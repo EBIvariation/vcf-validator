@@ -307,7 +307,7 @@
 
     # Header between meta and records
     sample_name = (print - ("\n" | "\t"))+ ;
-    header   = "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT" ("\t" sample_name >sample_name_begin %sample_name_end)+;
+    header   = "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO" ("\tFORMAT" ("\t" sample_name >sample_name_begin %sample_name_end)+ )?;
 
     # Records
     record_chrom    = (alnum | "_" | "." | "," )+ ;
@@ -340,17 +340,17 @@
 
     record_format   = (alnum)+ (":" (alnum)+)* ;
     record_sample   = (alnum | punct)+ (":" (alnum | punct)+)* ;
-    record      = (record_chrom >chrom_begin %chrom_end $err(chrom_error) CS
-                    record_pos >pos_begin %pos_end $err(pos_error) CS
-                    record_id >id_begin %id_end $err(id_error) CS
-                    record_ref >ref_begin %ref_end $err(ref_error) CS
-                    record_alt >alt_begin %alt_end $err(alt_error) CS
-                    record_qual >qual_begin %qual_end $err(qual_error) CS
-                    record_filter >filter_begin %filter_end $err(filter_error) CS
-                    record_info >info_begin %info_end $err(info_error) CS
-                    record_format >format_begin %format_end $err(format_error)
-                    (CS record_sample >sample_begin %sample_end $err(sample_error))+)
-                    >record_begin %record_end;
+    record      = (record_chrom >chrom_begin %chrom_end $err(chrom_error) 
+                    CS record_pos >pos_begin %pos_end $err(pos_error) 
+                    CS record_id >id_begin %id_end $err(id_error) 
+                    CS record_ref >ref_begin %ref_end $err(ref_error) 
+                    CS record_alt >alt_begin %alt_end $err(alt_error) 
+                    CS record_qual >qual_begin %qual_end $err(qual_error) 
+                    CS record_filter >filter_begin %filter_end $err(filter_error) 
+                    CS record_info >info_begin %info_end $err(info_error) 
+                    (CS record_format >format_begin %format_end $err(format_error)
+                    (CS record_sample >sample_begin %sample_end $err(sample_error))+ )?
+                  ) >record_begin %record_end;
 
     fileformat_section = (fileformat NL) $err(fileformat_section_error);
     meta_section = (meta_entry NL)* $err(meta_section_error);
