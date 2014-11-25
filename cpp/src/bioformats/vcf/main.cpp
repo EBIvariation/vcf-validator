@@ -7,43 +7,56 @@
 
 #include <iostream>
 #include <fstream>
-#include <sstream>
 #include <string>
+#include <vector>
 
-using namespace std;
+#include "vcf_validator.h"
 
-int run_vcf_parser(const string & input_text);
-
-/*
- * 
- */
-int main(int argc, char** argv)
+namespace
 {
-    if (argc < 2) {
-        cerr << "Please provide an input VCF file" << endl;
-        return 1;
+  bool is_valid_vcf_file(char const * path)
+  {
+    size_t const default_buffer_size = 64 * 1024;
+ 
+    std::ifstream input{path};
+    auto validator = opencb::vcf::Validator{};    
+
+//    for ( std::string line; std::getline(input, line); )
+//    {
+//        validator.parse_line(line);
+////        std::cout << "Valid line: " << validator.is_valid() << std::endl;
+//    }
+    
+    std::vector<char> line;
+    char ch;
+    
+    while (input.get(ch)) {
+        line.push_back(ch);
+        if (ch == '\n') {
+            validator.parse_line(line);
+//        std::cout << "Valid line: " << validator.is_valid() << std::endl;
+            line.clear();
+        }
     }
     
-    ifstream input {argv[1]};
-    
-    // Read header
-    stringstream buffer_text;
-    for(string line; getline(input, line) && line[0] == '#'; )
-    {
-        buffer_text << line << endl;
-    }
-    cout << buffer_text.str() << endl;
-    cout << "Result: " << run_vcf_parser(buffer_text.str()) << endl;
-    
-    // Read body
-    buffer_text.str(string{});
-    for(string line; getline(input, line); )
-    {
-        buffer_text << line << endl;
-    }
-    cout << buffer_text.str() << endl;
-    cout << "Result: " << run_vcf_parser(buffer_text.str()) << endl;
-    
-    return 0;
+
+    validator.end();
+
+    std::cout << "Valid: " << validator.is_valid() << std::endl;
+
+    return validator.is_valid();
+  }
 }
 
+int main(int argc, char** argv)
+{
+  if (argc < 2)
+  {
+    std::cerr << "Please provide an input VCF file" << std::endl;
+    return 1;
+  }
+
+  const char * path = argv[1];
+
+  return !is_valid_vcf_file(path);
+}
