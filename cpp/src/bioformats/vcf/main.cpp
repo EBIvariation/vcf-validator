@@ -16,8 +16,6 @@ namespace
 {
   bool is_valid_vcf_file(char const * path)
   {
-    size_t const default_buffer_size = 64 * 1024;
- 
     std::ifstream input{path};
     auto validator = opencb::vcf::Validator{};    
 
@@ -33,7 +31,7 @@ namespace
     while (input.get(ch)) {
         line.push_back(ch);
         if (ch == '\n') {
-            validator.parse_line(line);
+            validator.parse(line);
 //        std::cout << "Valid line: " << validator.is_valid() << std::endl;
             line.clear();
         }

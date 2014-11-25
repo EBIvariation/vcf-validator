@@ -27,44 +27,44 @@
         printf("Line %zu: Error in file format\n", n_lines);
     }
 
-    action header_entry_begin {
-        printf("Reading header entry\n");
-//        status->current_header_entry = vcf_header_entry_new();
+    action meta_entry_begin {
+        printf("Reading meta entry\n");
+//        status->current_meta_entry = vcf_meta_entry_new();
     }
 
-    action header_entry_end {
-//        add_vcf_header_entry(status->current_header_entry, file);
+    action meta_entry_end {
+//        add_vcf_meta_entry(status->current_meta_entry, file);
     }
 
-    action header_error {
-        printf("Line %zu (%s): Error in header\n", n_lines);
+    action meta_error {
+        printf("Line %zu (%s): Error in meta\n", n_lines);
     }
 
-    action header_id_begin {
+    action meta_id_begin {
         ts = p;
     }
 
-    action header_id_end {
-//        set_vcf_header_entry_name(ts, p-ts, status->current_header_entry);
+    action meta_id_end {
+//        set_vcf_meta_entry_name(ts, p-ts, status->current_meta_entry);
     }
 
-    action header_field_value_begin {
+    action meta_field_value_begin {
         ts = p;
     }
 
-    action header_field_value_end {
+    action meta_field_value_end {
 /*        if (*ts == '<') {
-            add_vcf_header_entry_value(ts+1, p-ts-1, status->current_header_entry);
+            add_vcf_meta_entry_value(ts+1, p-ts-1, status->current_meta_entry);
         } else if (*(p-1) == '>') {
-            add_vcf_header_entry_value(ts, p-ts-1, status->current_header_entry);
+            add_vcf_meta_entry_value(ts, p-ts-1, status->current_meta_entry);
         } else {
-            add_vcf_header_entry_value(ts, p-ts, status->current_header_entry);
+            add_vcf_meta_entry_value(ts, p-ts, status->current_meta_entry);
         }*/
     }
 
-    action delimiter_begin {
+    action header_begin {
         ts = p;
-        printf("Reading delimiter\n");
+        printf("Reading header\n");
     }
 
     action sample_name_begin {
@@ -270,20 +270,18 @@
     format_name = (alnum | punct)+ ;
     fileformat  = "##fileformat=" format_name >fileformat_begin %fileformat_end $err(fileformat_error) >linebreak;
 
-    # Header
-    field_value = (print)+ ;
-    header_field   = ( identifier "=" field_value ) >header_field_value_begin %header_field_value_end ;
-    header_entry   = (
-                      ("##" identifier >header_id_begin %header_id_end "=<" header_field ("," header_field)* ">") |
-                      ("##" field_value >header_field_value_begin %header_field_value_end) 
+    # Meta-data
+    meta_field_value = (print)+ ;
+    meta_field   = ( identifier "=" meta_field_value ) >meta_field_value_begin %meta_field_value_end ;
+    meta_entry   = (
+                      ("##" identifier >meta_id_begin %meta_id_end "=<" meta_field ("," meta_field)* ">") |
+                      ("##" meta_field_value >meta_field_value_begin %meta_field_value_end) 
                      )
-                      >header_entry_begin %header_entry_end ;
-    header      = (header_entry "\n" >linebreak )* ;
+                      >meta_entry_begin %meta_entry_end >linebreak ;
 
-    # Delimiter between header and records
+    # Header between meta and records
     sample_name = (print - ("\n" | "\t"))+ ;
-#    delimiter   = "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT" ("\t" sample_name >sample_name_begin %sample_name_end)+ "\n" >linebreak;
-    delimiter   = "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT" ("\t" sample_name >sample_name_begin %sample_name_end)+ >linebreak;
+    header   = "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT" ("\t" sample_name >sample_name_begin %sample_name_end)+ >linebreak;
 
     # Records
     record_chrom    = (alnum | "_" | "." | "," )+ ;
@@ -326,12 +324,13 @@
                     record_info >info_begin %info_end $err(info_error) "\t" 
                     record_format >format_begin %format_end $err(format_error) 
                     ("\t" record_sample >sample_begin %sample_end $err(sample_error))+) 
-                    >record_begin %record_end ;
-    records     =  record ("\n" >linebreak record)* ;
+                    >record_begin %record_end >linebreak ;
 
-    # Machine start
-#    main        := fileformat ("\n")* (header)? ("\n")* delimiter ("\n")* (records)? ("\n")* ;
-    main        := fileformat "\n" (header_entry ("\n" header_entry)*)? "\n" delimiter "\n" (records)? ("\n")* ;
+    # Machine start (fileformat, then optional meta, header, then optional records)
+    main        := fileformat "\n" 
+                   (meta_entry ("\n" meta_entry)*)? "\n" 
+                   header "\n" 
+                   (record ("\n" record)*)? ("\n")* ;
 
 }%%
 
@@ -346,6 +345,7 @@ namespace opencb
 {
   namespace vcf
   {
+
     Validator::Validator()
     : n_lines{0},
       n_batches{0}  
@@ -355,31 +355,27 @@ namespace opencb
       }%%
     }
 
-
-    void Validator::parse_line(std::vector<char> const & line)
+    void Validator::parse(std::vector<char> const & text)
     {
-      char const * p = &line[0];
-      char const * pe = &line[0] + line.size();
+      char const * p = &text[0];
+      char const * pe = &text[0] + text.size();
       char const * eof = nullptr;
 
       parse_buffer(p, pe, eof);
     }
 
-/*
-    void Validator::parse_line(std::string const & line)
+    void Validator::parse(std::string const & text)
     {
-      char const * p = line.data();
-      char const * pe = line.data() + line.size();
+      char const * p = text.data();
+      char const * pe = text.data() + text.size();
       char const * eof = nullptr;
 
       parse_buffer(p, pe, eof);
     }
-*/
 
     void Validator::end()
     {
       char const * empty = "";
-
       parse_buffer(empty, empty, empty);
     }
 
@@ -397,5 +393,6 @@ namespace opencb
       write exec;
       }%%
     }
+
   }
 }

@@ -12,8 +12,9 @@ namespace opencb
       public:
 	Validator();
 
-        //void parse_line(std::string const & line);
-        void parse_line(std::vector<char> const & line);
+        void parse(std::string const & text);
+        void parse(std::vector<char> const & text);
+        
 	void end();
 
 	bool is_valid() const;
@@ -23,9 +24,7 @@ namespace opencb
 
 	size_t n_lines;
 	size_t n_batches;
-        int cs;
-        int top;
-        int act;	        
+        int cs;	        
     };
   }
 }
