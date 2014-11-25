@@ -1,0 +1,10 @@
+
+env = Environment(
+                  CC = 'g++',
+                  CCFLAGS = '-std=c++11'
+                 )
+
+# Generate application and libraries using C++ source files
+env.Program("ragel.out", Glob("*.cpp"))
+#env.Library("ragel.a", "main.cpp")
+#env.Library("ragel.so", "main.cpp")
