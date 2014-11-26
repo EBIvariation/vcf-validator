@@ -45,7 +45,7 @@ namespace opencb
 
         void handle_token_char(ParsingState const & state, char c)
         {
-          m_current_token.push_back(c);
+//          m_current_token.push_back(c);
         }
 
       private:

@@ -44,14 +44,13 @@ namespace
 ////        std::cout << "Valid line: " << validator.is_valid() << std::endl;
 //    }
     std::vector<char> line;
-	line.reserve(default_line_buffer_size);
+    line.reserve(default_line_buffer_size);
     
-    while (readline(input, line)) {
-        validator.parse(line);
+    while (readline(input, line)) { 
+       validator.parse(line);
 //        std::cout << "Valid line: " << validator.is_valid() << std::endl;
     }
     
-
     validator.end();
 
     std::cout << "Valid: " << validator.is_valid() << std::endl;
