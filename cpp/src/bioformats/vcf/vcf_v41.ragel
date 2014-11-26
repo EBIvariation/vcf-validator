@@ -46,13 +46,15 @@
         fhold; fgoto body_section_skip;
     }
 
-    action fileformat_begin {
-        ts = p;
-    }
-
     action fileformat_end {
 //        set_vcf_file_format(ts, p-ts, file);
     }
+
+    action fileformat_name_error {
+        ErrorPolicy::handle_fileformat_section_error(*this,
+            "Fileformat must be a sequence of alphanumeric and/or punctuation characters");
+        fhold; fgoto meta_section_skip;
+    } 
 
     action meta_entry_begin {
 //        printf("Reading meta entry\n");
@@ -63,16 +65,8 @@
 //        add_vcf_meta_entry(status->current_meta_entry, file);
     }
 
-    action meta_id_begin {
-        ts = p;
-    }
-
     action meta_id_end {
 //        set_vcf_meta_entry_name(ts, p-ts, status->current_meta_entry);
-    }
-
-    action meta_field_value_begin {
-        ts = p;
     }
 
     action meta_field_value_end {
@@ -88,10 +82,6 @@
     action header_begin {
         ts = p;
 //        printf("Reading header\n");
-    }
-
-    action sample_name_begin {
-        ts = p;
     }
 
     action sample_name_end {
@@ -127,21 +117,11 @@
 */
     }
 
-    action chrom_begin {
-        ts = p;
-    }
-
     action chrom_end {
 //        set_vcf_record_chromosome(ts, p-ts, status->current_record);
     }
 
     action chrom_error {
-//        printf("Line %zu: Error in 'chromosome' field\n", n_lines);
-//        vcf_record_free(status->current_record);
-    }
-
-    action pos_begin {
-        ts = p;
     }
 
     action pos_end {
@@ -151,12 +131,8 @@
     }
 
     action pos_error {
-        printf("Line %zu: Error in 'position' field\n", n_lines);
-//        vcf_record_free(status->current_record);
-    }
-
-    action id_begin {
-        ts = p;
+        ErrorPolicy::handle_body_section_error(*this, "Position must be a positive number");
+        fhold; fgoto body_section_skip;
     }
 
     action id_end {
@@ -168,10 +144,6 @@
  //       vcf_record_free(status->current_record);
     }
 
-    action ref_begin {
- //       ts = p;
-    }
-
     action ref_end {
  //       set_vcf_record_reference(ts, p-ts, status->current_record);
     }
@@ -179,10 +151,6 @@
     action ref_error {
         printf("Line %zu: Error in 'reference' field\n", n_lines);
 //        vcf_record_free(status->current_record);
-    }
-
-    action alt_begin {
-        ts = p;
     }
 
     action alt_end {
@@ -210,10 +178,6 @@
  //       vcf_record_free(status->current_record);
     }
 
-    action qual_begin {
-        ts = p;
-    }
-
     action qual_end {
 /*        float quality = -1.0f;
         if (strncmp(".", ts, 1) != 0) {
@@ -229,10 +193,6 @@
  //       vcf_record_free(status->current_record);
     }
 
-    action filter_begin {
-        ts = p;
-    }
-
     action filter_end {
  //       set_vcf_record_filter(ts, p-ts, status->current_record);
     }
@@ -240,10 +200,6 @@
     action filter_error {
         printf("Line %zu: Error in 'filter' field\n", n_lines);
  //       vcf_record_free(status->current_record);
-    }
-
-    action info_begin {
-        ts = p;
     }
 
     action info_end {
@@ -255,10 +211,6 @@
  //       vcf_record_free(status->current_record);
     }
 
-    action format_begin {
-        ts = p;
-    }
-
     action format_end {
  //       set_vcf_record_format(ts, p-ts, status->current_record);
     }
@@ -266,10 +218,6 @@
     action format_error {
         printf("Line %zu: Error in 'format' field\n", n_lines);
  //       vcf_record_free(status->current_record);
-    }
-
-    action sample_begin {
-        ts = p;
     }
 
     action sample_end {
@@ -293,21 +241,21 @@
     identifier  = (alnum)+ ;
 
     # File format
-    format_name = (alnum | punct)+ ;
-    fileformat  = "##fileformat=" format_name >fileformat_begin %fileformat_end;
+    format_name = (alnum | punct)+ $err(fileformat_name_error);
+    fileformat  = "##fileformat=" format_name >token_begin %fileformat_end;
 
     # Meta-data
     meta_field_value = (print)+ ;
-    meta_field   = ( identifier "=" meta_field_value ) >meta_field_value_begin %meta_field_value_end ;
+    meta_field   = ( identifier "=" meta_field_value ) >token_begin %meta_field_value_end ;
     meta_entry   = (
-                      ("##" identifier >meta_id_begin %meta_id_end "=<" meta_field ("," meta_field)* ">") |
-                      ("##" meta_field_value >meta_field_value_begin %meta_field_value_end)
+                      ("##" identifier >token_begin %meta_id_end "=<" meta_field ("," meta_field)* ">") |
+                      ("##" meta_field_value >token_begin %meta_field_value_end)
                      )
                       >meta_entry_begin %meta_entry_end;
 
     # Header between meta and records
     sample_name = (print - ("\n" | "\t"))+ ;
-    header   = "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO" ("\tFORMAT" ("\t" sample_name >sample_name_begin %sample_name_end)+ )?;
+    header   = "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO" ("\tFORMAT" ("\t" sample_name >token_begin %sample_name_end)+ )?;
 
     # Records
     record_chrom    = (alnum | "_" | "." | "," )+ ;
@@ -340,16 +288,16 @@
 
     record_format   = (alnum)+ (":" (alnum)+)* ;
     record_sample   = (alnum | punct)+ (":" (alnum | punct)+)* ;
-    record      = (record_chrom >chrom_begin %chrom_end $err(chrom_error) 
-                    CS record_pos >pos_begin %pos_end $err(pos_error) 
-                    CS record_id >id_begin %id_end $err(id_error) 
-                    CS record_ref >ref_begin %ref_end $err(ref_error) 
-                    CS record_alt >alt_begin %alt_end $err(alt_error) 
-                    CS record_qual >qual_begin %qual_end $err(qual_error) 
-                    CS record_filter >filter_begin %filter_end $err(filter_error) 
-                    CS record_info >info_begin %info_end $err(info_error) 
-                    (CS record_format >format_begin %format_end $err(format_error)
-                    (CS record_sample >sample_begin %sample_end $err(sample_error))+ )?
+    record      = (record_chrom >token_begin %chrom_end $err(chrom_error) 
+                    CS record_pos >token_begin %pos_end $err(pos_error) 
+                    CS record_id >token_begin %id_end $err(id_error) 
+                    CS record_ref >token_begin %ref_end $err(ref_error) 
+                    CS record_alt >token_begin %alt_end $err(alt_error) 
+                    CS record_qual >token_begin %qual_end $err(qual_error) 
+                    CS record_filter >token_begin %filter_end $err(filter_error) 
+                    CS record_info >token_begin %info_end $err(info_error) 
+                    (CS record_format >token_begin %format_end $err(format_error)
+                    (CS record_sample >token_begin %sample_end $err(sample_error))+ )?
                   ) >record_begin %record_end;
 
     fileformat_section = (fileformat NL) $err(fileformat_section_error);

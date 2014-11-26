@@ -20,31 +20,31 @@ namespace opencb
   namespace vcf
   {
 
-    void AbortErrorPolicy::handle_fileformat_section_error(ParsingState const & state)
+    void AbortErrorPolicy::handle_fileformat_section_error(ParsingState const & state, std::string message)
     {
         std::stringstream msg;
-        msg << "Line " << state.n_lines << ": Error in fileformat section";
+        msg << "Line " << state.n_lines << ": " << message;
         throw_syntax_error(msg.str());
     }
 
-    void AbortErrorPolicy::handle_meta_section_error(ParsingState const & state)
+    void AbortErrorPolicy::handle_meta_section_error(ParsingState const & state, std::string message)
     {
         std::stringstream msg;
-        msg << "Line " << state.n_lines << ": Error in meta section";
+        msg << "Line " << state.n_lines << ": " << message;
         throw_syntax_error(msg.str());
     }
 
-    void AbortErrorPolicy::handle_header_section_error(ParsingState const & state)
+    void AbortErrorPolicy::handle_header_section_error(ParsingState const & state, std::string message)
     {
         std::stringstream msg;
-        msg << "Line " << state.n_lines << ": Error in header section";
+        msg << "Line " << state.n_lines << ": " << message;
         throw_syntax_error(msg.str());
     }
 
-    void AbortErrorPolicy::handle_body_section_error(ParsingState const & state)
+    void AbortErrorPolicy::handle_body_section_error(ParsingState const & state, std::string message)
     {
         std::stringstream msg;
-        msg << "Line " << state.n_lines << ": Error in body section";
+        msg << "Line " << state.n_lines << ": " << message;
         throw_syntax_error(msg.str());
     }
 
