@@ -225,8 +225,8 @@
     }
 
     action sample_error {
-        printf("Line %zu: Error in sample\n", n_lines);
-//        vcf_record_free(status->current_record);
+        ErrorPolicy::handle_body_section_error(*this, "Incorrect sample format");
+        fhold; fgoto body_section_skip;
     }
 
     #################################################
@@ -283,7 +283,8 @@
     NL = "\n" >line_break;
     CS = "\t" >tab_break;
 
-    number          = (digit)+ ("." (digit)+)? ;    # Integer or floating-point number
+    any_number      = (digit)+ ("." (digit)+)? ;    # Integer or floating-point number
+    int_number      = (digit)+ ;                    # Integer number
     bases           = ("A" | "C" | "G" | "T" | "N" | "a" | "c" | "t" | "g" | "n" )+ ;
     identifier      = (alnum | "." | "_")+ ;
 
@@ -292,7 +293,7 @@
     fileformat      = "##fileformat=" fileformat_name >token_begin %fileformat_end;
 
     # Meta-data
-    meta_key        = (alnum)+ ;
+    meta_key        = (alnum)+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB");
     meta_field_value= (print - "=")+ ;
     meta_field      = ( meta_key "=" meta_field_value ) >token_begin %meta_field_value_end ;
     
@@ -322,7 +323,6 @@
     
     meta_entry      = ( 
                        ("##" 
-                         ^["ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB"]
                          meta_key >token_begin %meta_id_end "=<" meta_field ("," meta_field)* ">") %(meta_generic_read) $err(meta_generic_err) |
                        ("##ALT=<" meta_alt ">" ) %(meta_alt_read) $err(meta_alt_err) | 
                        ("##FILTER=<" meta_filter ">" ) %(meta_filter_read) $err(meta_filter_err) | 
@@ -344,8 +344,8 @@
                       ("\tFORMAT" ("\t" sample_name >token_begin %sample_name_end)+ )?;
 
     # Records
-    record_chrom    = (alnum | (punct - ":"))+ | ("<" (alnum | (punct - (":" | ">")))+ ">");
-    record_pos      = (digit)+ ;
+    record_chrom    = (alnum | punct - ":")+ | ("<" (alnum | punct - (":" | ">"))+ ">");
+    record_pos      = int_number ;
     record_id       = (alnum | "_")+ | "." ;
     record_ref      = bases ;
 
@@ -360,20 +360,44 @@
                       record_alt_indel %alt_indel_end |
                       record_alt_sv %alt_sv_end ;
                       
-    record_qual     = number | "." ;
+    record_qual     = any_number | "." ;
 
-    filter_value    = (alnum | (punct - ";"))+ ;
+    filter_value    = (alnum | punct - ";")+ ;
     record_filter   = "." | (filter_value (";" filter_value)*) ;
 
-
-    info_id         = (alnum | "_")+ | "." ;
+    info_key        = ( (alnum | "_")+ | "." ) - ("AA" | "AC" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G") ;
     info_value      = (print - space)+ ;
     info_value_list = info_value ("," info_value)* ;
-    info_entry      = info_id | info_id "=" info_value_list ;
+    info_entry      = (
+                        "AA=" (bases | ".") |
+                        "AC=" int_number ("," int_number)* |
+                        "AF=" any_number ("," any_number)* |
+                        "AN=" int_number |
+                        "BQ=" any_number |
+                        "CIGAR=" (alnum)+ |
+                        "DB" ("=" ("1" | "0"))? |
+                        "DP=" int_number |
+                        "END=" int_number |
+                        "H2" ("=" ("1" | "0"))? | 
+                        "H3" ("=" ("1" | "0"))? |
+                        "MQ=" any_number |
+                        "MQ0=" int_number |
+                        "NS="  int_number |
+                        "SB=" any_number |
+                        "SOMATIC" ("=" ("1" | "0"))? |
+                        "VALIDATED" ("=" ("1" | "0"))? |
+                        "1000G" ("=" ("1" | "0"))? |
+                        info_key | 
+                        info_key "=" info_value_list
+                      );
     record_info     = info_entry (";" info_entry)* ;
 
     record_format   = (alnum)+ (":" (alnum)+)* ;
-    record_sample   = (alnum | punct)+ (":" (alnum | punct)+)* ;
+    
+    sample_allele   = (digit | ".") ;
+    sample_gt       = sample_allele (("/" | "|") sample_allele)* ;
+    record_sample   = sample_gt (":" (alnum | punct)+)* ;  # Genotype is mandatory and must be the first field
+    
     record          = (record_chrom >token_begin %chrom_end $err(chrom_error) 
                         CS record_pos >token_begin %pos_end $err(pos_error) 
                         CS record_id >token_begin %id_end $err(id_error) 
