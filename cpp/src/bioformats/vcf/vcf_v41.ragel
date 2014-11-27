@@ -296,7 +296,7 @@
     meta_field_value= (print - "=")+ ;
     meta_field      = ( meta_key "=" meta_field_value ) >token_begin %meta_field_value_end ;
     
-    meta_alt        = "ID=" ( ("DEL" | "INS" | "DUP" | "INV" | "CNV") meta_field_value )
+    meta_alt        = "ID=" ( ("DEL" | "INS" | "DUP" | "INV" | "CNV") ( ":" meta_field_value)? )
                         ",Description=\"" meta_field_value "\"" ;
     meta_assembly   = (print - ("\n" | "\t"))+ ;  # URL
     meta_contig     = "ID=" identifier
@@ -351,7 +351,7 @@
 
     record_alt_snv  = ((bases | ".") ("," (bases | "."))* )+ | "0";
     record_alt_indel= "<DEL>" | "<INS>" | "<DUP>" | "<INV>" | "<CNV>" |
-                       "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">";
+                       "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">" | "*";
     record_alt_sv   = "]" record_chrom ":" record_pos "]" (bases)+ |
                       "[" record_chrom ":" record_pos "[" (bases)+ |
                       (bases)+ "]" record_chrom ":" record_pos "]" |
@@ -359,11 +359,11 @@
     record_alt      = record_alt_snv %alt_snv_end |
                       record_alt_indel %alt_indel_end |
                       record_alt_sv %alt_sv_end ;
+                      
     record_qual     = number | "." ;
 
-    filter_value    = (alnum | "_" | "." | "," )+ ;
-    filter_entry    = filter_value ("," filter_value)* ;
-    record_filter   = "." | filter_entry (";" filter_entry)* ;
+    filter_value    = (alnum | (punct - ";"))+ ;
+    record_filter   = "." | (filter_value (";" filter_value)*) ;
 
 
     info_id         = (alnum | "_")+ | "." ;
