@@ -252,13 +252,39 @@
     action meta_generic_read {
         printf("Meta in line %zu\n", n_lines);
     }
+    
+    
+    action meta_alt_err {
+        printf("Meta ALT error in line %zu\n", n_lines);
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_filter_err {
+        printf("Meta FILTER error in line %zu\n", n_lines);
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_format_err {
+        printf("Meta FORMAT error in line %zu\n", n_lines);
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_info_err {
+        printf("Meta INFO error in line %zu\n", n_lines);
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_generic_err {
+        printf("Meta error in line %zu\n", n_lines);
+        fhold; fgoto meta_section_skip;
+    }
+
 
     NL = "\n" >line_break;
     CS = "\t" >tab_break;
 
     number          = (digit)+ ("." (digit)+)? ;    # Integer or floating-point number
-    number_int      = (digit)+ ;                    # Integer number
-    bases           = ("A" | "C" | "G" | "T" | "N")+ ;
+    bases           = ("A" | "C" | "G" | "T" | "N" | "a" | "c" | "t" | "g" | "n" )+ ;
     identifier      = (alnum | "." | "_")+ ;
 
     # File format
@@ -278,11 +304,11 @@
     meta_filter     = "ID=" identifier
                         ",Description=\"" meta_field_value "\"" ;
     meta_format     = "ID=" identifier 
-                        ",Number=" ( number_int | "A" | "R" | "G" | "." ) 
+                        ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) 
                         ",Type=" ( "Integer" | "Float" | "Character" | "String" )
                         ",Description=\"" meta_field_value "\"" ;
     meta_info       = "ID=" identifier 
-                        ",Number=" ( number_int | "A" | "R" | "G" | "." ) 
+                        ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) 
                         ",Type=" ( "Integer" | "Float" | "Flag" | "Character" | "String" )
                         ",Description=\"" meta_field_value "\""
                         (",Source=\"" meta_field_value "\"")?
@@ -295,16 +321,18 @@
                         ",Descriptions=\"" meta_field_value "\"" (",\"" meta_field_value "\"")* ;
     
     meta_entry      = ( 
-                       ("##ALT=<" meta_alt ">" ) %(meta_alt_read) | 
-                       ("##FILTER=<" meta_filter ">" ) %(meta_filter_read) | 
-                       ("##FORMAT=<" meta_format ">" ) %(meta_format_read) |
-                       ("##INFO=<" meta_info ">" )  %(meta_info_read) | 
+                       ("##" 
+                         ^["ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB"]
+                         meta_key >token_begin %meta_id_end "=<" meta_field ("," meta_field)* ">") %(meta_generic_read) $err(meta_generic_err) |
+                       ("##ALT=<" meta_alt ">" ) %(meta_alt_read) $err(meta_alt_err) | 
+                       ("##FILTER=<" meta_filter ">" ) %(meta_filter_read) $err(meta_filter_err) | 
+                       ("##FORMAT=<" meta_format ">" ) %(meta_format_read) $err(meta_format_err) |
+                       ("##INFO=<" meta_info ">" ) %(meta_info_read) $err(meta_info_err) | 
                        ("##assembly=" meta_assembly ) |
                        ("##contig=<" meta_contig ">" ) |
                        ("##SAMPLE=<" meta_sample ">" ) |
                        ("##PEDIGREE=<" meta_pedigree ">" ) |
                        ("##pedigreeDB=<" meta_assembly ">" ) |
-                       ("##" meta_key >token_begin %meta_id_end "=<" meta_field ("," meta_field)* ">") %(meta_generic_read) |
                        ("##" meta_field >token_begin %meta_field_value_end) |
                        ("##" meta_field_value >token_begin %meta_field_value_end)
                       )
@@ -316,7 +344,7 @@
                       ("\tFORMAT" ("\t" sample_name >token_begin %sample_name_end)+ )?;
 
     # Records
-    record_chrom    = (alnum | "_" | "." | "," )+ ;
+    record_chrom    = (alnum | (punct - ":"))+ | ("<" (alnum | (punct - (":" | ">")))+ ">");
     record_pos      = (digit)+ ;
     record_id       = (alnum | "_")+ | "." ;
     record_ref      = bases ;
