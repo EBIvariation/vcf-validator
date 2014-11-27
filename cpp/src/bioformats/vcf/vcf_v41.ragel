@@ -259,7 +259,7 @@
     number          = (digit)+ ("." (digit)+)? ;    # Integer or floating-point number
     number_int      = (digit)+ ;                    # Integer number
     bases           = ("A" | "C" | "G" | "T" | "N")+ ;
-    identifier      = (alnum | punct)+ ;
+    identifier      = (alnum | "." | "_")+ ;
 
     # File format
     fileformat_name = (alnum | punct)+ $err(fileformat_name_error);
@@ -269,8 +269,12 @@
     meta_key        = (alnum)+ ;
     meta_field_value= (print - "=")+ ;
     meta_field      = ( meta_key "=" meta_field_value ) >token_begin %meta_field_value_end ;
+    
     meta_alt        = "ID=" ( ("DEL" | "INS" | "DUP" | "INV" | "CNV") meta_field_value )
                         ",Description=\"" meta_field_value "\"" ;
+    meta_assembly   = (print - ("\n" | "\t"))+ ;  # URL
+    meta_contig     = "ID=" identifier
+                        ",URL=" meta_field_value ;
     meta_filter     = "ID=" identifier
                         ",Description=\"" meta_field_value "\"" ;
     meta_format     = "ID=" identifier 
@@ -283,12 +287,24 @@
                         ",Description=\"" meta_field_value "\""
                         (",Source=\"" meta_field_value "\"")?
                         (",Version=\"" meta_field_value "\"")? ;
+    meta_pedigree   = (identifier "=" identifier)+ ;
+    meta_pedigreeDB = (print - ("\n" | "\t"))+ ;  # URL
+    meta_sample     = "ID=" identifier
+                        ",Genomes=" identifier ("," identifier)*
+                        ",Mixture=" identifier ("," identifier)*
+                        ",Descriptions=\"" meta_field_value "\"" (",\"" meta_field_value "\"")* ;
+    
     meta_entry      = ( 
-                       ("##ALT=<" %(meta_alt_read) meta_alt ">" ) | 
-                       ("##FILTER=<" %(meta_filter_read) meta_filter ">" ) | 
-                       ("##FORMAT=<" %(meta_format_read) meta_format ">" ) |
-                       ("##INFO=<" %(meta_info_read) meta_info ">" ) | 
-                       ("##" meta_key >token_begin %meta_id_end %(meta_generic_read) "=<" meta_field ("," meta_field)* ">") |
+                       ("##ALT=<" meta_alt ">" ) %(meta_alt_read) | 
+                       ("##FILTER=<" meta_filter ">" ) %(meta_filter_read) | 
+                       ("##FORMAT=<" meta_format ">" ) %(meta_format_read) |
+                       ("##INFO=<" meta_info ">" )  %(meta_info_read) | 
+                       ("##assembly=" meta_assembly ) |
+                       ("##contig=<" meta_contig ">" ) |
+                       ("##SAMPLE=<" meta_sample ">" ) |
+                       ("##PEDIGREE=<" meta_pedigree ">" ) |
+                       ("##pedigreeDB=<" meta_assembly ">" ) |
+                       ("##" meta_key >token_begin %meta_id_end "=<" meta_field ("," meta_field)* ">") %(meta_generic_read) |
                        ("##" meta_field >token_begin %meta_field_value_end) |
                        ("##" meta_field_value >token_begin %meta_field_value_end)
                       )
