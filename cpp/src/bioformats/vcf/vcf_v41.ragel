@@ -283,17 +283,20 @@
     NL = "\n" >line_break;
     CS = "\t" >tab_break;
 
-    any_number      = (digit)+ ("." (digit)+)? ;    # Integer or floating-point number
-    int_number      = (digit)+ ;                    # Integer number
+    # Integer and floating-point numbers
+    any_number      = (digit)+ ("." (digit)+)? ;
+    int_number      = (digit)+ ;
+    # Bases are case-insensitive
     bases           = ("A" | "C" | "G" | "T" | "N" | "a" | "c" | "t" | "g" | "n" )+ ;
-    identifier      = (alnum | "." | "_")+ ;
+    # Identifiers may contain dots or underscores, but not only those
+    identifier      = (alnum | "." | "_")+ - ((".")+ | ("_")+) ;
 
-    # File format
+    # File format must be a sequence of alphanumeric and/or punctuation characters like "VCFv4.1"
     fileformat_name = (alnum | punct)+ $err(fileformat_name_error);
     fileformat      = "##fileformat=" fileformat_name >token_begin %fileformat_end;
 
     # Meta-data
-    meta_key        = (alnum)+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB");
+    meta_key        = (alnum | "_" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB");
     meta_field_value= (print - "=")+ ;
     meta_field      = ( meta_key "=" meta_field_value ) >token_begin %meta_field_value_end ;
     
@@ -346,19 +349,21 @@
     # Records
     record_chrom    = (alnum | punct - ":")+ | ("<" (alnum | punct - (":" | ">"))+ ">");
     record_pos      = int_number ;
-    record_id       = (alnum | "_")+ | "." ;
+    ## ID must be a string with no white-spaces or semi-colons
+    record_id       = (print - (space | ";"))+ | "." ;
     record_ref      = bases ;
 
     record_alt_snv  = ((bases | ".") ("," (bases | "."))* )+ | "0";
-    record_alt_indel= "<DEL>" | "<INS>" | "<DUP>" | "<INV>" | "<CNV>" |
-                       "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">" | "*";
+    record_alt_indel= "<DEL>" | "<INS>" | "<DUP>" | "<INV>" | "<CNV>" | "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">" | "*";
     record_alt_sv   = "]" record_chrom ":" record_pos "]" (bases)+ |
                       "[" record_chrom ":" record_pos "[" (bases)+ |
                       (bases)+ "]" record_chrom ":" record_pos "]" |
                       (bases)+ "[" record_chrom ":" record_pos "[" ;
+    record_alt_other= ("<" identifier ">") - ("<DEL>" | "<INS>" | "<DUP>" | "<INV>" | "<CNV>" | "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">");
     record_alt      = record_alt_snv %alt_snv_end |
                       record_alt_indel %alt_indel_end |
-                      record_alt_sv %alt_sv_end ;
+                      record_alt_sv %alt_sv_end |
+                      record_alt_other ;
                       
     record_qual     = any_number | "." ;
 
@@ -392,7 +397,7 @@
                       );
     record_info     = info_entry (";" info_entry)* ;
 
-    record_format   = (alnum)+ (":" (alnum)+)* ;
+    record_format   = identifier (":" identifier)* ;
     
     sample_allele   = (digit | ".") ;
     sample_gt       = sample_allele (("/" | "|") sample_allele)* ;
