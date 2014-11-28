@@ -9,6 +9,9 @@
     #             Actions definition            #
     #############################################
 
+
+    ############## General actions ##############
+    
     action token_begin {
         ParsePolicy::handle_token_begin(*this);
     }
@@ -25,6 +28,9 @@
     action tab_break {
         ++n_columns;
     }
+
+    
+    ######### Incorrect section actions #########
 
     action fileformat_section_error {
         ErrorPolicy::handle_fileformat_section_error(*this);
@@ -46,15 +52,12 @@
         fhold; fgoto body_section_skip;
     }
 
+    
+    ########### Correct fields actions ##########
+
     action fileformat_end {
 //        set_vcf_file_format(ts, p-ts, file);
     }
-
-    action fileformat_name_error {
-        ErrorPolicy::handle_fileformat_section_error(*this,
-            "Fileformat must be a sequence of alphanumeric and/or punctuation characters");
-        fhold; fgoto meta_section_skip;
-    } 
 
     action meta_entry_begin {
 //        printf("Reading meta entry\n");
@@ -79,6 +82,26 @@
         }*/
     }
 
+    action meta_alt_read {
+        printf("Meta ALT in line %zu\n", n_lines);
+    }
+
+    action meta_filter_read {
+        printf("Meta FILTER in line %zu\n", n_lines);
+    }
+
+    action meta_format_read {
+        printf("Meta FORMAT in line %zu\n", n_lines);
+    }
+
+    action meta_info_read {
+        printf("Meta INFO in line %zu\n", n_lines);
+    }
+
+    action meta_generic_read {
+        printf("Meta in line %zu\n", n_lines);
+    }
+    
     action header_begin {
         ts = p;
 //        printf("Reading header\n");
@@ -121,36 +144,18 @@
 //        set_vcf_record_chromosome(ts, p-ts, status->current_record);
     }
 
-    action chrom_error {
-    }
-
     action pos_end {
 //        char *field = strndup(ts, p-ts);
  //       set_vcf_record_position(atol(field), status->current_record);
  //       free(field);
     }
 
-    action pos_error {
-        ErrorPolicy::handle_body_section_error(*this, "Position must be a positive number");
-        fhold; fgoto body_section_skip;
-    }
-
     action id_end {
 //        set_vcf_record_id(ts, p-ts, status->current_record);
     }
 
-    action id_error {
-        printf("Line %zu: Error in 'id' field\n", n_lines);
- //       vcf_record_free(status->current_record);
-    }
-
     action ref_end {
  //       set_vcf_record_reference(ts, p-ts, status->current_record);
-    }
-
-    action ref_error {
-        printf("Line %zu: Error in 'reference' field\n", n_lines);
-//        vcf_record_free(status->current_record);
     }
 
     action alt_end {
@@ -173,11 +178,6 @@
  //       set_vcf_record_type(VARIANT_SV, status->current_record);
     }
 
-    action alt_error {
-        printf("Line %zu: Error in 'alternate' field\n", n_lines);
- //       vcf_record_free(status->current_record);
-    }
-
     action qual_end {
 /*        float quality = -1.0f;
         if (strncmp(".", ts, 1) != 0) {
@@ -188,72 +188,31 @@
         set_vcf_record_quality(quality, status->current_record);*/
     }
 
-    action qual_error {
-        printf("Line %zu: Error in 'quality' field\n", n_lines);
- //       vcf_record_free(status->current_record);
-    }
-
     action filter_end {
  //       set_vcf_record_filter(ts, p-ts, status->current_record);
-    }
-
-    action filter_error {
-        printf("Line %zu: Error in 'filter' field\n", n_lines);
- //       vcf_record_free(status->current_record);
     }
 
     action info_end {
 //        set_vcf_record_info(ts, p-ts, status->current_record);
     }
 
-    action info_error {
-        printf("Line %zu: Error in 'info' field\n", n_lines);
- //       vcf_record_free(status->current_record);
-    }
-
     action format_end {
  //       set_vcf_record_format(ts, p-ts, status->current_record);
-    }
-
-    action format_error {
-        printf("Line %zu: Error in 'format' field\n", n_lines);
- //       vcf_record_free(status->current_record);
     }
 
     action sample_end {
 //        add_vcf_record_sample(ts, p-ts, status->current_record);
     }
 
-    action sample_error {
-        ErrorPolicy::handle_body_section_error(*this, "Incorrect sample format");
-        fhold; fgoto body_section_skip;
-    }
 
-    #################################################
-    #               Machine definition              #
-    #################################################
+    ########## Incorrect fields actions ##########
 
-    action meta_alt_read {
-        printf("Meta ALT in line %zu\n", n_lines);
-    }
+    action fileformat_error {
+        ErrorPolicy::handle_fileformat_section_error(*this,
+            "Fileformat must be a sequence of alphanumeric and/or punctuation characters");
+        fhold; fgoto meta_section_skip;
+    } 
 
-    action meta_filter_read {
-        printf("Meta FILTER in line %zu\n", n_lines);
-    }
-
-    action meta_format_read {
-        printf("Meta FORMAT in line %zu\n", n_lines);
-    }
-
-    action meta_info_read {
-        printf("Meta INFO in line %zu\n", n_lines);
-    }
-
-    action meta_generic_read {
-        printf("Meta in line %zu\n", n_lines);
-    }
-    
-    
     action meta_alt_err {
         printf("Meta ALT error in line %zu\n", n_lines);
         fhold; fgoto meta_section_skip;
@@ -279,7 +238,59 @@
         fhold; fgoto meta_section_skip;
     }
 
+    action chrom_error {
+    }
 
+    action pos_error {
+        ErrorPolicy::handle_body_section_error(*this, "Position must be a positive number");
+        fhold; fgoto body_section_skip;
+    }
+
+    action id_error {
+        printf("Line %zu: Error in 'id' field\n", n_lines);
+ //       vcf_record_free(status->current_record);
+    }
+
+    action ref_error {
+        printf("Line %zu: Error in 'reference' field\n", n_lines);
+//        vcf_record_free(status->current_record);
+    }
+
+    action alt_error {
+        printf("Line %zu: Error in 'alternate' field\n", n_lines);
+ //       vcf_record_free(status->current_record);
+    }
+
+    action qual_error {
+        printf("Line %zu: Error in 'quality' field\n", n_lines);
+ //       vcf_record_free(status->current_record);
+    }
+
+    action filter_error {
+        printf("Line %zu: Error in 'filter' field\n", n_lines);
+ //       vcf_record_free(status->current_record);
+    }
+
+    action info_error {
+        printf("Line %zu: Error in 'info' field\n", n_lines);
+ //       vcf_record_free(status->current_record);
+    }
+
+    action format_error {
+        printf("Line %zu: Error in 'format' field\n", n_lines);
+ //       vcf_record_free(status->current_record);
+    }
+
+    action sample_error {
+        ErrorPolicy::handle_body_section_error(*this, "Incorrect sample format");
+        fhold; fgoto body_section_skip;
+    }
+
+    #################################################
+    #               Machine definition              #
+    #################################################
+
+    
     NL = "\n" >line_break;
     CS = "\t" >tab_break;
 
@@ -292,7 +303,7 @@
     identifier      = (alnum | "." | "_")+ - ((".")+ | ("_")+) ;
 
     # File format must be a sequence of alphanumeric and/or punctuation characters like "VCFv4.1"
-    fileformat_name = (alnum | punct)+ $err(fileformat_name_error);
+    fileformat_name = (alnum | punct)+ $err(fileformat_error);
     fileformat      = "##fileformat=" fileformat_name >token_begin %fileformat_end;
 
     # Meta-data

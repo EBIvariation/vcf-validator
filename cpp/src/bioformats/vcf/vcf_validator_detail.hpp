@@ -5,7 +5,7 @@
 #include "vcf_validator.hpp"
 
 
-#line 434 "vcf_v41.ragel"
+#line 445 "vcf_v41.ragel"
 
 
 namespace
@@ -23,7 +23,7 @@ static const int vcf_en_meta_section_skip = 672;
 static const int vcf_en_body_section_skip = 673;
 
 
-#line 440 "vcf_v41.ragel"
+#line 451 "vcf_v41.ragel"
 
 }
 
@@ -40,7 +40,7 @@ namespace opencb
 	cs = vcf_start;
 	}
 
-#line 452 "vcf_v41.ragel"
+#line 463 "vcf_v41.ragel"
 
     }
 
@@ -77,7 +77,7 @@ namespace opencb
       return cs >= 
 #line 79 "vcf_validator_detail.hpp"
 674
-#line 485 "vcf_v41.ragel"
+#line 496 "vcf_v41.ragel"
 ;
     }
 
@@ -99,428 +99,428 @@ case 1:
 		goto st2;
 	goto tr0;
 tr0:
-#line 29 "vcf_v41.ragel"
+#line 35 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr14:
-#line 53 "vcf_v41.ragel"
+#line 210 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this,
             "Fileformat must be a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st672;}
     }
-#line 29 "vcf_v41.ragel"
+#line 35 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr18:
-#line 29 "vcf_v41.ragel"
+#line 35 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this);
         p--; {goto st672;}
     }
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 257 "vcf_v41.ragel"
+#line 216 "vcf_v41.ragel"
 	{
         printf("Meta ALT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 262 "vcf_v41.ragel"
+#line 221 "vcf_v41.ragel"
 	{
         printf("Meta FILTER error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 267 "vcf_v41.ragel"
+#line 226 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 272 "vcf_v41.ragel"
+#line 231 "vcf_v41.ragel"
 	{
         printf("Meta INFO error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
-#line 39 "vcf_v41.ragel"
+#line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
         p--; {goto st673;}
     }
 	goto st0;
 tr20:
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 257 "vcf_v41.ragel"
+#line 216 "vcf_v41.ragel"
 	{
         printf("Meta ALT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 262 "vcf_v41.ragel"
+#line 221 "vcf_v41.ragel"
 	{
         printf("Meta FILTER error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 267 "vcf_v41.ragel"
+#line 226 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 272 "vcf_v41.ragel"
+#line 231 "vcf_v41.ragel"
 	{
         printf("Meta INFO error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
-#line 39 "vcf_v41.ragel"
+#line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
         p--; {goto st673;}
     }
 	goto st0;
 tr23:
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 257 "vcf_v41.ragel"
+#line 216 "vcf_v41.ragel"
 	{
         printf("Meta ALT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 262 "vcf_v41.ragel"
+#line 221 "vcf_v41.ragel"
 	{
         printf("Meta FILTER error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 267 "vcf_v41.ragel"
+#line 226 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 272 "vcf_v41.ragel"
+#line 231 "vcf_v41.ragel"
 	{
         printf("Meta INFO error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr34:
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr37:
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr142:
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 257 "vcf_v41.ragel"
+#line 216 "vcf_v41.ragel"
 	{
         printf("Meta ALT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr146:
-#line 257 "vcf_v41.ragel"
+#line 216 "vcf_v41.ragel"
 	{
         printf("Meta ALT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr191:
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 262 "vcf_v41.ragel"
+#line 221 "vcf_v41.ragel"
 	{
         printf("Meta FILTER error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 267 "vcf_v41.ragel"
+#line 226 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr194:
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 262 "vcf_v41.ragel"
+#line 221 "vcf_v41.ragel"
 	{
         printf("Meta FILTER error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr200:
-#line 262 "vcf_v41.ragel"
+#line 221 "vcf_v41.ragel"
 	{
         printf("Meta FILTER error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr226:
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 267 "vcf_v41.ragel"
+#line 226 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr232:
-#line 267 "vcf_v41.ragel"
+#line 226 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr296:
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 272 "vcf_v41.ragel"
+#line 231 "vcf_v41.ragel"
 	{
         printf("Meta INFO error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr301:
-#line 272 "vcf_v41.ragel"
+#line 231 "vcf_v41.ragel"
 	{
         printf("Meta INFO error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	goto st0;
 tr515:
-#line 39 "vcf_v41.ragel"
+#line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
         p--; {goto st673;}
     }
 	goto st0;
 tr565:
-#line 124 "vcf_v41.ragel"
+#line 241 "vcf_v41.ragel"
 	{
     }
-#line 44 "vcf_v41.ragel"
+#line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
         p--; {goto st673;}
     }
 	goto st0;
 tr568:
-#line 133 "vcf_v41.ragel"
+#line 244 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Position must be a positive number");
         p--; {goto st673;}
     }
-#line 44 "vcf_v41.ragel"
+#line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
         p--; {goto st673;}
     }
 	goto st0;
 tr572:
-#line 142 "vcf_v41.ragel"
+#line 249 "vcf_v41.ragel"
 	{
         printf("Line %zu: Error in 'id' field\n", n_lines);
  //       vcf_record_free(status->current_record);
     }
-#line 44 "vcf_v41.ragel"
+#line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
         p--; {goto st673;}
     }
 	goto st0;
 tr576:
-#line 151 "vcf_v41.ragel"
+#line 254 "vcf_v41.ragel"
 	{
         printf("Line %zu: Error in 'reference' field\n", n_lines);
 //        vcf_record_free(status->current_record);
     }
-#line 44 "vcf_v41.ragel"
+#line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
         p--; {goto st673;}
     }
 	goto st0;
 tr580:
-#line 176 "vcf_v41.ragel"
+#line 259 "vcf_v41.ragel"
 	{
         printf("Line %zu: Error in 'alternate' field\n", n_lines);
  //       vcf_record_free(status->current_record);
     }
-#line 44 "vcf_v41.ragel"
+#line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
         p--; {goto st673;}
     }
 	goto st0;
 tr589:
-#line 191 "vcf_v41.ragel"
+#line 264 "vcf_v41.ragel"
 	{
         printf("Line %zu: Error in 'quality' field\n", n_lines);
  //       vcf_record_free(status->current_record);
     }
-#line 44 "vcf_v41.ragel"
+#line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
         p--; {goto st673;}
     }
 	goto st0;
 tr593:
-#line 200 "vcf_v41.ragel"
+#line 269 "vcf_v41.ragel"
 	{
         printf("Line %zu: Error in 'filter' field\n", n_lines);
  //       vcf_record_free(status->current_record);
     }
-#line 44 "vcf_v41.ragel"
+#line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
         p--; {goto st673;}
     }
 	goto st0;
 tr598:
-#line 209 "vcf_v41.ragel"
+#line 274 "vcf_v41.ragel"
 	{
         printf("Line %zu: Error in 'info' field\n", n_lines);
  //       vcf_record_free(status->current_record);
     }
-#line 44 "vcf_v41.ragel"
+#line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
         p--; {goto st673;}
     }
 	goto st0;
 tr616:
-#line 218 "vcf_v41.ragel"
+#line 279 "vcf_v41.ragel"
 	{
         printf("Line %zu: Error in 'format' field\n", n_lines);
  //       vcf_record_free(status->current_record);
     }
-#line 44 "vcf_v41.ragel"
+#line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
         p--; {goto st673;}
     }
 	goto st0;
 tr624:
-#line 227 "vcf_v41.ragel"
+#line 284 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Incorrect sample format");
         p--; {goto st673;}
     }
-#line 44 "vcf_v41.ragel"
+#line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
         p--; {goto st673;}
     }
 	goto st0;
 tr747:
-#line 39 "vcf_v41.ragel"
+#line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
         p--; {goto st673;}
     }
-#line 124 "vcf_v41.ragel"
+#line 241 "vcf_v41.ragel"
 	{
     }
-#line 44 "vcf_v41.ragel"
+#line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
         p--; {goto st673;}
@@ -622,7 +622,7 @@ case 14:
 		goto tr15;
 	goto tr14;
 tr15:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -638,11 +638,11 @@ case 15:
 		goto st15;
 	goto tr14;
 tr16:
-#line 49 "vcf_v41.ragel"
+#line 58 "vcf_v41.ragel"
 	{
 //        set_vcf_file_format(ts, p-ts, file);
     }
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
@@ -657,7 +657,7 @@ case 16:
 		goto tr19;
 	goto tr18;
 tr19:
-#line 59 "vcf_v41.ragel"
+#line 62 "vcf_v41.ragel"
 	{
 //        printf("Reading meta entry\n");
 //        status->current_meta_entry = vcf_meta_entry_new();
@@ -713,7 +713,7 @@ case 18:
 		goto tr24;
 	goto tr23;
 tr24:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -732,7 +732,7 @@ case 19:
 		goto st19;
 	goto tr34;
 tr35:
-#line 72 "vcf_v41.ragel"
+#line 75 "vcf_v41.ragel"
 	{
 /*        if (*ts == '<') {
             add_vcf_meta_entry_value(ts+1, p-ts-1, status->current_meta_entry);
@@ -742,97 +742,97 @@ tr35:
             add_vcf_meta_entry_value(ts, p-ts, status->current_meta_entry);
         }*/
     }
-#line 64 "vcf_v41.ragel"
+#line 67 "vcf_v41.ragel"
 	{
 //        add_vcf_meta_entry(status->current_meta_entry, file);
     }
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
     }
 	goto st20;
 tr65:
-#line 252 "vcf_v41.ragel"
+#line 101 "vcf_v41.ragel"
 	{
         printf("Meta in line %zu\n", n_lines);
     }
-#line 64 "vcf_v41.ragel"
+#line 67 "vcf_v41.ragel"
 	{
 //        add_vcf_meta_entry(status->current_meta_entry, file);
     }
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
     }
 	goto st20;
 tr174:
-#line 236 "vcf_v41.ragel"
+#line 85 "vcf_v41.ragel"
 	{
         printf("Meta ALT in line %zu\n", n_lines);
     }
-#line 64 "vcf_v41.ragel"
+#line 67 "vcf_v41.ragel"
 	{
 //        add_vcf_meta_entry(status->current_meta_entry, file);
     }
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
     }
 	goto st20;
 tr225:
-#line 240 "vcf_v41.ragel"
+#line 89 "vcf_v41.ragel"
 	{
         printf("Meta FILTER in line %zu\n", n_lines);
     }
-#line 64 "vcf_v41.ragel"
+#line 67 "vcf_v41.ragel"
 	{
 //        add_vcf_meta_entry(status->current_meta_entry, file);
     }
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
     }
 	goto st20;
 tr285:
-#line 244 "vcf_v41.ragel"
+#line 93 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT in line %zu\n", n_lines);
     }
-#line 64 "vcf_v41.ragel"
+#line 67 "vcf_v41.ragel"
 	{
 //        add_vcf_meta_entry(status->current_meta_entry, file);
     }
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
     }
 	goto st20;
 tr380:
-#line 248 "vcf_v41.ragel"
+#line 97 "vcf_v41.ragel"
 	{
         printf("Meta INFO in line %zu\n", n_lines);
     }
-#line 64 "vcf_v41.ragel"
+#line 67 "vcf_v41.ragel"
 	{
 //        add_vcf_meta_entry(status->current_meta_entry, file);
     }
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
     }
 	goto st20;
 tr417:
-#line 64 "vcf_v41.ragel"
+#line 67 "vcf_v41.ragel"
 	{
 //        add_vcf_meta_entry(status->current_meta_entry, file);
     }
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
@@ -847,7 +847,7 @@ case 20:
 		goto tr19;
 	goto tr20;
 tr25:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -884,7 +884,7 @@ case 21:
 		goto st21;
 	goto tr37;
 tr39:
-#line 68 "vcf_v41.ragel"
+#line 71 "vcf_v41.ragel"
 	{
 //        set_vcf_meta_entry_name(ts, p-ts, status->current_meta_entry);
     }
@@ -943,7 +943,7 @@ case 23:
 		goto st19;
 	goto tr37;
 tr41:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -1004,7 +1004,7 @@ case 26:
 		goto st26;
 	goto tr37;
 tr53:
-#line 72 "vcf_v41.ragel"
+#line 75 "vcf_v41.ragel"
 	{
 /*        if (*ts == '<') {
             add_vcf_meta_entry_value(ts+1, p-ts-1, status->current_meta_entry);
@@ -1058,7 +1058,7 @@ case 27:
 		goto st26;
 	goto tr37;
 tr55:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -1096,7 +1096,7 @@ case 28:
 		goto st28;
 	goto tr37;
 tr54:
-#line 72 "vcf_v41.ragel"
+#line 75 "vcf_v41.ragel"
 	{
 /*        if (*ts == '<') {
             add_vcf_meta_entry_value(ts+1, p-ts-1, status->current_meta_entry);
@@ -1124,7 +1124,7 @@ case 29:
 		goto st26;
 	goto tr37;
 tr56:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -1228,7 +1228,7 @@ case 32:
 		goto st26;
 	goto tr37;
 tr57:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -1492,7 +1492,7 @@ case 40:
 		goto st28;
 	goto tr37;
 tr58:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -1595,7 +1595,7 @@ case 43:
 		goto st28;
 	goto tr37;
 tr59:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -1826,7 +1826,7 @@ case 50:
 		goto st28;
 	goto tr37;
 tr60:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -1961,7 +1961,7 @@ case 54:
 		goto st28;
 	goto tr37;
 tr61:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -2192,7 +2192,7 @@ case 61:
 		goto st28;
 	goto tr37;
 tr62:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -2359,7 +2359,7 @@ case 66:
 		goto st28;
 	goto tr37;
 tr63:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -2654,7 +2654,7 @@ case 75:
 		goto st28;
 	goto tr37;
 tr42:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -2755,7 +2755,7 @@ case 78:
 		goto st19;
 	goto tr37;
 tr43:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -3011,7 +3011,7 @@ case 86:
 		goto st24;
 	goto tr37;
 tr44:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -3111,7 +3111,7 @@ case 89:
 		goto st24;
 	goto tr37;
 tr45:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -3335,7 +3335,7 @@ case 96:
 		goto st24;
 	goto tr37;
 tr46:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -3466,7 +3466,7 @@ case 100:
 		goto st24;
 	goto tr37;
 tr47:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -3690,7 +3690,7 @@ case 107:
 		goto st24;
 	goto tr37;
 tr48:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -3852,7 +3852,7 @@ case 112:
 		goto st24;
 	goto tr37;
 tr49:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -4138,7 +4138,7 @@ case 121:
 		goto st24;
 	goto tr37;
 tr26:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -4665,7 +4665,7 @@ case 168:
 	}
 	goto tr146;
 tr27:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -5766,7 +5766,7 @@ case 267:
 		goto st211;
 	goto tr232;
 tr28:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -6830,7 +6830,7 @@ case 366:
 		goto st278;
 	goto tr301;
 tr29:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -7291,7 +7291,7 @@ case 387:
 		goto st378;
 	goto tr34;
 tr30:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -8228,7 +8228,7 @@ case 443:
 		goto st400;
 	goto tr34;
 tr31:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -8498,7 +8498,7 @@ case 453:
 		goto st453;
 	goto tr34;
 tr32:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -8851,7 +8851,7 @@ case 474:
 		goto st466;
 	goto tr34;
 tr33:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -9511,7 +9511,7 @@ case 532:
 		goto st533;
 	goto tr515;
 tr562:
-#line 87 "vcf_v41.ragel"
+#line 110 "vcf_v41.ragel"
 	{
 //        add_vcf_sample_name(ts, p-ts, file);
     }
@@ -9525,7 +9525,7 @@ case 533:
 		goto tr561;
 	goto tr515;
 tr561:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -9543,18 +9543,18 @@ case 534:
 		goto st534;
 	goto tr515;
 tr553:
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
     }
 	goto st674;
 tr563:
-#line 87 "vcf_v41.ragel"
+#line 110 "vcf_v41.ragel"
 	{
 //        add_vcf_sample_name(ts, p-ts, file);
     }
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
@@ -9572,12 +9572,12 @@ case 674:
 		goto tr748;
 	goto tr747;
 tr748:
-#line 91 "vcf_v41.ragel"
+#line 114 "vcf_v41.ragel"
 	{
 //        status->current_record = vcf_record_new();
 //        printf("Reading record\n");
     }
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -9596,11 +9596,11 @@ case 535:
 		goto st535;
 	goto tr565;
 tr566:
-#line 120 "vcf_v41.ragel"
+#line 143 "vcf_v41.ragel"
 	{
 //        set_vcf_record_chromosome(ts, p-ts, status->current_record);
     }
-#line 25 "vcf_v41.ragel"
+#line 28 "vcf_v41.ragel"
 	{
         ++n_columns;
     }
@@ -9614,7 +9614,7 @@ case 536:
 		goto tr569;
 	goto tr568;
 tr569:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -9630,13 +9630,13 @@ case 537:
 		goto st537;
 	goto tr568;
 tr570:
-#line 127 "vcf_v41.ragel"
+#line 147 "vcf_v41.ragel"
 	{
 //        char *field = strndup(ts, p-ts);
  //       set_vcf_record_position(atol(field), status->current_record);
  //       free(field);
     }
-#line 25 "vcf_v41.ragel"
+#line 28 "vcf_v41.ragel"
 	{
         ++n_columns;
     }
@@ -9653,7 +9653,7 @@ case 538:
 		goto tr573;
 	goto tr572;
 tr573:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -9672,11 +9672,11 @@ case 539:
 		goto st539;
 	goto tr572;
 tr574:
-#line 138 "vcf_v41.ragel"
+#line 153 "vcf_v41.ragel"
 	{
 //        set_vcf_record_id(ts, p-ts, status->current_record);
     }
-#line 25 "vcf_v41.ragel"
+#line 28 "vcf_v41.ragel"
 	{
         ++n_columns;
     }
@@ -9700,7 +9700,7 @@ case 540:
 	}
 	goto tr576;
 tr577:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -9725,11 +9725,11 @@ case 541:
 	}
 	goto tr576;
 tr578:
-#line 147 "vcf_v41.ragel"
+#line 157 "vcf_v41.ragel"
 	{
  //       set_vcf_record_reference(ts, p-ts, status->current_record);
     }
-#line 25 "vcf_v41.ragel"
+#line 28 "vcf_v41.ragel"
 	{
         ++n_columns;
     }
@@ -9759,7 +9759,7 @@ case 542:
 	}
 	goto tr580;
 tr581:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -9773,11 +9773,11 @@ case 543:
 		goto tr588;
 	goto tr580;
 tr588:
-#line 168 "vcf_v41.ragel"
+#line 173 "vcf_v41.ragel"
 	{
  //       set_vcf_record_type(VARIANT_INDEL, status->current_record);
     }
-#line 156 "vcf_v41.ragel"
+#line 161 "vcf_v41.ragel"
 	{
  /*       if (!strncmp("0", ts, 1)) {
             set_vcf_record_alternate(".", 1, status->current_record);
@@ -9785,17 +9785,17 @@ tr588:
             set_vcf_record_alternate(ts, p-ts, status->current_record);
         }*/
     }
-#line 25 "vcf_v41.ragel"
+#line 28 "vcf_v41.ragel"
 	{
         ++n_columns;
     }
 	goto st544;
 tr693:
-#line 164 "vcf_v41.ragel"
+#line 169 "vcf_v41.ragel"
 	{
  //       set_vcf_record_type(VARIANT_SNV, status->current_record);
     }
-#line 156 "vcf_v41.ragel"
+#line 161 "vcf_v41.ragel"
 	{
  /*       if (!strncmp("0", ts, 1)) {
             set_vcf_record_alternate(".", 1, status->current_record);
@@ -9803,13 +9803,13 @@ tr693:
             set_vcf_record_alternate(ts, p-ts, status->current_record);
         }*/
     }
-#line 25 "vcf_v41.ragel"
+#line 28 "vcf_v41.ragel"
 	{
         ++n_columns;
     }
 	goto st544;
 tr703:
-#line 156 "vcf_v41.ragel"
+#line 161 "vcf_v41.ragel"
 	{
  /*       if (!strncmp("0", ts, 1)) {
             set_vcf_record_alternate(".", 1, status->current_record);
@@ -9817,17 +9817,17 @@ tr703:
             set_vcf_record_alternate(ts, p-ts, status->current_record);
         }*/
     }
-#line 25 "vcf_v41.ragel"
+#line 28 "vcf_v41.ragel"
 	{
         ++n_columns;
     }
 	goto st544;
 tr731:
-#line 172 "vcf_v41.ragel"
+#line 177 "vcf_v41.ragel"
 	{
  //       set_vcf_record_type(VARIANT_SV, status->current_record);
     }
-#line 156 "vcf_v41.ragel"
+#line 161 "vcf_v41.ragel"
 	{
  /*       if (!strncmp("0", ts, 1)) {
             set_vcf_record_alternate(".", 1, status->current_record);
@@ -9835,7 +9835,7 @@ tr731:
             set_vcf_record_alternate(ts, p-ts, status->current_record);
         }*/
     }
-#line 25 "vcf_v41.ragel"
+#line 28 "vcf_v41.ragel"
 	{
         ++n_columns;
     }
@@ -9851,7 +9851,7 @@ case 544:
 		goto tr591;
 	goto tr589;
 tr590:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -9875,7 +9875,7 @@ tr592:
         }
         set_vcf_record_quality(quality, status->current_record);*/
     }
-#line 25 "vcf_v41.ragel"
+#line 28 "vcf_v41.ragel"
 	{
         ++n_columns;
     }
@@ -9892,7 +9892,7 @@ case 546:
 		goto tr594;
 	goto tr593;
 tr594:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -9910,11 +9910,11 @@ case 547:
 		goto st547;
 	goto tr593;
 tr595:
-#line 196 "vcf_v41.ragel"
+#line 191 "vcf_v41.ragel"
 	{
  //       set_vcf_record_filter(ts, p-ts, status->current_record);
     }
-#line 25 "vcf_v41.ragel"
+#line 28 "vcf_v41.ragel"
 	{
         ++n_columns;
     }
@@ -9949,7 +9949,7 @@ case 548:
 		goto tr600;
 	goto tr598;
 tr599:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -9967,11 +9967,11 @@ case 549:
 	}
 	goto tr598;
 tr612:
-#line 205 "vcf_v41.ragel"
+#line 195 "vcf_v41.ragel"
 	{
 //        set_vcf_record_info(ts, p-ts, status->current_record);
     }
-#line 25 "vcf_v41.ragel"
+#line 28 "vcf_v41.ragel"
 	{
         ++n_columns;
     }
@@ -9995,7 +9995,7 @@ case 550:
 		goto tr618;
 	goto tr616;
 tr617:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -10019,7 +10019,7 @@ case 551:
 		goto st552;
 	goto tr616;
 tr618:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -10045,21 +10045,21 @@ case 552:
 		goto st552;
 	goto tr616;
 tr622:
-#line 214 "vcf_v41.ragel"
+#line 199 "vcf_v41.ragel"
 	{
  //       set_vcf_record_format(ts, p-ts, status->current_record);
     }
-#line 25 "vcf_v41.ragel"
+#line 28 "vcf_v41.ragel"
 	{
         ++n_columns;
     }
 	goto st553;
 tr626:
-#line 223 "vcf_v41.ragel"
+#line 203 "vcf_v41.ragel"
 	{
 //        add_vcf_record_sample(ts, p-ts, status->current_record);
     }
-#line 25 "vcf_v41.ragel"
+#line 28 "vcf_v41.ragel"
 	{
         ++n_columns;
     }
@@ -10075,7 +10075,7 @@ case 553:
 		goto tr625;
 	goto tr624;
 tr625:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -10094,11 +10094,11 @@ case 554:
 	}
 	goto tr624;
 tr613:
-#line 205 "vcf_v41.ragel"
+#line 195 "vcf_v41.ragel"
 	{
 //        set_vcf_record_info(ts, p-ts, status->current_record);
     }
-#line 96 "vcf_v41.ragel"
+#line 119 "vcf_v41.ragel"
 	{
 /*        // If batch is full, add to the list of batches and create a new, empty one
         if (batch_size > 0 && status->current_batch->records->size == batch_size)
@@ -10122,18 +10122,18 @@ tr613:
         status->num_samples = 0;
 */
     }
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
     }
 	goto st675;
 tr627:
-#line 223 "vcf_v41.ragel"
+#line 203 "vcf_v41.ragel"
 	{
 //        add_vcf_record_sample(ts, p-ts, status->current_record);
     }
-#line 96 "vcf_v41.ragel"
+#line 119 "vcf_v41.ragel"
 	{
 /*        // If batch is full, add to the list of batches and create a new, empty one
         if (batch_size > 0 && status->current_batch->records->size == batch_size)
@@ -10157,7 +10157,7 @@ tr627:
         status->num_samples = 0;
 */
     }
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
@@ -10219,7 +10219,7 @@ case 558:
 		goto st552;
 	goto tr616;
 tr619:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -10271,7 +10271,7 @@ case 560:
 		goto st561;
 	goto tr598;
 tr600:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -10316,7 +10316,7 @@ case 563:
 		goto st563;
 	goto tr598;
 tr601:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -10444,7 +10444,7 @@ case 570:
 	}
 	goto tr598;
 tr602:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -10661,7 +10661,7 @@ case 585:
 		goto st585;
 	goto tr598;
 tr603:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -10726,7 +10726,7 @@ case 589:
 		goto st589;
 	goto tr598;
 tr604:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -10865,7 +10865,7 @@ case 596:
 		goto st596;
 	goto tr598;
 tr605:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -10894,7 +10894,7 @@ case 597:
 		goto st561;
 	goto tr598;
 tr606:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -10943,7 +10943,7 @@ case 599:
 		goto st561;
 	goto tr598;
 tr607:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -10976,7 +10976,7 @@ case 600:
 		goto st561;
 	goto tr598;
 tr608:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -11022,7 +11022,7 @@ case 602:
 		goto st561;
 	goto tr598;
 tr609:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -11050,7 +11050,7 @@ case 603:
 		goto st561;
 	goto tr598;
 tr610:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -11184,7 +11184,7 @@ case 609:
 		goto st561;
 	goto tr598;
 tr611:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -11369,7 +11369,7 @@ case 618:
 		goto st547;
 	goto tr593;
 tr591:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -11403,7 +11403,7 @@ case 621:
 		goto st621;
 	goto tr589;
 tr582:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -11448,7 +11448,7 @@ case 623:
 	}
 	goto tr580;
 tr583:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -11462,7 +11462,7 @@ case 624:
 		goto tr693;
 	goto tr580;
 tr584:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -11837,7 +11837,7 @@ case 651:
 		goto st627;
 	goto tr580;
 tr585:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -11943,7 +11943,7 @@ case 661:
 		goto st661;
 	goto tr580;
 tr586:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -12020,7 +12020,7 @@ case 667:
 	}
 	goto tr580;
 tr587:
-#line 12 "vcf_v41.ragel"
+#line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
@@ -12069,12 +12069,12 @@ case 672:
 		goto tr744;
 	goto st672;
 tr744:
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
     }
-#line 432 "vcf_v41.ragel"
+#line 443 "vcf_v41.ragel"
 	{ {goto st20;} }
 	goto st676;
 st676:
@@ -12091,12 +12091,12 @@ case 673:
 		goto tr746;
 	goto st673;
 tr746:
-#line 20 "vcf_v41.ragel"
+#line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
     }
-#line 433 "vcf_v41.ragel"
+#line 444 "vcf_v41.ragel"
 	{ {goto st675;} }
 	goto st677;
 st677:
@@ -12800,7 +12800,7 @@ case 677:
 	case 11: 
 	case 12: 
 	case 13: 
-#line 29 "vcf_v41.ragel"
+#line 35 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this);
         p--; {goto st672;}
@@ -12891,7 +12891,7 @@ case 677:
 	case 486: 
 	case 487: 
 	case 488: 
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
@@ -12943,7 +12943,7 @@ case 677:
 	case 532: 
 	case 533: 
 	case 534: 
-#line 39 "vcf_v41.ragel"
+#line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
         p--; {goto st673;}
@@ -12951,261 +12951,16 @@ case 677:
 	break;
 	case 14: 
 	case 15: 
-#line 53 "vcf_v41.ragel"
+#line 210 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this,
             "Fileformat must be a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st672;}
     }
-#line 29 "vcf_v41.ragel"
+#line 35 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this);
         p--; {goto st672;}
-    }
-	break;
-	case 535: 
-#line 124 "vcf_v41.ragel"
-	{
-    }
-#line 44 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st673;}
-    }
-	break;
-	case 536: 
-	case 537: 
-#line 133 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this, "Position must be a positive number");
-        p--; {goto st673;}
-    }
-#line 44 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st673;}
-    }
-	break;
-	case 538: 
-	case 539: 
-#line 142 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'id' field\n", n_lines);
- //       vcf_record_free(status->current_record);
-    }
-#line 44 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st673;}
-    }
-	break;
-	case 540: 
-	case 541: 
-#line 151 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'reference' field\n", n_lines);
-//        vcf_record_free(status->current_record);
-    }
-#line 44 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st673;}
-    }
-	break;
-	case 542: 
-	case 543: 
-	case 622: 
-	case 623: 
-	case 624: 
-	case 625: 
-	case 626: 
-	case 627: 
-	case 628: 
-	case 629: 
-	case 630: 
-	case 631: 
-	case 632: 
-	case 633: 
-	case 634: 
-	case 635: 
-	case 636: 
-	case 637: 
-	case 638: 
-	case 639: 
-	case 640: 
-	case 641: 
-	case 642: 
-	case 643: 
-	case 644: 
-	case 645: 
-	case 646: 
-	case 647: 
-	case 648: 
-	case 649: 
-	case 650: 
-	case 651: 
-	case 652: 
-	case 653: 
-	case 654: 
-	case 655: 
-	case 656: 
-	case 657: 
-	case 658: 
-	case 659: 
-	case 660: 
-	case 661: 
-	case 662: 
-	case 663: 
-	case 664: 
-	case 665: 
-	case 666: 
-	case 667: 
-	case 668: 
-	case 669: 
-	case 670: 
-	case 671: 
-#line 176 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'alternate' field\n", n_lines);
- //       vcf_record_free(status->current_record);
-    }
-#line 44 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st673;}
-    }
-	break;
-	case 544: 
-	case 545: 
-	case 619: 
-	case 620: 
-	case 621: 
-#line 191 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'quality' field\n", n_lines);
- //       vcf_record_free(status->current_record);
-    }
-#line 44 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st673;}
-    }
-	break;
-	case 546: 
-	case 547: 
-	case 618: 
-#line 200 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'filter' field\n", n_lines);
- //       vcf_record_free(status->current_record);
-    }
-#line 44 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st673;}
-    }
-	break;
-	case 548: 
-	case 549: 
-	case 560: 
-	case 561: 
-	case 562: 
-	case 563: 
-	case 564: 
-	case 565: 
-	case 566: 
-	case 567: 
-	case 568: 
-	case 569: 
-	case 570: 
-	case 571: 
-	case 572: 
-	case 573: 
-	case 574: 
-	case 575: 
-	case 576: 
-	case 577: 
-	case 578: 
-	case 579: 
-	case 580: 
-	case 581: 
-	case 582: 
-	case 583: 
-	case 584: 
-	case 585: 
-	case 586: 
-	case 587: 
-	case 588: 
-	case 589: 
-	case 590: 
-	case 591: 
-	case 592: 
-	case 593: 
-	case 594: 
-	case 595: 
-	case 596: 
-	case 597: 
-	case 598: 
-	case 599: 
-	case 600: 
-	case 601: 
-	case 602: 
-	case 603: 
-	case 604: 
-	case 605: 
-	case 606: 
-	case 607: 
-	case 608: 
-	case 609: 
-	case 610: 
-	case 611: 
-	case 612: 
-	case 613: 
-	case 614: 
-	case 615: 
-	case 616: 
-	case 617: 
-#line 209 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'info' field\n", n_lines);
- //       vcf_record_free(status->current_record);
-    }
-#line 44 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st673;}
-    }
-	break;
-	case 550: 
-	case 551: 
-	case 552: 
-	case 558: 
-	case 559: 
-#line 218 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'format' field\n", n_lines);
- //       vcf_record_free(status->current_record);
-    }
-#line 44 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st673;}
-    }
-	break;
-	case 553: 
-	case 554: 
-	case 555: 
-	case 556: 
-	case 557: 
-#line 227 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this, "Incorrect sample format");
-        p--; {goto st673;}
-    }
-#line 44 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st673;}
     }
 	break;
 	case 125: 
@@ -13252,12 +13007,12 @@ case 677:
 	case 166: 
 	case 167: 
 	case 168: 
-#line 257 "vcf_v41.ragel"
+#line 216 "vcf_v41.ragel"
 	{
         printf("Meta ALT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
@@ -13288,12 +13043,12 @@ case 677:
 	case 197: 
 	case 198: 
 	case 199: 
-#line 262 "vcf_v41.ragel"
+#line 221 "vcf_v41.ragel"
 	{
         printf("Meta FILTER error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
@@ -13362,12 +13117,12 @@ case 677:
 	case 265: 
 	case 266: 
 	case 267: 
-#line 267 "vcf_v41.ragel"
+#line 226 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
@@ -13468,12 +13223,12 @@ case 677:
 	case 364: 
 	case 365: 
 	case 366: 
-#line 272 "vcf_v41.ragel"
+#line 231 "vcf_v41.ragel"
 	{
         printf("Meta INFO error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
@@ -13618,31 +13373,276 @@ case 677:
 	case 482: 
 	case 483: 
 	case 484: 
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	break;
+	case 535: 
+#line 241 "vcf_v41.ragel"
+	{
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st673;}
+    }
+	break;
+	case 536: 
+	case 537: 
+#line 244 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Position must be a positive number");
+        p--; {goto st673;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st673;}
+    }
+	break;
+	case 538: 
+	case 539: 
+#line 249 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'id' field\n", n_lines);
+ //       vcf_record_free(status->current_record);
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st673;}
+    }
+	break;
+	case 540: 
+	case 541: 
+#line 254 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'reference' field\n", n_lines);
+//        vcf_record_free(status->current_record);
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st673;}
+    }
+	break;
+	case 542: 
+	case 543: 
+	case 622: 
+	case 623: 
+	case 624: 
+	case 625: 
+	case 626: 
+	case 627: 
+	case 628: 
+	case 629: 
+	case 630: 
+	case 631: 
+	case 632: 
+	case 633: 
+	case 634: 
+	case 635: 
+	case 636: 
+	case 637: 
+	case 638: 
+	case 639: 
+	case 640: 
+	case 641: 
+	case 642: 
+	case 643: 
+	case 644: 
+	case 645: 
+	case 646: 
+	case 647: 
+	case 648: 
+	case 649: 
+	case 650: 
+	case 651: 
+	case 652: 
+	case 653: 
+	case 654: 
+	case 655: 
+	case 656: 
+	case 657: 
+	case 658: 
+	case 659: 
+	case 660: 
+	case 661: 
+	case 662: 
+	case 663: 
+	case 664: 
+	case 665: 
+	case 666: 
+	case 667: 
+	case 668: 
+	case 669: 
+	case 670: 
+	case 671: 
+#line 259 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'alternate' field\n", n_lines);
+ //       vcf_record_free(status->current_record);
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st673;}
+    }
+	break;
+	case 544: 
+	case 545: 
+	case 619: 
+	case 620: 
+	case 621: 
+#line 264 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'quality' field\n", n_lines);
+ //       vcf_record_free(status->current_record);
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st673;}
+    }
+	break;
+	case 546: 
+	case 547: 
+	case 618: 
+#line 269 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'filter' field\n", n_lines);
+ //       vcf_record_free(status->current_record);
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st673;}
+    }
+	break;
+	case 548: 
+	case 549: 
+	case 560: 
+	case 561: 
+	case 562: 
+	case 563: 
+	case 564: 
+	case 565: 
+	case 566: 
+	case 567: 
+	case 568: 
+	case 569: 
+	case 570: 
+	case 571: 
+	case 572: 
+	case 573: 
+	case 574: 
+	case 575: 
+	case 576: 
+	case 577: 
+	case 578: 
+	case 579: 
+	case 580: 
+	case 581: 
+	case 582: 
+	case 583: 
+	case 584: 
+	case 585: 
+	case 586: 
+	case 587: 
+	case 588: 
+	case 589: 
+	case 590: 
+	case 591: 
+	case 592: 
+	case 593: 
+	case 594: 
+	case 595: 
+	case 596: 
+	case 597: 
+	case 598: 
+	case 599: 
+	case 600: 
+	case 601: 
+	case 602: 
+	case 603: 
+	case 604: 
+	case 605: 
+	case 606: 
+	case 607: 
+	case 608: 
+	case 609: 
+	case 610: 
+	case 611: 
+	case 612: 
+	case 613: 
+	case 614: 
+	case 615: 
+	case 616: 
+	case 617: 
+#line 274 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'info' field\n", n_lines);
+ //       vcf_record_free(status->current_record);
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st673;}
+    }
+	break;
+	case 550: 
+	case 551: 
+	case 552: 
+	case 558: 
+	case 559: 
+#line 279 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'format' field\n", n_lines);
+ //       vcf_record_free(status->current_record);
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st673;}
+    }
+	break;
+	case 553: 
+	case 554: 
+	case 555: 
+	case 556: 
+	case 557: 
+#line 284 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Incorrect sample format");
+        p--; {goto st673;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st673;}
+    }
+	break;
 	case 122: 
 	case 123: 
 	case 124: 
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 257 "vcf_v41.ragel"
+#line 216 "vcf_v41.ragel"
 	{
         printf("Meta ALT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
@@ -13653,17 +13653,17 @@ case 677:
 	case 172: 
 	case 173: 
 	case 174: 
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 262 "vcf_v41.ragel"
+#line 221 "vcf_v41.ragel"
 	{
         printf("Meta FILTER error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
@@ -13674,17 +13674,17 @@ case 677:
 	case 202: 
 	case 203: 
 	case 204: 
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 267 "vcf_v41.ragel"
+#line 226 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
@@ -13694,71 +13694,71 @@ case 677:
 	case 269: 
 	case 270: 
 	case 271: 
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 272 "vcf_v41.ragel"
+#line 231 "vcf_v41.ragel"
 	{
         printf("Meta INFO error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	break;
 	case 169: 
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 262 "vcf_v41.ragel"
+#line 221 "vcf_v41.ragel"
 	{
         printf("Meta FILTER error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 267 "vcf_v41.ragel"
+#line 226 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
 	break;
 	case 18: 
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 257 "vcf_v41.ragel"
+#line 216 "vcf_v41.ragel"
 	{
         printf("Meta ALT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 262 "vcf_v41.ragel"
+#line 221 "vcf_v41.ragel"
 	{
         printf("Meta FILTER error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 267 "vcf_v41.ragel"
+#line 226 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 272 "vcf_v41.ragel"
+#line 231 "vcf_v41.ragel"
 	{
         printf("Meta INFO error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
@@ -13766,79 +13766,79 @@ case 677:
 	break;
 	case 17: 
 	case 20: 
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 257 "vcf_v41.ragel"
+#line 216 "vcf_v41.ragel"
 	{
         printf("Meta ALT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 262 "vcf_v41.ragel"
+#line 221 "vcf_v41.ragel"
 	{
         printf("Meta FILTER error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 267 "vcf_v41.ragel"
+#line 226 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 272 "vcf_v41.ragel"
+#line 231 "vcf_v41.ragel"
 	{
         printf("Meta INFO error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
-#line 39 "vcf_v41.ragel"
+#line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
         p--; {goto st673;}
     }
 	break;
 	case 16: 
-#line 29 "vcf_v41.ragel"
+#line 35 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this);
         p--; {goto st672;}
     }
-#line 277 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
         printf("Meta error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 257 "vcf_v41.ragel"
+#line 216 "vcf_v41.ragel"
 	{
         printf("Meta ALT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 262 "vcf_v41.ragel"
+#line 221 "vcf_v41.ragel"
 	{
         printf("Meta FILTER error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 267 "vcf_v41.ragel"
+#line 226 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 272 "vcf_v41.ragel"
+#line 231 "vcf_v41.ragel"
 	{
         printf("Meta INFO error in line %zu\n", n_lines);
         p--; {goto st672;}
     }
-#line 34 "vcf_v41.ragel"
+#line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st672;}
     }
-#line 39 "vcf_v41.ragel"
+#line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
         p--; {goto st673;}
@@ -13851,7 +13851,7 @@ case 677:
 	_out: {}
 	}
 
-#line 496 "vcf_v41.ragel"
+#line 507 "vcf_v41.ragel"
 
     }
 
