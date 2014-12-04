@@ -360,8 +360,11 @@
     # Records
     record_chrom    = (alnum | punct - ":")+ | ("<" (alnum | punct - (":" | ">"))+ ">");
     record_pos      = int_number ;
-    ## ID must be a string with no white-spaces or semi-colons
-    record_id       = (print - (space | ";"))+ | "." ;
+
+    ## ID must be a (list of) string with no white-spaces or semi-colons
+    record_id_value = (print - (space | ";"))+ ;
+    record_id       = record_id_value (";" record_id_value)*  | "." ;
+
     record_ref      = bases ;
 
     record_alt_snv  = ((bases | ".") ("," (bases | "."))* )+ | "0";
