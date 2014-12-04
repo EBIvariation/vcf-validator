@@ -374,13 +374,22 @@
 
     record_ref      = bases ;
 
-    record_alt_snv  = ((bases | ".") ("," (bases | "."))* )+ | "0";
+    ## A basic ALT can be something like AGT (biallelic), A,AT (multiallelic) or dot (no variant, must be the only allele)
+    ## Zero is just for compatibility with PlinkSeq transformation
+    record_alt_snv  = (bases ("," bases)* )+ | "." |"0";
+    ## Indel alternates can be represented by standardized prefixes or an asterisk
     record_alt_indel= "<DEL>" | "<INS>" | "<DUP>" | "<INV>" | "<CNV>" | "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">" | "*";
+    ## Structural variants follow forms like:
+    ## ]1:1234]ATG or ]<contig_1>:1234]ATG : paired breakends
+    ## .AGT, AGT.: single breakends
     record_alt_sv   = "]" record_chrom ":" record_pos "]" (bases)+ |
                       "[" record_chrom ":" record_pos "[" (bases)+ |
                       (bases)+ "]" record_chrom ":" record_pos "]" |
-                      (bases)+ "[" record_chrom ":" record_pos "[" ;
+                      (bases)+ "[" record_chrom ":" record_pos "[" | 
+                      "." bases | bases ".";
+    ## Other alternates can be any identifier surrounded by < > symbols
     record_alt_other= ("<" identifier ">") - ("<DEL>" | "<INS>" | "<DUP>" | "<INV>" | "<CNV>" | "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">");
+    ## Main alternate allele rule
     record_alt      = record_alt_snv %alt_snv_end |
                       record_alt_indel %alt_indel_end |
                       record_alt_sv %alt_sv_end |
