@@ -239,6 +239,8 @@
     }
 
     action chrom_error {
+        printf("Line %zu: Error in 'chrom' field\n", n_lines);
+        fhold; fgoto body_section_skip;
     }
 
     action pos_error {
@@ -248,37 +250,37 @@
 
     action id_error {
         printf("Line %zu: Error in 'id' field\n", n_lines);
- //       vcf_record_free(status->current_record);
+        fhold; fgoto body_section_skip;
     }
 
     action ref_error {
         printf("Line %zu: Error in 'reference' field\n", n_lines);
-//        vcf_record_free(status->current_record);
+        fhold; fgoto body_section_skip;
     }
 
     action alt_error {
         printf("Line %zu: Error in 'alternate' field\n", n_lines);
- //       vcf_record_free(status->current_record);
+        fhold; fgoto body_section_skip;
     }
 
     action qual_error {
         printf("Line %zu: Error in 'quality' field\n", n_lines);
- //       vcf_record_free(status->current_record);
+        fhold; fgoto body_section_skip;
     }
 
     action filter_error {
         printf("Line %zu: Error in 'filter' field\n", n_lines);
- //       vcf_record_free(status->current_record);
+        fhold; fgoto body_section_skip;
     }
 
     action info_error {
         printf("Line %zu: Error in 'info' field\n", n_lines);
- //       vcf_record_free(status->current_record);
+        fhold; fgoto body_section_skip;
     }
 
     action format_error {
         printf("Line %zu: Error in 'format' field\n", n_lines);
- //       vcf_record_free(status->current_record);
+        fhold; fgoto body_section_skip;
     }
 
     action sample_error {
@@ -358,7 +360,12 @@
                       ("\tFORMAT" ("\t" sample_name >token_begin %sample_name_end)+ )?;
 
     # Records
-    record_chrom    = (alnum | punct - ":")+ | ("<" (alnum | punct - (":" | ">"))+ ">");
+
+    ## A chromosome must be a string with no white-spaces or colons, and may be surronded by < > symbols (for contigs)
+    record_chr_basic= (alnum | punct - (":" | "<" | ">"))+ ;
+    record_chr_contg= "<" (alnum | punct - (":" | ">"))+ ">" ;
+    record_chrom    = record_chr_basic | record_chr_contg;
+    
     record_pos      = int_number ;
 
     ## ID must be a (list of) string with no white-spaces or semi-colons
