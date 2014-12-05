@@ -333,6 +333,13 @@
     # TODO Could it accept more symbols? Comma won't be, for sure
     identifier      = (alnum | "." | "_" | "-" )+ - ((".")+ | ("_")+ | ("-")+) ;
     
+    # URL inspired in http://stackoverflow.com/questions/8784903/failed-to-convert-url-parser-regular-expression-to-ragel
+    scheme    = (alpha (any - [:/?#] - "\n")+ ) ;
+    authority = (alpha (any - [/?#] - "\n")* ) ;
+    path      = (any - [?#] - "\n")* ;
+    query     = (any - [#] - "\n")* ;
+    fragment  = (any - "\n")* ; 
+    url       =  scheme "://" authority path ("?" query)? ("#" fragment)?;
 
     # File format must be a sequence of alphanumeric and/or punctuation characters like "VCFv4.1"
     fileformat_name = (alnum | punct)+ $err(fileformat_error);
@@ -349,9 +356,9 @@
                               ( ":" meta_field_value)? $err(meta_alt_id_suffix_err)
                             ) 
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
-    meta_assembly   = (print - ("\n" | "\t"))+ ;  # URL
+    meta_assembly   = url ;
     meta_contig     = "ID=" identifier $err(meta_id_err)
-                        ",URL=" meta_field_value ;
+                        ",URL=" url ;
     meta_filter     = "ID=" identifier $err(meta_id_err) 
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
     meta_format     = "ID=" identifier $err(meta_id_err)
@@ -365,7 +372,7 @@
                         (",Source=\"" meta_field_value "\"")?
                         (",Version=\"" meta_field_value "\"")? ;
     meta_pedigree   = (identifier "=" identifier)+ ;
-    meta_pedigreeDB = (print - ("\n" | "\t"))+ ;  # URL
+    meta_pedigreeDB = url ;
     meta_sample     = "ID=" identifier $err(meta_id_err)
                         ",Genomes=" identifier ("," identifier)*
                         ",Mixture=" identifier ("," identifier)*
