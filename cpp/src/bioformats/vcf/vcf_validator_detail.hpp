@@ -5,7 +5,7 @@
 #include "vcf_validator.hpp"
 
 
-#line 464 "vcf_v41.ragel"
+#line 483 "vcf_v41.ragel"
 
 
 namespace
@@ -13,17 +13,17 @@ namespace
   
 #line 15 "vcf_validator_detail.hpp"
 static const int vcf_start = 1;
-static const int vcf_first_final = 703;
+static const int vcf_first_final = 671;
 static const int vcf_error = 0;
 
 static const int vcf_en_main = 1;
 static const int vcf_en_main_meta_section = 20;
-static const int vcf_en_main_body_section = 704;
-static const int vcf_en_meta_section_skip = 701;
-static const int vcf_en_body_section_skip = 702;
+static const int vcf_en_main_body_section = 672;
+static const int vcf_en_meta_section_skip = 669;
+static const int vcf_en_body_section_skip = 670;
 
 
-#line 470 "vcf_v41.ragel"
+#line 489 "vcf_v41.ragel"
 
 }
 
@@ -40,7 +40,7 @@ namespace opencb
 	cs = vcf_start;
 	}
 
-#line 482 "vcf_v41.ragel"
+#line 501 "vcf_v41.ragel"
 
     }
 
@@ -76,8 +76,8 @@ namespace opencb
     {
       return cs >= 
 #line 79 "vcf_validator_detail.hpp"
-703
-#line 515 "vcf_v41.ragel"
+671
+#line 534 "vcf_v41.ragel"
 ;
     }
 
@@ -102,435 +102,508 @@ tr0:
 #line 35 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	goto st0;
 tr14:
 #line 210 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this,
-            "Fileformat must be a sequence of alphanumeric and/or punctuation characters");
-        p--; {goto st701;}
+            "Fileformat is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st669;}
     }
 #line 35 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	goto st0;
 tr18:
 #line 35 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
-#line 236 "vcf_v41.ragel"
+#line 251 "vcf_v41.ragel"
 	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
     }
 #line 216 "vcf_v41.ragel"
 	{
-        printf("Meta ALT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
     }
-#line 221 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
-        printf("Meta FILTER error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        p--; {goto st669;}
     }
-#line 226 "vcf_v41.ragel"
+#line 241 "vcf_v41.ragel"
 	{
-        printf("Meta FORMAT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        p--; {goto st669;}
     }
-#line 231 "vcf_v41.ragel"
+#line 246 "vcf_v41.ragel"
 	{
-        printf("Meta INFO error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 #line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 	goto st0;
 tr20:
-#line 236 "vcf_v41.ragel"
+#line 251 "vcf_v41.ragel"
 	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
     }
 #line 216 "vcf_v41.ragel"
 	{
-        printf("Meta ALT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
     }
-#line 221 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
-        printf("Meta FILTER error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        p--; {goto st669;}
     }
-#line 226 "vcf_v41.ragel"
+#line 241 "vcf_v41.ragel"
 	{
-        printf("Meta FORMAT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        p--; {goto st669;}
     }
-#line 231 "vcf_v41.ragel"
+#line 246 "vcf_v41.ragel"
 	{
-        printf("Meta INFO error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 #line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 	goto st0;
 tr23:
-#line 236 "vcf_v41.ragel"
+#line 251 "vcf_v41.ragel"
 	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
     }
 #line 216 "vcf_v41.ragel"
 	{
-        printf("Meta ALT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
     }
-#line 221 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
-        printf("Meta FILTER error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        p--; {goto st669;}
     }
-#line 226 "vcf_v41.ragel"
+#line 241 "vcf_v41.ragel"
 	{
-        printf("Meta FORMAT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        p--; {goto st669;}
     }
-#line 231 "vcf_v41.ragel"
+#line 246 "vcf_v41.ragel"
 	{
-        printf("Meta INFO error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	goto st0;
 tr34:
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	goto st0;
 tr37:
-#line 236 "vcf_v41.ragel"
+#line 251 "vcf_v41.ragel"
 	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	goto st0;
 tr142:
-#line 236 "vcf_v41.ragel"
+#line 251 "vcf_v41.ragel"
 	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
     }
 #line 216 "vcf_v41.ragel"
 	{
-        printf("Meta ALT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	goto st0;
 tr146:
 #line 216 "vcf_v41.ragel"
 	{
-        printf("Meta ALT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	goto st0;
-tr191:
-#line 236 "vcf_v41.ragel"
-	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
+tr151:
 #line 221 "vcf_v41.ragel"
 	{
-        printf("Meta FILTER error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
+        p--; {goto st669;}
+    }
+#line 216 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
+    }
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
+    }
+	goto st0;
+tr157:
+#line 221 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
+        p--; {goto st669;}
     }
 #line 226 "vcf_v41.ragel"
 	{
-        printf("Meta FORMAT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
+        p--; {goto st669;}
+    }
+#line 216 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	goto st0;
-tr194:
-#line 236 "vcf_v41.ragel"
-	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
-#line 221 "vcf_v41.ragel"
-	{
-        printf("Meta FILTER error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
-#line 40 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
-    }
-	goto st0;
-tr200:
-#line 221 "vcf_v41.ragel"
-	{
-        printf("Meta FILTER error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
-#line 40 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
-    }
-	goto st0;
-tr227:
-#line 236 "vcf_v41.ragel"
-	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
-#line 226 "vcf_v41.ragel"
-	{
-        printf("Meta FORMAT error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
-#line 40 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
-    }
-	goto st0;
-tr233:
-#line 226 "vcf_v41.ragel"
-	{
-        printf("Meta FORMAT error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
-#line 40 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
-    }
-	goto st0;
-tr298:
-#line 236 "vcf_v41.ragel"
-	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
+tr174:
 #line 231 "vcf_v41.ragel"
 	{
-        printf("Meta INFO error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata description format is not correct");
+        p--; {goto st669;}
+    }
+#line 216 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	goto st0;
-tr303:
-#line 231 "vcf_v41.ragel"
+tr178:
+#line 226 "vcf_v41.ragel"
 	{
-        printf("Meta INFO error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
+        p--; {goto st669;}
+    }
+#line 216 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	goto st0;
-tr525:
-#line 45 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_header_section_error(*this);
-        p--; {goto st702;}
-    }
-	goto st0;
-tr575:
-#line 241 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'chrom' field\n", n_lines);
-        p--; {goto st702;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
-    }
-	goto st0;
-tr578:
-#line 246 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this, "Position must be a positive number");
-        p--; {goto st702;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
-    }
-	goto st0;
-tr582:
+tr195:
 #line 251 "vcf_v41.ragel"
 	{
-        printf("Line %zu: Error in 'id' field\n", n_lines);
-        p--; {goto st702;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
     }
-#line 50 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
-    }
-	goto st0;
-tr587:
-#line 256 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'reference' field\n", n_lines);
-        p--; {goto st702;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
-    }
-	goto st0;
-tr591:
-#line 261 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'alternate' field\n", n_lines);
-        p--; {goto st702;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
-    }
-	goto st0;
-tr600:
-#line 266 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'quality' field\n", n_lines);
-        p--; {goto st702;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
-    }
-	goto st0;
-tr604:
-#line 271 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'filter' field\n", n_lines);
-        p--; {goto st702;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
-    }
-	goto st0;
-tr609:
-#line 276 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'info' field\n", n_lines);
-        p--; {goto st702;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
-    }
-	goto st0;
-tr627:
-#line 281 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'format' field\n", n_lines);
-        p--; {goto st702;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
-    }
-	goto st0;
-tr636:
-#line 286 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this, "Incorrect sample format");
-        p--; {goto st702;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
-    }
-	goto st0;
-tr775:
-#line 45 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_header_section_error(*this);
-        p--; {goto st702;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        p--; {goto st669;}
     }
 #line 241 "vcf_v41.ragel"
 	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        p--; {goto st669;}
+    }
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
+    }
+	goto st0;
+tr198:
+#line 251 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
+    }
+#line 236 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        p--; {goto st669;}
+    }
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
+    }
+	goto st0;
+tr204:
+#line 236 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        p--; {goto st669;}
+    }
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
+    }
+	goto st0;
+tr231:
+#line 251 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
+    }
+#line 241 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        p--; {goto st669;}
+    }
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
+    }
+	goto st0;
+tr237:
+#line 241 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        p--; {goto st669;}
+    }
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
+    }
+	goto st0;
+tr302:
+#line 251 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
+    }
+#line 246 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        p--; {goto st669;}
+    }
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
+    }
+	goto st0;
+tr307:
+#line 246 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        p--; {goto st669;}
+    }
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
+    }
+	goto st0;
+tr497:
+#line 45 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_header_section_error(*this);
+        p--; {goto st670;}
+    }
+	goto st0;
+tr547:
+#line 256 "vcf_v41.ragel"
+	{
         printf("Line %zu: Error in 'chrom' field\n", n_lines);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 #line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 	goto st0;
-#line 534 "vcf_validator_detail.hpp"
+tr550:
+#line 261 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Position is not a positive number");
+        p--; {goto st670;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st670;}
+    }
+	goto st0;
+tr554:
+#line 266 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'id' field\n", n_lines);
+        p--; {goto st670;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st670;}
+    }
+	goto st0;
+tr559:
+#line 271 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'reference' field\n", n_lines);
+        p--; {goto st670;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st670;}
+    }
+	goto st0;
+tr563:
+#line 276 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'alternate' field\n", n_lines);
+        p--; {goto st670;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st670;}
+    }
+	goto st0;
+tr572:
+#line 281 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'quality' field\n", n_lines);
+        p--; {goto st670;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st670;}
+    }
+	goto st0;
+tr576:
+#line 286 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'filter' field\n", n_lines);
+        p--; {goto st670;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st670;}
+    }
+	goto st0;
+tr581:
+#line 291 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'info' field\n", n_lines);
+        p--; {goto st670;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st670;}
+    }
+	goto st0;
+tr599:
+#line 296 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'format' field\n", n_lines);
+        p--; {goto st670;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st670;}
+    }
+	goto st0;
+tr608:
+#line 301 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Incorrect sample format");
+        p--; {goto st670;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st670;}
+    }
+	goto st0;
+tr747:
+#line 45 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_header_section_error(*this);
+        p--; {goto st670;}
+    }
+#line 256 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'chrom' field\n", n_lines);
+        p--; {goto st670;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st670;}
+    }
+	goto st0;
+#line 607 "vcf_validator_detail.hpp"
 st0:
 cs = 0;
 	goto _out;
@@ -635,7 +708,7 @@ st15:
 	if ( ++p == pe )
 		goto _test_eof15;
 case 15:
-#line 639 "vcf_validator_detail.hpp"
+#line 712 "vcf_validator_detail.hpp"
 	if ( (*p) == 10 )
 		goto tr16;
 	if ( 33 <= (*p) && (*p) <= 126 )
@@ -656,7 +729,7 @@ st16:
 	if ( ++p == pe )
 		goto _test_eof16;
 case 16:
-#line 660 "vcf_validator_detail.hpp"
+#line 733 "vcf_validator_detail.hpp"
 	if ( (*p) == 35 )
 		goto tr19;
 	goto tr18;
@@ -671,10 +744,10 @@ st17:
 	if ( ++p == pe )
 		goto _test_eof17;
 case 17:
-#line 675 "vcf_validator_detail.hpp"
+#line 748 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 35: goto st18;
-		case 67: goto st499;
+		case 67: goto st467;
 	}
 	goto tr20;
 st18:
@@ -726,7 +799,7 @@ st19:
 	if ( ++p == pe )
 		goto _test_eof19;
 case 19:
-#line 730 "vcf_validator_detail.hpp"
+#line 803 "vcf_validator_detail.hpp"
 	if ( (*p) == 10 )
 		goto tr35;
 	if ( (*p) > 60 ) {
@@ -771,7 +844,7 @@ tr65:
         n_columns = 1;
     }
 	goto st20;
-tr174:
+tr177:
 #line 85 "vcf_v41.ragel"
 	{
         printf("Meta ALT in line %zu\n", n_lines);
@@ -786,7 +859,7 @@ tr174:
         n_columns = 1;
     }
 	goto st20;
-tr226:
+tr230:
 #line 89 "vcf_v41.ragel"
 	{
         printf("Meta FILTER in line %zu\n", n_lines);
@@ -801,7 +874,7 @@ tr226:
         n_columns = 1;
     }
 	goto st20;
-tr287:
+tr291:
 #line 93 "vcf_v41.ragel"
 	{
         printf("Meta FORMAT in line %zu\n", n_lines);
@@ -816,7 +889,7 @@ tr287:
         n_columns = 1;
     }
 	goto st20;
-tr383:
+tr361:
 #line 97 "vcf_v41.ragel"
 	{
         printf("Meta INFO in line %zu\n", n_lines);
@@ -831,7 +904,7 @@ tr383:
         n_columns = 1;
     }
 	goto st20;
-tr423:
+tr395:
 #line 67 "vcf_v41.ragel"
 	{
 //        add_vcf_meta_entry(status->current_meta_entry, file);
@@ -846,7 +919,7 @@ st20:
 	if ( ++p == pe )
 		goto _test_eof20;
 case 20:
-#line 850 "vcf_validator_detail.hpp"
+#line 923 "vcf_validator_detail.hpp"
 	if ( (*p) == 35 )
 		goto tr19;
 	goto tr20;
@@ -860,7 +933,7 @@ st21:
 	if ( ++p == pe )
 		goto _test_eof21;
 case 21:
-#line 864 "vcf_validator_detail.hpp"
+#line 937 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr39;
@@ -897,7 +970,7 @@ st22:
 	if ( ++p == pe )
 		goto _test_eof22;
 case 22:
-#line 901 "vcf_validator_detail.hpp"
+#line 974 "vcf_validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st23;
 	if ( (*p) > 59 ) {
@@ -956,7 +1029,7 @@ st24:
 	if ( ++p == pe )
 		goto _test_eof24;
 case 24:
-#line 960 "vcf_validator_detail.hpp"
+#line 1033 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -1023,7 +1096,7 @@ st27:
 	if ( ++p == pe )
 		goto _test_eof27;
 case 27:
-#line 1027 "vcf_validator_detail.hpp"
+#line 1100 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr53;
 		case 62: goto tr54;
@@ -1071,7 +1144,7 @@ st28:
 	if ( ++p == pe )
 		goto _test_eof28;
 case 28:
-#line 1075 "vcf_validator_detail.hpp"
+#line 1148 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr53;
 		case 61: goto st25;
@@ -1115,7 +1188,7 @@ st29:
 	if ( ++p == pe )
 		goto _test_eof29;
 case 29:
-#line 1119 "vcf_validator_detail.hpp"
+#line 1192 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr65;
 		case 44: goto tr53;
@@ -1137,7 +1210,7 @@ st30:
 	if ( ++p == pe )
 		goto _test_eof30;
 case 30:
-#line 1141 "vcf_validator_detail.hpp"
+#line 1214 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr53;
 		case 61: goto st25;
@@ -1241,7 +1314,7 @@ st33:
 	if ( ++p == pe )
 		goto _test_eof33;
 case 33:
-#line 1245 "vcf_validator_detail.hpp"
+#line 1318 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr53;
 		case 61: goto st25;
@@ -1505,7 +1578,7 @@ st41:
 	if ( ++p == pe )
 		goto _test_eof41;
 case 41:
-#line 1509 "vcf_validator_detail.hpp"
+#line 1582 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr53;
 		case 61: goto st25;
@@ -1608,7 +1681,7 @@ st44:
 	if ( ++p == pe )
 		goto _test_eof44;
 case 44:
-#line 1612 "vcf_validator_detail.hpp"
+#line 1685 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr53;
 		case 61: goto st25;
@@ -1839,7 +1912,7 @@ st51:
 	if ( ++p == pe )
 		goto _test_eof51;
 case 51:
-#line 1843 "vcf_validator_detail.hpp"
+#line 1916 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr53;
 		case 61: goto st25;
@@ -1974,7 +2047,7 @@ st55:
 	if ( ++p == pe )
 		goto _test_eof55;
 case 55:
-#line 1978 "vcf_validator_detail.hpp"
+#line 2051 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr53;
 		case 61: goto st25;
@@ -2205,7 +2278,7 @@ st62:
 	if ( ++p == pe )
 		goto _test_eof62;
 case 62:
-#line 2209 "vcf_validator_detail.hpp"
+#line 2282 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr53;
 		case 61: goto st25;
@@ -2372,7 +2445,7 @@ st67:
 	if ( ++p == pe )
 		goto _test_eof67;
 case 67:
-#line 2376 "vcf_validator_detail.hpp"
+#line 2449 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr53;
 		case 61: goto st25;
@@ -2667,7 +2740,7 @@ st76:
 	if ( ++p == pe )
 		goto _test_eof76;
 case 76:
-#line 2671 "vcf_validator_detail.hpp"
+#line 2744 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -2768,7 +2841,7 @@ st79:
 	if ( ++p == pe )
 		goto _test_eof79;
 case 79:
-#line 2772 "vcf_validator_detail.hpp"
+#line 2845 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -3024,7 +3097,7 @@ st87:
 	if ( ++p == pe )
 		goto _test_eof87;
 case 87:
-#line 3028 "vcf_validator_detail.hpp"
+#line 3101 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -3124,7 +3197,7 @@ st90:
 	if ( ++p == pe )
 		goto _test_eof90;
 case 90:
-#line 3128 "vcf_validator_detail.hpp"
+#line 3201 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -3348,7 +3421,7 @@ st97:
 	if ( ++p == pe )
 		goto _test_eof97;
 case 97:
-#line 3352 "vcf_validator_detail.hpp"
+#line 3425 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -3479,7 +3552,7 @@ st101:
 	if ( ++p == pe )
 		goto _test_eof101;
 case 101:
-#line 3483 "vcf_validator_detail.hpp"
+#line 3556 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -3703,7 +3776,7 @@ st108:
 	if ( ++p == pe )
 		goto _test_eof108;
 case 108:
-#line 3707 "vcf_validator_detail.hpp"
+#line 3780 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -3865,7 +3938,7 @@ st113:
 	if ( ++p == pe )
 		goto _test_eof113;
 case 113:
-#line 3869 "vcf_validator_detail.hpp"
+#line 3942 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -4151,7 +4224,7 @@ st122:
 	if ( ++p == pe )
 		goto _test_eof122;
 case 122:
-#line 4155 "vcf_validator_detail.hpp"
+#line 4228 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr39;
@@ -4277,21 +4350,21 @@ case 129:
 		case 68: goto st164;
 		case 73: goto st167;
 	}
-	goto tr146;
+	goto tr151;
 st130:
 	if ( ++p == pe )
 		goto _test_eof130;
 case 130:
 	if ( (*p) == 78 )
 		goto st131;
-	goto tr146;
+	goto tr151;
 st131:
 	if ( ++p == pe )
 		goto _test_eof131;
 case 131:
 	if ( (*p) == 86 )
 		goto st132;
-	goto tr146;
+	goto tr151;
 st132:
 	if ( ++p == pe )
 		goto _test_eof132;
@@ -4300,7 +4373,7 @@ case 132:
 		case 44: goto st133;
 		case 58: goto st150;
 	}
-	goto tr146;
+	goto tr157;
 st133:
 	if ( ++p == pe )
 		goto _test_eof133;
@@ -4396,10 +4469,7 @@ st146:
 	if ( ++p == pe )
 		goto _test_eof146;
 case 146:
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st147;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st147;
 	goto tr146;
 st147:
@@ -4408,12 +4478,9 @@ st147:
 case 147:
 	if ( (*p) == 34 )
 		goto st148;
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st147;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st147;
-	goto tr146;
+	goto tr174;
 st148:
 	if ( ++p == pe )
 		goto _test_eof148;
@@ -4422,26 +4489,20 @@ case 148:
 		case 34: goto st148;
 		case 62: goto st149;
 	}
-	if ( (*p) > 60 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st147;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st147;
-	goto tr146;
+	goto tr174;
 st149:
 	if ( ++p == pe )
 		goto _test_eof149;
 case 149:
 	switch( (*p) ) {
-		case 10: goto tr174;
+		case 10: goto tr177;
 		case 34: goto st148;
 	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st147;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st147;
-	goto tr146;
+	goto tr174;
 st150:
 	if ( ++p == pe )
 		goto _test_eof150;
@@ -4451,7 +4512,7 @@ case 150:
 			goto st151;
 	} else if ( (*p) >= 32 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st151:
 	if ( ++p == pe )
 		goto _test_eof151;
@@ -4463,7 +4524,7 @@ case 151:
 			goto st151;
 	} else if ( (*p) >= 32 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st152:
 	if ( ++p == pe )
 		goto _test_eof152;
@@ -4477,7 +4538,7 @@ case 152:
 			goto st151;
 	} else if ( (*p) >= 32 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st153:
 	if ( ++p == pe )
 		goto _test_eof153;
@@ -4491,7 +4552,7 @@ case 153:
 			goto st151;
 	} else if ( (*p) >= 32 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st154:
 	if ( ++p == pe )
 		goto _test_eof154;
@@ -4505,7 +4566,7 @@ case 154:
 			goto st151;
 	} else if ( (*p) >= 32 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st155:
 	if ( ++p == pe )
 		goto _test_eof155;
@@ -4519,7 +4580,7 @@ case 155:
 			goto st151;
 	} else if ( (*p) >= 32 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st156:
 	if ( ++p == pe )
 		goto _test_eof156;
@@ -4533,7 +4594,7 @@ case 156:
 			goto st151;
 	} else if ( (*p) >= 32 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st157:
 	if ( ++p == pe )
 		goto _test_eof157;
@@ -4547,7 +4608,7 @@ case 157:
 			goto st151;
 	} else if ( (*p) >= 32 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st158:
 	if ( ++p == pe )
 		goto _test_eof158;
@@ -4561,7 +4622,7 @@ case 158:
 			goto st151;
 	} else if ( (*p) >= 32 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st159:
 	if ( ++p == pe )
 		goto _test_eof159;
@@ -4575,7 +4636,7 @@ case 159:
 			goto st151;
 	} else if ( (*p) >= 32 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st160:
 	if ( ++p == pe )
 		goto _test_eof160;
@@ -4589,7 +4650,7 @@ case 160:
 			goto st151;
 	} else if ( (*p) >= 32 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st161:
 	if ( ++p == pe )
 		goto _test_eof161;
@@ -4603,7 +4664,7 @@ case 161:
 			goto st151;
 	} else if ( (*p) >= 32 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st162:
 	if ( ++p == pe )
 		goto _test_eof162;
@@ -4617,7 +4678,7 @@ case 162:
 			goto st151;
 	} else if ( (*p) >= 32 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st163:
 	if ( ++p == pe )
 		goto _test_eof163;
@@ -4628,7 +4689,7 @@ case 163:
 	}
 	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st151;
-	goto tr146;
+	goto tr178;
 st164:
 	if ( ++p == pe )
 		goto _test_eof164;
@@ -4637,28 +4698,28 @@ case 164:
 		case 69: goto st165;
 		case 85: goto st166;
 	}
-	goto tr146;
+	goto tr151;
 st165:
 	if ( ++p == pe )
 		goto _test_eof165;
 case 165:
 	if ( (*p) == 76 )
 		goto st132;
-	goto tr146;
+	goto tr151;
 st166:
 	if ( ++p == pe )
 		goto _test_eof166;
 case 166:
 	if ( (*p) == 80 )
 		goto st132;
-	goto tr146;
+	goto tr151;
 st167:
 	if ( ++p == pe )
 		goto _test_eof167;
 case 167:
 	if ( (*p) == 78 )
 		goto st168;
-	goto tr146;
+	goto tr151;
 st168:
 	if ( ++p == pe )
 		goto _test_eof168;
@@ -4667,7 +4728,7 @@ case 168:
 		case 83: goto st132;
 		case 86: goto st132;
 	}
-	goto tr146;
+	goto tr151;
 tr27:
 #line 15 "vcf_v41.ragel"
 	{
@@ -4678,7 +4739,7 @@ st169:
 	if ( ++p == pe )
 		goto _test_eof169;
 case 169:
-#line 4682 "vcf_validator_detail.hpp"
+#line 4743 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr39;
@@ -4706,7 +4767,7 @@ case 169:
 			goto st21;
 	} else
 		goto st21;
-	goto tr191;
+	goto tr195;
 st170:
 	if ( ++p == pe )
 		goto _test_eof170;
@@ -4737,7 +4798,7 @@ case 170:
 			goto st21;
 	} else
 		goto st21;
-	goto tr194;
+	goto tr198;
 st171:
 	if ( ++p == pe )
 		goto _test_eof171;
@@ -4768,7 +4829,7 @@ case 171:
 			goto st21;
 	} else
 		goto st21;
-	goto tr194;
+	goto tr198;
 st172:
 	if ( ++p == pe )
 		goto _test_eof172;
@@ -4799,7 +4860,7 @@ case 172:
 			goto st21;
 	} else
 		goto st21;
-	goto tr194;
+	goto tr198;
 st173:
 	if ( ++p == pe )
 		goto _test_eof173;
@@ -4830,7 +4891,7 @@ case 173:
 			goto st21;
 	} else
 		goto st21;
-	goto tr194;
+	goto tr198;
 st174:
 	if ( ++p == pe )
 		goto _test_eof174;
@@ -4860,35 +4921,35 @@ case 174:
 			goto st21;
 	} else
 		goto st21;
-	goto tr194;
+	goto tr198;
 st175:
 	if ( ++p == pe )
 		goto _test_eof175;
 case 175:
 	if ( (*p) == 60 )
 		goto st176;
-	goto tr200;
+	goto tr204;
 st176:
 	if ( ++p == pe )
 		goto _test_eof176;
 case 176:
 	if ( (*p) == 73 )
 		goto st177;
-	goto tr200;
+	goto tr204;
 st177:
 	if ( ++p == pe )
 		goto _test_eof177;
 case 177:
 	if ( (*p) == 68 )
 		goto st178;
-	goto tr200;
+	goto tr204;
 st178:
 	if ( ++p == pe )
 		goto _test_eof178;
 case 178:
 	if ( (*p) == 61 )
 		goto st179;
-	goto tr200;
+	goto tr204;
 st179:
 	if ( ++p == pe )
 		goto _test_eof179;
@@ -4906,7 +4967,7 @@ case 179:
 			goto st181;
 	} else
 		goto st181;
-	goto tr200;
+	goto tr204;
 st180:
 	if ( ++p == pe )
 		goto _test_eof180;
@@ -4924,7 +4985,7 @@ case 180:
 			goto st181;
 	} else
 		goto st181;
-	goto tr200;
+	goto tr204;
 st181:
 	if ( ++p == pe )
 		goto _test_eof181;
@@ -4944,120 +5005,114 @@ case 181:
 			goto st181;
 	} else
 		goto st181;
-	goto tr200;
+	goto tr204;
 st182:
 	if ( ++p == pe )
 		goto _test_eof182;
 case 182:
 	if ( (*p) == 68 )
 		goto st183;
-	goto tr200;
+	goto tr204;
 st183:
 	if ( ++p == pe )
 		goto _test_eof183;
 case 183:
 	if ( (*p) == 101 )
 		goto st184;
-	goto tr200;
+	goto tr204;
 st184:
 	if ( ++p == pe )
 		goto _test_eof184;
 case 184:
 	if ( (*p) == 115 )
 		goto st185;
-	goto tr200;
+	goto tr204;
 st185:
 	if ( ++p == pe )
 		goto _test_eof185;
 case 185:
 	if ( (*p) == 99 )
 		goto st186;
-	goto tr200;
+	goto tr204;
 st186:
 	if ( ++p == pe )
 		goto _test_eof186;
 case 186:
 	if ( (*p) == 114 )
 		goto st187;
-	goto tr200;
+	goto tr204;
 st187:
 	if ( ++p == pe )
 		goto _test_eof187;
 case 187:
 	if ( (*p) == 105 )
 		goto st188;
-	goto tr200;
+	goto tr204;
 st188:
 	if ( ++p == pe )
 		goto _test_eof188;
 case 188:
 	if ( (*p) == 112 )
 		goto st189;
-	goto tr200;
+	goto tr204;
 st189:
 	if ( ++p == pe )
 		goto _test_eof189;
 case 189:
 	if ( (*p) == 116 )
 		goto st190;
-	goto tr200;
+	goto tr204;
 st190:
 	if ( ++p == pe )
 		goto _test_eof190;
 case 190:
 	if ( (*p) == 105 )
 		goto st191;
-	goto tr200;
+	goto tr204;
 st191:
 	if ( ++p == pe )
 		goto _test_eof191;
 case 191:
 	if ( (*p) == 111 )
 		goto st192;
-	goto tr200;
+	goto tr204;
 st192:
 	if ( ++p == pe )
 		goto _test_eof192;
 case 192:
 	if ( (*p) == 110 )
 		goto st193;
-	goto tr200;
+	goto tr204;
 st193:
 	if ( ++p == pe )
 		goto _test_eof193;
 case 193:
 	if ( (*p) == 61 )
 		goto st194;
-	goto tr200;
+	goto tr204;
 st194:
 	if ( ++p == pe )
 		goto _test_eof194;
 case 194:
 	if ( (*p) == 34 )
 		goto st195;
-	goto tr200;
+	goto tr204;
 st195:
 	if ( ++p == pe )
 		goto _test_eof195;
 case 195:
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st196;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st196;
-	goto tr200;
+	goto tr204;
 st196:
 	if ( ++p == pe )
 		goto _test_eof196;
 case 196:
 	if ( (*p) == 34 )
 		goto st197;
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st196;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st196;
-	goto tr200;
+	goto tr204;
 st197:
 	if ( ++p == pe )
 		goto _test_eof197;
@@ -5066,26 +5121,20 @@ case 197:
 		case 34: goto st197;
 		case 62: goto st198;
 	}
-	if ( (*p) > 60 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st196;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st196;
-	goto tr200;
+	goto tr204;
 st198:
 	if ( ++p == pe )
 		goto _test_eof198;
 case 198:
 	switch( (*p) ) {
-		case 10: goto tr226;
+		case 10: goto tr230;
 		case 34: goto st197;
 	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st196;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st196;
-	goto tr200;
+	goto tr204;
 st199:
 	if ( ++p == pe )
 		goto _test_eof199;
@@ -5103,7 +5152,7 @@ case 199:
 			goto st181;
 	} else
 		goto st181;
-	goto tr200;
+	goto tr204;
 st200:
 	if ( ++p == pe )
 		goto _test_eof200;
@@ -5121,7 +5170,7 @@ case 200:
 			goto st181;
 	} else
 		goto st181;
-	goto tr200;
+	goto tr204;
 st201:
 	if ( ++p == pe )
 		goto _test_eof201;
@@ -5152,7 +5201,7 @@ case 201:
 			goto st21;
 	} else
 		goto st21;
-	goto tr227;
+	goto tr231;
 st202:
 	if ( ++p == pe )
 		goto _test_eof202;
@@ -5183,7 +5232,7 @@ case 202:
 			goto st21;
 	} else
 		goto st21;
-	goto tr227;
+	goto tr231;
 st203:
 	if ( ++p == pe )
 		goto _test_eof203;
@@ -5214,7 +5263,7 @@ case 203:
 			goto st21;
 	} else
 		goto st21;
-	goto tr227;
+	goto tr231;
 st204:
 	if ( ++p == pe )
 		goto _test_eof204;
@@ -5245,7 +5294,7 @@ case 204:
 			goto st21;
 	} else
 		goto st21;
-	goto tr227;
+	goto tr231;
 st205:
 	if ( ++p == pe )
 		goto _test_eof205;
@@ -5275,35 +5324,35 @@ case 205:
 			goto st21;
 	} else
 		goto st21;
-	goto tr227;
+	goto tr231;
 st206:
 	if ( ++p == pe )
 		goto _test_eof206;
 case 206:
 	if ( (*p) == 60 )
 		goto st207;
-	goto tr233;
+	goto tr237;
 st207:
 	if ( ++p == pe )
 		goto _test_eof207;
 case 207:
 	if ( (*p) == 73 )
 		goto st208;
-	goto tr233;
+	goto tr237;
 st208:
 	if ( ++p == pe )
 		goto _test_eof208;
 case 208:
 	if ( (*p) == 68 )
 		goto st209;
-	goto tr233;
+	goto tr237;
 st209:
 	if ( ++p == pe )
 		goto _test_eof209;
 case 209:
 	if ( (*p) == 61 )
 		goto st210;
-	goto tr233;
+	goto tr237;
 st210:
 	if ( ++p == pe )
 		goto _test_eof210;
@@ -5321,7 +5370,7 @@ case 210:
 			goto st212;
 	} else
 		goto st212;
-	goto tr233;
+	goto tr237;
 st211:
 	if ( ++p == pe )
 		goto _test_eof211;
@@ -5339,7 +5388,7 @@ case 211:
 			goto st212;
 	} else
 		goto st212;
-	goto tr233;
+	goto tr237;
 st212:
 	if ( ++p == pe )
 		goto _test_eof212;
@@ -5359,56 +5408,56 @@ case 212:
 			goto st212;
 	} else
 		goto st212;
-	goto tr233;
+	goto tr237;
 st213:
 	if ( ++p == pe )
 		goto _test_eof213;
 case 213:
 	if ( (*p) == 78 )
 		goto st214;
-	goto tr233;
+	goto tr237;
 st214:
 	if ( ++p == pe )
 		goto _test_eof214;
 case 214:
 	if ( (*p) == 117 )
 		goto st215;
-	goto tr233;
+	goto tr237;
 st215:
 	if ( ++p == pe )
 		goto _test_eof215;
 case 215:
 	if ( (*p) == 109 )
 		goto st216;
-	goto tr233;
+	goto tr237;
 st216:
 	if ( ++p == pe )
 		goto _test_eof216;
 case 216:
 	if ( (*p) == 98 )
 		goto st217;
-	goto tr233;
+	goto tr237;
 st217:
 	if ( ++p == pe )
 		goto _test_eof217;
 case 217:
 	if ( (*p) == 101 )
 		goto st218;
-	goto tr233;
+	goto tr237;
 st218:
 	if ( ++p == pe )
 		goto _test_eof218;
 case 218:
 	if ( (*p) == 114 )
 		goto st219;
-	goto tr233;
+	goto tr237;
 st219:
 	if ( ++p == pe )
 		goto _test_eof219;
 case 219:
 	if ( (*p) == 61 )
 		goto st220;
-	goto tr233;
+	goto tr237;
 st220:
 	if ( ++p == pe )
 		goto _test_eof220;
@@ -5421,49 +5470,49 @@ case 220:
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st267;
-	goto tr233;
+	goto tr237;
 st221:
 	if ( ++p == pe )
 		goto _test_eof221;
 case 221:
 	if ( (*p) == 44 )
 		goto st222;
-	goto tr233;
+	goto tr237;
 st222:
 	if ( ++p == pe )
 		goto _test_eof222;
 case 222:
 	if ( (*p) == 84 )
 		goto st223;
-	goto tr233;
+	goto tr237;
 st223:
 	if ( ++p == pe )
 		goto _test_eof223;
 case 223:
 	if ( (*p) == 121 )
 		goto st224;
-	goto tr233;
+	goto tr237;
 st224:
 	if ( ++p == pe )
 		goto _test_eof224;
 case 224:
 	if ( (*p) == 112 )
 		goto st225;
-	goto tr233;
+	goto tr237;
 st225:
 	if ( ++p == pe )
 		goto _test_eof225;
 case 225:
 	if ( (*p) == 101 )
 		goto st226;
-	goto tr233;
+	goto tr237;
 st226:
 	if ( ++p == pe )
 		goto _test_eof226;
 case 226:
 	if ( (*p) == 61 )
 		goto st227;
-	goto tr233;
+	goto tr237;
 st227:
 	if ( ++p == pe )
 		goto _test_eof227;
@@ -5474,183 +5523,177 @@ case 227:
 		case 73: goto st258;
 		case 83: goto st262;
 	}
-	goto tr233;
+	goto tr237;
 st228:
 	if ( ++p == pe )
 		goto _test_eof228;
 case 228:
 	if ( (*p) == 104 )
 		goto st229;
-	goto tr233;
+	goto tr237;
 st229:
 	if ( ++p == pe )
 		goto _test_eof229;
 case 229:
 	if ( (*p) == 97 )
 		goto st230;
-	goto tr233;
+	goto tr237;
 st230:
 	if ( ++p == pe )
 		goto _test_eof230;
 case 230:
 	if ( (*p) == 114 )
 		goto st231;
-	goto tr233;
+	goto tr237;
 st231:
 	if ( ++p == pe )
 		goto _test_eof231;
 case 231:
 	if ( (*p) == 97 )
 		goto st232;
-	goto tr233;
+	goto tr237;
 st232:
 	if ( ++p == pe )
 		goto _test_eof232;
 case 232:
 	if ( (*p) == 99 )
 		goto st233;
-	goto tr233;
+	goto tr237;
 st233:
 	if ( ++p == pe )
 		goto _test_eof233;
 case 233:
 	if ( (*p) == 116 )
 		goto st234;
-	goto tr233;
+	goto tr237;
 st234:
 	if ( ++p == pe )
 		goto _test_eof234;
 case 234:
 	if ( (*p) == 101 )
 		goto st235;
-	goto tr233;
+	goto tr237;
 st235:
 	if ( ++p == pe )
 		goto _test_eof235;
 case 235:
 	if ( (*p) == 114 )
 		goto st236;
-	goto tr233;
+	goto tr237;
 st236:
 	if ( ++p == pe )
 		goto _test_eof236;
 case 236:
 	if ( (*p) == 44 )
 		goto st237;
-	goto tr233;
+	goto tr237;
 st237:
 	if ( ++p == pe )
 		goto _test_eof237;
 case 237:
 	if ( (*p) == 68 )
 		goto st238;
-	goto tr233;
+	goto tr237;
 st238:
 	if ( ++p == pe )
 		goto _test_eof238;
 case 238:
 	if ( (*p) == 101 )
 		goto st239;
-	goto tr233;
+	goto tr237;
 st239:
 	if ( ++p == pe )
 		goto _test_eof239;
 case 239:
 	if ( (*p) == 115 )
 		goto st240;
-	goto tr233;
+	goto tr237;
 st240:
 	if ( ++p == pe )
 		goto _test_eof240;
 case 240:
 	if ( (*p) == 99 )
 		goto st241;
-	goto tr233;
+	goto tr237;
 st241:
 	if ( ++p == pe )
 		goto _test_eof241;
 case 241:
 	if ( (*p) == 114 )
 		goto st242;
-	goto tr233;
+	goto tr237;
 st242:
 	if ( ++p == pe )
 		goto _test_eof242;
 case 242:
 	if ( (*p) == 105 )
 		goto st243;
-	goto tr233;
+	goto tr237;
 st243:
 	if ( ++p == pe )
 		goto _test_eof243;
 case 243:
 	if ( (*p) == 112 )
 		goto st244;
-	goto tr233;
+	goto tr237;
 st244:
 	if ( ++p == pe )
 		goto _test_eof244;
 case 244:
 	if ( (*p) == 116 )
 		goto st245;
-	goto tr233;
+	goto tr237;
 st245:
 	if ( ++p == pe )
 		goto _test_eof245;
 case 245:
 	if ( (*p) == 105 )
 		goto st246;
-	goto tr233;
+	goto tr237;
 st246:
 	if ( ++p == pe )
 		goto _test_eof246;
 case 246:
 	if ( (*p) == 111 )
 		goto st247;
-	goto tr233;
+	goto tr237;
 st247:
 	if ( ++p == pe )
 		goto _test_eof247;
 case 247:
 	if ( (*p) == 110 )
 		goto st248;
-	goto tr233;
+	goto tr237;
 st248:
 	if ( ++p == pe )
 		goto _test_eof248;
 case 248:
 	if ( (*p) == 61 )
 		goto st249;
-	goto tr233;
+	goto tr237;
 st249:
 	if ( ++p == pe )
 		goto _test_eof249;
 case 249:
 	if ( (*p) == 34 )
 		goto st250;
-	goto tr233;
+	goto tr237;
 st250:
 	if ( ++p == pe )
 		goto _test_eof250;
 case 250:
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st251;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st251;
-	goto tr233;
+	goto tr237;
 st251:
 	if ( ++p == pe )
 		goto _test_eof251;
 case 251:
 	if ( (*p) == 34 )
 		goto st252;
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st251;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st251;
-	goto tr233;
+	goto tr237;
 st252:
 	if ( ++p == pe )
 		goto _test_eof252;
@@ -5659,117 +5702,111 @@ case 252:
 		case 34: goto st252;
 		case 62: goto st253;
 	}
-	if ( (*p) > 60 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st251;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st251;
-	goto tr233;
+	goto tr237;
 st253:
 	if ( ++p == pe )
 		goto _test_eof253;
 case 253:
 	switch( (*p) ) {
-		case 10: goto tr287;
+		case 10: goto tr291;
 		case 34: goto st252;
 	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st251;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st251;
-	goto tr233;
+	goto tr237;
 st254:
 	if ( ++p == pe )
 		goto _test_eof254;
 case 254:
 	if ( (*p) == 108 )
 		goto st255;
-	goto tr233;
+	goto tr237;
 st255:
 	if ( ++p == pe )
 		goto _test_eof255;
 case 255:
 	if ( (*p) == 111 )
 		goto st256;
-	goto tr233;
+	goto tr237;
 st256:
 	if ( ++p == pe )
 		goto _test_eof256;
 case 256:
 	if ( (*p) == 97 )
 		goto st257;
-	goto tr233;
+	goto tr237;
 st257:
 	if ( ++p == pe )
 		goto _test_eof257;
 case 257:
 	if ( (*p) == 116 )
 		goto st236;
-	goto tr233;
+	goto tr237;
 st258:
 	if ( ++p == pe )
 		goto _test_eof258;
 case 258:
 	if ( (*p) == 110 )
 		goto st259;
-	goto tr233;
+	goto tr237;
 st259:
 	if ( ++p == pe )
 		goto _test_eof259;
 case 259:
 	if ( (*p) == 116 )
 		goto st260;
-	goto tr233;
+	goto tr237;
 st260:
 	if ( ++p == pe )
 		goto _test_eof260;
 case 260:
 	if ( (*p) == 101 )
 		goto st261;
-	goto tr233;
+	goto tr237;
 st261:
 	if ( ++p == pe )
 		goto _test_eof261;
 case 261:
 	if ( (*p) == 103 )
 		goto st234;
-	goto tr233;
+	goto tr237;
 st262:
 	if ( ++p == pe )
 		goto _test_eof262;
 case 262:
 	if ( (*p) == 116 )
 		goto st263;
-	goto tr233;
+	goto tr237;
 st263:
 	if ( ++p == pe )
 		goto _test_eof263;
 case 263:
 	if ( (*p) == 114 )
 		goto st264;
-	goto tr233;
+	goto tr237;
 st264:
 	if ( ++p == pe )
 		goto _test_eof264;
 case 264:
 	if ( (*p) == 105 )
 		goto st265;
-	goto tr233;
+	goto tr237;
 st265:
 	if ( ++p == pe )
 		goto _test_eof265;
 case 265:
 	if ( (*p) == 110 )
 		goto st266;
-	goto tr233;
+	goto tr237;
 st266:
 	if ( ++p == pe )
 		goto _test_eof266;
 case 266:
 	if ( (*p) == 103 )
 		goto st236;
-	goto tr233;
+	goto tr237;
 st267:
 	if ( ++p == pe )
 		goto _test_eof267;
@@ -5778,7 +5815,7 @@ case 267:
 		goto st222;
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st267;
-	goto tr233;
+	goto tr237;
 st268:
 	if ( ++p == pe )
 		goto _test_eof268;
@@ -5796,7 +5833,7 @@ case 268:
 			goto st212;
 	} else
 		goto st212;
-	goto tr233;
+	goto tr237;
 st269:
 	if ( ++p == pe )
 		goto _test_eof269;
@@ -5814,7 +5851,7 @@ case 269:
 			goto st212;
 	} else
 		goto st212;
-	goto tr233;
+	goto tr237;
 tr28:
 #line 15 "vcf_v41.ragel"
 	{
@@ -5825,7 +5862,7 @@ st270:
 	if ( ++p == pe )
 		goto _test_eof270;
 case 270:
-#line 5829 "vcf_validator_detail.hpp"
+#line 5866 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr39;
@@ -5852,7 +5889,7 @@ case 270:
 			goto st21;
 	} else
 		goto st21;
-	goto tr298;
+	goto tr302;
 st271:
 	if ( ++p == pe )
 		goto _test_eof271;
@@ -5883,7 +5920,7 @@ case 271:
 			goto st21;
 	} else
 		goto st21;
-	goto tr298;
+	goto tr302;
 st272:
 	if ( ++p == pe )
 		goto _test_eof272;
@@ -5914,7 +5951,7 @@ case 272:
 			goto st21;
 	} else
 		goto st21;
-	goto tr298;
+	goto tr302;
 st273:
 	if ( ++p == pe )
 		goto _test_eof273;
@@ -5944,43 +5981,43 @@ case 273:
 			goto st21;
 	} else
 		goto st21;
-	goto tr298;
+	goto tr302;
 st274:
 	if ( ++p == pe )
 		goto _test_eof274;
 case 274:
 	if ( (*p) == 60 )
 		goto st275;
-	goto tr303;
+	goto tr307;
 st275:
 	if ( ++p == pe )
 		goto _test_eof275;
 case 275:
 	if ( (*p) == 73 )
 		goto st276;
-	goto tr303;
+	goto tr307;
 st276:
 	if ( ++p == pe )
 		goto _test_eof276;
 case 276:
 	if ( (*p) == 68 )
 		goto st277;
-	goto tr303;
+	goto tr307;
 st277:
 	if ( ++p == pe )
 		goto _test_eof277;
 case 277:
 	if ( (*p) == 61 )
 		goto st278;
-	goto tr303;
+	goto tr307;
 st278:
 	if ( ++p == pe )
 		goto _test_eof278;
 case 278:
 	switch( (*p) ) {
 		case 45: goto st279;
-		case 46: goto st368;
-		case 95: goto st369;
+		case 46: goto st336;
+		case 95: goto st337;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
@@ -5990,7 +6027,7 @@ case 278:
 			goto st280;
 	} else
 		goto st280;
-	goto tr303;
+	goto tr307;
 st279:
 	if ( ++p == pe )
 		goto _test_eof279;
@@ -6008,7 +6045,7 @@ case 279:
 			goto st280;
 	} else
 		goto st280;
-	goto tr303;
+	goto tr307;
 st280:
 	if ( ++p == pe )
 		goto _test_eof280;
@@ -6028,56 +6065,56 @@ case 280:
 			goto st280;
 	} else
 		goto st280;
-	goto tr303;
+	goto tr307;
 st281:
 	if ( ++p == pe )
 		goto _test_eof281;
 case 281:
 	if ( (*p) == 78 )
 		goto st282;
-	goto tr303;
+	goto tr307;
 st282:
 	if ( ++p == pe )
 		goto _test_eof282;
 case 282:
 	if ( (*p) == 117 )
 		goto st283;
-	goto tr303;
+	goto tr307;
 st283:
 	if ( ++p == pe )
 		goto _test_eof283;
 case 283:
 	if ( (*p) == 109 )
 		goto st284;
-	goto tr303;
+	goto tr307;
 st284:
 	if ( ++p == pe )
 		goto _test_eof284;
 case 284:
 	if ( (*p) == 98 )
 		goto st285;
-	goto tr303;
+	goto tr307;
 st285:
 	if ( ++p == pe )
 		goto _test_eof285;
 case 285:
 	if ( (*p) == 101 )
 		goto st286;
-	goto tr303;
+	goto tr307;
 st286:
 	if ( ++p == pe )
 		goto _test_eof286;
 case 286:
 	if ( (*p) == 114 )
 		goto st287;
-	goto tr303;
+	goto tr307;
 st287:
 	if ( ++p == pe )
 		goto _test_eof287;
 case 287:
 	if ( (*p) == 61 )
 		goto st288;
-	goto tr303;
+	goto tr307;
 st288:
 	if ( ++p == pe )
 		goto _test_eof288;
@@ -6089,790 +6126,362 @@ case 288:
 		case 82: goto st289;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st367;
-	goto tr303;
+		goto st335;
+	goto tr307;
 st289:
 	if ( ++p == pe )
 		goto _test_eof289;
 case 289:
 	if ( (*p) == 44 )
 		goto st290;
-	goto tr303;
+	goto tr307;
 st290:
 	if ( ++p == pe )
 		goto _test_eof290;
 case 290:
 	if ( (*p) == 84 )
 		goto st291;
-	goto tr303;
+	goto tr307;
 st291:
 	if ( ++p == pe )
 		goto _test_eof291;
 case 291:
 	if ( (*p) == 121 )
 		goto st292;
-	goto tr303;
+	goto tr307;
 st292:
 	if ( ++p == pe )
 		goto _test_eof292;
 case 292:
 	if ( (*p) == 112 )
 		goto st293;
-	goto tr303;
+	goto tr307;
 st293:
 	if ( ++p == pe )
 		goto _test_eof293;
 case 293:
 	if ( (*p) == 101 )
 		goto st294;
-	goto tr303;
+	goto tr307;
 st294:
 	if ( ++p == pe )
 		goto _test_eof294;
 case 294:
 	if ( (*p) == 61 )
 		goto st295;
-	goto tr303;
+	goto tr307;
 st295:
 	if ( ++p == pe )
 		goto _test_eof295;
 case 295:
 	switch( (*p) ) {
 		case 67: goto st296;
-		case 70: goto st354;
-		case 73: goto st359;
-		case 83: goto st363;
+		case 70: goto st322;
+		case 73: goto st327;
+		case 83: goto st331;
 	}
-	goto tr303;
+	goto tr307;
 st296:
 	if ( ++p == pe )
 		goto _test_eof296;
 case 296:
 	if ( (*p) == 104 )
 		goto st297;
-	goto tr303;
+	goto tr307;
 st297:
 	if ( ++p == pe )
 		goto _test_eof297;
 case 297:
 	if ( (*p) == 97 )
 		goto st298;
-	goto tr303;
+	goto tr307;
 st298:
 	if ( ++p == pe )
 		goto _test_eof298;
 case 298:
 	if ( (*p) == 114 )
 		goto st299;
-	goto tr303;
+	goto tr307;
 st299:
 	if ( ++p == pe )
 		goto _test_eof299;
 case 299:
 	if ( (*p) == 97 )
 		goto st300;
-	goto tr303;
+	goto tr307;
 st300:
 	if ( ++p == pe )
 		goto _test_eof300;
 case 300:
 	if ( (*p) == 99 )
 		goto st301;
-	goto tr303;
+	goto tr307;
 st301:
 	if ( ++p == pe )
 		goto _test_eof301;
 case 301:
 	if ( (*p) == 116 )
 		goto st302;
-	goto tr303;
+	goto tr307;
 st302:
 	if ( ++p == pe )
 		goto _test_eof302;
 case 302:
 	if ( (*p) == 101 )
 		goto st303;
-	goto tr303;
+	goto tr307;
 st303:
 	if ( ++p == pe )
 		goto _test_eof303;
 case 303:
 	if ( (*p) == 114 )
 		goto st304;
-	goto tr303;
+	goto tr307;
 st304:
 	if ( ++p == pe )
 		goto _test_eof304;
 case 304:
 	if ( (*p) == 44 )
 		goto st305;
-	goto tr303;
+	goto tr307;
 st305:
 	if ( ++p == pe )
 		goto _test_eof305;
 case 305:
 	if ( (*p) == 68 )
 		goto st306;
-	goto tr303;
+	goto tr307;
 st306:
 	if ( ++p == pe )
 		goto _test_eof306;
 case 306:
 	if ( (*p) == 101 )
 		goto st307;
-	goto tr303;
+	goto tr307;
 st307:
 	if ( ++p == pe )
 		goto _test_eof307;
 case 307:
 	if ( (*p) == 115 )
 		goto st308;
-	goto tr303;
+	goto tr307;
 st308:
 	if ( ++p == pe )
 		goto _test_eof308;
 case 308:
 	if ( (*p) == 99 )
 		goto st309;
-	goto tr303;
+	goto tr307;
 st309:
 	if ( ++p == pe )
 		goto _test_eof309;
 case 309:
 	if ( (*p) == 114 )
 		goto st310;
-	goto tr303;
+	goto tr307;
 st310:
 	if ( ++p == pe )
 		goto _test_eof310;
 case 310:
 	if ( (*p) == 105 )
 		goto st311;
-	goto tr303;
+	goto tr307;
 st311:
 	if ( ++p == pe )
 		goto _test_eof311;
 case 311:
 	if ( (*p) == 112 )
 		goto st312;
-	goto tr303;
+	goto tr307;
 st312:
 	if ( ++p == pe )
 		goto _test_eof312;
 case 312:
 	if ( (*p) == 116 )
 		goto st313;
-	goto tr303;
+	goto tr307;
 st313:
 	if ( ++p == pe )
 		goto _test_eof313;
 case 313:
 	if ( (*p) == 105 )
 		goto st314;
-	goto tr303;
+	goto tr307;
 st314:
 	if ( ++p == pe )
 		goto _test_eof314;
 case 314:
 	if ( (*p) == 111 )
 		goto st315;
-	goto tr303;
+	goto tr307;
 st315:
 	if ( ++p == pe )
 		goto _test_eof315;
 case 315:
 	if ( (*p) == 110 )
 		goto st316;
-	goto tr303;
+	goto tr307;
 st316:
 	if ( ++p == pe )
 		goto _test_eof316;
 case 316:
 	if ( (*p) == 61 )
 		goto st317;
-	goto tr303;
+	goto tr307;
 st317:
 	if ( ++p == pe )
 		goto _test_eof317;
 case 317:
 	if ( (*p) == 34 )
 		goto st318;
-	goto tr303;
+	goto tr307;
 st318:
 	if ( ++p == pe )
 		goto _test_eof318;
 case 318:
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st319;
-	goto tr303;
+	goto tr307;
 st319:
 	if ( ++p == pe )
 		goto _test_eof319;
 case 319:
 	if ( (*p) == 34 )
 		goto st320;
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st319;
-	goto tr303;
+	goto tr307;
 st320:
 	if ( ++p == pe )
 		goto _test_eof320;
 case 320:
 	switch( (*p) ) {
 		case 34: goto st320;
-		case 44: goto st321;
-		case 62: goto st353;
+		case 62: goto st321;
 	}
-	if ( (*p) > 60 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st319;
-	goto tr303;
+	goto tr307;
 st321:
 	if ( ++p == pe )
 		goto _test_eof321;
 case 321:
 	switch( (*p) ) {
+		case 10: goto tr361;
 		case 34: goto st320;
-		case 83: goto st322;
-		case 86: goto st346;
 	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st319;
-	goto tr303;
+	goto tr307;
 st322:
 	if ( ++p == pe )
 		goto _test_eof322;
 case 322:
-	switch( (*p) ) {
-		case 34: goto st320;
-		case 111: goto st323;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
-		goto st319;
-	goto tr303;
+	if ( (*p) == 108 )
+		goto st323;
+	goto tr307;
 st323:
 	if ( ++p == pe )
 		goto _test_eof323;
 case 323:
 	switch( (*p) ) {
-		case 34: goto st320;
-		case 117: goto st324;
+		case 97: goto st324;
+		case 111: goto st325;
 	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
-		goto st319;
-	goto tr303;
+	goto tr307;
 st324:
 	if ( ++p == pe )
 		goto _test_eof324;
 case 324:
-	switch( (*p) ) {
-		case 34: goto st320;
-		case 114: goto st325;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
-		goto st319;
-	goto tr303;
+	if ( (*p) == 103 )
+		goto st304;
+	goto tr307;
 st325:
 	if ( ++p == pe )
 		goto _test_eof325;
 case 325:
-	switch( (*p) ) {
-		case 34: goto st320;
-		case 99: goto st326;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
-		goto st319;
-	goto tr303;
+	if ( (*p) == 97 )
+		goto st326;
+	goto tr307;
 st326:
 	if ( ++p == pe )
 		goto _test_eof326;
 case 326:
-	switch( (*p) ) {
-		case 34: goto st320;
-		case 101: goto st327;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
-		goto st319;
-	goto tr303;
+	if ( (*p) == 116 )
+		goto st304;
+	goto tr307;
 st327:
 	if ( ++p == pe )
 		goto _test_eof327;
 case 327:
-	switch( (*p) ) {
-		case 34: goto st320;
-		case 61: goto st328;
-	}
-	if ( 32 <= (*p) && (*p) <= 126 )
-		goto st319;
-	goto tr303;
+	if ( (*p) == 110 )
+		goto st328;
+	goto tr307;
 st328:
 	if ( ++p == pe )
 		goto _test_eof328;
 case 328:
-	if ( (*p) == 34 )
+	if ( (*p) == 116 )
 		goto st329;
-	goto tr303;
+	goto tr307;
 st329:
 	if ( ++p == pe )
 		goto _test_eof329;
 case 329:
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st330;
-	} else if ( (*p) >= 32 )
+	if ( (*p) == 101 )
 		goto st330;
-	goto tr303;
+	goto tr307;
 st330:
 	if ( ++p == pe )
 		goto _test_eof330;
 case 330:
-	if ( (*p) == 34 )
-		goto st331;
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st330;
-	} else if ( (*p) >= 32 )
-		goto st330;
-	goto tr303;
+	if ( (*p) == 103 )
+		goto st302;
+	goto tr307;
 st331:
 	if ( ++p == pe )
 		goto _test_eof331;
 case 331:
-	switch( (*p) ) {
-		case 34: goto st331;
-		case 44: goto st332;
-		case 62: goto st345;
-	}
-	if ( (*p) > 60 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st330;
-	} else if ( (*p) >= 32 )
-		goto st330;
-	goto tr303;
+	if ( (*p) == 116 )
+		goto st332;
+	goto tr307;
 st332:
 	if ( ++p == pe )
 		goto _test_eof332;
 case 332:
-	switch( (*p) ) {
-		case 34: goto st331;
-		case 86: goto st333;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st330;
-	} else if ( (*p) >= 32 )
-		goto st330;
-	goto tr303;
+	if ( (*p) == 114 )
+		goto st333;
+	goto tr307;
 st333:
 	if ( ++p == pe )
 		goto _test_eof333;
 case 333:
-	switch( (*p) ) {
-		case 34: goto st331;
-		case 101: goto st334;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st330;
-	} else if ( (*p) >= 32 )
-		goto st330;
-	goto tr303;
+	if ( (*p) == 105 )
+		goto st334;
+	goto tr307;
 st334:
 	if ( ++p == pe )
 		goto _test_eof334;
 case 334:
-	switch( (*p) ) {
-		case 34: goto st331;
-		case 114: goto st335;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st330;
-	} else if ( (*p) >= 32 )
-		goto st330;
-	goto tr303;
+	if ( (*p) == 110 )
+		goto st324;
+	goto tr307;
 st335:
 	if ( ++p == pe )
 		goto _test_eof335;
 case 335:
-	switch( (*p) ) {
-		case 34: goto st331;
-		case 115: goto st336;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st330;
-	} else if ( (*p) >= 32 )
-		goto st330;
-	goto tr303;
+	if ( (*p) == 44 )
+		goto st290;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st335;
+	goto tr307;
 st336:
 	if ( ++p == pe )
 		goto _test_eof336;
 case 336:
 	switch( (*p) ) {
-		case 34: goto st331;
-		case 105: goto st337;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st330;
-	} else if ( (*p) >= 32 )
-		goto st330;
-	goto tr303;
-st337:
-	if ( ++p == pe )
-		goto _test_eof337;
-case 337:
-	switch( (*p) ) {
-		case 34: goto st331;
-		case 111: goto st338;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st330;
-	} else if ( (*p) >= 32 )
-		goto st330;
-	goto tr303;
-st338:
-	if ( ++p == pe )
-		goto _test_eof338;
-case 338:
-	switch( (*p) ) {
-		case 34: goto st331;
-		case 110: goto st339;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st330;
-	} else if ( (*p) >= 32 )
-		goto st330;
-	goto tr303;
-st339:
-	if ( ++p == pe )
-		goto _test_eof339;
-case 339:
-	switch( (*p) ) {
-		case 34: goto st331;
-		case 61: goto st340;
-	}
-	if ( 32 <= (*p) && (*p) <= 126 )
-		goto st330;
-	goto tr303;
-st340:
-	if ( ++p == pe )
-		goto _test_eof340;
-case 340:
-	if ( (*p) == 34 )
-		goto st341;
-	goto tr303;
-st341:
-	if ( ++p == pe )
-		goto _test_eof341;
-case 341:
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st342;
-	} else if ( (*p) >= 32 )
-		goto st342;
-	goto tr303;
-st342:
-	if ( ++p == pe )
-		goto _test_eof342;
-case 342:
-	if ( (*p) == 34 )
-		goto st343;
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st342;
-	} else if ( (*p) >= 32 )
-		goto st342;
-	goto tr303;
-st343:
-	if ( ++p == pe )
-		goto _test_eof343;
-case 343:
-	switch( (*p) ) {
-		case 34: goto st343;
-		case 62: goto st344;
-	}
-	if ( (*p) > 60 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st342;
-	} else if ( (*p) >= 32 )
-		goto st342;
-	goto tr303;
-st344:
-	if ( ++p == pe )
-		goto _test_eof344;
-case 344:
-	switch( (*p) ) {
-		case 10: goto tr383;
-		case 34: goto st343;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st342;
-	} else if ( (*p) >= 32 )
-		goto st342;
-	goto tr303;
-st345:
-	if ( ++p == pe )
-		goto _test_eof345;
-case 345:
-	switch( (*p) ) {
-		case 10: goto tr383;
-		case 34: goto st331;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st330;
-	} else if ( (*p) >= 32 )
-		goto st330;
-	goto tr303;
-st346:
-	if ( ++p == pe )
-		goto _test_eof346;
-case 346:
-	switch( (*p) ) {
-		case 34: goto st320;
-		case 101: goto st347;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
-		goto st319;
-	goto tr303;
-st347:
-	if ( ++p == pe )
-		goto _test_eof347;
-case 347:
-	switch( (*p) ) {
-		case 34: goto st320;
-		case 114: goto st348;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
-		goto st319;
-	goto tr303;
-st348:
-	if ( ++p == pe )
-		goto _test_eof348;
-case 348:
-	switch( (*p) ) {
-		case 34: goto st320;
-		case 115: goto st349;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
-		goto st319;
-	goto tr303;
-st349:
-	if ( ++p == pe )
-		goto _test_eof349;
-case 349:
-	switch( (*p) ) {
-		case 34: goto st320;
-		case 105: goto st350;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
-		goto st319;
-	goto tr303;
-st350:
-	if ( ++p == pe )
-		goto _test_eof350;
-case 350:
-	switch( (*p) ) {
-		case 34: goto st320;
-		case 111: goto st351;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
-		goto st319;
-	goto tr303;
-st351:
-	if ( ++p == pe )
-		goto _test_eof351;
-case 351:
-	switch( (*p) ) {
-		case 34: goto st320;
-		case 110: goto st352;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
-		goto st319;
-	goto tr303;
-st352:
-	if ( ++p == pe )
-		goto _test_eof352;
-case 352:
-	switch( (*p) ) {
-		case 34: goto st320;
-		case 61: goto st340;
-	}
-	if ( 32 <= (*p) && (*p) <= 126 )
-		goto st319;
-	goto tr303;
-st353:
-	if ( ++p == pe )
-		goto _test_eof353;
-case 353:
-	switch( (*p) ) {
-		case 10: goto tr383;
-		case 34: goto st320;
-	}
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st319;
-	} else if ( (*p) >= 32 )
-		goto st319;
-	goto tr303;
-st354:
-	if ( ++p == pe )
-		goto _test_eof354;
-case 354:
-	if ( (*p) == 108 )
-		goto st355;
-	goto tr303;
-st355:
-	if ( ++p == pe )
-		goto _test_eof355;
-case 355:
-	switch( (*p) ) {
-		case 97: goto st356;
-		case 111: goto st357;
-	}
-	goto tr303;
-st356:
-	if ( ++p == pe )
-		goto _test_eof356;
-case 356:
-	if ( (*p) == 103 )
-		goto st304;
-	goto tr303;
-st357:
-	if ( ++p == pe )
-		goto _test_eof357;
-case 357:
-	if ( (*p) == 97 )
-		goto st358;
-	goto tr303;
-st358:
-	if ( ++p == pe )
-		goto _test_eof358;
-case 358:
-	if ( (*p) == 116 )
-		goto st304;
-	goto tr303;
-st359:
-	if ( ++p == pe )
-		goto _test_eof359;
-case 359:
-	if ( (*p) == 110 )
-		goto st360;
-	goto tr303;
-st360:
-	if ( ++p == pe )
-		goto _test_eof360;
-case 360:
-	if ( (*p) == 116 )
-		goto st361;
-	goto tr303;
-st361:
-	if ( ++p == pe )
-		goto _test_eof361;
-case 361:
-	if ( (*p) == 101 )
-		goto st362;
-	goto tr303;
-st362:
-	if ( ++p == pe )
-		goto _test_eof362;
-case 362:
-	if ( (*p) == 103 )
-		goto st302;
-	goto tr303;
-st363:
-	if ( ++p == pe )
-		goto _test_eof363;
-case 363:
-	if ( (*p) == 116 )
-		goto st364;
-	goto tr303;
-st364:
-	if ( ++p == pe )
-		goto _test_eof364;
-case 364:
-	if ( (*p) == 114 )
-		goto st365;
-	goto tr303;
-st365:
-	if ( ++p == pe )
-		goto _test_eof365;
-case 365:
-	if ( (*p) == 105 )
-		goto st366;
-	goto tr303;
-st366:
-	if ( ++p == pe )
-		goto _test_eof366;
-case 366:
-	if ( (*p) == 110 )
-		goto st356;
-	goto tr303;
-st367:
-	if ( ++p == pe )
-		goto _test_eof367;
-case 367:
-	if ( (*p) == 44 )
-		goto st290;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st367;
-	goto tr303;
-st368:
-	if ( ++p == pe )
-		goto _test_eof368;
-case 368:
-	switch( (*p) ) {
 		case 45: goto st280;
-		case 46: goto st368;
+		case 46: goto st336;
 		case 95: goto st280;
 	}
 	if ( (*p) < 65 ) {
@@ -6883,13 +6492,13 @@ case 368:
 			goto st280;
 	} else
 		goto st280;
-	goto tr303;
-st369:
+	goto tr307;
+st337:
 	if ( ++p == pe )
-		goto _test_eof369;
-case 369:
+		goto _test_eof337;
+case 337:
 	if ( (*p) == 95 )
-		goto st369;
+		goto st337;
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st280;
@@ -6901,22 +6510,22 @@ case 369:
 			goto st280;
 	} else
 		goto st280;
-	goto tr303;
+	goto tr307;
 tr29:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st370;
-st370:
+	goto st338;
+st338:
 	if ( ++p == pe )
-		goto _test_eof370;
-case 370:
-#line 6916 "vcf_validator_detail.hpp"
+		goto _test_eof338;
+case 338:
+#line 6525 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr39;
-		case 69: goto st371;
+		case 69: goto st339;
 		case 95: goto st21;
 	}
 	if ( (*p) < 65 ) {
@@ -6940,14 +6549,14 @@ case 370:
 	} else
 		goto st21;
 	goto tr37;
-st371:
+st339:
 	if ( ++p == pe )
-		goto _test_eof371;
-case 371:
+		goto _test_eof339;
+case 339:
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr39;
-		case 68: goto st372;
+		case 68: goto st340;
 		case 95: goto st21;
 	}
 	if ( (*p) < 65 ) {
@@ -6971,14 +6580,14 @@ case 371:
 	} else
 		goto st21;
 	goto tr37;
-st372:
+st340:
 	if ( ++p == pe )
-		goto _test_eof372;
-case 372:
+		goto _test_eof340;
+case 340:
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr39;
-		case 73: goto st373;
+		case 73: goto st341;
 		case 95: goto st21;
 	}
 	if ( (*p) < 65 ) {
@@ -7002,14 +6611,14 @@ case 372:
 	} else
 		goto st21;
 	goto tr37;
-st373:
+st341:
 	if ( ++p == pe )
-		goto _test_eof373;
-case 373:
+		goto _test_eof341;
+case 341:
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr39;
-		case 71: goto st374;
+		case 71: goto st342;
 		case 95: goto st21;
 	}
 	if ( (*p) < 65 ) {
@@ -7033,14 +6642,14 @@ case 373:
 	} else
 		goto st21;
 	goto tr37;
-st374:
+st342:
 	if ( ++p == pe )
-		goto _test_eof374;
-case 374:
+		goto _test_eof342;
+case 342:
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr39;
-		case 82: goto st375;
+		case 82: goto st343;
 		case 95: goto st21;
 	}
 	if ( (*p) < 65 ) {
@@ -7064,14 +6673,14 @@ case 374:
 	} else
 		goto st21;
 	goto tr37;
-st375:
+st343:
 	if ( ++p == pe )
-		goto _test_eof375;
-case 375:
+		goto _test_eof343;
+case 343:
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr39;
-		case 69: goto st376;
+		case 69: goto st344;
 		case 95: goto st21;
 	}
 	if ( (*p) < 65 ) {
@@ -7095,14 +6704,14 @@ case 375:
 	} else
 		goto st21;
 	goto tr37;
-st376:
+st344:
 	if ( ++p == pe )
-		goto _test_eof376;
-case 376:
+		goto _test_eof344;
+case 344:
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr39;
-		case 69: goto st377;
+		case 69: goto st345;
 		case 95: goto st21;
 	}
 	if ( (*p) < 65 ) {
@@ -7126,13 +6735,13 @@ case 376:
 	} else
 		goto st21;
 	goto tr37;
-st377:
+st345:
 	if ( ++p == pe )
-		goto _test_eof377;
-case 377:
+		goto _test_eof345;
+case 345:
 	switch( (*p) ) {
 		case 10: goto tr35;
-		case 61: goto st378;
+		case 61: goto st346;
 		case 95: goto st21;
 	}
 	if ( (*p) < 65 ) {
@@ -7156,297 +6765,297 @@ case 377:
 	} else
 		goto st21;
 	goto tr37;
-st378:
+st346:
 	if ( ++p == pe )
-		goto _test_eof378;
-case 378:
+		goto _test_eof346;
+case 346:
 	if ( (*p) == 60 )
-		goto st379;
+		goto st347;
 	goto tr34;
-st379:
+st347:
 	if ( ++p == pe )
-		goto _test_eof379;
-case 379:
+		goto _test_eof347;
+case 347:
 	switch( (*p) ) {
-		case 45: goto st380;
-		case 46: goto st392;
-		case 95: goto st393;
+		case 45: goto st348;
+		case 46: goto st360;
+		case 95: goto st361;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st381;
+			goto st349;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st381;
+			goto st349;
 	} else
-		goto st381;
+		goto st349;
 	goto tr34;
-st380:
+st348:
 	if ( ++p == pe )
-		goto _test_eof380;
-case 380:
+		goto _test_eof348;
+case 348:
 	switch( (*p) ) {
-		case 45: goto st380;
-		case 46: goto st381;
-		case 95: goto st381;
+		case 45: goto st348;
+		case 46: goto st349;
+		case 95: goto st349;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st381;
+			goto st349;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st381;
+			goto st349;
 	} else
-		goto st381;
+		goto st349;
 	goto tr34;
-st381:
+st349:
 	if ( ++p == pe )
-		goto _test_eof381;
-case 381:
+		goto _test_eof349;
+case 349:
 	switch( (*p) ) {
-		case 61: goto st382;
-		case 95: goto st381;
+		case 61: goto st350;
+		case 95: goto st349;
 	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st381;
+			goto st349;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st381;
+				goto st349;
 		} else if ( (*p) >= 65 )
-			goto st381;
+			goto st349;
 	} else
-		goto st381;
+		goto st349;
 	goto tr34;
-st382:
+st350:
 	if ( ++p == pe )
-		goto _test_eof382;
-case 382:
+		goto _test_eof350;
+case 350:
 	switch( (*p) ) {
-		case 45: goto st383;
-		case 46: goto st390;
-		case 95: goto st391;
+		case 45: goto st351;
+		case 46: goto st358;
+		case 95: goto st359;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st384;
+			goto st352;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st384;
+			goto st352;
 	} else
-		goto st384;
+		goto st352;
 	goto tr34;
-st383:
+st351:
 	if ( ++p == pe )
-		goto _test_eof383;
-case 383:
+		goto _test_eof351;
+case 351:
 	switch( (*p) ) {
-		case 45: goto st383;
-		case 46: goto st384;
-		case 95: goto st384;
+		case 45: goto st351;
+		case 46: goto st352;
+		case 95: goto st352;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st384;
+			goto st352;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st384;
+			goto st352;
 	} else
-		goto st384;
+		goto st352;
 	goto tr34;
-st384:
+st352:
 	if ( ++p == pe )
-		goto _test_eof384;
-case 384:
+		goto _test_eof352;
+case 352:
 	switch( (*p) ) {
-		case 45: goto st385;
-		case 46: goto st388;
-		case 62: goto st387;
-		case 95: goto st389;
+		case 45: goto st353;
+		case 46: goto st356;
+		case 62: goto st355;
+		case 95: goto st357;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st386;
+			goto st354;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st386;
+			goto st354;
 	} else
-		goto st386;
+		goto st354;
 	goto tr34;
-st385:
+st353:
 	if ( ++p == pe )
-		goto _test_eof385;
-case 385:
+		goto _test_eof353;
+case 353:
 	switch( (*p) ) {
-		case 45: goto st385;
-		case 46: goto st386;
-		case 62: goto st387;
-		case 95: goto st386;
+		case 45: goto st353;
+		case 46: goto st354;
+		case 62: goto st355;
+		case 95: goto st354;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st386;
+			goto st354;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st386;
+			goto st354;
 	} else
-		goto st386;
+		goto st354;
 	goto tr34;
-st386:
+st354:
 	if ( ++p == pe )
-		goto _test_eof386;
-case 386:
+		goto _test_eof354;
+case 354:
 	switch( (*p) ) {
-		case 61: goto st382;
-		case 62: goto st387;
-		case 95: goto st386;
+		case 61: goto st350;
+		case 62: goto st355;
+		case 95: goto st354;
 	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st386;
+			goto st354;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st386;
+				goto st354;
 		} else if ( (*p) >= 65 )
-			goto st386;
+			goto st354;
 	} else
-		goto st386;
+		goto st354;
 	goto tr34;
-st387:
+st355:
 	if ( ++p == pe )
-		goto _test_eof387;
-case 387:
+		goto _test_eof355;
+case 355:
 	if ( (*p) == 10 )
-		goto tr423;
+		goto tr395;
 	goto tr34;
-st388:
+st356:
 	if ( ++p == pe )
-		goto _test_eof388;
-case 388:
+		goto _test_eof356;
+case 356:
 	switch( (*p) ) {
-		case 45: goto st386;
-		case 46: goto st388;
-		case 62: goto st387;
-		case 95: goto st386;
+		case 45: goto st354;
+		case 46: goto st356;
+		case 62: goto st355;
+		case 95: goto st354;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st386;
+			goto st354;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st386;
+			goto st354;
 	} else
-		goto st386;
+		goto st354;
 	goto tr34;
-st389:
+st357:
 	if ( ++p == pe )
-		goto _test_eof389;
-case 389:
+		goto _test_eof357;
+case 357:
 	switch( (*p) ) {
-		case 62: goto st387;
-		case 95: goto st389;
+		case 62: goto st355;
+		case 95: goto st357;
 	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st386;
+			goto st354;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st386;
+				goto st354;
 		} else if ( (*p) >= 65 )
-			goto st386;
+			goto st354;
 	} else
-		goto st386;
+		goto st354;
 	goto tr34;
-st390:
+st358:
 	if ( ++p == pe )
-		goto _test_eof390;
-case 390:
+		goto _test_eof358;
+case 358:
 	switch( (*p) ) {
-		case 45: goto st384;
-		case 46: goto st390;
-		case 95: goto st384;
+		case 45: goto st352;
+		case 46: goto st358;
+		case 95: goto st352;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st384;
+			goto st352;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st384;
+			goto st352;
 	} else
-		goto st384;
+		goto st352;
 	goto tr34;
-st391:
+st359:
 	if ( ++p == pe )
-		goto _test_eof391;
-case 391:
+		goto _test_eof359;
+case 359:
 	if ( (*p) == 95 )
-		goto st391;
+		goto st359;
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st384;
+			goto st352;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st384;
+				goto st352;
 		} else if ( (*p) >= 65 )
-			goto st384;
+			goto st352;
 	} else
-		goto st384;
+		goto st352;
 	goto tr34;
-st392:
+st360:
 	if ( ++p == pe )
-		goto _test_eof392;
-case 392:
+		goto _test_eof360;
+case 360:
 	switch( (*p) ) {
-		case 45: goto st381;
-		case 46: goto st392;
-		case 95: goto st381;
+		case 45: goto st349;
+		case 46: goto st360;
+		case 95: goto st349;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st381;
+			goto st349;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st381;
+			goto st349;
 	} else
-		goto st381;
+		goto st349;
 	goto tr34;
-st393:
+st361:
 	if ( ++p == pe )
-		goto _test_eof393;
-case 393:
+		goto _test_eof361;
+case 361:
 	if ( (*p) == 95 )
-		goto st393;
+		goto st361;
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st381;
+			goto st349;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st381;
+				goto st349;
 		} else if ( (*p) >= 65 )
-			goto st381;
+			goto st349;
 	} else
-		goto st381;
+		goto st349;
 	goto tr34;
 tr30:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st394;
-st394:
+	goto st362;
+st362:
 	if ( ++p == pe )
-		goto _test_eof394;
-case 394:
-#line 7446 "vcf_validator_detail.hpp"
+		goto _test_eof362;
+case 362:
+#line 7055 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr39;
-		case 65: goto st395;
+		case 65: goto st363;
 		case 95: goto st21;
 	}
 	if ( (*p) < 66 ) {
@@ -7470,995 +7079,1629 @@ case 394:
 	} else
 		goto st21;
 	goto tr37;
+st363:
+	if ( ++p == pe )
+		goto _test_eof363;
+case 363:
+	switch( (*p) ) {
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 77: goto st364;
+		case 95: goto st21;
+	}
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
+	} else
+		goto st21;
+	goto tr37;
+st364:
+	if ( ++p == pe )
+		goto _test_eof364;
+case 364:
+	switch( (*p) ) {
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 80: goto st365;
+		case 95: goto st21;
+	}
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
+	} else
+		goto st21;
+	goto tr37;
+st365:
+	if ( ++p == pe )
+		goto _test_eof365;
+case 365:
+	switch( (*p) ) {
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 76: goto st366;
+		case 95: goto st21;
+	}
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
+	} else
+		goto st21;
+	goto tr37;
+st366:
+	if ( ++p == pe )
+		goto _test_eof366;
+case 366:
+	switch( (*p) ) {
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 69: goto st367;
+		case 95: goto st21;
+	}
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
+	} else
+		goto st21;
+	goto tr37;
+st367:
+	if ( ++p == pe )
+		goto _test_eof367;
+case 367:
+	switch( (*p) ) {
+		case 10: goto tr35;
+		case 61: goto st368;
+		case 95: goto st21;
+	}
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
+	} else
+		goto st21;
+	goto tr37;
+st368:
+	if ( ++p == pe )
+		goto _test_eof368;
+case 368:
+	if ( (*p) == 60 )
+		goto st369;
+	goto tr34;
+st369:
+	if ( ++p == pe )
+		goto _test_eof369;
+case 369:
+	if ( (*p) == 73 )
+		goto st370;
+	goto tr34;
+st370:
+	if ( ++p == pe )
+		goto _test_eof370;
+case 370:
+	if ( (*p) == 68 )
+		goto st371;
+	goto tr34;
+st371:
+	if ( ++p == pe )
+		goto _test_eof371;
+case 371:
+	if ( (*p) == 61 )
+		goto st372;
+	goto tr34;
+st372:
+	if ( ++p == pe )
+		goto _test_eof372;
+case 372:
+	switch( (*p) ) {
+		case 45: goto st373;
+		case 46: goto st419;
+		case 95: goto st420;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st374;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st374;
+	} else
+		goto st374;
+	goto tr34;
+st373:
+	if ( ++p == pe )
+		goto _test_eof373;
+case 373:
+	switch( (*p) ) {
+		case 45: goto st373;
+		case 46: goto st374;
+		case 95: goto st374;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st374;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st374;
+	} else
+		goto st374;
+	goto tr34;
+st374:
+	if ( ++p == pe )
+		goto _test_eof374;
+case 374:
+	switch( (*p) ) {
+		case 44: goto st375;
+		case 95: goto st374;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st374;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st374;
+		} else if ( (*p) >= 65 )
+			goto st374;
+	} else
+		goto st374;
+	goto tr34;
+st375:
+	if ( ++p == pe )
+		goto _test_eof375;
+case 375:
+	if ( (*p) == 71 )
+		goto st376;
+	goto tr34;
+st376:
+	if ( ++p == pe )
+		goto _test_eof376;
+case 376:
+	if ( (*p) == 101 )
+		goto st377;
+	goto tr34;
+st377:
+	if ( ++p == pe )
+		goto _test_eof377;
+case 377:
+	if ( (*p) == 110 )
+		goto st378;
+	goto tr34;
+st378:
+	if ( ++p == pe )
+		goto _test_eof378;
+case 378:
+	if ( (*p) == 111 )
+		goto st379;
+	goto tr34;
+st379:
+	if ( ++p == pe )
+		goto _test_eof379;
+case 379:
+	if ( (*p) == 109 )
+		goto st380;
+	goto tr34;
+st380:
+	if ( ++p == pe )
+		goto _test_eof380;
+case 380:
+	if ( (*p) == 101 )
+		goto st381;
+	goto tr34;
+st381:
+	if ( ++p == pe )
+		goto _test_eof381;
+case 381:
+	if ( (*p) == 115 )
+		goto st382;
+	goto tr34;
+st382:
+	if ( ++p == pe )
+		goto _test_eof382;
+case 382:
+	if ( (*p) == 61 )
+		goto st383;
+	goto tr34;
+st383:
+	if ( ++p == pe )
+		goto _test_eof383;
+case 383:
+	switch( (*p) ) {
+		case 45: goto st384;
+		case 46: goto st387;
+		case 95: goto st418;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st385;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st385;
+	} else
+		goto st385;
+	goto tr34;
+st384:
+	if ( ++p == pe )
+		goto _test_eof384;
+case 384:
+	switch( (*p) ) {
+		case 45: goto st384;
+		case 46: goto st385;
+		case 95: goto st385;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st385;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st385;
+	} else
+		goto st385;
+	goto tr34;
+st385:
+	if ( ++p == pe )
+		goto _test_eof385;
+case 385:
+	switch( (*p) ) {
+		case 44: goto st386;
+		case 95: goto st385;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st385;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st385;
+		} else if ( (*p) >= 65 )
+			goto st385;
+	} else
+		goto st385;
+	goto tr34;
+st386:
+	if ( ++p == pe )
+		goto _test_eof386;
+case 386:
+	switch( (*p) ) {
+		case 45: goto st384;
+		case 46: goto st387;
+		case 77: goto st388;
+		case 95: goto st418;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st385;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st385;
+	} else
+		goto st385;
+	goto tr34;
+st387:
+	if ( ++p == pe )
+		goto _test_eof387;
+case 387:
+	switch( (*p) ) {
+		case 45: goto st385;
+		case 46: goto st387;
+		case 95: goto st385;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st385;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st385;
+	} else
+		goto st385;
+	goto tr34;
+st388:
+	if ( ++p == pe )
+		goto _test_eof388;
+case 388:
+	switch( (*p) ) {
+		case 44: goto st386;
+		case 95: goto st385;
+		case 105: goto st389;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st385;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st385;
+		} else if ( (*p) >= 65 )
+			goto st385;
+	} else
+		goto st385;
+	goto tr34;
+st389:
+	if ( ++p == pe )
+		goto _test_eof389;
+case 389:
+	switch( (*p) ) {
+		case 44: goto st386;
+		case 95: goto st385;
+		case 120: goto st390;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st385;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st385;
+		} else if ( (*p) >= 65 )
+			goto st385;
+	} else
+		goto st385;
+	goto tr34;
+st390:
+	if ( ++p == pe )
+		goto _test_eof390;
+case 390:
+	switch( (*p) ) {
+		case 44: goto st386;
+		case 95: goto st385;
+		case 116: goto st391;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st385;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st385;
+		} else if ( (*p) >= 65 )
+			goto st385;
+	} else
+		goto st385;
+	goto tr34;
+st391:
+	if ( ++p == pe )
+		goto _test_eof391;
+case 391:
+	switch( (*p) ) {
+		case 44: goto st386;
+		case 95: goto st385;
+		case 117: goto st392;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st385;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st385;
+		} else if ( (*p) >= 65 )
+			goto st385;
+	} else
+		goto st385;
+	goto tr34;
+st392:
+	if ( ++p == pe )
+		goto _test_eof392;
+case 392:
+	switch( (*p) ) {
+		case 44: goto st386;
+		case 95: goto st385;
+		case 114: goto st393;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st385;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st385;
+		} else if ( (*p) >= 65 )
+			goto st385;
+	} else
+		goto st385;
+	goto tr34;
+st393:
+	if ( ++p == pe )
+		goto _test_eof393;
+case 393:
+	switch( (*p) ) {
+		case 44: goto st386;
+		case 95: goto st385;
+		case 101: goto st394;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st385;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st385;
+		} else if ( (*p) >= 65 )
+			goto st385;
+	} else
+		goto st385;
+	goto tr34;
+st394:
+	if ( ++p == pe )
+		goto _test_eof394;
+case 394:
+	switch( (*p) ) {
+		case 44: goto st386;
+		case 61: goto st395;
+		case 95: goto st385;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st385;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st385;
+		} else if ( (*p) >= 65 )
+			goto st385;
+	} else
+		goto st385;
+	goto tr34;
 st395:
 	if ( ++p == pe )
 		goto _test_eof395;
 case 395:
 	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 77: goto st396;
-		case 95: goto st21;
+		case 45: goto st396;
+		case 46: goto st399;
+		case 95: goto st417;
 	}
 	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st397;
 	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st397;
 	} else
-		goto st21;
-	goto tr37;
+		goto st397;
+	goto tr34;
 st396:
 	if ( ++p == pe )
 		goto _test_eof396;
 case 396:
 	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 80: goto st397;
-		case 95: goto st21;
+		case 45: goto st396;
+		case 46: goto st397;
+		case 95: goto st397;
 	}
 	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st397;
 	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st397;
 	} else
-		goto st21;
-	goto tr37;
+		goto st397;
+	goto tr34;
 st397:
 	if ( ++p == pe )
 		goto _test_eof397;
 case 397:
 	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 76: goto st398;
-		case 95: goto st21;
+		case 44: goto st398;
+		case 95: goto st397;
 	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st397;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st397;
+		} else if ( (*p) >= 65 )
+			goto st397;
 	} else
-		goto st21;
-	goto tr37;
+		goto st397;
+	goto tr34;
 st398:
 	if ( ++p == pe )
 		goto _test_eof398;
 case 398:
 	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 69: goto st399;
-		case 95: goto st21;
+		case 45: goto st396;
+		case 46: goto st399;
+		case 68: goto st400;
+		case 95: goto st417;
 	}
 	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st397;
 	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st397;
 	} else
-		goto st21;
-	goto tr37;
+		goto st397;
+	goto tr34;
 st399:
 	if ( ++p == pe )
 		goto _test_eof399;
 case 399:
 	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto st400;
-		case 95: goto st21;
+		case 45: goto st397;
+		case 46: goto st399;
+		case 95: goto st397;
 	}
 	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st397;
 	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st397;
 	} else
-		goto st21;
-	goto tr37;
+		goto st397;
+	goto tr34;
 st400:
 	if ( ++p == pe )
 		goto _test_eof400;
 case 400:
-	if ( (*p) == 60 )
-		goto st401;
+	switch( (*p) ) {
+		case 44: goto st398;
+		case 95: goto st397;
+		case 101: goto st401;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st397;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st397;
+		} else if ( (*p) >= 65 )
+			goto st397;
+	} else
+		goto st397;
 	goto tr34;
 st401:
 	if ( ++p == pe )
 		goto _test_eof401;
 case 401:
-	if ( (*p) == 73 )
-		goto st402;
+	switch( (*p) ) {
+		case 44: goto st398;
+		case 95: goto st397;
+		case 115: goto st402;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st397;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st397;
+		} else if ( (*p) >= 65 )
+			goto st397;
+	} else
+		goto st397;
 	goto tr34;
 st402:
 	if ( ++p == pe )
 		goto _test_eof402;
 case 402:
-	if ( (*p) == 68 )
-		goto st403;
+	switch( (*p) ) {
+		case 44: goto st398;
+		case 95: goto st397;
+		case 99: goto st403;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st397;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st397;
+		} else if ( (*p) >= 65 )
+			goto st397;
+	} else
+		goto st397;
 	goto tr34;
 st403:
 	if ( ++p == pe )
 		goto _test_eof403;
 case 403:
-	if ( (*p) == 61 )
-		goto st404;
+	switch( (*p) ) {
+		case 44: goto st398;
+		case 95: goto st397;
+		case 114: goto st404;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st397;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st397;
+		} else if ( (*p) >= 65 )
+			goto st397;
+	} else
+		goto st397;
 	goto tr34;
 st404:
 	if ( ++p == pe )
 		goto _test_eof404;
 case 404:
 	switch( (*p) ) {
-		case 45: goto st405;
-		case 46: goto st451;
-		case 95: goto st452;
+		case 44: goto st398;
+		case 95: goto st397;
+		case 105: goto st405;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st406;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st406;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st397;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st397;
+		} else if ( (*p) >= 65 )
+			goto st397;
 	} else
-		goto st406;
+		goto st397;
 	goto tr34;
 st405:
 	if ( ++p == pe )
 		goto _test_eof405;
 case 405:
 	switch( (*p) ) {
-		case 45: goto st405;
-		case 46: goto st406;
-		case 95: goto st406;
+		case 44: goto st398;
+		case 95: goto st397;
+		case 112: goto st406;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st406;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st406;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st397;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st397;
+		} else if ( (*p) >= 65 )
+			goto st397;
 	} else
-		goto st406;
+		goto st397;
 	goto tr34;
 st406:
 	if ( ++p == pe )
 		goto _test_eof406;
 case 406:
 	switch( (*p) ) {
-		case 44: goto st407;
-		case 95: goto st406;
+		case 44: goto st398;
+		case 95: goto st397;
+		case 116: goto st407;
 	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st406;
+			goto st397;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st406;
+				goto st397;
 		} else if ( (*p) >= 65 )
-			goto st406;
+			goto st397;
 	} else
-		goto st406;
+		goto st397;
 	goto tr34;
 st407:
 	if ( ++p == pe )
 		goto _test_eof407;
 case 407:
-	if ( (*p) == 71 )
-		goto st408;
+	switch( (*p) ) {
+		case 44: goto st398;
+		case 95: goto st397;
+		case 105: goto st408;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st397;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st397;
+		} else if ( (*p) >= 65 )
+			goto st397;
+	} else
+		goto st397;
 	goto tr34;
 st408:
 	if ( ++p == pe )
 		goto _test_eof408;
 case 408:
-	if ( (*p) == 101 )
-		goto st409;
+	switch( (*p) ) {
+		case 44: goto st398;
+		case 95: goto st397;
+		case 111: goto st409;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st397;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st397;
+		} else if ( (*p) >= 65 )
+			goto st397;
+	} else
+		goto st397;
 	goto tr34;
 st409:
 	if ( ++p == pe )
 		goto _test_eof409;
 case 409:
-	if ( (*p) == 110 )
-		goto st410;
+	switch( (*p) ) {
+		case 44: goto st398;
+		case 95: goto st397;
+		case 110: goto st410;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st397;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st397;
+		} else if ( (*p) >= 65 )
+			goto st397;
+	} else
+		goto st397;
 	goto tr34;
 st410:
 	if ( ++p == pe )
 		goto _test_eof410;
 case 410:
-	if ( (*p) == 111 )
-		goto st411;
+	switch( (*p) ) {
+		case 44: goto st398;
+		case 95: goto st397;
+		case 115: goto st411;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st397;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st397;
+		} else if ( (*p) >= 65 )
+			goto st397;
+	} else
+		goto st397;
 	goto tr34;
 st411:
 	if ( ++p == pe )
 		goto _test_eof411;
 case 411:
-	if ( (*p) == 109 )
-		goto st412;
+	switch( (*p) ) {
+		case 44: goto st398;
+		case 61: goto st412;
+		case 95: goto st397;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st397;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st397;
+		} else if ( (*p) >= 65 )
+			goto st397;
+	} else
+		goto st397;
 	goto tr34;
 st412:
 	if ( ++p == pe )
 		goto _test_eof412;
 case 412:
-	if ( (*p) == 101 )
+	if ( (*p) == 34 )
 		goto st413;
 	goto tr34;
 st413:
 	if ( ++p == pe )
 		goto _test_eof413;
 case 413:
-	if ( (*p) == 115 )
+	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st414;
 	goto tr34;
 st414:
 	if ( ++p == pe )
 		goto _test_eof414;
 case 414:
-	if ( (*p) == 61 )
+	if ( (*p) == 34 )
 		goto st415;
+	if ( 32 <= (*p) && (*p) <= 126 )
+		goto st414;
 	goto tr34;
 st415:
 	if ( ++p == pe )
 		goto _test_eof415;
 case 415:
 	switch( (*p) ) {
-		case 45: goto st416;
-		case 46: goto st419;
-		case 95: goto st450;
+		case 34: goto st415;
+		case 62: goto st416;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st417;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st417;
-	} else
-		goto st417;
+	if ( 32 <= (*p) && (*p) <= 126 )
+		goto st414;
 	goto tr34;
 st416:
 	if ( ++p == pe )
 		goto _test_eof416;
 case 416:
 	switch( (*p) ) {
-		case 45: goto st416;
-		case 46: goto st417;
-		case 95: goto st417;
+		case 10: goto tr395;
+		case 34: goto st415;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st417;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st417;
-	} else
-		goto st417;
+	if ( 32 <= (*p) && (*p) <= 126 )
+		goto st414;
 	goto tr34;
 st417:
 	if ( ++p == pe )
 		goto _test_eof417;
 case 417:
-	switch( (*p) ) {
-		case 44: goto st418;
-		case 95: goto st417;
-	}
+	if ( (*p) == 95 )
+		goto st417;
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st417;
+			goto st397;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st417;
+				goto st397;
 		} else if ( (*p) >= 65 )
-			goto st417;
+			goto st397;
 	} else
-		goto st417;
+		goto st397;
 	goto tr34;
 st418:
 	if ( ++p == pe )
 		goto _test_eof418;
 case 418:
-	switch( (*p) ) {
-		case 45: goto st416;
-		case 46: goto st419;
-		case 77: goto st420;
-		case 95: goto st450;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st417;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st417;
+	if ( (*p) == 95 )
+		goto st418;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st385;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st385;
+		} else if ( (*p) >= 65 )
+			goto st385;
 	} else
-		goto st417;
+		goto st385;
 	goto tr34;
 st419:
 	if ( ++p == pe )
 		goto _test_eof419;
 case 419:
 	switch( (*p) ) {
-		case 45: goto st417;
+		case 45: goto st374;
 		case 46: goto st419;
-		case 95: goto st417;
+		case 95: goto st374;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st417;
+			goto st374;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st417;
+			goto st374;
 	} else
-		goto st417;
+		goto st374;
 	goto tr34;
 st420:
 	if ( ++p == pe )
 		goto _test_eof420;
 case 420:
-	switch( (*p) ) {
-		case 44: goto st418;
-		case 95: goto st417;
-		case 105: goto st421;
-	}
+	if ( (*p) == 95 )
+		goto st420;
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st417;
+			goto st374;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st417;
+				goto st374;
 		} else if ( (*p) >= 65 )
-			goto st417;
+			goto st374;
 	} else
-		goto st417;
+		goto st374;
 	goto tr34;
+tr31:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st421;
 st421:
 	if ( ++p == pe )
 		goto _test_eof421;
 case 421:
+#line 8089 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 44: goto st418;
-		case 95: goto st417;
-		case 120: goto st422;
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 95: goto st21;
+		case 115: goto st422;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st417;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st417;
-		} else if ( (*p) >= 65 )
-			goto st417;
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st417;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st422:
 	if ( ++p == pe )
 		goto _test_eof422;
 case 422:
 	switch( (*p) ) {
-		case 44: goto st418;
-		case 95: goto st417;
-		case 116: goto st423;
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 95: goto st21;
+		case 115: goto st423;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st417;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st417;
-		} else if ( (*p) >= 65 )
-			goto st417;
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st417;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st423:
 	if ( ++p == pe )
 		goto _test_eof423;
 case 423:
 	switch( (*p) ) {
-		case 44: goto st418;
-		case 95: goto st417;
-		case 117: goto st424;
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 95: goto st21;
+		case 101: goto st424;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st417;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st417;
-		} else if ( (*p) >= 65 )
-			goto st417;
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st417;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st424:
 	if ( ++p == pe )
 		goto _test_eof424;
 case 424:
 	switch( (*p) ) {
-		case 44: goto st418;
-		case 95: goto st417;
-		case 114: goto st425;
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 95: goto st21;
+		case 109: goto st425;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st417;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st417;
-		} else if ( (*p) >= 65 )
-			goto st417;
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st417;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st425:
 	if ( ++p == pe )
 		goto _test_eof425;
 case 425:
 	switch( (*p) ) {
-		case 44: goto st418;
-		case 95: goto st417;
-		case 101: goto st426;
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 95: goto st21;
+		case 98: goto st426;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st417;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st417;
-		} else if ( (*p) >= 65 )
-			goto st417;
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st417;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st426:
 	if ( ++p == pe )
 		goto _test_eof426;
 case 426:
 	switch( (*p) ) {
-		case 44: goto st418;
-		case 61: goto st427;
-		case 95: goto st417;
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 95: goto st21;
+		case 108: goto st427;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st417;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st417;
-		} else if ( (*p) >= 65 )
-			goto st417;
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st417;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st427:
 	if ( ++p == pe )
 		goto _test_eof427;
 case 427:
 	switch( (*p) ) {
-		case 45: goto st428;
-		case 46: goto st431;
-		case 95: goto st449;
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 95: goto st21;
+		case 121: goto st428;
 	}
 	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st429;
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
 	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st429;
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st429;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st428:
 	if ( ++p == pe )
 		goto _test_eof428;
 case 428:
 	switch( (*p) ) {
-		case 45: goto st428;
-		case 46: goto st429;
-		case 95: goto st429;
+		case 10: goto tr35;
+		case 61: goto st429;
+		case 95: goto st21;
 	}
 	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st429;
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
 	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st429;
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st429;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st429:
 	if ( ++p == pe )
 		goto _test_eof429;
 case 429:
-	switch( (*p) ) {
-		case 44: goto st430;
-		case 95: goto st429;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
-		} else if ( (*p) >= 65 )
-			goto st429;
-	} else
-		goto st429;
+	if ( 32 <= (*p) && (*p) <= 126 )
+		goto st430;
 	goto tr34;
 st430:
 	if ( ++p == pe )
 		goto _test_eof430;
 case 430:
-	switch( (*p) ) {
-		case 45: goto st428;
-		case 46: goto st431;
-		case 68: goto st432;
-		case 95: goto st449;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st429;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st429;
-	} else
-		goto st429;
+	if ( (*p) == 10 )
+		goto tr395;
+	if ( 32 <= (*p) && (*p) <= 126 )
+		goto st430;
 	goto tr34;
+tr32:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st431;
 st431:
 	if ( ++p == pe )
 		goto _test_eof431;
 case 431:
+#line 8359 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 45: goto st429;
-		case 46: goto st431;
-		case 95: goto st429;
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 95: goto st21;
+		case 111: goto st432;
 	}
 	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st429;
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
 	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st429;
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st429;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st432:
 	if ( ++p == pe )
 		goto _test_eof432;
 case 432:
 	switch( (*p) ) {
-		case 44: goto st430;
-		case 95: goto st429;
-		case 101: goto st433;
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 95: goto st21;
+		case 110: goto st433;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
-		} else if ( (*p) >= 65 )
-			goto st429;
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st429;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st433:
 	if ( ++p == pe )
 		goto _test_eof433;
 case 433:
 	switch( (*p) ) {
-		case 44: goto st430;
-		case 95: goto st429;
-		case 115: goto st434;
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 95: goto st21;
+		case 116: goto st434;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
-		} else if ( (*p) >= 65 )
-			goto st429;
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st429;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st434:
 	if ( ++p == pe )
 		goto _test_eof434;
 case 434:
 	switch( (*p) ) {
-		case 44: goto st430;
-		case 95: goto st429;
-		case 99: goto st435;
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 95: goto st21;
+		case 105: goto st435;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
-		} else if ( (*p) >= 65 )
-			goto st429;
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st429;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st435:
 	if ( ++p == pe )
 		goto _test_eof435;
 case 435:
 	switch( (*p) ) {
-		case 44: goto st430;
-		case 95: goto st429;
-		case 114: goto st436;
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 95: goto st21;
+		case 103: goto st436;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
-		} else if ( (*p) >= 65 )
-			goto st429;
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st429;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st436:
 	if ( ++p == pe )
 		goto _test_eof436;
 case 436:
 	switch( (*p) ) {
-		case 44: goto st430;
-		case 95: goto st429;
-		case 105: goto st437;
+		case 10: goto tr35;
+		case 61: goto st437;
+		case 95: goto st21;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
-		} else if ( (*p) >= 65 )
-			goto st429;
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
 	} else
-		goto st429;
-	goto tr34;
+		goto st21;
+	goto tr37;
 st437:
 	if ( ++p == pe )
 		goto _test_eof437;
 case 437:
-	switch( (*p) ) {
-		case 44: goto st430;
-		case 95: goto st429;
-		case 112: goto st438;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
-		} else if ( (*p) >= 65 )
-			goto st429;
-	} else
-		goto st429;
+	if ( (*p) == 60 )
+		goto st438;
 	goto tr34;
 st438:
 	if ( ++p == pe )
 		goto _test_eof438;
 case 438:
-	switch( (*p) ) {
-		case 44: goto st430;
-		case 95: goto st429;
-		case 116: goto st439;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
-		} else if ( (*p) >= 65 )
-			goto st429;
-	} else
-		goto st429;
+	if ( (*p) == 73 )
+		goto st439;
 	goto tr34;
 st439:
 	if ( ++p == pe )
 		goto _test_eof439;
 case 439:
-	switch( (*p) ) {
-		case 44: goto st430;
-		case 95: goto st429;
-		case 105: goto st440;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
-		} else if ( (*p) >= 65 )
-			goto st429;
-	} else
-		goto st429;
+	if ( (*p) == 68 )
+		goto st440;
 	goto tr34;
 st440:
 	if ( ++p == pe )
 		goto _test_eof440;
 case 440:
-	switch( (*p) ) {
-		case 44: goto st430;
-		case 95: goto st429;
-		case 111: goto st441;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
-		} else if ( (*p) >= 65 )
-			goto st429;
-	} else
-		goto st429;
+	if ( (*p) == 61 )
+		goto st441;
 	goto tr34;
 st441:
 	if ( ++p == pe )
 		goto _test_eof441;
 case 441:
 	switch( (*p) ) {
-		case 44: goto st430;
-		case 95: goto st429;
-		case 110: goto st442;
+		case 45: goto st442;
+		case 46: goto st451;
+		case 95: goto st452;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
-		} else if ( (*p) >= 65 )
-			goto st429;
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st443;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st443;
 	} else
-		goto st429;
+		goto st443;
 	goto tr34;
 st442:
 	if ( ++p == pe )
 		goto _test_eof442;
 case 442:
 	switch( (*p) ) {
-		case 44: goto st430;
-		case 95: goto st429;
-		case 115: goto st443;
+		case 45: goto st442;
+		case 46: goto st443;
+		case 95: goto st443;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
-		} else if ( (*p) >= 65 )
-			goto st429;
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st443;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st443;
 	} else
-		goto st429;
+		goto st443;
 	goto tr34;
 st443:
 	if ( ++p == pe )
 		goto _test_eof443;
 case 443:
 	switch( (*p) ) {
-		case 44: goto st430;
-		case 61: goto st444;
-		case 95: goto st429;
+		case 44: goto st444;
+		case 95: goto st443;
 	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
+			goto st443;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
+				goto st443;
 		} else if ( (*p) >= 65 )
-			goto st429;
+			goto st443;
 	} else
-		goto st429;
+		goto st443;
 	goto tr34;
 st444:
 	if ( ++p == pe )
 		goto _test_eof444;
 case 444:
-	if ( (*p) == 34 )
+	if ( (*p) == 85 )
 		goto st445;
 	goto tr34;
 st445:
 	if ( ++p == pe )
 		goto _test_eof445;
 case 445:
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st446;
-	} else if ( (*p) >= 32 )
+	if ( (*p) == 82 )
 		goto st446;
 	goto tr34;
 st446:
 	if ( ++p == pe )
 		goto _test_eof446;
 case 446:
-	if ( (*p) == 34 )
+	if ( (*p) == 76 )
 		goto st447;
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st446;
-	} else if ( (*p) >= 32 )
-		goto st446;
 	goto tr34;
 st447:
 	if ( ++p == pe )
 		goto _test_eof447;
 case 447:
-	switch( (*p) ) {
-		case 34: goto st447;
-		case 62: goto st448;
-	}
-	if ( (*p) > 60 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st446;
-	} else if ( (*p) >= 32 )
-		goto st446;
+	if ( (*p) == 61 )
+		goto st448;
 	goto tr34;
 st448:
 	if ( ++p == pe )
 		goto _test_eof448;
 case 448:
-	switch( (*p) ) {
-		case 10: goto tr423;
-		case 34: goto st447;
-	}
 	if ( (*p) > 60 ) {
 		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st446;
+			goto st449;
 	} else if ( (*p) >= 32 )
-		goto st446;
+		goto st449;
 	goto tr34;
 st449:
 	if ( ++p == pe )
 		goto _test_eof449;
 case 449:
-	if ( (*p) == 95 )
+	if ( (*p) == 62 )
+		goto st450;
+	if ( (*p) > 60 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
+			goto st449;
+	} else if ( (*p) >= 32 )
 		goto st449;
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st429;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st429;
-		} else if ( (*p) >= 65 )
-			goto st429;
-	} else
-		goto st429;
 	goto tr34;
 st450:
 	if ( ++p == pe )
 		goto _test_eof450;
 case 450:
-	if ( (*p) == 95 )
-		goto st450;
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st417;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st417;
-		} else if ( (*p) >= 65 )
-			goto st417;
-	} else
-		goto st417;
+	switch( (*p) ) {
+		case 10: goto tr395;
+		case 62: goto st450;
+	}
+	if ( (*p) > 60 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
+			goto st449;
+	} else if ( (*p) >= 32 )
+		goto st449;
 	goto tr34;
 st451:
 	if ( ++p == pe )
 		goto _test_eof451;
 case 451:
 	switch( (*p) ) {
-		case 45: goto st406;
+		case 45: goto st443;
 		case 46: goto st451;
-		case 95: goto st406;
+		case 95: goto st443;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st406;
+			goto st443;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st406;
+			goto st443;
 	} else
-		goto st406;
+		goto st443;
 	goto tr34;
 st452:
 	if ( ++p == pe )
@@ -8468,17 +8711,17 @@ case 452:
 		goto st452;
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st406;
+			goto st443;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st406;
+				goto st443;
 		} else if ( (*p) >= 65 )
-			goto st406;
+			goto st443;
 	} else
-		goto st406;
+		goto st443;
 	goto tr34;
-tr31:
+tr33:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -8488,12 +8731,12 @@ st453:
 	if ( ++p == pe )
 		goto _test_eof453;
 case 453:
-#line 8492 "vcf_validator_detail.hpp"
+#line 8735 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr39;
 		case 95: goto st21;
-		case 115: goto st454;
+		case 101: goto st454;
 	}
 	if ( (*p) < 65 ) {
 		if ( (*p) < 48 ) {
@@ -8524,7 +8767,7 @@ case 454:
 		case 10: goto tr35;
 		case 61: goto tr39;
 		case 95: goto st21;
-		case 115: goto st455;
+		case 100: goto st455;
 	}
 	if ( (*p) < 65 ) {
 		if ( (*p) < 48 ) {
@@ -8555,7 +8798,7 @@ case 455:
 		case 10: goto tr35;
 		case 61: goto tr39;
 		case 95: goto st21;
-		case 101: goto st456;
+		case 105: goto st456;
 	}
 	if ( (*p) < 65 ) {
 		if ( (*p) < 48 ) {
@@ -8586,7 +8829,7 @@ case 456:
 		case 10: goto tr35;
 		case 61: goto tr39;
 		case 95: goto st21;
-		case 109: goto st457;
+		case 103: goto st457;
 	}
 	if ( (*p) < 65 ) {
 		if ( (*p) < 48 ) {
@@ -8617,7 +8860,7 @@ case 457:
 		case 10: goto tr35;
 		case 61: goto tr39;
 		case 95: goto st21;
-		case 98: goto st458;
+		case 114: goto st458;
 	}
 	if ( (*p) < 65 ) {
 		if ( (*p) < 48 ) {
@@ -8648,7 +8891,7 @@ case 458:
 		case 10: goto tr35;
 		case 61: goto tr39;
 		case 95: goto st21;
-		case 108: goto st459;
+		case 101: goto st459;
 	}
 	if ( (*p) < 65 ) {
 		if ( (*p) < 48 ) {
@@ -8679,7 +8922,7 @@ case 459:
 		case 10: goto tr35;
 		case 61: goto tr39;
 		case 95: goto st21;
-		case 121: goto st460;
+		case 101: goto st460;
 	}
 	if ( (*p) < 65 ) {
 		if ( (*p) < 48 ) {
@@ -8708,7 +8951,8 @@ st460:
 case 460:
 	switch( (*p) ) {
 		case 10: goto tr35;
-		case 61: goto st461;
+		case 61: goto tr39;
+		case 68: goto st461;
 		case 95: goto st21;
 	}
 	if ( (*p) < 65 ) {
@@ -8736,1094 +8980,447 @@ st461:
 	if ( ++p == pe )
 		goto _test_eof461;
 case 461:
-	if ( 32 <= (*p) && (*p) <= 126 )
-		goto st462;
-	goto tr34;
+	switch( (*p) ) {
+		case 10: goto tr35;
+		case 61: goto tr39;
+		case 66: goto st462;
+		case 95: goto st21;
+	}
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
+	} else
+		goto st21;
+	goto tr37;
 st462:
 	if ( ++p == pe )
 		goto _test_eof462;
 case 462:
-	if ( (*p) == 10 )
-		goto tr423;
-	if ( 32 <= (*p) && (*p) <= 126 )
-		goto st462;
-	goto tr34;
-tr32:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st463;
+	switch( (*p) ) {
+		case 10: goto tr35;
+		case 61: goto st463;
+		case 95: goto st21;
+	}
+	if ( (*p) < 65 ) {
+		if ( (*p) < 48 ) {
+			if ( 32 <= (*p) && (*p) <= 47 )
+				goto st19;
+		} else if ( (*p) > 57 ) {
+			if ( 58 <= (*p) && (*p) <= 64 )
+				goto st19;
+		} else
+			goto st21;
+	} else if ( (*p) > 90 ) {
+		if ( (*p) < 97 ) {
+			if ( 91 <= (*p) && (*p) <= 96 )
+				goto st19;
+		} else if ( (*p) > 122 ) {
+			if ( 123 <= (*p) && (*p) <= 126 )
+				goto st19;
+		} else
+			goto st21;
+	} else
+		goto st21;
+	goto tr37;
 st463:
 	if ( ++p == pe )
 		goto _test_eof463;
 case 463:
-#line 8762 "vcf_validator_detail.hpp"
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 95: goto st21;
-		case 111: goto st464;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 60 )
+		goto st464;
+	goto tr34;
 st464:
 	if ( ++p == pe )
 		goto _test_eof464;
 case 464:
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 95: goto st21;
-		case 110: goto st465;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( 32 <= (*p) && (*p) <= 126 )
+		goto st465;
+	goto tr34;
 st465:
 	if ( ++p == pe )
 		goto _test_eof465;
 case 465:
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 95: goto st21;
-		case 116: goto st466;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 62 )
+		goto st466;
+	if ( 32 <= (*p) && (*p) <= 126 )
+		goto st465;
+	goto tr34;
 st466:
 	if ( ++p == pe )
 		goto _test_eof466;
 case 466:
 	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 95: goto st21;
-		case 105: goto st467;
+		case 10: goto tr395;
+		case 62: goto st466;
 	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( 32 <= (*p) && (*p) <= 126 )
+		goto st465;
+	goto tr34;
 st467:
 	if ( ++p == pe )
 		goto _test_eof467;
 case 467:
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 95: goto st21;
-		case 103: goto st468;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 72 )
+		goto st468;
+	goto tr497;
 st468:
 	if ( ++p == pe )
 		goto _test_eof468;
 case 468:
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto st469;
-		case 95: goto st21;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 82 )
+		goto st469;
+	goto tr497;
 st469:
 	if ( ++p == pe )
 		goto _test_eof469;
 case 469:
-	if ( (*p) == 60 )
+	if ( (*p) == 79 )
 		goto st470;
-	goto tr34;
+	goto tr497;
 st470:
 	if ( ++p == pe )
 		goto _test_eof470;
 case 470:
-	if ( (*p) == 73 )
+	if ( (*p) == 77 )
 		goto st471;
-	goto tr34;
+	goto tr497;
 st471:
 	if ( ++p == pe )
 		goto _test_eof471;
 case 471:
-	if ( (*p) == 68 )
+	if ( (*p) == 9 )
 		goto st472;
-	goto tr34;
+	goto tr497;
 st472:
 	if ( ++p == pe )
 		goto _test_eof472;
 case 472:
-	if ( (*p) == 61 )
+	if ( (*p) == 80 )
 		goto st473;
-	goto tr34;
+	goto tr497;
 st473:
 	if ( ++p == pe )
 		goto _test_eof473;
 case 473:
-	switch( (*p) ) {
-		case 45: goto st474;
-		case 46: goto st483;
-		case 95: goto st484;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st475;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st475;
-	} else
-		goto st475;
-	goto tr34;
+	if ( (*p) == 79 )
+		goto st474;
+	goto tr497;
 st474:
 	if ( ++p == pe )
 		goto _test_eof474;
 case 474:
-	switch( (*p) ) {
-		case 45: goto st474;
-		case 46: goto st475;
-		case 95: goto st475;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st475;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st475;
-	} else
+	if ( (*p) == 83 )
 		goto st475;
-	goto tr34;
+	goto tr497;
 st475:
 	if ( ++p == pe )
 		goto _test_eof475;
 case 475:
-	switch( (*p) ) {
-		case 44: goto st476;
-		case 95: goto st475;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st475;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st475;
-		} else if ( (*p) >= 65 )
-			goto st475;
-	} else
-		goto st475;
-	goto tr34;
+	if ( (*p) == 9 )
+		goto st476;
+	goto tr497;
 st476:
 	if ( ++p == pe )
 		goto _test_eof476;
 case 476:
-	if ( (*p) == 85 )
+	if ( (*p) == 73 )
 		goto st477;
-	goto tr34;
+	goto tr497;
 st477:
 	if ( ++p == pe )
 		goto _test_eof477;
 case 477:
-	if ( (*p) == 82 )
+	if ( (*p) == 68 )
 		goto st478;
-	goto tr34;
+	goto tr497;
 st478:
 	if ( ++p == pe )
 		goto _test_eof478;
 case 478:
-	if ( (*p) == 76 )
+	if ( (*p) == 9 )
 		goto st479;
-	goto tr34;
+	goto tr497;
 st479:
 	if ( ++p == pe )
 		goto _test_eof479;
 case 479:
-	if ( (*p) == 61 )
+	if ( (*p) == 82 )
 		goto st480;
-	goto tr34;
+	goto tr497;
 st480:
 	if ( ++p == pe )
 		goto _test_eof480;
 case 480:
-	if ( (*p) > 60 ) {
-		if ( 62 <= (*p) && (*p) <= 126 )
-			goto st481;
-	} else if ( (*p) >= 32 )
+	if ( (*p) == 69 )
 		goto st481;
-	goto tr34;
+	goto tr497;
 st481:
 	if ( ++p == pe )
 		goto _test_eof481;
 case 481:
-	if ( (*p) == 62 )
+	if ( (*p) == 70 )
 		goto st482;
-	if ( (*p) > 60 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st481;
-	} else if ( (*p) >= 32 )
-		goto st481;
-	goto tr34;
+	goto tr497;
 st482:
 	if ( ++p == pe )
 		goto _test_eof482;
 case 482:
-	switch( (*p) ) {
-		case 10: goto tr423;
-		case 62: goto st482;
-	}
-	if ( (*p) > 60 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st481;
-	} else if ( (*p) >= 32 )
-		goto st481;
-	goto tr34;
+	if ( (*p) == 9 )
+		goto st483;
+	goto tr497;
 st483:
 	if ( ++p == pe )
 		goto _test_eof483;
 case 483:
-	switch( (*p) ) {
-		case 45: goto st475;
-		case 46: goto st483;
-		case 95: goto st475;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st475;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st475;
-	} else
-		goto st475;
-	goto tr34;
+	if ( (*p) == 65 )
+		goto st484;
+	goto tr497;
 st484:
 	if ( ++p == pe )
 		goto _test_eof484;
 case 484:
-	if ( (*p) == 95 )
-		goto st484;
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st475;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st475;
-		} else if ( (*p) >= 65 )
-			goto st475;
-	} else
-		goto st475;
-	goto tr34;
-tr33:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st485;
+	if ( (*p) == 76 )
+		goto st485;
+	goto tr497;
 st485:
 	if ( ++p == pe )
 		goto _test_eof485;
 case 485:
-#line 9138 "vcf_validator_detail.hpp"
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 95: goto st21;
-		case 101: goto st486;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 84 )
+		goto st486;
+	goto tr497;
 st486:
 	if ( ++p == pe )
 		goto _test_eof486;
 case 486:
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 95: goto st21;
-		case 100: goto st487;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 9 )
+		goto st487;
+	goto tr497;
 st487:
 	if ( ++p == pe )
 		goto _test_eof487;
 case 487:
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 95: goto st21;
-		case 105: goto st488;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 81 )
+		goto st488;
+	goto tr497;
 st488:
 	if ( ++p == pe )
 		goto _test_eof488;
 case 488:
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 95: goto st21;
-		case 103: goto st489;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 85 )
+		goto st489;
+	goto tr497;
 st489:
 	if ( ++p == pe )
 		goto _test_eof489;
 case 489:
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 95: goto st21;
-		case 114: goto st490;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 65 )
+		goto st490;
+	goto tr497;
 st490:
 	if ( ++p == pe )
 		goto _test_eof490;
 case 490:
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 95: goto st21;
-		case 101: goto st491;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 76 )
+		goto st491;
+	goto tr497;
 st491:
 	if ( ++p == pe )
 		goto _test_eof491;
 case 491:
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 95: goto st21;
-		case 101: goto st492;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 9 )
+		goto st492;
+	goto tr497;
 st492:
 	if ( ++p == pe )
 		goto _test_eof492;
 case 492:
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 68: goto st493;
-		case 95: goto st21;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 70 )
+		goto st493;
+	goto tr497;
 st493:
 	if ( ++p == pe )
 		goto _test_eof493;
 case 493:
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto tr39;
-		case 66: goto st494;
-		case 95: goto st21;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 73 )
+		goto st494;
+	goto tr497;
 st494:
 	if ( ++p == pe )
 		goto _test_eof494;
 case 494:
-	switch( (*p) ) {
-		case 10: goto tr35;
-		case 61: goto st495;
-		case 95: goto st21;
-	}
-	if ( (*p) < 65 ) {
-		if ( (*p) < 48 ) {
-			if ( 32 <= (*p) && (*p) <= 47 )
-				goto st19;
-		} else if ( (*p) > 57 ) {
-			if ( 58 <= (*p) && (*p) <= 64 )
-				goto st19;
-		} else
-			goto st21;
-	} else if ( (*p) > 90 ) {
-		if ( (*p) < 97 ) {
-			if ( 91 <= (*p) && (*p) <= 96 )
-				goto st19;
-		} else if ( (*p) > 122 ) {
-			if ( 123 <= (*p) && (*p) <= 126 )
-				goto st19;
-		} else
-			goto st21;
-	} else
-		goto st21;
-	goto tr37;
+	if ( (*p) == 76 )
+		goto st495;
+	goto tr497;
 st495:
 	if ( ++p == pe )
 		goto _test_eof495;
 case 495:
-	if ( (*p) == 60 )
+	if ( (*p) == 84 )
 		goto st496;
-	goto tr34;
+	goto tr497;
 st496:
 	if ( ++p == pe )
 		goto _test_eof496;
 case 496:
-	if ( 32 <= (*p) && (*p) <= 126 )
+	if ( (*p) == 69 )
 		goto st497;
-	goto tr34;
+	goto tr497;
 st497:
 	if ( ++p == pe )
 		goto _test_eof497;
 case 497:
-	if ( (*p) == 62 )
+	if ( (*p) == 82 )
 		goto st498;
-	if ( 32 <= (*p) && (*p) <= 126 )
-		goto st497;
-	goto tr34;
+	goto tr497;
 st498:
 	if ( ++p == pe )
 		goto _test_eof498;
 case 498:
-	switch( (*p) ) {
-		case 10: goto tr423;
-		case 62: goto st498;
-	}
-	if ( 32 <= (*p) && (*p) <= 126 )
-		goto st497;
-	goto tr34;
+	if ( (*p) == 9 )
+		goto st499;
+	goto tr497;
 st499:
 	if ( ++p == pe )
 		goto _test_eof499;
 case 499:
-	if ( (*p) == 72 )
+	if ( (*p) == 73 )
 		goto st500;
-	goto tr525;
+	goto tr497;
 st500:
 	if ( ++p == pe )
 		goto _test_eof500;
 case 500:
-	if ( (*p) == 82 )
+	if ( (*p) == 78 )
 		goto st501;
-	goto tr525;
+	goto tr497;
 st501:
 	if ( ++p == pe )
 		goto _test_eof501;
 case 501:
-	if ( (*p) == 79 )
+	if ( (*p) == 70 )
 		goto st502;
-	goto tr525;
+	goto tr497;
 st502:
 	if ( ++p == pe )
 		goto _test_eof502;
 case 502:
-	if ( (*p) == 77 )
+	if ( (*p) == 79 )
 		goto st503;
-	goto tr525;
+	goto tr497;
 st503:
 	if ( ++p == pe )
 		goto _test_eof503;
 case 503:
-	if ( (*p) == 9 )
-		goto st504;
-	goto tr525;
+	switch( (*p) ) {
+		case 9: goto st504;
+		case 10: goto tr535;
+	}
+	goto tr497;
 st504:
 	if ( ++p == pe )
 		goto _test_eof504;
 case 504:
-	if ( (*p) == 80 )
+	if ( (*p) == 70 )
 		goto st505;
-	goto tr525;
+	goto tr497;
 st505:
 	if ( ++p == pe )
 		goto _test_eof505;
 case 505:
 	if ( (*p) == 79 )
 		goto st506;
-	goto tr525;
+	goto tr497;
 st506:
 	if ( ++p == pe )
 		goto _test_eof506;
 case 506:
-	if ( (*p) == 83 )
+	if ( (*p) == 82 )
 		goto st507;
-	goto tr525;
+	goto tr497;
 st507:
 	if ( ++p == pe )
 		goto _test_eof507;
 case 507:
-	if ( (*p) == 9 )
+	if ( (*p) == 77 )
 		goto st508;
-	goto tr525;
+	goto tr497;
 st508:
 	if ( ++p == pe )
 		goto _test_eof508;
 case 508:
-	if ( (*p) == 73 )
+	if ( (*p) == 65 )
 		goto st509;
-	goto tr525;
+	goto tr497;
 st509:
 	if ( ++p == pe )
 		goto _test_eof509;
 case 509:
-	if ( (*p) == 68 )
+	if ( (*p) == 84 )
 		goto st510;
-	goto tr525;
+	goto tr497;
 st510:
 	if ( ++p == pe )
 		goto _test_eof510;
 case 510:
 	if ( (*p) == 9 )
 		goto st511;
-	goto tr525;
+	goto tr497;
+tr544:
+#line 110 "vcf_v41.ragel"
+	{
+//        add_vcf_sample_name(ts, p-ts, file);
+    }
+	goto st511;
 st511:
 	if ( ++p == pe )
 		goto _test_eof511;
 case 511:
-	if ( (*p) == 82 )
-		goto st512;
-	goto tr525;
-st512:
-	if ( ++p == pe )
-		goto _test_eof512;
-case 512:
-	if ( (*p) == 69 )
-		goto st513;
-	goto tr525;
-st513:
-	if ( ++p == pe )
-		goto _test_eof513;
-case 513:
-	if ( (*p) == 70 )
-		goto st514;
-	goto tr525;
-st514:
-	if ( ++p == pe )
-		goto _test_eof514;
-case 514:
-	if ( (*p) == 9 )
-		goto st515;
-	goto tr525;
-st515:
-	if ( ++p == pe )
-		goto _test_eof515;
-case 515:
-	if ( (*p) == 65 )
-		goto st516;
-	goto tr525;
-st516:
-	if ( ++p == pe )
-		goto _test_eof516;
-case 516:
-	if ( (*p) == 76 )
-		goto st517;
-	goto tr525;
-st517:
-	if ( ++p == pe )
-		goto _test_eof517;
-case 517:
-	if ( (*p) == 84 )
-		goto st518;
-	goto tr525;
-st518:
-	if ( ++p == pe )
-		goto _test_eof518;
-case 518:
-	if ( (*p) == 9 )
-		goto st519;
-	goto tr525;
-st519:
-	if ( ++p == pe )
-		goto _test_eof519;
-case 519:
-	if ( (*p) == 81 )
-		goto st520;
-	goto tr525;
-st520:
-	if ( ++p == pe )
-		goto _test_eof520;
-case 520:
-	if ( (*p) == 85 )
-		goto st521;
-	goto tr525;
-st521:
-	if ( ++p == pe )
-		goto _test_eof521;
-case 521:
-	if ( (*p) == 65 )
-		goto st522;
-	goto tr525;
-st522:
-	if ( ++p == pe )
-		goto _test_eof522;
-case 522:
-	if ( (*p) == 76 )
-		goto st523;
-	goto tr525;
-st523:
-	if ( ++p == pe )
-		goto _test_eof523;
-case 523:
-	if ( (*p) == 9 )
-		goto st524;
-	goto tr525;
-st524:
-	if ( ++p == pe )
-		goto _test_eof524;
-case 524:
-	if ( (*p) == 70 )
-		goto st525;
-	goto tr525;
-st525:
-	if ( ++p == pe )
-		goto _test_eof525;
-case 525:
-	if ( (*p) == 73 )
-		goto st526;
-	goto tr525;
-st526:
-	if ( ++p == pe )
-		goto _test_eof526;
-case 526:
-	if ( (*p) == 76 )
-		goto st527;
-	goto tr525;
-st527:
-	if ( ++p == pe )
-		goto _test_eof527;
-case 527:
-	if ( (*p) == 84 )
-		goto st528;
-	goto tr525;
-st528:
-	if ( ++p == pe )
-		goto _test_eof528;
-case 528:
-	if ( (*p) == 69 )
-		goto st529;
-	goto tr525;
-st529:
-	if ( ++p == pe )
-		goto _test_eof529;
-case 529:
-	if ( (*p) == 82 )
-		goto st530;
-	goto tr525;
-st530:
-	if ( ++p == pe )
-		goto _test_eof530;
-case 530:
-	if ( (*p) == 9 )
-		goto st531;
-	goto tr525;
-st531:
-	if ( ++p == pe )
-		goto _test_eof531;
-case 531:
-	if ( (*p) == 73 )
-		goto st532;
-	goto tr525;
-st532:
-	if ( ++p == pe )
-		goto _test_eof532;
-case 532:
-	if ( (*p) == 78 )
-		goto st533;
-	goto tr525;
-st533:
-	if ( ++p == pe )
-		goto _test_eof533;
-case 533:
-	if ( (*p) == 70 )
-		goto st534;
-	goto tr525;
-st534:
-	if ( ++p == pe )
-		goto _test_eof534;
-case 534:
-	if ( (*p) == 79 )
-		goto st535;
-	goto tr525;
-st535:
-	if ( ++p == pe )
-		goto _test_eof535;
-case 535:
-	switch( (*p) ) {
-		case 9: goto st536;
-		case 10: goto tr563;
-	}
-	goto tr525;
-st536:
-	if ( ++p == pe )
-		goto _test_eof536;
-case 536:
-	if ( (*p) == 70 )
-		goto st537;
-	goto tr525;
-st537:
-	if ( ++p == pe )
-		goto _test_eof537;
-case 537:
-	if ( (*p) == 79 )
-		goto st538;
-	goto tr525;
-st538:
-	if ( ++p == pe )
-		goto _test_eof538;
-case 538:
-	if ( (*p) == 82 )
-		goto st539;
-	goto tr525;
-st539:
-	if ( ++p == pe )
-		goto _test_eof539;
-case 539:
-	if ( (*p) == 77 )
-		goto st540;
-	goto tr525;
-st540:
-	if ( ++p == pe )
-		goto _test_eof540;
-case 540:
-	if ( (*p) == 65 )
-		goto st541;
-	goto tr525;
-st541:
-	if ( ++p == pe )
-		goto _test_eof541;
-case 541:
-	if ( (*p) == 84 )
-		goto st542;
-	goto tr525;
-st542:
-	if ( ++p == pe )
-		goto _test_eof542;
-case 542:
-	if ( (*p) == 9 )
-		goto st543;
-	goto tr525;
-tr572:
-#line 110 "vcf_v41.ragel"
-	{
-//        add_vcf_sample_name(ts, p-ts, file);
-    }
-	goto st543;
-st543:
-	if ( ++p == pe )
-		goto _test_eof543;
-case 543:
-#line 9798 "vcf_validator_detail.hpp"
+#line 9395 "vcf_validator_detail.hpp"
 	if ( 32 <= (*p) && (*p) <= 126 )
-		goto tr571;
-	goto tr525;
-tr571:
+		goto tr543;
+	goto tr497;
+tr543:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st544;
-st544:
+	goto st512;
+st512:
 	if ( ++p == pe )
-		goto _test_eof544;
-case 544:
-#line 9812 "vcf_validator_detail.hpp"
+		goto _test_eof512;
+case 512:
+#line 9409 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr572;
-		case 10: goto tr573;
+		case 9: goto tr544;
+		case 10: goto tr545;
 	}
 	if ( 32 <= (*p) && (*p) <= 126 )
-		goto st544;
-	goto tr525;
-tr563:
+		goto st512;
+	goto tr497;
+tr535:
 #line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
     }
-	goto st703;
-tr573:
+	goto st671;
+tr545:
 #line 110 "vcf_v41.ragel"
 	{
 //        add_vcf_sample_name(ts, p-ts, file);
@@ -9833,24 +9430,24 @@ tr573:
         ++n_lines;
         n_columns = 1;
     }
-	goto st703;
-st703:
+	goto st671;
+st671:
 	if ( ++p == pe )
-		goto _test_eof703;
-case 703:
-#line 9842 "vcf_validator_detail.hpp"
+		goto _test_eof671;
+case 671:
+#line 9439 "vcf_validator_detail.hpp"
 	if ( (*p) == 60 )
-		goto tr777;
+		goto tr749;
 	if ( (*p) < 59 ) {
 		if ( 33 <= (*p) && (*p) <= 57 )
-			goto tr776;
+			goto tr748;
 	} else if ( (*p) > 61 ) {
 		if ( 63 <= (*p) && (*p) <= 126 )
-			goto tr776;
+			goto tr748;
 	} else
-		goto tr776;
-	goto tr775;
-tr776:
+		goto tr748;
+	goto tr747;
+tr748:
 #line 114 "vcf_v41.ragel"
 	{
 //        status->current_record = vcf_record_new();
@@ -9860,24 +9457,24 @@ tr776:
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st545;
-st545:
+	goto st513;
+st513:
 	if ( ++p == pe )
-		goto _test_eof545;
-case 545:
-#line 9869 "vcf_validator_detail.hpp"
+		goto _test_eof513;
+case 513:
+#line 9466 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr576;
-		case 59: goto st545;
-		case 61: goto st545;
+		case 9: goto tr548;
+		case 59: goto st513;
+		case 61: goto st513;
 	}
 	if ( (*p) > 57 ) {
 		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st545;
+			goto st513;
 	} else if ( (*p) >= 33 )
-		goto st545;
-	goto tr575;
-tr576:
+		goto st513;
+	goto tr547;
+tr548:
 #line 143 "vcf_v41.ragel"
 	{
 //        set_vcf_record_chromosome(ts, p-ts, status->current_record);
@@ -9886,32 +9483,32 @@ tr576:
 	{
         ++n_columns;
     }
-	goto st546;
-st546:
+	goto st514;
+st514:
 	if ( ++p == pe )
-		goto _test_eof546;
-case 546:
-#line 9895 "vcf_validator_detail.hpp"
+		goto _test_eof514;
+case 514:
+#line 9492 "vcf_validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
-		goto tr579;
-	goto tr578;
-tr579:
+		goto tr551;
+	goto tr550;
+tr551:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st547;
-st547:
+	goto st515;
+st515:
 	if ( ++p == pe )
-		goto _test_eof547;
-case 547:
-#line 9909 "vcf_validator_detail.hpp"
+		goto _test_eof515;
+case 515:
+#line 9506 "vcf_validator_detail.hpp"
 	if ( (*p) == 9 )
-		goto tr580;
+		goto tr552;
 	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st547;
-	goto tr578;
-tr580:
+		goto st515;
+	goto tr550;
+tr552:
 #line 147 "vcf_v41.ragel"
 	{
 //        char *field = strndup(ts, p-ts);
@@ -9922,37 +9519,37 @@ tr580:
 	{
         ++n_columns;
     }
-	goto st548;
-st548:
+	goto st516;
+st516:
 	if ( ++p == pe )
-		goto _test_eof548;
-case 548:
-#line 9931 "vcf_validator_detail.hpp"
+		goto _test_eof516;
+case 516:
+#line 9528 "vcf_validator_detail.hpp"
 	if ( (*p) > 58 ) {
 		if ( 60 <= (*p) && (*p) <= 126 )
-			goto tr583;
+			goto tr555;
 	} else if ( (*p) >= 33 )
-		goto tr583;
-	goto tr582;
-tr583:
+		goto tr555;
+	goto tr554;
+tr555:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st549;
-st549:
+	goto st517;
+st517:
 	if ( ++p == pe )
-		goto _test_eof549;
-case 549:
-#line 9948 "vcf_validator_detail.hpp"
+		goto _test_eof517;
+case 517:
+#line 9545 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr584;
-		case 59: goto st700;
+		case 9: goto tr556;
+		case 59: goto st668;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
-		goto st549;
-	goto tr582;
-tr584:
+		goto st517;
+	goto tr554;
+tr556:
 #line 153 "vcf_v41.ragel"
 	{
 //        set_vcf_record_id(ts, p-ts, status->current_record);
@@ -9961,51 +9558,51 @@ tr584:
 	{
         ++n_columns;
     }
-	goto st550;
-st550:
+	goto st518;
+st518:
 	if ( ++p == pe )
-		goto _test_eof550;
-case 550:
-#line 9970 "vcf_validator_detail.hpp"
+		goto _test_eof518;
+case 518:
+#line 9567 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 65: goto tr588;
-		case 67: goto tr588;
-		case 71: goto tr588;
-		case 78: goto tr588;
-		case 84: goto tr588;
-		case 97: goto tr588;
-		case 99: goto tr588;
-		case 103: goto tr588;
-		case 110: goto tr588;
-		case 116: goto tr588;
+		case 65: goto tr560;
+		case 67: goto tr560;
+		case 71: goto tr560;
+		case 78: goto tr560;
+		case 84: goto tr560;
+		case 97: goto tr560;
+		case 99: goto tr560;
+		case 103: goto tr560;
+		case 110: goto tr560;
+		case 116: goto tr560;
 	}
-	goto tr587;
-tr588:
+	goto tr559;
+tr560:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st551;
-st551:
+	goto st519;
+st519:
 	if ( ++p == pe )
-		goto _test_eof551;
-case 551:
-#line 9994 "vcf_validator_detail.hpp"
+		goto _test_eof519;
+case 519:
+#line 9591 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr589;
-		case 65: goto st551;
-		case 67: goto st551;
-		case 71: goto st551;
-		case 78: goto st551;
-		case 84: goto st551;
-		case 97: goto st551;
-		case 99: goto st551;
-		case 103: goto st551;
-		case 110: goto st551;
-		case 116: goto st551;
+		case 9: goto tr561;
+		case 65: goto st519;
+		case 67: goto st519;
+		case 71: goto st519;
+		case 78: goto st519;
+		case 84: goto st519;
+		case 97: goto st519;
+		case 99: goto st519;
+		case 103: goto st519;
+		case 110: goto st519;
+		case 116: goto st519;
 	}
-	goto tr587;
-tr589:
+	goto tr559;
+tr561:
 #line 157 "vcf_v41.ragel"
 	{
  //       set_vcf_record_reference(ts, p-ts, status->current_record);
@@ -10014,46 +9611,46 @@ tr589:
 	{
         ++n_columns;
     }
-	goto st552;
-st552:
+	goto st520;
+st520:
 	if ( ++p == pe )
-		goto _test_eof552;
-case 552:
-#line 10023 "vcf_validator_detail.hpp"
+		goto _test_eof520;
+case 520:
+#line 9620 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 42: goto tr592;
-		case 46: goto tr593;
-		case 48: goto tr594;
-		case 60: goto tr595;
-		case 65: goto tr596;
-		case 67: goto tr596;
-		case 71: goto tr596;
-		case 78: goto tr596;
-		case 84: goto tr596;
-		case 91: goto tr597;
-		case 93: goto tr598;
-		case 97: goto tr596;
-		case 99: goto tr596;
-		case 103: goto tr596;
-		case 110: goto tr596;
-		case 116: goto tr596;
+		case 42: goto tr564;
+		case 46: goto tr565;
+		case 48: goto tr566;
+		case 60: goto tr567;
+		case 65: goto tr568;
+		case 67: goto tr568;
+		case 71: goto tr568;
+		case 78: goto tr568;
+		case 84: goto tr568;
+		case 91: goto tr569;
+		case 93: goto tr570;
+		case 97: goto tr568;
+		case 99: goto tr568;
+		case 103: goto tr568;
+		case 110: goto tr568;
+		case 116: goto tr568;
 	}
-	goto tr591;
-tr592:
+	goto tr563;
+tr564:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st553;
-st553:
+	goto st521;
+st521:
 	if ( ++p == pe )
-		goto _test_eof553;
-case 553:
-#line 10053 "vcf_validator_detail.hpp"
+		goto _test_eof521;
+case 521:
+#line 9650 "vcf_validator_detail.hpp"
 	if ( (*p) == 9 )
-		goto tr599;
-	goto tr591;
-tr599:
+		goto tr571;
+	goto tr563;
+tr571:
 #line 173 "vcf_v41.ragel"
 	{
  //       set_vcf_record_type(VARIANT_INDEL, status->current_record);
@@ -10070,8 +9667,8 @@ tr599:
 	{
         ++n_columns;
     }
-	goto st554;
-tr708:
+	goto st522;
+tr680:
 #line 169 "vcf_v41.ragel"
 	{
  //       set_vcf_record_type(VARIANT_SNV, status->current_record);
@@ -10088,8 +9685,8 @@ tr708:
 	{
         ++n_columns;
     }
-	goto st554;
-tr710:
+	goto st522;
+tr682:
 #line 177 "vcf_v41.ragel"
 	{
  //       set_vcf_record_type(VARIANT_SV, status->current_record);
@@ -10106,8 +9703,8 @@ tr710:
 	{
         ++n_columns;
     }
-	goto st554;
-tr719:
+	goto st522;
+tr691:
 #line 161 "vcf_v41.ragel"
 	{
  /*       if (!strncmp("0", ts, 1)) {
@@ -10120,32 +9717,32 @@ tr719:
 	{
         ++n_columns;
     }
-	goto st554;
-st554:
+	goto st522;
+st522:
 	if ( ++p == pe )
-		goto _test_eof554;
-case 554:
-#line 10129 "vcf_validator_detail.hpp"
+		goto _test_eof522;
+case 522:
+#line 9726 "vcf_validator_detail.hpp"
 	if ( (*p) == 46 )
-		goto tr601;
+		goto tr573;
 	if ( 48 <= (*p) && (*p) <= 57 )
-		goto tr602;
-	goto tr600;
-tr601:
+		goto tr574;
+	goto tr572;
+tr573:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st555;
-st555:
+	goto st523;
+st523:
 	if ( ++p == pe )
-		goto _test_eof555;
-case 555:
-#line 10145 "vcf_validator_detail.hpp"
+		goto _test_eof523;
+case 523:
+#line 9742 "vcf_validator_detail.hpp"
 	if ( (*p) == 9 )
-		goto tr603;
-	goto tr600;
-tr603:
+		goto tr575;
+	goto tr572;
+tr575:
 #line 181 "vcf_v41.ragel"
 	{
 /*        float quality = -1.0f;
@@ -10160,37 +9757,37 @@ tr603:
 	{
         ++n_columns;
     }
-	goto st556;
-st556:
+	goto st524;
+st524:
 	if ( ++p == pe )
-		goto _test_eof556;
-case 556:
-#line 10169 "vcf_validator_detail.hpp"
+		goto _test_eof524;
+case 524:
+#line 9766 "vcf_validator_detail.hpp"
 	if ( (*p) > 58 ) {
 		if ( 60 <= (*p) && (*p) <= 126 )
-			goto tr605;
+			goto tr577;
 	} else if ( (*p) >= 33 )
-		goto tr605;
-	goto tr604;
-tr605:
+		goto tr577;
+	goto tr576;
+tr577:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st557;
-st557:
+	goto st525;
+st525:
 	if ( ++p == pe )
-		goto _test_eof557;
-case 557:
-#line 10186 "vcf_validator_detail.hpp"
+		goto _test_eof525;
+case 525:
+#line 9783 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr606;
-		case 59: goto st632;
+		case 9: goto tr578;
+		case 59: goto st600;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
-		goto st557;
-	goto tr604;
-tr606:
+		goto st525;
+	goto tr576;
+tr578:
 #line 191 "vcf_v41.ragel"
 	{
  //       set_vcf_record_filter(ts, p-ts, status->current_record);
@@ -10199,55 +9796,55 @@ tr606:
 	{
         ++n_columns;
     }
-	goto st558;
-st558:
+	goto st526;
+st526:
 	if ( ++p == pe )
-		goto _test_eof558;
-case 558:
-#line 10208 "vcf_validator_detail.hpp"
+		goto _test_eof526;
+case 526:
+#line 9805 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 46: goto tr610;
-		case 49: goto tr612;
-		case 65: goto tr613;
-		case 66: goto tr614;
-		case 67: goto tr615;
-		case 68: goto tr616;
-		case 69: goto tr617;
-		case 72: goto tr618;
-		case 77: goto tr619;
-		case 78: goto tr620;
-		case 83: goto tr621;
-		case 86: goto tr622;
-		case 95: goto tr611;
+		case 46: goto tr582;
+		case 49: goto tr584;
+		case 65: goto tr585;
+		case 66: goto tr586;
+		case 67: goto tr587;
+		case 68: goto tr588;
+		case 69: goto tr589;
+		case 72: goto tr590;
+		case 77: goto tr591;
+		case 78: goto tr592;
+		case 83: goto tr593;
+		case 86: goto tr594;
+		case 95: goto tr583;
 	}
 	if ( (*p) < 70 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto tr611;
+			goto tr583;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto tr611;
+			goto tr583;
 	} else
-		goto tr611;
-	goto tr609;
-tr610:
+		goto tr583;
+	goto tr581;
+tr582:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st559;
-st559:
+	goto st527;
+st527:
 	if ( ++p == pe )
-		goto _test_eof559;
-case 559:
-#line 10243 "vcf_validator_detail.hpp"
+		goto _test_eof527;
+case 527:
+#line 9840 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
 	}
-	goto tr609;
-tr623:
+	goto tr581;
+tr595:
 #line 195 "vcf_v41.ragel"
 	{
 //        set_vcf_record_info(ts, p-ts, status->current_record);
@@ -10256,80 +9853,80 @@ tr623:
 	{
         ++n_columns;
     }
-	goto st560;
-st560:
+	goto st528;
+st528:
 	if ( ++p == pe )
-		goto _test_eof560;
-case 560:
-#line 10265 "vcf_validator_detail.hpp"
+		goto _test_eof528;
+case 528:
+#line 9862 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 45: goto tr628;
-		case 46: goto tr629;
-		case 95: goto tr631;
+		case 45: goto tr600;
+		case 46: goto tr601;
+		case 95: goto tr603;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto tr630;
+			goto tr602;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto tr630;
+			goto tr602;
 	} else
-		goto tr630;
-	goto tr627;
-tr628:
+		goto tr602;
+	goto tr599;
+tr600:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st561;
-st561:
+	goto st529;
+st529:
 	if ( ++p == pe )
-		goto _test_eof561;
-case 561:
-#line 10290 "vcf_validator_detail.hpp"
+		goto _test_eof529;
+case 529:
+#line 9887 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 45: goto st561;
-		case 46: goto st562;
-		case 95: goto st562;
+		case 45: goto st529;
+		case 46: goto st530;
+		case 95: goto st530;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st562;
+			goto st530;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st562;
+			goto st530;
 	} else
-		goto st562;
-	goto tr627;
-tr630:
+		goto st530;
+	goto tr599;
+tr602:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st562;
-st562:
+	goto st530;
+st530:
 	if ( ++p == pe )
-		goto _test_eof562;
-case 562:
-#line 10315 "vcf_validator_detail.hpp"
+		goto _test_eof530;
+case 530:
+#line 9912 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr634;
-		case 58: goto st571;
-		case 95: goto st562;
+		case 9: goto tr606;
+		case 58: goto st539;
+		case 95: goto st530;
 	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st562;
+			goto st530;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st562;
+				goto st530;
 		} else if ( (*p) >= 65 )
-			goto st562;
+			goto st530;
 	} else
-		goto st562;
-	goto tr627;
-tr634:
+		goto st530;
+	goto tr599;
+tr606:
 #line 199 "vcf_v41.ragel"
 	{
  //       set_vcf_record_format(ts, p-ts, status->current_record);
@@ -10338,8 +9935,8 @@ tr634:
 	{
         ++n_columns;
     }
-	goto st563;
-tr638:
+	goto st531;
+tr610:
 #line 203 "vcf_v41.ragel"
 	{
 //        add_vcf_record_sample(ts, p-ts, status->current_record);
@@ -10348,37 +9945,37 @@ tr638:
 	{
         ++n_columns;
     }
-	goto st563;
-st563:
+	goto st531;
+st531:
 	if ( ++p == pe )
-		goto _test_eof563;
-case 563:
-#line 10357 "vcf_validator_detail.hpp"
+		goto _test_eof531;
+case 531:
+#line 9954 "vcf_validator_detail.hpp"
 	if ( (*p) == 46 )
-		goto tr637;
+		goto tr609;
 	if ( 48 <= (*p) && (*p) <= 57 )
-		goto tr637;
-	goto tr636;
-tr637:
+		goto tr609;
+	goto tr608;
+tr609:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st564;
-st564:
+	goto st532;
+st532:
 	if ( ++p == pe )
-		goto _test_eof564;
-case 564:
-#line 10373 "vcf_validator_detail.hpp"
+		goto _test_eof532;
+case 532:
+#line 9970 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr638;
-		case 10: goto tr639;
-		case 47: goto st568;
-		case 58: goto st569;
-		case 124: goto st568;
+		case 9: goto tr610;
+		case 10: goto tr611;
+		case 47: goto st536;
+		case 58: goto st537;
+		case 124: goto st536;
 	}
-	goto tr636;
-tr624:
+	goto tr608;
+tr596:
 #line 195 "vcf_v41.ragel"
 	{
 //        set_vcf_record_info(ts, p-ts, status->current_record);
@@ -10412,8 +10009,8 @@ tr624:
         ++n_lines;
         n_columns = 1;
     }
-	goto st704;
-tr639:
+	goto st672;
+tr611:
 #line 203 "vcf_v41.ragel"
 	{
 //        add_vcf_record_sample(ts, p-ts, status->current_record);
@@ -10447,24 +10044,24 @@ tr639:
         ++n_lines;
         n_columns = 1;
     }
-	goto st704;
-st704:
+	goto st672;
+st672:
 	if ( ++p == pe )
-		goto _test_eof704;
-case 704:
-#line 10456 "vcf_validator_detail.hpp"
+		goto _test_eof672;
+case 672:
+#line 10053 "vcf_validator_detail.hpp"
 	if ( (*p) == 60 )
-		goto tr777;
+		goto tr749;
 	if ( (*p) < 59 ) {
 		if ( 33 <= (*p) && (*p) <= 57 )
-			goto tr776;
+			goto tr748;
 	} else if ( (*p) > 61 ) {
 		if ( 63 <= (*p) && (*p) <= 126 )
-			goto tr776;
+			goto tr748;
 	} else
-		goto tr776;
-	goto tr575;
-tr777:
+		goto tr748;
+	goto tr547;
+tr749:
 #line 114 "vcf_v41.ragel"
 	{
 //        status->current_record = vcf_record_new();
@@ -10474,86 +10071,619 @@ tr777:
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st565;
+	goto st533;
+st533:
+	if ( ++p == pe )
+		goto _test_eof533;
+case 533:
+#line 10080 "vcf_validator_detail.hpp"
+	if ( (*p) < 59 ) {
+		if ( 33 <= (*p) && (*p) <= 57 )
+			goto st534;
+	} else if ( (*p) > 61 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
+			goto st534;
+	} else
+		goto st534;
+	goto tr547;
+st534:
+	if ( ++p == pe )
+		goto _test_eof534;
+case 534:
+	if ( (*p) == 62 )
+		goto st535;
+	if ( (*p) > 57 ) {
+		if ( 59 <= (*p) && (*p) <= 126 )
+			goto st534;
+	} else if ( (*p) >= 33 )
+		goto st534;
+	goto tr547;
+st535:
+	if ( ++p == pe )
+		goto _test_eof535;
+case 535:
+	if ( (*p) == 9 )
+		goto tr548;
+	goto tr547;
+st536:
+	if ( ++p == pe )
+		goto _test_eof536;
+case 536:
+	if ( (*p) == 46 )
+		goto st532;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st532;
+	goto tr608;
+st537:
+	if ( ++p == pe )
+		goto _test_eof537;
+case 537:
+	if ( 33 <= (*p) && (*p) <= 126 )
+		goto st538;
+	goto tr608;
+st538:
+	if ( ++p == pe )
+		goto _test_eof538;
+case 538:
+	switch( (*p) ) {
+		case 9: goto tr610;
+		case 10: goto tr611;
+	}
+	if ( 33 <= (*p) && (*p) <= 126 )
+		goto st538;
+	goto tr608;
+st539:
+	if ( ++p == pe )
+		goto _test_eof539;
+case 539:
+	switch( (*p) ) {
+		case 45: goto st529;
+		case 46: goto st540;
+		case 95: goto st541;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st530;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st530;
+	} else
+		goto st530;
+	goto tr599;
+tr601:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st540;
+st540:
+	if ( ++p == pe )
+		goto _test_eof540;
+case 540:
+#line 10164 "vcf_validator_detail.hpp"
+	switch( (*p) ) {
+		case 45: goto st530;
+		case 46: goto st540;
+		case 95: goto st530;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st530;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st530;
+	} else
+		goto st530;
+	goto tr599;
+tr603:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st541;
+st541:
+	if ( ++p == pe )
+		goto _test_eof541;
+case 541:
+#line 10189 "vcf_validator_detail.hpp"
+	if ( (*p) == 95 )
+		goto st541;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st530;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st530;
+		} else if ( (*p) >= 65 )
+			goto st530;
+	} else
+		goto st530;
+	goto tr599;
+st542:
+	if ( ++p == pe )
+		goto _test_eof542;
+case 542:
+	switch( (*p) ) {
+		case 46: goto st527;
+		case 49: goto st546;
+		case 65: goto st553;
+		case 66: goto st568;
+		case 67: goto st572;
+		case 68: goto st579;
+		case 69: goto st580;
+		case 72: goto st582;
+		case 77: goto st583;
+		case 78: goto st585;
+		case 83: goto st586;
+		case 86: goto st592;
+		case 95: goto st543;
+	}
+	if ( (*p) < 70 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
+tr583:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st543;
+st543:
+	if ( ++p == pe )
+		goto _test_eof543;
+case 543:
+#line 10242 "vcf_validator_detail.hpp"
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
+st544:
+	if ( ++p == pe )
+		goto _test_eof544;
+case 544:
+	if ( 33 <= (*p) && (*p) <= 126 )
+		goto st545;
+	goto tr581;
+st545:
+	if ( ++p == pe )
+		goto _test_eof545;
+case 545:
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+	}
+	if ( 33 <= (*p) && (*p) <= 126 )
+		goto st545;
+	goto tr581;
+tr584:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st546;
+st546:
+	if ( ++p == pe )
+		goto _test_eof546;
+case 546:
+#line 10287 "vcf_validator_detail.hpp"
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 48: goto st547;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 49 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
+st547:
+	if ( ++p == pe )
+		goto _test_eof547;
+case 547:
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 48: goto st548;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 49 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
+st548:
+	if ( ++p == pe )
+		goto _test_eof548;
+case 548:
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 48: goto st549;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 49 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
+st549:
+	if ( ++p == pe )
+		goto _test_eof549;
+case 549:
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 71: goto st550;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
+st550:
+	if ( ++p == pe )
+		goto _test_eof550;
+case 550:
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st551;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
+st551:
+	if ( ++p == pe )
+		goto _test_eof551;
+case 551:
+	if ( 48 <= (*p) && (*p) <= 49 )
+		goto st552;
+	goto tr581;
+st552:
+	if ( ++p == pe )
+		goto _test_eof552;
+case 552:
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+	}
+	goto tr581;
+tr585:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st553;
+st553:
+	if ( ++p == pe )
+		goto _test_eof553;
+case 553:
+#line 10415 "vcf_validator_detail.hpp"
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 65: goto st554;
+		case 67: goto st557;
+		case 70: goto st560;
+		case 78: goto st565;
+		case 95: goto st543;
+	}
+	if ( (*p) < 66 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
+st554:
+	if ( ++p == pe )
+		goto _test_eof554;
+case 554:
+	switch( (*p) ) {
+		case 61: goto st555;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
+st555:
+	if ( ++p == pe )
+		goto _test_eof555;
+case 555:
+	switch( (*p) ) {
+		case 46: goto st552;
+		case 65: goto st556;
+		case 67: goto st556;
+		case 71: goto st556;
+		case 78: goto st556;
+		case 84: goto st556;
+		case 97: goto st556;
+		case 99: goto st556;
+		case 103: goto st556;
+		case 110: goto st556;
+		case 116: goto st556;
+	}
+	goto tr581;
+st556:
+	if ( ++p == pe )
+		goto _test_eof556;
+case 556:
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 65: goto st556;
+		case 67: goto st556;
+		case 71: goto st556;
+		case 78: goto st556;
+		case 84: goto st556;
+		case 97: goto st556;
+		case 99: goto st556;
+		case 103: goto st556;
+		case 110: goto st556;
+		case 116: goto st556;
+	}
+	goto tr581;
+st557:
+	if ( ++p == pe )
+		goto _test_eof557;
+case 557:
+	switch( (*p) ) {
+		case 61: goto st558;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
+st558:
+	if ( ++p == pe )
+		goto _test_eof558;
+case 558:
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st559;
+	goto tr581;
+st559:
+	if ( ++p == pe )
+		goto _test_eof559;
+case 559:
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 44: goto st558;
+		case 59: goto st542;
+	}
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st559;
+	goto tr581;
+st560:
+	if ( ++p == pe )
+		goto _test_eof560;
+case 560:
+	switch( (*p) ) {
+		case 61: goto st561;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
+st561:
+	if ( ++p == pe )
+		goto _test_eof561;
+case 561:
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st562;
+	goto tr581;
+st562:
+	if ( ++p == pe )
+		goto _test_eof562;
+case 562:
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 44: goto st561;
+		case 46: goto st563;
+		case 59: goto st542;
+	}
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st562;
+	goto tr581;
+st563:
+	if ( ++p == pe )
+		goto _test_eof563;
+case 563:
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st564;
+	goto tr581;
+st564:
+	if ( ++p == pe )
+		goto _test_eof564;
+case 564:
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 44: goto st561;
+		case 59: goto st542;
+	}
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st564;
+	goto tr581;
 st565:
 	if ( ++p == pe )
 		goto _test_eof565;
 case 565:
-#line 10483 "vcf_validator_detail.hpp"
-	if ( (*p) < 59 ) {
-		if ( 33 <= (*p) && (*p) <= 57 )
-			goto st566;
-	} else if ( (*p) > 61 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st566;
+	switch( (*p) ) {
+		case 61: goto st566;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
 	} else
-		goto st566;
-	goto tr575;
+		goto st543;
+	goto tr581;
 st566:
 	if ( ++p == pe )
 		goto _test_eof566;
 case 566:
-	if ( (*p) == 62 )
+	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st567;
-	if ( (*p) > 57 ) {
-		if ( 59 <= (*p) && (*p) <= 126 )
-			goto st566;
-	} else if ( (*p) >= 33 )
-		goto st566;
-	goto tr575;
+	goto tr581;
 st567:
 	if ( ++p == pe )
 		goto _test_eof567;
 case 567:
-	if ( (*p) == 9 )
-		goto tr576;
-	goto tr575;
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+	}
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st567;
+	goto tr581;
+tr586:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st568;
 st568:
 	if ( ++p == pe )
 		goto _test_eof568;
 case 568:
-	if ( (*p) == 46 )
-		goto st564;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st564;
-	goto tr636;
+#line 10632 "vcf_validator_detail.hpp"
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 81: goto st569;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
 st569:
 	if ( ++p == pe )
 		goto _test_eof569;
 case 569:
-	if ( 33 <= (*p) && (*p) <= 126 )
-		goto st570;
-	goto tr636;
+	switch( (*p) ) {
+		case 61: goto st570;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
 st570:
 	if ( ++p == pe )
 		goto _test_eof570;
 case 570:
-	switch( (*p) ) {
-		case 9: goto tr638;
-		case 10: goto tr639;
-	}
-	if ( 33 <= (*p) && (*p) <= 126 )
-		goto st570;
-	goto tr636;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st571;
+	goto tr581;
 st571:
 	if ( ++p == pe )
 		goto _test_eof571;
 case 571:
 	switch( (*p) ) {
-		case 45: goto st561;
-		case 46: goto st572;
-		case 95: goto st573;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 46: goto st566;
+		case 59: goto st542;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st562;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st562;
-	} else
-		goto st562;
-	goto tr627;
-tr629:
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st571;
+	goto tr581;
+tr587:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -10563,248 +10693,293 @@ st572:
 	if ( ++p == pe )
 		goto _test_eof572;
 case 572:
-#line 10567 "vcf_validator_detail.hpp"
+#line 10697 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 45: goto st562;
-		case 46: goto st572;
-		case 95: goto st562;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 73: goto st573;
+		case 95: goto st543;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st562;
+			goto st543;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st562;
+			goto st543;
 	} else
-		goto st562;
-	goto tr627;
-tr631:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st573;
+		goto st543;
+	goto tr581;
 st573:
 	if ( ++p == pe )
 		goto _test_eof573;
 case 573:
-#line 10592 "vcf_validator_detail.hpp"
-	if ( (*p) == 95 )
-		goto st573;
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st562;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st562;
-		} else if ( (*p) >= 65 )
-			goto st562;
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 71: goto st574;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
 	} else
-		goto st562;
-	goto tr627;
+		goto st543;
+	goto tr581;
 st574:
 	if ( ++p == pe )
 		goto _test_eof574;
 case 574:
 	switch( (*p) ) {
-		case 46: goto st559;
-		case 49: goto st578;
-		case 65: goto st585;
-		case 66: goto st600;
-		case 67: goto st604;
-		case 68: goto st611;
-		case 69: goto st612;
-		case 72: goto st614;
-		case 77: goto st615;
-		case 78: goto st617;
-		case 83: goto st618;
-		case 86: goto st624;
-		case 95: goto st575;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 65: goto st575;
+		case 95: goto st543;
 	}
-	if ( (*p) < 70 ) {
+	if ( (*p) < 66 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
+			goto st543;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st543;
 	} else
-		goto st575;
-	goto tr609;
-tr611:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st575;
+		goto st543;
+	goto tr581;
 st575:
 	if ( ++p == pe )
 		goto _test_eof575;
 case 575:
-#line 10645 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 95: goto st575;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 82: goto st576;
+		case 95: goto st543;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
+			goto st543;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st543;
 	} else
-		goto st575;
-	goto tr609;
+		goto st543;
+	goto tr581;
 st576:
 	if ( ++p == pe )
 		goto _test_eof576;
 case 576:
-	if ( 33 <= (*p) && (*p) <= 126 )
-		goto st577;
-	goto tr609;
+	switch( (*p) ) {
+		case 61: goto st577;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
 st577:
 	if ( ++p == pe )
 		goto _test_eof577;
 case 577:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-	}
-	if ( 33 <= (*p) && (*p) <= 126 )
-		goto st577;
-	goto tr609;
-tr612:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st578;
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st578;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st578;
+	} else
+		goto st578;
+	goto tr581;
 st578:
 	if ( ++p == pe )
 		goto _test_eof578;
 case 578:
-#line 10690 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 48: goto st579;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 95: goto st575;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
 	}
 	if ( (*p) < 65 ) {
-		if ( 49 <= (*p) && (*p) <= 57 )
-			goto st575;
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st578;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st578;
 	} else
-		goto st575;
-	goto tr609;
+		goto st578;
+	goto tr581;
+tr588:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st579;
 st579:
 	if ( ++p == pe )
 		goto _test_eof579;
 case 579:
+#line 10836 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 48: goto st580;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 95: goto st575;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 66: goto st550;
+		case 80: goto st565;
+		case 95: goto st543;
 	}
 	if ( (*p) < 65 ) {
-		if ( 49 <= (*p) && (*p) <= 57 )
-			goto st575;
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st543;
 	} else
-		goto st575;
-	goto tr609;
+		goto st543;
+	goto tr581;
+tr589:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st580;
 st580:
 	if ( ++p == pe )
 		goto _test_eof580;
 case 580:
+#line 10865 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 48: goto st581;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 95: goto st575;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 78: goto st581;
+		case 95: goto st543;
 	}
 	if ( (*p) < 65 ) {
-		if ( 49 <= (*p) && (*p) <= 57 )
-			goto st575;
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st543;
 	} else
-		goto st575;
-	goto tr609;
+		goto st543;
+	goto tr581;
 st581:
 	if ( ++p == pe )
 		goto _test_eof581;
 case 581:
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 71: goto st582;
-		case 95: goto st575;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 68: goto st565;
+		case 95: goto st543;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
+			goto st543;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st543;
 	} else
-		goto st575;
-	goto tr609;
+		goto st543;
+	goto tr581;
+tr590:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st582;
 st582:
 	if ( ++p == pe )
 		goto _test_eof582;
 case 582:
+#line 10914 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st583;
-		case 95: goto st575;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 95: goto st543;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+	if ( (*p) < 52 ) {
+		if ( (*p) > 49 ) {
+			if ( 50 <= (*p) && (*p) <= 51 )
+				goto st550;
+		} else if ( (*p) >= 48 )
+			goto st543;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st543;
+		} else if ( (*p) >= 65 )
+			goto st543;
 	} else
-		goto st575;
-	goto tr609;
+		goto st543;
+	goto tr581;
+tr591:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st583;
 st583:
 	if ( ++p == pe )
 		goto _test_eof583;
 case 583:
-	if ( 48 <= (*p) && (*p) <= 49 )
-		goto st584;
-	goto tr609;
+#line 10947 "vcf_validator_detail.hpp"
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 81: goto st584;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
 st584:
 	if ( ++p == pe )
 		goto _test_eof584;
 case 584:
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
+		case 48: goto st565;
+		case 61: goto st570;
+		case 95: goto st543;
 	}
-	goto tr609;
-tr613:
+	if ( (*p) < 65 ) {
+		if ( 49 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
+tr592:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -10814,279 +10989,378 @@ st585:
 	if ( ++p == pe )
 		goto _test_eof585;
 case 585:
-#line 10818 "vcf_validator_detail.hpp"
+#line 10993 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 65: goto st586;
-		case 67: goto st589;
-		case 70: goto st592;
-		case 78: goto st597;
-		case 95: goto st575;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 83: goto st565;
+		case 95: goto st543;
 	}
-	if ( (*p) < 66 ) {
+	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
+			goto st543;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st543;
 	} else
-		goto st575;
-	goto tr609;
+		goto st543;
+	goto tr581;
+tr593:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st586;
 st586:
 	if ( ++p == pe )
 		goto _test_eof586;
 case 586:
+#line 11021 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 61: goto st587;
-		case 95: goto st575;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 66: goto st569;
+		case 79: goto st587;
+		case 95: goto st543;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
+			goto st543;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st543;
 	} else
-		goto st575;
-	goto tr609;
+		goto st543;
+	goto tr581;
 st587:
 	if ( ++p == pe )
 		goto _test_eof587;
 case 587:
 	switch( (*p) ) {
-		case 46: goto st584;
-		case 65: goto st588;
-		case 67: goto st588;
-		case 71: goto st588;
-		case 78: goto st588;
-		case 84: goto st588;
-		case 97: goto st588;
-		case 99: goto st588;
-		case 103: goto st588;
-		case 110: goto st588;
-		case 116: goto st588;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 77: goto st588;
+		case 95: goto st543;
 	}
-	goto tr609;
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
 st588:
 	if ( ++p == pe )
 		goto _test_eof588;
 case 588:
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 65: goto st588;
-		case 67: goto st588;
-		case 71: goto st588;
-		case 78: goto st588;
-		case 84: goto st588;
-		case 97: goto st588;
-		case 99: goto st588;
-		case 103: goto st588;
-		case 110: goto st588;
-		case 116: goto st588;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 65: goto st589;
+		case 95: goto st543;
 	}
-	goto tr609;
+	if ( (*p) < 66 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
 st589:
 	if ( ++p == pe )
 		goto _test_eof589;
 case 589:
 	switch( (*p) ) {
-		case 61: goto st590;
-		case 95: goto st575;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 84: goto st590;
+		case 95: goto st543;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
+			goto st543;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st543;
 	} else
-		goto st575;
-	goto tr609;
+		goto st543;
+	goto tr581;
 st590:
 	if ( ++p == pe )
 		goto _test_eof590;
 case 590:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st591;
-	goto tr609;
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 73: goto st591;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
 st591:
 	if ( ++p == pe )
 		goto _test_eof591;
 case 591:
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 44: goto st590;
-		case 59: goto st574;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 67: goto st550;
+		case 95: goto st543;
 	}
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st591;
-	goto tr609;
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
+tr594:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st592;
 st592:
 	if ( ++p == pe )
 		goto _test_eof592;
 case 592:
+#line 11155 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 61: goto st593;
-		case 95: goto st575;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 65: goto st593;
+		case 95: goto st543;
 	}
-	if ( (*p) < 65 ) {
+	if ( (*p) < 66 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
+			goto st543;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st543;
 	} else
-		goto st575;
-	goto tr609;
+		goto st543;
+	goto tr581;
 st593:
 	if ( ++p == pe )
 		goto _test_eof593;
 case 593:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st594;
-	goto tr609;
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 76: goto st594;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
 st594:
 	if ( ++p == pe )
 		goto _test_eof594;
 case 594:
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 44: goto st593;
-		case 46: goto st595;
-		case 59: goto st574;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 73: goto st595;
+		case 95: goto st543;
 	}
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st594;
-	goto tr609;
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
 st595:
 	if ( ++p == pe )
 		goto _test_eof595;
 case 595:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st596;
-	goto tr609;
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 68: goto st596;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
 st596:
 	if ( ++p == pe )
 		goto _test_eof596;
 case 596:
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 44: goto st593;
-		case 59: goto st574;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 65: goto st597;
+		case 95: goto st543;
 	}
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st596;
-	goto tr609;
+	if ( (*p) < 66 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
 st597:
 	if ( ++p == pe )
 		goto _test_eof597;
 case 597:
 	switch( (*p) ) {
-		case 61: goto st598;
-		case 95: goto st575;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 84: goto st598;
+		case 95: goto st543;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
+			goto st543;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st543;
 	} else
-		goto st575;
-	goto tr609;
+		goto st543;
+	goto tr581;
 st598:
 	if ( ++p == pe )
 		goto _test_eof598;
 case 598:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st599;
-	goto tr609;
+	switch( (*p) ) {
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 69: goto st599;
+		case 95: goto st543;
+	}
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
 st599:
 	if ( ++p == pe )
 		goto _test_eof599;
 case 599:
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
+		case 9: goto tr595;
+		case 10: goto tr596;
+		case 59: goto st542;
+		case 61: goto st544;
+		case 68: goto st550;
+		case 95: goto st543;
 	}
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st599;
-	goto tr609;
-tr614:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st600;
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st543;
+	} else if ( (*p) > 90 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st543;
+	} else
+		goto st543;
+	goto tr581;
 st600:
 	if ( ++p == pe )
 		goto _test_eof600;
 case 600:
-#line 11035 "vcf_validator_detail.hpp"
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 81: goto st601;
-		case 95: goto st575;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	if ( (*p) > 58 ) {
+		if ( 60 <= (*p) && (*p) <= 126 )
+			goto st525;
+	} else if ( (*p) >= 33 )
+		goto st525;
+	goto tr576;
+tr574:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st601;
 st601:
 	if ( ++p == pe )
 		goto _test_eof601;
 case 601:
+#line 11340 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 61: goto st602;
-		case 95: goto st575;
+		case 9: goto tr575;
+		case 46: goto st602;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st601;
+	goto tr572;
 st602:
 	if ( ++p == pe )
 		goto _test_eof602;
 case 602:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st603;
-	goto tr609;
+	goto tr572;
 st603:
 	if ( ++p == pe )
 		goto _test_eof603;
 case 603:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 46: goto st598;
-		case 59: goto st574;
-	}
+	if ( (*p) == 9 )
+		goto tr575;
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st603;
-	goto tr609;
-tr615:
+	goto tr572;
+tr565:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -11096,686 +11370,505 @@ st604:
 	if ( ++p == pe )
 		goto _test_eof604;
 case 604:
-#line 11100 "vcf_validator_detail.hpp"
+#line 11374 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 73: goto st605;
-		case 95: goto st575;
+		case 9: goto tr680;
+		case 65: goto st605;
+		case 67: goto st605;
+		case 71: goto st605;
+		case 78: goto st605;
+		case 84: goto st605;
+		case 97: goto st605;
+		case 99: goto st605;
+		case 103: goto st605;
+		case 110: goto st605;
+		case 116: goto st605;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	goto tr563;
 st605:
 	if ( ++p == pe )
 		goto _test_eof605;
 case 605:
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 71: goto st606;
-		case 95: goto st575;
+		case 9: goto tr682;
+		case 65: goto st605;
+		case 67: goto st605;
+		case 71: goto st605;
+		case 78: goto st605;
+		case 84: goto st605;
+		case 97: goto st605;
+		case 99: goto st605;
+		case 103: goto st605;
+		case 110: goto st605;
+		case 116: goto st605;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	goto tr563;
+tr566:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st606;
 st606:
 	if ( ++p == pe )
 		goto _test_eof606;
 case 606:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 65: goto st607;
-		case 95: goto st575;
-	}
-	if ( (*p) < 66 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+#line 11417 "vcf_validator_detail.hpp"
+	if ( (*p) == 9 )
+		goto tr680;
+	goto tr563;
+tr567:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st607;
 st607:
 	if ( ++p == pe )
 		goto _test_eof607;
 case 607:
+#line 11431 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 82: goto st608;
-		case 95: goto st575;
+		case 45: goto st608;
+		case 46: goto st611;
+		case 67: goto st612;
+		case 68: goto st615;
+		case 73: goto st632;
+		case 95: goto st634;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
+			goto st609;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st609;
 	} else
-		goto st575;
-	goto tr609;
+		goto st609;
+	goto tr563;
 st608:
 	if ( ++p == pe )
 		goto _test_eof608;
 case 608:
 	switch( (*p) ) {
-		case 61: goto st609;
-		case 95: goto st575;
+		case 45: goto st608;
+		case 46: goto st609;
+		case 95: goto st609;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
+			goto st609;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st609;
 	} else
-		goto st575;
-	goto tr609;
+		goto st609;
+	goto tr563;
 st609:
 	if ( ++p == pe )
 		goto _test_eof609;
 case 609:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st610;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st610;
+	switch( (*p) ) {
+		case 62: goto st610;
+		case 95: goto st609;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st609;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st609;
+		} else if ( (*p) >= 65 )
+			goto st609;
 	} else
-		goto st610;
-	goto tr609;
+		goto st609;
+	goto tr563;
 st610:
 	if ( ++p == pe )
 		goto _test_eof610;
 case 610:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st610;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st610;
-	} else
-		goto st610;
-	goto tr609;
-tr616:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st611;
+	if ( (*p) == 9 )
+		goto tr691;
+	goto tr563;
 st611:
 	if ( ++p == pe )
 		goto _test_eof611;
 case 611:
-#line 11239 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 66: goto st582;
-		case 80: goto st597;
-		case 95: goto st575;
+		case 45: goto st609;
+		case 46: goto st611;
+		case 95: goto st609;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
+			goto st609;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st609;
 	} else
-		goto st575;
-	goto tr609;
-tr617:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st612;
+		goto st609;
+	goto tr563;
 st612:
 	if ( ++p == pe )
 		goto _test_eof612;
 case 612:
-#line 11268 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
+		case 62: goto st610;
 		case 78: goto st613;
-		case 95: goto st575;
+		case 95: goto st609;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st609;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st609;
+		} else if ( (*p) >= 65 )
+			goto st609;
 	} else
-		goto st575;
-	goto tr609;
+		goto st609;
+	goto tr563;
 st613:
 	if ( ++p == pe )
 		goto _test_eof613;
 case 613:
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 68: goto st597;
-		case 95: goto st575;
+		case 62: goto st610;
+		case 86: goto st614;
+		case 95: goto st609;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st609;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st609;
+		} else if ( (*p) >= 65 )
+			goto st609;
 	} else
-		goto st575;
-	goto tr609;
-tr618:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st614;
+		goto st609;
+	goto tr563;
 st614:
 	if ( ++p == pe )
 		goto _test_eof614;
 case 614:
-#line 11317 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 95: goto st575;
+		case 62: goto st521;
+		case 95: goto st609;
 	}
-	if ( (*p) < 52 ) {
-		if ( (*p) > 49 ) {
-			if ( 50 <= (*p) && (*p) <= 51 )
-				goto st582;
-		} else if ( (*p) >= 48 )
-			goto st575;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st609;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st575;
+				goto st609;
 		} else if ( (*p) >= 65 )
-			goto st575;
+			goto st609;
 	} else
-		goto st575;
-	goto tr609;
-tr619:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st615;
+		goto st609;
+	goto tr563;
 st615:
 	if ( ++p == pe )
 		goto _test_eof615;
 case 615:
-#line 11350 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 81: goto st616;
-		case 95: goto st575;
+		case 62: goto st610;
+		case 69: goto st616;
+		case 85: goto st623;
+		case 95: goto st609;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st609;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st609;
+		} else if ( (*p) >= 65 )
+			goto st609;
 	} else
-		goto st575;
-	goto tr609;
+		goto st609;
+	goto tr563;
 st616:
 	if ( ++p == pe )
 		goto _test_eof616;
 case 616:
 	switch( (*p) ) {
-		case 48: goto st597;
-		case 61: goto st602;
-		case 95: goto st575;
+		case 62: goto st610;
+		case 76: goto st617;
+		case 95: goto st609;
 	}
-	if ( (*p) < 65 ) {
-		if ( 49 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st609;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st609;
+		} else if ( (*p) >= 65 )
+			goto st609;
 	} else
-		goto st575;
-	goto tr609;
-tr620:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st617;
+		goto st609;
+	goto tr563;
 st617:
 	if ( ++p == pe )
 		goto _test_eof617;
 case 617:
-#line 11396 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 83: goto st597;
-		case 95: goto st575;
+		case 58: goto st618;
+		case 62: goto st521;
+		case 95: goto st609;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st609;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st609;
+		} else if ( (*p) >= 65 )
+			goto st609;
 	} else
-		goto st575;
-	goto tr609;
-tr621:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st618;
+		goto st609;
+	goto tr563;
 st618:
 	if ( ++p == pe )
 		goto _test_eof618;
 case 618:
-#line 11424 "vcf_validator_detail.hpp"
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 66: goto st601;
-		case 79: goto st619;
-		case 95: goto st575;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	if ( (*p) == 77 )
+		goto st619;
+	goto tr563;
 st619:
 	if ( ++p == pe )
 		goto _test_eof619;
 case 619:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 77: goto st620;
-		case 95: goto st575;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	if ( (*p) == 69 )
+		goto st620;
+	goto tr563;
 st620:
 	if ( ++p == pe )
 		goto _test_eof620;
 case 620:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 65: goto st621;
-		case 95: goto st575;
-	}
-	if ( (*p) < 66 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	if ( (*p) == 58 )
+		goto st621;
+	goto tr563;
 st621:
 	if ( ++p == pe )
 		goto _test_eof621;
 case 621:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 84: goto st622;
-		case 95: goto st575;
-	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
+			goto st622;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st622;
 	} else
-		goto st575;
-	goto tr609;
+		goto st622;
+	goto tr563;
 st622:
 	if ( ++p == pe )
 		goto _test_eof622;
 case 622:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 73: goto st623;
-		case 95: goto st575;
-	}
+	if ( (*p) == 62 )
+		goto st521;
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
+			goto st622;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+			goto st622;
 	} else
-		goto st575;
-	goto tr609;
+		goto st622;
+	goto tr563;
 st623:
 	if ( ++p == pe )
 		goto _test_eof623;
 case 623:
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 67: goto st582;
-		case 95: goto st575;
+		case 62: goto st610;
+		case 80: goto st624;
+		case 95: goto st609;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st609;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st609;
+		} else if ( (*p) >= 65 )
+			goto st609;
 	} else
-		goto st575;
-	goto tr609;
-tr622:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st624;
+		goto st609;
+	goto tr563;
 st624:
 	if ( ++p == pe )
 		goto _test_eof624;
 case 624:
-#line 11558 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 65: goto st625;
-		case 95: goto st575;
+		case 58: goto st625;
+		case 62: goto st521;
+		case 95: goto st609;
 	}
-	if ( (*p) < 66 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st609;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st609;
+		} else if ( (*p) >= 65 )
+			goto st609;
 	} else
-		goto st575;
-	goto tr609;
+		goto st609;
+	goto tr563;
 st625:
 	if ( ++p == pe )
 		goto _test_eof625;
 case 625:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 76: goto st626;
-		case 95: goto st575;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	if ( (*p) == 84 )
+		goto st626;
+	goto tr563;
 st626:
 	if ( ++p == pe )
 		goto _test_eof626;
 case 626:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 73: goto st627;
-		case 95: goto st575;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	if ( (*p) == 65 )
+		goto st627;
+	goto tr563;
 st627:
 	if ( ++p == pe )
 		goto _test_eof627;
 case 627:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 68: goto st628;
-		case 95: goto st575;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	if ( (*p) == 78 )
+		goto st628;
+	goto tr563;
 st628:
 	if ( ++p == pe )
 		goto _test_eof628;
 case 628:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 65: goto st629;
-		case 95: goto st575;
-	}
-	if ( (*p) < 66 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	if ( (*p) == 68 )
+		goto st629;
+	goto tr563;
 st629:
 	if ( ++p == pe )
 		goto _test_eof629;
 case 629:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 84: goto st630;
-		case 95: goto st575;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	if ( (*p) == 69 )
+		goto st630;
+	goto tr563;
 st630:
 	if ( ++p == pe )
 		goto _test_eof630;
 case 630:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 69: goto st631;
-		case 95: goto st575;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	if ( (*p) == 77 )
+		goto st631;
+	goto tr563;
 st631:
 	if ( ++p == pe )
 		goto _test_eof631;
 case 631:
-	switch( (*p) ) {
-		case 9: goto tr623;
-		case 10: goto tr624;
-		case 59: goto st574;
-		case 61: goto st576;
-		case 68: goto st582;
-		case 95: goto st575;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st575;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st575;
-	} else
-		goto st575;
-	goto tr609;
+	if ( (*p) == 62 )
+		goto st521;
+	goto tr563;
 st632:
 	if ( ++p == pe )
 		goto _test_eof632;
 case 632:
-	if ( (*p) > 58 ) {
-		if ( 60 <= (*p) && (*p) <= 126 )
-			goto st557;
-	} else if ( (*p) >= 33 )
-		goto st557;
-	goto tr604;
-tr602:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st633;
+	switch( (*p) ) {
+		case 62: goto st610;
+		case 78: goto st633;
+		case 95: goto st609;
+	}
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st609;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st609;
+		} else if ( (*p) >= 65 )
+			goto st609;
+	} else
+		goto st609;
+	goto tr563;
 st633:
 	if ( ++p == pe )
 		goto _test_eof633;
 case 633:
-#line 11743 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr603;
-		case 46: goto st634;
+		case 62: goto st610;
+		case 83: goto st617;
+		case 86: goto st614;
+		case 95: goto st609;
 	}
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st633;
-	goto tr600;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st609;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st609;
+		} else if ( (*p) >= 65 )
+			goto st609;
+	} else
+		goto st609;
+	goto tr563;
 st634:
 	if ( ++p == pe )
 		goto _test_eof634;
 case 634:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st635;
-	goto tr600;
-st635:
-	if ( ++p == pe )
-		goto _test_eof635;
-case 635:
-	if ( (*p) == 9 )
-		goto tr603;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st635;
-	goto tr600;
-tr593:
+	if ( (*p) == 95 )
+		goto st634;
+	if ( (*p) < 48 ) {
+		if ( 45 <= (*p) && (*p) <= 46 )
+			goto st609;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st609;
+		} else if ( (*p) >= 65 )
+			goto st609;
+	} else
+		goto st609;
+	goto tr563;
+tr568:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
     }
-	goto st636;
+	goto st635;
+st635:
+	if ( ++p == pe )
+		goto _test_eof635;
+case 635:
+#line 11849 "vcf_validator_detail.hpp"
+	switch( (*p) ) {
+		case 9: goto tr680;
+		case 44: goto st636;
+		case 46: goto st638;
+		case 65: goto st635;
+		case 67: goto st635;
+		case 71: goto st635;
+		case 78: goto st635;
+		case 84: goto st635;
+		case 91: goto st639;
+		case 93: goto st646;
+		case 97: goto st635;
+		case 99: goto st635;
+		case 103: goto st635;
+		case 110: goto st635;
+		case 116: goto st635;
+	}
+	goto tr563;
 st636:
 	if ( ++p == pe )
 		goto _test_eof636;
 case 636:
-#line 11777 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr708;
 		case 65: goto st637;
 		case 67: goto st637;
 		case 71: goto st637;
@@ -11787,13 +11880,14 @@ case 636:
 		case 110: goto st637;
 		case 116: goto st637;
 	}
-	goto tr591;
+	goto tr563;
 st637:
 	if ( ++p == pe )
 		goto _test_eof637;
 case 637:
 	switch( (*p) ) {
-		case 9: goto tr710;
+		case 9: goto tr680;
+		case 44: goto st636;
 		case 65: goto st637;
 		case 67: goto st637;
 		case 71: goto st637;
@@ -11805,903 +11899,406 @@ case 637:
 		case 110: goto st637;
 		case 116: goto st637;
 	}
-	goto tr591;
-tr594:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st638;
+	goto tr563;
 st638:
 	if ( ++p == pe )
 		goto _test_eof638;
 case 638:
-#line 11820 "vcf_validator_detail.hpp"
 	if ( (*p) == 9 )
-		goto tr708;
-	goto tr591;
-tr595:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st639;
+		goto tr682;
+	goto tr563;
 st639:
 	if ( ++p == pe )
 		goto _test_eof639;
 case 639:
-#line 11834 "vcf_validator_detail.hpp"
-	switch( (*p) ) {
-		case 45: goto st640;
-		case 46: goto st643;
-		case 67: goto st644;
-		case 68: goto st647;
-		case 73: goto st664;
-		case 95: goto st666;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st641;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st641;
+	if ( (*p) == 60 )
+		goto st643;
+	if ( (*p) < 59 ) {
+		if ( 33 <= (*p) && (*p) <= 57 )
+			goto st640;
+	} else if ( (*p) > 61 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
+			goto st640;
 	} else
-		goto st641;
-	goto tr591;
+		goto st640;
+	goto tr563;
 st640:
 	if ( ++p == pe )
 		goto _test_eof640;
 case 640:
 	switch( (*p) ) {
-		case 45: goto st640;
-		case 46: goto st641;
-		case 95: goto st641;
+		case 58: goto st641;
+		case 61: goto st640;
 	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st641;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st641;
-	} else
-		goto st641;
-	goto tr591;
+	if ( (*p) > 59 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
+			goto st640;
+	} else if ( (*p) >= 33 )
+		goto st640;
+	goto tr563;
 st641:
 	if ( ++p == pe )
 		goto _test_eof641;
 case 641:
-	switch( (*p) ) {
-		case 62: goto st642;
-		case 95: goto st641;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st641;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st641;
-		} else if ( (*p) >= 65 )
-			goto st641;
-	} else
-		goto st641;
-	goto tr591;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st642;
+	goto tr563;
 st642:
 	if ( ++p == pe )
 		goto _test_eof642;
 case 642:
-	if ( (*p) == 9 )
-		goto tr719;
-	goto tr591;
+	if ( (*p) == 91 )
+		goto st638;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st642;
+	goto tr563;
 st643:
 	if ( ++p == pe )
 		goto _test_eof643;
 case 643:
-	switch( (*p) ) {
-		case 45: goto st641;
-		case 46: goto st643;
-		case 95: goto st641;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st641;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st641;
+	if ( (*p) < 59 ) {
+		if ( 33 <= (*p) && (*p) <= 57 )
+			goto st644;
+	} else if ( (*p) > 61 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
+			goto st644;
 	} else
-		goto st641;
-	goto tr591;
+		goto st644;
+	goto tr563;
 st644:
 	if ( ++p == pe )
 		goto _test_eof644;
 case 644:
-	switch( (*p) ) {
-		case 62: goto st642;
-		case 78: goto st645;
-		case 95: goto st641;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st641;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st641;
-		} else if ( (*p) >= 65 )
-			goto st641;
-	} else
-		goto st641;
-	goto tr591;
+	if ( (*p) == 62 )
+		goto st645;
+	if ( (*p) > 57 ) {
+		if ( 59 <= (*p) && (*p) <= 126 )
+			goto st644;
+	} else if ( (*p) >= 33 )
+		goto st644;
+	goto tr563;
 st645:
 	if ( ++p == pe )
 		goto _test_eof645;
 case 645:
-	switch( (*p) ) {
-		case 62: goto st642;
-		case 86: goto st646;
-		case 95: goto st641;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st641;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st641;
-		} else if ( (*p) >= 65 )
-			goto st641;
-	} else
+	if ( (*p) == 58 )
 		goto st641;
-	goto tr591;
+	goto tr563;
 st646:
 	if ( ++p == pe )
 		goto _test_eof646;
 case 646:
-	switch( (*p) ) {
-		case 62: goto st553;
-		case 95: goto st641;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st641;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st641;
-		} else if ( (*p) >= 65 )
-			goto st641;
+	if ( (*p) == 60 )
+		goto st650;
+	if ( (*p) < 59 ) {
+		if ( 33 <= (*p) && (*p) <= 57 )
+			goto st647;
+	} else if ( (*p) > 61 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
+			goto st647;
 	} else
-		goto st641;
-	goto tr591;
+		goto st647;
+	goto tr563;
 st647:
 	if ( ++p == pe )
 		goto _test_eof647;
 case 647:
 	switch( (*p) ) {
-		case 62: goto st642;
-		case 69: goto st648;
-		case 85: goto st655;
-		case 95: goto st641;
+		case 58: goto st648;
+		case 61: goto st647;
 	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st641;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st641;
-		} else if ( (*p) >= 65 )
-			goto st641;
-	} else
-		goto st641;
-	goto tr591;
+	if ( (*p) > 59 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
+			goto st647;
+	} else if ( (*p) >= 33 )
+		goto st647;
+	goto tr563;
 st648:
 	if ( ++p == pe )
 		goto _test_eof648;
 case 648:
-	switch( (*p) ) {
-		case 62: goto st642;
-		case 76: goto st649;
-		case 95: goto st641;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st641;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st641;
-		} else if ( (*p) >= 65 )
-			goto st641;
-	} else
-		goto st641;
-	goto tr591;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st649;
+	goto tr563;
 st649:
 	if ( ++p == pe )
 		goto _test_eof649;
 case 649:
-	switch( (*p) ) {
-		case 58: goto st650;
-		case 62: goto st553;
-		case 95: goto st641;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st641;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st641;
-		} else if ( (*p) >= 65 )
-			goto st641;
-	} else
-		goto st641;
-	goto tr591;
+	if ( (*p) == 93 )
+		goto st638;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st649;
+	goto tr563;
 st650:
 	if ( ++p == pe )
 		goto _test_eof650;
 case 650:
-	if ( (*p) == 77 )
+	if ( (*p) < 59 ) {
+		if ( 33 <= (*p) && (*p) <= 57 )
+			goto st651;
+	} else if ( (*p) > 61 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
+			goto st651;
+	} else
 		goto st651;
-	goto tr591;
+	goto tr563;
 st651:
 	if ( ++p == pe )
 		goto _test_eof651;
 case 651:
-	if ( (*p) == 69 )
+	if ( (*p) == 62 )
 		goto st652;
-	goto tr591;
+	if ( (*p) > 57 ) {
+		if ( 59 <= (*p) && (*p) <= 126 )
+			goto st651;
+	} else if ( (*p) >= 33 )
+		goto st651;
+	goto tr563;
 st652:
 	if ( ++p == pe )
 		goto _test_eof652;
 case 652:
 	if ( (*p) == 58 )
-		goto st653;
-	goto tr591;
+		goto st648;
+	goto tr563;
+tr569:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st653;
 st653:
 	if ( ++p == pe )
 		goto _test_eof653;
 case 653:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
+#line 12075 "vcf_validator_detail.hpp"
+	if ( (*p) == 60 )
+		goto st658;
+	if ( (*p) < 59 ) {
+		if ( 33 <= (*p) && (*p) <= 57 )
 			goto st654;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
+	} else if ( (*p) > 61 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
 			goto st654;
 	} else
 		goto st654;
-	goto tr591;
+	goto tr563;
 st654:
 	if ( ++p == pe )
 		goto _test_eof654;
 case 654:
-	if ( (*p) == 62 )
-		goto st553;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
+	switch( (*p) ) {
+		case 58: goto st655;
+		case 61: goto st654;
+	}
+	if ( (*p) > 59 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
 			goto st654;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st654;
-	} else
+	} else if ( (*p) >= 33 )
 		goto st654;
-	goto tr591;
+	goto tr563;
 st655:
 	if ( ++p == pe )
 		goto _test_eof655;
 case 655:
-	switch( (*p) ) {
-		case 62: goto st642;
-		case 80: goto st656;
-		case 95: goto st641;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st641;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st641;
-		} else if ( (*p) >= 65 )
-			goto st641;
-	} else
-		goto st641;
-	goto tr591;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st656;
+	goto tr563;
 st656:
 	if ( ++p == pe )
 		goto _test_eof656;
 case 656:
-	switch( (*p) ) {
-		case 58: goto st657;
-		case 62: goto st553;
-		case 95: goto st641;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st641;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st641;
-		} else if ( (*p) >= 65 )
-			goto st641;
-	} else
-		goto st641;
-	goto tr591;
+	if ( (*p) == 91 )
+		goto st657;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st656;
+	goto tr563;
 st657:
 	if ( ++p == pe )
 		goto _test_eof657;
 case 657:
-	if ( (*p) == 84 )
-		goto st658;
-	goto tr591;
+	switch( (*p) ) {
+		case 65: goto st605;
+		case 67: goto st605;
+		case 71: goto st605;
+		case 78: goto st605;
+		case 84: goto st605;
+		case 97: goto st605;
+		case 99: goto st605;
+		case 103: goto st605;
+		case 110: goto st605;
+		case 116: goto st605;
+	}
+	goto tr563;
 st658:
 	if ( ++p == pe )
 		goto _test_eof658;
 case 658:
-	if ( (*p) == 65 )
+	if ( (*p) < 59 ) {
+		if ( 33 <= (*p) && (*p) <= 57 )
+			goto st659;
+	} else if ( (*p) > 61 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
+			goto st659;
+	} else
 		goto st659;
-	goto tr591;
+	goto tr563;
 st659:
 	if ( ++p == pe )
 		goto _test_eof659;
 case 659:
-	if ( (*p) == 78 )
+	if ( (*p) == 62 )
 		goto st660;
-	goto tr591;
+	if ( (*p) > 57 ) {
+		if ( 59 <= (*p) && (*p) <= 126 )
+			goto st659;
+	} else if ( (*p) >= 33 )
+		goto st659;
+	goto tr563;
 st660:
 	if ( ++p == pe )
 		goto _test_eof660;
 case 660:
-	if ( (*p) == 68 )
-		goto st661;
-	goto tr591;
+	if ( (*p) == 58 )
+		goto st655;
+	goto tr563;
+tr570:
+#line 15 "vcf_v41.ragel"
+	{
+        ParsePolicy::handle_token_begin(*this);
+    }
+	goto st661;
 st661:
 	if ( ++p == pe )
 		goto _test_eof661;
 case 661:
-	if ( (*p) == 69 )
+#line 12176 "vcf_validator_detail.hpp"
+	if ( (*p) == 60 )
+		goto st665;
+	if ( (*p) < 59 ) {
+		if ( 33 <= (*p) && (*p) <= 57 )
+			goto st662;
+	} else if ( (*p) > 61 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
+			goto st662;
+	} else
 		goto st662;
-	goto tr591;
+	goto tr563;
 st662:
 	if ( ++p == pe )
 		goto _test_eof662;
 case 662:
-	if ( (*p) == 77 )
-		goto st663;
-	goto tr591;
+	switch( (*p) ) {
+		case 58: goto st663;
+		case 61: goto st662;
+	}
+	if ( (*p) > 59 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
+			goto st662;
+	} else if ( (*p) >= 33 )
+		goto st662;
+	goto tr563;
 st663:
 	if ( ++p == pe )
 		goto _test_eof663;
 case 663:
-	if ( (*p) == 62 )
-		goto st553;
-	goto tr591;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st664;
+	goto tr563;
 st664:
 	if ( ++p == pe )
 		goto _test_eof664;
 case 664:
-	switch( (*p) ) {
-		case 62: goto st642;
-		case 78: goto st665;
-		case 95: goto st641;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st641;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st641;
-		} else if ( (*p) >= 65 )
-			goto st641;
-	} else
-		goto st641;
-	goto tr591;
+	if ( (*p) == 93 )
+		goto st657;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto st664;
+	goto tr563;
 st665:
 	if ( ++p == pe )
 		goto _test_eof665;
 case 665:
-	switch( (*p) ) {
-		case 62: goto st642;
-		case 83: goto st649;
-		case 86: goto st646;
-		case 95: goto st641;
-	}
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st641;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st641;
-		} else if ( (*p) >= 65 )
-			goto st641;
+	if ( (*p) < 59 ) {
+		if ( 33 <= (*p) && (*p) <= 57 )
+			goto st666;
+	} else if ( (*p) > 61 ) {
+		if ( 63 <= (*p) && (*p) <= 126 )
+			goto st666;
 	} else
-		goto st641;
-	goto tr591;
+		goto st666;
+	goto tr563;
 st666:
 	if ( ++p == pe )
 		goto _test_eof666;
 case 666:
-	if ( (*p) == 95 )
+	if ( (*p) == 62 )
+		goto st667;
+	if ( (*p) > 57 ) {
+		if ( 59 <= (*p) && (*p) <= 126 )
+			goto st666;
+	} else if ( (*p) >= 33 )
 		goto st666;
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st641;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st641;
-		} else if ( (*p) >= 65 )
-			goto st641;
-	} else
-		goto st641;
-	goto tr591;
-tr596:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st667;
+	goto tr563;
 st667:
 	if ( ++p == pe )
 		goto _test_eof667;
 case 667:
-#line 12252 "vcf_validator_detail.hpp"
-	switch( (*p) ) {
-		case 9: goto tr708;
-		case 44: goto st668;
-		case 46: goto st670;
-		case 65: goto st667;
-		case 67: goto st667;
-		case 71: goto st667;
-		case 78: goto st667;
-		case 84: goto st667;
-		case 91: goto st671;
-		case 93: goto st678;
-		case 97: goto st667;
-		case 99: goto st667;
-		case 103: goto st667;
-		case 110: goto st667;
-		case 116: goto st667;
-	}
-	goto tr591;
+	if ( (*p) == 58 )
+		goto st663;
+	goto tr563;
 st668:
 	if ( ++p == pe )
 		goto _test_eof668;
 case 668:
-	switch( (*p) ) {
-		case 65: goto st669;
-		case 67: goto st669;
-		case 71: goto st669;
-		case 78: goto st669;
-		case 84: goto st669;
-		case 97: goto st669;
-		case 99: goto st669;
-		case 103: goto st669;
-		case 110: goto st669;
-		case 116: goto st669;
-	}
-	goto tr591;
+	if ( (*p) > 58 ) {
+		if ( 60 <= (*p) && (*p) <= 126 )
+			goto st517;
+	} else if ( (*p) >= 33 )
+		goto st517;
+	goto tr554;
 st669:
 	if ( ++p == pe )
 		goto _test_eof669;
 case 669:
-	switch( (*p) ) {
-		case 9: goto tr708;
-		case 44: goto st668;
-		case 65: goto st669;
-		case 67: goto st669;
-		case 71: goto st669;
-		case 78: goto st669;
-		case 84: goto st669;
-		case 97: goto st669;
-		case 99: goto st669;
-		case 103: goto st669;
-		case 110: goto st669;
-		case 116: goto st669;
-	}
-	goto tr591;
-st670:
-	if ( ++p == pe )
-		goto _test_eof670;
-case 670:
-	if ( (*p) == 9 )
-		goto tr710;
-	goto tr591;
-st671:
-	if ( ++p == pe )
-		goto _test_eof671;
-case 671:
-	if ( (*p) == 60 )
-		goto st675;
-	if ( (*p) < 59 ) {
-		if ( 33 <= (*p) && (*p) <= 57 )
-			goto st672;
-	} else if ( (*p) > 61 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st672;
-	} else
-		goto st672;
-	goto tr591;
-st672:
-	if ( ++p == pe )
-		goto _test_eof672;
-case 672:
-	switch( (*p) ) {
-		case 58: goto st673;
-		case 61: goto st672;
-	}
-	if ( (*p) > 59 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st672;
-	} else if ( (*p) >= 33 )
-		goto st672;
-	goto tr591;
+	if ( (*p) == 10 )
+		goto tr744;
+	goto st669;
+tr744:
+#line 23 "vcf_v41.ragel"
+	{
+        ++n_lines;
+        n_columns = 1;
+    }
+#line 481 "vcf_v41.ragel"
+	{ {goto st20;} }
+	goto st673;
 st673:
 	if ( ++p == pe )
 		goto _test_eof673;
 case 673:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st674;
-	goto tr591;
+#line 12280 "vcf_validator_detail.hpp"
+	goto st0;
+st670:
+	if ( ++p == pe )
+		goto _test_eof670;
+case 670:
+	if ( (*p) == 10 )
+		goto tr746;
+	goto st670;
+tr746:
+#line 23 "vcf_v41.ragel"
+	{
+        ++n_lines;
+        n_columns = 1;
+    }
+#line 482 "vcf_v41.ragel"
+	{ {goto st672;} }
+	goto st674;
 st674:
 	if ( ++p == pe )
 		goto _test_eof674;
 case 674:
-	if ( (*p) == 91 )
-		goto st670;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st674;
-	goto tr591;
-st675:
-	if ( ++p == pe )
-		goto _test_eof675;
-case 675:
-	if ( (*p) < 59 ) {
-		if ( 33 <= (*p) && (*p) <= 57 )
-			goto st676;
-	} else if ( (*p) > 61 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st676;
-	} else
-		goto st676;
-	goto tr591;
-st676:
-	if ( ++p == pe )
-		goto _test_eof676;
-case 676:
-	if ( (*p) == 62 )
-		goto st677;
-	if ( (*p) > 57 ) {
-		if ( 59 <= (*p) && (*p) <= 126 )
-			goto st676;
-	} else if ( (*p) >= 33 )
-		goto st676;
-	goto tr591;
-st677:
-	if ( ++p == pe )
-		goto _test_eof677;
-case 677:
-	if ( (*p) == 58 )
-		goto st673;
-	goto tr591;
-st678:
-	if ( ++p == pe )
-		goto _test_eof678;
-case 678:
-	if ( (*p) == 60 )
-		goto st682;
-	if ( (*p) < 59 ) {
-		if ( 33 <= (*p) && (*p) <= 57 )
-			goto st679;
-	} else if ( (*p) > 61 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st679;
-	} else
-		goto st679;
-	goto tr591;
-st679:
-	if ( ++p == pe )
-		goto _test_eof679;
-case 679:
-	switch( (*p) ) {
-		case 58: goto st680;
-		case 61: goto st679;
-	}
-	if ( (*p) > 59 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st679;
-	} else if ( (*p) >= 33 )
-		goto st679;
-	goto tr591;
-st680:
-	if ( ++p == pe )
-		goto _test_eof680;
-case 680:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st681;
-	goto tr591;
-st681:
-	if ( ++p == pe )
-		goto _test_eof681;
-case 681:
-	if ( (*p) == 93 )
-		goto st670;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st681;
-	goto tr591;
-st682:
-	if ( ++p == pe )
-		goto _test_eof682;
-case 682:
-	if ( (*p) < 59 ) {
-		if ( 33 <= (*p) && (*p) <= 57 )
-			goto st683;
-	} else if ( (*p) > 61 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st683;
-	} else
-		goto st683;
-	goto tr591;
-st683:
-	if ( ++p == pe )
-		goto _test_eof683;
-case 683:
-	if ( (*p) == 62 )
-		goto st684;
-	if ( (*p) > 57 ) {
-		if ( 59 <= (*p) && (*p) <= 126 )
-			goto st683;
-	} else if ( (*p) >= 33 )
-		goto st683;
-	goto tr591;
-st684:
-	if ( ++p == pe )
-		goto _test_eof684;
-case 684:
-	if ( (*p) == 58 )
-		goto st680;
-	goto tr591;
-tr597:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st685;
-st685:
-	if ( ++p == pe )
-		goto _test_eof685;
-case 685:
-#line 12478 "vcf_validator_detail.hpp"
-	if ( (*p) == 60 )
-		goto st690;
-	if ( (*p) < 59 ) {
-		if ( 33 <= (*p) && (*p) <= 57 )
-			goto st686;
-	} else if ( (*p) > 61 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st686;
-	} else
-		goto st686;
-	goto tr591;
-st686:
-	if ( ++p == pe )
-		goto _test_eof686;
-case 686:
-	switch( (*p) ) {
-		case 58: goto st687;
-		case 61: goto st686;
-	}
-	if ( (*p) > 59 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st686;
-	} else if ( (*p) >= 33 )
-		goto st686;
-	goto tr591;
-st687:
-	if ( ++p == pe )
-		goto _test_eof687;
-case 687:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st688;
-	goto tr591;
-st688:
-	if ( ++p == pe )
-		goto _test_eof688;
-case 688:
-	if ( (*p) == 91 )
-		goto st689;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st688;
-	goto tr591;
-st689:
-	if ( ++p == pe )
-		goto _test_eof689;
-case 689:
-	switch( (*p) ) {
-		case 65: goto st637;
-		case 67: goto st637;
-		case 71: goto st637;
-		case 78: goto st637;
-		case 84: goto st637;
-		case 97: goto st637;
-		case 99: goto st637;
-		case 103: goto st637;
-		case 110: goto st637;
-		case 116: goto st637;
-	}
-	goto tr591;
-st690:
-	if ( ++p == pe )
-		goto _test_eof690;
-case 690:
-	if ( (*p) < 59 ) {
-		if ( 33 <= (*p) && (*p) <= 57 )
-			goto st691;
-	} else if ( (*p) > 61 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st691;
-	} else
-		goto st691;
-	goto tr591;
-st691:
-	if ( ++p == pe )
-		goto _test_eof691;
-case 691:
-	if ( (*p) == 62 )
-		goto st692;
-	if ( (*p) > 57 ) {
-		if ( 59 <= (*p) && (*p) <= 126 )
-			goto st691;
-	} else if ( (*p) >= 33 )
-		goto st691;
-	goto tr591;
-st692:
-	if ( ++p == pe )
-		goto _test_eof692;
-case 692:
-	if ( (*p) == 58 )
-		goto st687;
-	goto tr591;
-tr598:
-#line 15 "vcf_v41.ragel"
-	{
-        ParsePolicy::handle_token_begin(*this);
-    }
-	goto st693;
-st693:
-	if ( ++p == pe )
-		goto _test_eof693;
-case 693:
-#line 12579 "vcf_validator_detail.hpp"
-	if ( (*p) == 60 )
-		goto st697;
-	if ( (*p) < 59 ) {
-		if ( 33 <= (*p) && (*p) <= 57 )
-			goto st694;
-	} else if ( (*p) > 61 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st694;
-	} else
-		goto st694;
-	goto tr591;
-st694:
-	if ( ++p == pe )
-		goto _test_eof694;
-case 694:
-	switch( (*p) ) {
-		case 58: goto st695;
-		case 61: goto st694;
-	}
-	if ( (*p) > 59 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st694;
-	} else if ( (*p) >= 33 )
-		goto st694;
-	goto tr591;
-st695:
-	if ( ++p == pe )
-		goto _test_eof695;
-case 695:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st696;
-	goto tr591;
-st696:
-	if ( ++p == pe )
-		goto _test_eof696;
-case 696:
-	if ( (*p) == 93 )
-		goto st689;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st696;
-	goto tr591;
-st697:
-	if ( ++p == pe )
-		goto _test_eof697;
-case 697:
-	if ( (*p) < 59 ) {
-		if ( 33 <= (*p) && (*p) <= 57 )
-			goto st698;
-	} else if ( (*p) > 61 ) {
-		if ( 63 <= (*p) && (*p) <= 126 )
-			goto st698;
-	} else
-		goto st698;
-	goto tr591;
-st698:
-	if ( ++p == pe )
-		goto _test_eof698;
-case 698:
-	if ( (*p) == 62 )
-		goto st699;
-	if ( (*p) > 57 ) {
-		if ( 59 <= (*p) && (*p) <= 126 )
-			goto st698;
-	} else if ( (*p) >= 33 )
-		goto st698;
-	goto tr591;
-st699:
-	if ( ++p == pe )
-		goto _test_eof699;
-case 699:
-	if ( (*p) == 58 )
-		goto st695;
-	goto tr591;
-st700:
-	if ( ++p == pe )
-		goto _test_eof700;
-case 700:
-	if ( (*p) > 58 ) {
-		if ( 60 <= (*p) && (*p) <= 126 )
-			goto st549;
-	} else if ( (*p) >= 33 )
-		goto st549;
-	goto tr582;
-st701:
-	if ( ++p == pe )
-		goto _test_eof701;
-case 701:
-	if ( (*p) == 10 )
-		goto tr772;
-	goto st701;
-tr772:
-#line 23 "vcf_v41.ragel"
-	{
-        ++n_lines;
-        n_columns = 1;
-    }
-#line 462 "vcf_v41.ragel"
-	{ {goto st20;} }
-	goto st705;
-st705:
-	if ( ++p == pe )
-		goto _test_eof705;
-case 705:
-#line 12683 "vcf_validator_detail.hpp"
-	goto st0;
-st702:
-	if ( ++p == pe )
-		goto _test_eof702;
-case 702:
-	if ( (*p) == 10 )
-		goto tr774;
-	goto st702;
-tr774:
-#line 23 "vcf_v41.ragel"
-	{
-        ++n_lines;
-        n_columns = 1;
-    }
-#line 463 "vcf_v41.ragel"
-	{ {goto st704;} }
-	goto st706;
-st706:
-	if ( ++p == pe )
-		goto _test_eof706;
-case 706:
-#line 12705 "vcf_validator_detail.hpp"
+#line 12302 "vcf_validator_detail.hpp"
 	goto st0;
 	}
 	_test_eof2: cs = 2; goto _test_eof; 
@@ -13215,6 +12812,7 @@ case 706:
 	_test_eof510: cs = 510; goto _test_eof; 
 	_test_eof511: cs = 511; goto _test_eof; 
 	_test_eof512: cs = 512; goto _test_eof; 
+	_test_eof671: cs = 671; goto _test_eof; 
 	_test_eof513: cs = 513; goto _test_eof; 
 	_test_eof514: cs = 514; goto _test_eof; 
 	_test_eof515: cs = 515; goto _test_eof; 
@@ -13235,6 +12833,7 @@ case 706:
 	_test_eof530: cs = 530; goto _test_eof; 
 	_test_eof531: cs = 531; goto _test_eof; 
 	_test_eof532: cs = 532; goto _test_eof; 
+	_test_eof672: cs = 672; goto _test_eof; 
 	_test_eof533: cs = 533; goto _test_eof; 
 	_test_eof534: cs = 534; goto _test_eof; 
 	_test_eof535: cs = 535; goto _test_eof; 
@@ -13247,7 +12846,6 @@ case 706:
 	_test_eof542: cs = 542; goto _test_eof; 
 	_test_eof543: cs = 543; goto _test_eof; 
 	_test_eof544: cs = 544; goto _test_eof; 
-	_test_eof703: cs = 703; goto _test_eof; 
 	_test_eof545: cs = 545; goto _test_eof; 
 	_test_eof546: cs = 546; goto _test_eof; 
 	_test_eof547: cs = 547; goto _test_eof; 
@@ -13268,7 +12866,6 @@ case 706:
 	_test_eof562: cs = 562; goto _test_eof; 
 	_test_eof563: cs = 563; goto _test_eof; 
 	_test_eof564: cs = 564; goto _test_eof; 
-	_test_eof704: cs = 704; goto _test_eof; 
 	_test_eof565: cs = 565; goto _test_eof; 
 	_test_eof566: cs = 566; goto _test_eof; 
 	_test_eof567: cs = 567; goto _test_eof; 
@@ -13374,41 +12971,9 @@ case 706:
 	_test_eof667: cs = 667; goto _test_eof; 
 	_test_eof668: cs = 668; goto _test_eof; 
 	_test_eof669: cs = 669; goto _test_eof; 
-	_test_eof670: cs = 670; goto _test_eof; 
-	_test_eof671: cs = 671; goto _test_eof; 
-	_test_eof672: cs = 672; goto _test_eof; 
 	_test_eof673: cs = 673; goto _test_eof; 
+	_test_eof670: cs = 670; goto _test_eof; 
 	_test_eof674: cs = 674; goto _test_eof; 
-	_test_eof675: cs = 675; goto _test_eof; 
-	_test_eof676: cs = 676; goto _test_eof; 
-	_test_eof677: cs = 677; goto _test_eof; 
-	_test_eof678: cs = 678; goto _test_eof; 
-	_test_eof679: cs = 679; goto _test_eof; 
-	_test_eof680: cs = 680; goto _test_eof; 
-	_test_eof681: cs = 681; goto _test_eof; 
-	_test_eof682: cs = 682; goto _test_eof; 
-	_test_eof683: cs = 683; goto _test_eof; 
-	_test_eof684: cs = 684; goto _test_eof; 
-	_test_eof685: cs = 685; goto _test_eof; 
-	_test_eof686: cs = 686; goto _test_eof; 
-	_test_eof687: cs = 687; goto _test_eof; 
-	_test_eof688: cs = 688; goto _test_eof; 
-	_test_eof689: cs = 689; goto _test_eof; 
-	_test_eof690: cs = 690; goto _test_eof; 
-	_test_eof691: cs = 691; goto _test_eof; 
-	_test_eof692: cs = 692; goto _test_eof; 
-	_test_eof693: cs = 693; goto _test_eof; 
-	_test_eof694: cs = 694; goto _test_eof; 
-	_test_eof695: cs = 695; goto _test_eof; 
-	_test_eof696: cs = 696; goto _test_eof; 
-	_test_eof697: cs = 697; goto _test_eof; 
-	_test_eof698: cs = 698; goto _test_eof; 
-	_test_eof699: cs = 699; goto _test_eof; 
-	_test_eof700: cs = 700; goto _test_eof; 
-	_test_eof701: cs = 701; goto _test_eof; 
-	_test_eof705: cs = 705; goto _test_eof; 
-	_test_eof702: cs = 702; goto _test_eof; 
-	_test_eof706: cs = 706; goto _test_eof; 
 
 	_test_eof: {}
 	if ( p == eof )
@@ -13430,10 +12995,36 @@ case 706:
 #line 35 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	break;
 	case 19: 
+	case 346: 
+	case 347: 
+	case 348: 
+	case 349: 
+	case 350: 
+	case 351: 
+	case 352: 
+	case 353: 
+	case 354: 
+	case 355: 
+	case 356: 
+	case 357: 
+	case 358: 
+	case 359: 
+	case 360: 
+	case 361: 
+	case 368: 
+	case 369: 
+	case 370: 
+	case 371: 
+	case 372: 
+	case 373: 
+	case 374: 
+	case 375: 
+	case 376: 
+	case 377: 
 	case 378: 
 	case 379: 
 	case 380: 
@@ -13450,6 +13041,12 @@ case 706:
 	case 391: 
 	case 392: 
 	case 393: 
+	case 394: 
+	case 395: 
+	case 396: 
+	case 397: 
+	case 398: 
+	case 399: 
 	case 400: 
 	case 401: 
 	case 402: 
@@ -13471,22 +13068,8 @@ case 706:
 	case 418: 
 	case 419: 
 	case 420: 
-	case 421: 
-	case 422: 
-	case 423: 
-	case 424: 
-	case 425: 
-	case 426: 
-	case 427: 
-	case 428: 
 	case 429: 
 	case 430: 
-	case 431: 
-	case 432: 
-	case 433: 
-	case 434: 
-	case 435: 
-	case 436: 
 	case 437: 
 	case 438: 
 	case 439: 
@@ -13503,8 +13086,18 @@ case 706:
 	case 450: 
 	case 451: 
 	case 452: 
-	case 461: 
-	case 462: 
+	case 463: 
+	case 464: 
+	case 465: 
+	case 466: 
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
+    }
+	break;
+	case 467: 
+	case 468: 
 	case 469: 
 	case 470: 
 	case 471: 
@@ -13521,16 +13114,20 @@ case 706:
 	case 482: 
 	case 483: 
 	case 484: 
+	case 485: 
+	case 486: 
+	case 487: 
+	case 488: 
+	case 489: 
+	case 490: 
+	case 491: 
+	case 492: 
+	case 493: 
+	case 494: 
 	case 495: 
 	case 496: 
 	case 497: 
 	case 498: 
-#line 40 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
-    }
-	break;
 	case 499: 
 	case 500: 
 	case 501: 
@@ -13545,42 +13142,10 @@ case 706:
 	case 510: 
 	case 511: 
 	case 512: 
-	case 513: 
-	case 514: 
-	case 515: 
-	case 516: 
-	case 517: 
-	case 518: 
-	case 519: 
-	case 520: 
-	case 521: 
-	case 522: 
-	case 523: 
-	case 524: 
-	case 525: 
-	case 526: 
-	case 527: 
-	case 528: 
-	case 529: 
-	case 530: 
-	case 531: 
-	case 532: 
-	case 533: 
-	case 534: 
-	case 535: 
-	case 536: 
-	case 537: 
-	case 538: 
-	case 539: 
-	case 540: 
-	case 541: 
-	case 542: 
-	case 543: 
-	case 544: 
 #line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 	break;
 	case 14: 
@@ -13588,23 +13153,19 @@ case 706:
 #line 210 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this,
-            "Fileformat must be a sequence of alphanumeric and/or punctuation characters");
-        p--; {goto st701;}
+            "Fileformat is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st669;}
     }
 #line 35 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	break;
 	case 125: 
 	case 126: 
 	case 127: 
 	case 128: 
-	case 129: 
-	case 130: 
-	case 131: 
-	case 132: 
 	case 133: 
 	case 134: 
 	case 135: 
@@ -13619,37 +13180,15 @@ case 706:
 	case 144: 
 	case 145: 
 	case 146: 
-	case 147: 
-	case 148: 
-	case 149: 
-	case 150: 
-	case 151: 
-	case 152: 
-	case 153: 
-	case 154: 
-	case 155: 
-	case 156: 
-	case 157: 
-	case 158: 
-	case 159: 
-	case 160: 
-	case 161: 
-	case 162: 
-	case 163: 
-	case 164: 
-	case 165: 
-	case 166: 
-	case 167: 
-	case 168: 
 #line 216 "vcf_v41.ragel"
 	{
-        printf("Meta ALT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	break;
 	case 175: 
@@ -13678,15 +13217,15 @@ case 706:
 	case 198: 
 	case 199: 
 	case 200: 
-#line 221 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
-        printf("Meta FILTER error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	break;
 	case 206: 
@@ -13753,15 +13292,15 @@ case 706:
 	case 267: 
 	case 268: 
 	case 269: 
-#line 226 "vcf_v41.ragel"
+#line 241 "vcf_v41.ragel"
 	{
-        printf("Meta FORMAT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	break;
 	case 274: 
@@ -13828,47 +13367,15 @@ case 706:
 	case 335: 
 	case 336: 
 	case 337: 
-	case 338: 
-	case 339: 
-	case 340: 
-	case 341: 
-	case 342: 
-	case 343: 
-	case 344: 
-	case 345: 
-	case 346: 
-	case 347: 
-	case 348: 
-	case 349: 
-	case 350: 
-	case 351: 
-	case 352: 
-	case 353: 
-	case 354: 
-	case 355: 
-	case 356: 
-	case 357: 
-	case 358: 
-	case 359: 
-	case 360: 
-	case 361: 
-	case 362: 
-	case 363: 
-	case 364: 
-	case 365: 
-	case 366: 
-	case 367: 
-	case 368: 
-	case 369: 
-#line 231 "vcf_v41.ragel"
+#line 246 "vcf_v41.ragel"
 	{
-        printf("Meta INFO error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	break;
 	case 21: 
@@ -13972,20 +13479,34 @@ case 706:
 	case 119: 
 	case 120: 
 	case 121: 
-	case 370: 
-	case 371: 
-	case 372: 
-	case 373: 
-	case 374: 
-	case 375: 
-	case 376: 
-	case 377: 
-	case 394: 
-	case 395: 
-	case 396: 
-	case 397: 
-	case 398: 
-	case 399: 
+	case 338: 
+	case 339: 
+	case 340: 
+	case 341: 
+	case 342: 
+	case 343: 
+	case 344: 
+	case 345: 
+	case 362: 
+	case 363: 
+	case 364: 
+	case 365: 
+	case 366: 
+	case 367: 
+	case 421: 
+	case 422: 
+	case 423: 
+	case 424: 
+	case 425: 
+	case 426: 
+	case 427: 
+	case 428: 
+	case 431: 
+	case 432: 
+	case 433: 
+	case 434: 
+	case 435: 
+	case 436: 
 	case 453: 
 	case 454: 
 	case 455: 
@@ -13994,90 +13515,108 @@ case 706:
 	case 458: 
 	case 459: 
 	case 460: 
-	case 463: 
-	case 464: 
-	case 465: 
-	case 466: 
-	case 467: 
-	case 468: 
-	case 485: 
-	case 486: 
-	case 487: 
-	case 488: 
-	case 489: 
-	case 490: 
-	case 491: 
-	case 492: 
-	case 493: 
-	case 494: 
-#line 236 "vcf_v41.ragel"
+	case 461: 
+	case 462: 
+#line 251 "vcf_v41.ragel"
 	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	break;
-	case 545: 
-	case 565: 
-	case 566: 
-	case 567: 
-#line 241 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'chrom' field\n", n_lines);
-        p--; {goto st702;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
-    }
-	break;
-	case 546: 
-	case 547: 
-#line 246 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this, "Position must be a positive number");
-        p--; {goto st702;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
-    }
-	break;
-	case 548: 
-	case 549: 
-	case 700: 
-#line 251 "vcf_v41.ragel"
-	{
-        printf("Line %zu: Error in 'id' field\n", n_lines);
-        p--; {goto st702;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
-    }
-	break;
-	case 550: 
-	case 551: 
+	case 513: 
+	case 533: 
+	case 534: 
+	case 535: 
 #line 256 "vcf_v41.ragel"
 	{
-        printf("Line %zu: Error in 'reference' field\n", n_lines);
-        p--; {goto st702;}
+        printf("Line %zu: Error in 'chrom' field\n", n_lines);
+        p--; {goto st670;}
     }
 #line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 	break;
-	case 552: 
-	case 553: 
+	case 514: 
+	case 515: 
+#line 261 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Position is not a positive number");
+        p--; {goto st670;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st670;}
+    }
+	break;
+	case 516: 
+	case 517: 
+	case 668: 
+#line 266 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'id' field\n", n_lines);
+        p--; {goto st670;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st670;}
+    }
+	break;
+	case 518: 
+	case 519: 
+#line 271 "vcf_v41.ragel"
+	{
+        printf("Line %zu: Error in 'reference' field\n", n_lines);
+        p--; {goto st670;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st670;}
+    }
+	break;
+	case 520: 
+	case 521: 
+	case 604: 
+	case 605: 
+	case 606: 
+	case 607: 
+	case 608: 
+	case 609: 
+	case 610: 
+	case 611: 
+	case 612: 
+	case 613: 
+	case 614: 
+	case 615: 
+	case 616: 
+	case 617: 
+	case 618: 
+	case 619: 
+	case 620: 
+	case 621: 
+	case 622: 
+	case 623: 
+	case 624: 
+	case 625: 
+	case 626: 
+	case 627: 
+	case 628: 
+	case 629: 
+	case 630: 
+	case 631: 
+	case 632: 
+	case 633: 
+	case 634: 
+	case 635: 
 	case 636: 
 	case 637: 
 	case 638: 
@@ -14110,81 +13649,81 @@ case 706:
 	case 665: 
 	case 666: 
 	case 667: 
-	case 668: 
-	case 669: 
-	case 670: 
-	case 671: 
-	case 672: 
-	case 673: 
-	case 674: 
-	case 675: 
-	case 676: 
-	case 677: 
-	case 678: 
-	case 679: 
-	case 680: 
-	case 681: 
-	case 682: 
-	case 683: 
-	case 684: 
-	case 685: 
-	case 686: 
-	case 687: 
-	case 688: 
-	case 689: 
-	case 690: 
-	case 691: 
-	case 692: 
-	case 693: 
-	case 694: 
-	case 695: 
-	case 696: 
-	case 697: 
-	case 698: 
-	case 699: 
-#line 261 "vcf_v41.ragel"
+#line 276 "vcf_v41.ragel"
 	{
         printf("Line %zu: Error in 'alternate' field\n", n_lines);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 #line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 	break;
-	case 554: 
-	case 555: 
-	case 633: 
-	case 634: 
-	case 635: 
-#line 266 "vcf_v41.ragel"
+	case 522: 
+	case 523: 
+	case 601: 
+	case 602: 
+	case 603: 
+#line 281 "vcf_v41.ragel"
 	{
         printf("Line %zu: Error in 'quality' field\n", n_lines);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 #line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 	break;
-	case 556: 
-	case 557: 
-	case 632: 
-#line 271 "vcf_v41.ragel"
+	case 524: 
+	case 525: 
+	case 600: 
+#line 286 "vcf_v41.ragel"
 	{
         printf("Line %zu: Error in 'filter' field\n", n_lines);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 #line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 	break;
+	case 526: 
+	case 527: 
+	case 542: 
+	case 543: 
+	case 544: 
+	case 545: 
+	case 546: 
+	case 547: 
+	case 548: 
+	case 549: 
+	case 550: 
+	case 551: 
+	case 552: 
+	case 553: 
+	case 554: 
+	case 555: 
+	case 556: 
+	case 557: 
 	case 558: 
 	case 559: 
+	case 560: 
+	case 561: 
+	case 562: 
+	case 563: 
+	case 564: 
+	case 565: 
+	case 566: 
+	case 567: 
+	case 568: 
+	case 569: 
+	case 570: 
+	case 571: 
+	case 572: 
+	case 573: 
 	case 574: 
 	case 575: 
 	case 576: 
@@ -14211,99 +13750,140 @@ case 706:
 	case 597: 
 	case 598: 
 	case 599: 
-	case 600: 
-	case 601: 
-	case 602: 
-	case 603: 
-	case 604: 
-	case 605: 
-	case 606: 
-	case 607: 
-	case 608: 
-	case 609: 
-	case 610: 
-	case 611: 
-	case 612: 
-	case 613: 
-	case 614: 
-	case 615: 
-	case 616: 
-	case 617: 
-	case 618: 
-	case 619: 
-	case 620: 
-	case 621: 
-	case 622: 
-	case 623: 
-	case 624: 
-	case 625: 
-	case 626: 
-	case 627: 
-	case 628: 
-	case 629: 
-	case 630: 
-	case 631: 
-#line 276 "vcf_v41.ragel"
+#line 291 "vcf_v41.ragel"
 	{
         printf("Line %zu: Error in 'info' field\n", n_lines);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 #line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 	break;
-	case 560: 
-	case 561: 
-	case 562: 
-	case 571: 
-	case 572: 
-	case 573: 
-#line 281 "vcf_v41.ragel"
+	case 528: 
+	case 529: 
+	case 530: 
+	case 539: 
+	case 540: 
+	case 541: 
+#line 296 "vcf_v41.ragel"
 	{
         printf("Line %zu: Error in 'format' field\n", n_lines);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 #line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 	break;
-	case 563: 
-	case 564: 
-	case 568: 
-	case 569: 
-	case 570: 
-#line 286 "vcf_v41.ragel"
+	case 531: 
+	case 532: 
+	case 536: 
+	case 537: 
+	case 538: 
+#line 301 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Incorrect sample format");
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 #line 50 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st702;}
+        p--; {goto st670;}
+    }
+	break;
+	case 129: 
+	case 130: 
+	case 131: 
+	case 164: 
+	case 165: 
+	case 166: 
+	case 167: 
+	case 168: 
+#line 221 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
+        p--; {goto st669;}
+    }
+#line 216 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
+    }
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
+    }
+	break;
+	case 150: 
+	case 151: 
+	case 152: 
+	case 153: 
+	case 154: 
+	case 155: 
+	case 156: 
+	case 157: 
+	case 158: 
+	case 159: 
+	case 160: 
+	case 161: 
+	case 162: 
+	case 163: 
+#line 226 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
+        p--; {goto st669;}
+    }
+#line 216 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
+    }
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
+    }
+	break;
+	case 147: 
+	case 148: 
+	case 149: 
+#line 231 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata description format is not correct");
+        p--; {goto st669;}
+    }
+#line 216 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
+    }
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
     }
 	break;
 	case 122: 
 	case 123: 
 	case 124: 
-#line 236 "vcf_v41.ragel"
+#line 251 "vcf_v41.ragel"
 	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
     }
 #line 216 "vcf_v41.ragel"
 	{
-        printf("Meta ALT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	break;
 	case 170: 
@@ -14311,20 +13891,20 @@ case 706:
 	case 172: 
 	case 173: 
 	case 174: 
+#line 251 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
+    }
 #line 236 "vcf_v41.ragel"
 	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
-#line 221 "vcf_v41.ragel"
-	{
-        printf("Meta FILTER error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	break;
 	case 201: 
@@ -14332,184 +13912,206 @@ case 706:
 	case 203: 
 	case 204: 
 	case 205: 
-#line 236 "vcf_v41.ragel"
+#line 251 "vcf_v41.ragel"
 	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
     }
-#line 226 "vcf_v41.ragel"
+#line 241 "vcf_v41.ragel"
 	{
-        printf("Meta FORMAT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	break;
 	case 270: 
 	case 271: 
 	case 272: 
 	case 273: 
-#line 236 "vcf_v41.ragel"
+#line 251 "vcf_v41.ragel"
 	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
     }
-#line 231 "vcf_v41.ragel"
+#line 246 "vcf_v41.ragel"
 	{
-        printf("Meta INFO error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 	break;
-	case 169: 
-#line 236 "vcf_v41.ragel"
-	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
+	case 132: 
 #line 221 "vcf_v41.ragel"
 	{
-        printf("Meta FILTER error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
+        p--; {goto st669;}
     }
 #line 226 "vcf_v41.ragel"
 	{
-        printf("Meta FORMAT error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
-#line 40 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
-    }
-	break;
-	case 18: 
-#line 236 "vcf_v41.ragel"
-	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
+        p--; {goto st669;}
     }
 #line 216 "vcf_v41.ragel"
 	{
-        printf("Meta ALT error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
-#line 221 "vcf_v41.ragel"
-	{
-        printf("Meta FILTER error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
-#line 226 "vcf_v41.ragel"
-	{
-        printf("Meta FORMAT error in line %zu\n", n_lines);
-        p--; {goto st701;}
-    }
-#line 231 "vcf_v41.ragel"
-	{
-        printf("Meta INFO error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
+    }
+	break;
+	case 169: 
+#line 251 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
+    }
+#line 236 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        p--; {goto st669;}
+    }
+#line 241 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        p--; {goto st669;}
+    }
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
+    }
+	break;
+	case 18: 
+#line 251 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
+    }
+#line 216 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
+    }
+#line 236 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        p--; {goto st669;}
+    }
+#line 241 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        p--; {goto st669;}
+    }
+#line 246 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        p--; {goto st669;}
+    }
+#line 40 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_meta_section_error(*this);
+        p--; {goto st669;}
     }
 	break;
 	case 17: 
 	case 20: 
-#line 236 "vcf_v41.ragel"
+#line 251 "vcf_v41.ragel"
 	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
     }
 #line 216 "vcf_v41.ragel"
 	{
-        printf("Meta ALT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
     }
-#line 221 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
-        printf("Meta FILTER error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        p--; {goto st669;}
     }
-#line 226 "vcf_v41.ragel"
+#line 241 "vcf_v41.ragel"
 	{
-        printf("Meta FORMAT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        p--; {goto st669;}
     }
-#line 231 "vcf_v41.ragel"
+#line 246 "vcf_v41.ragel"
 	{
-        printf("Meta INFO error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 #line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 	break;
 	case 16: 
 #line 35 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
-#line 236 "vcf_v41.ragel"
+#line 251 "vcf_v41.ragel"
 	{
-        printf("Meta error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        p--; {goto st669;}
     }
 #line 216 "vcf_v41.ragel"
 	{
-        printf("Meta ALT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        p--; {goto st669;}
     }
-#line 221 "vcf_v41.ragel"
+#line 236 "vcf_v41.ragel"
 	{
-        printf("Meta FILTER error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        p--; {goto st669;}
     }
-#line 226 "vcf_v41.ragel"
+#line 241 "vcf_v41.ragel"
 	{
-        printf("Meta FORMAT error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        p--; {goto st669;}
     }
-#line 231 "vcf_v41.ragel"
+#line 246 "vcf_v41.ragel"
 	{
-        printf("Meta INFO error in line %zu\n", n_lines);
-        p--; {goto st701;}
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        p--; {goto st669;}
     }
 #line 40 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this);
-        p--; {goto st701;}
+        p--; {goto st669;}
     }
 #line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
-        p--; {goto st702;}
+        p--; {goto st670;}
     }
 	break;
-#line 14506 "vcf_validator_detail.hpp"
+#line 14108 "vcf_validator_detail.hpp"
 	}
 	}
 
 	_out: {}
 	}
 
-#line 526 "vcf_v41.ragel"
+#line 545 "vcf_v41.ragel"
 
     }
 

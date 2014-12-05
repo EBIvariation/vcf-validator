@@ -209,32 +209,47 @@
 
     action fileformat_error {
         ErrorPolicy::handle_fileformat_section_error(*this,
-            "Fileformat must be a sequence of alphanumeric and/or punctuation characters");
+            "Fileformat is not a sequence of alphanumeric and/or punctuation characters");
         fhold; fgoto meta_section_skip;
     } 
 
     action meta_alt_err {
-        printf("Meta ALT error in line %zu\n", n_lines);
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_alt_id_prefix_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_alt_id_suffix_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_alt_desc_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata description format is not correct");
         fhold; fgoto meta_section_skip;
     }
 
     action meta_filter_err {
-        printf("Meta FILTER error in line %zu\n", n_lines);
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
         fhold; fgoto meta_section_skip;
     }
 
     action meta_format_err {
-        printf("Meta FORMAT error in line %zu\n", n_lines);
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
         fhold; fgoto meta_section_skip;
     }
 
     action meta_info_err {
-        printf("Meta INFO error in line %zu\n", n_lines);
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
         fhold; fgoto meta_section_skip;
     }
 
     action meta_generic_err {
-        printf("Meta error in line %zu\n", n_lines);
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
         fhold; fgoto meta_section_skip;
     }
 
@@ -244,7 +259,7 @@
     }
 
     action pos_error {
-        ErrorPolicy::handle_body_section_error(*this, "Position must be a positive number");
+        ErrorPolicy::handle_body_section_error(*this, "Position is not a positive number");
         fhold; fgoto body_section_skip;
     }
 
@@ -311,23 +326,27 @@
     # Meta-data
     meta_key        = (alnum | "_" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB");
     meta_field_value= (print - "=")+ ;
+    meta_field_desc = (print)+ ;
     meta_field      = ( meta_key "=" meta_field_value ) >token_begin %meta_field_value_end ;
     
-    meta_alt        = "ID=" ( ("DEL" | "INS" | "DUP" | "INV" | "CNV") ( ":" meta_field_value)? )
-                        ",Description=\"" meta_field_value "\"" ;
+    meta_alt        = "ID=" ( 
+                              ("DEL" | "INS" | "DUP" | "INV" | "CNV") $err(meta_alt_id_prefix_err) 
+                              ( ":" meta_field_value)? $err(meta_alt_id_suffix_err)
+                            ) 
+                        ",Description=\"" meta_field_desc "\"" $err(meta_alt_desc_err) ;
     meta_assembly   = (print - ("\n" | "\t"))+ ;  # URL
     meta_contig     = "ID=" identifier
                         ",URL=" meta_field_value ;
     meta_filter     = "ID=" identifier
-                        ",Description=\"" meta_field_value "\"" ;
+                        ",Description=\"" meta_field_desc "\"" ;
     meta_format     = "ID=" identifier 
                         ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) 
                         ",Type=" ( "Integer" | "Float" | "Character" | "String" )
-                        ",Description=\"" meta_field_value "\"" ;
+                        ",Description=\"" meta_field_desc "\"" ;
     meta_info       = "ID=" identifier 
                         ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) 
                         ",Type=" ( "Integer" | "Float" | "Flag" | "Character" | "String" )
-                        ",Description=\"" meta_field_value "\""
+                        ",Description=\"" meta_field_desc "\""
                         (",Source=\"" meta_field_value "\"")?
                         (",Version=\"" meta_field_value "\"")? ;
     meta_pedigree   = (identifier "=" identifier)+ ;
@@ -335,7 +354,7 @@
     meta_sample     = "ID=" identifier
                         ",Genomes=" identifier ("," identifier)*
                         ",Mixture=" identifier ("," identifier)*
-                        ",Descriptions=\"" meta_field_value "\"" (",\"" meta_field_value "\"")* ;
+                        ",Descriptions=\"" meta_field_desc "\"" (",\"" meta_field_desc "\"")* ;
     
     meta_entry      = ( 
                        ("##" 
