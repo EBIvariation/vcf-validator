@@ -264,6 +264,11 @@
         fhold; fgoto meta_section_skip;
     }
 
+    action meta_url_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata URL is not valid");
+        fhold; fgoto meta_section_skip;
+    }
+    
     # Records
     
     action chrom_error {
@@ -356,9 +361,9 @@
                               ( ":" meta_field_value)? $err(meta_alt_id_suffix_err)
                             ) 
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
-    meta_assembly   = url ;
+    meta_assembly   = url $err(meta_url_err) ;
     meta_contig     = "ID=" identifier $err(meta_id_err)
-                        ",URL=" url ;
+                        ",URL=" url $err(meta_url_err) ;
     meta_filter     = "ID=" identifier $err(meta_id_err) 
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
     meta_format     = "ID=" identifier $err(meta_id_err)
@@ -372,7 +377,7 @@
                         (",Source=\"" meta_field_value "\"")?
                         (",Version=\"" meta_field_value "\"")? ;
     meta_pedigree   = (identifier "=" identifier)+ ;
-    meta_pedigreeDB = url ;
+    meta_pedigreeDB = url $err(meta_url_err) ;
     meta_sample     = "ID=" identifier $err(meta_id_err)
                         ",Genomes=" identifier ("," identifier)*
                         ",Mixture=" identifier ("," identifier)*
@@ -388,7 +393,7 @@
                        ("##contig=<" meta_contig ">" ) |
                        ("##SAMPLE=<" meta_sample ">" ) |
                        ("##PEDIGREE=<" meta_pedigree ">" ) |
-                       ("##pedigreeDB=<" meta_assembly ">" ) |
+                       ("##pedigreeDB=<" meta_pedigreeDB ">" ) |
                        ("##" meta_field >token_begin %meta_field_value_end) |
                        ("##" meta_field_value >token_begin %meta_field_value_end)
                       )
