@@ -15,9 +15,13 @@ asdfasI23rt'0'0ºo
 ##INFO=<ID=AC,Number=.,Type=Integer,Description="Alternate Allele Count">
 ##INFO=<ID=AN,Number=1,Type=Integer,Description="Total Allele Count">
 ##ALT=<ID=DEL,Description="Deletion">
-##ALT=<ID=DUP,Description="Duplication>
+##ALT=<ID=DUP,Description="Duplication without quotation mark at the end>
+##ALT=<ID=DUP,Description="Duplication with quotation mark inside"">
 ##ALT=<ID=NOTVALID,Description="Not valid ALT metadata ID">
 ##ALT=<ID=DEL:ABC=,Description="Deletion with invalid suffix">
+##FILTER=<ID=FIL.1,Description="Valid filter">
+##FILTER=<ID=FIL;1,Description="Non-valid filter">
+##FILTER=<ID=FIL-1,Description="Non-valid filter description>
 ##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
 ##FORMAT=<ID=DS,Number=1,Type=Float,Description="Genotype dosage from MaCH/Thunder">
 ##FORMAT=<ID=GL,Number=.,Type=Float,Description="Genotype Likelihoods">
