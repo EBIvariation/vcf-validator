@@ -301,8 +301,8 @@
     int_number      = (digit)+ ;
     # Bases are case-insensitive
     bases           = ("A" | "C" | "G" | "T" | "N" | "a" | "c" | "t" | "g" | "n" )+ ;
-    # Identifiers may contain dots or underscores, but not only those
-    identifier      = (alnum | "." | "_")+ - ((".")+ | ("_")+) ;
+    # Identifiers may contain some symbols, but not only those
+    identifier      = (alnum | "." | "_" | "-" )+ - ((".")+ | ("_")+ | ("-")+) ;
 
     # File format must be a sequence of alphanumeric and/or punctuation characters like "VCFv4.1"
     fileformat_name = (alnum | punct)+ $err(fileformat_error);
