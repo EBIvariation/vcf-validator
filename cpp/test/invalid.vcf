@@ -24,7 +24,9 @@ asdfasI23rt'0'0ºo
 ##FILTER=<ID=FIL-1,Description="Non-valid filter description>
 ##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
 ##FORMAT=<ID=DS,Number=1,Type=Float,Description="Genotype dosage from MaCH/Thunder">
-##FORMAT=<ID=GL,Number=.,Type=Float,Description="Genotype Likelihoods">
+##FORMAT=<ID=GL,Number=S,Type=Float,Description="Genotype Likelihoods">
+##FORMAT=<ID=GL,Number=.,Type=Floating,Description="Genotype Likelihoods">
+##FORMAT=<ID=GL,Number=.,Type=Float,Description="Genotype Likelihoods with not valid description>
 ##INFO=<ID=AA,Number=1,Type=String,Description="Ancestral Allele, ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/pilot_data/technical/reference/ancestral_alignments/README">
 ##INFO=<ID=AF,Number=1,Type=Float,Description="Global Allele Frequency based on AC/AN">
 ##INFO=<ID=AMR_AF,Number=1,Type=Float,Description="Allele Frequency for samples from AMR based on AC/AN">

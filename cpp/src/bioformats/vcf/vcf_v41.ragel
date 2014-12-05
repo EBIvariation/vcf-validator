@@ -242,6 +242,16 @@
         fhold; fgoto meta_section_skip;
     }
 
+    action meta_format_number_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "FORMAT metadata Number is not a number, A, R, G or dot");
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_format_type_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "FORMAT metadata Type is not a Integer, Float, Character or String");
+        fhold; fgoto meta_section_skip;
+    }
+
     # INFO metadata
     action meta_info_err {
         ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
@@ -367,9 +377,9 @@
     meta_filter     = "ID=" identifier $err(meta_id_err) 
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
     meta_format     = "ID=" identifier $err(meta_id_err)
-                        ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) 
-                        ",Type=" ( "Integer" | "Float" | "Character" | "String" )
-                        ",Description=\"" meta_field_desc "\"" ;
+                        ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) $err(meta_format_number_err) 
+                        ",Type=" ( "Integer" | "Float" | "Character" | "String" ) $err(meta_format_type_err) 
+                        ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
     meta_info       = "ID=" identifier $err(meta_id_err) 
                         ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) 
                         ",Type=" ( "Integer" | "Float" | "Flag" | "Character" | "String" )
