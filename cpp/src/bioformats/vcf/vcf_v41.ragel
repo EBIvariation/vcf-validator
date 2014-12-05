@@ -258,6 +258,16 @@
         fhold; fgoto meta_section_skip;
     }
 
+    action meta_info_number_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Number is not a number, A, R, G or dot");
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_info_type_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Type is not a Integer, Float, Flag, Character or String");
+        fhold; fgoto meta_section_skip;
+    }
+
     # Metadata generic errors (do not apply to a specific type)
     action meta_generic_err {
         ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
@@ -381,9 +391,9 @@
                         ",Type=" ( "Integer" | "Float" | "Character" | "String" ) $err(meta_format_type_err) 
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
     meta_info       = "ID=" identifier $err(meta_id_err) 
-                        ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) 
-                        ",Type=" ( "Integer" | "Float" | "Flag" | "Character" | "String" )
-                        ",Description=\"" meta_field_desc "\""
+                        ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) $err(meta_info_number_err)  
+                        ",Type=" ( "Integer" | "Float" | "Flag" | "Character" | "String" ) $err(meta_info_type_err)
+                        ",Description=\"" meta_field_desc "\"" $err(meta_desc_err)
                         (",Source=\"" meta_field_value "\"")?
                         (",Version=\"" meta_field_value "\"")? ;
     meta_pedigree   = (identifier "=" identifier)+ ;
