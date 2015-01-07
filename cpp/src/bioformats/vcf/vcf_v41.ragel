@@ -464,8 +464,8 @@
                        ("##SAMPLE=<" meta_sample ">" ) $err(meta_sample_err) |
                        ("##PEDIGREE=<" meta_pedigree ">" ) $err(meta_pedigree_err) |
                        ("##pedigreeDB=<" meta_pedigreeDB ">" ) $err(meta_pedigreedb_err) |
-                       ("##" meta_field >token_begin %meta_field_value_end) |
-                       ("##" meta_field_value >token_begin %meta_field_value_end)
+                       ("##" meta_field >token_begin %meta_field_value_end) $err(meta_generic_err) |
+                       ("##" meta_field_value >token_begin %meta_field_value_end)  $err(meta_generic_err)
                       )
                       >meta_entry_begin %meta_entry_end;
 
