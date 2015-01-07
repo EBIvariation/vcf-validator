@@ -126,52 +126,52 @@ tr18:
     }
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 234 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in assembly metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st702;}
     }
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 294 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st702;}
     }
 #line 300 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -188,52 +188,52 @@ tr18:
 tr20:
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 234 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in assembly metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st702;}
     }
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 294 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st702;}
     }
 #line 300 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -250,52 +250,52 @@ tr20:
 tr23:
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 234 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in assembly metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st702;}
     }
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 294 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st702;}
     }
 #line 300 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -307,7 +307,7 @@ tr23:
 tr34:
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -319,12 +319,12 @@ tr34:
 tr141:
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -336,7 +336,7 @@ tr141:
 tr145:
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -348,12 +348,12 @@ tr145:
 tr150:
 #line 223 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
+        ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -365,17 +365,17 @@ tr150:
 tr156:
 #line 223 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
+        ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
         p--; {goto st702;}
     }
 #line 228 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -387,12 +387,12 @@ tr156:
 tr173:
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -404,12 +404,12 @@ tr173:
 tr177:
 #line 228 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -421,17 +421,17 @@ tr177:
 tr194:
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -443,12 +443,12 @@ tr194:
 tr197:
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -460,7 +460,7 @@ tr197:
 tr203:
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -472,12 +472,12 @@ tr203:
 tr208:
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -489,12 +489,12 @@ tr208:
 tr228:
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -506,12 +506,12 @@ tr228:
 tr232:
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -523,7 +523,7 @@ tr232:
 tr238:
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -535,12 +535,12 @@ tr238:
 tr243:
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -552,12 +552,12 @@ tr243:
 tr256:
 #line 257 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "FORMAT metadata Number is not a number, A, R, G or dot");
+        ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Number is not a number, A, R, G or dot");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -569,12 +569,12 @@ tr256:
 tr265:
 #line 262 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "FORMAT metadata Type is not a Integer, Float, Character or String");
+        ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Type is not a Integer, Float, Character or String");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -586,12 +586,12 @@ tr265:
 tr293:
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -603,12 +603,12 @@ tr293:
 tr307:
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -620,7 +620,7 @@ tr307:
 tr312:
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -632,12 +632,12 @@ tr312:
 tr317:
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -649,12 +649,12 @@ tr317:
 tr330:
 #line 273 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Number is not a number, A, R, G or dot");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Number is not a number, A, R, G or dot");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -666,12 +666,12 @@ tr330:
 tr339:
 #line 278 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Type is not a Integer, Float, Flag, Character or String");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Type is not a Integer, Float, Flag, Character or String");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -683,12 +683,12 @@ tr339:
 tr367:
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -700,22 +700,22 @@ tr367:
 tr369:
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 283 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Source string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Source string is not valid");
         p--; {goto st702;}
     }
 #line 288 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Version string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Version string is not valid");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -727,17 +727,17 @@ tr369:
 tr372:
 #line 283 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Source string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Source string is not valid");
         p--; {goto st702;}
     }
 #line 288 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Version string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Version string is not valid");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -749,12 +749,12 @@ tr372:
 tr375:
 #line 283 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Source string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Source string is not valid");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -766,12 +766,12 @@ tr375:
 tr386:
 #line 288 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Version string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Version string is not valid");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -783,12 +783,12 @@ tr386:
 tr408:
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 294 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -800,7 +800,7 @@ tr408:
 tr417:
 #line 294 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -812,12 +812,12 @@ tr417:
 tr419:
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 294 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -829,12 +829,12 @@ tr419:
 tr431:
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -846,7 +846,7 @@ tr431:
 tr438:
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -858,12 +858,12 @@ tr438:
 tr443:
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -875,17 +875,17 @@ tr443:
 tr448:
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 311 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -897,12 +897,12 @@ tr448:
 tr450:
 #line 311 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -914,17 +914,17 @@ tr450:
 tr463:
 #line 311 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 316 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -936,12 +936,12 @@ tr463:
 tr465:
 #line 316 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -953,17 +953,17 @@ tr465:
 tr478:
 #line 316 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -975,12 +975,12 @@ tr478:
 tr480:
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -992,12 +992,12 @@ tr480:
 tr497:
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 234 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in assembly metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -1009,12 +1009,12 @@ tr497:
 tr506:
 #line 337 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata URL is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata URL is not valid");
         p--; {goto st702;}
     }
 #line 234 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in assembly metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -1026,12 +1026,12 @@ tr506:
 tr513:
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -1043,7 +1043,7 @@ tr513:
 tr520:
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -1055,12 +1055,12 @@ tr520:
 tr525:
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -1072,12 +1072,12 @@ tr525:
 tr535:
 #line 337 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata URL is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata URL is not valid");
         p--; {goto st702;}
     }
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -1089,12 +1089,12 @@ tr535:
 tr543:
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 300 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -1106,7 +1106,7 @@ tr543:
 tr554:
 #line 300 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -1118,12 +1118,12 @@ tr554:
 tr556:
 #line 337 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata URL is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata URL is not valid");
         p--; {goto st702;}
     }
 #line 300 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -13709,7 +13709,7 @@ case 707:
 	case 149: 
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -13728,7 +13728,7 @@ case 707:
 	case 470: 
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -13758,7 +13758,7 @@ case 707:
 	case 198: 
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -13800,7 +13800,7 @@ case 707:
 	case 253: 
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -13842,7 +13842,7 @@ case 707:
 	case 344: 
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -13855,7 +13855,7 @@ case 707:
 	case 376: 
 #line 294 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -13867,7 +13867,7 @@ case 707:
 	case 491: 
 #line 300 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -13883,7 +13883,7 @@ case 707:
 	case 432: 
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -13996,7 +13996,7 @@ case 707:
 	case 121: 
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14281,12 +14281,12 @@ case 707:
 	case 168: 
 #line 223 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
+        ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14311,12 +14311,12 @@ case 707:
 	case 163: 
 #line 228 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14330,12 +14330,12 @@ case 707:
 	case 267: 
 #line 257 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "FORMAT metadata Number is not a number, A, R, G or dot");
+        ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Number is not a number, A, R, G or dot");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14369,12 +14369,12 @@ case 707:
 	case 266: 
 #line 262 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "FORMAT metadata Type is not a Integer, Float, Character or String");
+        ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Type is not a Integer, Float, Character or String");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14388,12 +14388,12 @@ case 707:
 	case 358: 
 #line 273 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Number is not a number, A, R, G or dot");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Number is not a number, A, R, G or dot");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14427,12 +14427,12 @@ case 707:
 	case 357: 
 #line 278 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Type is not a Integer, Float, Flag, Character or String");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Type is not a Integer, Float, Flag, Character or String");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14452,12 +14452,12 @@ case 707:
 	case 330: 
 #line 283 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Source string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Source string is not valid");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14480,12 +14480,12 @@ case 707:
 	case 343: 
 #line 288 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Version string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Version string is not valid");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14508,12 +14508,12 @@ case 707:
 	case 436: 
 #line 311 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14536,12 +14536,12 @@ case 707:
 	case 434: 
 #line 316 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14555,12 +14555,12 @@ case 707:
 	case 124: 
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14579,12 +14579,12 @@ case 707:
 	case 446: 
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 234 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in assembly metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14601,12 +14601,12 @@ case 707:
 	case 459: 
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14622,12 +14622,12 @@ case 707:
 	case 174: 
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14643,12 +14643,12 @@ case 707:
 	case 205: 
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14663,12 +14663,12 @@ case 707:
 	case 273: 
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14687,12 +14687,12 @@ case 707:
 	case 368: 
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 294 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14713,12 +14713,12 @@ case 707:
 	case 490: 
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 300 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14735,12 +14735,12 @@ case 707:
 	case 386: 
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14756,12 +14756,12 @@ case 707:
 	case 480: 
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14777,12 +14777,12 @@ case 707:
 	case 200: 
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14798,12 +14798,12 @@ case 707:
 	case 269: 
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14819,12 +14819,12 @@ case 707:
 	case 360: 
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14845,12 +14845,12 @@ case 707:
 	case 380: 
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 294 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14865,12 +14865,12 @@ case 707:
 	case 438: 
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14883,12 +14883,12 @@ case 707:
 	case 148: 
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14901,12 +14901,12 @@ case 707:
 	case 197: 
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14919,12 +14919,12 @@ case 707:
 	case 252: 
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14936,12 +14936,12 @@ case 707:
 	case 319: 
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14968,12 +14968,12 @@ case 707:
 	case 431: 
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -14991,12 +14991,12 @@ case 707:
 	case 453: 
 #line 337 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata URL is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata URL is not valid");
         p--; {goto st702;}
     }
 #line 234 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in assembly metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -15015,12 +15015,12 @@ case 707:
 	case 478: 
 #line 337 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata URL is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata URL is not valid");
         p--; {goto st702;}
     }
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -15039,12 +15039,12 @@ case 707:
 	case 499: 
 #line 337 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata URL is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata URL is not valid");
         p--; {goto st702;}
     }
 #line 300 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -15056,17 +15056,17 @@ case 707:
 	case 132: 
 #line 223 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
+        ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
         p--; {goto st702;}
     }
 #line 228 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -15079,17 +15079,17 @@ case 707:
 	case 331: 
 #line 283 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Source string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Source string is not valid");
         p--; {goto st702;}
     }
 #line 288 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Version string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Version string is not valid");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -15101,17 +15101,17 @@ case 707:
 	case 404: 
 #line 311 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 316 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -15123,17 +15123,17 @@ case 707:
 	case 415: 
 #line 316 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -15145,17 +15145,17 @@ case 707:
 	case 169: 
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -15167,17 +15167,17 @@ case 707:
 	case 393: 
 #line 327 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 311 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -15189,22 +15189,22 @@ case 707:
 	case 320: 
 #line 332 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st702;}
     }
 #line 283 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Source string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Source string is not valid");
         p--; {goto st702;}
     }
 #line 288 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Version string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Version string is not valid");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -15216,52 +15216,52 @@ case 707:
 	case 18: 
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 234 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in assembly metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st702;}
     }
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 294 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st702;}
     }
 #line 300 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -15274,52 +15274,52 @@ case 707:
 	case 20: 
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 234 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in assembly metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st702;}
     }
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 294 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st702;}
     }
 #line 300 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"
@@ -15341,52 +15341,52 @@ case 707:
     }
 #line 322 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         p--; {goto st702;}
     }
 #line 218 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st702;}
     }
 #line 246 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st702;}
     }
 #line 252 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st702;}
     }
 #line 268 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st702;}
     }
 #line 234 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in assembly metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st702;}
     }
 #line 240 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st702;}
     }
 #line 306 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st702;}
     }
 #line 294 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st702;}
     }
 #line 300 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st702;}
     }
 #line 40 "vcf_v41.ragel"

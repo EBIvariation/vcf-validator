@@ -216,126 +216,126 @@
 
     # ALT metadata
     action meta_alt_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in ALT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         fhold; fgoto meta_section_skip;
     }
 
     action meta_alt_id_prefix_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
+        ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
         fhold; fgoto meta_section_skip;
     }
 
     action meta_alt_id_suffix_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID suffix (after ':') is not valid");
         fhold; fgoto meta_section_skip;
     }
     
     # assembly metadata
     action meta_assembly_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in assembly metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         fhold; fgoto meta_section_skip;
     }
     
     # contig metadata
     action meta_contig_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         fhold; fgoto meta_section_skip;
     }
     
     # FILTER metadata
     action meta_filter_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         fhold; fgoto meta_section_skip;
     }
 
     # FORMAT metadata
     action meta_format_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in FORMAT metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         fhold; fgoto meta_section_skip;
     }
 
     action meta_format_number_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "FORMAT metadata Number is not a number, A, R, G or dot");
+        ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Number is not a number, A, R, G or dot");
         fhold; fgoto meta_section_skip;
     }
     
     action meta_format_type_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "FORMAT metadata Type is not a Integer, Float, Character or String");
+        ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Type is not a Integer, Float, Character or String");
         fhold; fgoto meta_section_skip;
     }
 
     # INFO metadata
     action meta_info_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in INFO metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         fhold; fgoto meta_section_skip;
     }
 
     action meta_info_number_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Number is not a number, A, R, G or dot");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Number is not a number, A, R, G or dot");
         fhold; fgoto meta_section_skip;
     }
     
     action meta_info_type_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Type is not a Integer, Float, Flag, Character or String");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Type is not a Integer, Float, Flag, Character or String");
         fhold; fgoto meta_section_skip;
     }
 
     action meta_info_source_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Source string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Source string is not valid");
         fhold; fgoto meta_section_skip;
     }
     
     action meta_info_version_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Version string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Version string is not valid");
         fhold; fgoto meta_section_skip;
     }
     
     # PEDIGREE metadata
     action meta_pedigree_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         fhold; fgoto meta_section_skip;
     }
     
     # pedigreeDB metadata
     action meta_pedigreedb_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         fhold; fgoto meta_section_skip;
     }
     
     # SAMPLE metadata
     action meta_sample_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         fhold; fgoto meta_section_skip;
     }
     
     action meta_sample_genomes_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
         fhold; fgoto meta_section_skip;
     }
     
     action meta_sample_mixture_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
         fhold; fgoto meta_section_skip;
     }
     
     # Metadata generic errors (do not apply to a specific type)
     action meta_generic_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
+        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
         fhold; fgoto meta_section_skip;
     }
 
     action meta_id_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         fhold; fgoto meta_section_skip;
     }
     
     action meta_desc_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata description string is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         fhold; fgoto meta_section_skip;
     }
 
     action meta_url_err {
-        ErrorPolicy::handle_fileformat_section_error(*this, "Metadata URL is not valid");
+        ErrorPolicy::handle_meta_section_error(*this, "Metadata URL is not valid");
         fhold; fgoto meta_section_skip;
     }
     
