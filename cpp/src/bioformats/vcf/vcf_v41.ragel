@@ -230,6 +230,12 @@
         fhold; fgoto meta_section_skip;
     }
     
+    # contig metadata
+    action meta_contig_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
+        fhold; fgoto meta_section_skip;
+    }
+    
     # FILTER metadata
     action meta_filter_err {
         ErrorPolicy::handle_fileformat_section_error(*this, "Error in FILTER metadata");
@@ -410,7 +416,7 @@
                        ("##FORMAT=<" meta_format ">" ) %(meta_format_read) $err(meta_format_err) |
                        ("##INFO=<" meta_info ">" ) %(meta_info_read) $err(meta_info_err) | 
                        ("##assembly=" meta_assembly ) |
-                       ("##contig=<" meta_contig ">" ) |
+                       ("##contig=<" meta_contig ">" ) $err(meta_contig_err) |
                        ("##SAMPLE=<" meta_sample ">" ) |
                        ("##PEDIGREE=<" meta_pedigree ">" ) |
                        ("##pedigreeDB=<" meta_pedigreeDB ">" ) |
