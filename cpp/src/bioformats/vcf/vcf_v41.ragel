@@ -284,6 +284,22 @@
         fhold; fgoto meta_section_skip;
     }
     
+    # SAMPLE metadata
+    action meta_sample_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_sample_genomes_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_sample_mixture_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
+        fhold; fgoto meta_section_skip;
+    }
+    
     # Metadata generic errors (do not apply to a specific type)
     action meta_generic_err {
         ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
@@ -415,9 +431,9 @@
     meta_pedigree   = (identifier "=" identifier)+ ;
     meta_pedigreeDB = url $err(meta_url_err) ;
     meta_sample     = "ID=" identifier $err(meta_id_err)
-                        ",Genomes=" identifier ("," identifier)*
-                        ",Mixture=" identifier ("," identifier)*
-                        ",Descriptions=\"" meta_field_desc "\"" (",\"" meta_field_desc "\"")* ;
+                        (",Genomes=" identifier (";" identifier)* ) $err(meta_sample_genomes_err)
+                        (",Mixture=" identifier (";" identifier)* ) $err(meta_sample_mixture_err)
+                        (",Description=\"" meta_field_desc (";" meta_field_desc)* "\"" ) $err(meta_desc_err) ;
     
     meta_entry      = ( 
                        ("##" meta_key >token_begin %meta_id_end "=<" meta_field ("," meta_field)* ">") %(meta_generic_read) $err(meta_generic_err) |
@@ -427,7 +443,7 @@
                        ("##INFO=<" meta_info ">" ) %(meta_info_read) $err(meta_info_err) | 
                        ("##assembly=" meta_assembly ) |
                        ("##contig=<" meta_contig ">" ) $err(meta_contig_err) |
-                       ("##SAMPLE=<" meta_sample ">" ) |
+                       ("##SAMPLE=<" meta_sample ">" ) $err(meta_sample_err) |
                        ("##PEDIGREE=<" meta_pedigree ">" ) |
                        ("##pedigreeDB=<" meta_pedigreeDB ">" ) |
                        ("##" meta_field >token_begin %meta_field_value_end) |
