@@ -284,6 +284,12 @@
         fhold; fgoto meta_section_skip;
     }
     
+    # PEDIGREE metadata
+    action meta_pedigree_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        fhold; fgoto meta_section_skip;
+    }
+    
     # SAMPLE metadata
     action meta_sample_err {
         ErrorPolicy::handle_fileformat_section_error(*this, "Error in SAMPLE metadata");
@@ -428,7 +434,7 @@
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err)
                         (",Source=\"" meta_field_desc "\"")? $err(meta_info_source_err)
                         (",Version=\"" meta_field_desc "\"")? $err(meta_info_version_err) ;
-    meta_pedigree   = (identifier "=" identifier)+ ;
+    meta_pedigree   = identifier $err(meta_id_err) "=" identifier $err(meta_id_err) ("," identifier $err(meta_id_err) "=" identifier $err(meta_id_err))* ;
     meta_pedigreeDB = url $err(meta_url_err) ;
     meta_sample     = "ID=" identifier $err(meta_id_err)
                         (",Genomes=" identifier (";" identifier)* ) $err(meta_sample_genomes_err)
@@ -444,7 +450,7 @@
                        ("##assembly=" meta_assembly ) |
                        ("##contig=<" meta_contig ">" ) $err(meta_contig_err) |
                        ("##SAMPLE=<" meta_sample ">" ) $err(meta_sample_err) |
-                       ("##PEDIGREE=<" meta_pedigree ">" ) |
+                       ("##PEDIGREE=<" meta_pedigree ">" ) $err(meta_pedigree_err) |
                        ("##pedigreeDB=<" meta_pedigreeDB ">" ) |
                        ("##" meta_field >token_begin %meta_field_value_end) |
                        ("##" meta_field_value >token_begin %meta_field_value_end)

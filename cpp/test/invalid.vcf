@@ -42,6 +42,9 @@ asdfasI23rt'0'0ºo
 ##reference=
 ##assembly=ftp://user@host:8080/path/to/file.fastq
 ##assembly=ftp://8080:8080/not-valid/host/to/file.fastq
+##PEDIGREE=<Name_0=Something>
+##PEDIGREE=<Name_0=Something,Name_1=Something-else>
+##PEDIGREE=<Name_0=Something,Name_1=Something wrong>
 ##pedigreeDB=<ftp://user@host:8080/path/to/pedigreeDB?arg1=db1>
 ##pedigreeDB=<ftp://8080:8080/not-valid/host/to/pedigreeDB>
 ##contig=<ID=contig_ok,URL=ftp://user@host:8080/path/to/contig>
