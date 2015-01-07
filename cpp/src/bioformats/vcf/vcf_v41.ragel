@@ -342,7 +342,7 @@
     # Records
     
     action chrom_error {
-        printf("Line %zu: Error in 'chrom' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Chromosome is not a string without colons or whitespaces, optionally wrapped with angle brackets (<>)");
         fhold; fgoto body_section_skip;
     }
 
@@ -352,17 +352,17 @@
     }
 
     action id_error {
-        printf("Line %zu: Error in 'id' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "ID is not a single dot or a list of strings without semicolons or whitespaces");
         fhold; fgoto body_section_skip;
     }
 
     action ref_error {
-        printf("Line %zu: Error in 'reference' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Reference is not a string of bases");
         fhold; fgoto body_section_skip;
     }
 
     action alt_error {
-        printf("Line %zu: Error in 'alternate' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Alternate is not a single dot or a comma-separated list of bases");
         fhold; fgoto body_section_skip;
     }
 

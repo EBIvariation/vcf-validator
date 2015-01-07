@@ -1142,7 +1142,7 @@ tr564:
 tr614:
 #line 344 "vcf_v41.ragel"
 	{
-        printf("Line %zu: Error in 'chrom' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Chromosome is not a string without colons or whitespaces, optionally wrapped with angle brackets (<>)");
         p--; {goto st703;}
     }
 #line 50 "vcf_v41.ragel"
@@ -1166,7 +1166,7 @@ tr617:
 tr621:
 #line 354 "vcf_v41.ragel"
 	{
-        printf("Line %zu: Error in 'id' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "ID is not a single dot or a list of strings without semicolons or whitespaces");
         p--; {goto st703;}
     }
 #line 50 "vcf_v41.ragel"
@@ -1178,7 +1178,7 @@ tr621:
 tr626:
 #line 359 "vcf_v41.ragel"
 	{
-        printf("Line %zu: Error in 'reference' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Reference is not a string of bases");
         p--; {goto st703;}
     }
 #line 50 "vcf_v41.ragel"
@@ -1190,7 +1190,7 @@ tr626:
 tr630:
 #line 364 "vcf_v41.ragel"
 	{
-        printf("Line %zu: Error in 'alternate' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Alternate is not a single dot or a comma-separated list of bases");
         p--; {goto st703;}
     }
 #line 50 "vcf_v41.ragel"
@@ -1267,7 +1267,7 @@ tr814:
     }
 #line 344 "vcf_v41.ragel"
 	{
-        printf("Line %zu: Error in 'chrom' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Chromosome is not a string without colons or whitespaces, optionally wrapped with angle brackets (<>)");
         p--; {goto st703;}
     }
 #line 50 "vcf_v41.ragel"
@@ -14011,7 +14011,7 @@ case 707:
 	case 568: 
 #line 344 "vcf_v41.ragel"
 	{
-        printf("Line %zu: Error in 'chrom' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Chromosome is not a string without colons or whitespaces, optionally wrapped with angle brackets (<>)");
         p--; {goto st703;}
     }
 #line 50 "vcf_v41.ragel"
@@ -14038,7 +14038,7 @@ case 707:
 	case 701: 
 #line 354 "vcf_v41.ragel"
 	{
-        printf("Line %zu: Error in 'id' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "ID is not a single dot or a list of strings without semicolons or whitespaces");
         p--; {goto st703;}
     }
 #line 50 "vcf_v41.ragel"
@@ -14051,7 +14051,7 @@ case 707:
 	case 552: 
 #line 359 "vcf_v41.ragel"
 	{
-        printf("Line %zu: Error in 'reference' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Reference is not a string of bases");
         p--; {goto st703;}
     }
 #line 50 "vcf_v41.ragel"
@@ -14128,7 +14128,7 @@ case 707:
 	case 700: 
 #line 364 "vcf_v41.ragel"
 	{
-        printf("Line %zu: Error in 'alternate' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Alternate is not a single dot or a comma-separated list of bases");
         p--; {goto st703;}
     }
 #line 50 "vcf_v41.ragel"
