@@ -35,6 +35,9 @@ asdfasI23rt'0'0ºo
 ##INFO=<ID=EUR_AF,Number=1,Type=Float,Description="Allele Frequency for samples from EUR based on AC/AN">
 ##INFO=<ID=VT,Number=1,Type=String,Description="indicates what type of variant the line represents">
 ##INFO=<ID=SNPSOURCE,Number=.,Type=String,Description="indicates if a snp was called when analysing the low coverage or exome alignment data">
+##INFO=<ID=ValidSourceVersion,Number=1,Type=Float,Description="Global Allele Frequency based on AC/AN",Source="This source is valid",Version="This version is valid">
+##INFO=<ID=NotValidSource,Number=1,Type=Float,Description="Global Allele Frequency based on AC/AN",Source="This source"not valid">
+##INFO=<ID=NotValidVersion,Number=1,Type=Float,Description="Global Allele Frequency based on AC/AN",Version="This version"not valid">
 ##reference=GRCh37
 ##reference=
 ##assembly=ftp://user@host:8080/path/to/file.fastq

@@ -274,6 +274,16 @@
         fhold; fgoto meta_section_skip;
     }
 
+    action meta_info_source_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Source string is not valid");
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_info_version_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "INFO metadata Version string is not valid");
+        fhold; fgoto meta_section_skip;
+    }
+    
     # Metadata generic errors (do not apply to a specific type)
     action meta_generic_err {
         ErrorPolicy::handle_fileformat_section_error(*this, "Error in metadata");
@@ -400,8 +410,8 @@
                         ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) $err(meta_info_number_err)  
                         ",Type=" ( "Integer" | "Float" | "Flag" | "Character" | "String" ) $err(meta_info_type_err)
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err)
-                        (",Source=\"" meta_field_value "\"")?
-                        (",Version=\"" meta_field_value "\"")? ;
+                        (",Source=\"" meta_field_desc "\"")? $err(meta_info_source_err)
+                        (",Version=\"" meta_field_desc "\"")? $err(meta_info_version_err) ;
     meta_pedigree   = (identifier "=" identifier)+ ;
     meta_pedigreeDB = url $err(meta_url_err) ;
     meta_sample     = "ID=" identifier $err(meta_id_err)
