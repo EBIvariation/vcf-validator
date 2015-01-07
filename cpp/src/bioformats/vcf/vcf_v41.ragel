@@ -230,6 +230,12 @@
         fhold; fgoto meta_section_skip;
     }
     
+    # assembly metadata
+    action meta_assembly_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in assembly metadata");
+        fhold; fgoto meta_section_skip;
+    }
+    
     # contig metadata
     action meta_contig_err {
         ErrorPolicy::handle_fileformat_section_error(*this, "Error in contig metadata");
@@ -287,6 +293,12 @@
     # PEDIGREE metadata
     action meta_pedigree_err {
         ErrorPolicy::handle_fileformat_section_error(*this, "Error in PEDIGREE metadata");
+        fhold; fgoto meta_section_skip;
+    }
+    
+    # pedigreeDB metadata
+    action meta_pedigreedb_err {
+        ErrorPolicy::handle_fileformat_section_error(*this, "Error in pedigreeDB metadata");
         fhold; fgoto meta_section_skip;
     }
     
@@ -447,11 +459,11 @@
                        ("##FILTER=<" meta_filter ">" ) %(meta_filter_read) $err(meta_filter_err) | 
                        ("##FORMAT=<" meta_format ">" ) %(meta_format_read) $err(meta_format_err) |
                        ("##INFO=<" meta_info ">" ) %(meta_info_read) $err(meta_info_err) | 
-                       ("##assembly=" meta_assembly ) |
+                       ("##assembly=" meta_assembly ) $err(meta_assembly_err) |
                        ("##contig=<" meta_contig ">" ) $err(meta_contig_err) |
                        ("##SAMPLE=<" meta_sample ">" ) $err(meta_sample_err) |
                        ("##PEDIGREE=<" meta_pedigree ">" ) $err(meta_pedigree_err) |
-                       ("##pedigreeDB=<" meta_pedigreeDB ">" ) |
+                       ("##pedigreeDB=<" meta_pedigreeDB ">" ) $err(meta_pedigreedb_err) |
                        ("##" meta_field >token_begin %meta_field_value_end) |
                        ("##" meta_field_value >token_begin %meta_field_value_end)
                       )
