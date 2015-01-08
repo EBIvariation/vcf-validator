@@ -205,7 +205,7 @@
     }
 
 
-    ########## Incorrect fields actions ##########
+    ########## Incorrect metadata and header actions ##########
 
     # Fileformat line
     action fileformat_error {
@@ -339,48 +339,151 @@
         fhold; fgoto meta_section_skip;
     }
     
-    # Records
-    
+    ########## Incorrect records actions ##########
+
+    # Chromosome
     action chrom_error {
         ErrorPolicy::handle_body_section_error(*this, "Chromosome is not a string without colons or whitespaces, optionally wrapped with angle brackets (<>)");
         fhold; fgoto body_section_skip;
     }
 
+    # Position
     action pos_error {
         ErrorPolicy::handle_body_section_error(*this, "Position is not a positive number");
         fhold; fgoto body_section_skip;
     }
 
+    # ID
     action id_error {
         ErrorPolicy::handle_body_section_error(*this, "ID is not a single dot or a list of strings without semicolons or whitespaces");
         fhold; fgoto body_section_skip;
     }
 
+    # Reference allele
     action ref_error {
         ErrorPolicy::handle_body_section_error(*this, "Reference is not a string of bases");
         fhold; fgoto body_section_skip;
     }
 
+    # Alternate alleles
     action alt_error {
         ErrorPolicy::handle_body_section_error(*this, "Alternate is not a single dot or a comma-separated list of bases");
         fhold; fgoto body_section_skip;
     }
 
+    # Quality
     action qual_error {
         ErrorPolicy::handle_body_section_error(*this, "Quality is not a single dot or a positive number");
         fhold; fgoto body_section_skip;
     }
 
+    # Filter
     action filter_error {
         ErrorPolicy::handle_body_section_error(*this, "Filter is not a single dot or a semicolon-separated list of strings");
         fhold; fgoto body_section_skip;
     }
 
+    # Info
     action info_error {
-        printf("Line %zu: Error in 'info' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         fhold; fgoto body_section_skip;
     }
 
+    #info_key        = (alnum | (punct - (";" | "=")))+ - ( "AA" | "AC" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G" | (punct)+ ) ;
+    #info_value      = (print - space)+ ;
+    #info_value_list = info_value ("," info_value)* ;
+    
+    action info_AA_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info AA value is not a single dot or a string of bases");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_AC_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info AC value is not a comma-separated list of numbers");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_AF_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info AF value is not a comma-separated list of numbers");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_AN_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info AN value is not an integer number");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_BQ_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info BQ value is not a number");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_CIGAR_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info CIGAR value is not an alphanumeric string");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_DB_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info DB is not a flag (with 1/0/no value)");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_DP_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info DP value is not an integer number");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_END_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info END value is not an integer number");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_H2_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info H2 is not a flag (with 1/0/no value)");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_H3_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info H3 is not a flag (with 1/0/no value)");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_MQ_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info MQ value is not a number");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_MQ0_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info MQ0 value is not an integer number");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_NS_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info NS value is not an integer number");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_SB_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info SB value is not a number");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_SOMATIC_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info SOMATIC is not a flag (with 1/0/no value)");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_VALIDATED_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info VALIDATED is not a flag (with 1/0/no value)");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_1000G_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info 1000G is not a flag (with 1/0/no value)");
+        fhold; fgoto body_section_skip;
+    }
+    
+    # Format
     action format_error {
         ErrorPolicy::handle_body_section_error(*this, "Format is not a colon-separated list of alphanumeric strings");
         fhold; fgoto body_section_skip;
@@ -391,6 +494,7 @@
         fhold; fgoto body_section_skip;
     }
     
+    # Samples
     action sample_error {
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
@@ -445,24 +549,32 @@
                               ( ":" meta_field_value)? $err(meta_alt_id_suffix_err)
                             ) 
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
+                        
     meta_assembly   = url $err(meta_url_err) ;
+    
     ## TODO Probably need to check meta_contig again after getting an answer from the spec team
     meta_contig     = "ID=" identifier $err(meta_id_err)
                         ",URL=" url $err(meta_url_err) ;
+                        
     meta_filter     = "ID=" identifier $err(meta_id_err) 
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
+                        
     meta_format     = "ID=" identifier $err(meta_id_err)
                         ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) $err(meta_format_number_err) 
                         ",Type=" ( "Integer" | "Float" | "Character" | "String" ) $err(meta_format_type_err) 
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
+                        
     meta_info       = "ID=" identifier $err(meta_id_err) 
                         ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) $err(meta_info_number_err)  
                         ",Type=" ( "Integer" | "Float" | "Flag" | "Character" | "String" ) $err(meta_info_type_err)
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err)
                         (",Source=\"" meta_field_desc "\"")? $err(meta_info_source_err)
                         (",Version=\"" meta_field_desc "\"")? $err(meta_info_version_err) ;
+                        
     meta_pedigree   = identifier $err(meta_id_err) "=" identifier $err(meta_id_err) ("," identifier $err(meta_id_err) "=" identifier $err(meta_id_err))* ;
+    
     meta_pedigreeDB = url $err(meta_url_err) ;
+    
     meta_sample     = "ID=" identifier $err(meta_id_err)
                         (",Genomes=" identifier (";" identifier)* ) $err(meta_sample_genomes_err)
                         (",Mixture=" identifier (";" identifier)* ) $err(meta_sample_mixture_err)
@@ -530,32 +642,32 @@
     filter_value    = (alnum | punct - ";")+ - (punct)+ ;
     record_filter   = (filter_value (";" filter_value)*) | "." ;
 
-    info_key        = ( (alnum | "_")+ | "." ) - ("AA" | "AC" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G") ;
-    info_value      = (print - space)+ ;
+    info_key        = (alnum | (punct - (";" | "=")))+ - ( "AA" | "AC" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G" | (punct)+ ) ;
+    info_value      = (print - (space | ";"))+ ;
     info_value_list = info_value ("," info_value)* ;
     info_entry      = (
-                        "AA=" (bases | ".") |
-                        "AC=" int_number ("," int_number)* |
-                        "AF=" any_number ("," any_number)* |
-                        "AN=" int_number |
-                        "BQ=" any_number |
-                        "CIGAR=" (alnum)+ |
-                        "DB" ("=" ("1" | "0"))? |
-                        "DP=" int_number |
-                        "END=" int_number |
-                        "H2" ("=" ("1" | "0"))? | 
-                        "H3" ("=" ("1" | "0"))? |
-                        "MQ=" any_number |
-                        "MQ0=" int_number |
-                        "NS="  int_number |
-                        "SB=" any_number |
-                        "SOMATIC" ("=" ("1" | "0"))? |
-                        "VALIDATED" ("=" ("1" | "0"))? |
-                        "1000G" ("=" ("1" | "0"))? |
+                        "AA=" (bases | ".") 			$err(info_AA_error) |
+                        "AC=" (int_number ("," int_number)*) 	$err(info_AC_error) |
+                        "AF=" (any_number ("," any_number)*) 	$err(info_AF_error) |
+                        "AN=" int_number 			$err(info_AN_error) |
+                        "BQ=" any_number 			$err(info_BQ_error) |
+                        "CIGAR=" (alnum)+ 			$err(info_CIGAR_error) |
+                        "DB" ("=" ("1" | "0"))? 		$err(info_DB_error) |
+                        "DP=" int_number 			$err(info_DP_error) |
+                        "END=" int_number 			$err(info_END_error) |
+                        "H2" ("=" ("1" | "0"))? 		$err(info_H2_error) | 
+                        "H3" ("=" ("1" | "0"))? 		$err(info_H3_error) |
+                        "MQ=" any_number 			$err(info_MQ_error) |
+                        "MQ0=" int_number 			$err(info_MQ0_error) |
+                        "NS="  int_number 			$err(info_NS_error) |
+                        "SB=" any_number 			$err(info_SB_error) |
+                        "SOMATIC" ("=" ("1" | "0"))? 		$err(info_SOMATIC_error) |
+                        "VALIDATED" ("=" ("1" | "0"))?		$err(info_VALIDATED_error) |
+                        "1000G" ("=" ("1" | "0"))? 		$err(info_1000G_error) |
                         info_key | 
                         info_key "=" info_value_list
                       );
-    record_info     = info_entry (";" info_entry)* ;
+    record_info     = info_entry (";" info_entry)* | "." ;
 
     ## TODO Could this be extended because a lot of files use _ as a separator?
     format_value    = (alnum)+ ;
@@ -566,16 +678,16 @@
     sample_gt       = sample_allele (("/" | "|") sample_allele)* ;
     record_sample   = sample_gt $err(sample_gt_error) (":" (alnum | punct)+)* ;
     
-    record          = (record_chrom >token_begin %chrom_end $err(chrom_error) 
-                        CS record_pos >token_begin %pos_end $err(pos_error) 
-                        CS record_id >token_begin %id_end $err(id_error) 
-                        CS record_ref >token_begin %ref_end $err(ref_error) 
-                        CS record_alt >token_begin %alt_end $err(alt_error) 
-                        CS record_qual >token_begin %qual_end $err(qual_error) 
-                        CS record_filter >token_begin %filter_end $err(filter_error) 
-                        CS record_info >token_begin %info_end $err(info_error) 
-                        (CS record_format >token_begin %format_end $err(format_error)
-                        (CS record_sample >token_begin %sample_end $err(sample_error))+ )?
+    record          = (record_chrom 		>token_begin %chrom_end $err(chrom_error) 
+                        CS record_pos 		>token_begin %pos_end $err(pos_error) 
+                        CS record_id 		>token_begin %id_end $err(id_error) 
+                        CS record_ref 		>token_begin %ref_end $err(ref_error) 
+                        CS record_alt 		>token_begin %alt_end $err(alt_error) 
+                        CS record_qual		>token_begin %qual_end $err(qual_error) 
+                        CS record_filter 	>token_begin %filter_end $err(filter_error) 
+                        CS record_info		>token_begin %info_end $err(info_error) 
+                        (CS record_format 	>token_begin %format_end $err(format_error)
+                        (CS record_sample 	>token_begin %sample_end $err(sample_error))+ )?
                       ) >record_begin %record_end;
 
     fileformat_section = (fileformat NL) $err(fileformat_section_error);
