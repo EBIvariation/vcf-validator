@@ -367,7 +367,7 @@
     }
 
     action qual_error {
-        printf("Line %zu: Error in 'quality' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Quality is not a single dot or a positive number");
         fhold; fgoto body_section_skip;
     }
 

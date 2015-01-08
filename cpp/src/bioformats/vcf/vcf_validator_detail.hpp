@@ -1202,7 +1202,7 @@ tr630:
 tr639:
 #line 369 "vcf_v41.ragel"
 	{
-        printf("Line %zu: Error in 'quality' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Quality is not a single dot or a positive number");
         p--; {goto st703;}
     }
 #line 50 "vcf_v41.ragel"
@@ -14144,7 +14144,7 @@ case 707:
 	case 636: 
 #line 369 "vcf_v41.ragel"
 	{
-        printf("Line %zu: Error in 'quality' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Quality is not a single dot or a positive number");
         p--; {goto st703;}
     }
 #line 50 "vcf_v41.ragel"
