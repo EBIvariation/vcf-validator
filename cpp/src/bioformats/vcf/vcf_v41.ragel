@@ -386,8 +386,22 @@
         fhold; fgoto body_section_skip;
     }
 
+    action format_gt_error {
+        ErrorPolicy::handle_body_section_error(*this, "Format first field is not GT");
+        fhold; fgoto body_section_skip;
+    }
+    
     action sample_error {
-        ErrorPolicy::handle_body_section_error(*this, "Incorrect sample format");
+        std::ostringstream message_stream;
+        message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
+        ErrorPolicy::handle_body_section_error(*this, message_stream.str());
+        fhold; fgoto body_section_skip;
+    }
+    
+    action sample_gt_error {
+        std::ostringstream message_stream;
+        message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
+        ErrorPolicy::handle_body_section_error(*this, message_stream.str());
         fhold; fgoto body_section_skip;
     }
 
@@ -545,11 +559,12 @@
 
     ## TODO Could this be extended because a lot of files use _ as a separator?
     format_value    = (alnum)+ ;
-    record_format   = format_value (":" format_value)* ;
+    record_format   = "GT" $err(format_gt_error) (":" format_value)* ;
     
+    ## In a sample, the genotype is mandatory and must be the first field
     sample_allele   = (digit | ".") ;
     sample_gt       = sample_allele (("/" | "|") sample_allele)* ;
-    record_sample   = sample_gt (":" (alnum | punct)+)* ;  # Genotype is mandatory and must be the first field
+    record_sample   = sample_gt $err(sample_gt_error) (":" (alnum | punct)+)* ;
     
     record          = (record_chrom >token_begin %chrom_end $err(chrom_error) 
                         CS record_pos >token_begin %pos_end $err(pos_error) 
