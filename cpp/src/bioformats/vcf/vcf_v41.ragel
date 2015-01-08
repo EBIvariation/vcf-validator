@@ -372,7 +372,7 @@
     }
 
     action filter_error {
-        printf("Line %zu: Error in 'filter' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Filter is not a single dot or a semicolon-separated list of strings");
         fhold; fgoto body_section_skip;
     }
 
@@ -512,8 +512,8 @@
                       
     record_qual     = any_number | "." ;
 
-    filter_value    = (alnum | punct - ";")+ ;
-    record_filter   = "." | (filter_value (";" filter_value)*) ;
+    filter_value    = (alnum | punct - ";")+ - (punct)+ ;
+    record_filter   = (filter_value (";" filter_value)*) | "." ;
 
     info_key        = ( (alnum | "_")+ | "." ) - ("AA" | "AC" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G") ;
     info_value      = (print - space)+ ;
