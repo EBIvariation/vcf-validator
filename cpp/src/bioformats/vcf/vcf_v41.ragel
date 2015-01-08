@@ -382,7 +382,7 @@
     }
 
     action format_error {
-        printf("Line %zu: Error in 'format' field\n", n_lines);
+        ErrorPolicy::handle_body_section_error(*this, "Format is not a colon-separated list of alphanumeric strings");
         fhold; fgoto body_section_skip;
     }
 
@@ -406,7 +406,7 @@
     bases           = ("A" | "C" | "G" | "T" | "N" | "a" | "c" | "t" | "g" | "n" )+ ;
     # Identifiers may contain some symbols, but not only those 
     # TODO Could it accept more symbols? Comma won't be, for sure
-    identifier      = (alnum | "." | "_" | "-" )+ - ((".")+ | ("_")+ | ("-")+) ;
+    identifier      = (alnum | "." | "_" | "-" )+ - ("." | "_" | "-")+ ;
     
     # URL inspired in http://stackoverflow.com/questions/8784903/failed-to-convert-url-parser-regular-expression-to-ragel
     scheme    = (alpha (any - [:/?#] - "\n")+ ) ;
@@ -432,6 +432,7 @@
                             ) 
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
     meta_assembly   = url $err(meta_url_err) ;
+    ## TODO Probably need to check meta_contig again after getting an answer from the spec team
     meta_contig     = "ID=" identifier $err(meta_id_err)
                         ",URL=" url $err(meta_url_err) ;
     meta_filter     = "ID=" identifier $err(meta_id_err) 
@@ -542,7 +543,9 @@
                       );
     record_info     = info_entry (";" info_entry)* ;
 
-    record_format   = identifier (":" identifier)* ;
+    ## TODO Could this be extended because a lot of files use _ as a separator?
+    format_value    = (alnum)+ ;
+    record_format   = format_value (":" format_value)* ;
     
     sample_allele   = (digit | ".") ;
     sample_gt       = sample_allele (("/" | "|") sample_allele)* ;
