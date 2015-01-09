@@ -5,7 +5,7 @@
 #include "vcf_validator.hpp"
 
 
-#line 709 "vcf_v41.ragel"
+#line 722 "vcf_v41.ragel"
 
 
 namespace
@@ -23,7 +23,7 @@ static const int vcf_en_meta_section_skip = 713;
 static const int vcf_en_body_section_skip = 714;
 
 
-#line 715 "vcf_v41.ragel"
+#line 728 "vcf_v41.ragel"
 
 }
 
@@ -40,7 +40,7 @@ namespace opencb
 	cs = vcf_start;
 	}
 
-#line 727 "vcf_v41.ragel"
+#line 740 "vcf_v41.ragel"
 
     }
 
@@ -77,7 +77,7 @@ namespace opencb
       return cs >= 
 #line 79 "vcf_validator_detail.hpp"
 715
-#line 760 "vcf_v41.ragel"
+#line 773 "vcf_v41.ragel"
 ;
     }
 
@@ -179,6 +179,11 @@ tr18:
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st713;}
     }
+#line 344 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
+        p--; {goto st714;}
+    }
 #line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
@@ -240,6 +245,11 @@ tr20:
 	{
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st713;}
+    }
+#line 344 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
+        p--; {goto st714;}
     }
 #line 45 "vcf_v41.ragel"
 	{
@@ -1133,14 +1143,26 @@ tr529:
     }
 	goto st0;
 tr537:
+#line 344 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
+        p--; {goto st714;}
+    }
 #line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
         p--; {goto st714;}
     }
 	goto st0;
-tr587:
-#line 345 "vcf_v41.ragel"
+tr576:
+#line 45 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_header_section_error(*this);
+        p--; {goto st714;}
+    }
+	goto st0;
+tr588:
+#line 352 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Chromosome is not a string without colons or whitespaces, optionally wrapped with angle brackets (<>)");
         p--; {goto st714;}
@@ -1151,8 +1173,8 @@ tr587:
         p--; {goto st714;}
     }
 	goto st0;
-tr590:
-#line 351 "vcf_v41.ragel"
+tr591:
+#line 358 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Position is not a positive number");
         p--; {goto st714;}
@@ -1163,8 +1185,8 @@ tr590:
         p--; {goto st714;}
     }
 	goto st0;
-tr594:
-#line 357 "vcf_v41.ragel"
+tr595:
+#line 364 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "ID is not a single dot or a list of strings without semicolons or whitespaces");
         p--; {goto st714;}
@@ -1175,8 +1197,8 @@ tr594:
         p--; {goto st714;}
     }
 	goto st0;
-tr599:
-#line 363 "vcf_v41.ragel"
+tr600:
+#line 370 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Reference is not a string of bases");
         p--; {goto st714;}
@@ -1187,8 +1209,8 @@ tr599:
         p--; {goto st714;}
     }
 	goto st0;
-tr603:
-#line 369 "vcf_v41.ragel"
+tr604:
+#line 376 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Alternate is not a single dot or a comma-separated list of bases");
         p--; {goto st714;}
@@ -1199,8 +1221,8 @@ tr603:
         p--; {goto st714;}
     }
 	goto st0;
-tr612:
-#line 375 "vcf_v41.ragel"
+tr613:
+#line 382 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Quality is not a single dot or a positive number");
         p--; {goto st714;}
@@ -1211,8 +1233,8 @@ tr612:
         p--; {goto st714;}
     }
 	goto st0;
-tr616:
-#line 381 "vcf_v41.ragel"
+tr617:
+#line 388 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Filter is not a single dot or a semicolon-separated list of strings");
         p--; {goto st714;}
@@ -1223,8 +1245,13 @@ tr616:
         p--; {goto st714;}
     }
 	goto st0;
-tr623:
-#line 387 "vcf_v41.ragel"
+tr624:
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1235,13 +1262,13 @@ tr623:
         p--; {goto st714;}
     }
 	goto st0;
-tr644:
-#line 492 "vcf_v41.ragel"
+tr645:
+#line 505 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Format first field is not GT");
         p--; {goto st714;}
     }
-#line 487 "vcf_v41.ragel"
+#line 500 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Format is not a colon-separated list of alphanumeric strings");
         p--; {goto st714;}
@@ -1252,15 +1279,15 @@ tr644:
         p--; {goto st714;}
     }
 	goto st0;
-tr649:
-#line 505 "vcf_v41.ragel"
+tr650:
+#line 518 "vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
         ErrorPolicy::handle_body_section_error(*this, message_stream.str());
         p--; {goto st714;}
     }
-#line 498 "vcf_v41.ragel"
+#line 511 "vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
@@ -1273,8 +1300,8 @@ tr649:
         p--; {goto st714;}
     }
 	goto st0;
-tr658:
-#line 498 "vcf_v41.ragel"
+tr659:
+#line 511 "vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
@@ -1287,8 +1314,8 @@ tr658:
         p--; {goto st714;}
     }
 	goto st0;
-tr660:
-#line 487 "vcf_v41.ragel"
+tr661:
+#line 500 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Format is not a colon-separated list of alphanumeric strings");
         p--; {goto st714;}
@@ -1300,12 +1327,34 @@ tr660:
     }
 	goto st0;
 tr678:
-#line 481 "vcf_v41.ragel"
+#line 404 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	goto st0;
+tr680:
+#line 494 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info 1000G is not a flag (with 1/0/no value)");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1316,30 +1365,30 @@ tr678:
         p--; {goto st714;}
     }
 	goto st0;
-tr686:
-#line 396 "vcf_v41.ragel"
+tr682:
+#line 494 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info 1000G is not a flag (with 1/0/no value)");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	goto st0;
+tr689:
+#line 409 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AA value is not a single dot or a string of bases");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
-        p--; {goto st714;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st714;}
-    }
-	goto st0;
-tr690:
-#line 401 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this, "Info AC value is not a comma-separated list of numbers");
-        p--; {goto st714;}
-    }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1351,12 +1400,29 @@ tr690:
     }
 	goto st0;
 tr693:
-#line 406 "vcf_v41.ragel"
+#line 414 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info AC value is not a comma-separated list of numbers");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	goto st0;
+tr696:
+#line 419 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AF value is not a comma-separated list of numbers");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1367,13 +1433,13 @@ tr693:
         p--; {goto st714;}
     }
 	goto st0;
-tr698:
-#line 411 "vcf_v41.ragel"
+tr701:
+#line 424 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AN value is not an integer number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1384,13 +1450,13 @@ tr698:
         p--; {goto st714;}
     }
 	goto st0;
-tr702:
-#line 416 "vcf_v41.ragel"
+tr705:
+#line 429 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info BQ value is not a number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1401,13 +1467,13 @@ tr702:
         p--; {goto st714;}
     }
 	goto st0;
-tr711:
-#line 421 "vcf_v41.ragel"
+tr714:
+#line 434 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info CIGAR value is not an alphanumeric string");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1418,13 +1484,18 @@ tr711:
         p--; {goto st714;}
     }
 	goto st0;
-tr715:
-#line 426 "vcf_v41.ragel"
+tr718:
+#line 439 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info DB is not a flag (with 1/0/no value)");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1435,30 +1506,30 @@ tr715:
         p--; {goto st714;}
     }
 	goto st0;
-tr719:
-#line 431 "vcf_v41.ragel"
+tr720:
+#line 439 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info DB is not a flag (with 1/0/no value)");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	goto st0;
+tr723:
+#line 444 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info DP value is not an integer number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
-        p--; {goto st714;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st714;}
-    }
-	goto st0;
-tr724:
-#line 436 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this, "Info END value is not an integer number");
-        p--; {goto st714;}
-    }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1470,12 +1541,12 @@ tr724:
     }
 	goto st0;
 tr728:
-#line 441 "vcf_v41.ragel"
+#line 449 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_body_section_error(*this, "Info H2 is not a flag (with 1/0/no value)");
+        ErrorPolicy::handle_body_section_error(*this, "Info END value is not an integer number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1486,13 +1557,57 @@ tr728:
         p--; {goto st714;}
     }
 	goto st0;
-tr731:
-#line 446 "vcf_v41.ragel"
+tr732:
+#line 454 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info H2 is not a flag (with 1/0/no value)");
+        p--; {goto st714;}
+    }
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	goto st0;
+tr734:
+#line 454 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info H2 is not a flag (with 1/0/no value)");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	goto st0;
+tr736:
+#line 459 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info H3 is not a flag (with 1/0/no value)");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1504,12 +1619,12 @@ tr731:
     }
 	goto st0;
 tr738:
-#line 456 "vcf_v41.ragel"
+#line 459 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_body_section_error(*this, "Info MQ0 value is not an integer number");
+        ErrorPolicy::handle_body_section_error(*this, "Info H3 is not a flag (with 1/0/no value)");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1520,13 +1635,13 @@ tr738:
         p--; {goto st714;}
     }
 	goto st0;
-tr740:
-#line 451 "vcf_v41.ragel"
+tr744:
+#line 469 "vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_body_section_error(*this, "Info MQ value is not a number");
+        ErrorPolicy::handle_body_section_error(*this, "Info MQ0 value is not an integer number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1538,12 +1653,29 @@ tr740:
     }
 	goto st0;
 tr746:
-#line 461 "vcf_v41.ragel"
+#line 464 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info MQ value is not a number");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	goto st0;
+tr752:
+#line 474 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info NS value is not an integer number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1554,13 +1686,13 @@ tr746:
         p--; {goto st714;}
     }
 	goto st0;
-tr751:
-#line 466 "vcf_v41.ragel"
+tr757:
+#line 479 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info SB value is not a number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1571,13 +1703,18 @@ tr751:
         p--; {goto st714;}
     }
 	goto st0;
-tr760:
-#line 471 "vcf_v41.ragel"
+tr766:
+#line 484 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info SOMATIC is not a flag (with 1/0/no value)");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1588,13 +1725,35 @@ tr760:
         p--; {goto st714;}
     }
 	goto st0;
-tr771:
-#line 476 "vcf_v41.ragel"
+tr768:
+#line 484 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info SOMATIC is not a flag (with 1/0/no value)");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	goto st0;
+tr778:
+#line 489 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info VALIDATED is not a flag (with 1/0/no value)");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -1605,13 +1764,30 @@ tr771:
         p--; {goto st714;}
     }
 	goto st0;
-tr842:
+tr780:
+#line 489 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info VALIDATED is not a flag (with 1/0/no value)");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	goto st0;
+tr850:
 #line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
         p--; {goto st714;}
     }
-#line 345 "vcf_v41.ragel"
+#line 352 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Chromosome is not a string without colons or whitespaces, optionally wrapped with angle brackets (<>)");
         p--; {goto st714;}
@@ -1622,7 +1798,7 @@ tr842:
         p--; {goto st714;}
     }
 	goto st0;
-#line 1626 "vcf_validator_detail.hpp"
+#line 1802 "vcf_validator_detail.hpp"
 st0:
 cs = 0;
 	goto _out;
@@ -1727,7 +1903,7 @@ st15:
 	if ( ++p == pe )
 		goto _test_eof15;
 case 15:
-#line 1731 "vcf_validator_detail.hpp"
+#line 1907 "vcf_validator_detail.hpp"
 	if ( (*p) == 10 )
 		goto tr16;
 	if ( 33 <= (*p) && (*p) <= 126 )
@@ -1748,7 +1924,7 @@ st16:
 	if ( ++p == pe )
 		goto _test_eof16;
 case 16:
-#line 1752 "vcf_validator_detail.hpp"
+#line 1928 "vcf_validator_detail.hpp"
 	if ( (*p) == 35 )
 		goto tr19;
 	goto tr18;
@@ -1763,7 +1939,7 @@ st17:
 	if ( ++p == pe )
 		goto _test_eof17;
 case 17:
-#line 1767 "vcf_validator_detail.hpp"
+#line 1943 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 35: goto st18;
 		case 67: goto st473;
@@ -1818,7 +1994,7 @@ st19:
 	if ( ++p == pe )
 		goto _test_eof19;
 case 19:
-#line 1822 "vcf_validator_detail.hpp"
+#line 1998 "vcf_validator_detail.hpp"
 	if ( (*p) == 10 )
 		goto tr35;
 	if ( (*p) > 60 ) {
@@ -1851,7 +2027,7 @@ tr35:
 tr64:
 #line 101 "vcf_v41.ragel"
 	{
-        printf("Meta in line %zu\n", n_lines);
+        //printf("Meta in line %zu\n", n_lines);
     }
 #line 67 "vcf_v41.ragel"
 	{
@@ -1866,7 +2042,7 @@ tr64:
 tr176:
 #line 85 "vcf_v41.ragel"
 	{
-        printf("Meta ALT in line %zu\n", n_lines);
+        //printf("Meta ALT in line %zu\n", n_lines);
     }
 #line 67 "vcf_v41.ragel"
 	{
@@ -1881,7 +2057,7 @@ tr176:
 tr228:
 #line 89 "vcf_v41.ragel"
 	{
-        printf("Meta FILTER in line %zu\n", n_lines);
+        //printf("Meta FILTER in line %zu\n", n_lines);
     }
 #line 67 "vcf_v41.ragel"
 	{
@@ -1896,7 +2072,7 @@ tr228:
 tr290:
 #line 93 "vcf_v41.ragel"
 	{
-        printf("Meta FORMAT in line %zu\n", n_lines);
+        //printf("Meta FORMAT in line %zu\n", n_lines);
     }
 #line 67 "vcf_v41.ragel"
 	{
@@ -1911,7 +2087,7 @@ tr290:
 tr388:
 #line 97 "vcf_v41.ragel"
 	{
-        printf("Meta INFO in line %zu\n", n_lines);
+        //printf("Meta INFO in line %zu\n", n_lines);
     }
 #line 67 "vcf_v41.ragel"
 	{
@@ -1938,7 +2114,7 @@ st20:
 	if ( ++p == pe )
 		goto _test_eof20;
 case 20:
-#line 1942 "vcf_validator_detail.hpp"
+#line 2118 "vcf_validator_detail.hpp"
 	if ( (*p) == 35 )
 		goto tr19;
 	goto tr20;
@@ -1952,7 +2128,7 @@ st21:
 	if ( ++p == pe )
 		goto _test_eof21;
 case 21:
-#line 1956 "vcf_validator_detail.hpp"
+#line 2132 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -1989,7 +2165,7 @@ st22:
 	if ( ++p == pe )
 		goto _test_eof22;
 case 22:
-#line 1993 "vcf_validator_detail.hpp"
+#line 2169 "vcf_validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st23;
 	if ( (*p) > 59 ) {
@@ -2048,7 +2224,7 @@ st24:
 	if ( ++p == pe )
 		goto _test_eof24;
 case 24:
-#line 2052 "vcf_validator_detail.hpp"
+#line 2228 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -2115,7 +2291,7 @@ st27:
 	if ( ++p == pe )
 		goto _test_eof27;
 case 27:
-#line 2119 "vcf_validator_detail.hpp"
+#line 2295 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr52;
 		case 62: goto tr53;
@@ -2163,7 +2339,7 @@ st28:
 	if ( ++p == pe )
 		goto _test_eof28;
 case 28:
-#line 2167 "vcf_validator_detail.hpp"
+#line 2343 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr52;
 		case 61: goto st25;
@@ -2207,7 +2383,7 @@ st29:
 	if ( ++p == pe )
 		goto _test_eof29;
 case 29:
-#line 2211 "vcf_validator_detail.hpp"
+#line 2387 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr64;
 		case 44: goto tr52;
@@ -2229,7 +2405,7 @@ st30:
 	if ( ++p == pe )
 		goto _test_eof30;
 case 30:
-#line 2233 "vcf_validator_detail.hpp"
+#line 2409 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr52;
 		case 61: goto st25;
@@ -2333,7 +2509,7 @@ st33:
 	if ( ++p == pe )
 		goto _test_eof33;
 case 33:
-#line 2337 "vcf_validator_detail.hpp"
+#line 2513 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr52;
 		case 61: goto st25;
@@ -2597,7 +2773,7 @@ st41:
 	if ( ++p == pe )
 		goto _test_eof41;
 case 41:
-#line 2601 "vcf_validator_detail.hpp"
+#line 2777 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr52;
 		case 61: goto st25;
@@ -2700,7 +2876,7 @@ st44:
 	if ( ++p == pe )
 		goto _test_eof44;
 case 44:
-#line 2704 "vcf_validator_detail.hpp"
+#line 2880 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr52;
 		case 61: goto st25;
@@ -2931,7 +3107,7 @@ st51:
 	if ( ++p == pe )
 		goto _test_eof51;
 case 51:
-#line 2935 "vcf_validator_detail.hpp"
+#line 3111 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr52;
 		case 61: goto st25;
@@ -3066,7 +3242,7 @@ st55:
 	if ( ++p == pe )
 		goto _test_eof55;
 case 55:
-#line 3070 "vcf_validator_detail.hpp"
+#line 3246 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr52;
 		case 61: goto st25;
@@ -3297,7 +3473,7 @@ st62:
 	if ( ++p == pe )
 		goto _test_eof62;
 case 62:
-#line 3301 "vcf_validator_detail.hpp"
+#line 3477 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr52;
 		case 61: goto st25;
@@ -3464,7 +3640,7 @@ st67:
 	if ( ++p == pe )
 		goto _test_eof67;
 case 67:
-#line 3468 "vcf_validator_detail.hpp"
+#line 3644 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr52;
 		case 61: goto st25;
@@ -3759,7 +3935,7 @@ st76:
 	if ( ++p == pe )
 		goto _test_eof76;
 case 76:
-#line 3763 "vcf_validator_detail.hpp"
+#line 3939 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -3860,7 +4036,7 @@ st79:
 	if ( ++p == pe )
 		goto _test_eof79;
 case 79:
-#line 3864 "vcf_validator_detail.hpp"
+#line 4040 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -4116,7 +4292,7 @@ st87:
 	if ( ++p == pe )
 		goto _test_eof87;
 case 87:
-#line 4120 "vcf_validator_detail.hpp"
+#line 4296 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -4216,7 +4392,7 @@ st90:
 	if ( ++p == pe )
 		goto _test_eof90;
 case 90:
-#line 4220 "vcf_validator_detail.hpp"
+#line 4396 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -4440,7 +4616,7 @@ st97:
 	if ( ++p == pe )
 		goto _test_eof97;
 case 97:
-#line 4444 "vcf_validator_detail.hpp"
+#line 4620 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -4571,7 +4747,7 @@ st101:
 	if ( ++p == pe )
 		goto _test_eof101;
 case 101:
-#line 4575 "vcf_validator_detail.hpp"
+#line 4751 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -4795,7 +4971,7 @@ st108:
 	if ( ++p == pe )
 		goto _test_eof108;
 case 108:
-#line 4799 "vcf_validator_detail.hpp"
+#line 4975 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -4957,7 +5133,7 @@ st113:
 	if ( ++p == pe )
 		goto _test_eof113;
 case 113:
-#line 4961 "vcf_validator_detail.hpp"
+#line 5137 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto st25;
@@ -5243,7 +5419,7 @@ st122:
 	if ( ++p == pe )
 		goto _test_eof122;
 case 122:
-#line 5247 "vcf_validator_detail.hpp"
+#line 5423 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -5753,7 +5929,7 @@ st169:
 	if ( ++p == pe )
 		goto _test_eof169;
 case 169:
-#line 5757 "vcf_validator_detail.hpp"
+#line 5933 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -6758,7 +6934,7 @@ st264:
 	if ( ++p == pe )
 		goto _test_eof264;
 case 264:
-#line 6762 "vcf_validator_detail.hpp"
+#line 6938 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -7535,7 +7711,7 @@ st352:
 	if ( ++p == pe )
 		goto _test_eof352;
 case 352:
-#line 7539 "vcf_validator_detail.hpp"
+#line 7715 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -7880,7 +8056,7 @@ st366:
 	if ( ++p == pe )
 		goto _test_eof366;
 case 366:
-#line 7884 "vcf_validator_detail.hpp"
+#line 8060 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -8452,7 +8628,7 @@ st415:
 	if ( ++p == pe )
 		goto _test_eof415;
 case 415:
-#line 8456 "vcf_validator_detail.hpp"
+#line 8632 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -8771,7 +8947,7 @@ st430:
 	if ( ++p == pe )
 		goto _test_eof430;
 case 430:
-#line 8775 "vcf_validator_detail.hpp"
+#line 8951 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -9133,7 +9309,7 @@ st454:
 	if ( ++p == pe )
 		goto _test_eof454;
 case 454:
-#line 9137 "vcf_validator_detail.hpp"
+#line 9313 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -9789,50 +9965,50 @@ st510:
 case 510:
 	if ( (*p) == 70 )
 		goto st511;
-	goto tr537;
+	goto tr576;
 st511:
 	if ( ++p == pe )
 		goto _test_eof511;
 case 511:
 	if ( (*p) == 79 )
 		goto st512;
-	goto tr537;
+	goto tr576;
 st512:
 	if ( ++p == pe )
 		goto _test_eof512;
 case 512:
 	if ( (*p) == 82 )
 		goto st513;
-	goto tr537;
+	goto tr576;
 st513:
 	if ( ++p == pe )
 		goto _test_eof513;
 case 513:
 	if ( (*p) == 77 )
 		goto st514;
-	goto tr537;
+	goto tr576;
 st514:
 	if ( ++p == pe )
 		goto _test_eof514;
 case 514:
 	if ( (*p) == 65 )
 		goto st515;
-	goto tr537;
+	goto tr576;
 st515:
 	if ( ++p == pe )
 		goto _test_eof515;
 case 515:
 	if ( (*p) == 84 )
 		goto st516;
-	goto tr537;
+	goto tr576;
 st516:
 	if ( ++p == pe )
 		goto _test_eof516;
 case 516:
 	if ( (*p) == 9 )
 		goto st517;
-	goto tr537;
-tr584:
+	goto tr576;
+tr585:
 #line 110 "vcf_v41.ragel"
 	{
 //        add_vcf_sample_name(ts, p-ts, file);
@@ -9842,11 +10018,11 @@ st517:
 	if ( ++p == pe )
 		goto _test_eof517;
 case 517:
-#line 9846 "vcf_validator_detail.hpp"
+#line 10022 "vcf_validator_detail.hpp"
 	if ( 32 <= (*p) && (*p) <= 126 )
-		goto tr583;
-	goto tr537;
-tr583:
+		goto tr584;
+	goto tr576;
+tr584:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -9856,14 +10032,14 @@ st518:
 	if ( ++p == pe )
 		goto _test_eof518;
 case 518:
-#line 9860 "vcf_validator_detail.hpp"
+#line 10036 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr584;
-		case 10: goto tr585;
+		case 9: goto tr585;
+		case 10: goto tr586;
 	}
 	if ( 32 <= (*p) && (*p) <= 126 )
 		goto st518;
-	goto tr537;
+	goto tr576;
 tr575:
 #line 23 "vcf_v41.ragel"
 	{
@@ -9871,7 +10047,7 @@ tr575:
         n_columns = 1;
     }
 	goto st715;
-tr585:
+tr586:
 #line 110 "vcf_v41.ragel"
 	{
 //        add_vcf_sample_name(ts, p-ts, file);
@@ -9886,19 +10062,19 @@ st715:
 	if ( ++p == pe )
 		goto _test_eof715;
 case 715:
-#line 9890 "vcf_validator_detail.hpp"
+#line 10066 "vcf_validator_detail.hpp"
 	if ( (*p) == 60 )
-		goto tr844;
+		goto tr852;
 	if ( (*p) < 59 ) {
 		if ( 33 <= (*p) && (*p) <= 57 )
-			goto tr843;
+			goto tr851;
 	} else if ( (*p) > 61 ) {
 		if ( 63 <= (*p) && (*p) <= 126 )
-			goto tr843;
+			goto tr851;
 	} else
-		goto tr843;
-	goto tr842;
-tr843:
+		goto tr851;
+	goto tr850;
+tr851:
 #line 114 "vcf_v41.ragel"
 	{
 //        status->current_record = vcf_record_new();
@@ -9913,9 +10089,9 @@ st519:
 	if ( ++p == pe )
 		goto _test_eof519;
 case 519:
-#line 9917 "vcf_validator_detail.hpp"
+#line 10093 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr588;
+		case 9: goto tr589;
 		case 59: goto st519;
 		case 61: goto st519;
 	}
@@ -9924,8 +10100,8 @@ case 519:
 			goto st519;
 	} else if ( (*p) >= 33 )
 		goto st519;
-	goto tr587;
-tr588:
+	goto tr588;
+tr589:
 #line 143 "vcf_v41.ragel"
 	{
 //        set_vcf_record_chromosome(ts, p-ts, status->current_record);
@@ -9939,11 +10115,11 @@ st520:
 	if ( ++p == pe )
 		goto _test_eof520;
 case 520:
-#line 9943 "vcf_validator_detail.hpp"
+#line 10119 "vcf_validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
-		goto tr591;
-	goto tr590;
-tr591:
+		goto tr592;
+	goto tr591;
+tr592:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -9953,13 +10129,13 @@ st521:
 	if ( ++p == pe )
 		goto _test_eof521;
 case 521:
-#line 9957 "vcf_validator_detail.hpp"
+#line 10133 "vcf_validator_detail.hpp"
 	if ( (*p) == 9 )
-		goto tr592;
+		goto tr593;
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st521;
-	goto tr590;
-tr592:
+	goto tr591;
+tr593:
 #line 147 "vcf_v41.ragel"
 	{
 //        char *field = strndup(ts, p-ts);
@@ -9975,14 +10151,14 @@ st522:
 	if ( ++p == pe )
 		goto _test_eof522;
 case 522:
-#line 9979 "vcf_validator_detail.hpp"
+#line 10155 "vcf_validator_detail.hpp"
 	if ( (*p) > 58 ) {
 		if ( 60 <= (*p) && (*p) <= 126 )
-			goto tr595;
+			goto tr596;
 	} else if ( (*p) >= 33 )
-		goto tr595;
-	goto tr594;
-tr595:
+		goto tr596;
+	goto tr595;
+tr596:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -9992,15 +10168,15 @@ st523:
 	if ( ++p == pe )
 		goto _test_eof523;
 case 523:
-#line 9996 "vcf_validator_detail.hpp"
+#line 10172 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr596;
+		case 9: goto tr597;
 		case 59: goto st712;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st523;
-	goto tr594;
-tr596:
+	goto tr595;
+tr597:
 #line 153 "vcf_v41.ragel"
 	{
 //        set_vcf_record_id(ts, p-ts, status->current_record);
@@ -10014,21 +10190,21 @@ st524:
 	if ( ++p == pe )
 		goto _test_eof524;
 case 524:
-#line 10018 "vcf_validator_detail.hpp"
+#line 10194 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 65: goto tr600;
-		case 67: goto tr600;
-		case 71: goto tr600;
-		case 78: goto tr600;
-		case 84: goto tr600;
-		case 97: goto tr600;
-		case 99: goto tr600;
-		case 103: goto tr600;
-		case 110: goto tr600;
-		case 116: goto tr600;
+		case 65: goto tr601;
+		case 67: goto tr601;
+		case 71: goto tr601;
+		case 78: goto tr601;
+		case 84: goto tr601;
+		case 97: goto tr601;
+		case 99: goto tr601;
+		case 103: goto tr601;
+		case 110: goto tr601;
+		case 116: goto tr601;
 	}
-	goto tr599;
-tr600:
+	goto tr600;
+tr601:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -10038,9 +10214,9 @@ st525:
 	if ( ++p == pe )
 		goto _test_eof525;
 case 525:
-#line 10042 "vcf_validator_detail.hpp"
+#line 10218 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr601;
+		case 9: goto tr602;
 		case 65: goto st525;
 		case 67: goto st525;
 		case 71: goto st525;
@@ -10052,8 +10228,8 @@ case 525:
 		case 110: goto st525;
 		case 116: goto st525;
 	}
-	goto tr599;
-tr601:
+	goto tr600;
+tr602:
 #line 157 "vcf_v41.ragel"
 	{
  //       set_vcf_record_reference(ts, p-ts, status->current_record);
@@ -10067,27 +10243,27 @@ st526:
 	if ( ++p == pe )
 		goto _test_eof526;
 case 526:
-#line 10071 "vcf_validator_detail.hpp"
+#line 10247 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 42: goto tr604;
-		case 46: goto tr605;
-		case 48: goto tr606;
-		case 60: goto tr607;
-		case 65: goto tr608;
-		case 67: goto tr608;
-		case 71: goto tr608;
-		case 78: goto tr608;
-		case 84: goto tr608;
-		case 91: goto tr609;
-		case 93: goto tr610;
-		case 97: goto tr608;
-		case 99: goto tr608;
-		case 103: goto tr608;
-		case 110: goto tr608;
-		case 116: goto tr608;
+		case 42: goto tr605;
+		case 46: goto tr606;
+		case 48: goto tr607;
+		case 60: goto tr608;
+		case 65: goto tr609;
+		case 67: goto tr609;
+		case 71: goto tr609;
+		case 78: goto tr609;
+		case 84: goto tr609;
+		case 91: goto tr610;
+		case 93: goto tr611;
+		case 97: goto tr609;
+		case 99: goto tr609;
+		case 103: goto tr609;
+		case 110: goto tr609;
+		case 116: goto tr609;
 	}
-	goto tr603;
-tr604:
+	goto tr604;
+tr605:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -10097,11 +10273,11 @@ st527:
 	if ( ++p == pe )
 		goto _test_eof527;
 case 527:
-#line 10101 "vcf_validator_detail.hpp"
+#line 10277 "vcf_validator_detail.hpp"
 	if ( (*p) == 9 )
-		goto tr611;
-	goto tr603;
-tr611:
+		goto tr612;
+	goto tr604;
+tr612:
 #line 173 "vcf_v41.ragel"
 	{
  //       set_vcf_record_type(VARIANT_INDEL, status->current_record);
@@ -10119,7 +10295,7 @@ tr611:
         ++n_columns;
     }
 	goto st528;
-tr777:
+tr785:
 #line 169 "vcf_v41.ragel"
 	{
  //       set_vcf_record_type(VARIANT_SNV, status->current_record);
@@ -10137,7 +10313,7 @@ tr777:
         ++n_columns;
     }
 	goto st528;
-tr779:
+tr787:
 #line 177 "vcf_v41.ragel"
 	{
  //       set_vcf_record_type(VARIANT_SV, status->current_record);
@@ -10155,7 +10331,7 @@ tr779:
         ++n_columns;
     }
 	goto st528;
-tr786:
+tr794:
 #line 161 "vcf_v41.ragel"
 	{
  /*       if (!strncmp("0", ts, 1)) {
@@ -10173,13 +10349,13 @@ st528:
 	if ( ++p == pe )
 		goto _test_eof528;
 case 528:
-#line 10177 "vcf_validator_detail.hpp"
+#line 10353 "vcf_validator_detail.hpp"
 	if ( (*p) == 46 )
-		goto tr613;
-	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr614;
-	goto tr612;
-tr613:
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto tr615;
+	goto tr613;
+tr614:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -10189,11 +10365,11 @@ st529:
 	if ( ++p == pe )
 		goto _test_eof529;
 case 529:
-#line 10193 "vcf_validator_detail.hpp"
+#line 10369 "vcf_validator_detail.hpp"
 	if ( (*p) == 9 )
-		goto tr615;
-	goto tr612;
-tr615:
+		goto tr616;
+	goto tr613;
+tr616:
 #line 181 "vcf_v41.ragel"
 	{
 /*        float quality = -1.0f;
@@ -10213,33 +10389,33 @@ st530:
 	if ( ++p == pe )
 		goto _test_eof530;
 case 530:
-#line 10217 "vcf_validator_detail.hpp"
+#line 10393 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 46: goto tr618;
-		case 58: goto tr617;
+		case 46: goto tr619;
+		case 58: goto tr618;
 	}
 	if ( (*p) < 65 ) {
 		if ( (*p) < 48 ) {
 			if ( 33 <= (*p) && (*p) <= 47 )
-				goto tr617;
+				goto tr618;
 		} else if ( (*p) > 57 ) {
 			if ( 60 <= (*p) && (*p) <= 64 )
-				goto tr617;
+				goto tr618;
 		} else
-			goto tr619;
+			goto tr620;
 	} else if ( (*p) > 90 ) {
 		if ( (*p) < 97 ) {
 			if ( 91 <= (*p) && (*p) <= 96 )
-				goto tr617;
+				goto tr618;
 		} else if ( (*p) > 122 ) {
 			if ( 123 <= (*p) && (*p) <= 126 )
-				goto tr617;
+				goto tr618;
 		} else
-			goto tr619;
+			goto tr620;
 	} else
-		goto tr619;
-	goto tr616;
-tr617:
+		goto tr620;
+	goto tr617;
+tr618:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -10249,7 +10425,7 @@ st531:
 	if ( ++p == pe )
 		goto _test_eof531;
 case 531:
-#line 10253 "vcf_validator_detail.hpp"
+#line 10429 "vcf_validator_detail.hpp"
 	if ( (*p) == 58 )
 		goto st531;
 	if ( (*p) < 65 ) {
@@ -10272,8 +10448,8 @@ case 531:
 			goto st532;
 	} else
 		goto st532;
-	goto tr616;
-tr619:
+	goto tr617;
+tr620:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -10283,15 +10459,15 @@ st532:
 	if ( ++p == pe )
 		goto _test_eof532;
 case 532:
-#line 10287 "vcf_validator_detail.hpp"
+#line 10463 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr622;
+		case 9: goto tr623;
 		case 59: goto st531;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st532;
-	goto tr616;
-tr622:
+	goto tr617;
+tr623:
 #line 191 "vcf_v41.ragel"
 	{
  //       set_vcf_record_filter(ts, p-ts, status->current_record);
@@ -10305,45 +10481,45 @@ st533:
 	if ( ++p == pe )
 		goto _test_eof533;
 case 533:
-#line 10309 "vcf_validator_detail.hpp"
+#line 10485 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 46: goto tr625;
-		case 49: goto tr627;
-		case 58: goto tr624;
-		case 60: goto tr624;
-		case 65: goto tr628;
-		case 66: goto tr629;
-		case 67: goto tr630;
-		case 68: goto tr631;
-		case 69: goto tr632;
-		case 72: goto tr633;
-		case 77: goto tr634;
-		case 78: goto tr635;
-		case 83: goto tr636;
-		case 86: goto tr637;
+		case 46: goto tr626;
+		case 49: goto tr628;
+		case 58: goto tr625;
+		case 60: goto tr625;
+		case 65: goto tr629;
+		case 66: goto tr630;
+		case 67: goto tr631;
+		case 68: goto tr632;
+		case 69: goto tr633;
+		case 72: goto tr634;
+		case 77: goto tr635;
+		case 78: goto tr636;
+		case 83: goto tr637;
+		case 86: goto tr638;
 	}
 	if ( (*p) < 70 ) {
 		if ( (*p) < 48 ) {
 			if ( 33 <= (*p) && (*p) <= 47 )
-				goto tr624;
+				goto tr625;
 		} else if ( (*p) > 57 ) {
 			if ( 62 <= (*p) && (*p) <= 64 )
-				goto tr624;
+				goto tr625;
 		} else
-			goto tr626;
+			goto tr627;
 	} else if ( (*p) > 90 ) {
 		if ( (*p) < 97 ) {
 			if ( 91 <= (*p) && (*p) <= 96 )
-				goto tr624;
+				goto tr625;
 		} else if ( (*p) > 122 ) {
 			if ( 123 <= (*p) && (*p) <= 126 )
-				goto tr624;
+				goto tr625;
 		} else
-			goto tr626;
+			goto tr627;
 	} else
-		goto tr626;
-	goto tr623;
-tr624:
+		goto tr627;
+	goto tr624;
+tr625:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -10353,7 +10529,7 @@ st534:
 	if ( ++p == pe )
 		goto _test_eof534;
 case 534:
-#line 10357 "vcf_validator_detail.hpp"
+#line 10533 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 58: goto st534;
 		case 60: goto st534;
@@ -10378,8 +10554,8 @@ case 534:
 			goto st535;
 	} else
 		goto st535;
-	goto tr623;
-tr626:
+	goto tr624;
+tr627:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -10389,17 +10565,17 @@ st535:
 	if ( ++p == pe )
 		goto _test_eof535;
 case 535:
-#line 10393 "vcf_validator_detail.hpp"
+#line 10569 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
-tr640:
+	goto tr624;
+tr641:
 #line 195 "vcf_v41.ragel"
 	{
 //        set_vcf_record_info(ts, p-ts, status->current_record);
@@ -10413,11 +10589,11 @@ st536:
 	if ( ++p == pe )
 		goto _test_eof536;
 case 536:
-#line 10417 "vcf_validator_detail.hpp"
+#line 10593 "vcf_validator_detail.hpp"
 	if ( (*p) == 71 )
-		goto tr645;
-	goto tr644;
-tr645:
+		goto tr646;
+	goto tr645;
+tr646:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -10427,20 +10603,20 @@ st537:
 	if ( ++p == pe )
 		goto _test_eof537;
 case 537:
-#line 10431 "vcf_validator_detail.hpp"
+#line 10607 "vcf_validator_detail.hpp"
 	if ( (*p) == 84 )
 		goto st538;
-	goto tr644;
+	goto tr645;
 st538:
 	if ( ++p == pe )
 		goto _test_eof538;
 case 538:
 	switch( (*p) ) {
-		case 9: goto tr647;
+		case 9: goto tr648;
 		case 58: goto st547;
 	}
-	goto tr644;
-tr647:
+	goto tr645;
+tr648:
 #line 199 "vcf_v41.ragel"
 	{
  //       set_vcf_record_format(ts, p-ts, status->current_record);
@@ -10450,7 +10626,7 @@ tr647:
         ++n_columns;
     }
 	goto st539;
-tr651:
+tr652:
 #line 203 "vcf_v41.ragel"
 	{
 //        add_vcf_record_sample(ts, p-ts, status->current_record);
@@ -10464,13 +10640,13 @@ st539:
 	if ( ++p == pe )
 		goto _test_eof539;
 case 539:
-#line 10468 "vcf_validator_detail.hpp"
+#line 10644 "vcf_validator_detail.hpp"
 	if ( (*p) == 46 )
-		goto tr650;
+		goto tr651;
 	if ( 48 <= (*p) && (*p) <= 57 )
-		goto tr650;
-	goto tr649;
-tr650:
+		goto tr651;
+	goto tr650;
+tr651:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -10480,16 +10656,16 @@ st540:
 	if ( ++p == pe )
 		goto _test_eof540;
 case 540:
-#line 10484 "vcf_validator_detail.hpp"
+#line 10660 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr651;
-		case 10: goto tr652;
+		case 9: goto tr652;
+		case 10: goto tr653;
 		case 47: goto st544;
 		case 58: goto st545;
 		case 124: goto st544;
 	}
-	goto tr649;
-tr641:
+	goto tr650;
+tr642:
 #line 195 "vcf_v41.ragel"
 	{
 //        set_vcf_record_info(ts, p-ts, status->current_record);
@@ -10524,7 +10700,7 @@ tr641:
         n_columns = 1;
     }
 	goto st716;
-tr652:
+tr653:
 #line 203 "vcf_v41.ragel"
 	{
 //        add_vcf_record_sample(ts, p-ts, status->current_record);
@@ -10563,19 +10739,19 @@ st716:
 	if ( ++p == pe )
 		goto _test_eof716;
 case 716:
-#line 10567 "vcf_validator_detail.hpp"
+#line 10743 "vcf_validator_detail.hpp"
 	if ( (*p) == 60 )
-		goto tr844;
+		goto tr852;
 	if ( (*p) < 59 ) {
 		if ( 33 <= (*p) && (*p) <= 57 )
-			goto tr843;
+			goto tr851;
 	} else if ( (*p) > 61 ) {
 		if ( 63 <= (*p) && (*p) <= 126 )
-			goto tr843;
+			goto tr851;
 	} else
-		goto tr843;
-	goto tr587;
-tr844:
+		goto tr851;
+	goto tr588;
+tr852:
 #line 114 "vcf_v41.ragel"
 	{
 //        status->current_record = vcf_record_new();
@@ -10590,7 +10766,7 @@ st541:
 	if ( ++p == pe )
 		goto _test_eof541;
 case 541:
-#line 10594 "vcf_validator_detail.hpp"
+#line 10770 "vcf_validator_detail.hpp"
 	if ( (*p) < 59 ) {
 		if ( 33 <= (*p) && (*p) <= 57 )
 			goto st542;
@@ -10599,7 +10775,7 @@ case 541:
 			goto st542;
 	} else
 		goto st542;
-	goto tr587;
+	goto tr588;
 st542:
 	if ( ++p == pe )
 		goto _test_eof542;
@@ -10611,14 +10787,14 @@ case 542:
 			goto st542;
 	} else if ( (*p) >= 33 )
 		goto st542;
-	goto tr587;
+	goto tr588;
 st543:
 	if ( ++p == pe )
 		goto _test_eof543;
 case 543:
 	if ( (*p) == 9 )
-		goto tr588;
-	goto tr587;
+		goto tr589;
+	goto tr588;
 st544:
 	if ( ++p == pe )
 		goto _test_eof544;
@@ -10627,25 +10803,25 @@ case 544:
 		goto st540;
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st540;
-	goto tr649;
+	goto tr650;
 st545:
 	if ( ++p == pe )
 		goto _test_eof545;
 case 545:
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st546;
-	goto tr658;
+	goto tr659;
 st546:
 	if ( ++p == pe )
 		goto _test_eof546;
 case 546:
 	switch( (*p) ) {
-		case 9: goto tr651;
-		case 10: goto tr652;
+		case 9: goto tr652;
+		case 10: goto tr653;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st546;
-	goto tr658;
+	goto tr659;
 st547:
 	if ( ++p == pe )
 		goto _test_eof547;
@@ -10658,13 +10834,13 @@ case 547:
 			goto st548;
 	} else
 		goto st548;
-	goto tr660;
+	goto tr661;
 st548:
 	if ( ++p == pe )
 		goto _test_eof548;
 case 548:
 	switch( (*p) ) {
-		case 9: goto tr647;
+		case 9: goto tr648;
 		case 58: goto st547;
 	}
 	if ( (*p) < 65 ) {
@@ -10675,7 +10851,7 @@ case 548:
 			goto st548;
 	} else
 		goto st548;
-	goto tr660;
+	goto tr661;
 st549:
 	if ( ++p == pe )
 		goto _test_eof549;
@@ -10715,8 +10891,8 @@ case 549:
 			goto st535;
 	} else
 		goto st535;
-	goto tr623;
-tr627:
+	goto tr624;
+tr628:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -10726,59 +10902,59 @@ st550:
 	if ( ++p == pe )
 		goto _test_eof550;
 case 550:
-#line 10730 "vcf_validator_detail.hpp"
+#line 10906 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 48: goto st551;
 		case 59: goto st549;
 		case 61: goto st554;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st551:
 	if ( ++p == pe )
 		goto _test_eof551;
 case 551:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 48: goto st552;
 		case 59: goto st549;
 		case 61: goto st554;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st552:
 	if ( ++p == pe )
 		goto _test_eof552;
 case 552:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 48: goto st553;
 		case 59: goto st549;
 		case 61: goto st554;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st553:
 	if ( ++p == pe )
 		goto _test_eof553;
 case 553:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 71: goto st556;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st554:
 	if ( ++p == pe )
 		goto _test_eof554;
@@ -10788,50 +10964,50 @@ case 554:
 			goto st555;
 	} else if ( (*p) >= 33 )
 		goto st555;
-	goto tr623;
+	goto tr678;
 st555:
 	if ( ++p == pe )
 		goto _test_eof555;
 case 555:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st555;
-	goto tr623;
+	goto tr678;
 st556:
 	if ( ++p == pe )
 		goto _test_eof556;
 case 556:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st557;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr678;
+	goto tr680;
 st557:
 	if ( ++p == pe )
 		goto _test_eof557;
 case 557:
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto st558;
-	goto tr678;
+	goto tr682;
 st558:
 	if ( ++p == pe )
 		goto _test_eof558;
 case 558:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
-	goto tr678;
-tr628:
+	goto tr682;
+tr629:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -10841,10 +11017,10 @@ st559:
 	if ( ++p == pe )
 		goto _test_eof559;
 case 559:
-#line 10845 "vcf_validator_detail.hpp"
+#line 11021 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 65: goto st560;
@@ -10854,7 +11030,7 @@ case 559:
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st560:
 	if ( ++p == pe )
 		goto _test_eof560;
@@ -10866,7 +11042,7 @@ case 560:
 			goto st535;
 	} else if ( (*p) >= 33 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st561:
 	if ( ++p == pe )
 		goto _test_eof561;
@@ -10884,24 +11060,24 @@ case 561:
 		case 110: goto st563;
 		case 116: goto st563;
 	}
-	goto tr686;
+	goto tr689;
 st562:
 	if ( ++p == pe )
 		goto _test_eof562;
 case 562:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
-	goto tr686;
+	goto tr689;
 st563:
 	if ( ++p == pe )
 		goto _test_eof563;
 case 563:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 65: goto st563;
 		case 67: goto st563;
@@ -10914,7 +11090,7 @@ case 563:
 		case 110: goto st563;
 		case 116: goto st563;
 	}
-	goto tr686;
+	goto tr689;
 st564:
 	if ( ++p == pe )
 		goto _test_eof564;
@@ -10926,27 +11102,27 @@ case 564:
 			goto st535;
 	} else if ( (*p) >= 33 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st565:
 	if ( ++p == pe )
 		goto _test_eof565;
 case 565:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st566;
-	goto tr690;
+	goto tr693;
 st566:
 	if ( ++p == pe )
 		goto _test_eof566;
 case 566:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 44: goto st565;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st566;
-	goto tr690;
+	goto tr693;
 st567:
 	if ( ++p == pe )
 		goto _test_eof567;
@@ -10958,48 +11134,48 @@ case 567:
 			goto st535;
 	} else if ( (*p) >= 33 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st568:
 	if ( ++p == pe )
 		goto _test_eof568;
 case 568:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st569;
-	goto tr693;
+	goto tr696;
 st569:
 	if ( ++p == pe )
 		goto _test_eof569;
 case 569:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 44: goto st568;
 		case 46: goto st570;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st569;
-	goto tr693;
+	goto tr696;
 st570:
 	if ( ++p == pe )
 		goto _test_eof570;
 case 570:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st571;
-	goto tr693;
+	goto tr696;
 st571:
 	if ( ++p == pe )
 		goto _test_eof571;
 case 571:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 44: goto st568;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st571;
-	goto tr693;
+	goto tr696;
 st572:
 	if ( ++p == pe )
 		goto _test_eof572;
@@ -11011,27 +11187,27 @@ case 572:
 			goto st535;
 	} else if ( (*p) >= 33 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st573:
 	if ( ++p == pe )
 		goto _test_eof573;
 case 573:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st574;
-	goto tr698;
+	goto tr701;
 st574:
 	if ( ++p == pe )
 		goto _test_eof574;
 case 574:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st574;
-	goto tr698;
-tr629:
+	goto tr701;
+tr630:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -11041,17 +11217,17 @@ st575:
 	if ( ++p == pe )
 		goto _test_eof575;
 case 575:
-#line 11045 "vcf_validator_detail.hpp"
+#line 11221 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 81: goto st576;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st576:
 	if ( ++p == pe )
 		goto _test_eof576;
@@ -11063,47 +11239,47 @@ case 576:
 			goto st535;
 	} else if ( (*p) >= 33 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st577:
 	if ( ++p == pe )
 		goto _test_eof577;
 case 577:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st578;
-	goto tr702;
+	goto tr705;
 st578:
 	if ( ++p == pe )
 		goto _test_eof578;
 case 578:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 46: goto st579;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st578;
-	goto tr702;
+	goto tr705;
 st579:
 	if ( ++p == pe )
 		goto _test_eof579;
 case 579:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st580;
-	goto tr702;
+	goto tr705;
 st580:
 	if ( ++p == pe )
 		goto _test_eof580;
 case 580:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st580;
-	goto tr702;
-tr630:
+	goto tr705;
+tr631:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -11113,59 +11289,59 @@ st581:
 	if ( ++p == pe )
 		goto _test_eof581;
 case 581:
-#line 11117 "vcf_validator_detail.hpp"
+#line 11293 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 73: goto st582;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st582:
 	if ( ++p == pe )
 		goto _test_eof582;
 case 582:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 71: goto st583;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st583:
 	if ( ++p == pe )
 		goto _test_eof583;
 case 583:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 65: goto st584;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st584:
 	if ( ++p == pe )
 		goto _test_eof584;
 case 584:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 82: goto st585;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st585:
 	if ( ++p == pe )
 		goto _test_eof585;
@@ -11177,7 +11353,7 @@ case 585:
 			goto st535;
 	} else if ( (*p) >= 33 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st586:
 	if ( ++p == pe )
 		goto _test_eof586;
@@ -11190,14 +11366,14 @@ case 586:
 			goto st587;
 	} else
 		goto st587;
-	goto tr711;
+	goto tr714;
 st587:
 	if ( ++p == pe )
 		goto _test_eof587;
 case 587:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
 	if ( (*p) < 65 ) {
@@ -11208,8 +11384,8 @@ case 587:
 			goto st587;
 	} else
 		goto st587;
-	goto tr711;
-tr631:
+	goto tr714;
+tr632:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -11219,10 +11395,10 @@ st588:
 	if ( ++p == pe )
 		goto _test_eof588;
 case 588:
-#line 11223 "vcf_validator_detail.hpp"
+#line 11399 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 66: goto st589;
@@ -11230,37 +11406,37 @@ case 588:
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st589:
 	if ( ++p == pe )
 		goto _test_eof589;
 case 589:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st590;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr715;
+	goto tr718;
 st590:
 	if ( ++p == pe )
 		goto _test_eof590;
 case 590:
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto st591;
-	goto tr715;
+	goto tr720;
 st591:
 	if ( ++p == pe )
 		goto _test_eof591;
 case 591:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
-	goto tr715;
+	goto tr720;
 st592:
 	if ( ++p == pe )
 		goto _test_eof592;
@@ -11272,27 +11448,27 @@ case 592:
 			goto st535;
 	} else if ( (*p) >= 33 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st593:
 	if ( ++p == pe )
 		goto _test_eof593;
 case 593:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st594;
-	goto tr719;
+	goto tr723;
 st594:
 	if ( ++p == pe )
 		goto _test_eof594;
 case 594:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st594;
-	goto tr719;
-tr632:
+	goto tr723;
+tr633:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -11302,31 +11478,31 @@ st595:
 	if ( ++p == pe )
 		goto _test_eof595;
 case 595:
-#line 11306 "vcf_validator_detail.hpp"
+#line 11482 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 78: goto st596;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st596:
 	if ( ++p == pe )
 		goto _test_eof596;
 case 596:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 68: goto st597;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st597:
 	if ( ++p == pe )
 		goto _test_eof597;
@@ -11338,27 +11514,27 @@ case 597:
 			goto st535;
 	} else if ( (*p) >= 33 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st598:
 	if ( ++p == pe )
 		goto _test_eof598;
 case 598:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st599;
-	goto tr724;
+	goto tr728;
 st599:
 	if ( ++p == pe )
 		goto _test_eof599;
 case 599:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st599;
-	goto tr724;
-tr633:
+	goto tr728;
+tr634:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -11368,10 +11544,10 @@ st600:
 	if ( ++p == pe )
 		goto _test_eof600;
 case 600:
-#line 11372 "vcf_validator_detail.hpp"
+#line 11548 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 50: goto st601;
 		case 51: goto st604;
 		case 59: goto st549;
@@ -11379,68 +11555,68 @@ case 600:
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st601:
 	if ( ++p == pe )
 		goto _test_eof601;
 case 601:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st602;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr728;
+	goto tr732;
 st602:
 	if ( ++p == pe )
 		goto _test_eof602;
 case 602:
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto st603;
-	goto tr728;
+	goto tr734;
 st603:
 	if ( ++p == pe )
 		goto _test_eof603;
 case 603:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
-	goto tr728;
+	goto tr734;
 st604:
 	if ( ++p == pe )
 		goto _test_eof604;
 case 604:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st605;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr731;
+	goto tr736;
 st605:
 	if ( ++p == pe )
 		goto _test_eof605;
 case 605:
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto st606;
-	goto tr731;
+	goto tr738;
 st606:
 	if ( ++p == pe )
 		goto _test_eof606;
 case 606:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
-	goto tr731;
-tr634:
+	goto tr738;
+tr635:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -11450,17 +11626,17 @@ st607:
 	if ( ++p == pe )
 		goto _test_eof607;
 case 607:
-#line 11454 "vcf_validator_detail.hpp"
+#line 11630 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 81: goto st608;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st608:
 	if ( ++p == pe )
 		goto _test_eof608;
@@ -11474,7 +11650,7 @@ case 608:
 			goto st535;
 	} else if ( (*p) >= 33 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st609:
 	if ( ++p == pe )
 		goto _test_eof609;
@@ -11486,66 +11662,66 @@ case 609:
 			goto st535;
 	} else if ( (*p) >= 33 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st610:
 	if ( ++p == pe )
 		goto _test_eof610;
 case 610:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st611;
-	goto tr738;
+	goto tr744;
 st611:
 	if ( ++p == pe )
 		goto _test_eof611;
 case 611:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st611;
-	goto tr738;
+	goto tr744;
 st612:
 	if ( ++p == pe )
 		goto _test_eof612;
 case 612:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st613;
-	goto tr740;
+	goto tr746;
 st613:
 	if ( ++p == pe )
 		goto _test_eof613;
 case 613:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 46: goto st614;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st613;
-	goto tr740;
+	goto tr746;
 st614:
 	if ( ++p == pe )
 		goto _test_eof614;
 case 614:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st615;
-	goto tr740;
+	goto tr746;
 st615:
 	if ( ++p == pe )
 		goto _test_eof615;
 case 615:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st615;
-	goto tr740;
-tr635:
+	goto tr746;
+tr636:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -11555,17 +11731,17 @@ st616:
 	if ( ++p == pe )
 		goto _test_eof616;
 case 616:
-#line 11559 "vcf_validator_detail.hpp"
+#line 11735 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 83: goto st617;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st617:
 	if ( ++p == pe )
 		goto _test_eof617;
@@ -11577,27 +11753,27 @@ case 617:
 			goto st535;
 	} else if ( (*p) >= 33 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st618:
 	if ( ++p == pe )
 		goto _test_eof618;
 case 618:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st619;
-	goto tr746;
+	goto tr752;
 st619:
 	if ( ++p == pe )
 		goto _test_eof619;
 case 619:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st619;
-	goto tr746;
-tr636:
+	goto tr752;
+tr637:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -11607,10 +11783,10 @@ st620:
 	if ( ++p == pe )
 		goto _test_eof620;
 case 620:
-#line 11611 "vcf_validator_detail.hpp"
+#line 11787 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 66: goto st621;
@@ -11618,7 +11794,7 @@ case 620:
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st621:
 	if ( ++p == pe )
 		goto _test_eof621;
@@ -11630,147 +11806,147 @@ case 621:
 			goto st535;
 	} else if ( (*p) >= 33 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st622:
 	if ( ++p == pe )
 		goto _test_eof622;
 case 622:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st623;
-	goto tr751;
+	goto tr757;
 st623:
 	if ( ++p == pe )
 		goto _test_eof623;
 case 623:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 46: goto st624;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st623;
-	goto tr751;
+	goto tr757;
 st624:
 	if ( ++p == pe )
 		goto _test_eof624;
 case 624:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st625;
-	goto tr751;
+	goto tr757;
 st625:
 	if ( ++p == pe )
 		goto _test_eof625;
 case 625:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st625;
-	goto tr751;
+	goto tr757;
 st626:
 	if ( ++p == pe )
 		goto _test_eof626;
 case 626:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 77: goto st627;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st627:
 	if ( ++p == pe )
 		goto _test_eof627;
 case 627:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 65: goto st628;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st628:
 	if ( ++p == pe )
 		goto _test_eof628;
 case 628:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 84: goto st629;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st629:
 	if ( ++p == pe )
 		goto _test_eof629;
 case 629:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 73: goto st630;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st630:
 	if ( ++p == pe )
 		goto _test_eof630;
 case 630:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 67: goto st631;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st631:
 	if ( ++p == pe )
 		goto _test_eof631;
 case 631:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st632;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr760;
+	goto tr766;
 st632:
 	if ( ++p == pe )
 		goto _test_eof632;
 case 632:
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto st633;
-	goto tr760;
+	goto tr768;
 st633:
 	if ( ++p == pe )
 		goto _test_eof633;
 case 633:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
-	goto tr760;
-tr637:
+	goto tr768;
+tr638:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -11780,146 +11956,146 @@ st634:
 	if ( ++p == pe )
 		goto _test_eof634;
 case 634:
-#line 11784 "vcf_validator_detail.hpp"
+#line 11960 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 65: goto st635;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st635:
 	if ( ++p == pe )
 		goto _test_eof635;
 case 635:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 76: goto st636;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st636:
 	if ( ++p == pe )
 		goto _test_eof636;
 case 636:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 73: goto st637;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st637:
 	if ( ++p == pe )
 		goto _test_eof637;
 case 637:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 68: goto st638;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st638:
 	if ( ++p == pe )
 		goto _test_eof638;
 case 638:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 65: goto st639;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st639:
 	if ( ++p == pe )
 		goto _test_eof639;
 case 639:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 84: goto st640;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st640:
 	if ( ++p == pe )
 		goto _test_eof640;
 case 640:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 69: goto st641;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st641:
 	if ( ++p == pe )
 		goto _test_eof641;
 case 641:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st554;
 		case 68: goto st642;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr623;
+	goto tr624;
 st642:
 	if ( ++p == pe )
 		goto _test_eof642;
 case 642:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 		case 61: goto st643;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto st535;
-	goto tr771;
+	goto tr778;
 st643:
 	if ( ++p == pe )
 		goto _test_eof643;
 case 643:
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto st644;
-	goto tr771;
+	goto tr780;
 st644:
 	if ( ++p == pe )
 		goto _test_eof644;
 case 644:
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 59: goto st549;
 	}
-	goto tr771;
-tr625:
+	goto tr780;
+tr626:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -11929,10 +12105,10 @@ st645:
 	if ( ++p == pe )
 		goto _test_eof645;
 case 645:
-#line 11933 "vcf_validator_detail.hpp"
+#line 12109 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr640;
-		case 10: goto tr641;
+		case 9: goto tr641;
+		case 10: goto tr642;
 		case 58: goto st534;
 		case 60: goto st534;
 	}
@@ -11956,8 +12132,8 @@ case 645:
 			goto st535;
 	} else
 		goto st535;
-	goto tr623;
-tr618:
+	goto tr624;
+tr619:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -11967,9 +12143,9 @@ st646:
 	if ( ++p == pe )
 		goto _test_eof646;
 case 646:
-#line 11971 "vcf_validator_detail.hpp"
+#line 12147 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr622;
+		case 9: goto tr623;
 		case 58: goto st531;
 	}
 	if ( (*p) < 65 ) {
@@ -11992,8 +12168,8 @@ case 646:
 			goto st532;
 	} else
 		goto st532;
-	goto tr616;
-tr614:
+	goto tr617;
+tr615:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -12003,31 +12179,31 @@ st647:
 	if ( ++p == pe )
 		goto _test_eof647;
 case 647:
-#line 12007 "vcf_validator_detail.hpp"
+#line 12183 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr615;
+		case 9: goto tr616;
 		case 46: goto st648;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st647;
-	goto tr612;
+	goto tr613;
 st648:
 	if ( ++p == pe )
 		goto _test_eof648;
 case 648:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st649;
-	goto tr612;
+	goto tr613;
 st649:
 	if ( ++p == pe )
 		goto _test_eof649;
 case 649:
 	if ( (*p) == 9 )
-		goto tr615;
+		goto tr616;
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st649;
-	goto tr612;
-tr605:
+	goto tr613;
+tr606:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -12037,9 +12213,9 @@ st650:
 	if ( ++p == pe )
 		goto _test_eof650;
 case 650:
-#line 12041 "vcf_validator_detail.hpp"
+#line 12217 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr777;
+		case 9: goto tr785;
 		case 65: goto st651;
 		case 67: goto st651;
 		case 71: goto st651;
@@ -12051,13 +12227,13 @@ case 650:
 		case 110: goto st651;
 		case 116: goto st651;
 	}
-	goto tr603;
+	goto tr604;
 st651:
 	if ( ++p == pe )
 		goto _test_eof651;
 case 651:
 	switch( (*p) ) {
-		case 9: goto tr779;
+		case 9: goto tr787;
 		case 65: goto st651;
 		case 67: goto st651;
 		case 71: goto st651;
@@ -12069,8 +12245,8 @@ case 651:
 		case 110: goto st651;
 		case 116: goto st651;
 	}
-	goto tr603;
-tr606:
+	goto tr604;
+tr607:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -12080,11 +12256,11 @@ st652:
 	if ( ++p == pe )
 		goto _test_eof652;
 case 652:
-#line 12084 "vcf_validator_detail.hpp"
+#line 12260 "vcf_validator_detail.hpp"
 	if ( (*p) == 9 )
-		goto tr777;
-	goto tr603;
-tr607:
+		goto tr785;
+	goto tr604;
+tr608:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -12094,7 +12270,7 @@ st653:
 	if ( ++p == pe )
 		goto _test_eof653;
 case 653:
-#line 12098 "vcf_validator_detail.hpp"
+#line 12274 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
 		case 67: goto st657;
 		case 68: goto st660;
@@ -12112,7 +12288,7 @@ case 653:
 			goto st655;
 	} else
 		goto st655;
-	goto tr603;
+	goto tr604;
 st654:
 	if ( ++p == pe )
 		goto _test_eof654;
@@ -12130,7 +12306,7 @@ case 654:
 			goto st655;
 	} else
 		goto st655;
-	goto tr603;
+	goto tr604;
 st655:
 	if ( ++p == pe )
 		goto _test_eof655;
@@ -12150,14 +12326,14 @@ case 655:
 			goto st655;
 	} else
 		goto st655;
-	goto tr603;
+	goto tr604;
 st656:
 	if ( ++p == pe )
 		goto _test_eof656;
 case 656:
 	if ( (*p) == 9 )
-		goto tr786;
-	goto tr603;
+		goto tr794;
+	goto tr604;
 st657:
 	if ( ++p == pe )
 		goto _test_eof657;
@@ -12178,7 +12354,7 @@ case 657:
 			goto st655;
 	} else
 		goto st655;
-	goto tr603;
+	goto tr604;
 st658:
 	if ( ++p == pe )
 		goto _test_eof658;
@@ -12199,7 +12375,7 @@ case 658:
 			goto st655;
 	} else
 		goto st655;
-	goto tr603;
+	goto tr604;
 st659:
 	if ( ++p == pe )
 		goto _test_eof659;
@@ -12219,7 +12395,7 @@ case 659:
 			goto st655;
 	} else
 		goto st655;
-	goto tr603;
+	goto tr604;
 st660:
 	if ( ++p == pe )
 		goto _test_eof660;
@@ -12241,7 +12417,7 @@ case 660:
 			goto st655;
 	} else
 		goto st655;
-	goto tr603;
+	goto tr604;
 st661:
 	if ( ++p == pe )
 		goto _test_eof661;
@@ -12262,7 +12438,7 @@ case 661:
 			goto st655;
 	} else
 		goto st655;
-	goto tr603;
+	goto tr604;
 st662:
 	if ( ++p == pe )
 		goto _test_eof662;
@@ -12283,28 +12459,28 @@ case 662:
 			goto st655;
 	} else
 		goto st655;
-	goto tr603;
+	goto tr604;
 st663:
 	if ( ++p == pe )
 		goto _test_eof663;
 case 663:
 	if ( (*p) == 77 )
 		goto st664;
-	goto tr603;
+	goto tr604;
 st664:
 	if ( ++p == pe )
 		goto _test_eof664;
 case 664:
 	if ( (*p) == 69 )
 		goto st665;
-	goto tr603;
+	goto tr604;
 st665:
 	if ( ++p == pe )
 		goto _test_eof665;
 case 665:
 	if ( (*p) == 58 )
 		goto st666;
-	goto tr603;
+	goto tr604;
 st666:
 	if ( ++p == pe )
 		goto _test_eof666;
@@ -12317,7 +12493,7 @@ case 666:
 			goto st667;
 	} else
 		goto st667;
-	goto tr603;
+	goto tr604;
 st667:
 	if ( ++p == pe )
 		goto _test_eof667;
@@ -12332,7 +12508,7 @@ case 667:
 			goto st667;
 	} else
 		goto st667;
-	goto tr603;
+	goto tr604;
 st668:
 	if ( ++p == pe )
 		goto _test_eof668;
@@ -12353,7 +12529,7 @@ case 668:
 			goto st655;
 	} else
 		goto st655;
-	goto tr603;
+	goto tr604;
 st669:
 	if ( ++p == pe )
 		goto _test_eof669;
@@ -12374,56 +12550,56 @@ case 669:
 			goto st655;
 	} else
 		goto st655;
-	goto tr603;
+	goto tr604;
 st670:
 	if ( ++p == pe )
 		goto _test_eof670;
 case 670:
 	if ( (*p) == 84 )
 		goto st671;
-	goto tr603;
+	goto tr604;
 st671:
 	if ( ++p == pe )
 		goto _test_eof671;
 case 671:
 	if ( (*p) == 65 )
 		goto st672;
-	goto tr603;
+	goto tr604;
 st672:
 	if ( ++p == pe )
 		goto _test_eof672;
 case 672:
 	if ( (*p) == 78 )
 		goto st673;
-	goto tr603;
+	goto tr604;
 st673:
 	if ( ++p == pe )
 		goto _test_eof673;
 case 673:
 	if ( (*p) == 68 )
 		goto st674;
-	goto tr603;
+	goto tr604;
 st674:
 	if ( ++p == pe )
 		goto _test_eof674;
 case 674:
 	if ( (*p) == 69 )
 		goto st675;
-	goto tr603;
+	goto tr604;
 st675:
 	if ( ++p == pe )
 		goto _test_eof675;
 case 675:
 	if ( (*p) == 77 )
 		goto st676;
-	goto tr603;
+	goto tr604;
 st676:
 	if ( ++p == pe )
 		goto _test_eof676;
 case 676:
 	if ( (*p) == 62 )
 		goto st527;
-	goto tr603;
+	goto tr604;
 st677:
 	if ( ++p == pe )
 		goto _test_eof677;
@@ -12444,7 +12620,7 @@ case 677:
 			goto st655;
 	} else
 		goto st655;
-	goto tr603;
+	goto tr604;
 st678:
 	if ( ++p == pe )
 		goto _test_eof678;
@@ -12466,8 +12642,8 @@ case 678:
 			goto st655;
 	} else
 		goto st655;
-	goto tr603;
-tr608:
+	goto tr604;
+tr609:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -12477,9 +12653,9 @@ st679:
 	if ( ++p == pe )
 		goto _test_eof679;
 case 679:
-#line 12481 "vcf_validator_detail.hpp"
+#line 12657 "vcf_validator_detail.hpp"
 	switch( (*p) ) {
-		case 9: goto tr777;
+		case 9: goto tr785;
 		case 44: goto st680;
 		case 46: goto st682;
 		case 65: goto st679;
@@ -12495,7 +12671,7 @@ case 679:
 		case 110: goto st679;
 		case 116: goto st679;
 	}
-	goto tr603;
+	goto tr604;
 st680:
 	if ( ++p == pe )
 		goto _test_eof680;
@@ -12512,13 +12688,13 @@ case 680:
 		case 110: goto st681;
 		case 116: goto st681;
 	}
-	goto tr603;
+	goto tr604;
 st681:
 	if ( ++p == pe )
 		goto _test_eof681;
 case 681:
 	switch( (*p) ) {
-		case 9: goto tr777;
+		case 9: goto tr785;
 		case 44: goto st680;
 		case 65: goto st681;
 		case 67: goto st681;
@@ -12531,14 +12707,14 @@ case 681:
 		case 110: goto st681;
 		case 116: goto st681;
 	}
-	goto tr603;
+	goto tr604;
 st682:
 	if ( ++p == pe )
 		goto _test_eof682;
 case 682:
 	if ( (*p) == 9 )
-		goto tr779;
-	goto tr603;
+		goto tr787;
+	goto tr604;
 st683:
 	if ( ++p == pe )
 		goto _test_eof683;
@@ -12553,7 +12729,7 @@ case 683:
 			goto st684;
 	} else
 		goto st684;
-	goto tr603;
+	goto tr604;
 st684:
 	if ( ++p == pe )
 		goto _test_eof684;
@@ -12567,14 +12743,14 @@ case 684:
 			goto st684;
 	} else if ( (*p) >= 33 )
 		goto st684;
-	goto tr603;
+	goto tr604;
 st685:
 	if ( ++p == pe )
 		goto _test_eof685;
 case 685:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st686;
-	goto tr603;
+	goto tr604;
 st686:
 	if ( ++p == pe )
 		goto _test_eof686;
@@ -12583,7 +12759,7 @@ case 686:
 		goto st682;
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st686;
-	goto tr603;
+	goto tr604;
 st687:
 	if ( ++p == pe )
 		goto _test_eof687;
@@ -12596,7 +12772,7 @@ case 687:
 			goto st688;
 	} else
 		goto st688;
-	goto tr603;
+	goto tr604;
 st688:
 	if ( ++p == pe )
 		goto _test_eof688;
@@ -12608,14 +12784,14 @@ case 688:
 			goto st688;
 	} else if ( (*p) >= 33 )
 		goto st688;
-	goto tr603;
+	goto tr604;
 st689:
 	if ( ++p == pe )
 		goto _test_eof689;
 case 689:
 	if ( (*p) == 58 )
 		goto st685;
-	goto tr603;
+	goto tr604;
 st690:
 	if ( ++p == pe )
 		goto _test_eof690;
@@ -12630,7 +12806,7 @@ case 690:
 			goto st691;
 	} else
 		goto st691;
-	goto tr603;
+	goto tr604;
 st691:
 	if ( ++p == pe )
 		goto _test_eof691;
@@ -12644,14 +12820,14 @@ case 691:
 			goto st691;
 	} else if ( (*p) >= 33 )
 		goto st691;
-	goto tr603;
+	goto tr604;
 st692:
 	if ( ++p == pe )
 		goto _test_eof692;
 case 692:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st693;
-	goto tr603;
+	goto tr604;
 st693:
 	if ( ++p == pe )
 		goto _test_eof693;
@@ -12660,7 +12836,7 @@ case 693:
 		goto st682;
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st693;
-	goto tr603;
+	goto tr604;
 st694:
 	if ( ++p == pe )
 		goto _test_eof694;
@@ -12673,7 +12849,7 @@ case 694:
 			goto st695;
 	} else
 		goto st695;
-	goto tr603;
+	goto tr604;
 st695:
 	if ( ++p == pe )
 		goto _test_eof695;
@@ -12685,15 +12861,15 @@ case 695:
 			goto st695;
 	} else if ( (*p) >= 33 )
 		goto st695;
-	goto tr603;
+	goto tr604;
 st696:
 	if ( ++p == pe )
 		goto _test_eof696;
 case 696:
 	if ( (*p) == 58 )
 		goto st692;
-	goto tr603;
-tr609:
+	goto tr604;
+tr610:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -12703,7 +12879,7 @@ st697:
 	if ( ++p == pe )
 		goto _test_eof697;
 case 697:
-#line 12707 "vcf_validator_detail.hpp"
+#line 12883 "vcf_validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st702;
 	if ( (*p) < 59 ) {
@@ -12714,7 +12890,7 @@ case 697:
 			goto st698;
 	} else
 		goto st698;
-	goto tr603;
+	goto tr604;
 st698:
 	if ( ++p == pe )
 		goto _test_eof698;
@@ -12728,14 +12904,14 @@ case 698:
 			goto st698;
 	} else if ( (*p) >= 33 )
 		goto st698;
-	goto tr603;
+	goto tr604;
 st699:
 	if ( ++p == pe )
 		goto _test_eof699;
 case 699:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st700;
-	goto tr603;
+	goto tr604;
 st700:
 	if ( ++p == pe )
 		goto _test_eof700;
@@ -12744,7 +12920,7 @@ case 700:
 		goto st701;
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st700;
-	goto tr603;
+	goto tr604;
 st701:
 	if ( ++p == pe )
 		goto _test_eof701;
@@ -12761,7 +12937,7 @@ case 701:
 		case 110: goto st651;
 		case 116: goto st651;
 	}
-	goto tr603;
+	goto tr604;
 st702:
 	if ( ++p == pe )
 		goto _test_eof702;
@@ -12774,7 +12950,7 @@ case 702:
 			goto st703;
 	} else
 		goto st703;
-	goto tr603;
+	goto tr604;
 st703:
 	if ( ++p == pe )
 		goto _test_eof703;
@@ -12786,15 +12962,15 @@ case 703:
 			goto st703;
 	} else if ( (*p) >= 33 )
 		goto st703;
-	goto tr603;
+	goto tr604;
 st704:
 	if ( ++p == pe )
 		goto _test_eof704;
 case 704:
 	if ( (*p) == 58 )
 		goto st699;
-	goto tr603;
-tr610:
+	goto tr604;
+tr611:
 #line 15 "vcf_v41.ragel"
 	{
         ParsePolicy::handle_token_begin(*this);
@@ -12804,7 +12980,7 @@ st705:
 	if ( ++p == pe )
 		goto _test_eof705;
 case 705:
-#line 12808 "vcf_validator_detail.hpp"
+#line 12984 "vcf_validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st709;
 	if ( (*p) < 59 ) {
@@ -12815,7 +12991,7 @@ case 705:
 			goto st706;
 	} else
 		goto st706;
-	goto tr603;
+	goto tr604;
 st706:
 	if ( ++p == pe )
 		goto _test_eof706;
@@ -12829,14 +13005,14 @@ case 706:
 			goto st706;
 	} else if ( (*p) >= 33 )
 		goto st706;
-	goto tr603;
+	goto tr604;
 st707:
 	if ( ++p == pe )
 		goto _test_eof707;
 case 707:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st708;
-	goto tr603;
+	goto tr604;
 st708:
 	if ( ++p == pe )
 		goto _test_eof708;
@@ -12845,7 +13021,7 @@ case 708:
 		goto st701;
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st708;
-	goto tr603;
+	goto tr604;
 st709:
 	if ( ++p == pe )
 		goto _test_eof709;
@@ -12858,7 +13034,7 @@ case 709:
 			goto st710;
 	} else
 		goto st710;
-	goto tr603;
+	goto tr604;
 st710:
 	if ( ++p == pe )
 		goto _test_eof710;
@@ -12870,14 +13046,14 @@ case 710:
 			goto st710;
 	} else if ( (*p) >= 33 )
 		goto st710;
-	goto tr603;
+	goto tr604;
 st711:
 	if ( ++p == pe )
 		goto _test_eof711;
 case 711:
 	if ( (*p) == 58 )
 		goto st707;
-	goto tr603;
+	goto tr604;
 st712:
 	if ( ++p == pe )
 		goto _test_eof712;
@@ -12887,50 +13063,50 @@ case 712:
 			goto st523;
 	} else if ( (*p) >= 33 )
 		goto st523;
-	goto tr594;
+	goto tr595;
 st713:
 	if ( ++p == pe )
 		goto _test_eof713;
 case 713:
 	if ( (*p) == 10 )
-		goto tr839;
+		goto tr847;
 	goto st713;
-tr839:
+tr847:
 #line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
     }
-#line 707 "vcf_v41.ragel"
+#line 720 "vcf_v41.ragel"
 	{ {goto st20;} }
 	goto st717;
 st717:
 	if ( ++p == pe )
 		goto _test_eof717;
 case 717:
-#line 12912 "vcf_validator_detail.hpp"
+#line 13088 "vcf_validator_detail.hpp"
 	goto st0;
 st714:
 	if ( ++p == pe )
 		goto _test_eof714;
 case 714:
 	if ( (*p) == 10 )
-		goto tr841;
+		goto tr849;
 	goto st714;
-tr841:
+tr849:
 #line 23 "vcf_v41.ragel"
 	{
         ++n_lines;
         n_columns = 1;
     }
-#line 708 "vcf_v41.ragel"
+#line 721 "vcf_v41.ragel"
 	{ {goto st716;} }
 	goto st718;
 st718:
 	if ( ++p == pe )
 		goto _test_eof718;
 case 718:
-#line 12934 "vcf_validator_detail.hpp"
+#line 13110 "vcf_validator_detail.hpp"
 	goto st0;
 	}
 	_test_eof2: cs = 2; goto _test_eof; 
@@ -13674,43 +13850,6 @@ case 718:
         p--; {goto st713;}
     }
 	break;
-	case 473: 
-	case 474: 
-	case 475: 
-	case 476: 
-	case 477: 
-	case 478: 
-	case 479: 
-	case 480: 
-	case 481: 
-	case 482: 
-	case 483: 
-	case 484: 
-	case 485: 
-	case 486: 
-	case 487: 
-	case 488: 
-	case 489: 
-	case 490: 
-	case 491: 
-	case 492: 
-	case 493: 
-	case 494: 
-	case 495: 
-	case 496: 
-	case 497: 
-	case 498: 
-	case 499: 
-	case 500: 
-	case 501: 
-	case 502: 
-	case 503: 
-	case 504: 
-	case 505: 
-	case 506: 
-	case 507: 
-	case 508: 
-	case 509: 
 	case 510: 
 	case 511: 
 	case 512: 
@@ -14057,11 +14196,59 @@ case 718:
         p--; {goto st713;}
     }
 	break;
+	case 473: 
+	case 474: 
+	case 475: 
+	case 476: 
+	case 477: 
+	case 478: 
+	case 479: 
+	case 480: 
+	case 481: 
+	case 482: 
+	case 483: 
+	case 484: 
+	case 485: 
+	case 486: 
+	case 487: 
+	case 488: 
+	case 489: 
+	case 490: 
+	case 491: 
+	case 492: 
+	case 493: 
+	case 494: 
+	case 495: 
+	case 496: 
+	case 497: 
+	case 498: 
+	case 499: 
+	case 500: 
+	case 501: 
+	case 502: 
+	case 503: 
+	case 504: 
+	case 505: 
+	case 506: 
+	case 507: 
+	case 508: 
+	case 509: 
+#line 344 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
+        p--; {goto st714;}
+    }
+#line 45 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_header_section_error(*this);
+        p--; {goto st714;}
+    }
+	break;
 	case 519: 
 	case 541: 
 	case 542: 
 	case 543: 
-#line 345 "vcf_v41.ragel"
+#line 352 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Chromosome is not a string without colons or whitespaces, optionally wrapped with angle brackets (<>)");
         p--; {goto st714;}
@@ -14074,7 +14261,7 @@ case 718:
 	break;
 	case 520: 
 	case 521: 
-#line 351 "vcf_v41.ragel"
+#line 358 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Position is not a positive number");
         p--; {goto st714;}
@@ -14088,7 +14275,7 @@ case 718:
 	case 522: 
 	case 523: 
 	case 712: 
-#line 357 "vcf_v41.ragel"
+#line 364 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "ID is not a single dot or a list of strings without semicolons or whitespaces");
         p--; {goto st714;}
@@ -14101,7 +14288,7 @@ case 718:
 	break;
 	case 524: 
 	case 525: 
-#line 363 "vcf_v41.ragel"
+#line 370 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Reference is not a string of bases");
         p--; {goto st714;}
@@ -14176,7 +14363,7 @@ case 718:
 	case 709: 
 	case 710: 
 	case 711: 
-#line 369 "vcf_v41.ragel"
+#line 376 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Alternate is not a single dot or a comma-separated list of bases");
         p--; {goto st714;}
@@ -14192,7 +14379,7 @@ case 718:
 	case 647: 
 	case 648: 
 	case 649: 
-#line 375 "vcf_v41.ragel"
+#line 382 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Quality is not a single dot or a positive number");
         p--; {goto st714;}
@@ -14207,7 +14394,7 @@ case 718:
 	case 531: 
 	case 532: 
 	case 646: 
-#line 381 "vcf_v41.ragel"
+#line 388 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Filter is not a single dot or a semicolon-separated list of strings");
         p--; {goto st714;}
@@ -14218,69 +14405,9 @@ case 718:
         p--; {goto st714;}
     }
 	break;
-	case 533: 
-	case 534: 
-	case 535: 
-	case 549: 
-	case 550: 
-	case 551: 
-	case 552: 
-	case 553: 
-	case 554: 
-	case 555: 
-	case 559: 
-	case 560: 
-	case 564: 
-	case 567: 
-	case 572: 
-	case 575: 
-	case 576: 
-	case 581: 
-	case 582: 
-	case 583: 
-	case 584: 
-	case 585: 
-	case 588: 
-	case 592: 
-	case 595: 
-	case 596: 
-	case 597: 
-	case 600: 
-	case 607: 
-	case 608: 
-	case 609: 
-	case 616: 
-	case 617: 
-	case 620: 
-	case 621: 
-	case 626: 
-	case 627: 
-	case 628: 
-	case 629: 
-	case 630: 
-	case 634: 
-	case 635: 
-	case 636: 
-	case 637: 
-	case 638: 
-	case 639: 
-	case 640: 
-	case 641: 
-	case 645: 
-#line 387 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
-        p--; {goto st714;}
-    }
-#line 50 "vcf_v41.ragel"
-	{
-        ErrorPolicy::handle_body_section_error(*this);
-        p--; {goto st714;}
-    }
-	break;
 	case 547: 
 	case 548: 
-#line 487 "vcf_v41.ragel"
+#line 500 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Format is not a colon-separated list of alphanumeric strings");
         p--; {goto st714;}
@@ -14293,7 +14420,7 @@ case 718:
 	break;
 	case 545: 
 	case 546: 
-#line 498 "vcf_v41.ragel"
+#line 511 "vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
@@ -15061,15 +15188,96 @@ case 718:
         p--; {goto st713;}
     }
 	break;
+	case 533: 
+	case 534: 
+	case 535: 
+	case 549: 
+	case 550: 
+	case 551: 
+	case 552: 
+	case 553: 
+	case 559: 
+	case 560: 
+	case 564: 
+	case 567: 
+	case 572: 
+	case 575: 
+	case 576: 
+	case 581: 
+	case 582: 
+	case 583: 
+	case 584: 
+	case 585: 
+	case 588: 
+	case 592: 
+	case 595: 
+	case 596: 
+	case 597: 
+	case 600: 
+	case 607: 
+	case 608: 
+	case 609: 
+	case 616: 
+	case 617: 
+	case 620: 
+	case 621: 
+	case 626: 
+	case 627: 
+	case 628: 
+	case 629: 
+	case 630: 
+	case 634: 
+	case 635: 
+	case 636: 
+	case 637: 
+	case 638: 
+	case 639: 
+	case 640: 
+	case 641: 
+	case 645: 
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	break;
+	case 554: 
+	case 555: 
+#line 404 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	break;
 	case 561: 
 	case 562: 
 	case 563: 
-#line 396 "vcf_v41.ragel"
+#line 409 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AA value is not a single dot or a string of bases");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15082,12 +15290,12 @@ case 718:
 	break;
 	case 565: 
 	case 566: 
-#line 401 "vcf_v41.ragel"
+#line 414 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AC value is not a comma-separated list of numbers");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15102,12 +15310,12 @@ case 718:
 	case 569: 
 	case 570: 
 	case 571: 
-#line 406 "vcf_v41.ragel"
+#line 419 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AF value is not a comma-separated list of numbers");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15120,12 +15328,12 @@ case 718:
 	break;
 	case 573: 
 	case 574: 
-#line 411 "vcf_v41.ragel"
+#line 424 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AN value is not an integer number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15140,12 +15348,12 @@ case 718:
 	case 578: 
 	case 579: 
 	case 580: 
-#line 416 "vcf_v41.ragel"
+#line 429 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info BQ value is not a number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15158,12 +15366,12 @@ case 718:
 	break;
 	case 586: 
 	case 587: 
-#line 421 "vcf_v41.ragel"
+#line 434 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info CIGAR value is not an alphanumeric string");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15174,15 +15382,14 @@ case 718:
         p--; {goto st714;}
     }
 	break;
-	case 589: 
 	case 590: 
 	case 591: 
-#line 426 "vcf_v41.ragel"
+#line 439 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info DB is not a flag (with 1/0/no value)");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15195,12 +15402,12 @@ case 718:
 	break;
 	case 593: 
 	case 594: 
-#line 431 "vcf_v41.ragel"
+#line 444 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info DP value is not an integer number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15213,12 +15420,12 @@ case 718:
 	break;
 	case 598: 
 	case 599: 
-#line 436 "vcf_v41.ragel"
+#line 449 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info END value is not an integer number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15229,15 +15436,14 @@ case 718:
         p--; {goto st714;}
     }
 	break;
-	case 601: 
 	case 602: 
 	case 603: 
-#line 441 "vcf_v41.ragel"
+#line 454 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info H2 is not a flag (with 1/0/no value)");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15248,15 +15454,14 @@ case 718:
         p--; {goto st714;}
     }
 	break;
-	case 604: 
 	case 605: 
 	case 606: 
-#line 446 "vcf_v41.ragel"
+#line 459 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info H3 is not a flag (with 1/0/no value)");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15271,12 +15476,12 @@ case 718:
 	case 613: 
 	case 614: 
 	case 615: 
-#line 451 "vcf_v41.ragel"
+#line 464 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info MQ value is not a number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15289,12 +15494,12 @@ case 718:
 	break;
 	case 610: 
 	case 611: 
-#line 456 "vcf_v41.ragel"
+#line 469 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info MQ0 value is not an integer number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15307,12 +15512,12 @@ case 718:
 	break;
 	case 618: 
 	case 619: 
-#line 461 "vcf_v41.ragel"
+#line 474 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info NS value is not an integer number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15327,12 +15532,12 @@ case 718:
 	case 623: 
 	case 624: 
 	case 625: 
-#line 466 "vcf_v41.ragel"
+#line 479 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info SB value is not a number");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15343,15 +15548,14 @@ case 718:
         p--; {goto st714;}
     }
 	break;
-	case 631: 
 	case 632: 
 	case 633: 
-#line 471 "vcf_v41.ragel"
+#line 484 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info SOMATIC is not a flag (with 1/0/no value)");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15362,15 +15566,14 @@ case 718:
         p--; {goto st714;}
     }
 	break;
-	case 642: 
 	case 643: 
 	case 644: 
-#line 476 "vcf_v41.ragel"
+#line 489 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info VALIDATED is not a flag (with 1/0/no value)");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15381,15 +15584,14 @@ case 718:
         p--; {goto st714;}
     }
 	break;
-	case 556: 
 	case 557: 
 	case 558: 
-#line 481 "vcf_v41.ragel"
+#line 494 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info 1000G is not a flag (with 1/0/no value)");
         p--; {goto st714;}
     }
-#line 387 "vcf_v41.ragel"
+#line 394 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st714;}
@@ -15403,12 +15605,12 @@ case 718:
 	case 536: 
 	case 537: 
 	case 538: 
-#line 492 "vcf_v41.ragel"
+#line 505 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Format first field is not GT");
         p--; {goto st714;}
     }
-#line 487 "vcf_v41.ragel"
+#line 500 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Format is not a colon-separated list of alphanumeric strings");
         p--; {goto st714;}
@@ -15422,14 +15624,14 @@ case 718:
 	case 539: 
 	case 540: 
 	case 544: 
-#line 505 "vcf_v41.ragel"
+#line 518 "vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
         ErrorPolicy::handle_body_section_error(*this, message_stream.str());
         p--; {goto st714;}
     }
-#line 498 "vcf_v41.ragel"
+#line 511 "vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
@@ -15575,6 +15777,138 @@ case 718:
         p--; {goto st713;}
     }
 	break;
+	case 589: 
+#line 439 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info DB is not a flag (with 1/0/no value)");
+        p--; {goto st714;}
+    }
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	break;
+	case 601: 
+#line 454 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info H2 is not a flag (with 1/0/no value)");
+        p--; {goto st714;}
+    }
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	break;
+	case 604: 
+#line 459 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info H3 is not a flag (with 1/0/no value)");
+        p--; {goto st714;}
+    }
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	break;
+	case 631: 
+#line 484 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info SOMATIC is not a flag (with 1/0/no value)");
+        p--; {goto st714;}
+    }
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	break;
+	case 642: 
+#line 489 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info VALIDATED is not a flag (with 1/0/no value)");
+        p--; {goto st714;}
+    }
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	break;
+	case 556: 
+#line 494 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info 1000G is not a flag (with 1/0/no value)");
+        p--; {goto st714;}
+    }
+#line 399 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        p--; {goto st714;}
+    }
+#line 394 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
+        p--; {goto st714;}
+    }
+#line 50 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_body_section_error(*this);
+        p--; {goto st714;}
+    }
+	break;
 	case 313: 
 #line 332 "vcf_v41.ragel"
 	{
@@ -15716,6 +16050,11 @@ case 718:
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st713;}
     }
+#line 344 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
+        p--; {goto st714;}
+    }
 #line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
@@ -15783,20 +16122,25 @@ case 718:
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st713;}
     }
+#line 344 "vcf_v41.ragel"
+	{
+        ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
+        p--; {goto st714;}
+    }
 #line 45 "vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this);
         p--; {goto st714;}
     }
 	break;
-#line 15793 "vcf_validator_detail.hpp"
+#line 16137 "vcf_validator_detail.hpp"
 	}
 	}
 
 	_out: {}
 	}
 
-#line 771 "vcf_v41.ragel"
+#line 784 "vcf_v41.ragel"
 
     }
 

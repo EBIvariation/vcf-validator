@@ -83,23 +83,23 @@
     }
 
     action meta_alt_read {
-        printf("Meta ALT in line %zu\n", n_lines);
+        //printf("Meta ALT in line %zu\n", n_lines);
     }
 
     action meta_filter_read {
-        printf("Meta FILTER in line %zu\n", n_lines);
+        //printf("Meta FILTER in line %zu\n", n_lines);
     }
 
     action meta_format_read {
-        printf("Meta FORMAT in line %zu\n", n_lines);
+        //printf("Meta FORMAT in line %zu\n", n_lines);
     }
 
     action meta_info_read {
-        printf("Meta INFO in line %zu\n", n_lines);
+        //printf("Meta INFO in line %zu\n", n_lines);
     }
 
     action meta_generic_read {
-        printf("Meta in line %zu\n", n_lines);
+        //printf("Meta in line %zu\n", n_lines);
     }
     
     action header_begin {
@@ -339,6 +339,13 @@
         fhold; fgoto meta_section_skip;
     }
     
+    # Header errors
+    
+    action header_prefix_err {
+        ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
+        fhold; fgoto body_section_skip;
+    }
+    
     ########## Incorrect records actions ##########
 
     # Chromosome
@@ -389,9 +396,15 @@
         fhold; fgoto body_section_skip;
     }
 
-    #info_key        = (alnum | (punct - (";" | "=")))+ - ( "AA" | "AC" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G" | (punct)+ ) ;
-    #info_value      = (print - space)+ ;
-    #info_value_list = info_value ("," info_value)* ;
+    action info_key_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_value_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)");
+        fhold; fgoto body_section_skip;
+    }
     
     action info_AA_error {
         ErrorPolicy::handle_body_section_error(*this, "Info AA value is not a single dot or a string of bases");
@@ -598,7 +611,7 @@
 
     # Header between meta and records
     sample_name     = (print - ("\n" | "\t"))+ ;
-    header          = "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO" 
+    header          = "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO" $err(header_prefix_err)
                       ("\tFORMAT" ("\t" sample_name >token_begin %sample_name_end)+ )?;
 
     # Records
@@ -664,8 +677,8 @@
                         "SOMATIC" ("=" ("1" | "0"))? 		$err(info_SOMATIC_error) |
                         "VALIDATED" ("=" ("1" | "0"))?		$err(info_VALIDATED_error) |
                         "1000G" ("=" ("1" | "0"))? 		$err(info_1000G_error) |
-                        info_key | 
-                        info_key "=" info_value_list
+                        info_key $err(info_key_error) | 
+                        info_key $err(info_key_error) "=" info_value_list $err(info_value_error)
                       );
     record_info     = info_entry (";" info_entry)* | "." ;
 
