@@ -565,9 +565,8 @@
                         
     meta_assembly   = url $err(meta_url_err) ;
     
-    ## TODO Probably need to check meta_contig again after getting an answer from the spec team
     meta_contig     = "ID=" identifier $err(meta_id_err)
-                        ",URL=" url $err(meta_url_err) ;
+                        ("," identifier "=" meta_field_value)* ;
                         
     meta_filter     = "ID=" identifier $err(meta_id_err) 
                         ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
