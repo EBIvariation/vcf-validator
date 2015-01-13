@@ -33,6 +33,7 @@ namespace opencb
       public:
         void handle_token_begin(ParsingState const & state) {}
         void handle_token_char(ParsingState const & state, char c) {}
+        std::string current_token() const { return nullptr; }
     };
 
     class StoreParsePolicy
@@ -45,7 +46,12 @@ namespace opencb
 
         void handle_token_char(ParsingState const & state, char c)
         {
-//          m_current_token.push_back(c);
+          m_current_token.push_back(c);
+        }
+        
+        std::string current_token() const
+        {
+          return m_current_token;
         }
 
       private:
@@ -59,7 +65,7 @@ namespace opencb
                 std::string message = "Error in file format section");
         
         void handle_meta_section_error(ParsingState const & state, 
-                std::string message = "Error in meta section");
+                std::string message = "Error in meta-data section");
         
         void handle_header_section_error(ParsingState const & state, 
                 std::string message = "Error in header section");
@@ -75,7 +81,7 @@ namespace opencb
                 std::string message = "Error in file format section");
         
         void handle_meta_section_error(ParsingState const & state, 
-                std::string message = "Error in meta section");
+                std::string message = "Error in meta-data section");
         
         void handle_header_section_error(ParsingState const & state, 
                 std::string message = "Error in header section");

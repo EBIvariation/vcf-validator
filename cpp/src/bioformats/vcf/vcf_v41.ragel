@@ -16,8 +16,12 @@
         ParsePolicy::handle_token_begin(*this);
     }
 
-    action token_end {
+    action token_middle {
         ParsePolicy::handle_token_char(*this, *p);
+    }
+    
+    action token_end {
+        //std::cout << "m_current_token '" << ParsePolicy::current_token() << "'" << std::endl;
     }
 
     action line_break {
@@ -113,10 +117,11 @@
 
     action record_begin {
 //        status->current_record = vcf_record_new();
-//        printf("Reading record\n");
+//        std::cout << "Reading record" << std::endl;
     }
 
     action record_end {
+//        std::cout << "Finished reading record" << std::endl;
 /*        // If batch is full, add to the list of batches and create a new, empty one
         if (batch_size > 0 && status->current_batch->records->size == batch_size)
         {
@@ -319,11 +324,6 @@
     }
     
     # Metadata generic errors (do not apply to a specific type)
-    action meta_generic_err {
-        ErrorPolicy::handle_meta_section_error(*this, "Error in metadata");
-        fhold; fgoto meta_section_skip;
-    }
-
     action meta_id_err {
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         fhold; fgoto meta_section_skip;
@@ -340,7 +340,6 @@
     }
     
     # Header errors
-    
     action header_prefix_err {
         ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
         fhold; fgoto body_section_skip;
@@ -593,7 +592,7 @@
                         (",Description=\"" meta_field_desc (";" meta_field_desc)* "\"" ) $err(meta_desc_err) ;
     
     meta_entry      = ( 
-                       ("##" meta_key >token_begin %meta_id_end "=<" meta_field ("," meta_field)* ">") %(meta_generic_read) $err(meta_generic_err) |
+                       ("##" meta_key >token_begin %meta_id_end "=<" meta_field ("," meta_field)* ">") %(meta_generic_read) |
                        ("##ALT=<" meta_alt ">" ) %(meta_alt_read) $err(meta_alt_err) | 
                        ("##FILTER=<" meta_filter ">" ) %(meta_filter_read) $err(meta_filter_err) | 
                        ("##FORMAT=<" meta_format ">" ) %(meta_format_read) $err(meta_format_err) |
@@ -603,8 +602,8 @@
                        ("##SAMPLE=<" meta_sample ">" ) $err(meta_sample_err) |
                        ("##PEDIGREE=<" meta_pedigree ">" ) $err(meta_pedigree_err) |
                        ("##pedigreeDB=<" meta_pedigreeDB ">" ) $err(meta_pedigreedb_err) |
-                       ("##" meta_field >token_begin %meta_field_value_end) $err(meta_generic_err) |
-                       ("##" meta_field_value >token_begin %meta_field_value_end)  $err(meta_generic_err)
+                       ("##" meta_field >token_begin %meta_field_value_end) |
+                       ("##" meta_field_value >token_begin %meta_field_value_end)
                       )
                       >meta_entry_begin %meta_entry_end;
 
@@ -690,16 +689,16 @@
     sample_gt       = sample_allele (("/" | "|") sample_allele)* ;
     record_sample   = sample_gt $err(sample_gt_error) (":" (alnum | punct)+)* ;
     
-    record          = (record_chrom 		>token_begin %chrom_end $err(chrom_error) 
-                        CS record_pos 		>token_begin %pos_end $err(pos_error) 
-                        CS record_id 		>token_begin %id_end $err(id_error) 
-                        CS record_ref 		>token_begin %ref_end $err(ref_error) 
-                        CS record_alt 		>token_begin %alt_end $err(alt_error) 
-                        CS record_qual		>token_begin %qual_end $err(qual_error) 
-                        CS record_filter 	>token_begin %filter_end $err(filter_error) 
-                        CS record_info		>token_begin %info_end $err(info_error) 
-                        (CS record_format 	>token_begin %format_end $err(format_error)
-                        (CS record_sample 	>token_begin %sample_end $err(sample_error))+ )?
+    record          = (record_chrom 		>token_begin @token_middle %token_end $err(chrom_error)
+                        CS record_pos 		>token_begin @token_middle %token_end $err(pos_error)
+                        CS record_id 		>token_begin @token_middle %token_end $err(id_error)
+                        CS record_ref 		>token_begin @token_middle %token_end $err(ref_error)
+                        CS record_alt 		>token_begin @token_middle %token_end $err(alt_error) 
+                        CS record_qual		>token_begin @token_middle %token_end $err(qual_error) 
+                        CS record_filter 	>token_begin @token_middle %token_end $err(filter_error) 
+                        CS record_info		>token_begin @token_middle %token_end $err(info_error) 
+                        (CS record_format	>token_begin @token_middle %token_end $err(format_error)
+                        (CS record_sample	>token_begin @token_middle %token_end $err(sample_error))+ )?
                       ) >record_begin %record_end;
 
     fileformat_section = (fileformat NL) $err(fileformat_section_error);
