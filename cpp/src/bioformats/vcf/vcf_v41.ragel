@@ -22,14 +22,17 @@
     
     action token_end {
         //std::cout << "m_current_token '" << ParsePolicy::current_token() << "'" << std::endl;
+        ParsePolicy::handle_token_end(*this);
     }
 
     action line_break {
+        ParsePolicy::handle_newline(*this);
         ++n_lines;
         n_columns = 1;
     }
 
     action tab_break {
+        ParsePolicy::handle_column_end(*this, n_columns);
         ++n_columns;
     }
 
@@ -121,7 +124,7 @@
     }
 
     action record_end {
-//        std::cout << "Finished reading record" << std::endl;
+        std::cout << "Finished reading record" << std::endl;
 /*        // If batch is full, add to the list of batches and create a new, empty one
         if (batch_size > 0 && status->current_batch->records->size == batch_size)
         {
@@ -615,8 +618,8 @@
     # Records
 
     ## A chromosome must be a string with no white-spaces or colons, and may be surronded by < > symbols (for contigs)
-    record_chr_basic= (alnum | punct - (":" | "<" | ">"))+ ;
-    record_chr_contg= "<" (alnum | punct - (":" | ">"))+ ">" ;
+    record_chr_basic= (alnum | punct - (":" | "<" | ">"))+ - (punct)+ ;
+    record_chr_contg= "<" record_chr_basic ">" ;
     record_chrom    = record_chr_basic | record_chr_contg;
     
     record_pos      = int_number ;

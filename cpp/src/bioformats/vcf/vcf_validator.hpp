@@ -1,11 +1,12 @@
 #ifndef OPENCB_VCF_VALIDATOR_H
 #define OPENCB_VCF_VALIDATOR_H
 
-#include <vector>
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace opencb
 {
@@ -33,6 +34,9 @@ namespace opencb
       public:
         void handle_token_begin(ParsingState const & state) {}
         void handle_token_char(ParsingState const & state, char c) {}
+        void handle_token_end(ParsingState const & state) {}
+        void handle_column_end(ParsingState const & state, size_t n_columns);
+        void handle_newline(ParsingState const & state) {}
         std::string current_token() const { return nullptr; }
     };
 
@@ -49,13 +53,70 @@ namespace opencb
           m_current_token.push_back(c);
         }
         
+        void handle_token_end(ParsingState const & state) {
+          m_grouped_tokens.push_back(m_current_token);
+        }
+        
+        void handle_column_end(ParsingState const & state, size_t n_columns) {
+            switch(n_columns) {
+                case 1:
+                    m_line_tokens["CHROM"] = m_grouped_tokens;
+                    break;
+                case 2:
+                    m_line_tokens["POS"] = m_grouped_tokens;
+                    break;
+                case 3:
+                    m_line_tokens["ID"] = m_grouped_tokens;
+                    break;
+                case 4:
+                    m_line_tokens["REF"] = m_grouped_tokens;
+                    break;
+                case 5:
+                    m_line_tokens["ALT"] = m_grouped_tokens;
+                    break;
+                case 6:
+                    m_line_tokens["QUAL"] = m_grouped_tokens;
+                    break;
+                default:
+                    break;
+            }
+            m_grouped_tokens = std::vector<std::string>{};
+        }
+        
+        void handle_newline(ParsingState const & state) {
+//            for (auto & group : m_line_tokens) {
+//                std::cout << group.first << " = " ;   
+//                for (auto & token : group.second) {
+//                    std::cout << token << ' ' ;   
+//                }
+//            std::cout << std::endl;
+//            }
+            
+            m_current_token.clear();
+            m_grouped_tokens.clear();
+            m_line_tokens.clear();
+        }
+        
         std::string current_token() const
         {
           return m_current_token;
         }
 
       private:
+        /**
+         * Token being currently parsed
+         */
         std::string m_current_token;
+        
+        /**
+         * Tokens that must be grouped, like all key-value pairs in the INFO column
+         */
+        std::vector<std::string> m_grouped_tokens;
+        
+        /**
+         * Tokens read in a line and grouped by an ID
+         */
+        std::map<std::string, std::vector<std::string>> m_line_tokens;
     };
 
     class AbortErrorPolicy
