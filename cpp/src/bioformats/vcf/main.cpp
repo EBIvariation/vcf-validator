@@ -11,7 +11,7 @@
 #include <vector>
 #include <stdexcept>
 
-#include "vcf_validator.hpp"
+#include "validator.hpp"
 
 namespace
 {

@@ -1,5 +1,5 @@
-#ifndef OPENCB_VCF_VALIDATOR_H
-#define OPENCB_VCF_VALIDATOR_H
+#ifndef OPENCB_VCF_VALIDATOR_HPP
+#define OPENCB_VCF_VALIDATOR_HPP
 
 #include <iostream>
 #include <map>
@@ -202,6 +202,6 @@ namespace opencb
   }
 }
 
-#include "vcf_validator_detail.hpp"
+#include "validator_detail.hpp"
 
 #endif
