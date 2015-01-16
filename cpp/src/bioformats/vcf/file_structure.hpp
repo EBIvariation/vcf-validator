@@ -33,7 +33,7 @@ namespace opencb
                   std::map<std::string, std::string> const & key_values);
     };
     
-    enum class InputFormat 
+    enum InputFormat 
     {
         VCF_FILE_VCF    = 0x01,
         VCF_FILE_GVCF   = 0x02,

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "file_structure.hpp"
 
 namespace opencb
@@ -67,7 +68,7 @@ namespace opencb
     void Record::check_ids() 
     {
         for (auto & id : ids) {
-            if (find_if(id.begin(), id.end(), [](char c) { return !isalnum(c); }) == id.end()) {
+            if (find_if(id.begin(), id.end(), [](char c) { return !isalnum(c); }) != id.end()) {
                 throw std::invalid_argument("ID must be alphanumeric");
             }
         }
@@ -76,7 +77,7 @@ namespace opencb
     void Record::check_alternate_alleles() 
     {
         for (auto & alternate : alternate_alleles) {
-            if (alternate[0] != reference_allele[0] && alternate.size() == reference_allele.size()) {
+            if (alternate[0] != reference_allele[0] && alternate.size() != reference_allele.size()) {
                 throw std::invalid_argument("Reference and alternate alleles must share the first nucleotide");
             } else if (alternate == reference_allele) {
                 throw std::invalid_argument("Reference and alternate alleles must not be the same");
@@ -94,7 +95,7 @@ namespace opencb
     void Record::check_format()
     {
         std::size_t pos = format.find(':');
-        if ((pos == std::string::npos && format != "GT") || (format.substr(pos) != "GT")) {
+        if ((pos == std::string::npos && format != "GT") || (format.substr(0, pos) != "GT")) {
             throw std::invalid_argument("Format first field must be the genotype (GT)");
         }
     }
