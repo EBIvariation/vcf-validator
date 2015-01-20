@@ -21,60 +21,43 @@ namespace opencb
 {
   namespace vcf
   {
+      
+    struct Source;
     
-    struct MetaEntry 
+    struct MetaEntry
     {
-    private:
         enum class Structure { NoValue, PlainValue, KeyValue };
         
-    public:
         std::string id;
         Structure structure; // Union discriminant
         
         boost::variant< std::string, 
                         std::map<std::string, std::string> > value;
         
-        MetaEntry(std::string const & id);
+        std::shared_ptr<Source> source;
         
         MetaEntry(std::string const & id,
-                  std::string const & plain_value);
+                  std::shared_ptr<Source> const & source);
         
         MetaEntry(std::string const & id,
-                  std::map<std::string, std::string> const & key_values);
+                  std::string const & plain_value,
+                  std::shared_ptr<Source> const & source);
+        
+        MetaEntry(std::string const & id,
+                  std::map<std::string, std::string> const & key_values,
+                  std::shared_ptr<Source> const & source);
         
         bool operator==(MetaEntry const &);
 
         bool operator!=(MetaEntry const &);
         
     private:
-        
         /**
          * Checks that the entry value satisfies the VCF specification.
          * 
          * @throw std::invalid_argument
          */
         void check_value();
-      
-        /**
-         * Checks that a plain value satisfies the VCF specification.
-         * 
-         * @throw std::invalid_argument
-         */
-        void check_plain_value(std::string value);
-        
-        /**
-         * Checks that a list of key-value pairs satisfy the VCF specification.
-         * 
-         * @throw std::invalid_argument
-         */
-        void check_key_values(std::map<std::string, std::string> value);
-        
-        void check_alt(std::map<std::string, std::string> value);
-        void check_contig(std::map<std::string, std::string> value);
-        void check_filter(std::map<std::string, std::string> value);
-        void check_format(std::map<std::string, std::string> value);
-        void check_info(std::map<std::string, std::string> value);
-        void check_sample(std::map<std::string, std::string> value);
     };
     
     enum InputFormat 

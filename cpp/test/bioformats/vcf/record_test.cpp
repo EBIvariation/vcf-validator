@@ -30,7 +30,7 @@ namespace opencb
                                 "AN=12,AF=0.5", 
                                 "GT:DP", 
                                 { "" },
-                            std::make_shared<vcf::Source>(source)} ) );
+                                std::make_shared<vcf::Source>(source)} ) );
                 
             CHECK_NOTHROW( (vcf::Record{ 
                                 "chr1", 

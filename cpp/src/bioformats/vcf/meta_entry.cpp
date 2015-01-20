@@ -1,26 +1,31 @@
+#include <iostream>
 #include "file_structure.hpp"
+#include "meta_entry_visitor.hpp"
 
 namespace opencb
 {
   namespace vcf
   {
   
-    MetaEntry::MetaEntry(std::string const & id)
-    : id{id}, structure{Structure::NoValue}
+    MetaEntry::MetaEntry(std::string const & id,
+                         std::shared_ptr<Source> const & source)
+    : id{id}, structure{Structure::NoValue}, source{source}
     {
         
     }
   
     MetaEntry::MetaEntry(std::string const & id, 
-                         std::string const & plain_value)
-    : id{id}, structure{Structure::PlainValue}, value{plain_value}
+                         std::string const & plain_value,
+                         std::shared_ptr<Source> const & source)
+    : id{id}, structure{Structure::PlainValue}, value{plain_value}, source{source}
     {
         check_value();
     }
         
     MetaEntry::MetaEntry(std::string const & id,
-                         std::map<std::string, std::string> const & key_values)
-    : id{id}, structure{Structure::KeyValue}, value{key_values}
+                         std::map<std::string, std::string> const & key_values,
+                         std::shared_ptr<Source> const & source)
+    : id{id}, structure{Structure::KeyValue}, value{key_values}, source{source}
     {
         check_value();
     }
@@ -38,23 +43,27 @@ namespace opencb
     
     void MetaEntry::check_value()
     {
-        if (std::string* plain_value = boost::get<std::string>(&value)) {
-            check_plain_value(*plain_value);
-        } else if (std::map<std::string, std::string>* key_values 
-                = boost::get<std::map<std::string, std::string>>(&value)) {
-            check_key_values(*key_values);
-        }
+        MetaEntryVisitor visitor = MetaEntryVisitor { *this }; 
+        boost::apply_visitor(visitor, value);
     }
+     
     
-    void MetaEntry::check_plain_value(std::string value)
+    MetaEntryVisitor::MetaEntryVisitor(MetaEntry const & entry)
+    : entry{entry}
     {
-        if (find_if(id.begin(), id.end(), [](char c) { return c == '\n'; }) != id.end()) {
+        
+    }
+       
+    void MetaEntryVisitor::operator()(std::string & value) const
+    {
+        if (find_if(value.begin(), value.end(), [](char c) { return c == '\n'; }) != value.end()) {
             throw std::invalid_argument("Metadata value contains a line break");
         }
     }
     
-    void MetaEntry::check_key_values(std::map<std::string, std::string> value)
+    void MetaEntryVisitor::operator()(std::map<std::string, std::string> & value) const
     {
+        auto & id = entry.id;
         if (id == "ALT") { 
             check_alt(value);
         } else if (id == "assembly") {
@@ -76,7 +85,7 @@ namespace opencb
         }
     }
     
-    void MetaEntry::check_alt(std::map<std::string, std::string> value)
+    void MetaEntryVisitor::check_alt(std::map<std::string, std::string> & value) const
     {
         // It must contain an ID and Description
         if (value.count("ID") == 0) {
@@ -87,10 +96,11 @@ namespace opencb
         }
         
         // Check ID prefix is "DEL" | "INS" | "DUP" | "INV" | "CNV"
-        size_t pos = id.find(':');
+        auto & id_field = value["ID"];
+        size_t pos = id_field.find(':');
         // If a colon was not found, check whole string
         // Otherwise, check substring before colon
-        std::string prefix = (pos == std::string::npos) ? id : id.substr(0, pos);
+        std::string prefix = (pos == std::string::npos) ? id_field : id_field.substr(0, pos);
         if (prefix != "DEL" && 
             prefix != "INS" && 
             prefix != "DUP" && 
@@ -100,7 +110,7 @@ namespace opencb
         }
     }
     
-    void MetaEntry::check_contig(std::map<std::string, std::string> value)
+    void MetaEntryVisitor::check_contig(std::map<std::string, std::string> & value) const
     {
         // It must contain an ID and Description
         if (value.count("ID") == 0) {
@@ -108,7 +118,7 @@ namespace opencb
         }
     }
     
-    void MetaEntry::check_filter(std::map<std::string, std::string> value)
+    void MetaEntryVisitor::check_filter(std::map<std::string, std::string> & value) const
     {
         // It must contain an ID and Description
         if (value.count("ID") == 0) {
@@ -119,7 +129,7 @@ namespace opencb
         }
     }
     
-    void MetaEntry::check_format(std::map<std::string, std::string> value)
+    void MetaEntryVisitor::check_format(std::map<std::string, std::string> & value) const
     {
         // It must contain an ID, Number, Type and Description
         if (value.count("ID") == 0) {
@@ -136,7 +146,8 @@ namespace opencb
         }
         
         // Check FORMAT Number
-        if (find_if(id.begin(), id.end(), [](char c) { return !isdigit(c); }) != id.end() &&
+        auto & id_field = value["ID"];
+        if (find_if(id_field.begin(), id_field.end(), [](char c) { return !isdigit(c); }) != id_field.end() &&
             value["Number"] != "A" &&
             value["Number"] != "R" &&
             value["Number"] != "G" &&
@@ -153,7 +164,7 @@ namespace opencb
         }
     }
     
-    void MetaEntry::check_info(std::map<std::string, std::string> value)
+    void MetaEntryVisitor::check_info(std::map<std::string, std::string> & value) const
     {
         // It must contain an ID, Number, Type and Description
         if (value.count("ID") == 0) {
@@ -170,7 +181,8 @@ namespace opencb
         }
         
         // Check INFO Number
-        if (find_if(id.begin(), id.end(), [](char c) { return !isdigit(c); }) != id.end() &&
+        auto & id_field = value["ID"];
+        if (find_if(id_field.begin(), id_field.end(), [](char c) { return !isdigit(c); }) != id_field.end() &&
             value["Number"] != "A" &&
             value["Number"] != "R" &&
             value["Number"] != "G" &&
@@ -188,7 +200,7 @@ namespace opencb
         }
     }
     
-    void MetaEntry::check_sample(std::map<std::string, std::string> value)
+    void MetaEntryVisitor::check_sample(std::map<std::string, std::string> & value) const
     {
         // It must contain an ID
         if (value.count("ID") == 0) {
