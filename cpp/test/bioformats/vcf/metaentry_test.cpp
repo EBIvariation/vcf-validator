@@ -209,4 +209,94 @@ namespace opencb
         }
     }
 
+    TEST_CASE("contig MetaEntry checks", "[checks][keyvalue]") 
+    {
+        auto source = vcf::Source {
+            "Example VCF source",
+            'r',
+            vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+            "v4.1",
+            {},
+            { "Sample1", "Sample2", "Sample3" }};
+            
+        SECTION("ID presence")
+        {
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "contig",
+                                { {"ID", "contig_1"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "contig",
+                                { {"ID", "contig_2"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {  
+                                "contig",
+                                { {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument );
+        }
+    }
+    
+    TEST_CASE("FILTER MetaEntry checks", "[checks][keyvalue]") 
+    {
+        auto source = vcf::Source {
+            "Example VCF source",
+            'r',
+            vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+            "v4.1",
+            {},
+            { "Sample1", "Sample2", "Sample3" }};
+            
+        SECTION("ID and Description presence")
+        {
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "FILTER",
+                                { {"ID", "Filter1"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {  
+                                "FILTER",
+                                { {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {  
+                                "FILTER",
+                                { {"ID", "TAG_ID"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument );
+        }
+    }
+    
+    TEST_CASE("SAMPLE MetaEntry checks", "[checks][keyvalue]") 
+    {
+        auto source = vcf::Source {
+            "Example VCF source",
+            'r',
+            vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+            "v4.1",
+            {},
+            { "Sample1", "Sample2", "Sample3" }};
+            
+        SECTION("ID presence")
+        {
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "SAMPLE",
+                                { {"ID", "Sample_1"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "SAMPLE",
+                                { {"ID", "Sample_2"}, {"Genomes", "genome_1,genome_2"}, {"Mixtures", "mixture_1"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {  
+                                "SAMPLE",
+                                { {"Genomes", "genome_1,genome_2"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument );
+        }
+    }
 }
