@@ -766,9 +766,6 @@ namespace opencb
     template <typename Configuration>
     void Parser<Configuration>::parse_buffer(char const * p, char const * pe, char const * eof)
     {
-      char const * ts = nullptr;
-      char const * te = nullptr;
-
       %%{
       write exec;
       }%%

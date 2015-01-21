@@ -26,7 +26,7 @@ namespace opencb
 
     class ParsingError : public std::runtime_error
     {
-      using runtime_error::runtime_error;
+        using runtime_error::runtime_error;
     };
 
     class IgnoreParsePolicy
@@ -35,9 +35,15 @@ namespace opencb
         void handle_token_begin(ParsingState const & state) {}
         void handle_token_char(ParsingState const & state, char c) {}
         void handle_token_end(ParsingState const & state) {}
-        void handle_column_end(ParsingState const & state, size_t n_columns);
         void handle_newline(ParsingState const & state) {}
-        std::string current_token() const { return nullptr; }
+        
+        void handle_meta_typeid(ParsingState const & state) {}
+        void handle_meta_key(ParsingState const & state) {}
+        void handle_meta_value(ParsingState const & state) {}
+        
+        void handle_column_end(ParsingState const & state, size_t n_columns);
+        
+        std::string current_token() const { return ""; }
     };
 
     class StoreParsePolicy
@@ -45,19 +51,53 @@ namespace opencb
       public:
         void handle_token_begin(ParsingState const & state)
         {
-          m_current_token = std::string();
+            m_current_token = std::string();
         }
 
         void handle_token_char(ParsingState const & state, char c)
         {
-          m_current_token.push_back(c);
+            m_current_token.push_back(c);
         }
         
-        void handle_token_end(ParsingState const & state) {
-          m_grouped_tokens.push_back(m_current_token);
+        void handle_token_end(ParsingState const & state) 
+        {
+            m_grouped_tokens.push_back(m_current_token);
         }
         
-        void handle_column_end(ParsingState const & state, size_t n_columns) {
+        void handle_newline(ParsingState const & state) 
+        {
+//            for (auto & group : m_line_tokens) {
+//                std::cout << group.first << " = " ;   
+//                for (auto & token : group.second) {
+//                    std::cout << token << ' ' ;   
+//                }
+//            std::cout << std::endl;
+//            }
+            
+            m_current_token.clear();
+            m_grouped_tokens.clear();
+            m_line_tokens.clear();
+        }
+        
+        
+        void handle_meta_typeid(ParsingState const & state) 
+        {
+            m_line_typeid = m_current_token;
+        }
+        
+        void handle_meta_key(ParsingState const & state) 
+        {
+            m_grouped_tokens.push_back(m_current_token);
+        }
+        
+        void handle_meta_value(ParsingState const & state) 
+        {
+            m_grouped_tokens.push_back(m_current_token);
+        }
+        
+        
+        void handle_column_end(ParsingState const & state, size_t n_columns) 
+        {
             switch(n_columns) {
                 case 1:
                     m_line_tokens["CHROM"] = m_grouped_tokens;
@@ -83,23 +123,9 @@ namespace opencb
             m_grouped_tokens = std::vector<std::string>{};
         }
         
-        void handle_newline(ParsingState const & state) {
-//            for (auto & group : m_line_tokens) {
-//                std::cout << group.first << " = " ;   
-//                for (auto & token : group.second) {
-//                    std::cout << token << ' ' ;   
-//                }
-//            std::cout << std::endl;
-//            }
-            
-            m_current_token.clear();
-            m_grouped_tokens.clear();
-            m_line_tokens.clear();
-        }
-        
         std::string current_token() const
         {
-          return m_current_token;
+            return m_current_token;
         }
 
       private:
@@ -107,6 +133,11 @@ namespace opencb
          * Token being currently parsed
          */
         std::string m_current_token;
+        
+        /**
+         * Token that acts as type ID for the whole line, like ALT/FILTER in meta entries
+         */
+        std::string m_line_typeid;
         
         /**
          * Tokens that must be grouped, like all key-value pairs in the INFO column
