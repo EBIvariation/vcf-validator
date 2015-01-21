@@ -146,8 +146,8 @@ namespace opencb
         }
         
         // Check FORMAT Number
-        auto & id_field = value["ID"];
-        if (find_if(id_field.begin(), id_field.end(), [](char c) { return !isdigit(c); }) != id_field.end() &&
+        auto & number_field = value["Number"];
+        if (find_if(number_field.begin(), number_field.end(), [](char c) { return !isdigit(c); }) != number_field.end() &&
             value["Number"] != "A" &&
             value["Number"] != "R" &&
             value["Number"] != "G" &&

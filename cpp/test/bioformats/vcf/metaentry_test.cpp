@@ -270,6 +270,124 @@ namespace opencb
         }
     }
     
+    TEST_CASE("FORMAT MetaEntry checks", "[checks][keyvalue]") 
+    {
+        auto source = vcf::Source {
+            "Example VCF source",
+            'r',
+            vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+            "v4.1",
+            {},
+            { "Sample1", "Sample2", "Sample3" }};
+            
+        SECTION("ID, Number, Type and Description presence")
+        {
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument ); 
+        }
+        
+        SECTION("Number field values")
+        {
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                            
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                            
+            CHECK_THROWS_AS( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument );
+        }
+        
+        SECTION("Type field values")
+        {
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "Character"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                            
+            CHECK_THROWS_AS( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry { 
+                                "FORMAT",
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument );
+        }
+    }
+    
     TEST_CASE("SAMPLE MetaEntry checks", "[checks][keyvalue]") 
     {
         auto source = vcf::Source {
