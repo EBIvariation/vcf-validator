@@ -9,7 +9,7 @@
 namespace opencb
 {
 
-    TEST_CASE("MetaEntry constructor (no value)", "[constructor]") 
+    TEST_CASE("MetaEntry constructor (no value)", "[constructor][novalue]") 
     {
         auto source = vcf::Source {
             "Example VCF source",
@@ -40,7 +40,7 @@ namespace opencb
             }
     }
 
-    TEST_CASE("MetaEntry constructor (plain value)", "[constructor]") 
+    TEST_CASE("MetaEntry constructor (plain value)", "[constructor][plainvalue]") 
     {
         auto source = vcf::Source {
             "Example VCF source",
@@ -51,7 +51,7 @@ namespace opencb
             { "Sample1", "Sample2", "Sample3" }};
 
             
-            SECTION ("Correct arguments")
+            SECTION("Correct arguments")
             {
                 CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "assembly",
@@ -59,7 +59,7 @@ namespace opencb
                                 std::make_shared<vcf::Source>(source)} ) );
             }
             
-            SECTION ("A one-line string value should be assigned")
+            SECTION("A one-line string value should be assigned")
             {
                 auto meta = vcf::MetaEntry { 
                                 "assembly",
@@ -73,7 +73,7 @@ namespace opencb
                                 boost::bad_get);
             }
                 
-            SECTION ("A multi-line string value should throw an error")
+            SECTION("A multi-line string value should throw an error")
             {
                 CHECK_THROWS_AS( (vcf::MetaEntry { 
                                     "assembly",
@@ -83,7 +83,7 @@ namespace opencb
             }
     }
 
-    TEST_CASE("MetaEntry constructor (key-value pairs)", "[constructor]") 
+    TEST_CASE("MetaEntry constructor (key-value pairs)", "[constructor][keyvalue]") 
     {
         auto source = vcf::Source {
             "Example VCF source",
@@ -93,8 +93,7 @@ namespace opencb
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
-            
-        SECTION ("Correct arguments")
+        SECTION("Correct arguments")
         {
             CHECK_NOTHROW( (vcf::MetaEntry { 
                             "contig",
@@ -103,7 +102,7 @@ namespace opencb
         }
             
         
-        SECTION ("No value should be assigned")
+        SECTION("A key-pair map should be assigned")
         {
             auto meta = vcf::MetaEntry {  
                             "contig",
@@ -115,6 +114,98 @@ namespace opencb
             CHECK_THROWS_AS( boost::get<std::string>(meta.value),
                             boost::bad_get);
             CHECK( (boost::get<std::map<std::string,std::string>>(meta.value)) == (std::map<std::string,std::string>{ {"ID", "contig_1"} }) );
+        }
+        
+    }
+    
+    
+    TEST_CASE("ALT MetaEntry checks", "[checks][keyvalue]") 
+    {
+        auto source = vcf::Source {
+            "Example VCF source",
+            'r',
+            vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+            "v4.1",
+            {},
+            { "Sample1", "Sample2", "Sample3" }};
+            
+        SECTION("ID and Description presence")
+        {
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "ALT",
+                                { {"ID", "INS"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {  
+                                "ALT",
+                                { {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {  
+                                "ALT",
+                                { {"ID", "TAG_ID"} },
+                                std::make_shared<vcf::Source>(source)}),
+                            std::invalid_argument );
+        }
+        
+        SECTION("ID prefixes")
+        {
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "ALT",
+                                { {"ID", "DEL"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                              
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "ALT",
+                                { {"ID", "INS"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                             
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "ALT",
+                                { {"ID", "DUP"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                             
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "ALT",
+                                { {"ID", "INV"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                             
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "ALT",
+                                { {"ID", "CNV"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                               
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "ALT",
+                                { {"ID", "DEL:FOO"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "ALT",
+                                { {"ID", "INS:FOO"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "ALT",
+                                { {"ID", "DUP:FOO"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "ALT",
+                                { {"ID", "INV:FOO"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "ALT",
+                                { {"ID", "CNV:FOO"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                  
+            CHECK_NOTHROW( (vcf::MetaEntry { 
+                                "ALT",
+                                { {"ID", "CNV:FOO:BAR"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)} ) );
+                                
         }
     }
 
