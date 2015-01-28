@@ -71,21 +71,18 @@ namespace opencb
     
     struct Source 
     {
-        std::string name;       /**< Name of the source to interact with (file, stdin...) */
-        char mode;              /**< Mode for interaction (w/r/a) */
-        
-        std::string version;    /**< VCF version */
-        unsigned input_format;  /**< Mask that stores whether the input is plain/gzipped VCF, BCF, etc */
+        std::string name;           /**< Name of the source to interact with (file, stdin...) */
+        unsigned int input_format;  /**< Mask that stores whether the input is plain/gzipped VCF, BCF, etc */
+        std::string version;        /**< VCF version */
 
         std::vector<MetaEntry> meta_entries;    /**< Entries in the file meta-data */
         std::vector<std::string> samples_names; /**< Names of the sequenced samples */
         
         Source(std::string const & name,
-               char const mode,
                unsigned const input_format,
-               std::string const & version,
-               std::vector<MetaEntry> const & meta_entries,
-               std::vector<std::string> const & samples_names);
+               std::string const & version = "VCFv4.1",
+               std::vector<MetaEntry> const & meta_entries = {},
+               std::vector<std::string> const & samples_names = {});
     };
     
     struct Record 

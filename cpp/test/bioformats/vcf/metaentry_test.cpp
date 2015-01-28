@@ -13,7 +13,6 @@ namespace opencb
     {
         auto source = vcf::Source {
             "Example VCF source",
-            'r',
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             "v4.1",
             {},
@@ -44,7 +43,6 @@ namespace opencb
     {
         auto source = vcf::Source {
             "Example VCF source",
-            'r',
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             "v4.1",
             {},
@@ -87,7 +85,6 @@ namespace opencb
     {
         auto source = vcf::Source {
             "Example VCF source",
-            'r',
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             "v4.1",
             {},
@@ -123,7 +120,6 @@ namespace opencb
     {
         auto source = vcf::Source {
             "Example VCF source",
-            'r',
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             "v4.1",
             {},
@@ -213,7 +209,6 @@ namespace opencb
     {
         auto source = vcf::Source {
             "Example VCF source",
-            'r',
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             "v4.1",
             {},
@@ -243,7 +238,6 @@ namespace opencb
     {
         auto source = vcf::Source {
             "Example VCF source",
-            'r',
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             "v4.1",
             {},
@@ -274,7 +268,6 @@ namespace opencb
     {
         auto source = vcf::Source {
             "Example VCF source",
-            'r',
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             "v4.1",
             {},
@@ -392,7 +385,6 @@ namespace opencb
     {
         auto source = vcf::Source {
             "Example VCF source",
-            'r',
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             "v4.1",
             {},
@@ -515,7 +507,6 @@ namespace opencb
     {
         auto source = vcf::Source {
             "Example VCF source",
-            'r',
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             "v4.1",
             {},

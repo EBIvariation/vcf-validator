@@ -7,10 +7,12 @@
 
 #include <iostream>
 #include <fstream>
+#include <memory>
 #include <string>
 #include <vector>
 #include <stdexcept>
 
+#include "file_structure.hpp"
 #include "validator.hpp"
 
 namespace
@@ -36,7 +38,8 @@ namespace
   bool is_valid_vcf_file(char const * path)
   {
     std::ifstream input{path};
-    auto validator = opencb::vcf::FullValidator{};
+    auto source = opencb::vcf::Source(path, opencb::vcf::InputFormat::VCF_FILE_VCF);
+    auto validator = opencb::vcf::FullValidator{std::make_shared<opencb::vcf::Source>(source)};
 
 //    for ( std::string line; std::getline(input, line); )
 //    {

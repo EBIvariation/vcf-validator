@@ -60,18 +60,14 @@
     }
 
     
-    ########### Correct fields actions ##########
+    ########### Correct meta actions ##########
 
     action fileformat_end {
-//        set_vcf_file_format(ts, p-ts, file);
-    }
-
-    action meta_entry_begin {
-//        printf("Reading meta entry\n");
-//        status->current_meta_entry = vcf_meta_entry_new();
+        ParsePolicy::handle_fileformat(*this);
     }
 
     action meta_entry_end {
+        ParsePolicy::handle_meta_line(*this);
 //        add_vcf_meta_entry(status->current_meta_entry, file);
     }
 
@@ -90,19 +86,48 @@
     }
 
     action meta_alt_read {
+        ParsePolicy::handle_meta_typeid(*this, "ALT");
         //printf("Meta ALT in line %zu\n", n_lines);
     }
 
+    action meta_assembly_read {
+        ParsePolicy::handle_meta_typeid(*this, "assembly");
+        //printf("Meta assembly in line %zu\n", n_lines);
+    }
+
+    action meta_contig_read {
+        ParsePolicy::handle_meta_typeid(*this, "contig");
+        //printf("Meta contig in line %zu\n", n_lines);
+    }
+
     action meta_filter_read {
+        ParsePolicy::handle_meta_typeid(*this, "FILTER");
         //printf("Meta FILTER in line %zu\n", n_lines);
     }
 
     action meta_format_read {
+        ParsePolicy::handle_meta_typeid(*this, "FORMAT");
         //printf("Meta FORMAT in line %zu\n", n_lines);
     }
 
     action meta_info_read {
+        ParsePolicy::handle_meta_typeid(*this, "INFO");
         //printf("Meta INFO in line %zu\n", n_lines);
+    }
+
+    action meta_pedigree_read {
+        ParsePolicy::handle_meta_typeid(*this, "PEDIGREE");
+        //printf("Meta PEDIGREE in line %zu\n", n_lines);
+    }
+
+    action meta_pedigreedb_read {
+        ParsePolicy::handle_meta_typeid(*this, "pedigreeDB");
+        //printf("Meta pedigreeDB in line %zu\n", n_lines);
+    }
+
+    action meta_sample_read {
+        ParsePolicy::handle_meta_typeid(*this, "SAMPLE");
+        //printf("Meta SAMPLE in line %zu\n", n_lines);
     }
 
     action meta_generic_read {
@@ -117,6 +142,9 @@
     action sample_name_end {
 //        add_vcf_sample_name(ts, p-ts, file);
     }
+
+
+    ########### Correct body actions ##########
 
     action record_begin {
 //        status->current_record = vcf_record_new();
@@ -541,7 +569,7 @@
 
     # File format must be a sequence of alphanumeric and/or punctuation characters like "VCFv4.1"
     fileformat_name = (alnum | punct)+ $err(fileformat_error);
-    fileformat      = "##fileformat=" fileformat_name >token_begin %fileformat_end;
+    fileformat      = "##fileformat=" fileformat_name >token_begin @token_middle %fileformat_end;
 
     # Meta-data
     meta_key        = (alnum | "_" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB");
@@ -582,22 +610,21 @@
                         (",Genomes=" identifier (";" identifier)* ) $err(meta_sample_genomes_err)
                         (",Mixture=" identifier (";" identifier)* ) $err(meta_sample_mixture_err)
                         (",Description=\"" meta_field_desc (";" meta_field_desc)* "\"" ) $err(meta_desc_err) ;
-    
-    meta_entry      = ( 
-                       ("##" meta_key >token_begin %meta_id_end "=<" meta_field ("," meta_field)* ">") %(meta_generic_read) |
-                       ("##ALT=<" meta_alt ">" ) %(meta_alt_read) $err(meta_alt_err) | 
-                       ("##FILTER=<" meta_filter ">" ) %(meta_filter_read) $err(meta_filter_err) | 
-                       ("##FORMAT=<" meta_format ">" ) %(meta_format_read) $err(meta_format_err) |
-                       ("##INFO=<" meta_info ">" ) %(meta_info_read) $err(meta_info_err) | 
-                       ("##assembly=" meta_assembly ) $err(meta_assembly_err) |
-                       ("##contig=<" meta_contig ">" ) $err(meta_contig_err) |
-                       ("##SAMPLE=<" meta_sample ">" ) $err(meta_sample_err) |
-                       ("##PEDIGREE=<" meta_pedigree ">" ) $err(meta_pedigree_err) |
-                       ("##pedigreeDB=<" meta_pedigreeDB ">" ) $err(meta_pedigreedb_err) |
-                       ("##" meta_field >token_begin %meta_field_value_end) |
-                       ("##" meta_field_value >token_begin %meta_field_value_end)
-                      )
-                      >meta_entry_begin %meta_entry_end;
+         
+    meta_entry      = "##" ( 
+                       (meta_key	>token_begin %meta_id_end "=<" meta_field ("," meta_field)* ">") %(meta_generic_read) |
+                       ("ALT=<" meta_alt ">" )			%(meta_alt_read) $err(meta_alt_err) | 
+                       ("FILTER=<" meta_filter ">" )		%(meta_filter_read) $err(meta_filter_err) | 
+                       ("FORMAT=<" meta_format ">" )		%(meta_format_read) $err(meta_format_err) |
+                       ("INFO=<" meta_info ">" )		%(meta_info_read) $err(meta_info_err) | 
+                       ("assembly=" meta_assembly )		%(meta_assembly_read) $err(meta_assembly_err) |
+                       ("contig=<" meta_contig ">" )		%(meta_contig_read) $err(meta_contig_err) |
+                       ("SAMPLE=<" meta_sample ">" )		%(meta_sample_read) $err(meta_sample_err) |
+                       ("PEDIGREE=<" meta_pedigree ">" )	%(meta_pedigree_read) $err(meta_pedigree_err) |
+                       ("pedigreeDB=<" meta_pedigreeDB ">" )	%(meta_pedigreedb_read) $err(meta_pedigreedb_err) |
+                       (meta_key "=" meta_field_value		>token_begin %meta_field_value_end) |
+                       (meta_field_value			>token_begin %meta_field_value_end)
+                      ) %meta_entry_end;
 
     # Header between meta and records
     sample_name     = (print - ("\n" | "\t"))+ ;
@@ -723,7 +750,8 @@ namespace opencb
   namespace vcf
   {
     template <typename Configuration>
-    Parser<Configuration>::Parser()
+    Parser<Configuration>::Parser(std::shared_ptr<Source> const & source)
+    : ParsingState{source}
     {
       %%{
       write init;

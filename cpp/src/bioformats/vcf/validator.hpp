@@ -3,10 +3,13 @@
 
 #include <iostream>
 #include <map>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
+
+#include "file_structure.hpp"
 
 namespace opencb
 {
@@ -14,14 +17,18 @@ namespace opencb
   {
     struct ParsingState
     {
-      ParsingState();
+        size_t n_lines;
+        size_t n_columns;
+        size_t n_batches;
 
-      size_t n_lines;
-      size_t n_columns;
-      size_t n_batches;
-
-      int cs;
-      bool m_is_valid;
+        int cs;
+        bool m_is_valid;
+        
+        std::shared_ptr<Source> source;
+     
+        ParsingState(std::shared_ptr<Source> source);
+        
+        void set_version(std::string & fileformat) const;
     };
 
     class ParsingError : public std::runtime_error
@@ -37,9 +44,12 @@ namespace opencb
         void handle_token_end(ParsingState const & state) {}
         void handle_newline(ParsingState const & state) {}
         
-        void handle_meta_typeid(ParsingState const & state) {}
+        void handle_fileformat(ParsingState const & state) {}
+        
+        void handle_meta_typeid(ParsingState const & state, std::string type_id) {}
         void handle_meta_key(ParsingState const & state) {}
         void handle_meta_value(ParsingState const & state) {}
+        void handle_meta_line(ParsingState const & state) {}
         
         void handle_column_end(ParsingState const & state, size_t n_columns);
         
@@ -79,10 +89,15 @@ namespace opencb
             m_line_tokens.clear();
         }
         
-        
-        void handle_meta_typeid(ParsingState const & state) 
+        void handle_fileformat(ParsingState const & state)
         {
-            m_line_typeid = m_current_token;
+            state.set_version(m_current_token);
+        }
+        
+        
+        void handle_meta_typeid(ParsingState const & state, std::string type_id) 
+        {
+            m_line_typeid = type_id;
         }
         
         void handle_meta_key(ParsingState const & state) 
@@ -93,6 +108,11 @@ namespace opencb
         void handle_meta_value(ParsingState const & state) 
         {
             m_grouped_tokens.push_back(m_current_token);
+        }
+        
+        void handle_meta_line(ParsingState const & state) 
+        {
+//            std::cout << "Now it's the moment to create a MetaEntry!" << std::endl;
         }
         
         
@@ -213,7 +233,7 @@ namespace opencb
         using ParsePolicy = typename Configuration::ParsePolicy;
         using ErrorPolicy = typename Configuration::ErrorPolicy;
 
-        Parser();
+        Parser(std::shared_ptr<Source> const & source);
 
         void parse(std::string const & text);
         void parse(std::vector<char> const & text);
@@ -221,9 +241,10 @@ namespace opencb
         void end();
 
         bool is_valid() const;
-
+        
       private:
         void parse_buffer(char const * p, char const * pe, char const * eof);
+        
     };
 
     // Predefined aliases for common uses of the parser
