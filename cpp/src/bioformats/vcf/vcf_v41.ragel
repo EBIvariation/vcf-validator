@@ -85,44 +85,72 @@
         }*/
     }
 
-    action meta_key_alt {
+    action meta_typeid_alt {
         ParsePolicy::handle_meta_typeid(*this, "ALT");
     }
 
-    action meta_key_assembly {
+    action meta_typeid_assembly {
         ParsePolicy::handle_meta_typeid(*this, "assembly");
     }
 
-    action meta_key_contig {
+    action meta_typeid_contig {
         ParsePolicy::handle_meta_typeid(*this, "contig");
     }
 
-    action meta_key_filter {
+    action meta_typeid_filter {
         ParsePolicy::handle_meta_typeid(*this, "FILTER");
     }
 
-    action meta_key_format {
+    action meta_typeid_format {
         ParsePolicy::handle_meta_typeid(*this, "FORMAT");
     }
 
-    action meta_key_info {
+    action meta_typeid_info {
         ParsePolicy::handle_meta_typeid(*this, "INFO");
     }
 
-    action meta_key_pedigree {
+    action meta_typeid_pedigree {
         ParsePolicy::handle_meta_typeid(*this, "PEDIGREE");
     }
 
-    action meta_key_pedigreedb {
+    action meta_typeid_pedigreedb {
         ParsePolicy::handle_meta_typeid(*this, "pedigreeDB");
     }
 
-    action meta_key_sample {
+    action meta_typeid_sample {
         ParsePolicy::handle_meta_typeid(*this, "SAMPLE");
     }
 
-    action meta_key_generic {
+    action meta_id {
+        ParsePolicy::handle_meta_key(*this, "ID");
+    }
+    
+    action meta_number {
+        ParsePolicy::handle_meta_key(*this, "Number");
+    }
+    
+    action meta_type {
+        ParsePolicy::handle_meta_key(*this, "Type");
+    }
+    
+    action meta_description {
+        ParsePolicy::handle_meta_key(*this, "Description");
+    }
+    
+    action meta_genomes {
+        ParsePolicy::handle_meta_key(*this, "Genomes");
+    }
+    
+    action meta_mixture {
+        ParsePolicy::handle_meta_key(*this, "Mixture");
+    }
+    
+    action meta_typeid_generic {
         ParsePolicy::handle_meta_typeid(*this);
+    }
+    
+    action meta_key_generic {
+        ParsePolicy::handle_meta_key(*this);
     }
     
     action header_begin {
@@ -247,8 +275,8 @@
         fhold; fgoto meta_section_skip;
     }
 
-    action meta_alt_id_prefix_err {
-        ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV");
+    action meta_alt_id_err {
+        ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence");
         fhold; fgoto meta_section_skip;
     }
 
@@ -326,12 +354,12 @@
     }
     
     action meta_sample_genomes_err {
-        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)");
         fhold; fgoto meta_section_skip;
     }
     
     action meta_sample_mixture_err {
-        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture contains a character different from alphanumeric, dot, underscore and dash");
+        ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)");
         fhold; fgoto meta_section_skip;
     }
     
@@ -564,57 +592,66 @@
 
     # Meta-data
     meta_key        = (alnum | "_" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB");
-    meta_field_value= (print - "=")+ ;
+    meta_value      = (print - "<")+ ;
+    meta_plain_value= (print - "=")+ ;
+    meta_field_value= (print - ("," | ">"))+ ;
     meta_field_desc = (print - "\"")+ ;
-    meta_field      = ( meta_key "=" meta_field_value ) >token_begin %meta_field_value_end ;
+    meta_field      = ( identifier >token_begin @token_middle %meta_key_generic
+                        "=" 
+                        meta_field_value >token_begin @token_middle %token_end ) ;
     
-    meta_alt        = "ID=" ( 
-                              ("DEL" | "INS" | "DUP" | "INV" | "CNV") $err(meta_alt_id_prefix_err) 
-                              ( ":" meta_field_value)? $err(meta_alt_id_suffix_err)
-                            )
-                        ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
+    meta_alt        = "ID=" %meta_id (alpha | ":")+ >token_begin @token_middle %token_end $err(meta_alt_id_err)
+                        ",Description" %meta_description "=\"" meta_field_desc >token_begin @token_middle %token_end "\"" $err(meta_desc_err) ;
                         
-    meta_assembly   = url $err(meta_url_err) ;
+    meta_assembly   = url >token_begin @token_middle %token_end $err(meta_url_err) ;
     
-    meta_contig     = "ID=" identifier $err(meta_id_err)
-                        ("," identifier "=" meta_field_value)* ;
+    meta_contig     = "ID=" %meta_id identifier >token_begin @token_middle %token_end $err(meta_id_err) 
+                        ("," identifier >token_begin @token_middle %token_end $err(meta_id_err) "=" meta_field_value >token_begin @token_middle %token_end)* ;
                         
-    meta_filter     = "ID=" identifier $err(meta_id_err) 
-                        ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
+    meta_filter     = "ID=" %meta_id identifier >token_begin @token_middle %token_end $err(meta_id_err) 
+                        ",Description=\"" meta_field_desc >token_begin @token_middle %meta_description %token_end "\"" $err(meta_desc_err) ;
+    
+    ## TODO It is unlikely, but "Number" could have multiple digits and in that case it should be managed the same way as "Type"
+    meta_format     = "ID=" %meta_id identifier >token_begin @token_middle %token_end $err(meta_id_err)
+                        ",Number=" %meta_number ( (digit)+ | "A" | "R" | "G" | "." ) >token_begin @token_middle %token_end $err(meta_format_number_err) 
+                        ",Type=" %meta_type (alpha)+ >token_begin @token_middle %token_end $err(meta_info_type_err)
+                        ",Description=" %meta_description "\"" meta_field_desc >token_begin @token_middle %token_end "\"" $err(meta_desc_err) ;
                         
-    meta_format     = "ID=" identifier $err(meta_id_err)
-                        ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) $err(meta_format_number_err) 
-                        ",Type=" ( "Integer" | "Float" | "Character" | "String" ) $err(meta_format_type_err) 
-                        ",Description=\"" meta_field_desc "\"" $err(meta_desc_err) ;
-                        
-    meta_info       = "ID=" identifier $err(meta_id_err) 
-                        ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) $err(meta_info_number_err)  
-                        ",Type=" ( "Integer" | "Float" | "Flag" | "Character" | "String" ) $err(meta_info_type_err)
-                        ",Description=\"" meta_field_desc "\"" $err(meta_desc_err)
+    ## TODO It is unlikely, but "Number" could have multiple digits and in that case it should be managed the same way as "Type"
+    meta_info       = "ID=" %meta_id identifier >token_begin @token_middle %token_end $err(meta_id_err) 
+                        ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) >token_begin @token_middle %meta_number %token_end $err(meta_info_number_err)  
+                        ",Type=" %meta_type (alpha)+ >token_begin @token_middle %token_end $err(meta_info_type_err)
+                        ",Description=" %meta_description "\"" meta_field_desc >token_begin @token_middle %token_end "\"" $err(meta_desc_err)
                         ("," identifier "=\"" meta_field_desc "\"")* ;
                         
-    meta_pedigree   = identifier $err(meta_id_err) "=" identifier $err(meta_id_err) ("," identifier $err(meta_id_err) "=" identifier $err(meta_id_err))* ;
+    meta_pedigree   = identifier >token_begin @token_middle %token_end $err(meta_id_err) "=" identifier >token_begin @token_middle %token_end $err(meta_id_err) 
+                        ("," identifier >token_begin @token_middle %token_end $err(meta_id_err) "=" identifier >token_begin @token_middle %token_end $err(meta_id_err))* ;
     
-    meta_pedigreeDB = url $err(meta_url_err) ;
+    meta_pedigreeDB = url >token_begin @token_middle %token_end $err(meta_url_err) ;
     
-    meta_sample     = "ID=" identifier $err(meta_id_err)
-                        (",Genomes=" identifier (";" identifier)* ) $err(meta_sample_genomes_err)
-                        (",Mixture=" identifier (";" identifier)* ) $err(meta_sample_mixture_err)
-                        (",Description=\"" meta_field_desc (";" meta_field_desc)* "\"" ) $err(meta_desc_err) ;
-         
+    ## TODO The error shown when "Description" is missing shows that Mixture is not a valid string
+    meta_sample     = "ID=" %meta_id identifier >token_begin @token_middle %token_end $err(meta_id_err)
+                        (",Genomes=" %meta_genomes meta_field_value >token_begin @token_middle %token_end) $err(meta_sample_genomes_err)
+                        (",Mixture=" %meta_mixture meta_field_value >token_begin @token_middle %token_end) $err(meta_sample_mixture_err)
+                        (",Description=" %meta_description "\"" meta_field_desc >token_begin @token_middle %token_end "\"") $err(meta_desc_err) ;
+
     meta_entry      = "##" ( 
-                       ("ALT"		%meta_key_alt 		"=<" meta_alt ">" )		$err(meta_alt_err) | 
-                       ("FILTER"	%meta_key_filter	"=<" meta_filter ">" )		$err(meta_filter_err) | 
-                       ("FORMAT"	%meta_key_format	"=<" meta_format ">" )		$err(meta_format_err) |
-                       ("INFO"		%meta_key_info		"=<" meta_info ">" )		$err(meta_info_err) | 
-                       ("assembly"	%meta_key_assembly	"=" meta_assembly )		$err(meta_assembly_err) |
-                       ("contig"	%meta_key_contig	"=<" meta_contig ">" )		$err(meta_contig_err) |
-                       ("SAMPLE"	%meta_key_sample	"=<" meta_sample ">" )		$err(meta_sample_err) |
-                       ("PEDIGREE"	%meta_key_pedigree	"=<" meta_pedigree ">" )	$err(meta_pedigree_err) |
-                       ("pedigreeDB"	%meta_key_pedigreedb	"=<" meta_pedigreeDB ">" )	$err(meta_pedigreedb_err) |
-                       (meta_key		>token_begin @token_middle %meta_key_generic "=<" meta_field ("," meta_field)* ">")  |
-                       (meta_key		>token_begin @token_middle %meta_key_generic "=" meta_field_value	>token_begin %meta_field_value_end) |
-                       (meta_field_value	>token_begin %meta_field_value_end)
+                       ("ALT"		%meta_typeid_alt 	"=<" meta_alt ">" )		$err(meta_alt_err) | 
+                       ("FILTER"	%meta_typeid_filter	"=<" meta_filter ">" )		$err(meta_filter_err) | 
+                       ("FORMAT"	%meta_typeid_format	"=<" meta_format ">" )		$err(meta_format_err) |
+                       ("INFO"		%meta_typeid_info	"=<" meta_info ">" )		$err(meta_info_err) | 
+                       ("assembly"	%meta_typeid_assembly	"=" meta_assembly )		$err(meta_assembly_err) |
+                       ("contig"	%meta_typeid_contig	"=<" meta_contig ">" )		$err(meta_contig_err) |
+                       ("SAMPLE"	%meta_typeid_sample	"=<" meta_sample ">" )		$err(meta_sample_err) |
+                       ("PEDIGREE"	%meta_typeid_pedigree	"=<" meta_pedigree ">" )	$err(meta_pedigree_err) |
+                       ("pedigreeDB"	%meta_typeid_pedigreedb	"=<" meta_pedigreeDB ">" )	$err(meta_pedigreedb_err) |
+                       (meta_plain_value	>token_begin @token_middle %token_end) |
+                       (meta_key	>token_begin @token_middle %meta_typeid_generic "=" 
+                         (
+                           ("<" meta_field ("," meta_field)* ">") |
+                           ( meta_value >token_begin @token_middle %token_end )
+                         )
+                       )
                       ) %meta_entry_end;
 
     # Header between meta and records

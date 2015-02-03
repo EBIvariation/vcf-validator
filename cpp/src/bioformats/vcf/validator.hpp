@@ -52,6 +52,7 @@ namespace opencb
         void handle_meta_typeid(ParsingState const & state) {}
         void handle_meta_typeid(ParsingState const & state, std::string type_id) {}
         void handle_meta_key(ParsingState const & state) {}
+        void handle_meta_key(ParsingState const & state, std::string key) {}
         void handle_meta_value(ParsingState const & state) {}
         void handle_meta_line(ParsingState const & state) {}
         
@@ -112,6 +113,11 @@ namespace opencb
         void handle_meta_key(ParsingState const & state) 
         {
             m_grouped_tokens.push_back(m_current_token);
+        }
+        
+        void handle_meta_key(ParsingState const & state, std::string key)
+        {
+            m_grouped_tokens.push_back(key);
         }
         
         void handle_meta_value(ParsingState const & state) 
