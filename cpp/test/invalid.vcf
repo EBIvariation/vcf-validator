@@ -38,6 +38,7 @@ asdfasI23rt'0'0ºo
 ##INFO=<ID=ValidSourceVersion,Number=1,Type=Float,Description="Global Allele Frequency based on AC/AN",Source="This source is valid",Version="This version is valid">
 ##INFO=<ID=NotValidSource,Number=1,Type=Float,Description="Global Allele Frequency based on AC/AN",Source="This source"not valid">
 ##INFO=<ID=NotValidVersion,Number=1,Type=Float,Description="Global Allele Frequency based on AC/AN",Version="This version"not valid">
+##MYID=<ID=GT,Number=1,Type=String,Description="Genotype">
 ##reference=GRCh37
 ##reference=
 ##assembly=ftp://user@host:8080/path/to/file.fastq

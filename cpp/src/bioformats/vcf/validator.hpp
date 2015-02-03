@@ -15,6 +15,7 @@ namespace opencb
 {
   namespace vcf
   {
+    
     struct ParsingState
     {
         size_t n_lines;
@@ -29,6 +30,8 @@ namespace opencb
         ParsingState(std::shared_ptr<Source> source);
         
         void set_version(std::string & fileformat) const;
+        
+        void add_meta(MetaEntry const & meta) const;
     };
 
     class ParsingError : public std::runtime_error
@@ -46,6 +49,7 @@ namespace opencb
         
         void handle_fileformat(ParsingState const & state) {}
         
+        void handle_meta_typeid(ParsingState const & state) {}
         void handle_meta_typeid(ParsingState const & state, std::string type_id) {}
         void handle_meta_key(ParsingState const & state) {}
         void handle_meta_value(ParsingState const & state) {}
@@ -95,6 +99,11 @@ namespace opencb
         }
         
         
+        void handle_meta_typeid(ParsingState const & state)
+        {
+            m_line_typeid = m_current_token;
+        }
+        
         void handle_meta_typeid(ParsingState const & state, std::string type_id) 
         {
             m_line_typeid = type_id;
@@ -113,6 +122,9 @@ namespace opencb
         void handle_meta_line(ParsingState const & state) 
         {
 //            std::cout << "Now it's the moment to create a MetaEntry!" << std::endl;
+            // TODO Put together m_line_typeid and m_grouped_tokens in a single MetaEntry object
+            // TODO Add MetaEntry to Source
+            // state.add_meta(meta);
         }
         
         

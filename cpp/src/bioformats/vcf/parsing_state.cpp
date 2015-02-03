@@ -15,5 +15,11 @@ namespace opencb
         source->version = version;
     }
     
+    
+    void ParsingState::add_meta(MetaEntry const & meta) const
+    {
+        source->meta_entries.push_back(meta);
+    }
+    
   }
 }
