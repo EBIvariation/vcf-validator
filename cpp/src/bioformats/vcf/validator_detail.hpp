@@ -5,7 +5,7 @@
 #include "validator.hpp"
 
 
-#line 767 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 756 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 
 
 namespace
@@ -23,7 +23,7 @@ static const int vcf_en_meta_section_skip = 547;
 static const int vcf_en_body_section_skip = 548;
 
 
-#line 773 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 762 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 
 }
 
@@ -41,7 +41,7 @@ namespace opencb
 	cs = vcf_start;
 	}
 
-#line 786 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 775 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 
     }
 
@@ -78,7 +78,7 @@ namespace opencb
       return cs >= 
 #line 80 "cpp/src/bioformats/vcf/validator_detail.hpp"
 549
-#line 819 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 808 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 ;
     }
 
@@ -104,7 +104,7 @@ tr0:
     }
 	goto st0;
 tr14:
-#line 266 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 255 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this,
             "Fileformat is not a sequence of alphanumeric and/or punctuation characters");
@@ -127,7 +127,7 @@ tr18:
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st547;}
     }
-#line 383 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
         p--; {goto st548;}
@@ -144,7 +144,7 @@ tr20:
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st547;}
     }
-#line 383 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
         p--; {goto st548;}
@@ -156,47 +156,47 @@ tr20:
     }
 	goto st0;
 tr23:
-#line 273 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 262 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st547;}
     }
-#line 301 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 290 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st547;}
     }
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
     }
-#line 323 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st547;}
     }
-#line 289 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 278 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st547;}
     }
-#line 295 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 284 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
     }
-#line 339 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 328 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st547;}
     }
-#line 345 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 334 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st547;}
@@ -215,7 +215,7 @@ tr34:
     }
 	goto st0;
 tr52:
-#line 273 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 262 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st547;}
@@ -227,12 +227,12 @@ tr52:
     }
 	goto st0;
 tr60:
-#line 278 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 267 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence");
         p--; {goto st547;}
     }
-#line 273 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 262 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st547;}
@@ -244,12 +244,12 @@ tr60:
     }
 	goto st0;
 tr78:
-#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st547;}
     }
-#line 273 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 262 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st547;}
@@ -261,12 +261,12 @@ tr78:
     }
 	goto st0;
 tr82:
-#line 301 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 290 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st547;}
     }
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
@@ -278,7 +278,7 @@ tr82:
     }
 	goto st0;
 tr85:
-#line 301 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 290 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st547;}
@@ -290,12 +290,12 @@ tr85:
     }
 	goto st0;
 tr95:
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 301 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 290 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st547;}
@@ -307,12 +307,12 @@ tr95:
     }
 	goto st0;
 tr115:
-#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st547;}
     }
-#line 301 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 290 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st547;}
@@ -324,7 +324,7 @@ tr115:
     }
 	goto st0;
 tr119:
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
@@ -336,12 +336,12 @@ tr119:
     }
 	goto st0;
 tr129:
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
@@ -353,12 +353,12 @@ tr129:
     }
 	goto st0;
 tr142:
-#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 301 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Number is not a number, A, R, G or dot");
         p--; {goto st547;}
     }
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
@@ -370,12 +370,12 @@ tr142:
     }
 	goto st0;
 tr151:
-#line 333 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 322 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Type is not a Integer, Float, Flag, Character or String");
         p--; {goto st547;}
     }
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
@@ -387,12 +387,12 @@ tr151:
     }
 	goto st0;
 tr169:
-#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st547;}
     }
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
@@ -404,7 +404,7 @@ tr169:
     }
 	goto st0;
 tr174:
-#line 323 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st547;}
@@ -416,12 +416,12 @@ tr174:
     }
 	goto st0;
 tr183:
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 323 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st547;}
@@ -433,12 +433,12 @@ tr183:
     }
 	goto st0;
 tr196:
-#line 328 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 317 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Number is not a number, A, R, G or dot");
         p--; {goto st547;}
     }
-#line 323 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st547;}
@@ -450,12 +450,12 @@ tr196:
     }
 	goto st0;
 tr205:
-#line 333 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 322 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Type is not a Integer, Float, Flag, Character or String");
         p--; {goto st547;}
     }
-#line 323 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st547;}
@@ -467,12 +467,12 @@ tr205:
     }
 	goto st0;
 tr223:
-#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st547;}
     }
-#line 323 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st547;}
@@ -484,7 +484,7 @@ tr223:
     }
 	goto st0;
 tr234:
-#line 339 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 328 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st547;}
@@ -496,12 +496,12 @@ tr234:
     }
 	goto st0;
 tr244:
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 339 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 328 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st547;}
@@ -513,7 +513,7 @@ tr244:
     }
 	goto st0;
 tr256:
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -525,12 +525,12 @@ tr256:
     }
 	goto st0;
 tr267:
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -542,17 +542,17 @@ tr267:
     }
 	goto st0;
 tr272:
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 345 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -564,12 +564,12 @@ tr272:
     }
 	goto st0;
 tr274:
-#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 345 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -581,17 +581,17 @@ tr274:
     }
 	goto st0;
 tr284:
-#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 345 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)");
         p--; {goto st547;}
     }
-#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 350 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -603,12 +603,12 @@ tr284:
     }
 	goto st0;
 tr287:
-#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 350 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -620,17 +620,17 @@ tr287:
     }
 	goto st0;
 tr297:
-#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 350 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)");
         p--; {goto st547;}
     }
-#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -642,12 +642,12 @@ tr297:
     }
 	goto st0;
 tr300:
-#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -659,7 +659,7 @@ tr300:
     }
 	goto st0;
 tr318:
-#line 289 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 278 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st547;}
@@ -671,12 +671,12 @@ tr318:
     }
 	goto st0;
 tr327:
-#line 377 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 366 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata URL is not valid");
         p--; {goto st547;}
     }
-#line 289 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 278 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st547;}
@@ -688,7 +688,7 @@ tr327:
     }
 	goto st0;
 tr334:
-#line 295 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 284 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st547;}
@@ -700,12 +700,12 @@ tr334:
     }
 	goto st0;
 tr345:
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 295 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 284 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st547;}
@@ -717,7 +717,7 @@ tr345:
     }
 	goto st0;
 tr359:
-#line 345 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 334 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st547;}
@@ -729,12 +729,12 @@ tr359:
     }
 	goto st0;
 tr371:
-#line 377 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 366 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata URL is not valid");
         p--; {goto st547;}
     }
-#line 345 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 334 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st547;}
@@ -746,7 +746,7 @@ tr371:
     }
 	goto st0;
 tr379:
-#line 383 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
         p--; {goto st548;}
@@ -765,7 +765,7 @@ tr418:
     }
 	goto st0;
 tr430:
-#line 391 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 380 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Chromosome is not a string without colons or whitespaces, optionally wrapped with angle brackets (<>)");
         p--; {goto st548;}
@@ -777,7 +777,7 @@ tr430:
     }
 	goto st0;
 tr434:
-#line 397 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 386 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Position is not a positive number");
         p--; {goto st548;}
@@ -789,7 +789,7 @@ tr434:
     }
 	goto st0;
 tr438:
-#line 403 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 392 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "ID is not a single dot or a list of strings without semicolons or whitespaces");
         p--; {goto st548;}
@@ -801,7 +801,7 @@ tr438:
     }
 	goto st0;
 tr443:
-#line 409 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 398 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Reference is not a string of bases");
         p--; {goto st548;}
@@ -813,7 +813,7 @@ tr443:
     }
 	goto st0;
 tr447:
-#line 415 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 404 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Alternate is not a single dot or a comma-separated list of bases");
         p--; {goto st548;}
@@ -825,7 +825,7 @@ tr447:
     }
 	goto st0;
 tr456:
-#line 421 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 410 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Quality is not a single dot or a positive number");
         p--; {goto st548;}
@@ -837,7 +837,7 @@ tr456:
     }
 	goto st0;
 tr460:
-#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 416 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Filter is not a single dot or a semicolon-separated list of strings");
         p--; {goto st548;}
@@ -849,12 +849,12 @@ tr460:
     }
 	goto st0;
 tr467:
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -866,12 +866,12 @@ tr467:
     }
 	goto st0;
 tr488:
-#line 544 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 533 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Format first field is not GT");
         p--; {goto st548;}
     }
-#line 539 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 528 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Format is not a colon-separated list of alphanumeric strings");
         p--; {goto st548;}
@@ -883,14 +883,14 @@ tr488:
     }
 	goto st0;
 tr493:
-#line 557 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 546 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
         ErrorPolicy::handle_body_section_error(*this, message_stream.str());
         p--; {goto st548;}
     }
-#line 550 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 539 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
@@ -904,7 +904,7 @@ tr493:
     }
 	goto st0;
 tr501:
-#line 550 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 539 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
@@ -918,7 +918,7 @@ tr501:
     }
 	goto st0;
 tr503:
-#line 539 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 528 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Format is not a colon-separated list of alphanumeric strings");
         p--; {goto st548;}
@@ -930,12 +930,12 @@ tr503:
     }
 	goto st0;
 tr520:
-#line 443 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 432 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -947,17 +947,17 @@ tr520:
     }
 	goto st0;
 tr522:
-#line 533 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 522 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info 1000G is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -969,12 +969,12 @@ tr522:
     }
 	goto st0;
 tr524:
-#line 533 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 522 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info 1000G is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -986,12 +986,12 @@ tr524:
     }
 	goto st0;
 tr531:
-#line 448 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 437 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AA value is not a single dot or a string of bases");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1003,12 +1003,12 @@ tr531:
     }
 	goto st0;
 tr535:
-#line 453 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 442 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AC value is not a comma-separated list of numbers");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1020,12 +1020,12 @@ tr535:
     }
 	goto st0;
 tr538:
-#line 458 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 447 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AF value is not a comma-separated list of numbers");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1037,12 +1037,12 @@ tr538:
     }
 	goto st0;
 tr543:
-#line 463 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 452 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AN value is not an integer number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1054,12 +1054,12 @@ tr543:
     }
 	goto st0;
 tr547:
-#line 468 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 457 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info BQ value is not a number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1071,12 +1071,12 @@ tr547:
     }
 	goto st0;
 tr556:
-#line 473 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 462 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info CIGAR value is not an alphanumeric string");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1088,17 +1088,17 @@ tr556:
     }
 	goto st0;
 tr560:
-#line 478 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 467 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info DB is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1110,12 +1110,12 @@ tr560:
     }
 	goto st0;
 tr562:
-#line 478 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 467 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info DB is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1127,12 +1127,12 @@ tr562:
     }
 	goto st0;
 tr565:
-#line 483 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 472 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info DP value is not an integer number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1144,12 +1144,12 @@ tr565:
     }
 	goto st0;
 tr570:
-#line 488 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 477 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info END value is not an integer number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1161,17 +1161,17 @@ tr570:
     }
 	goto st0;
 tr574:
-#line 493 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 482 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info H2 is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1183,12 +1183,12 @@ tr574:
     }
 	goto st0;
 tr576:
-#line 493 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 482 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info H2 is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1200,17 +1200,17 @@ tr576:
     }
 	goto st0;
 tr578:
-#line 498 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 487 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info H3 is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1222,12 +1222,12 @@ tr578:
     }
 	goto st0;
 tr580:
-#line 498 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 487 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info H3 is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1239,12 +1239,12 @@ tr580:
     }
 	goto st0;
 tr586:
-#line 508 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 497 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info MQ0 value is not an integer number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1256,12 +1256,12 @@ tr586:
     }
 	goto st0;
 tr588:
-#line 503 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 492 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info MQ value is not a number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1273,12 +1273,12 @@ tr588:
     }
 	goto st0;
 tr594:
-#line 513 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 502 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info NS value is not an integer number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1290,12 +1290,12 @@ tr594:
     }
 	goto st0;
 tr599:
-#line 518 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 507 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info SB value is not a number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1307,17 +1307,17 @@ tr599:
     }
 	goto st0;
 tr608:
-#line 523 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 512 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info SOMATIC is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1329,12 +1329,12 @@ tr608:
     }
 	goto st0;
 tr610:
-#line 523 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 512 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info SOMATIC is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1346,17 +1346,17 @@ tr610:
     }
 	goto st0;
 tr620:
-#line 528 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 517 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info VALIDATED is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1368,12 +1368,12 @@ tr620:
     }
 	goto st0;
 tr622:
-#line 528 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 517 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info VALIDATED is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -1390,7 +1390,7 @@ tr696:
         ErrorPolicy::handle_header_section_error(*this);
         p--; {goto st548;}
     }
-#line 391 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 380 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Chromosome is not a string without colons or whitespaces, optionally wrapped with angle brackets (<>)");
         p--; {goto st548;}
@@ -1627,8 +1627,11 @@ tr35:
     }
 #line 69 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
+      try {
         ParsePolicy::handle_meta_line(*this);
-//        add_vcf_meta_entry(status->current_meta_entry, file);
+      } catch (ParsingError ex) {
+        ErrorPolicy::handle_meta_section_error(*this, ex.what());
+      }
     }
 #line 28 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -1640,8 +1643,11 @@ tr35:
 tr51:
 #line 69 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
+      try {
         ParsePolicy::handle_meta_line(*this);
-//        add_vcf_meta_entry(status->current_meta_entry, file);
+      } catch (ParsingError ex) {
+        ErrorPolicy::handle_meta_section_error(*this, ex.what());
+      }
     }
 #line 28 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -1654,7 +1660,7 @@ st20:
 	if ( ++p == pe )
 		goto _test_eof20;
 case 20:
-#line 1658 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 1664 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 35 )
 		goto st17;
 	goto tr20;
@@ -1678,7 +1684,7 @@ st21:
 	if ( ++p == pe )
 		goto _test_eof21;
 case 21:
-#line 1682 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 1688 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -1706,7 +1712,7 @@ case 21:
 		goto tr37;
 	goto tr34;
 tr38:
-#line 148 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 137 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_typeid(*this);
     }
@@ -1715,7 +1721,7 @@ st22:
 	if ( ++p == pe )
 		goto _test_eof22;
 case 22:
-#line 1719 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 1725 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st24;
 	if ( 32 <= (*p) && (*p) <= 126 )
@@ -1741,7 +1747,7 @@ st23:
 	if ( ++p == pe )
 		goto _test_eof23;
 case 23:
-#line 1745 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 1751 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 10 )
 		goto tr35;
 	if ( (*p) > 59 ) {
@@ -1761,7 +1767,7 @@ st24:
 	if ( ++p == pe )
 		goto _test_eof24;
 case 24:
-#line 1765 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 1771 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 95 )
 		goto tr42;
 	if ( (*p) < 48 ) {
@@ -1786,7 +1792,7 @@ st25:
 	if ( ++p == pe )
 		goto _test_eof25;
 case 25:
-#line 1790 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 1796 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 95 )
 		goto st25;
 	if ( (*p) < 48 ) {
@@ -1821,7 +1827,7 @@ st26:
 	if ( ++p == pe )
 		goto _test_eof26;
 case 26:
-#line 1825 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 1831 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 61: goto tr46;
 		case 95: goto tr45;
@@ -1839,7 +1845,7 @@ case 26:
 		goto tr45;
 	goto tr34;
 tr46:
-#line 152 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 141 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this);
     }
@@ -1848,7 +1854,7 @@ st27:
 	if ( ++p == pe )
 		goto _test_eof27;
 case 27:
-#line 1852 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 1858 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) < 45 ) {
 		if ( 32 <= (*p) && (*p) <= 43 )
 			goto tr47;
@@ -1878,7 +1884,7 @@ st28:
 	if ( ++p == pe )
 		goto _test_eof28;
 case 28:
-#line 1882 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 1888 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr49;
 		case 62: goto tr50;
@@ -1897,7 +1903,7 @@ st29:
 	if ( ++p == pe )
 		goto _test_eof29;
 case 29:
-#line 1901 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 1907 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 10 )
 		goto tr51;
 	goto tr34;
@@ -1915,7 +1921,7 @@ st30:
 	if ( ++p == pe )
 		goto _test_eof30;
 case 30:
-#line 1919 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 1925 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -1953,7 +1959,7 @@ st31:
 	if ( ++p == pe )
 		goto _test_eof31;
 case 31:
-#line 1957 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 1963 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -1991,7 +1997,7 @@ st32:
 	if ( ++p == pe )
 		goto _test_eof32;
 case 32:
-#line 1995 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2001 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr55;
@@ -2019,7 +2025,7 @@ case 32:
 		goto tr37;
 	goto tr52;
 tr55:
-#line 88 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 77 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_typeid(*this, "ALT");
     }
@@ -2028,7 +2034,7 @@ st33:
 	if ( ++p == pe )
 		goto _test_eof33;
 case 33:
-#line 2032 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2038 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st34;
 	goto tr52;
@@ -2072,7 +2078,7 @@ tr63:
     }
 	goto st38;
 tr61:
-#line 124 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 113 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "ID");
     }
@@ -2089,7 +2095,7 @@ st38:
 	if ( ++p == pe )
 		goto _test_eof38;
 case 38:
-#line 2093 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2099 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr62;
 		case 58: goto tr63;
@@ -2111,7 +2117,7 @@ st39:
 	if ( ++p == pe )
 		goto _test_eof39;
 case 39:
-#line 2115 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2121 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 68 )
 		goto st40;
 	goto tr52;
@@ -2193,7 +2199,7 @@ case 50:
 		goto tr75;
 	goto tr52;
 tr75:
-#line 136 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 125 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "Description");
     }
@@ -2202,7 +2208,7 @@ st51:
 	if ( ++p == pe )
 		goto _test_eof51;
 case 51:
-#line 2206 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2212 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 34 )
 		goto st52;
 	goto tr52;
@@ -2236,7 +2242,7 @@ st53:
 	if ( ++p == pe )
 		goto _test_eof53;
 case 53:
-#line 2240 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2246 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 34 )
 		goto tr80;
 	if ( 32 <= (*p) && (*p) <= 126 )
@@ -2253,7 +2259,7 @@ st54:
 	if ( ++p == pe )
 		goto _test_eof54;
 case 54:
-#line 2257 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2263 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 62 )
 		goto st55;
 	goto tr78;
@@ -2278,7 +2284,7 @@ st56:
 	if ( ++p == pe )
 		goto _test_eof56;
 case 56:
-#line 2282 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2288 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -2317,7 +2323,7 @@ st57:
 	if ( ++p == pe )
 		goto _test_eof57;
 case 57:
-#line 2321 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2327 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -2355,7 +2361,7 @@ st58:
 	if ( ++p == pe )
 		goto _test_eof58;
 case 58:
-#line 2359 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2365 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -2393,7 +2399,7 @@ st59:
 	if ( ++p == pe )
 		goto _test_eof59;
 case 59:
-#line 2397 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2403 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -2431,7 +2437,7 @@ st60:
 	if ( ++p == pe )
 		goto _test_eof60;
 case 60:
-#line 2435 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2441 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -2469,7 +2475,7 @@ st61:
 	if ( ++p == pe )
 		goto _test_eof61;
 case 61:
-#line 2473 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2479 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr90;
@@ -2497,7 +2503,7 @@ case 61:
 		goto tr37;
 	goto tr85;
 tr90:
-#line 100 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 89 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_typeid(*this, "FILTER");
     }
@@ -2506,7 +2512,7 @@ st62:
 	if ( ++p == pe )
 		goto _test_eof62;
 case 62:
-#line 2510 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2516 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st63;
 	goto tr85;
@@ -2550,7 +2556,7 @@ case 66:
 		goto tr97;
 	goto tr95;
 tr96:
-#line 124 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 113 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "ID");
     }
@@ -2563,7 +2569,7 @@ st67:
 	if ( ++p == pe )
 		goto _test_eof67;
 case 67:
-#line 2567 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2573 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 95 )
 		goto st67;
 	if ( (*p) < 48 ) {
@@ -2585,7 +2591,7 @@ tr99:
     }
 	goto st68;
 tr97:
-#line 124 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 113 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "ID");
     }
@@ -2602,7 +2608,7 @@ st68:
 	if ( ++p == pe )
 		goto _test_eof68;
 case 68:
-#line 2606 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2612 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr100;
 		case 95: goto tr99;
@@ -2630,7 +2636,7 @@ st69:
 	if ( ++p == pe )
 		goto _test_eof69;
 case 69:
-#line 2634 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2640 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 68 )
 		goto st70;
 	goto tr85;
@@ -2748,14 +2754,14 @@ st83:
 	if ( ++p == pe )
 		goto _test_eof83;
 case 83:
-#line 2752 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2758 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 34 )
 		goto tr117;
 	if ( 32 <= (*p) && (*p) <= 126 )
 		goto tr116;
 	goto tr115;
 tr117:
-#line 136 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 125 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "Description");
     }
@@ -2769,7 +2775,7 @@ st84:
 	if ( ++p == pe )
 		goto _test_eof84;
 case 84:
-#line 2773 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2779 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 62 )
 		goto st85;
 	goto tr115;
@@ -2790,7 +2796,7 @@ st86:
 	if ( ++p == pe )
 		goto _test_eof86;
 case 86:
-#line 2794 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2800 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -2828,7 +2834,7 @@ st87:
 	if ( ++p == pe )
 		goto _test_eof87;
 case 87:
-#line 2832 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2838 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -2866,7 +2872,7 @@ st88:
 	if ( ++p == pe )
 		goto _test_eof88;
 case 88:
-#line 2870 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2876 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -2904,7 +2910,7 @@ st89:
 	if ( ++p == pe )
 		goto _test_eof89;
 case 89:
-#line 2908 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2914 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -2942,7 +2948,7 @@ st90:
 	if ( ++p == pe )
 		goto _test_eof90;
 case 90:
-#line 2946 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2952 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr124;
@@ -2970,7 +2976,7 @@ case 90:
 		goto tr37;
 	goto tr119;
 tr124:
-#line 104 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 93 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_typeid(*this, "FORMAT");
     }
@@ -2979,7 +2985,7 @@ st91:
 	if ( ++p == pe )
 		goto _test_eof91;
 case 91:
-#line 2983 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 2989 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st92;
 	goto tr119;
@@ -3023,7 +3029,7 @@ case 95:
 		goto tr131;
 	goto tr129;
 tr130:
-#line 124 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 113 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "ID");
     }
@@ -3036,7 +3042,7 @@ st96:
 	if ( ++p == pe )
 		goto _test_eof96;
 case 96:
-#line 3040 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3046 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 95 )
 		goto st96;
 	if ( (*p) < 48 ) {
@@ -3058,7 +3064,7 @@ tr133:
     }
 	goto st97;
 tr131:
-#line 124 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 113 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "ID");
     }
@@ -3075,7 +3081,7 @@ st97:
 	if ( ++p == pe )
 		goto _test_eof97;
 case 97:
-#line 3079 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3085 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr134;
 		case 95: goto tr133;
@@ -3103,7 +3109,7 @@ st98:
 	if ( ++p == pe )
 		goto _test_eof98;
 case 98:
-#line 3107 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3113 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 78 )
 		goto st99;
 	goto tr119;
@@ -3163,7 +3169,7 @@ case 105:
 		goto tr144;
 	goto tr142;
 tr143:
-#line 128 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 117 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "Number");
     }
@@ -3180,7 +3186,7 @@ st106:
 	if ( ++p == pe )
 		goto _test_eof106;
 case 106:
-#line 3184 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3190 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 44 )
 		goto tr145;
 	goto tr142;
@@ -3195,7 +3201,7 @@ st107:
 	if ( ++p == pe )
 		goto _test_eof107;
 case 107:
-#line 3199 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3205 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 84 )
 		goto st108;
 	goto tr119;
@@ -3244,7 +3250,7 @@ tr154:
     }
 	goto st113;
 tr152:
-#line 132 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 121 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "Type");
     }
@@ -3261,7 +3267,7 @@ st113:
 	if ( ++p == pe )
 		goto _test_eof113;
 case 113:
-#line 3265 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3271 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 44 )
 		goto tr153;
 	if ( (*p) > 90 ) {
@@ -3281,7 +3287,7 @@ st114:
 	if ( ++p == pe )
 		goto _test_eof114;
 case 114:
-#line 3285 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3291 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 68 )
 		goto st115;
 	goto tr119;
@@ -3370,7 +3376,7 @@ case 126:
 		goto tr167;
 	goto tr119;
 tr167:
-#line 136 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 125 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "Description");
     }
@@ -3379,7 +3385,7 @@ st127:
 	if ( ++p == pe )
 		goto _test_eof127;
 case 127:
-#line 3383 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3389 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) > 33 ) {
 		if ( 35 <= (*p) && (*p) <= 126 )
 			goto tr168;
@@ -3406,7 +3412,7 @@ st128:
 	if ( ++p == pe )
 		goto _test_eof128;
 case 128:
-#line 3410 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3416 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 34 )
 		goto tr171;
 	if ( 32 <= (*p) && (*p) <= 126 )
@@ -3423,7 +3429,7 @@ st129:
 	if ( ++p == pe )
 		goto _test_eof129;
 case 129:
-#line 3427 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3433 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 62 )
 		goto st130;
 	goto tr169;
@@ -3441,7 +3447,7 @@ tr173:
     }
 	goto st131;
 tr144:
-#line 128 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 117 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "Number");
     }
@@ -3458,7 +3464,7 @@ st131:
 	if ( ++p == pe )
 		goto _test_eof131;
 case 131:
-#line 3462 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3468 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 44 )
 		goto tr145;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -3478,7 +3484,7 @@ st132:
 	if ( ++p == pe )
 		goto _test_eof132;
 case 132:
-#line 3482 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3488 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -3516,7 +3522,7 @@ st133:
 	if ( ++p == pe )
 		goto _test_eof133;
 case 133:
-#line 3520 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3526 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -3554,7 +3560,7 @@ st134:
 	if ( ++p == pe )
 		goto _test_eof134;
 case 134:
-#line 3558 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3564 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -3592,7 +3598,7 @@ st135:
 	if ( ++p == pe )
 		goto _test_eof135;
 case 135:
-#line 3596 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3602 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr178;
@@ -3620,7 +3626,7 @@ case 135:
 		goto tr37;
 	goto tr174;
 tr178:
-#line 108 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 97 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_typeid(*this, "INFO");
     }
@@ -3629,7 +3635,7 @@ st136:
 	if ( ++p == pe )
 		goto _test_eof136;
 case 136:
-#line 3633 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3639 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st137;
 	goto tr174;
@@ -3673,7 +3679,7 @@ case 140:
 		goto tr185;
 	goto tr183;
 tr184:
-#line 124 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 113 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "ID");
     }
@@ -3686,7 +3692,7 @@ st141:
 	if ( ++p == pe )
 		goto _test_eof141;
 case 141:
-#line 3690 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3696 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 95 )
 		goto st141;
 	if ( (*p) < 48 ) {
@@ -3708,7 +3714,7 @@ tr187:
     }
 	goto st142;
 tr185:
-#line 124 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 113 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "ID");
     }
@@ -3725,7 +3731,7 @@ st142:
 	if ( ++p == pe )
 		goto _test_eof142;
 case 142:
-#line 3729 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3735 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr188;
 		case 95: goto tr187;
@@ -3753,7 +3759,7 @@ st143:
 	if ( ++p == pe )
 		goto _test_eof143;
 case 143:
-#line 3757 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3763 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 78 )
 		goto st144;
 	goto tr174;
@@ -3826,12 +3832,12 @@ st151:
 	if ( ++p == pe )
 		goto _test_eof151;
 case 151:
-#line 3830 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3836 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 44 )
 		goto tr199;
 	goto tr196;
 tr199:
-#line 128 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 117 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "Number");
     }
@@ -3845,7 +3851,7 @@ st152:
 	if ( ++p == pe )
 		goto _test_eof152;
 case 152:
-#line 3849 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3855 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 84 )
 		goto st153;
 	goto tr174;
@@ -3894,7 +3900,7 @@ tr208:
     }
 	goto st158;
 tr206:
-#line 132 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 121 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "Type");
     }
@@ -3911,7 +3917,7 @@ st158:
 	if ( ++p == pe )
 		goto _test_eof158;
 case 158:
-#line 3915 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3921 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 44 )
 		goto tr207;
 	if ( (*p) > 90 ) {
@@ -3931,7 +3937,7 @@ st159:
 	if ( ++p == pe )
 		goto _test_eof159;
 case 159:
-#line 3935 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 3941 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 68 )
 		goto st160;
 	goto tr174;
@@ -4020,7 +4026,7 @@ case 171:
 		goto tr221;
 	goto tr174;
 tr221:
-#line 136 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 125 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "Description");
     }
@@ -4029,7 +4035,7 @@ st172:
 	if ( ++p == pe )
 		goto _test_eof172;
 case 172:
-#line 4033 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4039 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) > 33 ) {
 		if ( 35 <= (*p) && (*p) <= 126 )
 			goto tr222;
@@ -4056,7 +4062,7 @@ st173:
 	if ( ++p == pe )
 		goto _test_eof173;
 case 173:
-#line 4060 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4066 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 34 )
 		goto tr225;
 	if ( 32 <= (*p) && (*p) <= 126 )
@@ -4073,7 +4079,7 @@ st174:
 	if ( ++p == pe )
 		goto _test_eof174;
 case 174:
-#line 4077 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4083 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto st175;
 		case 62: goto st181;
@@ -4179,7 +4185,7 @@ st182:
 	if ( ++p == pe )
 		goto _test_eof182;
 case 182:
-#line 4183 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4189 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 44 )
 		goto tr199;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -4199,7 +4205,7 @@ st183:
 	if ( ++p == pe )
 		goto _test_eof183;
 case 183:
-#line 4203 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4209 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -4237,7 +4243,7 @@ st184:
 	if ( ++p == pe )
 		goto _test_eof184;
 case 184:
-#line 4241 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4247 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -4275,7 +4281,7 @@ st185:
 	if ( ++p == pe )
 		goto _test_eof185;
 case 185:
-#line 4279 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4285 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -4313,7 +4319,7 @@ st186:
 	if ( ++p == pe )
 		goto _test_eof186;
 case 186:
-#line 4317 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4323 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -4351,7 +4357,7 @@ st187:
 	if ( ++p == pe )
 		goto _test_eof187;
 case 187:
-#line 4355 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4361 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -4389,7 +4395,7 @@ st188:
 	if ( ++p == pe )
 		goto _test_eof188;
 case 188:
-#line 4393 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4399 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -4427,7 +4433,7 @@ st189:
 	if ( ++p == pe )
 		goto _test_eof189;
 case 189:
-#line 4431 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4437 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -4465,7 +4471,7 @@ st190:
 	if ( ++p == pe )
 		goto _test_eof190;
 case 190:
-#line 4469 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4475 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr242;
@@ -4493,7 +4499,7 @@ case 190:
 		goto tr37;
 	goto tr234;
 tr242:
-#line 112 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 101 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_typeid(*this, "PEDIGREE");
     }
@@ -4502,7 +4508,7 @@ st191:
 	if ( ++p == pe )
 		goto _test_eof191;
 case 191:
-#line 4506 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4512 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st192;
 	goto tr234;
@@ -4517,7 +4523,7 @@ st192:
 	if ( ++p == pe )
 		goto _test_eof192;
 case 192:
-#line 4521 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4527 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 95 )
 		goto tr245;
 	if ( (*p) < 48 ) {
@@ -4542,7 +4548,7 @@ st193:
 	if ( ++p == pe )
 		goto _test_eof193;
 case 193:
-#line 4546 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4552 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 95 )
 		goto st193;
 	if ( (*p) < 48 ) {
@@ -4577,7 +4583,7 @@ st194:
 	if ( ++p == pe )
 		goto _test_eof194;
 case 194:
-#line 4581 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4587 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 61: goto tr249;
 		case 95: goto tr248;
@@ -4605,7 +4611,7 @@ st195:
 	if ( ++p == pe )
 		goto _test_eof195;
 case 195:
-#line 4609 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4615 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 95 )
 		goto tr250;
 	if ( (*p) < 48 ) {
@@ -4630,7 +4636,7 @@ st196:
 	if ( ++p == pe )
 		goto _test_eof196;
 case 196:
-#line 4634 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4640 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 95 )
 		goto st196;
 	if ( (*p) < 48 ) {
@@ -4665,7 +4671,7 @@ st197:
 	if ( ++p == pe )
 		goto _test_eof197;
 case 197:
-#line 4669 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4675 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr254;
 		case 62: goto tr255;
@@ -4694,7 +4700,7 @@ st198:
 	if ( ++p == pe )
 		goto _test_eof198;
 case 198:
-#line 4698 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4704 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 10 )
 		goto tr51;
 	goto tr234;
@@ -4712,7 +4718,7 @@ st199:
 	if ( ++p == pe )
 		goto _test_eof199;
 case 199:
-#line 4716 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4722 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -4750,7 +4756,7 @@ st200:
 	if ( ++p == pe )
 		goto _test_eof200;
 case 200:
-#line 4754 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4760 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -4788,7 +4794,7 @@ st201:
 	if ( ++p == pe )
 		goto _test_eof201;
 case 201:
-#line 4792 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4798 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -4826,7 +4832,7 @@ st202:
 	if ( ++p == pe )
 		goto _test_eof202;
 case 202:
-#line 4830 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4836 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -4864,7 +4870,7 @@ st203:
 	if ( ++p == pe )
 		goto _test_eof203;
 case 203:
-#line 4868 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4874 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -4902,7 +4908,7 @@ st204:
 	if ( ++p == pe )
 		goto _test_eof204;
 case 204:
-#line 4906 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4912 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr262;
@@ -4930,7 +4936,7 @@ case 204:
 		goto tr37;
 	goto tr256;
 tr262:
-#line 120 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 109 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_typeid(*this, "SAMPLE");
     }
@@ -4939,7 +4945,7 @@ st205:
 	if ( ++p == pe )
 		goto _test_eof205;
 case 205:
-#line 4943 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 4949 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st206;
 	goto tr256;
@@ -4983,7 +4989,7 @@ case 209:
 		goto tr269;
 	goto tr267;
 tr268:
-#line 124 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 113 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "ID");
     }
@@ -4996,7 +5002,7 @@ st210:
 	if ( ++p == pe )
 		goto _test_eof210;
 case 210:
-#line 5000 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5006 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 95 )
 		goto st210;
 	if ( (*p) < 48 ) {
@@ -5018,7 +5024,7 @@ tr271:
     }
 	goto st211;
 tr269:
-#line 124 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 113 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "ID");
     }
@@ -5035,7 +5041,7 @@ st211:
 	if ( ++p == pe )
 		goto _test_eof211;
 case 211:
-#line 5039 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5045 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr273;
 		case 95: goto tr271;
@@ -5063,7 +5069,7 @@ st212:
 	if ( ++p == pe )
 		goto _test_eof212;
 case 212:
-#line 5067 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5073 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 71 )
 		goto st213;
 	goto tr274;
@@ -5136,7 +5142,7 @@ tr285:
     }
 	goto st221;
 tr283:
-#line 140 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 129 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "Genomes");
     }
@@ -5153,7 +5159,7 @@ st221:
 	if ( ++p == pe )
 		goto _test_eof221;
 case 221:
-#line 5157 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5163 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 44 )
 		goto tr286;
 	if ( (*p) > 61 ) {
@@ -5173,7 +5179,7 @@ st222:
 	if ( ++p == pe )
 		goto _test_eof222;
 case 222:
-#line 5177 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5183 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 77 )
 		goto st223;
 	goto tr287;
@@ -5246,7 +5252,7 @@ tr298:
     }
 	goto st231;
 tr296:
-#line 144 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 133 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "Mixture");
     }
@@ -5263,7 +5269,7 @@ st231:
 	if ( ++p == pe )
 		goto _test_eof231;
 case 231:
-#line 5267 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5273 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 44 )
 		goto tr299;
 	if ( (*p) > 61 ) {
@@ -5283,7 +5289,7 @@ st232:
 	if ( ++p == pe )
 		goto _test_eof232;
 case 232:
-#line 5287 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5293 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 68 )
 		goto st233;
 	goto tr300;
@@ -5372,7 +5378,7 @@ case 244:
 		goto tr313;
 	goto tr300;
 tr313:
-#line 136 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 125 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "Description");
     }
@@ -5381,7 +5387,7 @@ st245:
 	if ( ++p == pe )
 		goto _test_eof245;
 case 245:
-#line 5385 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5391 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) > 33 ) {
 		if ( 35 <= (*p) && (*p) <= 126 )
 			goto tr314;
@@ -5408,7 +5414,7 @@ st246:
 	if ( ++p == pe )
 		goto _test_eof246;
 case 246:
-#line 5412 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5418 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 34 )
 		goto tr316;
 	if ( 32 <= (*p) && (*p) <= 126 )
@@ -5425,7 +5431,7 @@ st247:
 	if ( ++p == pe )
 		goto _test_eof247;
 case 247:
-#line 5429 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5435 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 62 )
 		goto st248;
 	goto tr300;
@@ -5450,7 +5456,7 @@ st249:
 	if ( ++p == pe )
 		goto _test_eof249;
 case 249:
-#line 5454 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5460 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -5488,7 +5494,7 @@ st250:
 	if ( ++p == pe )
 		goto _test_eof250;
 case 250:
-#line 5492 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5498 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -5526,7 +5532,7 @@ st251:
 	if ( ++p == pe )
 		goto _test_eof251;
 case 251:
-#line 5530 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5536 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -5564,7 +5570,7 @@ st252:
 	if ( ++p == pe )
 		goto _test_eof252;
 case 252:
-#line 5568 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5574 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -5602,7 +5608,7 @@ st253:
 	if ( ++p == pe )
 		goto _test_eof253;
 case 253:
-#line 5606 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5612 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -5640,7 +5646,7 @@ st254:
 	if ( ++p == pe )
 		goto _test_eof254;
 case 254:
-#line 5644 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5650 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -5678,7 +5684,7 @@ st255:
 	if ( ++p == pe )
 		goto _test_eof255;
 case 255:
-#line 5682 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5688 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -5716,7 +5722,7 @@ st256:
 	if ( ++p == pe )
 		goto _test_eof256;
 case 256:
-#line 5720 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5726 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr326;
@@ -5744,7 +5750,7 @@ case 256:
 		goto tr37;
 	goto tr318;
 tr326:
-#line 92 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 81 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_typeid(*this, "assembly");
     }
@@ -5753,7 +5759,7 @@ st257:
 	if ( ++p == pe )
 		goto _test_eof257;
 case 257:
-#line 5757 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5763 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
 			goto tr328;
@@ -5770,7 +5776,7 @@ st258:
 	if ( ++p == pe )
 		goto _test_eof258;
 case 258:
-#line 5774 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5780 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr327;
 		case 35: goto tr327;
@@ -5825,7 +5831,7 @@ st263:
 	if ( ++p == pe )
 		goto _test_eof263;
 case 263:
-#line 5829 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5835 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 10 )
 		goto tr35;
 	goto tr333;
@@ -5843,7 +5849,7 @@ st264:
 	if ( ++p == pe )
 		goto _test_eof264;
 case 264:
-#line 5847 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5853 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -5881,7 +5887,7 @@ st265:
 	if ( ++p == pe )
 		goto _test_eof265;
 case 265:
-#line 5885 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5891 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -5919,7 +5925,7 @@ st266:
 	if ( ++p == pe )
 		goto _test_eof266;
 case 266:
-#line 5923 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5929 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -5957,7 +5963,7 @@ st267:
 	if ( ++p == pe )
 		goto _test_eof267;
 case 267:
-#line 5961 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 5967 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -5995,7 +6001,7 @@ st268:
 	if ( ++p == pe )
 		goto _test_eof268;
 case 268:
-#line 5999 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6005 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -6033,7 +6039,7 @@ st269:
 	if ( ++p == pe )
 		goto _test_eof269;
 case 269:
-#line 6037 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6043 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr340;
@@ -6061,7 +6067,7 @@ case 269:
 		goto tr37;
 	goto tr334;
 tr340:
-#line 96 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 85 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_typeid(*this, "contig");
     }
@@ -6070,7 +6076,7 @@ st270:
 	if ( ++p == pe )
 		goto _test_eof270;
 case 270:
-#line 6074 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6080 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st271;
 	goto tr334;
@@ -6114,7 +6120,7 @@ case 274:
 		goto tr347;
 	goto tr345;
 tr346:
-#line 124 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 113 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "ID");
     }
@@ -6127,7 +6133,7 @@ st275:
 	if ( ++p == pe )
 		goto _test_eof275;
 case 275:
-#line 6131 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6137 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 95 )
 		goto st275;
 	if ( (*p) < 48 ) {
@@ -6149,7 +6155,7 @@ tr349:
     }
 	goto st276;
 tr347:
-#line 124 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 113 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_key(*this, "ID");
     }
@@ -6166,7 +6172,7 @@ st276:
 	if ( ++p == pe )
 		goto _test_eof276;
 case 276:
-#line 6170 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6176 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr350;
 		case 62: goto tr351;
@@ -6195,7 +6201,7 @@ st277:
 	if ( ++p == pe )
 		goto _test_eof277;
 case 277:
-#line 6199 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6205 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 95 )
 		goto tr352;
 	if ( (*p) < 48 ) {
@@ -6220,7 +6226,7 @@ st278:
 	if ( ++p == pe )
 		goto _test_eof278;
 case 278:
-#line 6224 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6230 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 95 )
 		goto st278;
 	if ( (*p) < 48 ) {
@@ -6255,7 +6261,7 @@ st279:
 	if ( ++p == pe )
 		goto _test_eof279;
 case 279:
-#line 6259 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6265 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 61: goto tr356;
 		case 95: goto tr355;
@@ -6283,7 +6289,7 @@ st280:
 	if ( ++p == pe )
 		goto _test_eof280;
 case 280:
-#line 6287 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6293 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) < 45 ) {
 		if ( 32 <= (*p) && (*p) <= 43 )
 			goto tr357;
@@ -6313,7 +6319,7 @@ st281:
 	if ( ++p == pe )
 		goto _test_eof281;
 case 281:
-#line 6317 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6323 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 44: goto tr350;
 		case 62: goto tr351;
@@ -6332,7 +6338,7 @@ st282:
 	if ( ++p == pe )
 		goto _test_eof282;
 case 282:
-#line 6336 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6342 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 10 )
 		goto tr51;
 	goto tr334;
@@ -6350,7 +6356,7 @@ st283:
 	if ( ++p == pe )
 		goto _test_eof283;
 case 283:
-#line 6354 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6360 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -6388,7 +6394,7 @@ st284:
 	if ( ++p == pe )
 		goto _test_eof284;
 case 284:
-#line 6392 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6398 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -6426,7 +6432,7 @@ st285:
 	if ( ++p == pe )
 		goto _test_eof285;
 case 285:
-#line 6430 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6436 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -6464,7 +6470,7 @@ st286:
 	if ( ++p == pe )
 		goto _test_eof286;
 case 286:
-#line 6468 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6474 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -6502,7 +6508,7 @@ st287:
 	if ( ++p == pe )
 		goto _test_eof287;
 case 287:
-#line 6506 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6512 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -6540,7 +6546,7 @@ st288:
 	if ( ++p == pe )
 		goto _test_eof288;
 case 288:
-#line 6544 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6550 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -6578,7 +6584,7 @@ st289:
 	if ( ++p == pe )
 		goto _test_eof289;
 case 289:
-#line 6582 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6588 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -6616,7 +6622,7 @@ st290:
 	if ( ++p == pe )
 		goto _test_eof290;
 case 290:
-#line 6620 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6626 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -6654,7 +6660,7 @@ st291:
 	if ( ++p == pe )
 		goto _test_eof291;
 case 291:
-#line 6658 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6664 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr38;
@@ -6692,7 +6698,7 @@ st292:
 	if ( ++p == pe )
 		goto _test_eof292;
 case 292:
-#line 6696 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6702 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr35;
 		case 61: goto tr369;
@@ -6720,7 +6726,7 @@ case 292:
 		goto tr37;
 	goto tr359;
 tr369:
-#line 116 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 105 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ParsePolicy::handle_meta_typeid(*this, "pedigreeDB");
     }
@@ -6729,7 +6735,7 @@ st293:
 	if ( ++p == pe )
 		goto _test_eof293;
 case 293:
-#line 6733 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6739 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st294;
 	goto tr359;
@@ -6753,7 +6759,7 @@ st295:
 	if ( ++p == pe )
 		goto _test_eof295;
 case 295:
-#line 6757 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6763 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr371;
 		case 35: goto tr371;
@@ -6808,7 +6814,7 @@ st300:
 	if ( ++p == pe )
 		goto _test_eof300;
 case 300:
-#line 6812 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6818 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr371;
 		case 62: goto tr378;
@@ -6829,7 +6835,7 @@ st301:
 	if ( ++p == pe )
 		goto _test_eof301;
 case 301:
-#line 6833 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 6839 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 10: goto tr51;
 		case 62: goto tr378;
@@ -7146,7 +7152,7 @@ case 345:
 		goto st346;
 	goto tr418;
 tr427:
-#line 161 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 150 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
 //        add_vcf_sample_name(ts, p-ts, file);
     }
@@ -7155,7 +7161,7 @@ st346:
 	if ( ++p == pe )
 		goto _test_eof346;
 case 346:
-#line 7159 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7165 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 32 <= (*p) && (*p) <= 126 )
 		goto tr426;
 	goto tr418;
@@ -7169,7 +7175,7 @@ st347:
 	if ( ++p == pe )
 		goto _test_eof347;
 case 347:
-#line 7173 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7179 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr427;
 		case 10: goto tr428;
@@ -7186,7 +7192,7 @@ tr417:
     }
 	goto st549;
 tr428:
-#line 161 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 150 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
 //        add_vcf_sample_name(ts, p-ts, file);
     }
@@ -7201,7 +7207,7 @@ st549:
 	if ( ++p == pe )
 		goto _test_eof549;
 case 549:
-#line 7205 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7211 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto tr699;
 	if ( (*p) < 63 ) {
@@ -7229,7 +7235,7 @@ case 549:
 		goto tr697;
 	goto tr696;
 tr697:
-#line 168 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 157 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
 //        status->current_record = vcf_record_new();
 //        std::cout << "Reading record" << std::endl;
@@ -7243,7 +7249,7 @@ st348:
 	if ( ++p == pe )
 		goto _test_eof348;
 case 348:
-#line 7247 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7253 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto st348;
 		case 61: goto st348;
@@ -7276,7 +7282,7 @@ tr432:
     }
 	goto st349;
 tr698:
-#line 168 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 157 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
 //        status->current_record = vcf_record_new();
 //        std::cout << "Reading record" << std::endl;
@@ -7294,7 +7300,7 @@ st349:
 	if ( ++p == pe )
 		goto _test_eof349;
 case 349:
-#line 7298 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7304 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr433;
 		case 59: goto tr432;
@@ -7322,7 +7328,7 @@ st350:
 	if ( ++p == pe )
 		goto _test_eof350;
 case 350:
-#line 7326 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7332 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr435;
 	goto tr434;
@@ -7346,7 +7352,7 @@ st351:
 	if ( ++p == pe )
 		goto _test_eof351;
 case 351:
-#line 7350 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7356 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 9 )
 		goto tr436;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -7368,7 +7374,7 @@ st352:
 	if ( ++p == pe )
 		goto _test_eof352;
 case 352:
-#line 7372 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7378 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) > 58 ) {
 		if ( 60 <= (*p) && (*p) <= 126 )
 			goto tr439;
@@ -7395,7 +7401,7 @@ st353:
 	if ( ++p == pe )
 		goto _test_eof353;
 case 353:
-#line 7399 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7405 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr440;
 		case 59: goto st546;
@@ -7419,7 +7425,7 @@ st354:
 	if ( ++p == pe )
 		goto _test_eof354;
 case 354:
-#line 7423 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7429 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 65: goto tr444;
 		case 67: goto tr444;
@@ -7453,7 +7459,7 @@ st355:
 	if ( ++p == pe )
 		goto _test_eof355;
 case 355:
-#line 7457 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7463 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr445;
 		case 65: goto tr446;
@@ -7484,7 +7490,7 @@ st356:
 	if ( ++p == pe )
 		goto _test_eof356;
 case 356:
-#line 7488 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7494 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 42: goto tr448;
 		case 46: goto tr449;
@@ -7524,7 +7530,7 @@ st357:
 	if ( ++p == pe )
 		goto _test_eof357;
 case 357:
-#line 7528 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7534 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 9 )
 		goto tr455;
 	goto tr447;
@@ -7541,7 +7547,7 @@ tr636:
     }
 	goto st358;
 tr455:
-#line 228 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 217 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
  //       set_vcf_record_type(VARIANT_INDEL, status->current_record);
     }
@@ -7557,7 +7563,7 @@ tr455:
     }
 	goto st358;
 tr627:
-#line 224 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 213 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
  //       set_vcf_record_type(VARIANT_SNV, status->current_record);
     }
@@ -7573,7 +7579,7 @@ tr627:
     }
 	goto st358;
 tr629:
-#line 232 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 221 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
  //       set_vcf_record_type(VARIANT_SV, status->current_record);
     }
@@ -7592,7 +7598,7 @@ st358:
 	if ( ++p == pe )
 		goto _test_eof358;
 case 358:
-#line 7596 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7602 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 46 )
 		goto tr457;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -7612,7 +7618,7 @@ st359:
 	if ( ++p == pe )
 		goto _test_eof359;
 case 359:
-#line 7616 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7622 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 9 )
 		goto tr459;
 	goto tr456;
@@ -7632,7 +7638,7 @@ st360:
 	if ( ++p == pe )
 		goto _test_eof360;
 case 360:
-#line 7636 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7642 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 46: goto tr462;
 		case 58: goto tr461;
@@ -7668,7 +7674,7 @@ st361:
 	if ( ++p == pe )
 		goto _test_eof361;
 case 361:
-#line 7672 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7678 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 58 )
 		goto st361;
 	if ( (*p) < 65 ) {
@@ -7712,7 +7718,7 @@ st362:
 	if ( ++p == pe )
 		goto _test_eof362;
 case 362:
-#line 7716 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7722 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr466;
 		case 59: goto st361;
@@ -7736,7 +7742,7 @@ st363:
 	if ( ++p == pe )
 		goto _test_eof363;
 case 363:
-#line 7740 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7746 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 46: goto tr469;
 		case 49: goto tr471;
@@ -7784,7 +7790,7 @@ st364:
 	if ( ++p == pe )
 		goto _test_eof364;
 case 364:
-#line 7788 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7794 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 58: goto st364;
 		case 60: goto st364;
@@ -7830,7 +7836,7 @@ st365:
 	if ( ++p == pe )
 		goto _test_eof365;
 case 365:
-#line 7834 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7840 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -7856,7 +7862,7 @@ st366:
 	if ( ++p == pe )
 		goto _test_eof366;
 case 366:
-#line 7860 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7866 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 71 )
 		goto tr489;
 	goto tr488;
@@ -7870,7 +7876,7 @@ st367:
 	if ( ++p == pe )
 		goto _test_eof367;
 case 367:
-#line 7874 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7880 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 84 )
 		goto tr490;
 	goto tr488;
@@ -7884,7 +7890,7 @@ st368:
 	if ( ++p == pe )
 		goto _test_eof368;
 case 368:
-#line 7888 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7894 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr491;
 		case 58: goto st377;
@@ -7906,7 +7912,7 @@ st369:
 	if ( ++p == pe )
 		goto _test_eof369;
 case 369:
-#line 7910 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7916 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 46 )
 		goto tr494;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -7932,7 +7938,7 @@ st370:
 	if ( ++p == pe )
 		goto _test_eof370;
 case 370:
-#line 7936 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7942 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr491;
 		case 10: goto tr485;
@@ -7947,7 +7953,7 @@ tr485:
         //std::cout << "m_current_token '" << ParsePolicy::current_token() << "'" << std::endl;
         ParsePolicy::handle_token_end(*this);
     }
-#line 173 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 162 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         std::cout << "Finished reading record" << std::endl;
 /*        // If batch is full, add to the list of batches and create a new, empty one
@@ -7983,7 +7989,7 @@ st550:
 	if ( ++p == pe )
 		goto _test_eof550;
 case 550:
-#line 7987 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7993 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto tr699;
 	if ( (*p) < 63 ) {
@@ -8011,7 +8017,7 @@ case 550:
 		goto tr697;
 	goto tr430;
 tr699:
-#line 168 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 157 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
 //        status->current_record = vcf_record_new();
 //        std::cout << "Reading record" << std::endl;
@@ -8025,7 +8031,7 @@ st371:
 	if ( ++p == pe )
 		goto _test_eof371;
 case 371:
-#line 8029 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8035 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto st371;
 		case 61: goto st371;
@@ -8075,7 +8081,7 @@ st373:
 	if ( ++p == pe )
 		goto _test_eof373;
 case 373:
-#line 8079 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8085 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 9 )
 		goto tr433;
 	goto tr430;
@@ -8105,7 +8111,7 @@ st376:
 	if ( ++p == pe )
 		goto _test_eof376;
 case 376:
-#line 8109 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8115 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr491;
 		case 10: goto tr485;
@@ -8136,7 +8142,7 @@ st378:
 	if ( ++p == pe )
 		goto _test_eof378;
 case 378:
-#line 8140 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8146 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr491;
 		case 58: goto st377;
@@ -8210,7 +8216,7 @@ st380:
 	if ( ++p == pe )
 		goto _test_eof380;
 case 380:
-#line 8214 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8220 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8231,7 +8237,7 @@ st381:
 	if ( ++p == pe )
 		goto _test_eof381;
 case 381:
-#line 8235 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8241 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8252,7 +8258,7 @@ st382:
 	if ( ++p == pe )
 		goto _test_eof382;
 case 382:
-#line 8256 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8262 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8273,7 +8279,7 @@ st383:
 	if ( ++p == pe )
 		goto _test_eof383;
 case 383:
-#line 8277 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8283 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8304,7 +8310,7 @@ st385:
 	if ( ++p == pe )
 		goto _test_eof385;
 case 385:
-#line 8308 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8314 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8323,7 +8329,7 @@ st386:
 	if ( ++p == pe )
 		goto _test_eof386;
 case 386:
-#line 8327 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8333 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8350,7 +8356,7 @@ st388:
 	if ( ++p == pe )
 		goto _test_eof388;
 case 388:
-#line 8354 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8360 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8377,7 +8383,7 @@ st389:
 	if ( ++p == pe )
 		goto _test_eof389;
 case 389:
-#line 8381 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8387 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8431,7 +8437,7 @@ st392:
 	if ( ++p == pe )
 		goto _test_eof392;
 case 392:
-#line 8435 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8441 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8448,7 +8454,7 @@ st393:
 	if ( ++p == pe )
 		goto _test_eof393;
 case 393:
-#line 8452 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8458 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8494,7 +8500,7 @@ st396:
 	if ( ++p == pe )
 		goto _test_eof396;
 case 396:
-#line 8498 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8504 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8533,7 +8539,7 @@ st399:
 	if ( ++p == pe )
 		goto _test_eof399;
 case 399:
-#line 8537 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8543 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8561,7 +8567,7 @@ st401:
 	if ( ++p == pe )
 		goto _test_eof401;
 case 401:
-#line 8565 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8571 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8600,7 +8606,7 @@ st404:
 	if ( ++p == pe )
 		goto _test_eof404;
 case 404:
-#line 8604 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8610 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8629,7 +8635,7 @@ st405:
 	if ( ++p == pe )
 		goto _test_eof405;
 case 405:
-#line 8633 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8639 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8669,7 +8675,7 @@ st408:
 	if ( ++p == pe )
 		goto _test_eof408;
 case 408:
-#line 8673 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8679 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8696,7 +8702,7 @@ st410:
 	if ( ++p == pe )
 		goto _test_eof410;
 case 410:
-#line 8700 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8706 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8725,7 +8731,7 @@ st411:
 	if ( ++p == pe )
 		goto _test_eof411;
 case 411:
-#line 8729 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8735 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8746,7 +8752,7 @@ st412:
 	if ( ++p == pe )
 		goto _test_eof412;
 case 412:
-#line 8750 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8756 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8767,7 +8773,7 @@ st413:
 	if ( ++p == pe )
 		goto _test_eof413;
 case 413:
-#line 8771 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8777 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8788,7 +8794,7 @@ st414:
 	if ( ++p == pe )
 		goto _test_eof414;
 case 414:
-#line 8792 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8798 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8834,7 +8840,7 @@ st417:
 	if ( ++p == pe )
 		goto _test_eof417;
 case 417:
-#line 8838 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8844 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8869,7 +8875,7 @@ st418:
 	if ( ++p == pe )
 		goto _test_eof418;
 case 418:
-#line 8873 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8879 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8891,7 +8897,7 @@ st419:
 	if ( ++p == pe )
 		goto _test_eof419;
 case 419:
-#line 8895 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8901 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8918,7 +8924,7 @@ st421:
 	if ( ++p == pe )
 		goto _test_eof421;
 case 421:
-#line 8922 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8928 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8954,7 +8960,7 @@ st424:
 	if ( ++p == pe )
 		goto _test_eof424;
 case 424:
-#line 8958 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8964 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -8983,7 +8989,7 @@ st425:
 	if ( ++p == pe )
 		goto _test_eof425;
 case 425:
-#line 8987 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8993 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9004,7 +9010,7 @@ st426:
 	if ( ++p == pe )
 		goto _test_eof426;
 case 426:
-#line 9008 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9014 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9044,7 +9050,7 @@ st429:
 	if ( ++p == pe )
 		goto _test_eof429;
 case 429:
-#line 9048 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9054 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9073,7 +9079,7 @@ st430:
 	if ( ++p == pe )
 		goto _test_eof430;
 case 430:
-#line 9077 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9083 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9095,7 +9101,7 @@ st431:
 	if ( ++p == pe )
 		goto _test_eof431;
 case 431:
-#line 9099 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9105 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9122,7 +9128,7 @@ st433:
 	if ( ++p == pe )
 		goto _test_eof433;
 case 433:
-#line 9126 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9132 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9139,7 +9145,7 @@ st434:
 	if ( ++p == pe )
 		goto _test_eof434;
 case 434:
-#line 9143 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9149 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9166,7 +9172,7 @@ st436:
 	if ( ++p == pe )
 		goto _test_eof436;
 case 436:
-#line 9170 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9176 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9193,7 +9199,7 @@ st437:
 	if ( ++p == pe )
 		goto _test_eof437;
 case 437:
-#line 9197 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9203 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9247,7 +9253,7 @@ st441:
 	if ( ++p == pe )
 		goto _test_eof441;
 case 441:
-#line 9251 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9257 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9273,7 +9279,7 @@ st443:
 	if ( ++p == pe )
 		goto _test_eof443;
 case 443:
-#line 9277 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9283 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9300,7 +9306,7 @@ st445:
 	if ( ++p == pe )
 		goto _test_eof445;
 case 445:
-#line 9304 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9310 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9329,7 +9335,7 @@ st446:
 	if ( ++p == pe )
 		goto _test_eof446;
 case 446:
-#line 9333 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9339 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9369,7 +9375,7 @@ st449:
 	if ( ++p == pe )
 		goto _test_eof449;
 case 449:
-#line 9373 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9379 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9398,7 +9404,7 @@ st450:
 	if ( ++p == pe )
 		goto _test_eof450;
 case 450:
-#line 9402 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9408 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9439,7 +9445,7 @@ st453:
 	if ( ++p == pe )
 		goto _test_eof453;
 case 453:
-#line 9443 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9449 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9466,7 +9472,7 @@ st455:
 	if ( ++p == pe )
 		goto _test_eof455;
 case 455:
-#line 9470 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9476 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9485,7 +9491,7 @@ st456:
 	if ( ++p == pe )
 		goto _test_eof456;
 case 456:
-#line 9489 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9495 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9506,7 +9512,7 @@ st457:
 	if ( ++p == pe )
 		goto _test_eof457;
 case 457:
-#line 9510 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9516 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9527,7 +9533,7 @@ st458:
 	if ( ++p == pe )
 		goto _test_eof458;
 case 458:
-#line 9531 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9537 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9548,7 +9554,7 @@ st459:
 	if ( ++p == pe )
 		goto _test_eof459;
 case 459:
-#line 9552 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9558 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9569,7 +9575,7 @@ st460:
 	if ( ++p == pe )
 		goto _test_eof460;
 case 460:
-#line 9573 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9579 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9590,7 +9596,7 @@ st461:
 	if ( ++p == pe )
 		goto _test_eof461;
 case 461:
-#line 9594 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9600 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9617,7 +9623,7 @@ st463:
 	if ( ++p == pe )
 		goto _test_eof463;
 case 463:
-#line 9621 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9627 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9644,7 +9650,7 @@ st464:
 	if ( ++p == pe )
 		goto _test_eof464;
 case 464:
-#line 9648 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9654 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9665,7 +9671,7 @@ st465:
 	if ( ++p == pe )
 		goto _test_eof465;
 case 465:
-#line 9669 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9675 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9686,7 +9692,7 @@ st466:
 	if ( ++p == pe )
 		goto _test_eof466;
 case 466:
-#line 9690 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9696 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9707,7 +9713,7 @@ st467:
 	if ( ++p == pe )
 		goto _test_eof467;
 case 467:
-#line 9711 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9717 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9728,7 +9734,7 @@ st468:
 	if ( ++p == pe )
 		goto _test_eof468;
 case 468:
-#line 9732 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9738 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9749,7 +9755,7 @@ st469:
 	if ( ++p == pe )
 		goto _test_eof469;
 case 469:
-#line 9753 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9759 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9770,7 +9776,7 @@ st470:
 	if ( ++p == pe )
 		goto _test_eof470;
 case 470:
-#line 9774 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9780 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9791,7 +9797,7 @@ st471:
 	if ( ++p == pe )
 		goto _test_eof471;
 case 471:
-#line 9795 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9801 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9812,7 +9818,7 @@ st472:
 	if ( ++p == pe )
 		goto _test_eof472;
 case 472:
-#line 9816 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9822 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9839,7 +9845,7 @@ st474:
 	if ( ++p == pe )
 		goto _test_eof474;
 case 474:
-#line 9843 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9849 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9860,7 +9866,7 @@ st475:
 	if ( ++p == pe )
 		goto _test_eof475;
 case 475:
-#line 9864 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9870 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr484;
 		case 10: goto tr485;
@@ -9902,7 +9908,7 @@ st476:
 	if ( ++p == pe )
 		goto _test_eof476;
 case 476:
-#line 9906 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9912 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr466;
 		case 58: goto st361;
@@ -9948,7 +9954,7 @@ st477:
 	if ( ++p == pe )
 		goto _test_eof477;
 case 477:
-#line 9952 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9958 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr459;
 		case 46: goto st478;
@@ -9973,7 +9979,7 @@ st479:
 	if ( ++p == pe )
 		goto _test_eof479;
 case 479:
-#line 9977 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9983 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 9 )
 		goto tr459;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -9993,7 +9999,7 @@ st480:
 	if ( ++p == pe )
 		goto _test_eof480;
 case 480:
-#line 9997 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10003 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr627;
 		case 65: goto tr628;
@@ -10018,7 +10024,7 @@ st481:
 	if ( ++p == pe )
 		goto _test_eof481;
 case 481:
-#line 10022 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10028 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr629;
 		case 65: goto tr628;
@@ -10047,7 +10053,7 @@ st482:
 	if ( ++p == pe )
 		goto _test_eof482;
 case 482:
-#line 10051 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10057 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 9 )
 		goto tr627;
 	goto tr447;
@@ -10061,7 +10067,7 @@ st483:
 	if ( ++p == pe )
 		goto _test_eof483;
 case 483:
-#line 10065 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10071 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 67: goto st487;
 		case 68: goto st490;
@@ -10128,7 +10134,7 @@ st486:
 	if ( ++p == pe )
 		goto _test_eof486;
 case 486:
-#line 10132 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10138 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 9 )
 		goto tr636;
 	goto tr447;
@@ -10461,7 +10467,7 @@ st509:
 	if ( ++p == pe )
 		goto _test_eof509;
 case 509:
-#line 10465 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10471 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr627;
 		case 44: goto st510;
@@ -10507,7 +10513,7 @@ st511:
 	if ( ++p == pe )
 		goto _test_eof511;
 case 511:
-#line 10511 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10517 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr627;
 		case 44: goto st510;
@@ -10533,7 +10539,7 @@ st512:
 	if ( ++p == pe )
 		goto _test_eof512;
 case 512:
-#line 10537 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10543 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 9 )
 		goto tr629;
 	goto tr447;
@@ -10825,7 +10831,7 @@ st529:
 	if ( ++p == pe )
 		goto _test_eof529;
 case 529:
-#line 10829 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10835 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st535;
 	if ( (*p) < 63 ) {
@@ -10988,7 +10994,7 @@ st538:
 	if ( ++p == pe )
 		goto _test_eof538;
 case 538:
-#line 10992 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10998 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto st543;
 	if ( (*p) < 63 ) {
@@ -11148,14 +11154,14 @@ tr693:
         ++n_lines;
         n_columns = 1;
     }
-#line 765 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 754 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{ {goto st20;} }
 	goto st551;
 st551:
 	if ( ++p == pe )
 		goto _test_eof551;
 case 551:
-#line 11159 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11165 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	goto st0;
 st548:
 	if ( ++p == pe )
@@ -11171,14 +11177,14 @@ tr695:
         ++n_lines;
         n_columns = 1;
     }
-#line 766 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 755 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{ {goto st550;} }
 	goto st552;
 st552:
 	if ( ++p == pe )
 		goto _test_eof552;
 case 552:
-#line 11182 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11188 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	goto st0;
 	}
 	_test_eof2: cs = 2; goto _test_eof; 
@@ -11789,7 +11795,7 @@ case 552:
 	break;
 	case 14: 
 	case 15: 
-#line 266 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 255 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_fileformat_section_error(*this,
             "Fileformat is not a sequence of alphanumeric and/or punctuation characters");
@@ -11823,7 +11829,7 @@ case 552:
 	case 51: 
 	case 52: 
 	case 55: 
-#line 273 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 262 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st547;}
@@ -11842,7 +11848,7 @@ case 552:
 	case 254: 
 	case 255: 
 	case 256: 
-#line 289 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 278 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st547;}
@@ -11866,7 +11872,7 @@ case 552:
 	case 280: 
 	case 281: 
 	case 282: 
-#line 295 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 284 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st547;}
@@ -11901,7 +11907,7 @@ case 552:
 	case 81: 
 	case 82: 
 	case 85: 
-#line 301 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 290 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st547;}
@@ -11948,7 +11954,7 @@ case 552:
 	case 126: 
 	case 127: 
 	case 130: 
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
@@ -12000,7 +12006,7 @@ case 552:
 	case 179: 
 	case 180: 
 	case 181: 
-#line 323 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st547;}
@@ -12021,7 +12027,7 @@ case 552:
 	case 190: 
 	case 191: 
 	case 198: 
-#line 339 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 328 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st547;}
@@ -12043,7 +12049,7 @@ case 552:
 	case 291: 
 	case 292: 
 	case 293: 
-#line 345 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 334 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st547;}
@@ -12065,7 +12071,7 @@ case 552:
 	case 207: 
 	case 208: 
 	case 248: 
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -12113,7 +12119,7 @@ case 552:
 	case 336: 
 	case 337: 
 	case 338: 
-#line 383 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
         p--; {goto st548;}
@@ -12129,7 +12135,7 @@ case 552:
 	case 371: 
 	case 372: 
 	case 373: 
-#line 391 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 380 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Chromosome is not a string without colons or whitespaces, optionally wrapped with angle brackets (<>)");
         p--; {goto st548;}
@@ -12142,7 +12148,7 @@ case 552:
 	break;
 	case 350: 
 	case 351: 
-#line 397 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 386 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Position is not a positive number");
         p--; {goto st548;}
@@ -12156,7 +12162,7 @@ case 552:
 	case 352: 
 	case 353: 
 	case 546: 
-#line 403 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 392 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "ID is not a single dot or a list of strings without semicolons or whitespaces");
         p--; {goto st548;}
@@ -12169,7 +12175,7 @@ case 552:
 	break;
 	case 354: 
 	case 355: 
-#line 409 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 398 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Reference is not a string of bases");
         p--; {goto st548;}
@@ -12248,7 +12254,7 @@ case 552:
 	case 543: 
 	case 544: 
 	case 545: 
-#line 415 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 404 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Alternate is not a single dot or a comma-separated list of bases");
         p--; {goto st548;}
@@ -12264,7 +12270,7 @@ case 552:
 	case 477: 
 	case 478: 
 	case 479: 
-#line 421 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 410 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Quality is not a single dot or a positive number");
         p--; {goto st548;}
@@ -12279,7 +12285,7 @@ case 552:
 	case 361: 
 	case 362: 
 	case 476: 
-#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 416 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Filter is not a single dot or a semicolon-separated list of strings");
         p--; {goto st548;}
@@ -12292,7 +12298,7 @@ case 552:
 	break;
 	case 377: 
 	case 378: 
-#line 539 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 528 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Format is not a colon-separated list of alphanumeric strings");
         p--; {goto st548;}
@@ -12305,7 +12311,7 @@ case 552:
 	break;
 	case 375: 
 	case 376: 
-#line 550 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 539 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
@@ -12325,7 +12331,7 @@ case 552:
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st547;}
     }
-#line 383 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
         p--; {goto st548;}
@@ -12338,12 +12344,12 @@ case 552:
 	break;
 	case 37: 
 	case 38: 
-#line 278 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 267 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence");
         p--; {goto st547;}
     }
-#line 273 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 262 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st547;}
@@ -12355,12 +12361,12 @@ case 552:
     }
 	break;
 	case 56: 
-#line 301 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 290 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st547;}
     }
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
@@ -12374,12 +12380,12 @@ case 552:
 	case 105: 
 	case 106: 
 	case 131: 
-#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 301 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Number is not a number, A, R, G or dot");
         p--; {goto st547;}
     }
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
@@ -12393,12 +12399,12 @@ case 552:
 	case 150: 
 	case 151: 
 	case 182: 
-#line 328 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 317 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Number is not a number, A, R, G or dot");
         p--; {goto st547;}
     }
-#line 323 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st547;}
@@ -12411,12 +12417,12 @@ case 552:
 	break;
 	case 112: 
 	case 113: 
-#line 333 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 322 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Type is not a Integer, Float, Flag, Character or String");
         p--; {goto st547;}
     }
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
@@ -12429,12 +12435,12 @@ case 552:
 	break;
 	case 157: 
 	case 158: 
-#line 333 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 322 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Type is not a Integer, Float, Flag, Character or String");
         p--; {goto st547;}
     }
-#line 323 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st547;}
@@ -12454,12 +12460,12 @@ case 552:
 	case 218: 
 	case 219: 
 	case 220: 
-#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 345 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -12479,12 +12485,12 @@ case 552:
 	case 228: 
 	case 229: 
 	case 230: 
-#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 350 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -12501,12 +12507,12 @@ case 552:
 	case 277: 
 	case 278: 
 	case 279: 
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 295 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 284 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st547;}
@@ -12520,12 +12526,12 @@ case 552:
 	case 66: 
 	case 67: 
 	case 68: 
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 301 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 290 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st547;}
@@ -12539,12 +12545,12 @@ case 552:
 	case 95: 
 	case 96: 
 	case 97: 
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
@@ -12558,12 +12564,12 @@ case 552:
 	case 140: 
 	case 141: 
 	case 142: 
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 323 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st547;}
@@ -12580,12 +12586,12 @@ case 552:
 	case 195: 
 	case 196: 
 	case 197: 
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 339 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 328 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st547;}
@@ -12598,12 +12604,12 @@ case 552:
 	break;
 	case 209: 
 	case 210: 
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -12616,12 +12622,12 @@ case 552:
 	break;
 	case 53: 
 	case 54: 
-#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st547;}
     }
-#line 273 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 262 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st547;}
@@ -12634,12 +12640,12 @@ case 552:
 	break;
 	case 83: 
 	case 84: 
-#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st547;}
     }
-#line 301 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 290 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st547;}
@@ -12652,12 +12658,12 @@ case 552:
 	break;
 	case 128: 
 	case 129: 
-#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st547;}
     }
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
@@ -12670,12 +12676,12 @@ case 552:
 	break;
 	case 173: 
 	case 174: 
-#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st547;}
     }
-#line 323 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st547;}
@@ -12702,12 +12708,12 @@ case 552:
 	case 245: 
 	case 246: 
 	case 247: 
-#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -12725,12 +12731,12 @@ case 552:
 	case 261: 
 	case 262: 
 	case 263: 
-#line 377 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 366 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata URL is not valid");
         p--; {goto st547;}
     }
-#line 289 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 278 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st547;}
@@ -12749,12 +12755,12 @@ case 552:
 	case 299: 
 	case 300: 
 	case 301: 
-#line 377 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 366 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata URL is not valid");
         p--; {goto st547;}
     }
-#line 345 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 334 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st547;}
@@ -12812,12 +12818,12 @@ case 552:
 	case 470: 
 	case 471: 
 	case 475: 
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -12830,12 +12836,12 @@ case 552:
 	break;
 	case 384: 
 	case 385: 
-#line 443 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 432 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -12849,12 +12855,12 @@ case 552:
 	case 391: 
 	case 392: 
 	case 393: 
-#line 448 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 437 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AA value is not a single dot or a string of bases");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -12867,12 +12873,12 @@ case 552:
 	break;
 	case 395: 
 	case 396: 
-#line 453 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 442 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AC value is not a comma-separated list of numbers");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -12887,12 +12893,12 @@ case 552:
 	case 399: 
 	case 400: 
 	case 401: 
-#line 458 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 447 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AF value is not a comma-separated list of numbers");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -12905,12 +12911,12 @@ case 552:
 	break;
 	case 403: 
 	case 404: 
-#line 463 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 452 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info AN value is not an integer number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -12925,12 +12931,12 @@ case 552:
 	case 408: 
 	case 409: 
 	case 410: 
-#line 468 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 457 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info BQ value is not a number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -12943,12 +12949,12 @@ case 552:
 	break;
 	case 416: 
 	case 417: 
-#line 473 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 462 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info CIGAR value is not an alphanumeric string");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -12961,12 +12967,12 @@ case 552:
 	break;
 	case 420: 
 	case 421: 
-#line 478 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 467 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info DB is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -12979,12 +12985,12 @@ case 552:
 	break;
 	case 423: 
 	case 424: 
-#line 483 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 472 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info DP value is not an integer number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -12997,12 +13003,12 @@ case 552:
 	break;
 	case 428: 
 	case 429: 
-#line 488 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 477 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info END value is not an integer number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13015,12 +13021,12 @@ case 552:
 	break;
 	case 432: 
 	case 433: 
-#line 493 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 482 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info H2 is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13033,12 +13039,12 @@ case 552:
 	break;
 	case 435: 
 	case 436: 
-#line 498 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 487 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info H3 is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13053,12 +13059,12 @@ case 552:
 	case 443: 
 	case 444: 
 	case 445: 
-#line 503 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 492 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info MQ value is not a number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13071,12 +13077,12 @@ case 552:
 	break;
 	case 440: 
 	case 441: 
-#line 508 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 497 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info MQ0 value is not an integer number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13089,12 +13095,12 @@ case 552:
 	break;
 	case 448: 
 	case 449: 
-#line 513 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 502 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info NS value is not an integer number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13109,12 +13115,12 @@ case 552:
 	case 453: 
 	case 454: 
 	case 455: 
-#line 518 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 507 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info SB value is not a number");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13127,12 +13133,12 @@ case 552:
 	break;
 	case 462: 
 	case 463: 
-#line 523 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 512 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info SOMATIC is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13145,12 +13151,12 @@ case 552:
 	break;
 	case 473: 
 	case 474: 
-#line 528 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 517 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info VALIDATED is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13163,12 +13169,12 @@ case 552:
 	break;
 	case 387: 
 	case 388: 
-#line 533 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 522 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info 1000G is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13182,12 +13188,12 @@ case 552:
 	case 366: 
 	case 367: 
 	case 368: 
-#line 544 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 533 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Format first field is not GT");
         p--; {goto st548;}
     }
-#line 539 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 528 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Format is not a colon-separated list of alphanumeric strings");
         p--; {goto st548;}
@@ -13201,14 +13207,14 @@ case 552:
 	case 369: 
 	case 370: 
 	case 374: 
-#line 557 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 546 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
         ErrorPolicy::handle_body_section_error(*this, message_stream.str());
         p--; {goto st548;}
     }
-#line 550 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 539 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
@@ -13232,7 +13238,7 @@ case 552:
         ErrorPolicy::handle_meta_section_error(*this);
         p--; {goto st547;}
     }
-#line 383 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
         p--; {goto st548;}
@@ -13244,17 +13250,17 @@ case 552:
     }
 	break;
 	case 221: 
-#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 345 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)");
         p--; {goto st547;}
     }
-#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 350 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -13266,17 +13272,17 @@ case 552:
     }
 	break;
 	case 231: 
-#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 350 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)");
         p--; {goto st547;}
     }
-#line 372 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 361 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata description string is not valid");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -13288,17 +13294,17 @@ case 552:
     }
 	break;
 	case 211: 
-#line 367 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash");
         p--; {goto st547;}
     }
-#line 356 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 345 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
@@ -13310,17 +13316,17 @@ case 552:
     }
 	break;
 	case 419: 
-#line 478 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 467 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info DB is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13332,17 +13338,17 @@ case 552:
     }
 	break;
 	case 431: 
-#line 493 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 482 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info H2 is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13354,17 +13360,17 @@ case 552:
     }
 	break;
 	case 434: 
-#line 498 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 487 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info H3 is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13376,17 +13382,17 @@ case 552:
     }
 	break;
 	case 461: 
-#line 523 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 512 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info SOMATIC is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13398,17 +13404,17 @@ case 552:
     }
 	break;
 	case 472: 
-#line 528 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 517 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info VALIDATED is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13420,17 +13426,17 @@ case 552:
     }
 	break;
 	case 386: 
-#line 533 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 522 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info 1000G is not a flag (with 1/0/no value)");
         p--; {goto st548;}
     }
-#line 438 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 427 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info key is not a sequence of alphanumeric and/or punctuation characters");
         p--; {goto st548;}
     }
-#line 433 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 422 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_body_section_error(*this, "Info is not a single dot or a semicolon-separated list of key-value pairs");
         p--; {goto st548;}
@@ -13442,47 +13448,47 @@ case 552:
     }
 	break;
 	case 18: 
-#line 273 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 262 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in ALT metadata");
         p--; {goto st547;}
     }
-#line 301 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 290 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FILTER metadata");
         p--; {goto st547;}
     }
-#line 307 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 296 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in FORMAT metadata");
         p--; {goto st547;}
     }
-#line 323 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 312 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in INFO metadata");
         p--; {goto st547;}
     }
-#line 289 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 278 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in assembly metadata");
         p--; {goto st547;}
     }
-#line 295 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 284 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in contig metadata");
         p--; {goto st547;}
     }
-#line 351 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 340 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in SAMPLE metadata");
         p--; {goto st547;}
     }
-#line 339 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 328 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in PEDIGREE metadata");
         p--; {goto st547;}
     }
-#line 345 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 334 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_meta_section_error(*this, "Error in pedigreeDB metadata");
         p--; {goto st547;}
@@ -13493,14 +13499,14 @@ case 552:
         p--; {goto st547;}
     }
 	break;
-#line 13497 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 13503 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	}
 	}
 
 	_out: {}
 	}
 
-#line 827 "cpp/src/bioformats/vcf/vcf_v41.ragel"
+#line 816 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 
     }
 

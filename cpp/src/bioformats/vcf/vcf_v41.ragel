@@ -67,22 +67,11 @@
     }
 
     action meta_entry_end {
+      try {
         ParsePolicy::handle_meta_line(*this);
-//        add_vcf_meta_entry(status->current_meta_entry, file);
-    }
-
-    action meta_id_end {
-//        set_vcf_meta_entry_name(ts, p-ts, status->current_meta_entry);
-    }
-
-    action meta_field_value_end {
-/*        if (*ts == '<') {
-            add_vcf_meta_entry_value(ts+1, p-ts-1, status->current_meta_entry);
-        } else if (*(p-1) == '>') {
-            add_vcf_meta_entry_value(ts, p-ts-1, status->current_meta_entry);
-        } else {
-            add_vcf_meta_entry_value(ts, p-ts, status->current_meta_entry);
-        }*/
+      } catch (ParsingError ex) {
+        ErrorPolicy::handle_meta_section_error(*this, ex.what());
+      }
     }
 
     action meta_typeid_alt {
@@ -646,7 +635,7 @@
                        ("PEDIGREE"	%meta_typeid_pedigree	"=<" meta_pedigree ">" )	$err(meta_pedigree_err) |
                        ("pedigreeDB"	%meta_typeid_pedigreedb	"=<" meta_pedigreeDB ">" )	$err(meta_pedigreedb_err) |
                        (meta_plain_value	>token_begin @token_middle %token_end) |
-                       (meta_key	>token_begin @token_middle %meta_typeid_generic "=" 
+                       (meta_key		>token_begin @token_middle %meta_typeid_generic "=" 
                          (
                            ("<" meta_field ("," meta_field)* ">") |
                            ( meta_value >token_begin @token_middle %token_end )

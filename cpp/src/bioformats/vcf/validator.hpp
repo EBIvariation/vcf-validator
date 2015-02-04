@@ -81,14 +81,6 @@ namespace opencb
         
         void handle_newline(ParsingState const & state) 
         {
-//            for (auto & group : m_line_tokens) {
-//                std::cout << group.first << " = " ;   
-//                for (auto & token : group.second) {
-//                    std::cout << token << ' ' ;   
-//                }
-//            std::cout << std::endl;
-//            }
-            
             m_current_token.clear();
             m_grouped_tokens.clear();
             m_line_tokens.clear();
@@ -127,10 +119,28 @@ namespace opencb
         
         void handle_meta_line(ParsingState const & state) 
         {
-//            std::cout << "Now it's the moment to create a MetaEntry!" << std::endl;
-            // TODO Put together m_line_typeid and m_grouped_tokens in a single MetaEntry object
-            // TODO Add MetaEntry to Source
-            // state.add_meta(meta);
+            // Put together m_line_typeid and m_grouped_tokens in a single MetaEntry object
+            // Add MetaEntry to Source
+            try {
+                if (m_line_typeid == "") { // Plain value
+                    state.add_meta(MetaEntry{m_grouped_tokens[0], state.source});
+
+                } else if (m_grouped_tokens.size() == 1) { // TypeID=value
+                    state.add_meta(MetaEntry{m_line_typeid, m_grouped_tokens[0], state.source});
+
+                } else if (m_grouped_tokens.size() % 2 == 0) { // TypeID=<Key-value pairs>
+                    auto key_values = std::map<std::string, std::string>{};
+                    for (int i = 0; i < m_grouped_tokens.size(); i += 2) {
+                        key_values[m_grouped_tokens[i]] = m_grouped_tokens[i+1];
+                    }
+                    state.add_meta(MetaEntry{m_line_typeid, key_values, state.source});
+
+                } else {
+                    // TODO Throw exception
+                }
+            } catch (std::invalid_argument ex) {
+                throw ParsingError(ex.what());
+            }
         }
         
         
