@@ -565,7 +565,7 @@
     bases           = ("A" | "C" | "G" | "T" | "N" | "a" | "c" | "t" | "g" | "n" )+ ;
     # Identifiers may contain some symbols, but not only those 
     # TODO Could it accept more symbols? Comma won't be, for sure
-    identifier      = (alnum | "." | "_" | "-" )+ - ("." | "_" | "-")+ ;
+    identifier      = ( (alnum | "." | "_" | "-" )+ - ("." | "_" | "-")+ ) >token_begin @token_middle %token_end;
     
     # URL inspired in http://stackoverflow.com/questions/8784903/failed-to-convert-url-parser-regular-expression-to-ragel
     scheme    = (alpha (any - [:/?#] - "\n")+ ) ;
@@ -573,56 +573,58 @@
     path      = (any - [?#] - "\n")* ;
     query     = (any - [#] - "\n")* ;
     fragment  = (any - "\n")* ; 
-    url       =  scheme "://" authority path ("?" query)? ("#" fragment)?;
+    url       = (scheme "://" authority path ("?" query)? ("#" fragment)?) >token_begin @token_middle %token_end ;
 
     # File format must be a sequence of alphanumeric and/or punctuation characters like "VCFv4.1"
     fileformat_name = (alnum | punct)+ $err(fileformat_error);
     fileformat      = "##fileformat=" fileformat_name >token_begin @token_middle %fileformat_end;
 
     # Meta-data
-    meta_key        = (alnum | "_" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB");
-    meta_value      = (print - "<")+ ;
-    meta_plain_value= (print - "=")+ ;
-    meta_field_value= (print - ("," | ">"))+ ;
-    meta_field_desc = (print - "\"")+ ;
-    meta_field      = ( identifier >token_begin @token_middle %meta_key_generic
-                        "=" 
-                        meta_field_value >token_begin @token_middle %token_end ) ;
+    meta_typeid     = ( (alnum | "_" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB") ) >token_begin @token_middle %meta_typeid_generic;
+    meta_key        = ( (alnum | "." | "_" | "-" )+ - ("." | "_" | "-")+ ) >token_begin @token_middle %meta_key_generic;
+    meta_value      = (print - "<")+ >token_begin @token_middle %token_end ;
+    meta_plain_value= (print - "=")+ >token_begin @token_middle %token_end ;
+    meta_field_value= (print - ("," | ">"))+ >token_begin @token_middle %token_end ;
+    meta_field      = meta_key "=" meta_field_value ;
+    
+    meta_field_desc = (print - "\"")+  >token_begin @token_middle %token_end ;
+    meta_field_num  = ( (digit)+ | "A" | "R" | "G" | "." ) >token_begin @token_middle %token_end ;
+    meta_field_type = (alpha)+ >token_begin @token_middle %token_end ;
     
     meta_alt        = "ID=" %meta_id (alpha | ":")+ >token_begin @token_middle %token_end $err(meta_alt_id_err)
-                        ",Description" %meta_description "=\"" meta_field_desc >token_begin @token_middle %token_end "\"" $err(meta_desc_err) ;
+                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err) ;
                         
-    meta_assembly   = url >token_begin @token_middle %token_end $err(meta_url_err) ;
+    meta_assembly   = url $err(meta_url_err) ;
     
-    meta_contig     = "ID=" %meta_id identifier >token_begin @token_middle %token_end $err(meta_id_err) 
-                        ("," identifier >token_begin @token_middle %token_end $err(meta_id_err) "=" meta_field_value >token_begin @token_middle %token_end)* ;
+    meta_contig     = "ID=" %meta_id identifier $err(meta_id_err) 
+                        ("," identifier "=" meta_field_value)* ;
                         
-    meta_filter     = "ID=" %meta_id identifier >token_begin @token_middle %token_end $err(meta_id_err) 
-                        ",Description=\"" meta_field_desc >token_begin @token_middle %meta_description %token_end "\"" $err(meta_desc_err) ;
+    meta_filter     = "ID=" %meta_id identifier $err(meta_id_err)
+                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err) ;
     
     ## TODO It is unlikely, but "Number" could have multiple digits and in that case it should be managed the same way as "Type"
-    meta_format     = "ID=" %meta_id identifier >token_begin @token_middle %token_end $err(meta_id_err)
-                        ",Number=" %meta_number ( (digit)+ | "A" | "R" | "G" | "." ) >token_begin @token_middle %token_end $err(meta_format_number_err) 
-                        ",Type=" %meta_type (alpha)+ >token_begin @token_middle %token_end $err(meta_info_type_err)
-                        ",Description=" %meta_description "\"" meta_field_desc >token_begin @token_middle %token_end "\"" $err(meta_desc_err) ;
+    meta_format     = "ID=" %meta_id identifier $err(meta_id_err)
+                        ",Number=" %meta_number meta_field_num $err(meta_format_number_err) 
+                        ",Type=" %meta_type meta_field_type $err(meta_info_type_err)
+                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err) ;
                         
     ## TODO It is unlikely, but "Number" could have multiple digits and in that case it should be managed the same way as "Type"
-    meta_info       = "ID=" %meta_id identifier >token_begin @token_middle %token_end $err(meta_id_err) 
-                        ",Number=" ( (digit)+ | "A" | "R" | "G" | "." ) >token_begin @token_middle %meta_number %token_end $err(meta_info_number_err)  
-                        ",Type=" %meta_type (alpha)+ >token_begin @token_middle %token_end $err(meta_info_type_err)
-                        ",Description=" %meta_description "\"" meta_field_desc >token_begin @token_middle %token_end "\"" $err(meta_desc_err)
-                        ("," identifier "=\"" meta_field_desc "\"")* ;
+    meta_info       = "ID=" %meta_id identifier $err(meta_id_err) 
+                        ",Number=" %meta_number meta_field_num $err(meta_info_number_err)  
+                        ",Type=" %meta_type meta_field_type $err(meta_info_type_err)
+                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
+                        ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
                         
-    meta_pedigree   = identifier >token_begin @token_middle %token_end $err(meta_id_err) "=" identifier >token_begin @token_middle %token_end $err(meta_id_err) 
-                        ("," identifier >token_begin @token_middle %token_end $err(meta_id_err) "=" identifier >token_begin @token_middle %token_end $err(meta_id_err))* ;
+    meta_pedigree   = identifier $err(meta_id_err) "=" identifier $err(meta_id_err)  
+                        ("," identifier $err(meta_id_err) "=" identifier $err(meta_id_err))* ;
     
-    meta_pedigreeDB = url >token_begin @token_middle %token_end $err(meta_url_err) ;
+    meta_pedigreeDB = url $err(meta_url_err) ;
     
     ## TODO The error shown when "Description" is missing shows that Mixture is not a valid string
-    meta_sample     = "ID=" %meta_id identifier >token_begin @token_middle %token_end $err(meta_id_err)
-                        (",Genomes=" %meta_genomes meta_field_value >token_begin @token_middle %token_end) $err(meta_sample_genomes_err)
-                        (",Mixture=" %meta_mixture meta_field_value >token_begin @token_middle %token_end) $err(meta_sample_mixture_err)
-                        (",Description=" %meta_description "\"" meta_field_desc >token_begin @token_middle %token_end "\"") $err(meta_desc_err) ;
+    meta_sample     = "ID=" %meta_id identifier $err(meta_id_err)
+                        (",Genomes=" %meta_genomes meta_field_value) $err(meta_sample_genomes_err)
+                        (",Mixture=" %meta_mixture meta_field_value) $err(meta_sample_mixture_err)
+                        (",Description=" %meta_description "\"" meta_field_desc "\"") $err(meta_desc_err) ;
 
     meta_entry      = "##" ( 
                        ("ALT"		%meta_typeid_alt 	"=<" meta_alt ">" )		$err(meta_alt_err) | 
@@ -634,13 +636,8 @@
                        ("SAMPLE"	%meta_typeid_sample	"=<" meta_sample ">" )		$err(meta_sample_err) |
                        ("PEDIGREE"	%meta_typeid_pedigree	"=<" meta_pedigree ">" )	$err(meta_pedigree_err) |
                        ("pedigreeDB"	%meta_typeid_pedigreedb	"=<" meta_pedigreeDB ">" )	$err(meta_pedigreedb_err) |
-                       (meta_plain_value	>token_begin @token_middle %token_end) |
-                       (meta_key		>token_begin @token_middle %meta_typeid_generic "=" 
-                         (
-                           ("<" meta_field ("," meta_field)* ">") |
-                           ( meta_value >token_begin @token_middle %token_end )
-                         )
-                       )
+                       (meta_plain_value) |
+                       (meta_typeid "=" ( ( "<" meta_field ("," meta_field)* ">") | meta_value ))
                       ) %meta_entry_end;
 
     # Header between meta and records
