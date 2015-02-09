@@ -160,6 +160,11 @@ namespace opencb
         
         void handle_column_end(ParsingState const & state, size_t n_columns) 
         {
+            for (auto & token : m_grouped_tokens) {
+                std::cout << token << "\t";
+            }
+            std::cout << std::endl;
+            
             switch(n_columns) {
                 case 1:
                     m_line_tokens["CHROM"] = m_grouped_tokens;
