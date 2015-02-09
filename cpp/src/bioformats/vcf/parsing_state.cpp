@@ -15,10 +15,14 @@ namespace opencb
         source->version = version;
     }
     
-    
     void ParsingState::add_meta(MetaEntry const & meta) const
     {
         source->meta_entries.push_back(meta);
+    }
+    
+    void ParsingState::set_samples(std::vector<std::string> & samples) const
+    {
+        source->samples_names = samples;
     }
     
   }

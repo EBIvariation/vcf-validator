@@ -32,6 +32,8 @@ namespace opencb
         void set_version(std::string & fileformat) const;
         
         void add_meta(MetaEntry const & meta) const;
+        
+        void set_samples(std::vector<std::string> & samples) const;
     };
 
     class ParsingError : public std::runtime_error
@@ -85,6 +87,7 @@ namespace opencb
             m_grouped_tokens.clear();
             m_line_tokens.clear();
         }
+        
         
         void handle_fileformat(ParsingState const & state)
         {
@@ -141,6 +144,17 @@ namespace opencb
             } catch (std::invalid_argument ex) {
                 throw ParsingError(ex.what());
             }
+        }
+        
+        
+        void handle_sample_name(ParsingState const & state)
+        {
+            m_grouped_tokens.push_back(m_current_token);
+        }
+        
+        void handle_header_line(ParsingState const & state) 
+        {
+            state.set_samples(m_grouped_tokens);
         }
         
         

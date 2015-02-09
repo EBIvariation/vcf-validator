@@ -66,14 +66,6 @@
         ParsePolicy::handle_fileformat(*this);
     }
 
-    action meta_entry_end {
-      try {
-        ParsePolicy::handle_meta_line(*this);
-      } catch (ParsingError ex) {
-        ErrorPolicy::handle_meta_section_error(*this, ex.what());
-      }
-    }
-
     action meta_typeid_alt {
         ParsePolicy::handle_meta_typeid(*this, "ALT");
     }
@@ -142,13 +134,20 @@
         ParsePolicy::handle_meta_key(*this);
     }
     
-    action header_begin {
-        ts = p;
-//        printf("Reading header\n");
+    action meta_entry_end {
+      try {
+        ParsePolicy::handle_meta_line(*this);
+      } catch (ParsingError ex) {
+        ErrorPolicy::handle_meta_section_error(*this, ex.what());
+      }
     }
 
     action sample_name_end {
-//        add_vcf_sample_name(ts, p-ts, file);
+        ParsePolicy::handle_sample_name(*this);
+    }
+    
+    action header_end {
+        ParsePolicy::handle_header_line(*this);
     }
 
 
@@ -641,9 +640,9 @@
                       ) %meta_entry_end;
 
     # Header between meta and records
-    sample_name     = (print - ("\n" | "\t"))+ ;
+    sample_name     = (print - ("\n" | "\t"))+ >token_begin @token_middle %sample_name_end;
     header          = "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO" $err(header_prefix_err)
-                      ("\tFORMAT" ("\t" sample_name >token_begin %sample_name_end)+ )?;
+                      ("\tFORMAT" ("\t" sample_name)+ )? %header_end ;
 
     # Records
 
