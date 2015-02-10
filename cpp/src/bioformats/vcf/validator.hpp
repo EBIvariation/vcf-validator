@@ -186,6 +186,15 @@ namespace opencb
                 case 6:
                     m_line_tokens["QUAL"] = m_grouped_tokens;
                     break;
+                case 7:
+                    m_line_tokens["FILTER"] = m_grouped_tokens;
+                    break;
+                case 8:
+                    m_line_tokens["INFO"] = m_grouped_tokens;
+                    break;
+                case 9:
+                    m_line_tokens["FORMAT"] = m_grouped_tokens;
+                    break;
                 default:
                     break;
             }

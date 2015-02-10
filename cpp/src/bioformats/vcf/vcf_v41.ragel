@@ -663,7 +663,7 @@
     record_id_empty = "." >token_begin @token_middle %token_end ;
     record_id       = record_id_value (";" record_id_value)* | record_id_empty ;
 
-    record_ref      = bases ;
+    record_ref      = bases >token_begin @token_middle %token_end ;
 
     ## A basic ALT can be something like AGT (biallelic), A,AT (multiallelic) or dot (no variant, must be the only allele)
     ## Zero is just for compatibility with PlinkSeq transformation
@@ -688,8 +688,9 @@
                       
     record_qual     = any_number | "." ;
 
-    filter_value    = (alnum | punct - ";")+ - (punct)+ ;
-    record_filter   = (filter_value (";" filter_value)*) | "." ;
+    record_fil_value= ((alnum | punct - ";")+ - (punct)+) >token_begin @token_middle %token_end ;
+    record_fil_empty= "." >token_begin @token_middle %token_end ;
+    record_filter   = (record_fil_value (";" record_fil_value)*) | record_fil_empty ;
 
     info_key        = (alnum | (punct - (";" | "=")))+ - ( "AA" | "AC" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G" | (punct)+ ) ;
     info_value      = (print - (space | ";"))+ ;
@@ -729,11 +730,11 @@
     
     record          = (record_chrom 		$err(chrom_error)
                         CS record_pos 		$err(pos_error)
-                        CS record_id 		>token_begin @token_middle %token_end $err(id_error)
-                        CS record_ref 		>token_begin @token_middle %token_end $err(ref_error)
+                        CS record_id 		$err(id_error)
+                        CS record_ref 		$err(ref_error)
                         CS record_alt 		>token_begin @token_middle %token_end $err(alt_error) 
                         CS record_qual		>token_begin @token_middle %token_end $err(qual_error) 
-                        CS record_filter 	>token_begin @token_middle %token_end $err(filter_error) 
+                        CS record_filter 	$err(filter_error) 
                         CS record_info		>token_begin @token_middle %token_end $err(info_error) 
                         (CS record_format	>token_begin @token_middle %token_end $err(format_error)
                         #(CS record_sample	>token_begin @token_middle %token_end $err(sample_error))+ )?
