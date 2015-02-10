@@ -59,6 +59,7 @@ namespace opencb
         void handle_meta_line(ParsingState const & state) {}
         
         void handle_column_end(ParsingState const & state, size_t n_columns);
+        void handle_body_line(ParsingState const & state) {}
         
         std::string current_token() const { return ""; }
     };
@@ -133,7 +134,7 @@ namespace opencb
 
                 } else if (m_grouped_tokens.size() % 2 == 0) { // TypeID=<Key-value pairs>
                     auto key_values = std::map<std::string, std::string>{};
-                    for (int i = 0; i < m_grouped_tokens.size(); i += 2) {
+                    for (size_t i = 0; i < m_grouped_tokens.size(); i += 2) {
                         key_values[m_grouped_tokens[i]] = m_grouped_tokens[i+1];
                     }
                     state.add_meta(MetaEntry{m_line_typeid, key_values, state.source});
@@ -160,8 +161,9 @@ namespace opencb
         
         void handle_column_end(ParsingState const & state, size_t n_columns) 
         {
+            std::cout << "Field " << n_columns << " tokens:\t";
             for (auto & token : m_grouped_tokens) {
-                std::cout << token << "\t";
+                std::cout << "'" << token << "'  ";
             }
             std::cout << std::endl;
             
@@ -189,6 +191,21 @@ namespace opencb
             }
             m_grouped_tokens = std::vector<std::string>{};
         }
+        
+        void handle_body_line(ParsingState const & state) 
+        {
+            for (auto & column : m_line_tokens)
+            {
+                std::cout << column.first << ":\t" ;
+                for (auto & value : column.second)
+                {
+                    std::cout << value << "  ";
+                }
+                std::cout << std::endl;
+            }
+            std::cout << std::endl;
+        }
+        
         
         std::string current_token() const
         {
