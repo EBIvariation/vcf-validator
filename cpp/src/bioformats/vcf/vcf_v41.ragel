@@ -632,19 +632,19 @@
     
     ## In a sample, the genotype is mandatory and must be the first field
     sample_allele   = (digit | ".") ;
-    sample_gt       = sample_allele (("/" | "|") sample_allele)* ;
-    record_sample   = sample_gt $err(sample_gt_error) (":" (alnum | punct)+)* ;
+    sample_gt       = (sample_allele (("/" | "|") sample_allele)*) ;
+    sample_value    = (alnum | (punct - ":"))+ ;
+    record_sample   = (sample_gt $err(sample_gt_error) (":" sample_value)*) >token_begin $token_middle %token_end ;
     
     record          = (record_chrom 		$err(chrom_error)
                         CS record_position	$err(pos_error)
                         CS record_id 		$err(id_error)
                         CS record_ref 		$err(ref_error)
                         CS record_alt 		$err(alt_error) 
-                        CS record_qual		>token_begin @token_middle %token_end $err(qual_error) 
+                        CS record_qual		$err(qual_error) 
                         CS record_filter 	$err(filter_error) 
                         CS record_info		>token_begin @token_middle %token_end $err(info_error) 
                         (CS record_format	$err(format_error)
-                        #(CS record_sample	>token_begin @token_middle %token_end $err(sample_error))+ )?
                         (CS record_sample	$err(sample_error))+ )?
                       ) %record_end;
 
