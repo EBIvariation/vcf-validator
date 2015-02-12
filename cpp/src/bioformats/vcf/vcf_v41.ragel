@@ -599,7 +599,7 @@
                         record_alt_sv |
                         record_alt_other ) >token_begin $token_middle %token_end ;
     record_alt      = record_alt_data ("," record_alt_data)* |
-                      record_alt_empty ;
+                      record_alt_empty >token_begin $token_middle %token_end ;
                       
     record_qual     = (any_number | ".") >token_begin $token_middle %token_end ;
 
