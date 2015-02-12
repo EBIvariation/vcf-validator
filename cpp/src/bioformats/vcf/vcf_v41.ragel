@@ -135,11 +135,11 @@
     }
     
     action meta_entry_end {
-      try {
-        ParsePolicy::handle_meta_line(*this);
-      } catch (ParsingError ex) {
-        ErrorPolicy::handle_meta_section_error(*this, ex.what());
-      }
+        try {
+          ParsePolicy::handle_meta_line(*this);
+        } catch (ParsingError ex) {
+          ErrorPolicy::handle_meta_section_error(*this, ex.what());
+        }
     }
 
     action sample_name_end {
@@ -154,13 +154,16 @@
     ########### Correct body actions ##########
 
     action record_end {
-        std::cout << "Finished reading record" << std::endl;
         // Handle last sample if proceeds
         if (n_columns > 9) {
           ParsePolicy::handle_column_end(*this, n_columns);
         }
         // Handle all columns in the record
-        ParsePolicy::handle_body_line(*this);
+        try {
+          ParsePolicy::handle_body_line(*this);
+        } catch (ParsingError ex) {
+          ErrorPolicy::handle_body_section_error(*this, ex.what());
+        }
     }
 
 
@@ -683,8 +686,10 @@ namespace opencb
   namespace vcf
   {
     template <typename Configuration>
-    Parser<Configuration>::Parser(std::shared_ptr<Source> const & source)
-    : ParsingState{source}
+    Parser<Configuration>::Parser(std::shared_ptr<Source> const & source,
+                                  std::shared_ptr<std::vector<Record>> const & records
+    )
+    : ParsingState{source, records}
     {
       %%{
       write init;

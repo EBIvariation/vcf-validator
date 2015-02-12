@@ -5,8 +5,10 @@ namespace opencb
   namespace vcf
   {
 
-    ParsingState::ParsingState(std::shared_ptr<Source> source)
-    : n_lines{1}, n_columns{1}, n_batches{0}, cs{0}, source{source}
+    ParsingState::ParsingState(
+        std::shared_ptr<Source> source,
+        std::shared_ptr<std::vector<Record>> records)
+    : n_lines{1}, n_columns{1}, n_batches{0}, cs{0}, source{source}, records{records}
     {
     }
 
@@ -18,6 +20,11 @@ namespace opencb
     void ParsingState::add_meta(MetaEntry const & meta) const
     {
         source->meta_entries.push_back(meta);
+    }
+    
+    void ParsingState::add_record(Record const & record) const
+    {
+        records->push_back(record);
     }
     
     std::vector<std::string> const & ParsingState::samples() const

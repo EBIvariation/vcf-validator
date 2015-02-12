@@ -96,8 +96,8 @@ namespace opencb
 
         float quality;
         std::vector<std::string> filters;
-        std::string info;
-        std::string format;
+        std::vector<std::string> info;
+        std::vector<std::string> format;
 
         std::vector<std::string> samples;
         
@@ -111,8 +111,8 @@ namespace opencb
                std::vector<std::string> const & alternate_alleles, 
                float const quality, 
                std::vector<std::string> const & filters, 
-               std::string const & info, 
-               std::string const & format, 
+               std::vector<std::string> const & info, 
+               std::vector<std::string> const & format, 
                std::vector<std::string> const & samples,
                std::shared_ptr<Source> const & source);
 

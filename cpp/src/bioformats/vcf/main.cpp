@@ -38,8 +38,12 @@ namespace
   bool is_valid_vcf_file(char const * path)
   {
     std::ifstream input{path};
-    auto source = opencb::vcf::Source(path, opencb::vcf::InputFormat::VCF_FILE_VCF);
-    auto validator = opencb::vcf::FullValidator{std::make_shared<opencb::vcf::Source>(source)};
+    auto source = opencb::vcf::Source{path, opencb::vcf::InputFormat::VCF_FILE_VCF};
+    auto records = std::vector<opencb::vcf::Record>{};
+    
+    auto validator = opencb::vcf::FullValidator{
+        std::make_shared<opencb::vcf::Source>(source),
+        std::make_shared<std::vector<opencb::vcf::Record>>(records)};
 
 //    for ( std::string line; std::getline(input, line); )
 //    {

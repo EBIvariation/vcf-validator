@@ -26,12 +26,16 @@ namespace opencb
         bool m_is_valid;
         
         std::shared_ptr<Source> source;
+        std::shared_ptr<std::vector<Record>> records;
      
-        ParsingState(std::shared_ptr<Source> source);
+        ParsingState(std::shared_ptr<Source> source,
+                     std::shared_ptr<std::vector<Record>> records);
         
         void set_version(std::string & fileformat) const;
         
         void add_meta(MetaEntry const & meta) const;
+        
+        void add_record(Record const & record) const;
         
         std::vector<std::string> const & samples() const;
         
@@ -61,7 +65,7 @@ namespace opencb
         void handle_meta_line(ParsingState const & state) {}
         
         void handle_column_end(ParsingState const & state, size_t n_columns);
-        void handle_body_line(ParsingState const & state) {}
+        void handle_body_line(ParsingState & state) {}
         
         std::string current_token() const { return ""; }
     };
@@ -204,19 +208,31 @@ namespace opencb
         
         void handle_body_line(ParsingState const & state) 
         {
-            for (auto & column : m_line_tokens)
-            {
-                std::cout << column.first << ":\t" ;
-                if (column.first == "SAMPLES") {
-                    std::cout << column.second.size() << "\t";
+            try {
+                auto position = static_cast<size_t>(std::stoi(m_line_tokens["POS"][0]));
+                float quality;
+                try {
+                    quality = std::stof(m_line_tokens["QUAL"][0]);
+                } catch (std::invalid_argument ex) {
+                    quality = 0;
                 }
-                for (auto & value : column.second)
-                {
-                    std::cout << value << "  ";
-                }
-                std::cout << std::endl;
+                
+                state.add_record(Record {
+                    m_line_tokens["CHROM"][0],
+                    position,
+                    m_line_tokens["ID"],
+                    m_line_tokens["REF"][0],
+                    m_line_tokens["ALT"],
+                    quality,
+                    m_line_tokens["FILTER"],
+                    m_line_tokens["INFO"],
+                    m_line_tokens["FORMAT"],
+                    m_line_tokens["SAMPLES"],
+                    state.source
+                });
+            } catch (std::invalid_argument ex) {
+                throw ParsingError(ex.what());
             }
-            std::cout << std::endl;
         }
         
         
@@ -310,7 +326,8 @@ namespace opencb
         using ParsePolicy = typename Configuration::ParsePolicy;
         using ErrorPolicy = typename Configuration::ErrorPolicy;
 
-        Parser(std::shared_ptr<Source> const & source);
+        Parser(std::shared_ptr<Source> const & source,
+               std::shared_ptr<std::vector<Record>> const & records);
 
         void parse(std::string const & text);
         void parse(std::vector<char> const & text);

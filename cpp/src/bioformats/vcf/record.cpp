@@ -13,8 +13,8 @@ namespace opencb
                          std::vector<std::string> const & alternate_alleles, 
                          float const quality, 
                          std::vector<std::string> const & filters, 
-                         std::string const & info, 
-                         std::string const & format, 
+                         std::vector<std::string> const & info, 
+                         std::vector<std::string> const & format, 
                          std::vector<std::string> const & samples,
                          std::shared_ptr<Source> const & source) 
     : chromosome{chromosome}, 
@@ -94,8 +94,7 @@ namespace opencb
     
     void Record::check_format()
     {
-        std::size_t pos = format.find(':');
-        if ((pos == std::string::npos && format != "GT") || (format.substr(0, pos) != "GT")) {
+        if (format[0] != "GT") {
             throw std::invalid_argument("Format first field must be the genotype (GT)");
         }
     }

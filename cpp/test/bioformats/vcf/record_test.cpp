@@ -26,8 +26,8 @@ namespace opencb
                                 { "AC", "AT" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "GT:DP", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" }, 
                                 { "" },
                                 std::make_shared<vcf::Source>(source)} ) );
                 
@@ -39,8 +39,8 @@ namespace opencb
                                 { "AC", "AT" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "GT:DP", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" },  
                                 { "" },
                                 std::make_shared<vcf::Source>(source)}) );
         }
@@ -55,8 +55,8 @@ namespace opencb
                                 { "AC", "AT" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "GT:DP", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" }, 
                                 { "" },
                                 std::make_shared<vcf::Source>(source)}),
                             std::invalid_argument);
@@ -72,8 +72,8 @@ namespace opencb
                                 { "AC", "AT" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "GT:DP", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" }, 
                                 { "" },
                                 std::make_shared<vcf::Source>(source)}),
                             std::invalid_argument);
@@ -89,8 +89,8 @@ namespace opencb
                                 { "AC", "AT" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "GT:DP", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" }, 
                                 { "" },
                                 std::make_shared<vcf::Source>(source)}),
                             std::invalid_argument);
@@ -106,8 +106,8 @@ namespace opencb
                                 { "AT" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "GT:DP", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" }, 
                                 { "" },
                                 std::make_shared<vcf::Source>(source)}) );
                                 
@@ -119,8 +119,8 @@ namespace opencb
                                 { "CT" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "GT:DP", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" }, 
                                 { "" },
                                 std::make_shared<vcf::Source>(source)}),
                             std::invalid_argument);
@@ -136,8 +136,8 @@ namespace opencb
                                 { "T", "C" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "GT:DP", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" }, 
                                 { "" },
                                 std::make_shared<vcf::Source>(source)}) );
         }
@@ -152,8 +152,8 @@ namespace opencb
                                 { "A" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "GT:DP", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" },  
                                 { "" },
                                 std::make_shared<vcf::Source>(source)}),
                             std::invalid_argument);
@@ -169,8 +169,8 @@ namespace opencb
                                 { "A", "C" }, 
                                 -1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "GT:DP", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" }, 
                                 { "" },
                                 std::make_shared<vcf::Source>(source)}),
                             std::invalid_argument);
@@ -186,8 +186,8 @@ namespace opencb
                                 { "T", "C" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "GT", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" }, 
                                 { "" },
                                 std::make_shared<vcf::Source>(source)}) );
                                 
@@ -199,8 +199,8 @@ namespace opencb
                                 { "A", "C" }, 
                                 -1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "DP", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" },  
                                 { "" },
                                 std::make_shared<vcf::Source>(source)}),
                             std::invalid_argument);
@@ -216,8 +216,8 @@ namespace opencb
                                 { "T", "C" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "GT:DP", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" }, 
                                 { "" },
                                 std::make_shared<vcf::Source>(source)}) );
                                 
@@ -229,8 +229,8 @@ namespace opencb
                                 { "A", "C" }, 
                                 -1.0, 
                                 { "PASS" }, 
-                                "AN=12,AF=0.5", 
-                                "DP:GT", 
+                                { "AN=12", "AF=0.5" }, 
+                                { "GT", "DP" }, 
                                 { "" },
                                 std::make_shared<vcf::Source>(source)}),
                             std::invalid_argument);
