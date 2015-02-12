@@ -33,6 +33,8 @@ namespace opencb
         
         void add_meta(MetaEntry const & meta) const;
         
+        std::vector<std::string> const & samples() const;
+        
         void set_samples(std::vector<std::string> & samples) const;
     };
 
@@ -161,12 +163,6 @@ namespace opencb
         
         void handle_column_end(ParsingState const & state, size_t n_columns) 
         {
-            std::cout << "Field " << n_columns << " tokens:\t";
-            for (auto & token : m_grouped_tokens) {
-                std::cout << "'" << token << "'  ";
-            }
-            std::cout << std::endl;
-            
             switch(n_columns) {
                 case 1:
                     m_line_tokens["CHROM"] = m_grouped_tokens;
@@ -196,7 +192,12 @@ namespace opencb
                     m_line_tokens["FORMAT"] = m_grouped_tokens;
                     break;
                 default:
-                    break;
+                    // Collection of samples
+                    if (m_line_tokens.find("SAMPLES") == m_line_tokens.end()) {
+                        m_line_tokens["SAMPLES"] = std::vector<std::string>{};
+                    }
+                    // Samples are stored as a single string
+                    m_line_tokens["SAMPLES"].push_back(m_grouped_tokens[0]);
             }
             m_grouped_tokens = std::vector<std::string>{};
         }
@@ -206,6 +207,9 @@ namespace opencb
             for (auto & column : m_line_tokens)
             {
                 std::cout << column.first << ":\t" ;
+                if (column.first == "SAMPLES") {
+                    std::cout << column.second.size() << "\t";
+                }
                 for (auto & value : column.second)
                 {
                     std::cout << value << "  ";

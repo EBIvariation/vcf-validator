@@ -20,6 +20,11 @@ namespace opencb
         source->meta_entries.push_back(meta);
     }
     
+    std::vector<std::string> const & ParsingState::samples() const
+    {
+        return source->samples_names;
+    }
+        
     void ParsingState::set_samples(std::vector<std::string> & samples) const
     {
         source->samples_names = samples;

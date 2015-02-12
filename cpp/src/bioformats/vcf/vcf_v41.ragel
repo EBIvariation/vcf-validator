@@ -155,6 +155,11 @@
 
     action record_end {
         std::cout << "Finished reading record" << std::endl;
+        // Handle last sample if proceeds
+        if (n_columns > 9) {
+          ParsePolicy::handle_column_end(*this, n_columns);
+        }
+        // Handle all columns in the record
         ParsePolicy::handle_body_line(*this);
     }
 
@@ -623,7 +628,7 @@
                         "1000G" ("=" ("1" | "0"))? 		$err(info_1000G_error) |
                         info_key $err(info_key_error) | 
                         info_key $err(info_key_error) "=" info_value_list $err(info_value_error)
-                      );
+                      ) >token_begin $token_middle %token_end ;
     record_info     = info_entry (";" info_entry)* | "." ;
 
     ## TODO Could this be extended because a lot of files use _ as a separator?
