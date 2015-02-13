@@ -77,7 +77,14 @@ namespace opencb
     void Record::check_alternate_alleles() 
     {
         for (auto & alternate : alternate_alleles) {
-            if (alternate[0] != reference_allele[0] && alternate.size() != reference_allele.size()) {
+            if (std::count(alternate.begin(), alternate.end(), '[') == 2 || 
+                std::count(alternate.begin(), alternate.end(), ']') == 2) { 
+                continue; // Break-ends can't be checked against the reference
+            } else if (alternate == ".") {
+                if (alternate_alleles.size() > 1) {
+                    throw std::invalid_argument("The no-alternate alleles symbol (dot) can not be combined with others");
+                }
+            } else if (alternate[0] != reference_allele[0] && alternate.size() != reference_allele.size()) {
                 throw std::invalid_argument("Reference and alternate alleles must share the first nucleotide");
             } else if (alternate == reference_allele) {
                 throw std::invalid_argument("Reference and alternate alleles must not be the same");
