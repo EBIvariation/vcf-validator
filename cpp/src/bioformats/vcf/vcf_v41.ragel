@@ -500,7 +500,8 @@
     meta_field_type = (alpha)+ >token_begin @token_middle %token_end ;
     
     meta_alt        = "ID=" %meta_id (alpha | ":")+ >token_begin @token_middle %token_end $err(meta_alt_id_err)
-                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err) ;
+                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
+                        ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
 
     meta_assembly   = url $err(meta_url_err) ;
     
@@ -508,13 +509,15 @@
                         ("," identifier "=" meta_field_value)* ;
                         
     meta_filter     = "ID=" %meta_id identifier $err(meta_id_err)
-                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err) ;
+                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
+                        ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
     
     ## TODO It is unlikely, but "Number" could have multiple digits and in that case it should be managed the same way as "Type"
     meta_format     = "ID=" %meta_id identifier $err(meta_id_err)
                         ",Number=" %meta_number meta_field_num $err(meta_format_number_err) 
                         ",Type=" %meta_type meta_field_type $err(meta_info_type_err)
-                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err) ;
+                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
+                        ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
                         
     ## TODO It is unlikely, but "Number" could have multiple digits and in that case it should be managed the same way as "Type"
     meta_info       = "ID=" %meta_id identifier $err(meta_id_err) 
