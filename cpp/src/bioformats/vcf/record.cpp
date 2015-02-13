@@ -34,6 +34,7 @@ namespace opencb
         check_alternate_alleles();
         check_quality();
         check_format();
+        check_samples();
     }
 
     bool Record::operator==(Record const & other) 
@@ -106,5 +107,11 @@ namespace opencb
         }
     }
 
+    void Record::check_samples() 
+    {
+        if (samples.size() != source->samples_names.size()) {
+            throw std::invalid_argument("The number of samples must match those listed in the header line");
+        }
+    }
   }
 }

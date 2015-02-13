@@ -156,6 +156,13 @@ namespace opencb
          * @throw std::invalid_argument
          */
         void check_format();
+        
+        /**
+         * Checks that it has the same number of samples as specified in the Source object
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_samples();
     };
 
   }
