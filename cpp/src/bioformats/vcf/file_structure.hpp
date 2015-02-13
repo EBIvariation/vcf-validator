@@ -47,9 +47,9 @@ namespace opencb
                   std::map<std::string, std::string> const & key_values,
                   std::shared_ptr<Source> const & source);
         
-        bool operator==(MetaEntry const &);
+        bool operator==(MetaEntry const &) const;
 
-        bool operator!=(MetaEntry const &);
+        bool operator!=(MetaEntry const &) const;
         
     private:
         /**
@@ -116,9 +116,9 @@ namespace opencb
                std::vector<std::string> const & samples,
                std::shared_ptr<Source> const & source);
 
-        bool operator==(Record const &);
+        bool operator==(Record const &) const;
 
-        bool operator!=(Record const &);
+        bool operator!=(Record const &) const;
         
     private:
         /**
@@ -126,14 +126,14 @@ namespace opencb
          * 
          * @throw std::invalid_argument
          */
-        void check_chromosome();
+        void check_chromosome() const;
         
         /**
          * Checks that IDs are alphanumeric
          * 
          * @throw std::invalid_argument
          */
-        void check_ids();
+        void check_ids() const;
         
         /**
          * Checks that alternate and reference alleles share the first nucleotide 
@@ -141,28 +141,28 @@ namespace opencb
          * 
          * @throw std::invalid_argument
          */
-        void check_alternate_alleles();
+        void check_alternate_alleles() const;
         
         /**
          * Checks that quality is zero or greater
          * 
          * @throw std::invalid_argument
          */
-        void check_quality();
+        void check_quality() const;
         
         /**
          * Checks that format starts with GT
          * 
          * @throw std::invalid_argument
          */
-        void check_format();
+        void check_format() const;
         
         /**
          * Checks that it has the same number of samples as specified in the Source object
          * 
          * @throw std::invalid_argument
          */
-        void check_samples();
+        void check_samples() const;
     };
 
   }

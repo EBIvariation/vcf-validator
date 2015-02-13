@@ -37,7 +37,7 @@ namespace opencb
         check_samples();
     }
 
-    bool Record::operator==(Record const & other) 
+    bool Record::operator==(Record const & other) const
     {
         return chromosome == other.chromosome &&
                 position == other.position &&
@@ -51,12 +51,12 @@ namespace opencb
                 samples == other.samples;
     }
 
-    bool Record::operator!=(Record const & other) 
+    bool Record::operator!=(Record const & other) const
     {
         return !(*this == other);
     }
 
-    void Record::check_chromosome() 
+    void Record::check_chromosome() const
     {
         if (chromosome.find(':') != std::string::npos) {
             throw std::invalid_argument("Chromosome must not contain colons");
@@ -66,7 +66,7 @@ namespace opencb
         }
     }
 
-    void Record::check_ids() 
+    void Record::check_ids() const
     {
         for (auto & id : ids) {
             if (find_if(id.begin(), id.end(), [](char c) { return !isalnum(c); }) != id.end()) {
@@ -75,7 +75,7 @@ namespace opencb
         }
     }
 
-    void Record::check_alternate_alleles() 
+    void Record::check_alternate_alleles() const
     {
         for (auto & alternate : alternate_alleles) {
             if (std::count(alternate.begin(), alternate.end(), '[') == 2 || 
@@ -93,21 +93,21 @@ namespace opencb
         }
     }
 
-    void Record::check_quality() 
+    void Record::check_quality() const
     {
         if (quality < 0) {
             throw std::invalid_argument("Quality must be equal or greater than zero");
         }
     }
     
-    void Record::check_format()
+    void Record::check_format() const
     {
         if (format[0] != "GT") {
             throw std::invalid_argument("Format first field must be the genotype (GT)");
         }
     }
 
-    void Record::check_samples() 
+    void Record::check_samples() const
     {
         if (samples.size() != source->samples_names.size()) {
             throw std::invalid_argument("The number of samples must match those listed in the header line");

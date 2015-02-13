@@ -30,13 +30,13 @@ namespace opencb
         check_value();
     }
     
-    bool MetaEntry::operator==(MetaEntry const & other)
+    bool MetaEntry::operator==(MetaEntry const & other) const
     {
         return id == other.id &&
                value == other.value;
     }
 
-    bool MetaEntry::operator!=(MetaEntry const & other)
+    bool MetaEntry::operator!=(MetaEntry const & other) const
     {
         return !(*this == other);
     }
