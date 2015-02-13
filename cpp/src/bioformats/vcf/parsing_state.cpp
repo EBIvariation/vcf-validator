@@ -19,7 +19,7 @@ namespace opencb
     
     void ParsingState::add_meta(MetaEntry const & meta) const
     {
-        source->meta_entries.push_back(meta);
+        source->meta_entries.emplace(meta.id, meta);
     }
     
     void ParsingState::add_record(Record const & record) const

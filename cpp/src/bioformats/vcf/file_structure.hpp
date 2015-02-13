@@ -75,13 +75,13 @@ namespace opencb
         unsigned int input_format;  /**< Mask that stores whether the input is plain/gzipped VCF, BCF, etc */
         std::string version;        /**< VCF version */
 
-        std::vector<MetaEntry> meta_entries;    /**< Entries in the file meta-data */
+        std::multimap<std::string, MetaEntry> meta_entries; /**< Entries in the file meta-data */
         std::vector<std::string> samples_names; /**< Names of the sequenced samples */
         
         Source(std::string const & name,
                unsigned const input_format,
                std::string const & version = "VCFv4.1",
-               std::vector<MetaEntry> const & meta_entries = {},
+               std::multimap<std::string, MetaEntry> const & meta_entries = {},
                std::vector<std::string> const & samples_names = {});
     };
     
@@ -149,6 +149,13 @@ namespace opencb
          * @throw std::invalid_argument
          */
         void check_quality() const;
+        
+        /**
+         * Checks that all the filters are listed in the meta section
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_filter() const;
         
         /**
          * Checks that format starts with GT

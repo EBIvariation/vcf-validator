@@ -33,6 +33,7 @@ namespace opencb
         check_ids();
         check_alternate_alleles();
         check_quality();
+        check_filter();
         check_format();
         check_samples();
     }
@@ -96,7 +97,32 @@ namespace opencb
     void Record::check_quality() const
     {
         if (quality < 0) {
-            throw std::invalid_argument("Quality must be equal or greater than zero");
+            throw std::invalid_argument("Quality is not equal or greater than zero");
+        }
+    }
+    
+    void Record::check_filter() const
+    {
+        typedef std::multimap<std::string, MetaEntry>::iterator iter;
+        std::pair<iter, iter> range = source->meta_entries.equal_range("FILTER");
+        
+        for (auto & filter : filters) {
+            if (filter != "PASS" && filter != ".") {
+                bool found_in_header = false;
+                for (; range.first != range.second; ++range.first) {
+                    auto & element = range.first; // MetaEntry object
+                    auto & key_values = boost::get<std::map < std::string, std::string >> ((element->second).value);
+                    
+                    if (key_values["ID"] == filter) {
+                        found_in_header = true;
+                        break;
+                    }
+                }
+                
+                if (!found_in_header) {
+                    throw std::invalid_argument("Filter '" + filter + "' is not listed in a meta-data FILTER entry");
+                }
+            }
         }
     }
     
