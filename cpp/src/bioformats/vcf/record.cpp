@@ -78,18 +78,49 @@ namespace opencb
 
     void Record::check_alternate_alleles() const
     {
+        // Check alternate allele structure against the reference
         for (auto & alternate : alternate_alleles) {
-            if (std::count(alternate.begin(), alternate.end(), '[') == 2 || 
-                std::count(alternate.begin(), alternate.end(), ']') == 2) { 
-                continue; // Break-ends can't be checked against the reference
-            } else if (alternate == ".") {
+            if (alternate == ".") {
                 if (alternate_alleles.size() > 1) {
                     throw std::invalid_argument("The no-alternate alleles symbol (dot) can not be combined with others");
                 }
+            } else if (alternate[0] == '<') {
+                continue; // Custom ALTs can't be checked against the reference
+            } else if (std::count(alternate.begin(), alternate.end(), '[') == 2 || 
+                std::count(alternate.begin(), alternate.end(), ']') == 2) { 
+                continue; // Break-ends can't be checked against the reference
             } else if (alternate[0] != reference_allele[0] && alternate.size() != reference_allele.size()) {
                 throw std::invalid_argument("Reference and alternate alleles must share the first nucleotide");
             } else if (alternate == reference_allele) {
                 throw std::invalid_argument("Reference and alternate alleles must not be the same");
+            }
+        }
+        
+        // Check alternate ID is present in meta-entry, if applicable
+        typedef std::multimap<std::string, MetaEntry>::iterator iter;
+        std::pair<iter, iter> range = source->meta_entries.equal_range("ALT");
+        
+        boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
+        boost::cmatch pieces_match;
+        
+        for (auto & alternate : alternate_alleles) {
+            if (regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
+                std::string alt_id = pieces_match[1];
+                bool found_in_header = false;
+                
+                for (; range.first != range.second; ++range.first) {
+                    auto & element = range.first; // Current std::pair object
+                    auto & key_values = boost::get<std::map < std::string, std::string >> ((element->second).value);
+                    
+                    if (key_values["ID"] == alt_id) {
+                        found_in_header = true;
+                        break;
+                    }
+                }
+                
+                if (!found_in_header) {
+                    throw std::invalid_argument("Alternate '" + alt_id + "' is not listed in a meta-data ALT entry");
+                }
             }
         }
     }
@@ -110,7 +141,7 @@ namespace opencb
             if (filter != "PASS" && filter != ".") {
                 bool found_in_header = false;
                 for (; range.first != range.second; ++range.first) {
-                    auto & element = range.first; // MetaEntry object
+                    auto & element = range.first; // Current std::pair object
                     auto & key_values = boost::get<std::map < std::string, std::string >> ((element->second).value);
                     
                     if (key_values["ID"] == filter) {

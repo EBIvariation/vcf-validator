@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 
+#include <boost/regex.hpp>
 #include <boost/variant.hpp>
 
 namespace opencb
