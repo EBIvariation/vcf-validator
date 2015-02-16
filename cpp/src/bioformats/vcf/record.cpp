@@ -162,6 +162,27 @@ namespace opencb
         if (format[0] != "GT") {
             throw std::invalid_argument("Format first field must be the genotype (GT)");
         }
+        
+        typedef std::multimap<std::string, MetaEntry>::iterator iter;
+        std::pair<iter, iter> range = source->meta_entries.equal_range("FORMAT");
+        
+        for (auto & fm : format) {
+            bool found_in_header = false;
+
+            for (; range.first != range.second; ++range.first) {
+                auto & element = range.first; // Current std::pair object
+                auto & key_values = boost::get<std::map < std::string, std::string >> ((element->second).value);
+
+                if (key_values["ID"] == fm) {
+                    found_in_header = true;
+                    break;
+                }
+            }
+
+            if (!found_in_header) {
+                throw std::invalid_argument("Format field '" + fm + "' is not listed in a meta-data FORMAT entry");
+            }
+        }
     }
 
     void Record::check_samples() const
