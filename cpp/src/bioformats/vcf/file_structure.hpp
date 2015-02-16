@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 
+#include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
 #include <boost/variant.hpp>
 
@@ -159,6 +160,14 @@ namespace opencb
         void check_filter() const;
         
         /**
+         * Checks that all the INFO fields are listed in the meta section, and their number and 
+         * type match those specifications
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_info() const;
+        
+        /**
          * Checks that format starts with GT
          * 
          * @throw std::invalid_argument
@@ -166,7 +175,10 @@ namespace opencb
         void check_format() const;
         
         /**
-         * Checks that it has the same number of samples as specified in the Source object
+         * Checks that the samples in the record:
+         * - Are the same number as specified in the Source object
+         * - Their allele indexes are not greater than the total number of alleles
+         * - The number and type of the fields match the FORMAT meta information
          * 
          * @throw std::invalid_argument
          */

@@ -34,6 +34,7 @@ namespace opencb
         check_alternate_alleles();
         check_quality();
         check_filter();
+        check_info();
         check_format();
         check_samples();
     }
@@ -69,6 +70,10 @@ namespace opencb
 
     void Record::check_ids() const
     {
+        if (ids.size() == 1 && ids[0] == ".") {
+            return; // No need to check if no IDs are provided
+        }
+        
         for (auto & id : ids) {
             if (find_if(id.begin(), id.end(), [](char c) { return !isalnum(c); }) != id.end()) {
                 throw std::invalid_argument("ID must be alphanumeric");
@@ -157,12 +162,14 @@ namespace opencb
         }
     }
     
+    void Record::check_info() const
+    {
+        typedef std::multimap<std::string, MetaEntry>::iterator iter;
+        std::pair<iter, iter> range = source->meta_entries.equal_range("INFO");
+    }
+    
     void Record::check_format() const
     {
-        if (format[0] != "GT") {
-            throw std::invalid_argument("Format first field must be the genotype (GT)");
-        }
-        
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
         std::pair<iter, iter> range = source->meta_entries.equal_range("FORMAT");
         
@@ -189,6 +196,32 @@ namespace opencb
     {
         if (samples.size() != source->samples_names.size()) {
             throw std::invalid_argument("The number of samples must match those listed in the header line");
+        }
+        
+        typedef std::multimap<std::string, MetaEntry>::iterator iter;
+        std::pair<iter, iter> range = source->meta_entries.equal_range("FORMAT");
+        
+        for (auto & sample : samples) {
+            std::vector<std::string> subfields;
+            boost::split(subfields, sample, boost::is_any_of(":"));
+            
+            // Their allele indexes must not be greater than the total number of alleles
+            std::vector<std::string> alleles;
+            boost::split(alleles, subfields[0], boost::is_any_of("|,/"));
+            for (auto & allele : alleles) {
+                if (allele == ".") { continue; } // No need to check missing alleles
+                
+                int num_allele = std::stoi(allele);
+                if (num_allele > alternate_alleles.size()) {
+                    throw std::invalid_argument("Alternate allele index " + std::to_string(num_allele) + 
+                            " is greater than the maximum allowed " + std::to_string(alternate_alleles.size()));
+                }
+            }
+            
+            // TODO The number and type of the fields match the FORMAT meta information
+            for (size_t i = 1; i < subfields.size(); ++i) {
+                
+            }
         }
     }
   }
