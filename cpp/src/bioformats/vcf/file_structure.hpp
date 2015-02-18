@@ -15,8 +15,6 @@
 #include <string>
 #include <vector>
 
-#include <boost/algorithm/string.hpp>
-#include <boost/regex.hpp>
 #include <boost/variant.hpp>
 
 namespace opencb
@@ -183,6 +181,24 @@ namespace opencb
          * @throw std::invalid_argument
          */
         void check_samples() const;
+        
+        /**
+         * Checks that every field in a sample matches the Number specification in the FORMAT meta
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_samples_cardinality(std::string const & field,
+                                       std::string const & number, 
+                                       size_t ploidy) const;
+        
+        /**
+         * Checks that every field in a sample matches the Type specification in the FORMAT meta
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_samples_type(std::string const & field,
+                                std::string const & type) const;
+        
     };
 
   }

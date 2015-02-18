@@ -1,5 +1,5 @@
-#include <iostream>
 #include "file_structure.hpp"
+#include "record.hpp"
 
 namespace opencb
 {
@@ -165,7 +165,7 @@ namespace opencb
     void Record::check_info() const
     {
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
-        std::pair<iter, iter> range = source->meta_entries.equal_range("INFO");
+//        std::pair<iter, iter> range = source->meta_entries.equal_range("INFO");
     }
     
     void Record::check_format() const
@@ -176,10 +176,8 @@ namespace opencb
         for (auto & fm : format) {
             bool found_in_header = false;
 
-            for (; range.first != range.second; ++range.first) {
-                auto & element = range.first; // Current std::pair object
-                auto & key_values = boost::get<std::map < std::string, std::string >> ((element->second).value);
-
+            for (iter & current = range.first; current != range.second; ++current) {
+                auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
                 if (key_values["ID"] == fm) {
                     found_in_header = true;
                     break;
@@ -197,13 +195,31 @@ namespace opencb
         if (samples.size() != source->samples_names.size()) {
             throw std::invalid_argument("The number of samples must match those listed in the header line");
         }
+     
+        if (samples.size() == 0) {
+            return; // Nothing to check if no samples are listed in the file
+        }
         
+        // Get the MetaEntry objects in the same order as they are displayed in the samples
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
         std::pair<iter, iter> range = source->meta_entries.equal_range("FORMAT");
+        std::vector<MetaEntry> format_meta;
         
-        for (auto & sample : samples) {
+        for (auto & fm : format) {
+            for (iter & current = range.first; current != range.second; ++current) {
+                auto & key_values = boost::get<std::map < std::string, std::string>>((current->second).value);
+
+                if (key_values["ID"] == fm) {
+                    format_meta.push_back(current->second);
+                    break;
+                }
+            }
+        }
+        
+        // Check the samples contents and accordance to the meta section
+        for (size_t i = 0; i < samples.size(); ++i) {
             std::vector<std::string> subfields;
-            boost::split(subfields, sample, boost::is_any_of(":"));
+            boost::split(subfields, samples[i], boost::is_any_of(":"));
             
             // Their allele indexes must not be greater than the total number of alleles
             std::vector<std::string> alleles;
@@ -218,11 +234,64 @@ namespace opencb
                 }
             }
             
-            // TODO The number and type of the fields match the FORMAT meta information
-            for (size_t i = 1; i < subfields.size(); ++i) {
+            // TODO The cardinality and type of the fields match the FORMAT meta information
+            for (size_t j = 1; j < subfields.size(); ++j) {
+                MetaEntry meta = format_meta[j];
+                auto & subfield = subfields[j];
                 
+                auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
+                try {
+                    check_samples_cardinality(subfield, key_values["Number"], alleles.size());
+//                check_samples_type(subfield, key_values["Type"]);
+                } catch (std::invalid_argument ex) {
+                    throw std::invalid_argument("Sample #" + std::to_string(i+1) + ", " + 
+                                                key_values["ID"] + "=" + ex.what());
+                }
             }
         }
     }
+    
+    void Record::check_samples_cardinality(std::string const & field,
+                                           std::string const & number, 
+                                           size_t ploidy) const
+    {
+        // To check the field cardinality, split by comma and...
+        std::vector<std::string> values;
+        boost::split(values, field, boost::is_any_of(","));
+        size_t expected = -1;
+        
+        if (number == "A") {
+            // ...check against the number of alternate alleles
+            expected = alternate_alleles.size();
+        } else if (number == "R") {
+            // ...check against the number of alternate alleles + 1
+            expected = alternate_alleles.size() + 1;
+        } else if (number == "G") {
+            // ...check against the number of possible genotypes
+            // The binomial coefficient is calculated considering the ploidy of the sample
+            expected = boost::math::binomial_coefficient<float>(alternate_alleles.size() + 1, ploidy);
+        } else if (number == ".") {
+            // ...if it unspecified, can't do anything about it
+        } else {
+            try {
+                // ...check against the specified number
+                expected = std::stoi(number);
+            } catch (...) {}
+        } 
+
+        if (number != ".") { // Forget about the unspecified number
+            if (values.size() != expected) {
+                throw std::invalid_argument(field + " does not match the meta specification Number=" + number);
+            }
+        }
+    }
+    
+    void Record::check_samples_type(std::string const & type, 
+                                    std::string const & field) const
+    {
+        // TODO Check the field type
+        throw std::runtime_error("Not implemented!");
+    }
+    
   }
 }
