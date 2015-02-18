@@ -242,7 +242,7 @@ namespace opencb
                 auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
                 try {
                     check_samples_cardinality(subfield, key_values["Number"], alleles.size());
-//                check_samples_type(subfield, key_values["Type"]);
+                    check_samples_type(subfield, key_values["Type"]);
                 } catch (std::invalid_argument ex) {
                     throw std::invalid_argument("Sample #" + std::to_string(i+1) + ", " + 
                                                 key_values["ID"] + "=" + ex.what());
@@ -271,7 +271,7 @@ namespace opencb
             // The binomial coefficient is calculated considering the ploidy of the sample
             expected = boost::math::binomial_coefficient<float>(alternate_alleles.size() + 1, ploidy);
         } else if (number == ".") {
-            // ...if it unspecified, can't do anything about it
+            // ...do nothing, it is unspecified
         } else {
             try {
                 // ...check against the specified number
@@ -286,11 +286,33 @@ namespace opencb
         }
     }
     
-    void Record::check_samples_type(std::string const & type, 
-                                    std::string const & field) const
+    void Record::check_samples_type(std::string const & field,
+                                    std::string const & type) const
     {
-        // TODO Check the field type
-        throw std::runtime_error("Not implemented!");
+        // To check the field type, split by comma and...
+        std::vector<std::string> values;
+        boost::split(values, field, boost::is_any_of(","));
+        
+        for (auto & value : values) {
+            try {
+                if (type == "Integer") {
+                    // ...try to cast to int
+                    std::stoi(value);
+                } else if (type == "Float") {
+                    // ...try to cast to float
+                    std::stof(value);
+                } else if (type == "Character") {
+                    // ...check the length is 1
+                    if (value.size() > 1) {
+                        throw std::invalid_argument("There can be only one character");
+                    }
+                } else if (type == "String") {
+                    // ...do nothing, it is guaranteed it will be a string
+                } 
+            } catch (...) {
+                throw std::invalid_argument(field + " does not match the meta specification Type=" + type);
+            }
+        }
     }
     
   }
