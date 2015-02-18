@@ -121,6 +121,8 @@ namespace opencb
         bool operator!=(Record const &) const;
         
     private:
+        typedef std::multimap<std::string, MetaEntry>::iterator meta_iterator;
+    
         /**
          * Checks that chromosome does not contain colons or white-spaces
          * 
@@ -136,12 +138,29 @@ namespace opencb
         void check_ids() const;
         
         /**
-         * Checks that alternate and reference alleles share the first nucleotide 
-         * when they have the same length, but are not exactly the same
+         * Checks the structure of an alternate allele and its accordance to the meta section
          * 
          * @throw std::invalid_argument
          */
         void check_alternate_alleles() const;
+        
+        /**
+         * Checks the structure of an alternate allele:
+         * - The dot is not combined with others
+         * - Is not the same as the reference
+         * - Shares the first nucleotide with the reference (does not apply to SV, break-ends and custom ALTs)
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_alternate_allele_structure(std::string const & alternate) const;
+        
+        /**
+         * Checks that alternates of the form <SOME_ALT_ID> are described in the meta section
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_alternate_allele_meta(std::string const & alt_id,
+                                         std::pair<meta_iterator, meta_iterator> range) const;
         
         /**
          * Checks that quality is zero or greater
@@ -181,6 +200,13 @@ namespace opencb
          * @throw std::invalid_argument
          */
         void check_samples() const;
+        
+        /**
+         * Check that the allele indexes in a sample are not greater than the total number of alleles
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_samples_alleles(std::vector<std::string> const & alleles) const;
         
         /**
          * Checks that every field in a sample matches the Number specification in the FORMAT meta

@@ -5,7 +5,7 @@ namespace opencb
 {
   namespace vcf
   {
-    
+
     Record::Record(std::string const & chromosome, 
                          size_t const position, 
                          std::vector<std::string> const & ids, 
@@ -83,50 +83,58 @@ namespace opencb
 
     void Record::check_alternate_alleles() const
     {
-        // Check alternate allele structure against the reference
-        for (auto & alternate : alternate_alleles) {
-            if (alternate == ".") {
-                if (alternate_alleles.size() > 1) {
-                    throw std::invalid_argument("The no-alternate alleles symbol (dot) can not be combined with others");
-                }
-            } else if (alternate[0] == '<') {
-                continue; // Custom ALTs can't be checked against the reference
-            } else if (std::count(alternate.begin(), alternate.end(), '[') == 2 || 
-                std::count(alternate.begin(), alternate.end(), ']') == 2) { 
-                continue; // Break-ends can't be checked against the reference
-            } else if (alternate[0] != reference_allele[0] && alternate.size() != reference_allele.size()) {
-                throw std::invalid_argument("Reference and alternate alleles must share the first nucleotide");
-            } else if (alternate == reference_allele) {
-                throw std::invalid_argument("Reference and alternate alleles must not be the same");
-            }
-        }
-        
-        // Check alternate ID is present in meta-entry, if applicable
-        typedef std::multimap<std::string, MetaEntry>::iterator iter;
-        std::pair<iter, iter> range = source->meta_entries.equal_range("ALT");
+        std::pair<meta_iterator, meta_iterator> range = source->meta_entries.equal_range("ALT");
         
         boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
         boost::cmatch pieces_match;
         
         for (auto & alternate : alternate_alleles) {
+            // Check alternate allele structure against the reference
+            check_alternate_allele_structure(alternate);
+            
+            // Check alternate ID is present in meta-entry (only applies to the form <SOME_ALT_ID>)
             if (regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
                 std::string alt_id = pieces_match[1];
-                bool found_in_header = false;
-                
-                for (; range.first != range.second; ++range.first) {
-                    auto & element = range.first; // Current std::pair object
-                    auto & key_values = boost::get<std::map < std::string, std::string >> ((element->second).value);
-                    
-                    if (key_values["ID"] == alt_id) {
-                        found_in_header = true;
-                        break;
-                    }
-                }
-                
-                if (!found_in_header) {
-                    throw std::invalid_argument("Alternate '" + alt_id + "' is not listed in a meta-data ALT entry");
-                }
+                check_alternate_allele_meta(alt_id, range);
             }
+        }
+        
+    }
+    
+    void Record::check_alternate_allele_structure(std::string const & alternate) const
+    {
+        if (alternate == ".") {
+            if (alternate_alleles.size() > 1) {
+                throw std::invalid_argument("The no-alternate alleles symbol (dot) can not be combined with others");
+            }
+        } else if (alternate[0] == '<') {
+            return; // Custom ALTs can't be checked against the reference
+        } else if (std::count(alternate.begin(), alternate.end(), '[') == 2 || 
+            std::count(alternate.begin(), alternate.end(), ']') == 2) { 
+            return; // Break-ends can't be checked against the reference
+        } else if (alternate[0] != reference_allele[0] && alternate.size() != reference_allele.size()) {
+            throw std::invalid_argument("Reference and alternate alleles must share the first nucleotide");
+        } else if (alternate == reference_allele) {
+            throw std::invalid_argument("Reference and alternate alleles must not be the same");
+        }
+    }
+    
+    void Record::check_alternate_allele_meta(std::string const & alt_id,
+                                             std::pair<meta_iterator, meta_iterator> range) const
+    {
+        bool found_in_header = false;
+
+        for (auto & current = range.first; range.first != range.second; ++current) {
+            auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
+
+            if (key_values["ID"] == alt_id) {
+                found_in_header = true;
+                break;
+            }
+        }
+
+        if (!found_in_header) {
+            throw std::invalid_argument("Alternate '" + alt_id + "' is not listed in a meta-data ALT entry");
         }
     }
 
@@ -227,18 +235,11 @@ namespace opencb
                         " has more fields than specified in the FORMAT column");
             }
             
-            // Their allele indexes must not be greater than the total number of alleles
             std::vector<std::string> alleles;
             boost::split(alleles, subfields[0], boost::is_any_of("|,/"));
-            for (auto & allele : alleles) {
-                if (allele == ".") { continue; } // No need to check missing alleles
-                
-                int num_allele = std::stoi(allele);
-                if (num_allele > alternate_alleles.size()) {
-                    throw std::invalid_argument("Alternate allele index " + std::to_string(num_allele) + 
-                            " is greater than the maximum allowed " + std::to_string(alternate_alleles.size()));
-                }
-            }
+            
+            // The allele indexes must not be greater than the total number of alleles
+            check_samples_alleles(alleles);
             
             // The cardinality and type of the fields match the FORMAT meta information
             for (size_t j = 1; j < subfields.size(); ++j) {
@@ -253,6 +254,19 @@ namespace opencb
                     throw std::invalid_argument("Sample #" + std::to_string(i+1) + ", " + 
                                                 key_values["ID"] + "=" + ex.what());
                 }
+            }
+        }
+    }
+    
+    void Record::check_samples_alleles(std::vector<std::string> const & alleles) const
+    {
+        for (auto & allele : alleles) {
+            if (allele == ".") { continue; } // No need to check missing alleles
+
+            int num_allele = std::stoi(allele);
+            if (num_allele > alternate_alleles.size()) {
+                throw std::invalid_argument("Alternate allele index " + std::to_string(num_allele) + 
+                        " is greater than the maximum allowed " + std::to_string(alternate_alleles.size()));
             }
         }
     }
