@@ -221,6 +221,12 @@ namespace opencb
             std::vector<std::string> subfields;
             boost::split(subfields, samples[i], boost::is_any_of(":"));
             
+            // The number of subfields can't be greater than the number in the FORMAT column
+            if (subfields.size() > format.size()) {
+                throw std::invalid_argument("Sample #" + std::to_string(i+1) + 
+                        " has more fields than specified in the FORMAT column");
+            }
+            
             // Their allele indexes must not be greater than the total number of alleles
             std::vector<std::string> alleles;
             boost::split(alleles, subfields[0], boost::is_any_of("|,/"));
@@ -234,7 +240,7 @@ namespace opencb
                 }
             }
             
-            // TODO The cardinality and type of the fields match the FORMAT meta information
+            // The cardinality and type of the fields match the FORMAT meta information
             for (size_t j = 1; j < subfields.size(); ++j) {
                 MetaEntry meta = format_meta[j];
                 auto & subfield = subfields[j];
