@@ -213,17 +213,17 @@ namespace opencb
          * 
          * @throw std::invalid_argument
          */
-        void check_samples_cardinality(std::string const & field,
-                                       std::string const & number, 
-                                       size_t ploidy) const;
+        void check_field_cardinality(std::string const & field,
+                                     std::string const & number, 
+                                     size_t ploidy) const;
         
         /**
-         * Checks that every field in a sample matches the Type specification in the FORMAT meta
+         * Checks that every field in a column matches the Type specification in the meta
          * 
          * @throw std::invalid_argument
          */
-        void check_samples_type(std::string const & field,
-                                std::string const & type) const;
+        void check_field_type(std::string const & field,
+                              std::string const & type) const;
         
     };
 

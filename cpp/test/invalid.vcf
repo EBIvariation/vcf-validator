@@ -1,6 +1,7 @@
 ##fileformat=
 ##INFO=<ID=LDAF,Number=1,Type=Floating,Description="MLE Allele Frequency Accounting for LD">
 ##INFO=<ID=AVGPOST,Number=1,Type=Float,Description="Average posterior probability from MaCH/Thunder"
+##INFO=<ID=AA,Number=1,Type=String,Description="Ancestral Allele, ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/pilot_data/technical/reference/ancestral_alignments/README">
 asdfasI23rt'0'0ºo
 30NFO=<ID=HOMSEQ,Number=.,Type=String,Description="Sequence of base pair identical micro-homology at event breakpoints">
 ##ALT=<ID=DUP,Description="Duplication without quotation mark at the end>

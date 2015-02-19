@@ -173,7 +173,34 @@ namespace opencb
     void Record::check_info() const
     {
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
-//        std::pair<iter, iter> range = source->meta_entries.equal_range("INFO");
+        std::pair<iter, iter> range = source->meta_entries.equal_range("INFO");
+        
+        // Check that all INFO fields are listed in the meta section, 
+        // and they match the Number and Type specified in there
+        for (auto & field : info) {
+            bool found_in_header = false;
+
+            for (iter current = range.first; current != range.second; ++current) {
+                auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
+                if (key_values["ID"] == field.first) {
+                    found_in_header = true;
+                    
+                    try {
+                        check_field_cardinality(field.second, key_values["Number"], 2); // TODO Assumes ploidy=2
+                        check_field_type(field.second, key_values["Type"]);
+                    } catch (std::invalid_argument ex) {
+                        throw std::invalid_argument("Info " + key_values["ID"] + "=" + ex.what());
+                    }
+                    
+                    break;
+                }
+            }
+
+            if (!found_in_header) {
+                throw std::invalid_argument("Info '" + field.first + "' is not listed in a meta-data INFO entry");
+            }
+        }
+        
     }
     
     void Record::check_format() const
@@ -184,7 +211,7 @@ namespace opencb
         for (auto & fm : format) {
             bool found_in_header = false;
 
-            for (iter & current = range.first; current != range.second; ++current) {
+            for (iter current = range.first; current != range.second; ++current) {
                 auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
                 if (key_values["ID"] == fm) {
                     found_in_header = true;
@@ -193,7 +220,7 @@ namespace opencb
             }
 
             if (!found_in_header) {
-                throw std::invalid_argument("Format field '" + fm + "' is not listed in a meta-data FORMAT entry");
+                throw std::invalid_argument("Format '" + fm + "' is not listed in a meta-data FORMAT entry");
             }
         }
     }
@@ -214,7 +241,7 @@ namespace opencb
         std::vector<MetaEntry> format_meta;
         
         for (auto & fm : format) {
-            for (iter & current = range.first; current != range.second; ++current) {
+            for (iter current = range.first; current != range.second; ++current) {
                 auto & key_values = boost::get<std::map < std::string, std::string>>((current->second).value);
 
                 if (key_values["ID"] == fm) {
@@ -248,8 +275,8 @@ namespace opencb
                 
                 auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
                 try {
-                    check_samples_cardinality(subfield, key_values["Number"], alleles.size());
-                    check_samples_type(subfield, key_values["Type"]);
+                    check_field_cardinality(subfield, key_values["Number"], alleles.size());
+                    check_field_type(subfield, key_values["Type"]);
                 } catch (std::invalid_argument ex) {
                     throw std::invalid_argument("Sample #" + std::to_string(i+1) + ", " + 
                                                 key_values["ID"] + "=" + ex.what());
@@ -271,9 +298,9 @@ namespace opencb
         }
     }
     
-    void Record::check_samples_cardinality(std::string const & field,
-                                           std::string const & number, 
-                                           size_t ploidy) const
+    void Record::check_field_cardinality(std::string const & field,
+                                         std::string const & number, 
+                                         size_t ploidy) const
     {
         // To check the field cardinality, split by comma and...
         std::vector<std::string> values;
@@ -306,8 +333,8 @@ namespace opencb
         }
     }
     
-    void Record::check_samples_type(std::string const & field,
-                                    std::string const & type) const
+    void Record::check_field_type(std::string const & field,
+                                  std::string const & type) const
     {
         // To check the field type, split by comma and...
         std::vector<std::string> values;
@@ -321,6 +348,16 @@ namespace opencb
                 } else if (type == "Float") {
                     // ...try to cast to float
                     std::stof(value);
+                } else if (type == "Flag") {
+                    if (value.size() > 1) {
+                        throw std::invalid_argument("There can be only 0 or 1 value");
+                    } else if (value.size() == 1) {
+                        int numeric_value = std::stoi(value);
+                        if (numeric_value != 0 && numeric_value != 1) {
+                            throw std::invalid_argument("A flag must be 0 or 1");
+                        }
+                    }
+                    // If no flag is provided then there is nothing to check
                 } else if (type == "Character") {
                     // ...check the length is 1
                     if (value.size() > 1) {
