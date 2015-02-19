@@ -49,6 +49,11 @@ namespace opencb
         using runtime_error::runtime_error;
     };
 
+    class ParsingWarning : public std::runtime_error
+    {
+        using runtime_error::runtime_error;
+    };
+
     class IgnoreParsePolicy
     {
       public:
@@ -73,6 +78,8 @@ namespace opencb
         void handle_body_line(ParsingState & state) {}
         
         std::string current_token() const { return ""; }
+        
+        std::vector<std::string> column_tokens(std::string const & column) const { return {}; }
     };
 
     class StoreParsePolicy
@@ -100,6 +107,8 @@ namespace opencb
         void handle_body_line(ParsingState const & state);
         
         std::string current_token() const;
+        
+        std::vector<std::string> column_tokens(std::string const & column) const;
 
       private:
         /**
@@ -137,6 +146,19 @@ namespace opencb
         
         void handle_body_section_error(ParsingState const & state, 
                 std::string message = "Error in body section");
+        
+        
+        void handle_fileformat_section_warning(ParsingState const & state, 
+                std::string message = "Warning in file format section");
+        
+        void handle_meta_section_warning(ParsingState const & state, 
+                std::string message = "Warning in meta-data section");
+        
+        void handle_header_section_warning(ParsingState const & state, 
+                std::string message = "Warning in header section");
+        
+        void handle_body_section_warning(ParsingState const & state, 
+                std::string message = "Warning in body section");
     };
 
     class ReportErrorPolicy
@@ -153,6 +175,19 @@ namespace opencb
         
         void handle_body_section_error(ParsingState const & state, 
                 std::string message = "Error in body section");
+        
+        
+        void handle_fileformat_section_warning(ParsingState const & state, 
+                std::string message = "Warning in file format section");
+        
+        void handle_meta_section_warning(ParsingState const & state, 
+                std::string message = "Warning in fmeta-data section");
+        
+        void handle_header_section_warning(ParsingState const & state, 
+                std::string message = "Warning in header section");
+        
+        void handle_body_section_warning(ParsingState const & state, 
+                std::string message = "Warning in body section");
     };
 
     // Only check syntax
@@ -199,6 +234,11 @@ namespace opencb
       private:
         void parse_buffer(char const * p, char const * pe, char const * eof);
         
+        void optional_check_meta_section() const;
+        
+        void optional_check_body_entry() const;
+        
+        void optional_check_body_section() const;
     };
 
     // Predefined aliases for common uses of the parser

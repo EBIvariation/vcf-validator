@@ -187,5 +187,10 @@ namespace opencb
         return m_current_token;
     }
 
+    std::vector<std::string> StoreParsePolicy::column_tokens(std::string const & column) const
+    {
+        return m_line_tokens.at(column);
+    }
+    
   }
 }
