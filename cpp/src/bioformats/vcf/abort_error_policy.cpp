@@ -22,30 +22,22 @@ namespace opencb
 
     void AbortErrorPolicy::handle_fileformat_section_error(ParsingState const & state, std::string message)
     {
-        std::stringstream msg;
-        msg << "Line " << state.n_lines << ": " << message;
-        throw_syntax_error(msg.str());
+        throw_syntax_error("Line " + std::to_string(state.n_lines) + ": " + message);
     }
 
     void AbortErrorPolicy::handle_meta_section_error(ParsingState const & state, std::string message)
     {
-        std::stringstream msg;
-        msg << "Line " << state.n_lines << ": " << message;
-        throw_syntax_error(msg.str());
+        throw_syntax_error("Line " + std::to_string(state.n_lines) + ": " + message);
     }
 
     void AbortErrorPolicy::handle_header_section_error(ParsingState const & state, std::string message)
     {
-        std::stringstream msg;
-        msg << "Line " << state.n_lines << ": " << message;
-        throw_syntax_error(msg.str());
+        throw_syntax_error("Line " + std::to_string(state.n_lines) + ": " + message);
     }
 
     void AbortErrorPolicy::handle_body_section_error(ParsingState const & state, std::string message)
     {
-        std::stringstream msg;
-        msg << "Line " << state.n_lines << ": " << message;
-        throw_syntax_error(msg.str());
+        throw_syntax_error("Line " + std::to_string(state.n_lines) + ": " + message);
     }
 
   }
