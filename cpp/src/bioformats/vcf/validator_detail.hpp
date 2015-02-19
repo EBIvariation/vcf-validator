@@ -14571,6 +14571,18 @@ case 559:
           ploidy = alleles.size();
         }
       }
+      
+      // The file should be sorted
+      if (ParsingState::records->size() > 0) {
+        auto & previous_record = ParsingState::records->back();
+        std::string current_chromosome = ParsePolicy::column_tokens("CHROM")[0];
+        int current_position = std::stoi(ParsePolicy::column_tokens("POS")[0]);
+        if (previous_record.chromosome == current_chromosome && 
+            previous_record.position > current_position) {
+          throw ParsingWarning("Genomic position " + current_chromosome + ":" + std::to_string(current_position) + 
+                               " is listed after " + previous_record.chromosome + ":" + std::to_string(previous_record.position));
+        }
+      }
     }
     
     template <typename Configuration>
