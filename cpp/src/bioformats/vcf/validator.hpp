@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+#include <boost/algorithm/string.hpp>
+
 #include "file_structure.hpp"
 
 namespace opencb
@@ -209,12 +211,27 @@ namespace opencb
         void handle_body_line(ParsingState const & state) 
         {
             try {
+                // Transform the position token into a size_t
                 auto position = static_cast<size_t>(std::stoi(m_line_tokens["POS"][0]));
+                
+                // Transform all the quality tokens into floating point numbers
                 float quality;
                 try {
                     quality = std::stof(m_line_tokens["QUAL"][0]);
                 } catch (std::invalid_argument ex) {
                     quality = 0;
+                }
+                
+                // Split the info tokens by the equals (=) symbol
+                std::map<std::string, std::string> info;
+                for (auto & field : m_line_tokens["INFO"]) {
+                    std::vector<std::string> subfields;
+                    boost::split(subfields, field, boost::is_any_of("="));
+                    if (subfields.size() > 1) {
+                        info.emplace(subfields[0], subfields[1]);
+                    } else {
+                        info.emplace(subfields[0], "");
+                    }
                 }
                 
                 state.add_record(Record {
@@ -225,7 +242,7 @@ namespace opencb
                     m_line_tokens["ALT"],
                     quality,
                     m_line_tokens["FILTER"],
-                    m_line_tokens["INFO"],
+                    info,
                     m_line_tokens["FORMAT"],
                     m_line_tokens["SAMPLES"],
                     state.source
