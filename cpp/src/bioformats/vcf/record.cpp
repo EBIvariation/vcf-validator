@@ -284,7 +284,7 @@ namespace opencb
         } else if (number == "G") {
             // ...check against the number of possible genotypes
             // The binomial coefficient is calculated considering the ploidy of the sample
-            expected = boost::math::binomial_coefficient<float>(alternate_alleles.size() + 1, ploidy);
+            expected = boost::math::binomial_coefficient<float>(alternate_alleles.size() + ploidy, ploidy);
         } else if (number == ".") {
             // ...do nothing, it is unspecified
         } else {
@@ -295,8 +295,12 @@ namespace opencb
         } 
 
         if (number != ".") { // Forget about the unspecified number
-            if (values.size() != expected) {
-                throw std::invalid_argument(field + " does not match the meta specification Number=" + number);
+            // The number of values must match the expected or, if the expected is 0, 
+            // there will be one empty value that needs to be specifically checked
+            if (values.size() != expected && 
+                values.size() > 1 && values[0] != "") {
+                throw std::invalid_argument(field + " does not match the meta specification Number=" + number + 
+                        ", expected " + std::to_string(expected) + " values");
             }
         }
     }
