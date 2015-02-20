@@ -122,18 +122,7 @@ namespace opencb
     void Record::check_alternate_allele_meta(std::string const & alt_id,
                                              std::pair<meta_iterator, meta_iterator> range) const
     {
-        bool found_in_header = false;
-
-        for (auto & current = range.first; range.first != range.second; ++current) {
-            auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
-
-            if (key_values["ID"] == alt_id) {
-                found_in_header = true;
-                break;
-            }
-        }
-
-        if (!found_in_header) {
+        if (!is_record_subfield_in_header(alt_id, range.first, range.second)) {
             throw std::invalid_argument("Alternate '" + alt_id + "' is not listed in a meta-data ALT entry");
         }
     }
@@ -152,18 +141,7 @@ namespace opencb
         
         for (auto & filter : filters) {
             if (filter != "PASS" && filter != ".") {
-                bool found_in_header = false;
-                for (; range.first != range.second; ++range.first) {
-                    auto & element = range.first; // Current std::pair object
-                    auto & key_values = boost::get<std::map < std::string, std::string >> ((element->second).value);
-                    
-                    if (key_values["ID"] == filter) {
-                        found_in_header = true;
-                        break;
-                    }
-                }
-                
-                if (!found_in_header) {
+                if (!is_record_subfield_in_header(filter, range.first, range.second)) {
                     throw std::invalid_argument("Filter '" + filter + "' is not listed in a meta-data FILTER entry");
                 }
             }
@@ -209,17 +187,7 @@ namespace opencb
         std::pair<iter, iter> range = source->meta_entries.equal_range("FORMAT");
         
         for (auto & fm : format) {
-            bool found_in_header = false;
-
-            for (iter current = range.first; current != range.second; ++current) {
-                auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
-                if (key_values["ID"] == fm) {
-                    found_in_header = true;
-                    break;
-                }
-            }
-
-            if (!found_in_header) {
+            if (!is_record_subfield_in_header(fm, range.first, range.second)) {
                 throw std::invalid_argument("Format '" + fm + "' is not listed in a meta-data FORMAT entry");
             }
         }
@@ -370,6 +338,21 @@ namespace opencb
                 throw std::invalid_argument(field + " does not match the meta specification Type=" + type);
             }
         }
+    }
+    
+    bool is_record_subfield_in_header(std::string const & field_value,
+                                      std::multimap<std::string, MetaEntry>::iterator begin,
+                                      std::multimap<std::string, MetaEntry>::iterator end)
+    {
+        for (std::multimap<std::string, MetaEntry>::iterator current = begin; current != end; ++current) {
+            auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
+
+            if (key_values["ID"] == field_value) {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
   }

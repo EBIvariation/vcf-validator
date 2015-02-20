@@ -14,5 +14,19 @@
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/regex.hpp>
 
+<<<<<<< HEAD
+=======
+namespace opencb
+{
+  namespace vcf
+  {
+    
+    bool is_record_subfield_in_header(std::string const & field_value,
+                                      std::multimap<std::string, MetaEntry>::iterator begin,
+                                      std::multimap<std::string, MetaEntry>::iterator end);
+    
+  }
+}
+>>>>>>> 1ef3621... Some more refactoring and test fixing in VCF record checks
 #endif	/* OPENCB_VCF_RECORD_HPP */
 
