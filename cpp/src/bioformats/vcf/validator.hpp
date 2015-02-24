@@ -6,6 +6,7 @@
 #include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -30,6 +31,8 @@ namespace opencb
         std::shared_ptr<Source> source;
         std::shared_ptr<std::vector<Record>> records;
      
+        std::set<std::string> bad_defined_contigs;
+        
         ParsingState(std::shared_ptr<Source> source,
                      std::shared_ptr<std::vector<Record>> records);
         
@@ -42,6 +45,8 @@ namespace opencb
         std::vector<std::string> const & samples() const;
         
         void set_samples(std::vector<std::string> & samples) const;
+        
+        void add_bad_defined_contig(std::string const & contig);
     };
 
     class ParsingError : public std::runtime_error
@@ -236,7 +241,7 @@ namespace opencb
         
         void optional_check_meta_section() const;
         
-        void optional_check_body_entry() const;
+        void optional_check_body_entry() ;//const;
         
         void optional_check_body_section() const;
     };

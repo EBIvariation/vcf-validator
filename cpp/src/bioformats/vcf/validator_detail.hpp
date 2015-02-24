@@ -14876,7 +14876,7 @@ case 567:
     }
     
     template <typename Configuration>
-    void Parser<Configuration>::optional_check_body_entry() const
+    void Parser<Configuration>::optional_check_body_entry() //const
     {
       // All samples should have the same ploidy
       int ploidy = -1;
@@ -14910,22 +14910,26 @@ case 567:
         }
       }
       
-      // The associated 'contig' meta entry should exist
+      // The associated 'contig' meta entry should exist (notify only once)
       std::string current_chromosome = ParsePolicy::column_tokens("CHROM")[0];
-      typedef std::multimap<std::string, MetaEntry>::iterator iter;
-      std::pair<iter, iter> range = ParsingState::source->meta_entries.equal_range("contig");
       
-      bool found_in_header = false;
-      for (iter current = range.first; current != range.second; ++current) {
-        auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
-        if (key_values["ID"] == current_chromosome) {
-          found_in_header = true;
-          break;
+      if (ParsingState::bad_defined_contigs.find(current_chromosome) == ParsingState::bad_defined_contigs.end()) {
+        typedef std::multimap<std::string, MetaEntry>::iterator iter;
+        std::pair<iter, iter> range = ParsingState::source->meta_entries.equal_range("contig");
+        
+        bool found_in_header = false;
+        for (iter current = range.first; current != range.second; ++current) {
+          auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
+          if (key_values["ID"] == current_chromosome) {
+            found_in_header = true;
+            break;
+          }
         }
-      }
-      
-      if (!found_in_header) {
-        throw ParsingWarning("Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description");
+        
+        if (!found_in_header) {
+          ParsingState::add_bad_defined_contig(current_chromosome);
+          throw ParsingWarning("Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description");
+        }
       }
     }
     

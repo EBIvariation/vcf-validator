@@ -8,7 +8,7 @@ namespace opencb
     ParsingState::ParsingState(
         std::shared_ptr<Source> source,
         std::shared_ptr<std::vector<Record>> records)
-    : n_lines{1}, n_columns{1}, n_batches{0}, cs{0}, source{source}, records{records}
+    : n_lines{1}, n_columns{1}, n_batches{0}, cs{0}, source{source}, records{records}, bad_defined_contigs{}
     {
     }
 
@@ -37,5 +37,9 @@ namespace opencb
         source->samples_names = samples;
     }
     
+    void ParsingState::add_bad_defined_contig(std::string const & contig)
+    {
+        bad_defined_contigs.emplace(contig); 
+    }
   }
 }
