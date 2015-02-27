@@ -29,7 +29,7 @@
         ++n_lines;
         n_columns = 1;
 
-        if (n_lines % 1000 == 0) {
+        if (n_lines % 10000 == 0) {
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
@@ -519,7 +519,7 @@
     meta_typeid     = ( (alnum | "_" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB") ) >token_begin @token_middle %meta_typeid_generic;
     meta_key        = ( (alnum | "." | "_" | "-" )+ - ("." | "_" | "-")+ ) >token_begin @token_middle %meta_key_generic;
     
-    meta_value      = (print - "<")+ >token_begin @token_middle %token_end ;
+    meta_value      = (print - "<") (print)+ >token_begin @token_middle %token_end ;
     meta_plain_value= (print - "=")+ >token_begin @token_middle %token_end ;
     meta_field_value= ( (print - ("," | ">")) | space )+ >token_begin @token_middle %token_end ;
     meta_field_desc = (print - "\"")+  >token_begin @token_middle %token_end ;
@@ -578,7 +578,13 @@
                        ("PEDIGREE"	%meta_typeid_pedigree	"=<" meta_pedigree ">" )	$err(meta_pedigree_err) |
                        ("pedigreeDB"	%meta_typeid_pedigreedb	"=<" meta_pedigreeDB ">" )	$err(meta_pedigreedb_err) |
                        (meta_plain_value) |
-                       (meta_typeid "=" ( ( "<" meta_field ("," meta_field)* ">") | meta_value ))
+                       (meta_typeid "=" 
+                         (
+                           ("<" meta_field ("," meta_field)* ">") | 
+                           ("<" meta_value ">") |
+                           meta_value 
+                         )
+                       )
                       ) %meta_entry_end;
 
     # Header between meta and records
