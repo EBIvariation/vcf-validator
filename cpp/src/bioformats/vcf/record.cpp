@@ -313,13 +313,15 @@ namespace opencb
         boost::split(values, field, boost::is_any_of(","));
         
         for (auto & value : values) {
+            if (value == ".") { continue; }
+            
             try {
                 if (type == "Integer") {
                     // ...try to cast to int
                     std::stoi(value);
                 } else if (type == "Float") {
-                    // ...try to cast to float
-                    std::stof(value);
+                    // ...try to cast to double (for extremely precise cases)
+                    std::stod(value);
                 } else if (type == "Flag") {
                     if (value.size() > 1) {
                         throw std::invalid_argument("There can be only 0 or 1 value");
