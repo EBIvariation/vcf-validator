@@ -27,6 +27,11 @@ namespace opencb
         records->push_back(record);
     }
     
+    void ParsingState::clear_records() const
+    {
+        records->clear();
+    }
+    
     std::vector<std::string> const & ParsingState::samples() const
     {
         return source->samples_names;

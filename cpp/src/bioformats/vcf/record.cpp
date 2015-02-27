@@ -75,8 +75,8 @@ namespace opencb
         }
         
         for (auto & id : ids) {
-            if (find_if(id.begin(), id.end(), [](char c) { return !isalnum(c); }) != id.end()) {
-                throw std::invalid_argument("ID must be alphanumeric");
+            if (find_if(id.begin(), id.end(), [](char c) { return c == ' ' || c == ';'; }) != id.end()) {
+                throw std::invalid_argument("ID must not contain semicolons or whitespaces");
             }
         }
     }

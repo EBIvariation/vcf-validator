@@ -45,11 +45,31 @@ namespace
         std::make_shared<opencb::vcf::Source>(source),
         std::make_shared<std::vector<opencb::vcf::Record>>(records)};
 
-//    for ( std::string line; std::getline(input, line); )
-//    {
-//        validator.parse_line(line);
-////        std::cout << "Valid line: " << validator.is_valid() << std::endl;
-//    }
+    std::vector<char> line;
+    line.reserve(default_line_buffer_size);
+    
+    while (readline(input, line)) { 
+        validator.parse(line);
+//        std::cout << "Valid line: " << validator.is_valid() << std::endl;
+    }
+    
+    validator.end();
+
+    std::cout << "Valid: " << validator.is_valid() << std::endl;
+
+    return validator.is_valid();
+  }
+  
+  
+  bool is_valid_vcf_file(std::istream & input)
+  {
+    auto source = opencb::vcf::Source{"stdin", opencb::vcf::InputFormat::VCF_FILE_VCF};
+    auto records = std::vector<opencb::vcf::Record>{};
+    
+    auto validator = opencb::vcf::FullValidator{
+        std::make_shared<opencb::vcf::Source>(source),
+        std::make_shared<std::vector<opencb::vcf::Record>>(records)};
+
     std::vector<char> line;
     line.reserve(default_line_buffer_size);
     
@@ -78,7 +98,11 @@ int main(int argc, char** argv)
 
   try
   {
-    return !is_valid_vcf_file(path);
+      if (std::string{path} == "stdin") {
+        return !is_valid_vcf_file(std::cin);
+      } else {
+        return !is_valid_vcf_file(path);
+      }
   }
   catch (std::runtime_error const & ex)
   {

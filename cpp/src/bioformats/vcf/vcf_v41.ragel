@@ -21,7 +21,6 @@
     }
     
     action token_end {
-        //std::cout << "m_current_token '" << ParsePolicy::current_token() << "'" << std::endl;
         ParsePolicy::handle_token_end(*this);
     }
 
@@ -29,6 +28,10 @@
         ParsePolicy::handle_newline(*this);
         ++n_lines;
         n_columns = 1;
+
+        if (n_lines % 1000 == 0) {
+            std::cout << "Lines read: " << n_lines << std::endl;
+        }
     }
 
     action tab_break {
@@ -482,8 +485,11 @@
     CS = "\t" >tab_break;
 
     # Integer and floating-point numbers
-    any_number      = (digit)+ ("." (digit)+)? ;
-    int_number      = (digit)+ ;
+    any_number      = ("-")?
+                      ( "0" | ([1-9] (digit)*) )
+                      ("." (digit)+)?
+                      (("e"|"E") ("+"|"-")? (digit)+)? ;
+    int_number      = ("-")? (digit)+ ;
     # Bases are case-insensitive
     bases           = ("A" | "C" | "G" | "T" | "N" | "a" | "c" | "t" | "g" | "n" )+ ;
     # Identifiers may contain some symbols, but not only those 
@@ -528,7 +534,8 @@
 
     meta_assembly   = url $err(meta_url_err) ;
     
-    meta_contig     = "ID=" %meta_id chrom_basic >token_begin @token_middle %token_end $err(meta_id_err) 
+    meta_contig_val = alnum ((alnum | punct - (":" | "<" | ">" | ","))+ - (punct)+)* ;
+    meta_contig     = "ID=" %meta_id meta_contig_val >token_begin $token_middle %token_end $err(meta_id_err) 
                         ("," identifier "=" meta_field_value)* ;
                         
     meta_filter     = "ID=" %meta_id identifier $err(meta_id_err)
@@ -725,6 +732,7 @@ namespace opencb
       char const * pe = &text[0] + text.size();
       char const * eof = nullptr;
 
+      clear_records();
       parse_buffer(p, pe, eof);
     }
 
@@ -735,6 +743,7 @@ namespace opencb
       char const * pe = text.data() + text.size();
       char const * eof = nullptr;
 
+      clear_records();
       parse_buffer(p, pe, eof);
     }
 
@@ -742,6 +751,7 @@ namespace opencb
     void Parser<Configuration>::end()
     {
       char const * empty = "";
+      clear_records();
       parse_buffer(empty, empty, empty);
     }
 
@@ -813,7 +823,7 @@ namespace opencb
         bool found_in_header = false;
         for (iter current = range.first; current != range.second; ++current) {
           auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
-          if (key_values["ID"] == current_chromosome) {
+          if (key_values.find("ID") != key_values.end() && key_values["ID"] == current_chromosome) {
             found_in_header = true;
             break;
           }

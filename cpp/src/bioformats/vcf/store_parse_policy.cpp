@@ -163,6 +163,12 @@ namespace opencb
                     info.emplace(subfields[0], "");
                 }
             }
+            
+            // Format and samples are optional
+            auto format = m_line_tokens.find("FORMAT") != m_line_tokens.end() ? 
+                m_line_tokens["FORMAT"] : std::vector<std::string>{} ;
+            auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ? 
+                m_line_tokens["SAMPLES"] : std::vector<std::string>{} ; 
 
             state.add_record(Record {
                 m_line_tokens["CHROM"][0],
@@ -173,8 +179,8 @@ namespace opencb
                 quality,
                 m_line_tokens["FILTER"],
                 info,
-                m_line_tokens["FORMAT"],
-                m_line_tokens["SAMPLES"],
+                format,
+                samples,
                 state.source
             });
         } catch (std::invalid_argument ex) {
@@ -189,7 +195,11 @@ namespace opencb
 
     std::vector<std::string> StoreParsePolicy::column_tokens(std::string const & column) const
     {
-        return m_line_tokens.at(column);
+        try {
+            return m_line_tokens.at(column);
+        } catch (std::out_of_range) {
+            return {};
+        }
     }
     
   }

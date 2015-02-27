@@ -42,6 +42,8 @@ namespace opencb
         
         void add_record(Record const & record) const;
         
+        void clear_records() const;
+        
         std::vector<std::string> const & samples() const;
         
         void set_samples(std::vector<std::string> & samples) const;
