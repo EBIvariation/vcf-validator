@@ -217,7 +217,7 @@ namespace opencb
                                 123456, 
                                 { "id123", "id456" }, 
                                 "A", 
-                                { "A", "C" }, 
+                                { "C" }, 
                                 -1.0, 
                                 { "PASS" }, 
                                 { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
@@ -225,6 +225,22 @@ namespace opencb
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
                             std::invalid_argument);
+        }
+
+        SECTION("Emtpy INFO") 
+        {
+            CHECK_NOTHROW( (vcf::Record{ 
+                                "chr1", 
+                                123456, 
+                                { "id123", "id456" }, 
+                                "A", 
+                                { "T", "C" }, 
+                                1.0, 
+                                { "PASS" }, 
+                                { { ".", "." } }, 
+                                { "GT", "DP" }, 
+                                { "0|1" },
+                                std::make_shared<vcf::Source>(source)}) );
         }
 
         SECTION("Single-field format") 
@@ -247,11 +263,11 @@ namespace opencb
                                 123456, 
                                 { "id123", "id456" }, 
                                 "A", 
-                                { "A", "C" }, 
-                                -1.0, 
+                                { "T", "C" }, 
+                                1.0, 
                                 { "PASS" }, 
                                 { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
-                                { "GT", "DP" }, 
+                                { "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
                             std::invalid_argument);
@@ -278,10 +294,10 @@ namespace opencb
                                 { "id123", "id456" }, 
                                 "A", 
                                 { "A", "C" }, 
-                                -1.0, 
+                                1.0, 
                                 { "PASS" }, 
                                 { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
-                                { "GT", "DP" }, 
+                                { "DP", "GT" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
                             std::invalid_argument);

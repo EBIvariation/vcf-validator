@@ -140,10 +140,10 @@ namespace opencb
         std::pair<iter, iter> range = source->meta_entries.equal_range("FILTER");
         
         for (auto & filter : filters) {
-            if (filter != "PASS" && filter != ".") {
-                if (!is_record_subfield_in_header(filter, range.first, range.second)) {
-                    throw std::invalid_argument("Filter '" + filter + "' is not listed in a meta-data FILTER entry");
-                }
+            if (filter == "PASS" || filter == ".") { continue; } // No need to check PASS or missing data
+            
+            if (!is_record_subfield_in_header(filter, range.first, range.second)) {
+                throw std::invalid_argument("Filter '" + filter + "' is not listed in a meta-data FILTER entry");
             }
         }
     }
@@ -156,6 +156,8 @@ namespace opencb
         // Check that all INFO fields are listed in the meta section, 
         // and they match the Number and Type specified in there
         for (auto & field : info) {
+            if (field.first == ".") { continue; } // No need to check missing data
+            
             bool found_in_header = false;
 
             for (iter current = range.first; current != range.second; ++current) {
@@ -183,6 +185,10 @@ namespace opencb
     
     void Record::check_format() const
     {
+        if (format[0] != "GT") {
+            throw std::invalid_argument("GT must be the first field in the FORMAT column");
+        }
+        
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
         std::pair<iter, iter> range = source->meta_entries.equal_range("FORMAT");
         
