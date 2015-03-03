@@ -123,7 +123,7 @@ namespace opencb
                                              std::pair<meta_iterator, meta_iterator> range) const
     {
         if (!is_record_subfield_in_header(alt_id, range.first, range.second)) {
-            throw std::invalid_argument("Alternate '" + alt_id + "' is not listed in a meta-data ALT entry");
+            throw std::invalid_argument("Alternate '<" + alt_id + ">' is not listed in a meta-data ALT entry");
         }
     }
 
