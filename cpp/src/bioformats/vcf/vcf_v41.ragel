@@ -516,7 +516,7 @@
     fileformat      = "##fileformat=" fileformat_name >token_begin @token_middle %fileformat_end;
 
     # Meta-data
-    meta_typeid     = ( (alnum | "_" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB") ) >token_begin @token_middle %meta_typeid_generic;
+    meta_typeid     = ( ( print - "=" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB") ) >token_begin @token_middle %meta_typeid_generic;
     meta_key        = ( (alnum | "." | "_" | "-" )+ - ("." | "_" | "-")+ ) >token_begin @token_middle %meta_key_generic;
     
     meta_value      = (print - "<") (print)+ >token_begin @token_middle %token_end ;
@@ -542,14 +542,12 @@
                         ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
                         ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
     
-    ## TODO It is unlikely, but "Number" could have multiple digits and in that case it should be managed the same way as "Type"
     meta_format     = "ID=" %meta_id identifier $err(meta_id_err)
                         ",Number=" %meta_number meta_field_num $err(meta_format_number_err) 
                         ",Type=" %meta_type meta_field_type $err(meta_info_type_err)
                         ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
                         ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
-                        
-    ## TODO It is unlikely, but "Number" could have multiple digits and in that case it should be managed the same way as "Type"
+
     meta_info       = "ID=" %meta_id identifier $err(meta_id_err) 
                         ",Number=" %meta_number meta_field_num $err(meta_info_number_err)  
                         ",Type=" %meta_type meta_field_type $err(meta_info_type_err)
