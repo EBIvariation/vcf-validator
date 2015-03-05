@@ -43,22 +43,22 @@ namespace opencb
     
     void AbortErrorPolicy::handle_fileformat_section_warning(ParsingState const & state, std::string message)
     {
-      std::cerr << "Line " << state.n_lines << ": " << message << std::endl;
+      std::cerr << "Line " << state.n_lines << ": " << message << " (warning)" << std::endl;
     }
 
     void AbortErrorPolicy::handle_meta_section_warning(ParsingState const & state, std::string message)
     {
-      std::cerr << "Line " << state.n_lines << ": " << message << std::endl;
+      std::cerr << "Line " << state.n_lines << ": " << message << " (warning)" << std::endl;
     }
 
     void AbortErrorPolicy::handle_header_section_warning(ParsingState const & state, std::string message)
     {
-      std::cerr << "Line " << state.n_lines << ": " << message << std::endl;
+      std::cerr << "Line " << state.n_lines << ": " << message << " (warning)" << std::endl;
     }
 
     void AbortErrorPolicy::handle_body_section_warning(ParsingState const & state, std::string message)
     {
-      std::cerr << "Line " << state.n_lines << ": " << message << std::endl;
+      std::cerr << "Line " << state.n_lines << ": " << message << " (warning)" << std::endl;
     }
 
   }

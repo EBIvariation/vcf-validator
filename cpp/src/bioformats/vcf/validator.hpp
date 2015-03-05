@@ -33,6 +33,8 @@ namespace opencb
      
         std::set<std::string> bad_defined_contigs;
         
+        std::multimap<std::string, std::string> undefined_metadata;
+        
         ParsingState(std::shared_ptr<Source> source,
                      std::shared_ptr<std::vector<Record>> records);
         
@@ -48,6 +50,8 @@ namespace opencb
         
         void set_samples(std::vector<std::string> & samples) const;
         
+        bool is_bad_defined_contig(std::string const & contig);
+        
         void add_bad_defined_contig(std::string const & contig);
     };
 
@@ -61,6 +65,9 @@ namespace opencb
         using runtime_error::runtime_error;
     };
 
+    /**
+     * Parsing policy that ignores the parsed tokens
+     */
     class IgnoreParsePolicy
     {
       public:
@@ -89,6 +96,9 @@ namespace opencb
         std::vector<std::string> column_tokens(std::string const & column) const { return {}; }
     };
 
+    /**
+     * Parsing policy that stores the parsed tokens for more thorough validations or future usage
+     */
     class StoreParsePolicy
     {
       public:
@@ -139,6 +149,9 @@ namespace opencb
         std::map<std::string, std::vector<std::string>> m_line_tokens;
     };
 
+    /**
+     * Error management policy that aborts execution when an error is found
+     */
     class AbortErrorPolicy
     {
       public:
@@ -168,6 +181,9 @@ namespace opencb
                 std::string message = "Warning in body section");
     };
 
+    /**
+     * Error management policy that reports when an error is found but continues execution
+     */
     class ReportErrorPolicy
     {
       public:
@@ -197,11 +213,37 @@ namespace opencb
                 std::string message = "Warning in body section");
     };
 
+    /**
+     * Validation policy that omits optional and context-based validations
+     */
+    class IgnoreOptionalPolicy
+    {
+      public:
+        void optional_check_meta_section() const {}
+        void optional_check_body_entry() {}
+        void optional_check_body_section() const {}
+    };
+    
+    /**
+     * Validation policy that runs optional and context-based validations
+     */
+    class ValidateOptionalPolicy
+    {
+      public:
+        void optional_check_meta_section(ParsingState const & state) const;
+        
+        void optional_check_body_entry(ParsingState & state, Record & record) ;//const;
+        
+        void optional_check_body_section(ParsingState const & state) const;
+    };
+    
+    
     // Only check syntax
     struct QuickValidatorCfg
     {
       using ParsePolicy = IgnoreParsePolicy;
       using ErrorPolicy = ReportErrorPolicy;
+      using OptionalPolicy = IgnoreOptionalPolicy;
     };
 
     // Check both syntax and semantics
@@ -209,6 +251,7 @@ namespace opencb
     {
       using ParsePolicy = StoreParsePolicy;
       using ErrorPolicy = ReportErrorPolicy;
+      using OptionalPolicy = ValidateOptionalPolicy;
     };
 
     // Read the file for processing, assuming it is correct
@@ -216,17 +259,20 @@ namespace opencb
     {
       using ParsePolicy = StoreParsePolicy;
       using ErrorPolicy = AbortErrorPolicy;
+      using OptionalPolicy = ValidateOptionalPolicy;
     };
 
     template <typename Configuration>
     class Parser
     : ParsingState,
       Configuration::ParsePolicy,
-      Configuration::ErrorPolicy
+      Configuration::ErrorPolicy,
+      Configuration::OptionalPolicy
     {
       public:
         using ParsePolicy = typename Configuration::ParsePolicy;
         using ErrorPolicy = typename Configuration::ErrorPolicy;
+        using OptionalPolicy = typename Configuration::OptionalPolicy;
 
         Parser(std::shared_ptr<Source> const & source,
                std::shared_ptr<std::vector<Record>> const & records);
@@ -240,12 +286,6 @@ namespace opencb
         
       private:
         void parse_buffer(char const * p, char const * pe, char const * eof);
-        
-        void optional_check_meta_section() const;
-        
-        void optional_check_body_entry() ;//const;
-        
-        void optional_check_body_section() const;
     };
 
     // Predefined aliases for common uses of the parser
