@@ -35,7 +35,6 @@
     }
 
     action tab_break {
-        ParsePolicy::handle_column_end(*this, n_columns);
         ++n_columns;
     }
 
@@ -163,12 +162,11 @@
 
     ########### Correct body actions ##########
 
+    action record_field_end {
+        ParsePolicy::handle_column_end(*this, n_columns);
+    }
+    
     action record_end {
-        // Handle last sample if proceeds
-        if (n_columns > 9) {
-          ParsePolicy::handle_column_end(*this, n_columns);
-        }
-        
         // Check warnings (non-blocking errors but potential mistakes anyway)
         try {
           optional_check_body_entry();
@@ -667,7 +665,8 @@
                         info_key $err(info_key_error) | 
                         info_key $err(info_key_error) "=" info_value_list $err(info_value_error)
                       ) >token_begin $token_middle %token_end ;
-    record_info     = info_entry (";" info_entry)* | "." ;
+    record_info     = ( info_entry (";" info_entry)* ) | 
+                      ( "." >token_begin @token_middle %token_end ) ;
 
     ## TODO Could this be extended because a lot of files use _ as a separator?
     format_value    = (alnum)+ >token_begin @token_middle %token_end ;
@@ -679,16 +678,16 @@
     sample_value    = (alnum | (punct - ":"))+ | "." ;
     record_sample   = (sample_gt $err(sample_gt_error) (":" sample_value)*) >token_begin $token_middle %token_end ;
     
-    record          = (record_chrom 		$err(chrom_error)
-                        CS record_position	$err(pos_error)
-                        CS record_id 		$err(id_error)
-                        CS record_ref 		$err(ref_error)
-                        CS record_alt 		$err(alt_error) 
-                        CS record_qual		$err(qual_error) 
-                        CS record_filter 	$err(filter_error) 
-                        CS record_info		>token_begin @token_middle %token_end $err(info_error) 
-                        (CS record_format	$err(format_error)
-                        (CS record_sample	$err(sample_error))+ )?
+    record          = (record_chrom 		%record_field_end $err(chrom_error)
+                        CS record_position	%record_field_end $err(pos_error)
+                        CS record_id 		%record_field_end $err(id_error)
+                        CS record_ref 		%record_field_end $err(ref_error)
+                        CS record_alt 		%record_field_end $err(alt_error) 
+                        CS record_qual		%record_field_end $err(qual_error) 
+                        CS record_filter 	%record_field_end $err(filter_error) 
+                        CS record_info		%record_field_end $err(info_error) 
+                        (CS record_format	%record_field_end $err(format_error)
+                        (CS record_sample	%record_field_end $err(sample_error))+ )?
                       ) %record_end;
 
     fileformat_section = (fileformat NL) $err(fileformat_section_error);
