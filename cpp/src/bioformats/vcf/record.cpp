@@ -185,6 +185,10 @@ namespace opencb
     
     void Record::check_format() const
     {
+        if (format.size() == 0) {
+            return; // Nothing to check
+        }
+            
         if (format[0] != "GT") {
             throw std::invalid_argument("GT must be the first field in the FORMAT column");
         }
