@@ -512,13 +512,20 @@
 
     # Meta-data
     meta_typeid     = ( ( print - "=" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB") ) >token_begin @token_middle %meta_typeid_generic;
-    meta_key        = ( (alnum | "." | "_" | "-" )+ - ("." | "_" | "-")+ ) >token_begin @token_middle %meta_key_generic;
+    meta_key        = ( (alnum | "." | "_" | "-" )+ - (punct)+ ) >token_begin @token_middle %meta_key_generic;
     
-    meta_value      = (print - "<") (print)* >token_begin @token_middle %token_end ;
-    meta_plain_value= (print - "=")+ >token_begin @token_middle %token_end ;
-    meta_field_value= ( (print - ("," | ">")) | space )+ >token_begin @token_middle %token_end ;
-    meta_field_desc = (print - "\"")+  >token_begin @token_middle %token_end ;
-    meta_field      = meta_key "=" ( meta_field_value | "\"" meta_field_desc "\"" );
+    ## A value can be expressed in multiple ways:
+    ## - Only text in the line (meta_value_free): it cannot contain an equals sign
+    ## - The line is a single key-value pair (meta_value): the value cannot contain an equals sign
+    ## - One of multiple key-value pairs, non-quoted (meta_field_value): the value cannot contain a comma -end of field-, or a closing angle bracket -end of entry
+    ## - One of multiple key-value pairs, quoted (meta_field_desc): the value cannot contain quotes
+    meta_value_free = (print - "=")+ 		>token_begin @token_middle %token_end ;
+    meta_value      = (print - "=")+		>token_begin @token_middle %token_end ;
+    meta_field_value= (print - ("," | ">" | "\""))+	>token_begin $token_middle %token_end ;
+    meta_field_desc = (print - "\"")+		>token_begin $token_middle %token_end ;
+    
+    meta_values     = ("\"" meta_field_desc "\"") | meta_field_value ;
+    meta_field      = meta_key "=" meta_values ;
     
     meta_field_num  = ( (digit)+ | "A" | "R" | "G" | "." ) >token_begin @token_middle %token_end ;
     meta_field_type = (alpha)+ >token_begin @token_middle %token_end ;
@@ -531,7 +538,7 @@
     
     meta_contig_val = alnum ((alnum | punct - (":" | "<" | ">" | ","))+ - (punct)+)* ;
     meta_contig     = "ID=" %meta_id meta_contig_val >token_begin $token_middle %token_end $err(meta_id_err) 
-                        ("," identifier "=" meta_field_value)* ;
+                        ("," identifier "=" meta_values)* ;
                         
     meta_filter     = "ID=" %meta_id identifier $err(meta_id_err)
                         ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
@@ -570,12 +577,13 @@
                        ("SAMPLE"	%meta_typeid_sample	"=<" meta_sample ">" )		$err(meta_sample_err) |
                        ("PEDIGREE"	%meta_typeid_pedigree	"=<" meta_pedigree ">" )	$err(meta_pedigree_err) |
                        ("pedigreeDB"	%meta_typeid_pedigreedb	"=<" meta_pedigreeDB ">" )	$err(meta_pedigreedb_err) |
-                       (meta_plain_value) |
+                       (meta_value_free) |
                        (meta_typeid "=" 
                          (
                            ("<" meta_field ("," meta_field)* ">") | 
-                           ("<" meta_value ">") |
-                           meta_value 
+                           "\"" meta_field_desc "\"" |
+                           ("<\"" meta_field_desc "\">") |
+                           meta_value
                          )
                        )
                       ) %meta_entry_end;
