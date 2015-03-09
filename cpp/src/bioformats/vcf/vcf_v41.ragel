@@ -665,8 +665,8 @@
     record_info     = ( info_entry (";" info_entry)* ) | 
                       ( "." >token_begin @token_middle %token_end ) ;
 
-    ## TODO Could this be extended because a lot of files use _ as a separator?
-    format_value    = (alnum)+ >token_begin @token_middle %token_end ;
+    ## Accepting non-alphanumeric characters is an addition in v4.3, but widely used in already existing files
+    format_value    = ( (alpha | "_") (alnum | "_" | ".")* ) >token_begin $token_middle %token_end ;
     record_format   = format_value (":" format_value)* ;
     
     ## In a sample, the genotype is mandatory and must be the first field
