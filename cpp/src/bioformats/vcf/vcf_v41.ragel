@@ -514,7 +514,7 @@
     meta_typeid     = ( ( print - "=" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB") ) >token_begin @token_middle %meta_typeid_generic;
     meta_key        = ( (alnum | "." | "_" | "-" )+ - ("." | "_" | "-")+ ) >token_begin @token_middle %meta_key_generic;
     
-    meta_value      = (print - "<") (print)+ >token_begin @token_middle %token_end ;
+    meta_value      = (print - "<") (print)* >token_begin @token_middle %token_end ;
     meta_plain_value= (print - "=")+ >token_begin @token_middle %token_end ;
     meta_field_value= ( (print - ("," | ">")) | space )+ >token_begin @token_middle %token_end ;
     meta_field_desc = (print - "\"")+  >token_begin @token_middle %token_end ;
