@@ -123,7 +123,7 @@ namespace opencb
                                              std::pair<meta_iterator, meta_iterator> range) const
     {
         if (!is_record_subfield_in_header(alt_id, range.first, range.second)) {
-            throw std::invalid_argument("Alternate '<" + alt_id + ">' is not listed in a meta-data ALT entry");
+            throw std::invalid_argument("Alternate '<" + alt_id + ">' is not listed in a valid meta-data ALT entry");
         }
     }
 
@@ -143,7 +143,7 @@ namespace opencb
             if (filter == "PASS" || filter == ".") { continue; } // No need to check PASS or missing data
             
             if (!is_record_subfield_in_header(filter, range.first, range.second)) {
-                throw std::invalid_argument("Filter '" + filter + "' is not listed in a meta-data FILTER entry");
+                throw std::invalid_argument("Filter '" + filter + "' is not listed in a valid meta-data FILTER entry");
             }
         }
     }
@@ -177,7 +177,7 @@ namespace opencb
             }
 
             if (!found_in_header) {
-                throw std::invalid_argument("Info '" + field.first + "' is not listed in a meta-data INFO entry");
+                throw std::invalid_argument("Info '" + field.first + "' is not listed in a valid meta-data INFO entry");
             }
         }
         
@@ -198,7 +198,7 @@ namespace opencb
         
         for (auto & fm : format) {
             if (!is_record_subfield_in_header(fm, range.first, range.second)) {
-                throw std::invalid_argument("Format '" + fm + "' is not listed in a meta-data FORMAT entry");
+                throw std::invalid_argument("Format '" + fm + "' is not listed in a valid meta-data FORMAT entry");
             }
         }
     }
