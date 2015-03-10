@@ -42,6 +42,23 @@ namespace opencb
         source->samples_names = samples;
     }
     
+    bool ParsingState::is_well_defined_meta(std::string const & meta_type, std::string const & id)
+    {
+        typedef std::multimap<std::string,std::string>::iterator iter;
+        std::pair<iter, iter> range = defined_metadata.equal_range(meta_type);
+        for (auto & current = range.first; current != range.second; ++current) {
+            if (current->second == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    void ParsingState::add_well_defined_meta(std::string const & meta_type, std::string const & id)
+    {
+        defined_metadata.emplace(meta_type, id);
+    }
+    
     bool ParsingState::is_bad_defined_meta(std::string const & meta_type, std::string const & id)
     {
         typedef std::multimap<std::string,std::string>::iterator iter;

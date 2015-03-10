@@ -31,8 +31,7 @@ namespace opencb
         std::shared_ptr<Source> source;
         std::shared_ptr<std::vector<Record>> records;
      
-        std::set<std::string> bad_defined_contigs;
-        
+        std::multimap<std::string, std::string> defined_metadata;
         std::multimap<std::string, std::string> undefined_metadata;
         
         ParsingState(std::shared_ptr<Source> source,
@@ -50,6 +49,10 @@ namespace opencb
         
         void set_samples(std::vector<std::string> & samples) const;
         
+        bool is_well_defined_meta(std::string const & meta_type, std::string const & id);
+        
+        void add_well_defined_meta(std::string const & meta_type, std::string const & id);
+	
         bool is_bad_defined_meta(std::string const & meta_type, std::string const & id);
         
         void add_bad_defined_meta(std::string const & meta_type, std::string const & id);
