@@ -581,7 +581,7 @@
                        (meta_typeid "=" 
                          (
                            ("<" meta_field ("," meta_field)* ">") | 
-                           "\"" meta_field_desc "\"" |
+                           ("\"" meta_field_desc "\"") |
                            ("<\"" meta_field_desc "\">") |
                            meta_value
                          )
