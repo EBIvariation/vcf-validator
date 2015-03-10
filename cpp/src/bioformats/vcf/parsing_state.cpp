@@ -42,21 +42,21 @@ namespace opencb
         source->samples_names = samples;
     }
     
-    bool ParsingState::is_bad_defined_contig(std::string const & contig)
+    bool ParsingState::is_bad_defined_meta(std::string const & meta_type, std::string const & id)
     {
         typedef std::multimap<std::string,std::string>::iterator iter;
-        std::pair<iter, iter> range = undefined_metadata.equal_range("contig");
+        std::pair<iter, iter> range = undefined_metadata.equal_range(meta_type);
         for (auto & current = range.first; current != range.second; ++current) {
-            if (current->second == contig) {
+            if (current->second == id) {
                 return true;
             }
         }
         return false;
     }
     
-    void ParsingState::add_bad_defined_contig(std::string const & contig)
+    void ParsingState::add_bad_defined_meta(std::string const & meta_type, std::string const & id)
     {
-        undefined_metadata.emplace("contig", contig);
+        undefined_metadata.emplace(meta_type, id);
     }
   }
 }

@@ -20,8 +20,10 @@ namespace opencb
         check_body_entry_ploidy(state, record);
         
         /*
-         * TODO All the following can be optimised using one map for correctly defined meta-data and other one for the incorrect, 
-         * so there is no need to check again once a chromosome is marked as correct
+         * Optimized using one map: no need to check again once some meta-data is marked as incorrect
+         * 
+         * TODO All the following can be optimised using another map for correctly defined meta-data: 
+         * so there is no need to check again once some meta-data is marked as correct
          */
         
         // The chromosome/contig should be described in the meta section
@@ -84,13 +86,15 @@ namespace opencb
         // The associated 'contig' meta entry should exist (notify only once)
         std::string current_chromosome = record.chromosome;
 
-        if (!state.is_bad_defined_contig(current_chromosome)) {
-            std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range("contig");
+        if (state.is_bad_defined_meta("contig", current_chromosome)) {
+            return; // Notify only once
+        }
+        
+        std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range("contig");
 
-            if (!is_record_subfield_in_header(current_chromosome, range.first, range.second)) {
-                state.add_bad_defined_contig(current_chromosome);
-                throw ParsingWarning("Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description");
-            }
+        if (!is_record_subfield_in_header(current_chromosome, range.first, range.second)) {
+            state.add_bad_defined_meta("contig", current_chromosome);
+            throw ParsingWarning("Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description");
         }
     }
     
@@ -105,7 +109,13 @@ namespace opencb
             // Check alternate ID is present in meta-entry (only applies to the form <SOME_ALT_ID>)
             if (regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
                 std::string alt_id = pieces_match[1];
+                
+                if (state.is_bad_defined_meta("ALT", alt_id)) {
+                    continue; // Notify only once
+                }
+                
                 if (!is_record_subfield_in_header(alt_id, range.first, range.second)) {
+                    state.add_bad_defined_meta("ALT", alt_id);
                     throw ParsingWarning("Alternate '<" + alt_id + ">' is not listed in a valid meta-data ALT entry");
                 }
             }
@@ -119,7 +129,12 @@ namespace opencb
         for (auto & filter : record.filters) {
             if (filter == "PASS" || filter == ".") { continue; } // No need to check PASS or missing data
             
+            if (state.is_bad_defined_meta("FILTER", filter)) {
+                continue; // Notify only once
+            }
+                
             if (!is_record_subfield_in_header(filter, range.first, range.second)) {
+                state.add_bad_defined_meta("FILTER", filter);
                 throw ParsingWarning("Filter '" + filter + "' is not listed in a valid meta-data FILTER entry");
             }
         }
@@ -130,10 +145,16 @@ namespace opencb
         std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range("INFO");
         
         for (auto & field : record.info) {
+            auto & id = field.first;
             if (field.first == ".") { continue; } // No need to check missing data
             
-            if (!is_record_subfield_in_header(field.first, range.first, range.second)) {
-                throw ParsingWarning("Info '" + field.first + "' is not listed in a valid meta-data INFO entry");
+            if (state.is_bad_defined_meta("INFO", id)) {
+                continue; // Notify only once
+            }
+            
+            if (!is_record_subfield_in_header(id, range.first, range.second)) {
+                state.add_bad_defined_meta("INFO", id);
+                throw ParsingWarning("Info '" + id + "' is not listed in a valid meta-data INFO entry");
             }
         }
     }
@@ -143,7 +164,12 @@ namespace opencb
         std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range("FORMAT");
         
         for (auto & fm : record.format) {
+            if (state.is_bad_defined_meta("FORMAT", fm)) {
+                continue; // Notify only once
+            }
+            
             if (!is_record_subfield_in_header(fm, range.first, range.second)) {
+                state.add_bad_defined_meta("FORMAT", fm);
                 throw ParsingWarning("Format '" + fm + "' is not listed in a valid meta-data FORMAT entry");
             }
         }

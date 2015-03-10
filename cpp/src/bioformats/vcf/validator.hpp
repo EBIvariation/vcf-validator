@@ -50,9 +50,9 @@ namespace opencb
         
         void set_samples(std::vector<std::string> & samples) const;
         
-        bool is_bad_defined_contig(std::string const & contig);
+        bool is_bad_defined_meta(std::string const & meta_type, std::string const & id);
         
-        void add_bad_defined_contig(std::string const & contig);
+        void add_bad_defined_meta(std::string const & meta_type, std::string const & id);
     };
 
     class ParsingError : public std::runtime_error
