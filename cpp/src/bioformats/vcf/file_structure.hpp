@@ -21,8 +21,12 @@ namespace opencb
 {
   namespace vcf
   {
-      
     struct Source;
+    struct MetaEntry;
+    struct Record;
+    
+    typedef std::multimap<std::string, MetaEntry>::iterator meta_iterator;
+    
     
     struct MetaEntry
     {
@@ -121,8 +125,6 @@ namespace opencb
         bool operator!=(Record const &) const;
         
     private:
-        typedef std::multimap<std::string, MetaEntry>::iterator meta_iterator;
-    
         /**
          * Checks that chromosome does not contain colons or white-spaces
          * 

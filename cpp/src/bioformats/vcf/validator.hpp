@@ -105,7 +105,7 @@ namespace opencb
         void handle_token_begin(ParsingState const & state);
         void handle_token_char(ParsingState const & state, char c);
         void handle_token_end(ParsingState const & state);
-        void handle_newline(ParsingState const & state) ;
+        void handle_newline(ParsingState const & state);
         
         void handle_fileformat(ParsingState const & state);
         
@@ -231,10 +231,16 @@ namespace opencb
     {
       public:
         void optional_check_meta_section(ParsingState const & state) const;
-        
         void optional_check_body_entry(ParsingState & state, Record & record) ;//const;
-        
         void optional_check_body_section(ParsingState const & state) const;
+        
+      private:
+        void check_body_entry_ploidy(ParsingState & state, Record & record);
+        void check_contig_meta(ParsingState & state, Record & record) const;
+        void check_alternate_allele_meta(ParsingState & state, Record & record) const;
+        void check_filter_meta(ParsingState & state, Record & record) const;
+        void check_info_meta(ParsingState & state, Record & record) const;
+        void check_format_meta(ParsingState & state, Record & record) const;
     };
     
     
