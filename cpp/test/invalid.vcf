@@ -15,6 +15,7 @@ asdfasI23rt'0'0ºo
 ##FORMAT=<ID=GL,Number=.,Type=Float,Description="Genotype Likelihoods with not valid description>
 ##INFO=<ID=NotValidSource,Number=1,Type=Float,Description="Global Allele Frequency based on AC/AN",Source="This source"not valid">
 ##INFO=<ID=NotValidVersion,Number=1,Type=Float,Description="Global Allele Frequency based on AC/AN",Version="This version"not valid">
+##reference=
 ##assembly=ftp://8080:8080/not-valid/host/to/file.fastq
 ##PEDIGREE=<Name_0=Something,Name_1=Something wrong>
 ##pedigreeDB=<ftp://8080:8080/not-valid/host/to/pedigreeDB>
