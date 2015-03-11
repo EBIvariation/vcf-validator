@@ -83,9 +83,24 @@ namespace opencb
 
     void Record::check_alternate_alleles() const
     {
+        boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
+        boost::cmatch pieces_match;
+        
         for (auto & alternate : alternate_alleles) {
             // Check alternate allele structure against the reference
             check_alternate_allele_structure(alternate);
+            
+            // Check that an alternate of the form <SOME_ALT> begins with DEL, INS, DUP, INV or CNV
+            if (regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
+                std::string alt_id = pieces_match[1];
+                if (!boost::starts_with(alt_id, "DEL") && 
+                    !boost::starts_with(alt_id, "INS") && 
+                    !boost::starts_with(alt_id, "DUP") && 
+                    !boost::starts_with(alt_id, "INV") && 
+                    !boost::starts_with(alt_id, "CNV")) {
+                    throw std::invalid_argument("Alternate ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence");
+                }
+            }
         }
         
     }
@@ -237,7 +252,7 @@ namespace opencb
 
             int num_allele = std::stoi(allele);
             if (num_allele > alternate_alleles.size()) {
-                throw std::invalid_argument("Alternate allele index " + std::to_string(num_allele) + 
+                throw std::invalid_argument("Allele index " + std::to_string(num_allele) + 
                         " is greater than the maximum allowed " + std::to_string(alternate_alleles.size()));
             }
         }
