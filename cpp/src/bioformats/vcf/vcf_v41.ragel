@@ -646,7 +646,7 @@
     info_value      = (print - (space | ";"))+ ;
     info_value_list = info_value ("," info_value)* ;
     info_entry      = (
-                        "AA=" (bases | ".") 			$err(info_AA_error) |
+                        "AA=" (bases | "." | "-") 		$err(info_AA_error) |
                         "AC=" (int_number ("," int_number)*) 	$err(info_AC_error) |
                         "AF=" (any_number ("," any_number)*) 	$err(info_AF_error) |
                         "AN=" int_number 			$err(info_AN_error) |

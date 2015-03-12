@@ -7864,7 +7864,6 @@ st415:
 case 415:
 #line 7866 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
-		case 46: goto tr572;
 		case 65: goto tr573;
 		case 67: goto tr573;
 		case 71: goto tr573;
@@ -7876,6 +7875,8 @@ case 415:
 		case 110: goto tr573;
 		case 116: goto tr573;
 	}
+	if ( 45 <= (*p) && (*p) <= 46 )
+		goto tr572;
 	goto tr571;
 tr572:
 #line 19 "cpp/src/bioformats/vcf/vcf_v41.ragel"
@@ -7887,7 +7888,7 @@ st416:
 	if ( ++p == pe )
 		goto _test_eof416;
 case 416:
-#line 7891 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7892 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -7904,7 +7905,7 @@ st417:
 	if ( ++p == pe )
 		goto _test_eof417;
 case 417:
-#line 7908 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7909 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -7931,7 +7932,7 @@ st418:
 	if ( ++p == pe )
 		goto _test_eof418;
 case 418:
-#line 7935 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7936 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 61 )
 		goto tr574;
 	if ( (*p) > 58 ) {
@@ -7950,7 +7951,7 @@ st419:
 	if ( ++p == pe )
 		goto _test_eof419;
 case 419:
-#line 7954 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7955 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 45 )
 		goto tr576;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -7966,7 +7967,7 @@ st420:
 	if ( ++p == pe )
 		goto _test_eof420;
 case 420:
-#line 7970 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7971 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr577;
 	goto tr575;
@@ -7980,7 +7981,7 @@ st421:
 	if ( ++p == pe )
 		goto _test_eof421;
 case 421:
-#line 7984 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 7985 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8000,7 +8001,7 @@ st422:
 	if ( ++p == pe )
 		goto _test_eof422;
 case 422:
-#line 8004 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8005 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 61 )
 		goto tr578;
 	if ( (*p) > 58 ) {
@@ -8019,7 +8020,7 @@ st423:
 	if ( ++p == pe )
 		goto _test_eof423;
 case 423:
-#line 8023 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8024 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 45: goto tr580;
 		case 48: goto tr581;
@@ -8037,7 +8038,7 @@ st424:
 	if ( ++p == pe )
 		goto _test_eof424;
 case 424:
-#line 8041 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8042 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 48 )
 		goto tr581;
 	if ( 49 <= (*p) && (*p) <= 57 )
@@ -8053,7 +8054,7 @@ st425:
 	if ( ++p == pe )
 		goto _test_eof425;
 case 425:
-#line 8057 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8058 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8074,7 +8075,7 @@ st426:
 	if ( ++p == pe )
 		goto _test_eof426;
 case 426:
-#line 8078 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8079 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr585;
 	goto tr579;
@@ -8088,7 +8089,7 @@ st427:
 	if ( ++p == pe )
 		goto _test_eof427;
 case 427:
-#line 8092 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8093 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8110,7 +8111,7 @@ st428:
 	if ( ++p == pe )
 		goto _test_eof428;
 case 428:
-#line 8114 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8115 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 43: goto tr586;
 		case 45: goto tr586;
@@ -8128,7 +8129,7 @@ st429:
 	if ( ++p == pe )
 		goto _test_eof429;
 case 429:
-#line 8132 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8133 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr587;
 	goto tr579;
@@ -8142,7 +8143,7 @@ st430:
 	if ( ++p == pe )
 		goto _test_eof430;
 case 430:
-#line 8146 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8147 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8162,7 +8163,7 @@ st431:
 	if ( ++p == pe )
 		goto _test_eof431;
 case 431:
-#line 8166 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8167 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8185,7 +8186,7 @@ st432:
 	if ( ++p == pe )
 		goto _test_eof432;
 case 432:
-#line 8189 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8190 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 61 )
 		goto tr588;
 	if ( (*p) > 58 ) {
@@ -8204,7 +8205,7 @@ st433:
 	if ( ++p == pe )
 		goto _test_eof433;
 case 433:
-#line 8208 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8209 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 45 )
 		goto tr590;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -8220,7 +8221,7 @@ st434:
 	if ( ++p == pe )
 		goto _test_eof434;
 case 434:
-#line 8224 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8225 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr591;
 	goto tr589;
@@ -8234,7 +8235,7 @@ st435:
 	if ( ++p == pe )
 		goto _test_eof435;
 case 435:
-#line 8238 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8239 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8257,7 +8258,7 @@ st436:
 	if ( ++p == pe )
 		goto _test_eof436;
 case 436:
-#line 8261 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8262 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8278,7 +8279,7 @@ st437:
 	if ( ++p == pe )
 		goto _test_eof437;
 case 437:
-#line 8282 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8283 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 61 )
 		goto tr593;
 	if ( (*p) > 58 ) {
@@ -8297,7 +8298,7 @@ st438:
 	if ( ++p == pe )
 		goto _test_eof438;
 case 438:
-#line 8301 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8302 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 45: goto tr595;
 		case 48: goto tr596;
@@ -8315,7 +8316,7 @@ st439:
 	if ( ++p == pe )
 		goto _test_eof439;
 case 439:
-#line 8319 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8320 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 48 )
 		goto tr596;
 	if ( 49 <= (*p) && (*p) <= 57 )
@@ -8331,7 +8332,7 @@ st440:
 	if ( ++p == pe )
 		goto _test_eof440;
 case 440:
-#line 8335 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8336 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8351,7 +8352,7 @@ st441:
 	if ( ++p == pe )
 		goto _test_eof441;
 case 441:
-#line 8355 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8356 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr600;
 	goto tr594;
@@ -8365,7 +8366,7 @@ st442:
 	if ( ++p == pe )
 		goto _test_eof442;
 case 442:
-#line 8369 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8370 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8386,7 +8387,7 @@ st443:
 	if ( ++p == pe )
 		goto _test_eof443;
 case 443:
-#line 8390 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8391 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 43: goto tr601;
 		case 45: goto tr601;
@@ -8404,7 +8405,7 @@ st444:
 	if ( ++p == pe )
 		goto _test_eof444;
 case 444:
-#line 8408 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8409 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr602;
 	goto tr594;
@@ -8418,7 +8419,7 @@ st445:
 	if ( ++p == pe )
 		goto _test_eof445;
 case 445:
-#line 8422 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8423 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8437,7 +8438,7 @@ st446:
 	if ( ++p == pe )
 		goto _test_eof446;
 case 446:
-#line 8441 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8442 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8463,7 +8464,7 @@ st447:
 	if ( ++p == pe )
 		goto _test_eof447;
 case 447:
-#line 8467 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8468 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8484,7 +8485,7 @@ st448:
 	if ( ++p == pe )
 		goto _test_eof448;
 case 448:
-#line 8488 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8489 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8505,7 +8506,7 @@ st449:
 	if ( ++p == pe )
 		goto _test_eof449;
 case 449:
-#line 8509 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8510 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8526,7 +8527,7 @@ st450:
 	if ( ++p == pe )
 		goto _test_eof450;
 case 450:
-#line 8530 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8531 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8547,7 +8548,7 @@ st451:
 	if ( ++p == pe )
 		goto _test_eof451;
 case 451:
-#line 8551 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8552 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 61 )
 		goto tr607;
 	if ( (*p) > 58 ) {
@@ -8566,7 +8567,7 @@ st452:
 	if ( ++p == pe )
 		goto _test_eof452;
 case 452:
-#line 8570 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8571 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto tr609;
@@ -8586,7 +8587,7 @@ st453:
 	if ( ++p == pe )
 		goto _test_eof453;
 case 453:
-#line 8590 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8591 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8615,7 +8616,7 @@ st454:
 	if ( ++p == pe )
 		goto _test_eof454;
 case 454:
-#line 8619 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8620 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8637,7 +8638,7 @@ st455:
 	if ( ++p == pe )
 		goto _test_eof455;
 case 455:
-#line 8641 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8642 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8657,7 +8658,7 @@ st456:
 	if ( ++p == pe )
 		goto _test_eof456;
 case 456:
-#line 8661 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8662 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto tr615;
 	goto tr614;
@@ -8671,7 +8672,7 @@ st457:
 	if ( ++p == pe )
 		goto _test_eof457;
 case 457:
-#line 8675 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8676 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8688,7 +8689,7 @@ st458:
 	if ( ++p == pe )
 		goto _test_eof458;
 case 458:
-#line 8692 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8693 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 61 )
 		goto tr616;
 	if ( (*p) > 58 ) {
@@ -8707,7 +8708,7 @@ st459:
 	if ( ++p == pe )
 		goto _test_eof459;
 case 459:
-#line 8711 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8712 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 45 )
 		goto tr618;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -8723,7 +8724,7 @@ st460:
 	if ( ++p == pe )
 		goto _test_eof460;
 case 460:
-#line 8727 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8728 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr619;
 	goto tr617;
@@ -8737,7 +8738,7 @@ st461:
 	if ( ++p == pe )
 		goto _test_eof461;
 case 461:
-#line 8741 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8742 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8760,7 +8761,7 @@ st462:
 	if ( ++p == pe )
 		goto _test_eof462;
 case 462:
-#line 8764 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8765 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8781,7 +8782,7 @@ st463:
 	if ( ++p == pe )
 		goto _test_eof463;
 case 463:
-#line 8785 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8786 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8802,7 +8803,7 @@ st464:
 	if ( ++p == pe )
 		goto _test_eof464;
 case 464:
-#line 8806 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8807 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 61 )
 		goto tr622;
 	if ( (*p) > 58 ) {
@@ -8821,7 +8822,7 @@ st465:
 	if ( ++p == pe )
 		goto _test_eof465;
 case 465:
-#line 8825 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8826 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 45 )
 		goto tr624;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -8837,7 +8838,7 @@ st466:
 	if ( ++p == pe )
 		goto _test_eof466;
 case 466:
-#line 8841 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8842 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr625;
 	goto tr623;
@@ -8851,7 +8852,7 @@ st467:
 	if ( ++p == pe )
 		goto _test_eof467;
 case 467:
-#line 8855 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8856 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8874,7 +8875,7 @@ st468:
 	if ( ++p == pe )
 		goto _test_eof468;
 case 468:
-#line 8878 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8879 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8896,7 +8897,7 @@ st469:
 	if ( ++p == pe )
 		goto _test_eof469;
 case 469:
-#line 8900 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8901 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8916,7 +8917,7 @@ st470:
 	if ( ++p == pe )
 		goto _test_eof470;
 case 470:
-#line 8920 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8921 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto tr631;
 	goto tr630;
@@ -8930,7 +8931,7 @@ st471:
 	if ( ++p == pe )
 		goto _test_eof471;
 case 471:
-#line 8934 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8935 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8947,7 +8948,7 @@ st472:
 	if ( ++p == pe )
 		goto _test_eof472;
 case 472:
-#line 8951 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8952 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -8967,7 +8968,7 @@ st473:
 	if ( ++p == pe )
 		goto _test_eof473;
 case 473:
-#line 8971 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8972 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto tr635;
 	goto tr634;
@@ -8981,7 +8982,7 @@ st474:
 	if ( ++p == pe )
 		goto _test_eof474;
 case 474:
-#line 8985 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 8986 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9002,7 +9003,7 @@ st475:
 	if ( ++p == pe )
 		goto _test_eof475;
 case 475:
-#line 9006 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9007 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9023,7 +9024,7 @@ st476:
 	if ( ++p == pe )
 		goto _test_eof476;
 case 476:
-#line 9027 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9028 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 48: goto tr637;
 		case 61: goto tr638;
@@ -9044,7 +9045,7 @@ st477:
 	if ( ++p == pe )
 		goto _test_eof477;
 case 477:
-#line 9048 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9049 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 61 )
 		goto tr639;
 	if ( (*p) > 58 ) {
@@ -9063,7 +9064,7 @@ st478:
 	if ( ++p == pe )
 		goto _test_eof478;
 case 478:
-#line 9067 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9068 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 45 )
 		goto tr641;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -9079,7 +9080,7 @@ st479:
 	if ( ++p == pe )
 		goto _test_eof479;
 case 479:
-#line 9083 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9084 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr642;
 	goto tr640;
@@ -9093,7 +9094,7 @@ st480:
 	if ( ++p == pe )
 		goto _test_eof480;
 case 480:
-#line 9097 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9098 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9112,7 +9113,7 @@ st481:
 	if ( ++p == pe )
 		goto _test_eof481;
 case 481:
-#line 9116 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9117 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 45: goto tr644;
 		case 48: goto tr645;
@@ -9130,7 +9131,7 @@ st482:
 	if ( ++p == pe )
 		goto _test_eof482;
 case 482:
-#line 9134 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9135 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 48 )
 		goto tr645;
 	if ( 49 <= (*p) && (*p) <= 57 )
@@ -9146,7 +9147,7 @@ st483:
 	if ( ++p == pe )
 		goto _test_eof483;
 case 483:
-#line 9150 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9151 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9166,7 +9167,7 @@ st484:
 	if ( ++p == pe )
 		goto _test_eof484;
 case 484:
-#line 9170 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9171 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr649;
 	goto tr643;
@@ -9180,7 +9181,7 @@ st485:
 	if ( ++p == pe )
 		goto _test_eof485;
 case 485:
-#line 9184 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9185 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9201,7 +9202,7 @@ st486:
 	if ( ++p == pe )
 		goto _test_eof486;
 case 486:
-#line 9205 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9206 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 43: goto tr650;
 		case 45: goto tr650;
@@ -9219,7 +9220,7 @@ st487:
 	if ( ++p == pe )
 		goto _test_eof487;
 case 487:
-#line 9223 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9224 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr651;
 	goto tr643;
@@ -9233,7 +9234,7 @@ st488:
 	if ( ++p == pe )
 		goto _test_eof488;
 case 488:
-#line 9237 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9238 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9252,7 +9253,7 @@ st489:
 	if ( ++p == pe )
 		goto _test_eof489;
 case 489:
-#line 9256 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9257 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9278,7 +9279,7 @@ st490:
 	if ( ++p == pe )
 		goto _test_eof490;
 case 490:
-#line 9282 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9283 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9299,7 +9300,7 @@ st491:
 	if ( ++p == pe )
 		goto _test_eof491;
 case 491:
-#line 9303 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9304 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 61 )
 		goto tr653;
 	if ( (*p) > 58 ) {
@@ -9318,7 +9319,7 @@ st492:
 	if ( ++p == pe )
 		goto _test_eof492;
 case 492:
-#line 9322 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9323 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 45 )
 		goto tr655;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -9334,7 +9335,7 @@ st493:
 	if ( ++p == pe )
 		goto _test_eof493;
 case 493:
-#line 9338 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9339 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr656;
 	goto tr654;
@@ -9348,7 +9349,7 @@ st494:
 	if ( ++p == pe )
 		goto _test_eof494;
 case 494:
-#line 9352 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9353 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9371,7 +9372,7 @@ st495:
 	if ( ++p == pe )
 		goto _test_eof495;
 case 495:
-#line 9375 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9376 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9393,7 +9394,7 @@ st496:
 	if ( ++p == pe )
 		goto _test_eof496;
 case 496:
-#line 9397 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9398 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 61 )
 		goto tr659;
 	if ( (*p) > 58 ) {
@@ -9412,7 +9413,7 @@ st497:
 	if ( ++p == pe )
 		goto _test_eof497;
 case 497:
-#line 9416 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9417 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 45: goto tr661;
 		case 48: goto tr662;
@@ -9430,7 +9431,7 @@ st498:
 	if ( ++p == pe )
 		goto _test_eof498;
 case 498:
-#line 9434 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9435 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 48 )
 		goto tr662;
 	if ( 49 <= (*p) && (*p) <= 57 )
@@ -9446,7 +9447,7 @@ st499:
 	if ( ++p == pe )
 		goto _test_eof499;
 case 499:
-#line 9450 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9451 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9466,7 +9467,7 @@ st500:
 	if ( ++p == pe )
 		goto _test_eof500;
 case 500:
-#line 9470 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9471 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr666;
 	goto tr660;
@@ -9480,7 +9481,7 @@ st501:
 	if ( ++p == pe )
 		goto _test_eof501;
 case 501:
-#line 9484 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9485 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9501,7 +9502,7 @@ st502:
 	if ( ++p == pe )
 		goto _test_eof502;
 case 502:
-#line 9505 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9506 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 43: goto tr667;
 		case 45: goto tr667;
@@ -9519,7 +9520,7 @@ st503:
 	if ( ++p == pe )
 		goto _test_eof503;
 case 503:
-#line 9523 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9524 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr668;
 	goto tr660;
@@ -9533,7 +9534,7 @@ st504:
 	if ( ++p == pe )
 		goto _test_eof504;
 case 504:
-#line 9537 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9538 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9552,7 +9553,7 @@ st505:
 	if ( ++p == pe )
 		goto _test_eof505;
 case 505:
-#line 9556 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9557 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9574,7 +9575,7 @@ st506:
 	if ( ++p == pe )
 		goto _test_eof506;
 case 506:
-#line 9578 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9579 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9595,7 +9596,7 @@ st507:
 	if ( ++p == pe )
 		goto _test_eof507;
 case 507:
-#line 9599 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9600 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9616,7 +9617,7 @@ st508:
 	if ( ++p == pe )
 		goto _test_eof508;
 case 508:
-#line 9620 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9621 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9637,7 +9638,7 @@ st509:
 	if ( ++p == pe )
 		goto _test_eof509;
 case 509:
-#line 9641 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9642 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9658,7 +9659,7 @@ st510:
 	if ( ++p == pe )
 		goto _test_eof510;
 case 510:
-#line 9662 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9663 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9679,7 +9680,7 @@ st511:
 	if ( ++p == pe )
 		goto _test_eof511;
 case 511:
-#line 9683 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9684 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9699,7 +9700,7 @@ st512:
 	if ( ++p == pe )
 		goto _test_eof512;
 case 512:
-#line 9703 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9704 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto tr677;
 	goto tr676;
@@ -9713,7 +9714,7 @@ st513:
 	if ( ++p == pe )
 		goto _test_eof513;
 case 513:
-#line 9717 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9718 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9734,7 +9735,7 @@ st514:
 	if ( ++p == pe )
 		goto _test_eof514;
 case 514:
-#line 9738 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9739 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9755,7 +9756,7 @@ st515:
 	if ( ++p == pe )
 		goto _test_eof515;
 case 515:
-#line 9759 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9760 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9776,7 +9777,7 @@ st516:
 	if ( ++p == pe )
 		goto _test_eof516;
 case 516:
-#line 9780 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9781 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9797,7 +9798,7 @@ st517:
 	if ( ++p == pe )
 		goto _test_eof517;
 case 517:
-#line 9801 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9802 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9818,7 +9819,7 @@ st518:
 	if ( ++p == pe )
 		goto _test_eof518;
 case 518:
-#line 9822 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9823 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9839,7 +9840,7 @@ st519:
 	if ( ++p == pe )
 		goto _test_eof519;
 case 519:
-#line 9843 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9844 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9860,7 +9861,7 @@ st520:
 	if ( ++p == pe )
 		goto _test_eof520;
 case 520:
-#line 9864 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9865 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9881,7 +9882,7 @@ st521:
 	if ( ++p == pe )
 		goto _test_eof521;
 case 521:
-#line 9885 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9886 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9902,7 +9903,7 @@ st522:
 	if ( ++p == pe )
 		goto _test_eof522;
 case 522:
-#line 9906 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9907 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9922,7 +9923,7 @@ st523:
 	if ( ++p == pe )
 		goto _test_eof523;
 case 523:
-#line 9926 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9927 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto tr689;
 	goto tr688;
@@ -9936,7 +9937,7 @@ st524:
 	if ( ++p == pe )
 		goto _test_eof524;
 case 524:
-#line 9940 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9941 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9957,7 +9958,7 @@ st525:
 	if ( ++p == pe )
 		goto _test_eof525;
 case 525:
-#line 9961 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 9962 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr533;
 		case 10: goto tr534;
@@ -9995,7 +9996,7 @@ st526:
 	if ( ++p == pe )
 		goto _test_eof526;
 case 526:
-#line 9999 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10000 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 58 )
 		goto tr509;
 	if ( (*p) < 65 ) {
@@ -10033,7 +10034,7 @@ st527:
 	if ( ++p == pe )
 		goto _test_eof527;
 case 527:
-#line 10037 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10038 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr514;
 		case 58: goto st385;
@@ -10069,7 +10070,7 @@ st528:
 	if ( ++p == pe )
 		goto _test_eof528;
 case 528:
-#line 10073 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10074 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr690;
 	goto tr498;
@@ -10083,7 +10084,7 @@ st529:
 	if ( ++p == pe )
 		goto _test_eof529;
 case 529:
-#line 10087 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10088 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr505;
 		case 69: goto tr507;
@@ -10102,7 +10103,7 @@ st530:
 	if ( ++p == pe )
 		goto _test_eof530;
 case 530:
-#line 10106 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10107 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 43: goto tr691;
 		case 45: goto tr691;
@@ -10120,7 +10121,7 @@ st531:
 	if ( ++p == pe )
 		goto _test_eof531;
 case 531:
-#line 10124 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10125 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr692;
 	goto tr498;
@@ -10134,7 +10135,7 @@ st532:
 	if ( ++p == pe )
 		goto _test_eof532;
 case 532:
-#line 10138 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10139 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 9 )
 		goto tr505;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -10160,7 +10161,7 @@ st533:
 	if ( ++p == pe )
 		goto _test_eof533;
 case 533:
-#line 10164 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10165 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr505;
 		case 46: goto tr506;
@@ -10184,7 +10185,7 @@ st534:
 	if ( ++p == pe )
 		goto _test_eof534;
 case 534:
-#line 10188 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10189 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 9 )
 		goto tr505;
 	goto tr498;
@@ -10198,7 +10199,7 @@ st535:
 	if ( ++p == pe )
 		goto _test_eof535;
 case 535:
-#line 10202 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10203 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 42: goto tr490;
 		case 46: goto tr693;
@@ -10237,7 +10238,7 @@ st536:
 	if ( ++p == pe )
 		goto _test_eof536;
 case 536:
-#line 10241 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10242 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 65: goto tr694;
 		case 67: goto tr694;
@@ -10261,7 +10262,7 @@ st537:
 	if ( ++p == pe )
 		goto _test_eof537;
 case 537:
-#line 10265 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10266 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr496;
 		case 44: goto tr497;
@@ -10297,7 +10298,7 @@ st538:
 	if ( ++p == pe )
 		goto _test_eof538;
 case 538:
-#line 10301 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10302 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 58: goto tr696;
 		case 95: goto tr696;
@@ -10321,7 +10322,7 @@ st539:
 	if ( ++p == pe )
 		goto _test_eof539;
 case 539:
-#line 10325 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10326 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 62: goto tr697;
 		case 95: goto tr695;
@@ -10355,7 +10356,7 @@ st540:
 	if ( ++p == pe )
 		goto _test_eof540;
 case 540:
-#line 10359 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10360 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr496;
 		case 44: goto tr497;
@@ -10384,7 +10385,7 @@ st541:
 	if ( ++p == pe )
 		goto _test_eof541;
 case 541:
-#line 10388 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10389 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto tr702;
 	if ( (*p) < 65 ) {
@@ -10406,7 +10407,7 @@ st542:
 	if ( ++p == pe )
 		goto _test_eof542;
 case 542:
-#line 10410 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10411 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 58: goto tr705;
 		case 59: goto tr703;
@@ -10443,7 +10444,7 @@ st543:
 	if ( ++p == pe )
 		goto _test_eof543;
 case 543:
-#line 10447 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10448 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr703;
 		case 61: goto tr703;
@@ -10479,7 +10480,7 @@ st544:
 	if ( ++p == pe )
 		goto _test_eof544;
 case 544:
-#line 10483 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10484 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 58: goto tr705;
 		case 61: goto tr704;
@@ -10500,7 +10501,7 @@ st545:
 	if ( ++p == pe )
 		goto _test_eof545;
 case 545:
-#line 10504 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10505 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 45 )
 		goto tr706;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -10516,7 +10517,7 @@ st546:
 	if ( ++p == pe )
 		goto _test_eof546;
 case 546:
-#line 10520 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10521 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr707;
 	goto tr489;
@@ -10530,7 +10531,7 @@ st547:
 	if ( ++p == pe )
 		goto _test_eof547;
 case 547:
-#line 10534 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10535 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 91 )
 		goto tr697;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -10546,7 +10547,7 @@ st548:
 	if ( ++p == pe )
 		goto _test_eof548;
 case 548:
-#line 10550 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10551 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto tr708;
@@ -10566,7 +10567,7 @@ st549:
 	if ( ++p == pe )
 		goto _test_eof549;
 case 549:
-#line 10570 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10571 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr709;
 		case 62: goto tr711;
@@ -10602,7 +10603,7 @@ st550:
 	if ( ++p == pe )
 		goto _test_eof550;
 case 550:
-#line 10606 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10607 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr709;
 		case 61: goto tr709;
@@ -10638,7 +10639,7 @@ st551:
 	if ( ++p == pe )
 		goto _test_eof551;
 case 551:
-#line 10642 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10643 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr710;
 		case 62: goto tr711;
@@ -10659,7 +10660,7 @@ st552:
 	if ( ++p == pe )
 		goto _test_eof552;
 case 552:
-#line 10663 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10664 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 58 )
 		goto tr705;
 	goto tr489;
@@ -10673,7 +10674,7 @@ st553:
 	if ( ++p == pe )
 		goto _test_eof553;
 case 553:
-#line 10677 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10678 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto tr713;
 	if ( (*p) < 65 ) {
@@ -10695,7 +10696,7 @@ st554:
 	if ( ++p == pe )
 		goto _test_eof554;
 case 554:
-#line 10699 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10700 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 58: goto tr716;
 		case 59: goto tr714;
@@ -10732,7 +10733,7 @@ st555:
 	if ( ++p == pe )
 		goto _test_eof555;
 case 555:
-#line 10736 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10737 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr714;
 		case 61: goto tr714;
@@ -10768,7 +10769,7 @@ st556:
 	if ( ++p == pe )
 		goto _test_eof556;
 case 556:
-#line 10772 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10773 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 58: goto tr716;
 		case 61: goto tr715;
@@ -10789,7 +10790,7 @@ st557:
 	if ( ++p == pe )
 		goto _test_eof557;
 case 557:
-#line 10793 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10794 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 45 )
 		goto tr717;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -10805,7 +10806,7 @@ st558:
 	if ( ++p == pe )
 		goto _test_eof558;
 case 558:
-#line 10809 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10810 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr718;
 	goto tr489;
@@ -10819,7 +10820,7 @@ st559:
 	if ( ++p == pe )
 		goto _test_eof559;
 case 559:
-#line 10823 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10824 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 93 )
 		goto tr697;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -10835,7 +10836,7 @@ st560:
 	if ( ++p == pe )
 		goto _test_eof560;
 case 560:
-#line 10839 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10840 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto tr719;
@@ -10855,7 +10856,7 @@ st561:
 	if ( ++p == pe )
 		goto _test_eof561;
 case 561:
-#line 10859 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10860 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr720;
 		case 62: goto tr722;
@@ -10891,7 +10892,7 @@ st562:
 	if ( ++p == pe )
 		goto _test_eof562;
 case 562:
-#line 10895 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10896 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr720;
 		case 61: goto tr720;
@@ -10927,7 +10928,7 @@ st563:
 	if ( ++p == pe )
 		goto _test_eof563;
 case 563:
-#line 10931 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10932 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr721;
 		case 62: goto tr722;
@@ -10948,7 +10949,7 @@ st564:
 	if ( ++p == pe )
 		goto _test_eof564;
 case 564:
-#line 10952 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10953 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 58 )
 		goto tr716;
 	goto tr489;
@@ -10966,7 +10967,7 @@ st565:
 	if ( ++p == pe )
 		goto _test_eof565;
 case 565:
-#line 10970 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10971 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto tr724;
 	if ( (*p) < 65 ) {
@@ -10988,7 +10989,7 @@ st566:
 	if ( ++p == pe )
 		goto _test_eof566;
 case 566:
-#line 10992 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 10993 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 58: goto tr727;
 		case 59: goto tr725;
@@ -11025,7 +11026,7 @@ st567:
 	if ( ++p == pe )
 		goto _test_eof567;
 case 567:
-#line 11029 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11030 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr725;
 		case 61: goto tr725;
@@ -11061,7 +11062,7 @@ st568:
 	if ( ++p == pe )
 		goto _test_eof568;
 case 568:
-#line 11065 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11066 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 58: goto tr727;
 		case 61: goto tr726;
@@ -11082,7 +11083,7 @@ st569:
 	if ( ++p == pe )
 		goto _test_eof569;
 case 569:
-#line 11086 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11087 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 45 )
 		goto tr728;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -11098,7 +11099,7 @@ st570:
 	if ( ++p == pe )
 		goto _test_eof570;
 case 570:
-#line 11102 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11103 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr729;
 	goto tr489;
@@ -11112,7 +11113,7 @@ st571:
 	if ( ++p == pe )
 		goto _test_eof571;
 case 571:
-#line 11116 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11117 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 91 )
 		goto tr730;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -11128,7 +11129,7 @@ st572:
 	if ( ++p == pe )
 		goto _test_eof572;
 case 572:
-#line 11132 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11133 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto tr731;
@@ -11148,7 +11149,7 @@ st573:
 	if ( ++p == pe )
 		goto _test_eof573;
 case 573:
-#line 11152 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11153 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr732;
 		case 62: goto tr734;
@@ -11184,7 +11185,7 @@ st574:
 	if ( ++p == pe )
 		goto _test_eof574;
 case 574:
-#line 11188 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11189 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr732;
 		case 61: goto tr732;
@@ -11220,7 +11221,7 @@ st575:
 	if ( ++p == pe )
 		goto _test_eof575;
 case 575:
-#line 11224 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11225 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr733;
 		case 62: goto tr734;
@@ -11241,7 +11242,7 @@ st576:
 	if ( ++p == pe )
 		goto _test_eof576;
 case 576:
-#line 11245 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11246 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 58 )
 		goto tr727;
 	goto tr489;
@@ -11259,7 +11260,7 @@ st577:
 	if ( ++p == pe )
 		goto _test_eof577;
 case 577:
-#line 11263 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11264 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 60 )
 		goto tr736;
 	if ( (*p) < 65 ) {
@@ -11281,7 +11282,7 @@ st578:
 	if ( ++p == pe )
 		goto _test_eof578;
 case 578:
-#line 11285 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11286 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 58: goto tr739;
 		case 59: goto tr737;
@@ -11318,7 +11319,7 @@ st579:
 	if ( ++p == pe )
 		goto _test_eof579;
 case 579:
-#line 11322 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11323 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr737;
 		case 61: goto tr737;
@@ -11354,7 +11355,7 @@ st580:
 	if ( ++p == pe )
 		goto _test_eof580;
 case 580:
-#line 11358 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11359 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 58: goto tr739;
 		case 61: goto tr738;
@@ -11375,7 +11376,7 @@ st581:
 	if ( ++p == pe )
 		goto _test_eof581;
 case 581:
-#line 11379 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11380 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 45 )
 		goto tr740;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -11391,7 +11392,7 @@ st582:
 	if ( ++p == pe )
 		goto _test_eof582;
 case 582:
-#line 11395 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11396 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr741;
 	goto tr489;
@@ -11405,7 +11406,7 @@ st583:
 	if ( ++p == pe )
 		goto _test_eof583;
 case 583:
-#line 11409 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11410 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 93 )
 		goto tr730;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -11421,7 +11422,7 @@ st584:
 	if ( ++p == pe )
 		goto _test_eof584;
 case 584:
-#line 11425 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11426 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto tr742;
@@ -11441,7 +11442,7 @@ st585:
 	if ( ++p == pe )
 		goto _test_eof585;
 case 585:
-#line 11445 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11446 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr743;
 		case 62: goto tr745;
@@ -11477,7 +11478,7 @@ st586:
 	if ( ++p == pe )
 		goto _test_eof586;
 case 586:
-#line 11481 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11482 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr743;
 		case 61: goto tr743;
@@ -11513,7 +11514,7 @@ st587:
 	if ( ++p == pe )
 		goto _test_eof587;
 case 587:
-#line 11517 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11518 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr744;
 		case 62: goto tr745;
@@ -11534,7 +11535,7 @@ st588:
 	if ( ++p == pe )
 		goto _test_eof588;
 case 588:
-#line 11538 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11539 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	if ( (*p) == 58 )
 		goto tr739;
 	goto tr489;
@@ -11552,7 +11553,7 @@ st589:
 	if ( ++p == pe )
 		goto _test_eof589;
 case 589:
-#line 11556 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11557 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr496;
 		case 65: goto tr694;
@@ -11577,7 +11578,7 @@ st590:
 	if ( ++p == pe )
 		goto _test_eof590;
 case 590:
-#line 11581 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11582 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 59: goto tr473;
 		case 61: goto tr473;
@@ -11613,7 +11614,7 @@ st591:
 	if ( ++p == pe )
 		goto _test_eof591;
 case 591:
-#line 11617 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11618 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	switch( (*p) ) {
 		case 9: goto tr472;
 		case 59: goto tr474;
@@ -11650,7 +11651,7 @@ st596:
 	if ( ++p == pe )
 		goto _test_eof596;
 case 596:
-#line 11654 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11655 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	goto st0;
 st593:
 	if ( ++p == pe )
@@ -11677,7 +11678,7 @@ st597:
 	if ( ++p == pe )
 		goto _test_eof597;
 case 597:
-#line 11681 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 11682 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	goto st0;
 	}
 	_test_eof2: cs = 2; goto _test_eof; 
@@ -14082,7 +14083,7 @@ case 597:
         p--; {goto st592;}
     }
 	break;
-#line 14086 "cpp/src/bioformats/vcf/validator_detail.hpp"
+#line 14087 "cpp/src/bioformats/vcf/validator_detail.hpp"
 	}
 	}
 
