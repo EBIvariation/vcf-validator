@@ -2,17 +2,17 @@
 
 namespace
 {
-  using namespace opencb::vcf;
+    using namespace opencb::vcf;
 
-  void throw_syntax_error(ParsingState const &)
-  {
-    throw ParsingError("Invalid VCF syntax");
-  }
-  
-  void throw_syntax_error(std::string const & msg)
-  {
-    throw ParsingError(msg);
-  }
+    void throw_syntax_error(ParsingState const &)
+    {
+        throw ParsingError("Invalid VCF syntax");
+    }
+
+    void throw_syntax_error(std::string const & msg)
+    {
+        throw ParsingError(msg);
+    }
 }
 
 namespace opencb
