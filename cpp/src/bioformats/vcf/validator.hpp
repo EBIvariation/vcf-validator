@@ -158,16 +158,16 @@ namespace opencb
     class AbortErrorPolicy
     {
       public:
-        void handle_fileformat_section_error(ParsingState const & state, 
+        void handle_fileformat_section_error(ParsingState & state, 
                 std::string message = "Error in file format section");
         
-        void handle_meta_section_error(ParsingState const & state, 
+        void handle_meta_section_error(ParsingState & state, 
                 std::string message = "Error in meta-data section");
         
-        void handle_header_section_error(ParsingState const & state, 
+        void handle_header_section_error(ParsingState & state, 
                 std::string message = "Error in header section");
         
-        void handle_body_section_error(ParsingState const & state, 
+        void handle_body_section_error(ParsingState & state, 
                 std::string message = "Error in body section");
         
         
@@ -190,16 +190,16 @@ namespace opencb
     class ReportErrorPolicy
     {
       public:
-        void handle_fileformat_section_error(ParsingState const & state, 
+        void handle_fileformat_section_error(ParsingState & state, 
                 std::string message = "Error in file format section");
         
-        void handle_meta_section_error(ParsingState const & state, 
+        void handle_meta_section_error(ParsingState & state, 
                 std::string message = "Error in meta-data section");
         
-        void handle_header_section_error(ParsingState const & state, 
+        void handle_header_section_error(ParsingState & state, 
                 std::string message = "Error in header section");
         
-        void handle_body_section_error(ParsingState const & state, 
+        void handle_body_section_error(ParsingState & state, 
                 std::string message = "Error in body section");
         
         

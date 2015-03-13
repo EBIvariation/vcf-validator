@@ -8,7 +8,8 @@ namespace opencb
     ParsingState::ParsingState(
         std::shared_ptr<Source> source,
         std::shared_ptr<std::vector<Record>> records)
-    : n_lines{1}, n_columns{1}, n_batches{0}, cs{0}, source{source}, records{records}, undefined_metadata{}
+    : n_lines{1}, n_columns{1}, n_batches{0}, cs{0}, m_is_valid{true}, 
+      source{source}, records{records}, undefined_metadata{}
     {
     }
 

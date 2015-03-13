@@ -781,7 +781,7 @@ namespace opencb
     template <typename Configuration>
     bool Parser<Configuration>::is_valid() const
     {
-      return cs >= %%{ write first_final; }%%;
+      return m_is_valid;
     }
 
     template <typename Configuration>
