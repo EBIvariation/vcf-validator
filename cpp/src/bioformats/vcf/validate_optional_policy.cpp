@@ -101,14 +101,13 @@ namespace opencb
     
     void ValidateOptionalPolicy::check_alternate_allele_meta(ParsingState & state, Record & record) const
     {
+        static boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
         std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range("ALT");
-        
-        boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
         boost::cmatch pieces_match;
         
         for (auto & alternate : record.alternate_alleles) {
             // Check alternate ID is present in meta-entry (only applies to the form <SOME_ALT_ID>)
-            if (regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
+            if (alternate[0] == '<' && regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
                 std::string alt_id = pieces_match[1];
                 
                 if (state.is_bad_defined_meta("ALT", alt_id)||

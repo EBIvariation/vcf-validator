@@ -83,7 +83,7 @@ namespace opencb
 
     void Record::check_alternate_alleles() const
     {
-        boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
+        static boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
         boost::cmatch pieces_match;
         
         for (auto & alternate : alternate_alleles) {
@@ -91,7 +91,7 @@ namespace opencb
             check_alternate_allele_structure(alternate);
             
             // Check that an alternate of the form <SOME_ALT> begins with DEL, INS, DUP, INV or CNV
-            if (regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
+            if (alternate[0] == '<' && regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
                 std::string alt_id = pieces_match[1];
                 if (!boost::starts_with(alt_id, "DEL") && 
                     !boost::starts_with(alt_id, "INS") && 
@@ -114,7 +114,7 @@ namespace opencb
         } else if (alternate[0] == '<') {
             return; // Custom ALTs can't be checked against the reference
         } else if (std::count(alternate.begin(), alternate.end(), '[') == 2 || 
-            std::count(alternate.begin(), alternate.end(), ']') == 2) { 
+                   std::count(alternate.begin(), alternate.end(), ']') == 2) { 
             return; // Break-ends can't be checked against the reference
         } else if (alternate[0] != reference_allele[0] && alternate.size() != reference_allele.size()) {
             throw std::invalid_argument("Reference and alternate alleles must share the first nucleotide");
