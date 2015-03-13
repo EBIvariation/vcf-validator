@@ -53,7 +53,7 @@
     
     action meta_section_end {
         try {
-          OptionalPolicy::optional_check_meta_section();
+          OptionalPolicy::optional_check_meta_section(*this);
         } catch (ParsingWarning warn) {
           ErrorPolicy::handle_meta_section_warning(*this, warn.what());
         }
@@ -61,6 +61,14 @@
 
     action header_section_error {
         ErrorPolicy::handle_header_section_error(*this);
+        
+        // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
+        try {
+          OptionalPolicy::optional_check_meta_section(*this);
+        } catch (ParsingWarning warn) {
+          ErrorPolicy::handle_meta_section_warning(*this, warn.what());
+        }
+        
         fhold; fgoto body_section_skip;
     }
 
@@ -297,6 +305,14 @@
     # Header errors
     action header_prefix_err {
         ErrorPolicy::handle_header_section_error(*this, "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO");
+        
+        // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
+        try {
+          OptionalPolicy::optional_check_meta_section(*this);
+        } catch (ParsingWarning warn) {
+          ErrorPolicy::handle_meta_section_warning(*this, warn.what());
+        }
+        
         fhold; fgoto body_section_skip;
     }
     
@@ -702,7 +718,7 @@
     main            := fileformat_section
                         meta_section
                         header_section
-                        body_section ;
+                        body_section >meta_section_end ;
 
     # Error recovery machines that skip until the next line and restart the
     # the most appropriate section state.

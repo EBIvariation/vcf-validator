@@ -10,7 +10,7 @@ namespace opencb
     void ValidateOptionalPolicy::optional_check_meta_section(ParsingState const & state) const
     {
         if (state.source->meta_entries.find("reference") == state.source->meta_entries.end()) {
-          throw ParsingWarning("It is recommended to include a 'reference' entry in the meta section");
+          throw ParsingWarning("A valid 'reference' entry is not listed in the meta section");
         }
     }
     
