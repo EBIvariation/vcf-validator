@@ -77,15 +77,13 @@ namespace opencb
         void handle_token_begin(ParsingState const & state) {}
         void handle_token_char(ParsingState const & state, char c) {}
         void handle_token_end(ParsingState const & state) {}
+        void handle_token_end(ParsingState const & state, std::string token) {}
         void handle_newline(ParsingState const & state) {}
         
         void handle_fileformat(ParsingState const & state) {}
         
         void handle_meta_typeid(ParsingState const & state) {}
         void handle_meta_typeid(ParsingState const & state, std::string type_id) {}
-        void handle_meta_key(ParsingState const & state) {}
-        void handle_meta_key(ParsingState const & state, std::string key) {}
-        void handle_meta_value(ParsingState const & state) {}
         void handle_meta_line(ParsingState const & state) {}
         
         void handle_sample_name(ParsingState const & state);
@@ -108,15 +106,13 @@ namespace opencb
         void handle_token_begin(ParsingState const & state);
         void handle_token_char(ParsingState const & state, char c);
         void handle_token_end(ParsingState const & state);
+        void handle_token_end(ParsingState const & state, std::string token);
         void handle_newline(ParsingState const & state);
         
         void handle_fileformat(ParsingState const & state);
         
         void handle_meta_typeid(ParsingState const & state);
         void handle_meta_typeid(ParsingState const & state, std::string type_id);
-        void handle_meta_key(ParsingState const & state);
-        void handle_meta_key(ParsingState const & state, std::string key);
-        void handle_meta_value(ParsingState const & state);
         void handle_meta_line(ParsingState const & state);
         
         

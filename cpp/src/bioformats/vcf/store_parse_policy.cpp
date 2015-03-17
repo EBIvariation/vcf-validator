@@ -19,7 +19,12 @@ namespace opencb
     {
         m_grouped_tokens.push_back(m_current_token);
     }
-
+    
+    void StoreParsePolicy::handle_token_end(ParsingState const & state, std::string token) 
+    {
+        m_grouped_tokens.push_back(token);
+    }
+    
     void StoreParsePolicy::handle_newline(ParsingState const & state) 
     {
         m_current_token.clear();
@@ -44,21 +49,7 @@ namespace opencb
         m_line_typeid = type_id;
     }
 
-    void StoreParsePolicy::handle_meta_key(ParsingState const & state) 
-    {
-        m_grouped_tokens.push_back(m_current_token);
-    }
-
-    void StoreParsePolicy::handle_meta_key(ParsingState const & state, std::string key)
-    {
-        m_grouped_tokens.push_back(key);
-    }
-
-    void StoreParsePolicy::handle_meta_value(ParsingState const & state) 
-    {
-        m_grouped_tokens.push_back(m_current_token);
-    }
-
+    
     void StoreParsePolicy::handle_meta_line(ParsingState const & state) 
     {
         // Put together m_line_typeid and m_grouped_tokens in a single MetaEntry object

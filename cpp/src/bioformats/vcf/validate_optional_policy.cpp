@@ -110,7 +110,7 @@ namespace opencb
             if (alternate[0] == '<' && regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
                 std::string alt_id = pieces_match[1];
                 
-                if (state.is_bad_defined_meta("ALT", alt_id)||
+                if (state.is_bad_defined_meta("ALT", alt_id) ||
                     state.is_well_defined_meta("ALT", alt_id)) {
                     continue; // Notify only once
                 }
@@ -132,7 +132,7 @@ namespace opencb
         for (auto & filter : record.filters) {
             if (filter == "PASS" || filter == ".") { continue; } // No need to check PASS or missing data
             
-            if (state.is_bad_defined_meta("FILTER", filter)||
+            if (state.is_bad_defined_meta("FILTER", filter) ||
                 state.is_well_defined_meta("FILTER", filter)) {
                 continue; // Notify only once
             }
@@ -154,7 +154,7 @@ namespace opencb
             auto & id = field.first;
             if (field.first == ".") { continue; } // No need to check missing data
             
-            if (state.is_bad_defined_meta("INFO", id)||
+            if (state.is_bad_defined_meta("INFO", id) ||
                 state.is_well_defined_meta("INFO", id)) {
                 continue; // Notify only once
             }
@@ -173,7 +173,7 @@ namespace opencb
         std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range("FORMAT");
         
         for (auto & fm : record.format) {
-            if (state.is_bad_defined_meta("FORMAT", fm)||
+            if (state.is_bad_defined_meta("FORMAT", fm) ||
                 state.is_well_defined_meta("FORMAT", fm)) {
                 continue; // Notify only once
             }

@@ -121,27 +121,27 @@
     }
 
     action meta_id {
-        ParsePolicy::handle_meta_key(*this, "ID");
+        ParsePolicy::handle_token_end(*this, "ID");
     }
     
     action meta_number {
-        ParsePolicy::handle_meta_key(*this, "Number");
+        ParsePolicy::handle_token_end(*this, "Number");
     }
     
     action meta_type {
-        ParsePolicy::handle_meta_key(*this, "Type");
+        ParsePolicy::handle_token_end(*this, "Type");
     }
     
     action meta_description {
-        ParsePolicy::handle_meta_key(*this, "Description");
+        ParsePolicy::handle_token_end(*this, "Description");
     }
     
     action meta_genomes {
-        ParsePolicy::handle_meta_key(*this, "Genomes");
+        ParsePolicy::handle_token_end(*this, "Genomes");
     }
     
     action meta_mixture {
-        ParsePolicy::handle_meta_key(*this, "Mixture");
+        ParsePolicy::handle_token_end(*this, "Mixture");
     }
     
     action meta_typeid_generic {
@@ -149,7 +149,7 @@
     }
     
     action meta_key_generic {
-        ParsePolicy::handle_meta_key(*this);
+        ParsePolicy::handle_token_end(*this);
     }
     
     action meta_entry_end {

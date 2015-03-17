@@ -1947,7 +1947,7 @@ case 31:
 tr54:
 #line 151 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this);
+        ParsePolicy::handle_token_end(*this);
     }
 	goto st32;
 st32:
@@ -2184,7 +2184,7 @@ tr75:
 tr72:
 #line 123 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "ID");
+        ParsePolicy::handle_token_end(*this, "ID");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -2314,7 +2314,7 @@ case 59:
 tr88:
 #line 135 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "Description");
+        ParsePolicy::handle_token_end(*this, "Description");
     }
 	goto st60;
 st60:
@@ -2474,7 +2474,7 @@ case 67:
 tr73:
 #line 123 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "ID");
+        ParsePolicy::handle_token_end(*this, "ID");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -2659,7 +2659,7 @@ case 79:
 tr117:
 #line 123 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "ID");
+        ParsePolicy::handle_token_end(*this, "ID");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -2694,7 +2694,7 @@ tr120:
 tr118:
 #line 123 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "ID");
+        ParsePolicy::handle_token_end(*this, "ID");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -2827,7 +2827,7 @@ case 94:
 tr134:
 #line 135 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "Description");
+        ParsePolicy::handle_token_end(*this, "Description");
     }
 	goto st95;
 st95:
@@ -3121,7 +3121,7 @@ case 112:
 tr158:
 #line 123 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "ID");
+        ParsePolicy::handle_token_end(*this, "ID");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -3156,7 +3156,7 @@ tr161:
 tr159:
 #line 123 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "ID");
+        ParsePolicy::handle_token_end(*this, "ID");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -3260,7 +3260,7 @@ case 122:
 tr171:
 #line 127 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "Number");
+        ParsePolicy::handle_token_end(*this, "Number");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -3340,7 +3340,7 @@ tr182:
 tr180:
 #line 131 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "Type");
+        ParsePolicy::handle_token_end(*this, "Type");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -3465,7 +3465,7 @@ case 143:
 tr195:
 #line 135 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "Description");
+        ParsePolicy::handle_token_end(*this, "Description");
     }
 	goto st144;
 st144:
@@ -3631,7 +3631,7 @@ tr208:
 tr172:
 #line 127 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "Number");
+        ParsePolicy::handle_token_end(*this, "Number");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -3775,7 +3775,7 @@ case 161:
 tr219:
 #line 123 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "ID");
+        ParsePolicy::handle_token_end(*this, "ID");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -3810,7 +3810,7 @@ tr222:
 tr220:
 #line 123 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "ID");
+        ParsePolicy::handle_token_end(*this, "ID");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -3914,7 +3914,7 @@ case 171:
 tr232:
 #line 127 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "Number");
+        ParsePolicy::handle_token_end(*this, "Number");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -3994,7 +3994,7 @@ tr243:
 tr241:
 #line 131 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "Type");
+        ParsePolicy::handle_token_end(*this, "Type");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -4119,7 +4119,7 @@ case 192:
 tr256:
 #line 135 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "Description");
+        ParsePolicy::handle_token_end(*this, "Description");
     }
 	goto st193;
 st193:
@@ -4285,7 +4285,7 @@ tr269:
 tr233:
 #line 127 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "Number");
+        ParsePolicy::handle_token_end(*this, "Number");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -4807,7 +4807,7 @@ case 228:
 tr304:
 #line 123 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "ID");
+        ParsePolicy::handle_token_end(*this, "ID");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -4842,7 +4842,7 @@ tr307:
 tr305:
 #line 123 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "ID");
+        ParsePolicy::handle_token_end(*this, "ID");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -4962,7 +4962,7 @@ tr321:
 tr319:
 #line 139 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "Genomes");
+        ParsePolicy::handle_token_end(*this, "Genomes");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -5077,7 +5077,7 @@ tr334:
 tr332:
 #line 143 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "Mixture");
+        ParsePolicy::handle_token_end(*this, "Mixture");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
@@ -5205,7 +5205,7 @@ case 263:
 tr349:
 #line 135 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "Description");
+        ParsePolicy::handle_token_end(*this, "Description");
     }
 	goto st264;
 st264:
@@ -5645,7 +5645,7 @@ case 293:
 tr382:
 #line 123 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
-        ParsePolicy::handle_meta_key(*this, "ID");
+        ParsePolicy::handle_token_end(*this, "ID");
     }
 #line 15 "cpp/src/bioformats/vcf/vcf_v41.ragel"
 	{
