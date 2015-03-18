@@ -56,17 +56,17 @@ namespace opencb
         // Add MetaEntry to Source
         try {
             if (m_line_typeid == "") { // Plain value
-                state.add_meta(MetaEntry{m_grouped_tokens[0], state.source});
+                state.add_meta(MetaEntry{m_grouped_tokens[0]});
 
             } else if (m_grouped_tokens.size() == 1) { // TypeID=value
-                state.add_meta(MetaEntry{m_line_typeid, m_grouped_tokens[0], state.source});
+                state.add_meta(MetaEntry{m_line_typeid, m_grouped_tokens[0]});
 
             } else if (m_grouped_tokens.size() % 2 == 0) { // TypeID=<Key-value pairs>
                 auto key_values = std::map<std::string, std::string>{};
                 for (size_t i = 0; i < m_grouped_tokens.size(); i += 2) {
                     key_values[m_grouped_tokens[i]] = m_grouped_tokens[i+1];
                 }
-                state.add_meta(MetaEntry{m_line_typeid, key_values, state.source});
+                state.add_meta(MetaEntry{m_line_typeid, key_values});
 
             } else {
                 // TODO Throw exception

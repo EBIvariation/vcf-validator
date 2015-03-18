@@ -7,25 +7,21 @@ namespace opencb
   namespace vcf
   {
   
-    MetaEntry::MetaEntry(std::string const & id,
-                         std::shared_ptr<Source> const & source)
-    : id{id}, structure{Structure::NoValue}, source{source}
+    MetaEntry::MetaEntry(std::string const & id)
+    : id{id}, structure{Structure::NoValue}
     {
-        
     }
-  
-    MetaEntry::MetaEntry(std::string const & id, 
-                         std::string const & plain_value,
-                         std::shared_ptr<Source> const & source)
-    : id{id}, structure{Structure::PlainValue}, value{plain_value}, source{source}
+        
+    MetaEntry::MetaEntry(std::string const & id,
+              std::string const & plain_value)
+    : id{id}, structure{Structure::PlainValue}, value{plain_value}
     {
         check_value();
     }
-        
+
     MetaEntry::MetaEntry(std::string const & id,
-                         std::map<std::string, std::string> const & key_values,
-                         std::shared_ptr<Source> const & source)
-    : id{id}, structure{Structure::KeyValue}, value{key_values}, source{source}
+              std::map<std::string, std::string> const & key_values)
+    : id{id}, structure{Structure::KeyValue}, value{key_values}
     {
         check_value();
     }

@@ -38,18 +38,13 @@ namespace opencb
         boost::variant< std::string, 
                         std::map<std::string, std::string> > value;
         
-        std::shared_ptr<Source> source;
+        MetaEntry(std::string const & id);
         
         MetaEntry(std::string const & id,
-                  std::shared_ptr<Source> const & source);
+                  std::string const & plain_value);
         
         MetaEntry(std::string const & id,
-                  std::string const & plain_value,
-                  std::shared_ptr<Source> const & source);
-        
-        MetaEntry(std::string const & id,
-                  std::map<std::string, std::string> const & key_values,
-                  std::shared_ptr<Source> const & source);
+                  std::map<std::string, std::string> const & key_values);
         
         bool operator==(MetaEntry const &) const;
 
@@ -119,7 +114,7 @@ namespace opencb
                std::vector<std::string> const & format, 
                std::vector<std::string> const & samples,
                std::shared_ptr<Source> const & source);
-
+        
         bool operator==(Record const &) const;
 
         bool operator!=(Record const &) const;
@@ -216,6 +211,7 @@ namespace opencb
          * @throw std::invalid_argument
          */
         void check_field_cardinality(std::string const & field,
+                                     std::vector<std::string> const & values,
                                      std::string const & number, 
                                      size_t ploidy) const;
         
@@ -225,6 +221,7 @@ namespace opencb
          * @throw std::invalid_argument
          */
         void check_field_type(std::string const & field,
+                              std::vector<std::string> const & values,
                               std::string const & type) const;
         
     };

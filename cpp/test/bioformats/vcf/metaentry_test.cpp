@@ -20,16 +20,12 @@ namespace opencb
             
             SECTION ("It should work with any ID and source")
             {
-                CHECK_NOTHROW( (vcf::MetaEntry { 
-                                "reference",
-                                std::make_shared<vcf::Source>(source)} ) );
+                CHECK_NOTHROW( (vcf::MetaEntry { "reference" }) );
             }
             
             SECTION ("No value should be assigned")
             {
-                auto meta = vcf::MetaEntry { 
-                                "reference",
-                                std::make_shared<vcf::Source>(source)} ;
+                auto meta = vcf::MetaEntry { "reference" } ;
                 
                 CHECK( meta.id == "reference" );
                 CHECK( meta.structure == vcf::MetaEntry::Structure::NoValue );
@@ -51,18 +47,12 @@ namespace opencb
             
             SECTION("Correct arguments")
             {
-                CHECK_NOTHROW( (vcf::MetaEntry { 
-                                "assembly",
-                                "GRCh37",
-                                std::make_shared<vcf::Source>(source)} ) );
+                CHECK_NOTHROW( (vcf::MetaEntry { "assembly", "GRCh37" }) );
             }
             
             SECTION("A one-line string value should be assigned")
             {
-                auto meta = vcf::MetaEntry { 
-                                "assembly",
-                                "GRCh37",
-                                std::make_shared<vcf::Source>(source)} ;
+                auto meta = vcf::MetaEntry { "assembly", "GRCh37" } ;
                         
                 CHECK( meta.structure == vcf::MetaEntry::Structure::PlainValue );
                 CHECK( meta.id == "assembly" );
@@ -73,10 +63,7 @@ namespace opencb
                 
             SECTION("A multi-line string value should throw an error")
             {
-                CHECK_THROWS_AS( (vcf::MetaEntry { 
-                                    "assembly",
-                                    "GRCh37\nGRCh37",
-                                    std::make_shared<vcf::Source>(source)} ),
+                CHECK_THROWS_AS( (vcf::MetaEntry { "assembly", "GRCh37\nGRCh37" } ),
                                 std::invalid_argument);
             }
     }
@@ -94,8 +81,7 @@ namespace opencb
         {
             CHECK_NOTHROW( (vcf::MetaEntry { 
                             "contig",
-                            { {"ID", "contig_1"} },
-                            std::make_shared<vcf::Source>(source)} ) );
+                            { {"ID", "contig_1"} }} ) );
         }
             
         
@@ -103,8 +89,7 @@ namespace opencb
         {
             auto meta = vcf::MetaEntry {  
                             "contig",
-                            { {"ID", "contig_1"} },
-                            std::make_shared<vcf::Source>(source)} ;
+                            { {"ID", "contig_1"} }} ;
 
             CHECK( meta.id == "contig" );
             CHECK( meta.structure == vcf::MetaEntry::Structure::KeyValue );
@@ -129,78 +114,78 @@ namespace opencb
         {
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "ALT",
-                                { {"ID", "INS"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "INS"}, {"Description", "tag_description"} }
+                            } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {  
                                 "ALT",
-                                { {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"Description", "tag_description"} }
+                            }),
                             std::invalid_argument );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {  
                                 "ALT",
-                                { {"ID", "TAG_ID"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "TAG_ID"} }
+                            }),
                             std::invalid_argument );
         }
         
         SECTION("ID prefixes")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
                                 "ALT",
-                                { {"ID", "DEL"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "DEL"}, {"Description", "tag_description"} }
+                            } ) );
                               
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "ALT",
-                                { {"ID", "INS"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "INS"}, {"Description", "tag_description"} }
+                            } ) );
                              
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "ALT",
-                                { {"ID", "DUP"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "DUP"}, {"Description", "tag_description"} }
+                            } ) );
                              
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "ALT",
-                                { {"ID", "INV"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "INV"}, {"Description", "tag_description"} }
+                            } ) );
                              
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "ALT",
-                                { {"ID", "CNV"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "CNV"}, {"Description", "tag_description"} }
+                            } ) );
                                
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "ALT",
-                                { {"ID", "DEL:FOO"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "DEL:FOO"}, {"Description", "tag_description"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "ALT",
-                                { {"ID", "INS:FOO"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "INS:FOO"}, {"Description", "tag_description"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "ALT",
-                                { {"ID", "DUP:FOO"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "DUP:FOO"}, {"Description", "tag_description"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "ALT",
-                                { {"ID", "INV:FOO"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "INV:FOO"}, {"Description", "tag_description"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "ALT",
-                                { {"ID", "CNV:FOO"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "CNV:FOO"}, {"Description", "tag_description"} }
+                            } ) );
                                   
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "ALT",
-                                { {"ID", "CNV:FOO:BAR"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "CNV:FOO:BAR"}, {"Description", "tag_description"} }
+                            } ) );
                                 
         }
     }
@@ -218,18 +203,18 @@ namespace opencb
         {
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "contig",
-                                { {"ID", "contig_1"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "contig_1"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "contig",
-                                { {"ID", "contig_2"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "contig_2"}, {"Description", "tag_description"} }
+                            } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {  
                                 "contig",
-                                { {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"Description", "tag_description"} }
+                            }),
                             std::invalid_argument );
         }
     }
@@ -247,19 +232,19 @@ namespace opencb
         {
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "FILTER",
-                                { {"ID", "Filter1"}, {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "Filter1"}, {"Description", "tag_description"} }
+                            } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {  
                                 "FILTER",
-                                { {"Description", "tag_description"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"Description", "tag_description"} }
+                            }),
                             std::invalid_argument );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {  
                                 "FILTER",
-                                { {"ID", "TAG_ID"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "TAG_ID"} }
+                            }),
                             std::invalid_argument );
         }
     }
@@ -277,31 +262,31 @@ namespace opencb
         {
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} }
+                            }),
                             std::invalid_argument ); 
         }
         
@@ -309,39 +294,39 @@ namespace opencb
         {
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                             
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
         }
         
@@ -349,34 +334,34 @@ namespace opencb
         {
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Genotype"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "Character"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "Character"}, {"Description", "Genotype"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
         }
     }
@@ -394,31 +379,31 @@ namespace opencb
         {
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} }
+                            }),
                             std::invalid_argument ); 
         }
         
@@ -426,39 +411,39 @@ namespace opencb
         {
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                             
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
         }
         
@@ -466,39 +451,39 @@ namespace opencb
         {
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Genotype"} }
+                            } ) );
                                      
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Genotype"} }
+                            } ) );
                                
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "Character"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "Character"}, {"Description", "Genotype"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} }
+                            } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry { 
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} }
+                            }),
                             std::invalid_argument );
         }
     }
@@ -516,18 +501,18 @@ namespace opencb
         {
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "SAMPLE",
-                                { {"ID", "Sample_1"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "Sample_1"} }
+                            } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 "SAMPLE",
-                                { {"ID", "Sample_2"}, {"Genomes", "genome_1,genome_2"}, {"Mixtures", "mixture_1"} },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                { {"ID", "Sample_2"}, {"Genomes", "genome_1,genome_2"}, {"Mixtures", "mixture_1"} }
+                            } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {  
                                 "SAMPLE",
-                                { {"Genomes", "genome_1,genome_2"} },
-                                std::make_shared<vcf::Source>(source)}),
+                                { {"Genomes", "genome_1,genome_2"} }
+                            }),
                             std::invalid_argument );
         }
     }

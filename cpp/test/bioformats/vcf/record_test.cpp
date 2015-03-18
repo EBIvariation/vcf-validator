@@ -24,11 +24,9 @@ namespace opencb
                     { "Number", "1" },
                     { "Type", "String" },
                     { "Description", "Genotype" }
-                },
-                std::make_shared<vcf::Source>(source)
-            }
-        );
-            
+                }
+        });
+           
         source.meta_entries.emplace("FORMAT",
             vcf::MetaEntry{
                 "FORMAT",
@@ -37,10 +35,8 @@ namespace opencb
                     { "Number", "1" },
                     { "Type", "Integer" },
                     { "Description", "Read depth" }
-                },
-                std::make_shared<vcf::Source>(source)
-            }
-        );
+                }
+            });
 
         source.meta_entries.emplace("INFO",
             vcf::MetaEntry{
@@ -50,8 +46,7 @@ namespace opencb
                     { "Number", "A" },
                     { "Type", "Integer" },
                     { "Description", "Allele number" }
-                },
-                std::make_shared<vcf::Source>(source)
+                }
         });
            
         source.meta_entries.emplace("INFO",
@@ -62,8 +57,7 @@ namespace opencb
                     { "Number", "A" },
                     { "Type", "Float" },
                     { "Description", "Allele frequency" }
-                },
-                std::make_shared<vcf::Source>(source)
+                }
             });
 
          

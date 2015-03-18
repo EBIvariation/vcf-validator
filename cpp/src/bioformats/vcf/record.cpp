@@ -148,8 +148,11 @@ namespace opencb
                 auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
                 if (key_values["ID"] == field.first) {
                     try {
-                        check_field_cardinality(field.second, key_values["Number"], 2); // TODO Assumes ploidy=2
-                        check_field_type(field.second, key_values["Type"]);
+                        std::vector<std::string> values;
+                        boost::split(values, field.second, boost::is_any_of(","));
+                        
+                        check_field_cardinality(field.second, values, key_values["Number"], 2); // TODO Assumes ploidy=2
+                        check_field_type(field.second, values, key_values["Type"]);
                     } catch (std::invalid_argument ex) {
                         throw std::invalid_argument("Info " + key_values["ID"] + "=" + ex.what());
                     }
@@ -202,7 +205,7 @@ namespace opencb
             
             if (!found_in_header) {
                 // If not found in header, a null-value meta entry must be created to make sizes match
-                format_meta.push_back(MetaEntry{"", source});
+                format_meta.push_back(MetaEntry{""});
             }
         }
         
@@ -235,8 +238,11 @@ namespace opencb
                 
                 auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
                 try {
-                    check_field_cardinality(subfield, key_values["Number"], alleles.size());
-                    check_field_type(subfield, key_values["Type"]);
+                    std::vector<std::string> values;
+                    boost::split(values, subfield, boost::is_any_of(","));
+                    
+                    check_field_cardinality(subfield, values, key_values["Number"], alleles.size());
+                    check_field_type(subfield, values, key_values["Type"]);
                 } catch (std::invalid_argument ex) {
                     throw std::invalid_argument("Sample #" + std::to_string(i+1) + ", " + 
                                                 key_values["ID"] + "=" + ex.what());
@@ -259,12 +265,11 @@ namespace opencb
     }
     
     void Record::check_field_cardinality(std::string const & field,
+                                         std::vector<std::string> const & values,
                                          std::string const & number, 
                                          size_t ploidy) const
     {
-        // To check the field cardinality, split by comma and...
-        std::vector<std::string> values;
-        boost::split(values, field, boost::is_any_of(","));
+        // To check the field cardinality...
         size_t expected = -1;
         
         if (number == "A") {
@@ -298,12 +303,10 @@ namespace opencb
     }
     
     void Record::check_field_type(std::string const & field,
+                                  std::vector<std::string> const & values,
                                   std::string const & type) const
     {
-        // To check the field type, split by comma and...
-        std::vector<std::string> values;
-        boost::split(values, field, boost::is_any_of(","));
-        
+        // To check the field type...
         for (auto & value : values) {
             if (value == ".") { continue; }
             
@@ -312,8 +315,13 @@ namespace opencb
                     // ...try to cast to int
                     std::stoi(value);
                 } else if (type == "Float") {
-                    // ...try to cast to double (for extremely precise cases)
-                    std::stod(value);
+                    // ...try to cast to float
+                    try {
+                        std::stof(value);
+                    } catch (std::out_of_range) {
+                        // It maybe a subnormal number
+                        std::stold(value);
+                    }
                 } else if (type == "Flag") {
                     if (value.size() > 1) {
                         throw std::invalid_argument("There can be only 0 or 1 value");
