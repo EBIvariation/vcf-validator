@@ -1,5 +1,12 @@
 # vcf-validator
-Validator for VCF implemented using C++11
+Validator for the Variant Call Format (VCF) implemented using C++11.
+
+It includes all the checks from the vcftools suite, and some more that involve lexical, syntactic and semantic analysis of the VCF input. If any inconsistencies are found, they are classified in one of the following categories:
+
+* Errors: Violations of the VCF specification
+* Warnings: An indication that something weird happened (different ploidy in samples from the same species) or a recommendation is not followed (missing meta-data)
+
+Please read the wiki for more details about checks already implemented.
 
 ## Dependencies
 
