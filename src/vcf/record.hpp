@@ -15,8 +15,6 @@
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/regex.hpp>
 
-<<<<<<< HEAD
-=======
 namespace opencb
 {
   namespace vcf
@@ -28,6 +26,6 @@ namespace opencb
     
   }
 }
->>>>>>> 1ef3621... Some more refactoring and test fixing in VCF record checks
+
 #endif	/* OPENCB_VCF_RECORD_HPP */
 
