@@ -1,6 +1,6 @@
 #include <cstdio>
 
-#include "validator.hpp"
+#include "vcf/validator.hpp"
 
 %%{
     machine vcf;

@@ -1,8 +1,8 @@
 #include <memory>
 
-#include "main_test.hpp"
+#include "catch/catch.hpp"
 
-#include "bioformats/vcf/file_structure.hpp"
+#include "vcf/file_structure.hpp"
 
 namespace opencb
 {

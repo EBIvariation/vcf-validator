@@ -12,8 +12,8 @@
 #include <vector>
 #include <stdexcept>
 
-#include "file_structure.hpp"
-#include "validator.hpp"
+#include "vcf/file_structure.hpp"
+#include "vcf/validator.hpp"
 
 namespace
 {

@@ -1,4 +1,4 @@
-#include "validator.hpp"
+#include "vcf/validator.hpp"
 
 namespace opencb
 {

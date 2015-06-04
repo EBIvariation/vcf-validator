@@ -1,6 +1,6 @@
 #include <iostream>
-#include "file_structure.hpp"
-#include "meta_entry_visitor.hpp"
+#include "vcf/file_structure.hpp"
+#include "vcf/meta_entry_visitor.hpp"
 
 namespace opencb
 {

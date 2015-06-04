@@ -1,4 +1,4 @@
-#include "file_structure.hpp"
+#include "vcf/file_structure.hpp"
 
 namespace opencb
 {

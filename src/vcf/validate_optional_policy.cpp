@@ -1,6 +1,6 @@
-#include "validator.hpp"
-#include "file_structure.hpp"
-#include "record.hpp"
+#include "vcf/validator.hpp"
+#include "vcf/file_structure.hpp"
+#include "vcf/record.hpp"
 
 namespace opencb
 {
