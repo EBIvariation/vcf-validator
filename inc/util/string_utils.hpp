@@ -8,6 +8,7 @@
 #ifndef STRING_UTILS_HPP
 #define	STRING_UTILS_HPP
 
+#include <cstring>
 #include <string>
 #include <vector>
 

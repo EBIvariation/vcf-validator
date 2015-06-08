@@ -10,9 +10,9 @@
 #include <string>
 #include <vector>
 
-#include <boost/algorithm/string.hpp>
-
 #include "file_structure.hpp"
+#include "util/string_utils.hpp"
+
 
 namespace opencb
 {

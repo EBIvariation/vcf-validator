@@ -62,9 +62,9 @@ namespace opencb
         size_t i = 1;
         for (auto & sample : record.samples) {
             std::vector<std::string> subfields;
-            boost::split(subfields, sample, boost::is_any_of(":"));
+            util::string_split(sample, ":", subfields);
             std::vector<std::string> alleles;
-            boost::split(alleles, subfields[0], boost::is_any_of("|,/"));
+            util::string_split(subfields[0], "|/", alleles);
 
             if (ploidy > 0) {
                 if (alleles.size() != ploidy) {

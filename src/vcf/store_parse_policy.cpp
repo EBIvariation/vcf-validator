@@ -1,4 +1,5 @@
 #include "vcf/validator.hpp"
+#include "util/string_utils.hpp"
 
 namespace opencb
 {
@@ -147,7 +148,7 @@ namespace opencb
             std::map<std::string, std::string> info;
             for (auto & field : m_line_tokens["INFO"]) {
                 std::vector<std::string> subfields;
-                boost::split(subfields, field, boost::is_any_of("="));
+                util::string_split(field, "=", subfields);
                 if (subfields.size() > 1) {
                     info.emplace(subfields[0], subfields[1]);
                 } else {

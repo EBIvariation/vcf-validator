@@ -10,7 +10,6 @@
 
 #include <iostream>
 
-#include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/regex.hpp>
