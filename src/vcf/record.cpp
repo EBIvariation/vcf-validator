@@ -149,7 +149,7 @@ namespace opencb
                 if (key_values["ID"] == field.first) {
                     try {
                         std::vector<std::string> values;
-                        boost::split(values, field.second, boost::is_any_of(","));
+                        util::string_split(field.second, ",", values);
                         
                         check_field_cardinality(field.second, values, key_values["Number"], 2); // TODO Assumes ploidy=2
                         check_field_type(field.second, values, key_values["Type"]);
@@ -212,7 +212,7 @@ namespace opencb
         // Check the samples contents and accordance to the meta section
         for (size_t i = 0; i < samples.size(); ++i) {
             std::vector<std::string> subfields;
-            boost::split(subfields, samples[i], boost::is_any_of(":"));
+            util::string_split(samples[i], ":", subfields);
             
             // The number of subfields can't be greater than the number in the FORMAT column
             if (subfields.size() > format.size()) {
@@ -221,7 +221,7 @@ namespace opencb
             }
             
             std::vector<std::string> alleles;
-            boost::split(alleles, subfields[0], boost::is_any_of("|,/"));
+            util::string_split(subfields[0], "|/", alleles);
             
             // The allele indexes must not be greater than the total number of alleles
             check_samples_alleles(alleles);
@@ -239,7 +239,7 @@ namespace opencb
                 auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
                 try {
                     std::vector<std::string> values;
-                    boost::split(values, subfield, boost::is_any_of(","));
+                    util::string_split(subfield, ",", values);
                     
                     check_field_cardinality(subfield, values, key_values["Number"], alleles.size());
                     check_field_type(subfield, values, key_values["Type"]);
@@ -298,6 +298,7 @@ namespace opencb
                 values.size() > 1 && values[0] != "") {
                 throw std::invalid_argument(field + " does not match the meta specification Number=" + number + 
                         ", expected " + std::to_string(expected) + " values");
+                
             }
         }
     }

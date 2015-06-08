@@ -15,6 +15,8 @@
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/regex.hpp>
 
+#include "util/string_utils.hpp"
+
 namespace opencb
 {
   namespace vcf

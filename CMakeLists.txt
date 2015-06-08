@@ -5,7 +5,7 @@ set (vcf-validator_VERSION_MAJOR 0)
 set (vcf-validator_VERSION_MINOR 1)
 
 # set (CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -pedantic -g")
-set (CMAKE_CXX_FLAGS "-std=c++11 -Wall -g")
+set (CMAKE_CXX_FLAGS "-std=c++11 -O3 -Wall -g")
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include_directories (inc)
