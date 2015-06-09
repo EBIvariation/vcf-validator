@@ -19,6 +19,9 @@ namespace opencb
         // All samples should have the same ploidy
         check_body_entry_ploidy(state, record);
         
+        // Reference and alternate alleles in indels should share the first nucleotide
+        check_body_entry_reference_alternate_matching(state, record);
+        
         /*
          * Once some meta-data is marked as in/correct there is no need again, so all the following have been 
          * optimised using a map for correctly defined meta-data and another one for incorrectly defined.
@@ -79,6 +82,18 @@ namespace opencb
         }
     }
   
+    void ValidateOptionalPolicy::check_body_entry_reference_alternate_matching(ParsingState & state, Record & record)
+    {
+        for (size_t i = 0; i < record.alternate_alleles.size(); ++i) {
+            auto & alternate = record.alternate_alleles[i];
+            auto type = record.types[i];
+            
+            if (type == RecordType::INDEL && alternate[0] != record.reference_allele[0]) {
+                throw ParsingWarning("Reference and alternate alleles do not share the first nucleotide");
+            }
+        }
+    }
+    
     void ValidateOptionalPolicy::check_contig_meta(ParsingState & state, Record & record) const
     {
         // The associated 'contig' meta entry should exist (notify only once)
@@ -107,7 +122,7 @@ namespace opencb
         
         for (auto & alternate : record.alternate_alleles) {
             // Check alternate ID is present in meta-entry (only applies to the form <SOME_ALT_ID>)
-            if (alternate[0] == '<' && regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
+            if (alternate[0] == '<' && boost::regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
                 std::string alt_id = pieces_match[1];
                 
                 if (state.is_bad_defined_meta("ALT", alt_id) ||

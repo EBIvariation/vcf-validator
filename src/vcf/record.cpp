@@ -22,6 +22,7 @@ namespace opencb
         ids{ids}, 
         reference_allele{reference_allele}, 
         alternate_alleles{alternate_alleles}, 
+        types{},
         quality{quality}, 
         filters{filters}, 
         info{info}, 
@@ -29,6 +30,7 @@ namespace opencb
         samples{samples},
         source{source}
     {
+        set_types();
         check_chromosome();
         check_ids();
         check_alternate_alleles();
@@ -58,6 +60,25 @@ namespace opencb
         return !(*this == other);
     }
 
+    void Record::set_types()
+    {
+        for (int i = 0; i < alternate_alleles.size(); ++i) {
+            auto & alternate = alternate_alleles[i];
+            if (alternate == ".") {
+                types.push_back(RecordType::NO_VARIATION);
+            } else if (alternate[0] == '<') {
+                types.push_back(RecordType::STRUCTURAL);
+            } else if (std::count(alternate.begin(), alternate.end(), '[') == 2 || 
+                   std::count(alternate.begin(), alternate.end(), ']') == 2) { 
+                types.push_back(RecordType::STRUCTURAL_BREAKEND);
+            } else if (alternate.size() != reference_allele.size()) {
+                types.push_back(RecordType::INDEL);
+            } else {
+                types.push_back(alternate.size() == 1 ? RecordType::SNV : RecordType::MNV);
+            }
+        }
+    }
+    
     void Record::check_chromosome() const
     {
         if (chromosome.find(':') != std::string::npos) {
@@ -75,7 +96,7 @@ namespace opencb
         }
         
         for (auto & id : ids) {
-            if (find_if(id.begin(), id.end(), [](char c) { return c == ' ' || c == ';'; }) != id.end()) {
+            if (std::find_if(id.begin(), id.end(), [](char c) { return c == ' ' || c == ';'; }) != id.end()) {
                 throw std::invalid_argument("ID must not contain semicolons or whitespaces");
             }
         }
@@ -86,12 +107,15 @@ namespace opencb
         static boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
         boost::cmatch pieces_match;
         
-        for (auto & alternate : alternate_alleles) {
+        for (size_t i = 0 ; i < alternate_alleles.size(); ++i) {
+            auto & alternate = alternate_alleles[i];
+            auto & type = types[i];
+            
             // Check alternate allele structure against the reference
-            check_alternate_allele_structure(alternate);
+            check_alternate_allele_structure(alternate, type);
             
             // Check that an alternate of the form <SOME_ALT> begins with DEL, INS, DUP, INV or CNV
-            if (alternate[0] == '<' && regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
+            if (alternate[0] == '<' && boost::regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
                 std::string alt_id = pieces_match[1];
                 if (!boost::starts_with(alt_id, "DEL") && 
                     !boost::starts_with(alt_id, "INS") && 
@@ -105,22 +129,28 @@ namespace opencb
         
     }
     
-    void Record::check_alternate_allele_structure(std::string const & alternate) const
+    void Record::check_alternate_allele_structure(std::string const & alternate, RecordType type) const
     {
-        if (alternate == ".") {
-            if (alternate_alleles.size() > 1) {
-                throw std::invalid_argument("The no-alternate alleles symbol (dot) can not be combined with others");
-            }
-        } else if (alternate[0] == '<') {
-            return; // Custom ALTs can't be checked against the reference
-        } else if (std::count(alternate.begin(), alternate.end(), '[') == 2 || 
-                   std::count(alternate.begin(), alternate.end(), ']') == 2) { 
-            return; // Break-ends can't be checked against the reference
-        } else if (alternate[0] != reference_allele[0] && alternate.size() != reference_allele.size()) {
-            throw std::invalid_argument("Reference and alternate alleles must share the first nucleotide");
-        } else if (alternate == reference_allele) {
-            throw std::invalid_argument("Reference and alternate alleles must not be the same");
+        switch (type) {
+            case RecordType::NO_VARIATION:
+                if (alternate_alleles.size() > 1) {
+                    throw std::invalid_argument("The no-alternate alleles symbol (dot) can not be combined with others");
+                }
+                break;
+            case RecordType::SNV:
+            case RecordType::MNV:
+                if (alternate == reference_allele) {
+                    throw std::invalid_argument("Reference and alternate alleles must not be the same");
+                }
+            case RecordType::INDEL:
+                // Nothing to check
+                break;
+            case RecordType::STRUCTURAL:
+            case RecordType::STRUCTURAL_BREAKEND:
+                // Custom ALTs (STRUCTURAL) and break-ends (STRUCTURAL_BREAKEND) can't be checked against the reference
+                break;
         }
+        
     }
     
     void Record::check_quality() const
