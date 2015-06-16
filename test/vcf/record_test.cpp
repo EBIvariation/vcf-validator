@@ -156,7 +156,7 @@ namespace opencb
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}) );
                                 
-            CHECK_THROWS_AS( (vcf::Record{ 
+            CHECK_NOTHROW( (vcf::Record{ 
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
@@ -167,8 +167,7 @@ namespace opencb
                                 { {"AN", "12"}, {"AF", "0.5"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}),
-                            std::invalid_argument);
+                                std::make_shared<vcf::Source>(source)}) );
         }
         
         SECTION("Same length alleles") 

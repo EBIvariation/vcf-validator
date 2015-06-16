@@ -27,6 +27,25 @@ namespace opencb
     
     typedef std::multimap<std::string, MetaEntry>::iterator meta_iterator;
     
+    enum InputFormat 
+    {
+        VCF_FILE_VCF    = 0x01,
+        VCF_FILE_GVCF   = 0x02,
+        VCF_FILE_GZIP   = 0x04,
+        VCF_FILE_BGZIP  = 0x08,
+        VCF_FILE_BCF    = 0x10,
+    };
+    
+    enum class RecordType
+    {
+        SNV,
+        MNV,
+        INDEL,
+        STRUCTURAL,
+        STRUCTURAL_BREAKEND,
+        NO_VARIATION
+    };
+    
     
     struct MetaEntry
     {
@@ -59,15 +78,6 @@ namespace opencb
         void check_value();
     };
     
-    enum InputFormat 
-    {
-        VCF_FILE_VCF    = 0x01,
-        VCF_FILE_GVCF   = 0x02,
-        VCF_FILE_GZIP   = 0x04,
-        VCF_FILE_BGZIP  = 0x08,
-        VCF_FILE_BCF    = 0x10,
-    };
-    
     struct Source 
     {
         std::string name;           /**< Name of the source to interact with (file, stdin...) */
@@ -92,7 +102,8 @@ namespace opencb
 
         std::string reference_allele;
         std::vector<std::string> alternate_alleles;
-
+        std::vector<RecordType> types;
+        
         float quality;
         std::vector<std::string> filters;
         std::map<std::string, std::string> info;
@@ -120,6 +131,9 @@ namespace opencb
         bool operator!=(Record const &) const;
         
     private:
+        
+        void set_types();
+        
         /**
          * Checks that chromosome does not contain colons or white-spaces
          * 
@@ -149,7 +163,7 @@ namespace opencb
          * 
          * @throw std::invalid_argument
          */
-        void check_alternate_allele_structure(std::string const & alternate) const;
+        void check_alternate_allele_structure(std::string const & alternate, RecordType type) const;
         
         /**
          * Checks that alternates of the form <SOME_ALT_ID> are described in the meta section
