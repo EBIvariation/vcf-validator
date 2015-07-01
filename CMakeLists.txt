@@ -23,6 +23,7 @@ declare_mod (vcf)
 
 # Dependency libraries
 find_package (Boost COMPONENTS regex REQUIRED )
+find_package (Boost COMPONENTS filesystem REQUIRED )
 include_directories (${Boost_INCLUDE_DIR} )
 
 # Application tests
