@@ -23,6 +23,8 @@ In any case, two binaries should be created in the `bin` subfolder: `vcf_validat
 
 Unit tests can be run using the binary `bin/test_validator` or, if the generator supports it, a command like `make test`. The first option may provide a more detailed output in case of test failure.
 
+**Note**: Tests that require input files will only work when executed with `make test` or running the binary from the project root folder (not the `bin` subfolder).
+
 ## Run
 
 vcf-validator only needs an input VCF file to be run. It accepts input in two different ways:
