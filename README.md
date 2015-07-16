@@ -10,8 +10,8 @@ Please read the wiki for more details about checks already implemented.
 
 ## Dependencies
 
-The only dependencies are the Boost library core and the Boost.regex module.
-If you are using Ubuntu, the required packages names will be `libboost-dev` and `libboost-regex-dev`.
+The only dependencies are the Boost library core and its submodules: Boost.filesystem, Boost.regex and Boost.system.
+If you are using Ubuntu, the required packages names will be `libboost-dev`, `libboost-filesystem-dev` and `libboost-regex-dev`.
 
 ## Build
 
