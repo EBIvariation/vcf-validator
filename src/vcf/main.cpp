@@ -12,13 +12,29 @@
 #include <vector>
 #include <stdexcept>
 
+#include <boost/program_options.hpp>
+
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
 
 namespace
 {
     size_t const default_line_buffer_size = 64 * 1024;
+    namespace po = boost::program_options;
 
+    po::options_description build_command_line_options()
+    {
+        po::options_description desc("Allowed options");
+        
+        desc.add_options()
+            ("help,h", "Display this help")
+            ("level,l", po::value<std::string>(), "Validation level: error, warning (default), block")
+            ("input,i", po::value<std::string>(), "Path to the input VCF file, or stdin (default)")
+        ;
+        
+        return desc;
+    }
+    
     template <typename Container>
     std::istream & readline(std::istream & stream, Container & container)
     {
@@ -86,6 +102,11 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    po::options_description desc = build_command_line_options();
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm); 
+    
     const char * path = argv[1];
     bool is_valid;
 
