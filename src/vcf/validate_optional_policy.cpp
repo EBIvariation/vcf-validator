@@ -19,6 +19,9 @@ namespace opencb
         // All samples should have the same ploidy
         check_body_entry_ploidy(state, record);
         
+        // Position zero should only be used for telomeres
+        check_body_entry_position_zero(state, record);
+        
         // Reference and alternate alleles in indels should share the first nucleotide
         check_body_entry_reference_alternate_matching(state, record);
         
@@ -82,6 +85,13 @@ namespace opencb
         }
     }
   
+    void ValidateOptionalPolicy::check_body_entry_position_zero(ParsingState & state, Record & record) const
+    {
+        if (record.position == 0) {
+            throw ParsingWarning("Position zero should only be used to reference a telomere");
+        }
+    }
+    
     void ValidateOptionalPolicy::check_body_entry_reference_alternate_matching(ParsingState & state, Record & record)
     {
         for (size_t i = 0; i < record.alternate_alleles.size(); ++i) {
