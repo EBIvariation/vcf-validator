@@ -21,18 +21,36 @@ namespace
 {
     size_t const default_line_buffer_size = 64 * 1024;
     namespace po = boost::program_options;
-
+    
     po::options_description build_command_line_options()
     {
-        po::options_description desc("Allowed options");
+        po::options_description description("Usage: vcf-validator [OPTIONS] [< input_file]\nAllowed options");
         
-        desc.add_options()
+        description.add_options()
             ("help,h", "Display this help")
-            ("level,l", po::value<std::string>(), "Validation level: error, warning (default), block")
-            ("input,i", po::value<std::string>(), "Path to the input VCF file, or stdin (default)")
+            ("level,l", po::value<std::string>()->default_value("warning"), "Validation level: error, warning, block")
+            ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
         ;
         
-        return desc;
+        return description;
+    }
+    
+    int check_command_line_options(po::variables_map & vm, po::options_description & desc)
+    {
+        if (vm.count("help"))
+        {
+            std::cout << desc << std::endl;
+            return 0;
+        }
+        
+        std::string level = vm["level"].as<std::string>();
+        if (level != "error" && level != "warning" && level != "block") {
+            std::cout << desc << std::endl;
+            std::cout << "Please choose one of the accepted validation levels" << std::endl;
+            return 1;
+        }
+        
+        return 0;
     }
     
     template <typename Container>
@@ -51,7 +69,7 @@ namespace
         return stream;
     }
 
-    bool is_valid_vcf_file(char const * path)
+    bool is_valid_vcf_file(std::string & path)
     {
         std::ifstream input{path};
         auto source = opencb::vcf::Source{path, opencb::vcf::InputFormat::VCF_FILE_VCF};
@@ -97,23 +115,23 @@ namespace
 
 int main(int argc, char** argv)
 {
-    if (argc < 2) {
-        std::cerr << "Please provide an input VCF file" << std::endl;
-        return 1;
-    }
-
     po::options_description desc = build_command_line_options();
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm); 
+    po::notify(vm);
     
-    const char * path = argv[1];
+    int check_options = check_command_line_options(vm, desc);
+    if (check_options) { return check_options; }
+    
     bool is_valid;
 
     try {
-        if (std::string{path} == "stdin") {
+        std::string path = vm["input"].as<std::string>();
+        if (path == "stdin") {
+            std::cout << "Reading from standard input..." << std::endl;
             is_valid = is_valid_vcf_file(std::cin);
         } else {
+            std::cout << "Reading from input file..." << std::endl;
             is_valid = is_valid_vcf_file(path);
         }
 
