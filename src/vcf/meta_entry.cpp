@@ -2,7 +2,7 @@
 #include "vcf/file_structure.hpp"
 #include "vcf/meta_entry_visitor.hpp"
 
-namespace opencb
+namespace ebi
 {
   namespace vcf
   {

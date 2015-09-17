@@ -1,5 +1,5 @@
-#ifndef OPENCB_VCF_VALIDATOR_HPP
-#define OPENCB_VCF_VALIDATOR_HPP
+#ifndef EBI_VCF_VALIDATOR_HPP
+#define EBI_VCF_VALIDATOR_HPP
 
 #include <iostream>
 #include <map>
@@ -14,7 +14,7 @@
 #include "util/string_utils.hpp"
 
 
-namespace opencb
+namespace ebi
 {
   namespace vcf
   {

@@ -5,8 +5,8 @@
  * Created on 18 February 2015, 11:33
  */
 
-#ifndef OPENCB_VCF_RECORD_HPP
-#define	OPENCB_VCF_RECORD_HPP
+#ifndef EBI_VCF_RECORD_HPP
+#define EBI_VCF_RECORD_HPP
 
 #include <iostream>
 
@@ -16,7 +16,7 @@
 
 #include "util/string_utils.hpp"
 
-namespace opencb
+namespace ebi
 {
   namespace vcf
   {
@@ -28,5 +28,5 @@ namespace opencb
   }
 }
 
-#endif	/* OPENCB_VCF_RECORD_HPP */
+#endif	/* EBI_VCF_RECORD_HPP */
 

@@ -1,7 +1,7 @@
 #include "vcf/file_structure.hpp"
 #include "vcf/record.hpp"
 
-namespace opencb
+namespace ebi
 {
   namespace vcf
   {

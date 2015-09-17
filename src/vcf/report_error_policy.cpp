@@ -1,6 +1,6 @@
 #include "vcf/validator.hpp"
 
-namespace opencb
+namespace ebi
 {
   namespace vcf
   {

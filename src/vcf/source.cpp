@@ -1,6 +1,6 @@
 #include "vcf/file_structure.hpp"
 
-namespace opencb
+namespace ebi
 {
   namespace vcf
   {

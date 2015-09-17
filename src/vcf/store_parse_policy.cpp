@@ -1,7 +1,7 @@
 #include "vcf/validator.hpp"
 #include "util/string_utils.hpp"
 
-namespace opencb
+namespace ebi
 {
   namespace vcf
   {

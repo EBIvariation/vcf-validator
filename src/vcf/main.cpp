@@ -38,12 +38,12 @@ namespace
     bool is_valid_vcf_file(char const * path)
     {
         std::ifstream input{path};
-        auto source = opencb::vcf::Source{path, opencb::vcf::InputFormat::VCF_FILE_VCF};
-        auto records = std::vector<opencb::vcf::Record>{};
+        auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF};
+        auto records = std::vector<ebi::vcf::Record>{};
 
-        auto validator = opencb::vcf::FullValidator{
-            std::make_shared<opencb::vcf::Source>(source),
-            std::make_shared<std::vector<opencb::vcf::Record>>(records)};
+        auto validator = ebi::vcf::FullValidator{
+            std::make_shared<ebi::vcf::Source>(source),
+            std::make_shared<std::vector<ebi::vcf::Record>>(records)};
 
         std::vector<char> line;
         line.reserve(default_line_buffer_size);
@@ -59,12 +59,12 @@ namespace
   
     bool is_valid_vcf_file(std::istream & input)
     {
-        auto source = opencb::vcf::Source{"stdin", opencb::vcf::InputFormat::VCF_FILE_VCF};
-        auto records = std::vector<opencb::vcf::Record>{};
+        auto source = ebi::vcf::Source{"stdin", ebi::vcf::InputFormat::VCF_FILE_VCF};
+        auto records = std::vector<ebi::vcf::Record>{};
 
-        auto validator = opencb::vcf::FullValidator{
-            std::make_shared<opencb::vcf::Source>(source),
-            std::make_shared<std::vector<opencb::vcf::Record>>(records)};
+        auto validator = ebi::vcf::FullValidator{
+            std::make_shared<ebi::vcf::Source>(source),
+            std::make_shared<std::vector<ebi::vcf::Record>>(records)};
 
         std::vector<char> line;
         line.reserve(default_line_buffer_size);

@@ -2,7 +2,7 @@
 
 namespace
 {
-    using namespace opencb::vcf;
+    using namespace ebi::vcf;
 
     void throw_syntax_error(ParsingState const &)
     {
@@ -15,7 +15,7 @@ namespace
     }
 }
 
-namespace opencb
+namespace ebi
 {
   namespace vcf
   {

@@ -4,7 +4,7 @@
 
 #include "vcf/file_structure.hpp"
 
-namespace opencb
+namespace ebi
 {
     
     TEST_CASE("Record constructor", "[constructor]") 

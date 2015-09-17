@@ -27,7 +27,7 @@ static const int vcf_en_body_section_skip = 593;
 
 }
 
-namespace opencb
+namespace ebi
 {
   namespace vcf
   {

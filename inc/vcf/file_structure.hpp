@@ -5,8 +5,8 @@
  * Created on 19 November 2014, 10:12
  */
 
-#ifndef OPENCB_VCF_FILESTRUCTURE_H
-#define	OPENCB_VCF_FILESTRUCTURE_H
+#ifndef EBI_VCF_FILESTRUCTURE_H
+#define EBI_VCF_FILESTRUCTURE_H
 
 #include <algorithm>
 #include <map>
@@ -17,7 +17,7 @@
 
 #include <boost/variant.hpp>
 
-namespace opencb
+namespace ebi
 {
   namespace vcf
   {
@@ -243,5 +243,5 @@ namespace opencb
   }
 }
 
-#endif	/* OPENCB_VCF_VCFFILESTRUCTURE_H */
+#endif	/* EBI_VCF_VCFFILESTRUCTURE_H */
 

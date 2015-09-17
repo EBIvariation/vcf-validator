@@ -6,7 +6,7 @@
 
 #include "vcf/file_structure.hpp"
 
-namespace opencb
+namespace ebi
 {
 
     TEST_CASE("MetaEntry constructor (no value)", "[constructor][novalue]") 
