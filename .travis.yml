@@ -4,9 +4,12 @@ compiler:
   - clang
   - gcc
 
-install:
+before_install:
+  - sudo add-apt-repository ppa:boost-latest/ppa -y
   - sudo apt-get update -qq
-  - sudo apt-get install -qq libboost-dev libboost-regex-dev
+
+install:
+  - sudo apt-get install -qq libboost1.54-dev libboost-regex1.54-dev
   - cmake -G "Unix Makefiles" 
 
 script:
