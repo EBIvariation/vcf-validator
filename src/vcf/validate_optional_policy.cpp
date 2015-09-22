@@ -83,7 +83,7 @@ namespace ebi
     void ValidateOptionalPolicy::check_body_entry_ploidy(ParsingState & state, Record & record)
     {
         // All samples should have the same ploidy
-        int ploidy = -1;
+        size_t ploidy = 0;
         size_t i = 1;
         for (auto & sample : record.samples) {
             std::vector<std::string> subfields;

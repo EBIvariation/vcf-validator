@@ -78,8 +78,8 @@ namespace ebi
 
     void Record::set_types()
     {
-        for (int i = 0; i < alternate_alleles.size(); ++i) {
-            auto & alternate = alternate_alleles[i];
+        for (std::vector<std::string>::iterator it = alternate_alleles.begin(); it != alternate_alleles.end(); ++it) {
+            auto & alternate = *it;
             if (alternate == ".") {
                 types.push_back(RecordType::NO_VARIATION);
             } else if (alternate[0] == '<') {
@@ -302,7 +302,7 @@ namespace ebi
         for (auto & allele : alleles) {
             if (allele == ".") { continue; } // No need to check missing alleles
 
-            int num_allele = std::stoi(allele);
+            size_t num_allele = std::stoi(allele);
             if (num_allele > alternate_alleles.size()) {
                 throw std::invalid_argument("Allele index " + std::to_string(num_allele) + 
                         " is greater than the maximum allowed " + std::to_string(alternate_alleles.size()));
