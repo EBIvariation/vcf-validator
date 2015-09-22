@@ -38,6 +38,9 @@ namespace ebi
         // Position zero should only be used for telomeres
         check_body_entry_position_zero(state, record);
         
+        // The standard separator is semi-colon, commas are accepted but most probably a mistake
+        check_body_entry_id_commas(state, record);
+        
         // Reference and alternate alleles in indels should share the first nucleotide
         check_body_entry_reference_alternate_matching(state, record);
         
@@ -105,6 +108,15 @@ namespace ebi
     {
         if (record.position == 0) {
             throw ParsingWarning("Position zero should only be used to reference a telomere");
+        }
+    }
+    
+    void ValidateOptionalPolicy::check_body_entry_id_commas(ParsingState & state, Record & record) const
+    {
+        for (auto & id : record.ids) {
+            if (std::find(id.begin(), id.end(), ',') != id.end()) {
+                throw ParsingWarning("Comma found in the ID column; if used as separator, please replace it with semi-colon");
+            }
         }
     }
     

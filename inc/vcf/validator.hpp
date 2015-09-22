@@ -252,6 +252,7 @@ namespace ebi
       private:
         void check_body_entry_ploidy(ParsingState & state, Record & record);
         void check_body_entry_position_zero(ParsingState & state, Record & record) const;
+        void check_body_entry_id_commas(ParsingState & state, Record & record) const;
         void check_body_entry_reference_alternate_matching(ParsingState & state, Record & record);
         
         void check_contig_meta(ParsingState & state, Record & record) const;
