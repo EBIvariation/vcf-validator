@@ -40,7 +40,7 @@ namespace
         if (vm.count("help"))
         {
             std::cout << desc << std::endl;
-            return 0;
+            return -1;
         }
         
         std::string level = vm["level"].as<std::string>();
@@ -69,31 +69,9 @@ namespace
         return stream;
     }
 
-    bool is_valid_vcf_file(std::string & path)
+    bool is_valid_vcf_file(std::istream & input, std::string & input_name)
     {
-        std::ifstream input{path};
-        auto source = opencb::vcf::Source{path, opencb::vcf::InputFormat::VCF_FILE_VCF};
-        auto records = std::vector<opencb::vcf::Record>{};
-
-        auto validator = opencb::vcf::FullValidator{
-            std::make_shared<opencb::vcf::Source>(source),
-            std::make_shared<std::vector<opencb::vcf::Record>>(records)};
-
-        std::vector<char> line;
-        line.reserve(default_line_buffer_size);
-
-        while (readline(input, line)) { 
-            validator.parse(line);
-        }
-
-        validator.end();
-
-        return validator.is_valid();
-    }
-  
-    bool is_valid_vcf_file(std::istream & input)
-    {
-        auto source = opencb::vcf::Source{"stdin", opencb::vcf::InputFormat::VCF_FILE_VCF};
+        auto source = opencb::vcf::Source{input_name, opencb::vcf::InputFormat::VCF_FILE_VCF};
         auto records = std::vector<opencb::vcf::Record>{};
 
         auto validator = opencb::vcf::FullValidator{
@@ -121,18 +99,21 @@ int main(int argc, char** argv)
     po::notify(vm);
     
     int check_options = check_command_line_options(vm, desc);
-    if (check_options) { return check_options; }
+    if (check_options < 0) { return 0; }
+    if (check_options > 0) { return check_options; }
     
     bool is_valid;
 
     try {
         std::string path = vm["input"].as<std::string>();
+    
         if (path == "stdin") {
             std::cout << "Reading from standard input..." << std::endl;
-            is_valid = is_valid_vcf_file(std::cin);
+            is_valid = is_valid_vcf_file(std::cin, path);
         } else {
             std::cout << "Reading from input file..." << std::endl;
-            is_valid = is_valid_vcf_file(path);
+            std::ifstream input{path};
+            is_valid = is_valid_vcf_file(input, path);
         }
 
         std::cout << "The input file is " << (is_valid ? "valid" : "not valid") << std::endl;
