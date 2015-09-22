@@ -1,4 +1,5 @@
-# vcf-validator
+# vcf-validator [![Build Status](https://travis-ci.org/cyenyxe/vcf-validator.svg)](https://travis-ci.org/cyenyxe/vcf-validator)
+
 Validator for the Variant Call Format (VCF) implemented using C++11.
 
 It includes all the checks from the vcftools suite, and some more that involve lexical, syntactic and semantic analysis of the VCF input. If any inconsistencies are found, they are classified in one of the following categories:
