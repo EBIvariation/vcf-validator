@@ -28,29 +28,53 @@ namespace
         
         description.add_options()
             ("help,h", "Display this help")
-            ("level,l", po::value<std::string>()->default_value("warning"), "Validation level: error, warning, block")
+            ("level,l", po::value<std::string>()->default_value("warning"), "Validation level: error, warning, break")
             ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
         ;
         
         return description;
     }
     
-    int check_command_line_options(po::variables_map & vm, po::options_description & desc)
+    int check_command_line_options(po::variables_map const & vm, po::options_description const & desc)
     {
-        if (vm.count("help"))
-        {
+        if (vm.count("help")) {
             std::cout << desc << std::endl;
             return -1;
         }
         
         std::string level = vm["level"].as<std::string>();
-        if (level != "error" && level != "warning" && level != "block") {
+        if (level != "error" && level != "warning" && level != "break") {
             std::cout << desc << std::endl;
             std::cout << "Please choose one of the accepted validation levels" << std::endl;
             return 1;
         }
         
         return 0;
+    }
+    
+    std::unique_ptr<opencb::vcf::Parser> build_parser(std::string const & path, std::string const & level)
+    {
+        auto source = opencb::vcf::Source{path, opencb::vcf::InputFormat::VCF_FILE_VCF};
+        auto records = std::vector<opencb::vcf::Record>{};
+        
+        if (level == "error") {
+            return std::unique_ptr<opencb::vcf::Parser>(
+                    new opencb::vcf::QuickValidator(
+                        std::make_shared<opencb::vcf::Source>(source),
+                        std::make_shared<std::vector<opencb::vcf::Record>>(records)));
+        } else if (level == "warning") {
+            return std::unique_ptr<opencb::vcf::Parser>(
+                    new opencb::vcf::FullValidator(
+                        std::make_shared<opencb::vcf::Source>(source),
+                        std::make_shared<std::vector<opencb::vcf::Record>>(records)));
+        } else if (level == "break") {
+            return std::unique_ptr<opencb::vcf::Parser>(
+                    new opencb::vcf::Reader(
+                        std::make_shared<opencb::vcf::Source>(source),
+                        std::make_shared<std::vector<opencb::vcf::Record>>(records)));
+        }
+        
+        throw std::invalid_argument("Please choose one of the accepted validation levels");
     }
     
     template <typename Container>
@@ -69,15 +93,8 @@ namespace
         return stream;
     }
 
-    bool is_valid_vcf_file(std::istream & input, std::string & input_name)
+    bool is_valid_vcf_file(std::istream & input, opencb::vcf::Parser & validator)
     {
-        auto source = opencb::vcf::Source{input_name, opencb::vcf::InputFormat::VCF_FILE_VCF};
-        auto records = std::vector<opencb::vcf::Record>{};
-
-        auto validator = opencb::vcf::FullValidator{
-            std::make_shared<opencb::vcf::Source>(source),
-            std::make_shared<std::vector<opencb::vcf::Record>>(records)};
-
         std::vector<char> line;
         line.reserve(default_line_buffer_size);
 
@@ -105,20 +122,25 @@ int main(int argc, char** argv)
     bool is_valid;
 
     try {
-        std::string path = vm["input"].as<std::string>();
+        auto path = vm["input"].as<std::string>();
+        auto level = vm["level"].as<std::string>();
+        auto validator = build_parser(path, level);
     
         if (path == "stdin") {
             std::cout << "Reading from standard input..." << std::endl;
-            is_valid = is_valid_vcf_file(std::cin, path);
+            is_valid = is_valid_vcf_file(std::cin, *validator);
         } else {
             std::cout << "Reading from input file..." << std::endl;
             std::ifstream input{path};
-            is_valid = is_valid_vcf_file(input, path);
+            is_valid = is_valid_vcf_file(input, *validator);
         }
 
         std::cout << "The input file is " << (is_valid ? "valid" : "not valid") << std::endl;
         return !is_valid; // A valid file returns an exit code 0
         
+    } catch (std::invalid_argument const & ex) {
+        std::cerr << ex.what() << std::endl;
+        return 1;
     } catch (std::runtime_error const & ex) {
         std::cout << "The input file is not valid" << std::endl;
         std::cerr << ex.what() << std::endl;

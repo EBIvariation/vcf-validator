@@ -86,10 +86,10 @@ namespace opencb
         void handle_meta_typeid(ParsingState const & state, std::string type_id) {}
         void handle_meta_line(ParsingState const & state) {}
         
-        void handle_sample_name(ParsingState const & state);
-        void handle_header_line(ParsingState const & state);
+        void handle_sample_name(ParsingState const & state) {}
+        void handle_header_line(ParsingState const & state) {}
         
-        void handle_column_end(ParsingState const & state, size_t n_columns);
+        void handle_column_end(ParsingState const & state, size_t n_columns) {}
         void handle_body_line(ParsingState & state) {}
         
         std::string current_token() const { return ""; }
@@ -218,9 +218,9 @@ namespace opencb
     class IgnoreOptionalPolicy
     {
       public:
-        void optional_check_meta_section() const {}
-        void optional_check_body_entry() {}
-        void optional_check_body_section() const {}
+        void optional_check_meta_section(ParsingState const & state) const {}
+        void optional_check_body_entry(ParsingState & state, Record & record) {}
+        void optional_check_body_section(ParsingState const & state) const {}
     };
     
     /**
@@ -270,9 +270,21 @@ namespace opencb
       using OptionalPolicy = ValidateOptionalPolicy;
     };
 
-    template <typename Configuration>
     class Parser
-    : ParsingState,
+    {
+      public:
+        virtual void parse(std::string const & text) = 0;
+        virtual void parse(std::vector<char> const & text) = 0;
+
+        virtual void end() = 0;
+
+        virtual bool is_valid() const = 0;
+    };
+    
+    template <typename Configuration>
+    class ParserImpl
+    : public Parser,
+      ParsingState,
       Configuration::ParsePolicy,
       Configuration::ErrorPolicy,
       Configuration::OptionalPolicy
@@ -282,7 +294,7 @@ namespace opencb
         using ErrorPolicy = typename Configuration::ErrorPolicy;
         using OptionalPolicy = typename Configuration::OptionalPolicy;
 
-        Parser(std::shared_ptr<Source> const & source,
+        ParserImpl(std::shared_ptr<Source> const & source,
                std::shared_ptr<std::vector<Record>> const & records);
 
         void parse(std::string const & text);
@@ -297,9 +309,9 @@ namespace opencb
     };
 
     // Predefined aliases for common uses of the parser
-    using QuickValidator = Parser<QuickValidatorCfg>;
-    using FullValidator = Parser<FullValidatorCfg>;
-    using Reader = Parser<ReaderCfg>;
+    using QuickValidator = ParserImpl<QuickValidatorCfg>;
+    using FullValidator = ParserImpl<FullValidatorCfg>;
+    using Reader = ParserImpl<ReaderCfg>;
   }
 }
 
