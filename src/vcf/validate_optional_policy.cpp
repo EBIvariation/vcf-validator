@@ -1,8 +1,24 @@
+/**
+ * Copyright 2015 EMBL - European Bioinformatics Institute
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 #include "vcf/validator.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/record.hpp"
 
-namespace opencb
+namespace ebi
 {
   namespace vcf
   {
@@ -21,6 +37,9 @@ namespace opencb
         
         // Position zero should only be used for telomeres
         check_body_entry_position_zero(state, record);
+        
+        // The standard separator is semi-colon, commas are accepted but most probably a mistake
+        check_body_entry_id_commas(state, record);
         
         // Reference and alternate alleles in indels should share the first nucleotide
         check_body_entry_reference_alternate_matching(state, record);
@@ -64,7 +83,7 @@ namespace opencb
     void ValidateOptionalPolicy::check_body_entry_ploidy(ParsingState & state, Record & record)
     {
         // All samples should have the same ploidy
-        int ploidy = -1;
+        size_t ploidy = 0;
         size_t i = 1;
         for (auto & sample : record.samples) {
             std::vector<std::string> subfields;
@@ -89,6 +108,15 @@ namespace opencb
     {
         if (record.position == 0) {
             throw ParsingWarning("Position zero should only be used to reference a telomere");
+        }
+    }
+    
+    void ValidateOptionalPolicy::check_body_entry_id_commas(ParsingState & state, Record & record) const
+    {
+        for (auto & id : record.ids) {
+            if (std::find(id.begin(), id.end(), ',') != id.end()) {
+                throw ParsingWarning("Comma found in the ID column; if used as separator, please replace it with semi-colon");
+            }
         }
     }
     

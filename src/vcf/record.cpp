@@ -1,7 +1,23 @@
+/**
+ * Copyright 2014-2015 EMBL - European Bioinformatics Institute
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 #include "vcf/file_structure.hpp"
 #include "vcf/record.hpp"
 
-namespace opencb
+namespace ebi
 {
   namespace vcf
   {
@@ -62,8 +78,8 @@ namespace opencb
 
     void Record::set_types()
     {
-        for (int i = 0; i < alternate_alleles.size(); ++i) {
-            auto & alternate = alternate_alleles[i];
+        for (std::vector<std::string>::iterator it = alternate_alleles.begin(); it != alternate_alleles.end(); ++it) {
+            auto & alternate = *it;
             if (alternate == ".") {
                 types.push_back(RecordType::NO_VARIATION);
             } else if (alternate[0] == '<') {
@@ -286,7 +302,7 @@ namespace opencb
         for (auto & allele : alleles) {
             if (allele == ".") { continue; } // No need to check missing alleles
 
-            int num_allele = std::stoi(allele);
+            size_t num_allele = std::stoi(allele);
             if (num_allele > alternate_alleles.size()) {
                 throw std::invalid_argument("Allele index " + std::to_string(num_allele) + 
                         " is greater than the maximum allowed " + std::to_string(alternate_alleles.size()));

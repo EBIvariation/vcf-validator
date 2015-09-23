@@ -1,8 +1,17 @@
-/* 
- * File:   main.cpp
- * Author: Cristina Yenyxe Gonzalez Garcia <cyenyxe@ebi.ac.uk>
+/**
+ * Copyright 2014-2015 EMBL - European Bioinformatics Institute
  *
- * Created on 19 November 2014, 15:54
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 #include <iostream>
@@ -52,26 +61,26 @@ namespace
         return 0;
     }
     
-    std::unique_ptr<opencb::vcf::Parser> build_parser(std::string const & path, std::string const & level)
+    std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const & path, std::string const & level)
     {
-        auto source = opencb::vcf::Source{path, opencb::vcf::InputFormat::VCF_FILE_VCF};
-        auto records = std::vector<opencb::vcf::Record>{};
+        auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF};
+        auto records = std::vector<ebi::vcf::Record>{};
         
         if (level == "error") {
-            return std::unique_ptr<opencb::vcf::Parser>(
-                    new opencb::vcf::QuickValidator(
-                        std::make_shared<opencb::vcf::Source>(source),
-                        std::make_shared<std::vector<opencb::vcf::Record>>(records)));
+            return std::unique_ptr<ebi::vcf::Parser>(
+                    new ebi::vcf::QuickValidator(
+                        std::make_shared<ebi::vcf::Source>(source),
+                        std::make_shared<std::vector<ebi::vcf::Record>>(records)));
         } else if (level == "warning") {
-            return std::unique_ptr<opencb::vcf::Parser>(
-                    new opencb::vcf::FullValidator(
-                        std::make_shared<opencb::vcf::Source>(source),
-                        std::make_shared<std::vector<opencb::vcf::Record>>(records)));
+            return std::unique_ptr<ebi::vcf::Parser>(
+                    new ebi::vcf::FullValidator(
+                        std::make_shared<ebi::vcf::Source>(source),
+                        std::make_shared<std::vector<ebi::vcf::Record>>(records)));
         } else if (level == "break") {
-            return std::unique_ptr<opencb::vcf::Parser>(
-                    new opencb::vcf::Reader(
-                        std::make_shared<opencb::vcf::Source>(source),
-                        std::make_shared<std::vector<opencb::vcf::Record>>(records)));
+            return std::unique_ptr<ebi::vcf::Parser>(
+                    new ebi::vcf::Reader(
+                        std::make_shared<ebi::vcf::Source>(source),
+                        std::make_shared<std::vector<ebi::vcf::Record>>(records)));
         }
         
         throw std::invalid_argument("Please choose one of the accepted validation levels");
@@ -93,7 +102,7 @@ namespace
         return stream;
     }
 
-    bool is_valid_vcf_file(std::istream & input, opencb::vcf::Parser & validator)
+    bool is_valid_vcf_file(std::istream & input, ebi::vcf::Parser & validator)
     {
         std::vector<char> line;
         line.reserve(default_line_buffer_size);

@@ -1,0 +1,29 @@
+language: cpp
+
+sudo: false
+
+compiler:
+  - clang
+  - gcc
+
+addons:
+  apt:
+    sources:
+      - boost-latest
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.8
+      - g++-4.8
+      - libboost1.55-dev
+      - libboost-regex1.55-dev
+
+install:
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+
+before_script:
+  - cmake -G "Unix Makefiles" 
+
+script:
+  - make
+  - make test
+
