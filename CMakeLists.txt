@@ -22,7 +22,7 @@ endmacro (declare_mod)
 declare_mod (vcf)
 
 # Dependency libraries
-find_package (Boost COMPONENTS regex program_options REQUIRED )
+find_package (Boost COMPONENTS filesystem program_options regex system REQUIRED )
 include_directories (${Boost_INCLUDE_DIR} )
 
 # Application tests

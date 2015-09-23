@@ -11,8 +11,8 @@ Please read the wiki for more details about checks already implemented.
 
 ## Dependencies
 
-The dependencies are the Boost library core, and its modules Boost.program_options and Boost.regex.
-If you are using Ubuntu, the required packages names will be `libboost-dev`, `libboost-program-options-dev` and `libboost-regex-dev`.
+The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.program_options, Boost.regex and Boost.system.
+If you are using Ubuntu, the required packages names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-program-options-dev` and `libboost-regex-dev`.
 
 ## Build
 
@@ -23,6 +23,8 @@ In any case, two binaries should be created in the `bin` subfolder: `vcf_validat
 ## Test
 
 Unit tests can be run using the binary `bin/test_validator` or, if the generator supports it, a command like `make test`. The first option may provide a more detailed output in case of test failure.
+
+**Note**: Tests that require input files will only work when executed with `make test` or running the binary from the project root folder (not the `bin` subfolder).
 
 ## Run
 
