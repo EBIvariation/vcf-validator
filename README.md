@@ -27,5 +27,14 @@ Unit tests can be run using the binary `bin/test_validator` or, if the generator
 
 vcf-validator only needs an input VCF file to be run. It accepts input in two different ways:
 
-* File path as argument: `vcf_validator /path/to/file.vcf`
-* Standard input: `vcf_validator stdin < /path/to/file.vcf` (the input can also come from a pipe)
+* File path as argument: `vcf_validator -i /path/to/file.vcf`
+* Standard input: `vcf_validator < /path/to/file.vcf`
+* Standard input from pipe: `zcat /path/to/file.vcf.gz | vcf_validator`
+
+The validation level can also be configured. This parameter is optional and accepts 3 values:
+
+* error: Display only errors
+* warning: Display both errors and warnings (default)
+* break: Stop after the first error is found
+
+Example: `vcf_validator -i /path/to/file.vcf -l break`
