@@ -16,9 +16,9 @@ If you are using Ubuntu, the required packages names will be `libboost-dev`, `li
 
 ## Build
 
-In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`.
+In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`. For those users who need static linkage, the option `-DBUILD_STATIC=1` must be provided to the `cmake` command.
 
-In any case, two binaries should be created in the `bin` subfolder: `vcf_validator` (the main application) and `test_validator` (unit tests).
+In any case, two binaries will be created in the `bin` subfolder: `vcf_validator` (the main application) and `test_validator` (unit tests).
 
 ## Test
 
