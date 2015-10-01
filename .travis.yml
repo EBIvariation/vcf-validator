@@ -2,28 +2,109 @@ sudo: false
 
 language: cpp
 
-compiler:
-  - clang
-  - gcc
+matrix:
+  include:
+    # Clang 3.5
+    - compiler: clang
+      env: C_COMPILER=clang-3.5 CXX_COMPILER=clang++-3.5
+      addons:
+        apt:
+          sources:
+            - boost-latest
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.5
+          packages:
+            - clang-3.5
+            - clang++-3.5
+            - libboost1.55-dev
+            - libboost-filesystem1.55-dev
+            - libboost-program-options1.55-dev
+            - libboost-regex1.55-dev
+    
+    # Clang 3.6
+    - compiler: clang
+      env: C_COMPILER=clang-3.6 CXX_COMPILER=clang++-3.6
+      addons:
+        apt:
+          sources:
+            - boost-latest
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.6
+          packages:
+            - clang-3.6
+            - clang++-3.6
+            - libboost1.55-dev
+            - libboost-filesystem1.55-dev
+            - libboost-program-options1.55-dev
+            - libboost-regex1.55-dev
+    
+    # Clang 3.7
+    - compiler: clang
+      env: C_COMPILER=clang-3.7 CXX_COMPILER=clang++-3.7
+      addons:
+        apt:
+          sources:
+            - boost-latest
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.7
+          packages:
+            - clang-3.7
+            - clang++-3.7
+            - libboost1.55-dev
+            - libboost-filesystem1.55-dev
+            - libboost-program-options1.55-dev
+            - libboost-regex1.55-dev
+    
+    # GCC 4.8
+    - compiler: gcc
+      env: C_COMPILER=gcc-4.8 CXX_COMPILER=g++-4.8
+      addons:
+        apt:
+          sources:
+            - boost-latest
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-4.8
+            - g++-4.8
+            - libboost1.55-dev
+            - libboost-filesystem1.55-dev
+            - libboost-program-options1.55-dev
+            - libboost-regex1.55-dev
+  
+    # GCC 4.9
+    - compiler: gcc
+      env: C_COMPILER=gcc-4.9 CXX_COMPILER=g++-4.9
+      addons:
+        apt:
+          sources:
+            - boost-latest
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-4.9
+            - g++-4.9
+            - libboost1.55-dev
+            - libboost-filesystem1.55-dev
+            - libboost-program-options1.55-dev
+            - libboost-regex1.55-dev
 
-addons:
-  apt:
-    sources:
-      - boost-latest
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-4.8
-      - g++-4.8
-      - libboost1.55-dev
-      - libboost-filesystem1.55-dev
-      - libboost-program-options1.55-dev
-      - libboost-regex1.55-dev
-
-install:
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+    # GCC 5
+    - compiler: gcc
+      env: C_COMPILER=gcc-5 CXX_COMPILER=g++-5
+      addons:
+        apt:
+          sources:
+            - boost-latest
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-5
+            - g++-5
+            - libboost1.55-dev
+            - libboost-filesystem1.55-dev
+            - libboost-program-options1.55-dev
+            - libboost-regex1.55-dev
 
 before_script:
-  - cmake -G "Unix Makefiles" 
+  - cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -G "Unix Makefiles" 
 
 script:
   - make
