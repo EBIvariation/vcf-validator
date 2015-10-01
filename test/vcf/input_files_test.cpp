@@ -18,15 +18,14 @@ namespace ebi
     std::istream & readline(std::istream & stream, Container & container)
     {
         char c;
-        bool not_eof;
 
         container.clear();
 
         do {
-            not_eof = stream.get(c);
+            stream.get(c);
             container.push_back(c);
-        } while (not_eof && c != '\n');
-
+        } while (!stream.eof() && c != '\n');
+        
         return stream;
     }
     
