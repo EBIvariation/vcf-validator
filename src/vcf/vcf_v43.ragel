@@ -565,7 +565,10 @@
 
     meta_assembly   = url $err(meta_url_err) ;
     
-    meta_contig_val = alnum ((alnum | punct - (":" | "<" | ">" | ","))+ - (punct)+)* ;
+    ## Sequence names allowed by the SAM format ( regex [!-)+-<>-~][!-~]* ) excluding the characters <>[]:*
+    meta_contig_val_first = alnum | ( punct - (":" | "<" | ">" | "[" | "]" | "*" | "=" ) ) ;
+    meta_contig_val_rest  = alnum | ( punct - (":" | "<" | ">" | "[" | "]" ) ) ;
+    meta_contig_val = meta_contig_val_first (meta_contig_val_rest)* ;
     meta_contig     = "ID=" %meta_id meta_contig_val >token_begin $token_middle %token_end $err(meta_id_err) 
                         ("," identifier "=" meta_values)* ;
                         
