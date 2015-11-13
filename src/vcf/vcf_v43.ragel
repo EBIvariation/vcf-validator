@@ -402,6 +402,21 @@
         fhold; fgoto body_section_skip;
     }
     
+    action info_AD_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info AD value is not a comma-separated list of numbers");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_ADF_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info ADF value is not a comma-separated list of numbers");
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_ADR_error {
+        ErrorPolicy::handle_body_section_error(*this, "Info ADR value is not a comma-separated list of numbers");
+        fhold; fgoto body_section_skip;
+    }
+    
     action info_AF_error {
         ErrorPolicy::handle_body_section_error(*this, "Info AF value is not a comma-separated list of numbers");
         fhold; fgoto body_section_skip;
@@ -683,12 +698,16 @@
     record_fil_empty= "." >token_begin @token_middle %token_end ;
     record_filter   = (record_fil_value (";" record_fil_value)*) | record_fil_empty ;
 
-    info_key        = (alnum | (punct - (";" | "=")))+ - ( "AA" | "AC" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G" | (punct)+ ) ;
-    info_value      = (print - (space | ";"))+ ;
+    info_key        = ( (alnum | "_") (alnum | digit | "_" | ".")* ) -
+                        ( "AA" | "AC" | "AD" | "ADF" | "ADR" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G" ) ;
+    info_value      = (print - ";")+ ;
     info_value_list = info_value ("," info_value)* ;
     info_entry      = (
                         "AA=" (bases | "." | "-") 		$err(info_AA_error) |
                         "AC=" (int_number ("," int_number)*) 	$err(info_AC_error) |
+                        "AD=" (int_number ("," int_number)*) 	$err(info_AD_error) |
+                        "ADF=" (int_number ("," int_number)*) 	$err(info_ADF_error) |
+                        "ADR=" (int_number ("," int_number)*) 	$err(info_ADR_error) |
                         "AF=" (any_number ("," any_number)*) 	$err(info_AF_error) |
                         "AN=" int_number 			$err(info_AN_error) |
                         "BQ=" any_number 			$err(info_BQ_error) |
