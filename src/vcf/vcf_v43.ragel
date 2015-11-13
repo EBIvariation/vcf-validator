@@ -19,7 +19,7 @@
 #include "vcf/validator.hpp"
 
 %%{
-    machine vcf_v41;
+    machine vcf_v43;
 
     #############################################
     #             Actions definition            #
@@ -209,7 +209,7 @@
     # Fileformat line
     action fileformat_error {
         ErrorPolicy::handle_fileformat_section_error(*this,
-            "The fileformat declaration is not 'fileformat=VCFv4.1'");
+            "The fileformat declaration is not 'fileformat=VCFv4.3'");
         fhold; fgoto meta_section_skip;
     } 
 
@@ -508,7 +508,7 @@
     #################################################
 
     
-    NL = "\n" >line_break;
+    NL = ("\n" | "\r\n") >line_break;
     CS = "\t" >tab_break;
 
     # Integer and floating-point numbers
@@ -538,7 +538,7 @@
     url       = (scheme "://" authority path ("?" query)? ("#" fragment)?) >token_begin @token_middle %token_end ;
 
     # File format line
-    fileformat_name = "VCFv4.1" $err(fileformat_error);
+    fileformat_name = "VCFv4.3" $err(fileformat_error);
     fileformat      = "##fileformat=" fileformat_name >token_begin @token_middle %fileformat_end;
 
     # Meta-data
@@ -556,11 +556,12 @@
     meta_values     = ("\"" meta_field_desc "\"") | meta_field_value ;
     meta_field      = meta_key "=" meta_values ;
     
-    meta_field_num  = ( (digit)+ | "A" | "G" | "." ) >token_begin @token_middle %token_end ;
+    meta_field_num  = ( (digit)+ | "A" | "R" | "G" | "." ) >token_begin @token_middle %token_end ;
     meta_field_type = (alpha)+ >token_begin @token_middle %token_end ;
     
     meta_alt        = "ID=" %meta_id alt_id >token_begin @token_middle %token_end $err(meta_alt_id_err)
-                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err) ;
+                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
+                        ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
 
     meta_assembly   = url $err(meta_url_err) ;
     
@@ -569,17 +570,20 @@
                         ("," identifier "=" meta_values)* ;
                         
     meta_filter     = "ID=" %meta_id identifier $err(meta_id_err)
-                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err) ;
+                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
+                        ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
     
     meta_format     = "ID=" %meta_id identifier $err(meta_id_err)
                         ",Number=" %meta_number meta_field_num $err(meta_format_number_err) 
                         ",Type=" %meta_type meta_field_type $err(meta_info_type_err)
-                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err) ;
+                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
+                        ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
 
     meta_info       = "ID=" %meta_id identifier $err(meta_id_err) 
                         ",Number=" %meta_number meta_field_num $err(meta_info_number_err)  
                         ",Type=" %meta_type meta_field_type $err(meta_info_type_err)
-                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err) ;
+                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
+                        ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
                         
     meta_pedigree   = identifier $err(meta_id_err) "=" identifier $err(meta_id_err)  
                         ("," identifier $err(meta_id_err) "=" identifier $err(meta_id_err))* ;
@@ -632,7 +636,7 @@
 
     record_ref      = bases >token_begin @token_middle %token_end ;
 
-    ## A basic ALT can be something like AGT (biallelic) or A,AT (multiallelic)
+    ## A basic ALT can be something like AGT (biallelic), A,AT (multiallelic)
     record_alt_snv  = (bases)+ ;
     
     ## Indel alternates can be represented by standardized prefixes or an asterisk
