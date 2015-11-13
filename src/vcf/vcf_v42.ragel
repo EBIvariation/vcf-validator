@@ -637,7 +637,7 @@
     record_ref      = bases >token_begin @token_middle %token_end ;
 
     ## A basic ALT can be something like AGT (biallelic) or A,AT (multiallelic)
-    record_alt_snv  = (bases)+ ;
+    record_alt_snv  = bases ;
     
     ## Indel alternates can be represented by standardized prefixes or an asterisk
     record_alt_indel= "<DEL>" | "<INS>" | "<DUP>" | "<INV>" | "<CNV>" | "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">" | "*";
@@ -645,10 +645,10 @@
     ## Structural variants follow forms like:
     ## ]1:1234]ATG or ]<contig_1>:1234]ATG : paired breakends
     ## .AGT, AGT.: single breakends
-    record_alt_sv   = "]" chromosome ":" position "]" (bases)+ |
-                      "[" chromosome ":" position "[" (bases)+ |
-                      (bases)+ "]" chromosome ":" position "]" |
-                      (bases)+ "[" chromosome ":" position "[" | 
+    record_alt_sv   = "]" chromosome ":" position "]" bases |
+                      "[" chromosome ":" position "[" bases |
+                      bases "]" chromosome ":" position "]" |
+                      bases "[" chromosome ":" position "[" | 
                       "." bases | 
                       bases "." ;
 

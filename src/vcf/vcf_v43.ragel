@@ -587,13 +587,20 @@
                         ",Type=" %meta_type meta_field_type $err(meta_info_type_err)
                         ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
                         ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
-                        
+
+    ## TODO For different ways to define a PEDIGREE tag now:
+    # ##PEDIGREE=<ID=TumourSample,Original=GermlineID>
+    # ##PEDIGREE=<ID=SomaticNonTumour,Original=GermlineID>
+    # ##PEDIGREE=<ID=ChildID,Father=FatherID,Mother=MotherID>
+    # ##PEDIGREE=<ID=SampleID,Name_1=Ancestor_1,...,Name_N=Ancestor_N>
     meta_pedigree   = identifier $err(meta_id_err) "=" identifier $err(meta_id_err)  
                         ("," identifier $err(meta_id_err) "=" identifier $err(meta_id_err))* ;
+                      
     
     meta_pedigreeDB = url $err(meta_url_err) ;
     
     ## TODO The error shown when "Description" is missing shows that Mixture is not a valid string
+    ## TODO Multiple ways to describe a sample now. Also new META meta entries
     meta_sample     = "ID=" %meta_id identifier $err(meta_id_err)
                         (",Genomes=" %meta_genomes meta_field_value) $err(meta_sample_genomes_err)
                         (",Mixture=" %meta_mixture meta_field_value) $err(meta_sample_mixture_err)
@@ -640,7 +647,7 @@
     record_ref      = bases >token_begin @token_middle %token_end ;
 
     ## A basic ALT can be something like AGT (biallelic), A,AT (multiallelic)
-    record_alt_snv  = (bases)+ ;
+    record_alt_snv  = bases ;
     
     ## Indel alternates can be represented by standardized prefixes or an asterisk
     record_alt_indel= "<DEL>" | "<INS>" | "<DUP>" | "<INV>" | "<CNV>" | "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">" | "*";
@@ -648,10 +655,10 @@
     ## Structural variants follow forms like:
     ## ]1:1234]ATG or ]<contig_1>:1234]ATG : paired breakends
     ## .AGT, AGT.: single breakends
-    record_alt_sv   = "]" chromosome ":" position "]" (bases)+ |
-                      "[" chromosome ":" position "[" (bases)+ |
-                      (bases)+ "]" chromosome ":" position "]" |
-                      (bases)+ "[" chromosome ":" position "[" | 
+    record_alt_sv   = "]" chromosome ":" position "]" bases |
+                      "[" chromosome ":" position "[" bases |
+                      bases "]" chromosome ":" position "]" |
+                      bases "[" chromosome ":" position "[" | 
                       "." bases | 
                       bases "." ;
 
