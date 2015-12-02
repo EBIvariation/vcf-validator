@@ -48,7 +48,7 @@ namespace ebi
   namespace vcf
   {
     template <typename Configuration>
-    ParserImpl<Configuration>::ParserImpl(std::shared_ptr<Source> const & source,
+    ParserImpl_v42<Configuration>::ParserImpl_v42(std::shared_ptr<Source> const & source,
                                           std::shared_ptr<std::vector<Record>> const & records
     )
     : ParsingState{source, records}
@@ -64,7 +64,7 @@ namespace ebi
     }
 
     template <typename Configuration>
-    void ParserImpl<Configuration>::parse(std::vector<char> const & text)
+    void ParserImpl_v42<Configuration>::parse(std::vector<char> const & text)
     {
       char const * p = &text[0];
       char const * pe = &text[0] + text.size();
@@ -75,7 +75,7 @@ namespace ebi
     }
 
     template <typename Configuration>
-    void ParserImpl<Configuration>::parse(std::string const & text)
+    void ParserImpl_v42<Configuration>::parse(std::string const & text)
     {
       char const * p = text.data();
       char const * pe = text.data() + text.size();
@@ -86,7 +86,7 @@ namespace ebi
     }
 
     template <typename Configuration>
-    void ParserImpl<Configuration>::end()
+    void ParserImpl_v42<Configuration>::end()
     {
       char const * empty = "";
       clear_records();
@@ -94,13 +94,13 @@ namespace ebi
     }
 
     template <typename Configuration>
-    bool ParserImpl<Configuration>::is_valid() const
+    bool ParserImpl_v42<Configuration>::is_valid() const
     {
       return m_is_valid;
     }
 
     template <typename Configuration>
-    void ParserImpl<Configuration>::parse_buffer(char const * p, char const * pe, char const * eof)
+    void ParserImpl_v42<Configuration>::parse_buffer(char const * p, char const * pe, char const * eof)
     {
       
 #line 107 "inc/vcf/validator_detail.hpp"

@@ -299,7 +299,7 @@ namespace ebi
     };
     
     template <typename Configuration>
-    class ParserImpl
+    class ParserImpl_v41
     : public Parser,
       ParsingState,
       Configuration::ParsePolicy,
@@ -311,7 +311,61 @@ namespace ebi
         using ErrorPolicy = typename Configuration::ErrorPolicy;
         using OptionalPolicy = typename Configuration::OptionalPolicy;
 
-        ParserImpl(std::shared_ptr<Source> const & source,
+        ParserImpl_v41(std::shared_ptr<Source> const & source,
+               std::shared_ptr<std::vector<Record>> const & records);
+
+        void parse(std::string const & text);
+        void parse(std::vector<char> const & text);
+
+        void end();
+
+        bool is_valid() const;
+        
+      private:
+        void parse_buffer(char const * p, char const * pe, char const * eof);
+    };
+
+    template <typename Configuration>
+    class ParserImpl_v42
+    : public Parser,
+      ParsingState,
+      Configuration::ParsePolicy,
+      Configuration::ErrorPolicy,
+      Configuration::OptionalPolicy
+    {
+      public:
+        using ParsePolicy = typename Configuration::ParsePolicy;
+        using ErrorPolicy = typename Configuration::ErrorPolicy;
+        using OptionalPolicy = typename Configuration::OptionalPolicy;
+
+        ParserImpl_v42(std::shared_ptr<Source> const & source,
+               std::shared_ptr<std::vector<Record>> const & records);
+
+        void parse(std::string const & text);
+        void parse(std::vector<char> const & text);
+
+        void end();
+
+        bool is_valid() const;
+        
+      private:
+        void parse_buffer(char const * p, char const * pe, char const * eof);
+    };
+
+    template <typename Configuration>
+    class ParserImpl_v43
+    : public Parser,
+      ParsingState,
+      Configuration::ParsePolicy,
+      Configuration::ErrorPolicy,
+      Configuration::OptionalPolicy
+    {
+      public:
+        using ParsePolicy = typename Configuration::ParsePolicy;
+        using ErrorPolicy = typename Configuration::ErrorPolicy;
+        using OptionalPolicy = typename Configuration::OptionalPolicy;
+
+        ParserImpl_v43(std::shared_ptr<Source> const & source,
                std::shared_ptr<std::vector<Record>> const & records);
 
         void parse(std::string const & text);
@@ -326,9 +380,17 @@ namespace ebi
     };
 
     // Predefined aliases for common uses of the parser
-    using QuickValidator = ParserImpl<QuickValidatorCfg>;
-    using FullValidator = ParserImpl<FullValidatorCfg>;
-    using Reader = ParserImpl<ReaderCfg>;
+    using QuickValidator_v41 = ParserImpl_v41<QuickValidatorCfg>;
+    using FullValidator_v41 = ParserImpl_v41<FullValidatorCfg>;
+    using Reader_v41 = ParserImpl_v41<ReaderCfg>;
+    
+    using QuickValidator_v42 = ParserImpl_v42<QuickValidatorCfg>;
+    using FullValidator_v42 = ParserImpl_v42<FullValidatorCfg>;
+    using Reader_v42 = ParserImpl_v42<ReaderCfg>;
+    
+    using QuickValidator_v43 = ParserImpl_v43<QuickValidatorCfg>;
+    using FullValidator_v43 = ParserImpl_v43<FullValidatorCfg>;
+    using Reader_v43 = ParserImpl_v43<ReaderCfg>;
   }
 }
 

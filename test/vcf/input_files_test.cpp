@@ -35,7 +35,7 @@ namespace ebi
         auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF};
         auto records = std::vector<ebi::vcf::Record>{};
 
-        auto validator = ebi::vcf::FullValidator{
+        auto validator = ebi::vcf::FullValidator_v42{
             std::make_shared<ebi::vcf::Source>(source),
             std::make_shared<std::vector<ebi::vcf::Record>>(records)};
 

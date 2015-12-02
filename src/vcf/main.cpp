@@ -61,24 +61,50 @@ namespace
         return 0;
     }
     
-    std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const & path, std::string const & level)
+    std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const & path, uint const & version, std::string const & level)
     {
         auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF};
         auto records = std::vector<ebi::vcf::Record>{};
         
         if (level == "error") {
-            return std::unique_ptr<ebi::vcf::Parser>(
-                    new ebi::vcf::QuickValidator(
-                        std::make_shared<ebi::vcf::Source>(source),
-                        std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            switch (version) {
+                case 41:
+                    return std::unique_ptr<ebi::vcf::Parser>(
+                            new ebi::vcf::QuickValidator_v41(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                case 42:
+                    return std::unique_ptr<ebi::vcf::Parser>(
+                            new ebi::vcf::QuickValidator_v42(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                case 43:
+                    return std::unique_ptr<ebi::vcf::Parser>(
+                            new ebi::vcf::QuickValidator_v43(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            }
         } else if (level == "warning") {
-            return std::unique_ptr<ebi::vcf::Parser>(
-                    new ebi::vcf::FullValidator(
-                        std::make_shared<ebi::vcf::Source>(source),
-                        std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            switch (version) {
+                case 41:
+                    return std::unique_ptr<ebi::vcf::Parser>(
+                            new ebi::vcf::FullValidator_v41(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                case 42:
+                    return std::unique_ptr<ebi::vcf::Parser>(
+                            new ebi::vcf::FullValidator_v42(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                case 43:
+                    return std::unique_ptr<ebi::vcf::Parser>(
+                            new ebi::vcf::FullValidator_v43(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            }
         } else if (level == "break") {
             return std::unique_ptr<ebi::vcf::Parser>(
-                    new ebi::vcf::Reader(
+                    new ebi::vcf::Reader_v42(
                         std::make_shared<ebi::vcf::Source>(source),
                         std::make_shared<std::vector<ebi::vcf::Record>>(records)));
         }
@@ -132,7 +158,7 @@ int main(int argc, char** argv)
     try {
         auto path = vm["input"].as<std::string>();
         auto level = vm["level"].as<std::string>();
-        auto validator = build_parser(path, level);
+        auto validator = build_parser(path, 42, level);
     
         if (path == "stdin") {
             std::cout << "Reading from standard input..." << std::endl;
