@@ -781,51 +781,16 @@ namespace ebi
 {
   namespace vcf
   {
+    
     template <typename Configuration>
     ParserImpl_v43<Configuration>::ParserImpl_v43(std::shared_ptr<Source> const & source,
-                                          std::shared_ptr<std::vector<Record>> const & records
+                                                  std::shared_ptr<std::vector<Record>> const & records
     )
-    : ParsingState{source, records}
+    : ParserImpl{source, records}
     {
       %%{
       write init;
       }%%
-    }
-
-    template <typename Configuration>
-    void ParserImpl_v43<Configuration>::parse(std::vector<char> const & text)
-    {
-      char const * p = &text[0];
-      char const * pe = &text[0] + text.size();
-      char const * eof = nullptr;
-
-      clear_records();
-      parse_buffer(p, pe, eof);
-    }
-
-    template <typename Configuration>
-    void ParserImpl_v43<Configuration>::parse(std::string const & text)
-    {
-      char const * p = text.data();
-      char const * pe = text.data() + text.size();
-      char const * eof = nullptr;
-
-      clear_records();
-      parse_buffer(p, pe, eof);
-    }
-
-    template <typename Configuration>
-    void ParserImpl_v43<Configuration>::end()
-    {
-      char const * empty = "";
-      clear_records();
-      parse_buffer(empty, empty, empty);
-    }
-
-    template <typename Configuration>
-    bool ParserImpl_v43<Configuration>::is_valid() const
-    {
-      return m_is_valid;
     }
 
     template <typename Configuration>

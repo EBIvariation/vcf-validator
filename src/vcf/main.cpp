@@ -103,10 +103,23 @@ namespace
                                 std::make_shared<std::vector<ebi::vcf::Record>>(records)));
             }
         } else if (level == "break") {
-            return std::unique_ptr<ebi::vcf::Parser>(
-                    new ebi::vcf::Reader_v42(
-                        std::make_shared<ebi::vcf::Source>(source),
-                        std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            switch (version) {
+                case 41:
+                    return std::unique_ptr<ebi::vcf::Parser>(
+                            new ebi::vcf::Reader_v41(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                case 42:
+                    return std::unique_ptr<ebi::vcf::Parser>(
+                            new ebi::vcf::Reader_v42(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                case 43:
+                    return std::unique_ptr<ebi::vcf::Parser>(
+                            new ebi::vcf::Reader_v43(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            }
         }
         
         throw std::invalid_argument("Please choose one of the accepted validation levels");

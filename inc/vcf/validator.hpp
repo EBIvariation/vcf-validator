@@ -74,10 +74,28 @@ namespace ebi
         virtual bool is_valid() const = 0;
     };
     
+    class ParserImpl
+    : public Parser,
+      public ParsingState
+    {
+      public:
+        ParserImpl(std::shared_ptr<Source> const & source,
+                   std::shared_ptr<std::vector<Record>> const & records);
+        
+        void parse(std::string const & text);
+        void parse(std::vector<char> const & text);
+
+        void end();
+
+        bool is_valid() const;
+       
+      protected:
+        virtual void parse_buffer(char const * p, char const * pe, char const * eof) = 0;
+    };
+    
     template <typename Configuration>
     class ParserImpl_v41
-    : public Parser,
-      ParsingState,
+    : public ParserImpl,
       Configuration::ParsePolicy,
       Configuration::ErrorPolicy,
       Configuration::OptionalPolicy
@@ -90,21 +108,13 @@ namespace ebi
         ParserImpl_v41(std::shared_ptr<Source> const & source,
                std::shared_ptr<std::vector<Record>> const & records);
 
-        void parse(std::string const & text);
-        void parse(std::vector<char> const & text);
-
-        void end();
-
-        bool is_valid() const;
-        
       private:
         void parse_buffer(char const * p, char const * pe, char const * eof);
     };
 
     template <typename Configuration>
     class ParserImpl_v42
-    : public Parser,
-      ParsingState,
+    : public ParserImpl,
       Configuration::ParsePolicy,
       Configuration::ErrorPolicy,
       Configuration::OptionalPolicy
@@ -117,21 +127,13 @@ namespace ebi
         ParserImpl_v42(std::shared_ptr<Source> const & source,
                std::shared_ptr<std::vector<Record>> const & records);
 
-        void parse(std::string const & text);
-        void parse(std::vector<char> const & text);
-
-        void end();
-
-        bool is_valid() const;
-        
       private:
         void parse_buffer(char const * p, char const * pe, char const * eof);
     };
 
     template <typename Configuration>
     class ParserImpl_v43
-    : public Parser,
-      ParsingState,
+    : public ParserImpl,
       Configuration::ParsePolicy,
       Configuration::ErrorPolicy,
       Configuration::OptionalPolicy
@@ -144,13 +146,6 @@ namespace ebi
         ParserImpl_v43(std::shared_ptr<Source> const & source,
                std::shared_ptr<std::vector<Record>> const & records);
 
-        void parse(std::string const & text);
-        void parse(std::vector<char> const & text);
-
-        void end();
-
-        bool is_valid() const;
-        
       private:
         void parse_buffer(char const * p, char const * pe, char const * eof);
     };
@@ -167,9 +162,12 @@ namespace ebi
     using QuickValidator_v43 = ParserImpl_v43<QuickValidatorCfg>;
     using FullValidator_v43 = ParserImpl_v43<FullValidatorCfg>;
     using Reader_v43 = ParserImpl_v43<ReaderCfg>;
+    
   }
 }
 
-#include "validator_detail.hpp"
+#include "validator_detail_v41.hpp"
+#include "validator_detail_v42.hpp"
+#include "validator_detail_v43.hpp"
 
 #endif
