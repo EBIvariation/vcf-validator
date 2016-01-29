@@ -49,12 +49,18 @@ namespace ebi
         m_line_tokens.clear();
     }
 
-
     void StoreParsePolicy::handle_fileformat(ParsingState const & state)
     {
-        state.set_version(m_current_token);
+        if (m_current_token == "VCFv4.1") {
+            state.set_version(Version::v41);
+        } else if (m_current_token == "VCFv4.2") {
+            state.set_version(Version::v42);
+        } else if (m_current_token == "VCFv4.3") {
+            state.set_version(Version::v43);
+        } else {
+            throw ParsingError("Not allowed VCF fileformat version");
+        }
     }
-
 
     void StoreParsePolicy::handle_meta_typeid(ParsingState const & state)
     {

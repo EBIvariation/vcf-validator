@@ -46,7 +46,7 @@ namespace ebi
         ParsingState(std::shared_ptr<Source> source,
                      std::shared_ptr<std::vector<Record>> records);
         
-        void set_version(std::string & fileformat) const;
+        void set_version(Version version) const;
         
         void add_meta(MetaEntry const & meta) const;
         

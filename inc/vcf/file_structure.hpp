@@ -45,6 +45,13 @@ namespace ebi
         VCF_FILE_BCF    = 0x10,
     };
     
+    enum class Version 
+    {
+        v41, 
+        v42, 
+        v43 
+    };
+    
     enum class RecordType
     {
         SNV,
@@ -91,16 +98,17 @@ namespace ebi
     {
         std::string name;           /**< Name of the source to interact with (file, stdin...) */
         unsigned int input_format;  /**< Mask that stores whether the input is plain/gzipped VCF, BCF, etc */
-        std::string version;        /**< VCF version */
+        Version version;            /**< VCF version */
 
         std::multimap<std::string, MetaEntry> meta_entries; /**< Entries in the file meta-data */
         std::vector<std::string> samples_names; /**< Names of the sequenced samples */
         
         Source(std::string const & name,
                unsigned const input_format,
-               std::string const & version = "VCFv4.1",
+               Version version = Version::v41,
                std::multimap<std::string, MetaEntry> const & meta_entries = {},
                std::vector<std::string> const & samples_names = {});
+        
     };
     
     struct Record 
