@@ -62,6 +62,12 @@ namespace
             return 1;
         }
         
+        if (!vm.count("version")) {
+            std::cout << desc << std::endl;
+            std::cout << "Please choose one of the accepted VCF fileformat versions" << std::endl;
+	    return 1;
+        }
+        
         std::string version = vm["version"].as<std::string>();
         if (version != "v4.1" && version != "v4.2" && version != "v4.3") {
             std::cout << desc << std::endl;
@@ -102,12 +108,12 @@ namespace
     
     std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const & path, ValidationLevel level, ebi::vcf::Version version)
     {
-        auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF};
+        auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, version};
         auto records = std::vector<ebi::vcf::Record>{};
         
         switch (level) {
         case ValidationLevel::error:
-            switch (source.version) {
+            switch (version) {
             case ebi::vcf::Version::v41:
                 return std::unique_ptr<ebi::vcf::Parser>(
                         new ebi::vcf::QuickValidator_v41(
@@ -237,8 +243,7 @@ int main(int argc, char** argv)
         std::cerr << ex.what() << std::endl;
         return 1;
     } catch (std::runtime_error const & ex) {
-        std::cout << "The input file is not valid" << std::endl;
-        std::cerr << ex.what() << std::endl;
+        std::cout << "The input file is not valid: " << ex.what() << std::endl;
         return 1;
     }
 }

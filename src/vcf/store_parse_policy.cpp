@@ -51,14 +51,22 @@ namespace ebi
 
     void StoreParsePolicy::handle_fileformat(ParsingState const & state)
     {
+        Version fileformat_version = Version::v41;
+
         if (m_current_token == "VCFv4.1") {
-            state.set_version(Version::v41);
+            fileformat_version = Version::v41;
         } else if (m_current_token == "VCFv4.2") {
-            state.set_version(Version::v42);
+            fileformat_version = Version::v42;
         } else if (m_current_token == "VCFv4.3") {
-            state.set_version(Version::v43);
+            fileformat_version = Version::v43;
         } else {
             throw ParsingError("Not allowed VCF fileformat version");
+        }
+        
+        if (fileformat_version != state.source->version) {
+            throw ParsingError("Unexpected VCF fileformat version found");
+        } else {
+            state.set_version(fileformat_version);
         }
     }
 
