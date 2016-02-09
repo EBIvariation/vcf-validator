@@ -56,7 +56,7 @@ namespace
         }
         
         std::string level = vm["level"].as<std::string>();
-        if (level != "error" && level != "warning" && level != "break") {
+        if (level != "error" && level != "warning" && level != "stop") {
             std::cout << desc << std::endl;
             std::cout << "Please choose one of the accepted validation levels" << std::endl;
             return 1;
@@ -65,7 +65,7 @@ namespace
         if (!vm.count("version")) {
             std::cout << desc << std::endl;
             std::cout << "Please choose one of the accepted VCF fileformat versions" << std::endl;
-	    return 1;
+            return 1;
         }
         
         std::string version = vm["version"].as<std::string>();
@@ -132,7 +132,7 @@ namespace
             default:
                 throw std::invalid_argument("Please choose one of the accepted VCF fileformat versions");
             }
-        break;
+        
         case ValidationLevel::warning:
             switch (version) {
             case ebi::vcf::Version::v41:
@@ -153,6 +153,7 @@ namespace
             default:
                 throw std::invalid_argument("Please choose one of the accepted VCF fileformat versions");
             }
+            
         case ValidationLevel::stop:
             switch (version) {
             case ebi::vcf::Version::v41:
@@ -173,6 +174,7 @@ namespace
             default:
                 throw std::invalid_argument("Please choose one of the accepted VCF fileformat versions");
             }
+            
         default:
             throw std::invalid_argument("Please choose one of the accepted validation levels");
         }
