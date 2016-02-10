@@ -29,7 +29,7 @@ namespace ebi
     {
     }
 
-    void ParsingState::set_version(std::string & version) const
+    void ParsingState::set_version(Version version) const
     {
         source->version = version;
     }

@@ -31,14 +31,18 @@ namespace
     size_t const default_line_buffer_size = 64 * 1024;
     namespace po = boost::program_options;
     
+    enum class ValidationLevel { error, warning, stop };
+    
+    
     po::options_description build_command_line_options()
     {
         po::options_description description("Usage: vcf-validator [OPTIONS] [< input_file]\nAllowed options");
         
         description.add_options()
             ("help,h", "Display this help")
-            ("level,l", po::value<std::string>()->default_value("warning"), "Validation level: error, warning, break")
             ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
+            ("level,l", po::value<std::string>()->default_value("warning"), "Validation level (error, warning, stop)")
+            ("version,v", po::value<std::string>(), "VCF fileformat version to validate the file against (v4.1, v4.2, v4.3)")
         ;
         
         return description;
@@ -52,38 +56,128 @@ namespace
         }
         
         std::string level = vm["level"].as<std::string>();
-        if (level != "error" && level != "warning" && level != "break") {
+        if (level != "error" && level != "warning" && level != "stop") {
             std::cout << desc << std::endl;
             std::cout << "Please choose one of the accepted validation levels" << std::endl;
+            return 1;
+        }
+        
+        if (!vm.count("version")) {
+            std::cout << desc << std::endl;
+            std::cout << "Please choose one of the accepted VCF fileformat versions" << std::endl;
+            return 1;
+        }
+        
+        std::string version = vm["version"].as<std::string>();
+        if (version != "v4.1" && version != "v4.2" && version != "v4.3") {
+            std::cout << desc << std::endl;
+            std::cout << "Please choose one of the accepted VCF fileformat versions" << std::endl;
             return 1;
         }
         
         return 0;
     }
     
-    std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const & path, std::string const & level)
+    ValidationLevel get_validation_level(std::string const & level_str)
     {
-        auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF};
-        auto records = std::vector<ebi::vcf::Record>{};
-        
-        if (level == "error") {
-            return std::unique_ptr<ebi::vcf::Parser>(
-                    new ebi::vcf::QuickValidator(
-                        std::make_shared<ebi::vcf::Source>(source),
-                        std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-        } else if (level == "warning") {
-            return std::unique_ptr<ebi::vcf::Parser>(
-                    new ebi::vcf::FullValidator(
-                        std::make_shared<ebi::vcf::Source>(source),
-                        std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-        } else if (level == "break") {
-            return std::unique_ptr<ebi::vcf::Parser>(
-                    new ebi::vcf::Reader(
-                        std::make_shared<ebi::vcf::Source>(source),
-                        std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+        if (level_str == "error") {
+            return ValidationLevel::error;
+        } else if (level_str == "warning") {
+            return ValidationLevel::warning;
+        } else if (level_str == "stop") {
+            return ValidationLevel::stop;
         }
         
         throw std::invalid_argument("Please choose one of the accepted validation levels");
+    }
+    
+    ebi::vcf::Version get_version(std::string const & version_str)
+    {
+        if (version_str == "v4.1") {
+            return ebi::vcf::Version::v41;
+        } else if (version_str == "v4.2") {
+            return ebi::vcf::Version::v42;
+        } else if (version_str == "v4.3") {
+            return ebi::vcf::Version::v43;
+        }
+        
+        throw std::invalid_argument("Please choose one of the accepted VCF fileformat versions");
+    }
+    
+    
+    
+    std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const & path, ValidationLevel level, ebi::vcf::Version version)
+    {
+        auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, version};
+        auto records = std::vector<ebi::vcf::Record>{};
+        
+        switch (level) {
+        case ValidationLevel::error:
+            switch (version) {
+            case ebi::vcf::Version::v41:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::QuickValidator_v41(
+                            std::make_shared<ebi::vcf::Source>(source),
+                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            case ebi::vcf::Version::v42:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::QuickValidator_v42(
+                            std::make_shared<ebi::vcf::Source>(source),
+                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            case ebi::vcf::Version::v43:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::QuickValidator_v43(
+                            std::make_shared<ebi::vcf::Source>(source),
+                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            default:
+                throw std::invalid_argument("Please choose one of the accepted VCF fileformat versions");
+            }
+        
+        case ValidationLevel::warning:
+            switch (version) {
+            case ebi::vcf::Version::v41:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::FullValidator_v41(
+                            std::make_shared<ebi::vcf::Source>(source),
+                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            case ebi::vcf::Version::v42:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::FullValidator_v42(
+                            std::make_shared<ebi::vcf::Source>(source),
+                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            case ebi::vcf::Version::v43:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::FullValidator_v43(
+                            std::make_shared<ebi::vcf::Source>(source),
+                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            default:
+                throw std::invalid_argument("Please choose one of the accepted VCF fileformat versions");
+            }
+            
+        case ValidationLevel::stop:
+            switch (version) {
+            case ebi::vcf::Version::v41:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::Reader_v41(
+                            std::make_shared<ebi::vcf::Source>(source),
+                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            case ebi::vcf::Version::v42:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::Reader_v42(
+                            std::make_shared<ebi::vcf::Source>(source),
+                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            case ebi::vcf::Version::v43:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::Reader_v43(
+                            std::make_shared<ebi::vcf::Source>(source),
+                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            default:
+                throw std::invalid_argument("Please choose one of the accepted VCF fileformat versions");
+            }
+            
+        default:
+            throw std::invalid_argument("Please choose one of the accepted validation levels");
+        }
     }
     
     template <typename Container>
@@ -132,7 +226,8 @@ int main(int argc, char** argv)
     try {
         auto path = vm["input"].as<std::string>();
         auto level = vm["level"].as<std::string>();
-        auto validator = build_parser(path, level);
+        auto version = vm["version"].as<std::string>();
+        auto validator = build_parser(path, get_validation_level(level), get_version(version));
     
         if (path == "stdin") {
             std::cout << "Reading from standard input..." << std::endl;
@@ -150,8 +245,7 @@ int main(int argc, char** argv)
         std::cerr << ex.what() << std::endl;
         return 1;
     } catch (std::runtime_error const & ex) {
-        std::cout << "The input file is not valid" << std::endl;
-        std::cerr << ex.what() << std::endl;
+        std::cout << "The input file is not valid: " << ex.what() << std::endl;
         return 1;
     }
 }

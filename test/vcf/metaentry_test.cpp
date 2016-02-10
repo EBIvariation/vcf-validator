@@ -30,7 +30,7 @@ namespace ebi
         auto source = vcf::Source {
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-            "v4.1",
+            vcf::Version::v41,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -56,7 +56,7 @@ namespace ebi
         auto source = vcf::Source {
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-            "v4.1",
+            vcf::Version::v42,
             {},
             { "Sample1", "Sample2", "Sample3" }};
 
@@ -89,7 +89,7 @@ namespace ebi
         auto source = vcf::Source {
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-            "v4.1",
+            vcf::Version::v43,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -122,7 +122,7 @@ namespace ebi
         auto source = vcf::Source {
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-            "v4.1",
+            vcf::Version::v41,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -211,7 +211,7 @@ namespace ebi
         auto source = vcf::Source {
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-            "v4.1",
+            vcf::Version::v42,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -240,7 +240,7 @@ namespace ebi
         auto source = vcf::Source {
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-            "v4.1",
+            vcf::Version::v43,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -270,7 +270,7 @@ namespace ebi
         auto source = vcf::Source {
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-            "v4.1",
+            vcf::Version::v41,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -387,7 +387,7 @@ namespace ebi
         auto source = vcf::Source {
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-            "v4.1",
+            vcf::Version::v42,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -509,7 +509,7 @@ namespace ebi
         auto source = vcf::Source {
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-            "v4.1",
+            vcf::Version::v43,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             

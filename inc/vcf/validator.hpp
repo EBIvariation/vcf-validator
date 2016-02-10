@@ -27,6 +27,10 @@
 #include <vector>
 
 #include "file_structure.hpp"
+#include "error_policy.hpp"
+#include "optional_policy.hpp"
+#include "parse_policy.hpp"
+#include "parsing_utils.hpp"
 #include "util/string_utils.hpp"
 
 
@@ -34,234 +38,6 @@ namespace ebi
 {
   namespace vcf
   {
-    
-    struct ParsingState
-    {
-        size_t n_lines;
-        size_t n_columns;
-        size_t n_batches;
-
-        int cs;
-        bool m_is_valid;
-        
-        std::shared_ptr<Source> source;
-        std::shared_ptr<std::vector<Record>> records;
-     
-        std::multimap<std::string, std::string> defined_metadata;
-        std::multimap<std::string, std::string> undefined_metadata;
-        
-        ParsingState(std::shared_ptr<Source> source,
-                     std::shared_ptr<std::vector<Record>> records);
-        
-        void set_version(std::string & fileformat) const;
-        
-        void add_meta(MetaEntry const & meta) const;
-        
-        void add_record(Record const & record) const;
-        
-        void clear_records() const;
-        
-        std::vector<std::string> const & samples() const;
-        
-        void set_samples(std::vector<std::string> & samples) const;
-        
-        bool is_well_defined_meta(std::string const & meta_type, std::string const & id);
-        
-        void add_well_defined_meta(std::string const & meta_type, std::string const & id);
-	
-        bool is_bad_defined_meta(std::string const & meta_type, std::string const & id);
-        
-        void add_bad_defined_meta(std::string const & meta_type, std::string const & id);
-    };
-
-    class ParsingError : public std::runtime_error
-    {
-        using runtime_error::runtime_error;
-    };
-
-    class ParsingWarning : public std::runtime_error
-    {
-        using runtime_error::runtime_error;
-    };
-
-    /**
-     * Parsing policy that ignores the parsed tokens
-     */
-    class IgnoreParsePolicy
-    {
-      public:
-        void handle_token_begin(ParsingState const & state) {}
-        void handle_token_char(ParsingState const & state, char c) {}
-        void handle_token_end(ParsingState const & state) {}
-        void handle_token_end(ParsingState const & state, std::string token) {}
-        void handle_newline(ParsingState const & state) {}
-        
-        void handle_fileformat(ParsingState const & state) {}
-        
-        void handle_meta_typeid(ParsingState const & state) {}
-        void handle_meta_typeid(ParsingState const & state, std::string type_id) {}
-        void handle_meta_line(ParsingState const & state) {}
-        
-        void handle_sample_name(ParsingState const & state) {}
-        void handle_header_line(ParsingState const & state) {}
-        
-        void handle_column_end(ParsingState const & state, size_t n_columns) {}
-        void handle_body_line(ParsingState & state) {}
-        
-        std::string current_token() const { return ""; }
-        
-        std::vector<std::string> column_tokens(std::string const & column) const { return {}; }
-    };
-
-    /**
-     * Parsing policy that stores the parsed tokens for more thorough validations or future usage
-     */
-    class StoreParsePolicy
-    {
-      public:
-        void handle_token_begin(ParsingState const & state);
-        void handle_token_char(ParsingState const & state, char c);
-        void handle_token_end(ParsingState const & state);
-        void handle_token_end(ParsingState const & state, std::string token);
-        void handle_newline(ParsingState const & state);
-        
-        void handle_fileformat(ParsingState const & state);
-        
-        void handle_meta_typeid(ParsingState const & state);
-        void handle_meta_typeid(ParsingState const & state, std::string type_id);
-        void handle_meta_line(ParsingState const & state);
-        
-        
-        void handle_sample_name(ParsingState const & state);
-        void handle_header_line(ParsingState const & state);
-        
-        void handle_column_end(ParsingState const & state, size_t n_columns);
-        void handle_body_line(ParsingState const & state);
-        
-        std::string current_token() const;
-        
-        std::vector<std::string> column_tokens(std::string const & column) const;
-
-      private:
-        /**
-         * Token being currently parsed
-         */
-        std::string m_current_token;
-        
-        /**
-         * Token that acts as type ID for the whole line, like ALT/FILTER in meta entries
-         */
-        std::string m_line_typeid;
-        
-        /**
-         * Tokens that must be grouped, like all key-value pairs in the INFO column
-         */
-        std::vector<std::string> m_grouped_tokens;
-        
-        /**
-         * Tokens read in a line and grouped by an ID
-         */
-        std::map<std::string, std::vector<std::string>> m_line_tokens;
-    };
-
-    /**
-     * Error management policy that aborts execution when an error is found
-     */
-    class AbortErrorPolicy
-    {
-      public:
-        void handle_fileformat_section_error(ParsingState & state, 
-                std::string message = "Error in file format section");
-        
-        void handle_meta_section_error(ParsingState & state, 
-                std::string message = "Error in meta-data section");
-        
-        void handle_header_section_error(ParsingState & state, 
-                std::string message = "Error in header section");
-        
-        void handle_body_section_error(ParsingState & state, 
-                std::string message = "Error in body section");
-        
-        
-        void handle_fileformat_section_warning(ParsingState const & state, 
-                std::string message = "Warning in file format section");
-        
-        void handle_meta_section_warning(ParsingState const & state, 
-                std::string message = "Warning in meta-data section");
-        
-        void handle_header_section_warning(ParsingState const & state, 
-                std::string message = "Warning in header section");
-        
-        void handle_body_section_warning(ParsingState const & state, 
-                std::string message = "Warning in body section");
-    };
-
-    /**
-     * Error management policy that reports when an error is found but continues execution
-     */
-    class ReportErrorPolicy
-    {
-      public:
-        void handle_fileformat_section_error(ParsingState & state, 
-                std::string message = "Error in file format section");
-        
-        void handle_meta_section_error(ParsingState & state, 
-                std::string message = "Error in meta-data section");
-        
-        void handle_header_section_error(ParsingState & state, 
-                std::string message = "Error in header section");
-        
-        void handle_body_section_error(ParsingState & state, 
-                std::string message = "Error in body section");
-        
-        
-        void handle_fileformat_section_warning(ParsingState const & state, 
-                std::string message = "Warning in file format section");
-        
-        void handle_meta_section_warning(ParsingState const & state, 
-                std::string message = "Warning in fmeta-data section");
-        
-        void handle_header_section_warning(ParsingState const & state, 
-                std::string message = "Warning in header section");
-        
-        void handle_body_section_warning(ParsingState const & state, 
-                std::string message = "Warning in body section");
-    };
-
-    /**
-     * Validation policy that omits optional and context-based validations
-     */
-    class IgnoreOptionalPolicy
-    {
-      public:
-        void optional_check_meta_section(ParsingState const & state) const {}
-        void optional_check_body_entry(ParsingState & state, Record & record) {}
-        void optional_check_body_section(ParsingState const & state) const {}
-    };
-    
-    /**
-     * Validation policy that runs optional and context-based validations
-     */
-    class ValidateOptionalPolicy
-    {
-      public:
-        void optional_check_meta_section(ParsingState const & state) const;
-        void optional_check_body_entry(ParsingState & state, Record & record) ;//const;
-        void optional_check_body_section(ParsingState const & state) const;
-        
-      private:
-        void check_body_entry_ploidy(ParsingState & state, Record & record);
-        void check_body_entry_position_zero(ParsingState & state, Record & record) const;
-        void check_body_entry_id_commas(ParsingState & state, Record & record) const;
-        void check_body_entry_reference_alternate_matching(ParsingState & state, Record & record);
-        
-        void check_contig_meta(ParsingState & state, Record & record) const;
-        void check_alternate_allele_meta(ParsingState & state, Record & record) const;
-        void check_filter_meta(ParsingState & state, Record & record) const;
-        void check_info_meta(ParsingState & state, Record & record) const;
-        void check_format_meta(ParsingState & state, Record & record) const;
-    };
-    
     
     // Only check syntax
     struct QuickValidatorCfg
@@ -298,10 +74,28 @@ namespace ebi
         virtual bool is_valid() const = 0;
     };
     
-    template <typename Configuration>
     class ParserImpl
     : public Parser,
-      ParsingState,
+      public ParsingState
+    {
+      public:
+        ParserImpl(std::shared_ptr<Source> const & source,
+                   std::shared_ptr<std::vector<Record>> const & records);
+        
+        void parse(std::string const & text);
+        void parse(std::vector<char> const & text);
+
+        void end();
+
+        bool is_valid() const;
+       
+      protected:
+        virtual void parse_buffer(char const * p, char const * pe, char const * eof) = 0;
+    };
+    
+    template <typename Configuration>
+    class ParserImpl_v41
+    : public ParserImpl,
       Configuration::ParsePolicy,
       Configuration::ErrorPolicy,
       Configuration::OptionalPolicy
@@ -311,27 +105,69 @@ namespace ebi
         using ErrorPolicy = typename Configuration::ErrorPolicy;
         using OptionalPolicy = typename Configuration::OptionalPolicy;
 
-        ParserImpl(std::shared_ptr<Source> const & source,
+        ParserImpl_v41(std::shared_ptr<Source> const & source,
                std::shared_ptr<std::vector<Record>> const & records);
 
-        void parse(std::string const & text);
-        void parse(std::vector<char> const & text);
+      private:
+        void parse_buffer(char const * p, char const * pe, char const * eof);
+    };
 
-        void end();
+    template <typename Configuration>
+    class ParserImpl_v42
+    : public ParserImpl,
+      Configuration::ParsePolicy,
+      Configuration::ErrorPolicy,
+      Configuration::OptionalPolicy
+    {
+      public:
+        using ParsePolicy = typename Configuration::ParsePolicy;
+        using ErrorPolicy = typename Configuration::ErrorPolicy;
+        using OptionalPolicy = typename Configuration::OptionalPolicy;
 
-        bool is_valid() const;
-        
+        ParserImpl_v42(std::shared_ptr<Source> const & source,
+               std::shared_ptr<std::vector<Record>> const & records);
+
+      private:
+        void parse_buffer(char const * p, char const * pe, char const * eof);
+    };
+
+    template <typename Configuration>
+    class ParserImpl_v43
+    : public ParserImpl,
+      Configuration::ParsePolicy,
+      Configuration::ErrorPolicy,
+      Configuration::OptionalPolicy
+    {
+      public:
+        using ParsePolicy = typename Configuration::ParsePolicy;
+        using ErrorPolicy = typename Configuration::ErrorPolicy;
+        using OptionalPolicy = typename Configuration::OptionalPolicy;
+
+        ParserImpl_v43(std::shared_ptr<Source> const & source,
+               std::shared_ptr<std::vector<Record>> const & records);
+
       private:
         void parse_buffer(char const * p, char const * pe, char const * eof);
     };
 
     // Predefined aliases for common uses of the parser
-    using QuickValidator = ParserImpl<QuickValidatorCfg>;
-    using FullValidator = ParserImpl<FullValidatorCfg>;
-    using Reader = ParserImpl<ReaderCfg>;
+    using QuickValidator_v41 = ParserImpl_v41<QuickValidatorCfg>;
+    using FullValidator_v41 = ParserImpl_v41<FullValidatorCfg>;
+    using Reader_v41 = ParserImpl_v41<ReaderCfg>;
+    
+    using QuickValidator_v42 = ParserImpl_v42<QuickValidatorCfg>;
+    using FullValidator_v42 = ParserImpl_v42<FullValidatorCfg>;
+    using Reader_v42 = ParserImpl_v42<ReaderCfg>;
+    
+    using QuickValidator_v43 = ParserImpl_v43<QuickValidatorCfg>;
+    using FullValidator_v43 = ParserImpl_v43<FullValidatorCfg>;
+    using Reader_v43 = ParserImpl_v43<ReaderCfg>;
+    
   }
 }
 
-#include "validator_detail.hpp"
+#include "validator_detail_v41.hpp"
+#include "validator_detail_v42.hpp"
+#include "validator_detail_v43.hpp"
 
 #endif
