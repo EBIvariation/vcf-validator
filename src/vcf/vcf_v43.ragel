@@ -537,7 +537,7 @@
     # TODO Could it accept more symbols? Comma won't be, for sure
     identifier      = ( (alnum | "." | "_" | "-" )+ - (punct)+ ) >token_begin @token_middle %token_end;
     # ALT ID (can be used from meta entries or in the ALT column)
-    alt_id          = (alnum | ":" | "_" )+ - (punct)+ ;
+    alt_id          = ( alnum | (punct - ("," | "<" | ">")) )+ - (punct)+ ;
     
     ## A chromosome must be a string with no white-spaces or colons, and may be surronded by < > symbols (for contigs)
     chrom_basic     = alnum ((alnum | punct - (":" | "<" | ">"))+ - (punct)+)* ;
