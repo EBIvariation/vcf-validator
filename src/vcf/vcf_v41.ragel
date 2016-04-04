@@ -536,7 +536,7 @@
     
     # URL inspired in http://stackoverflow.com/questions/8784903/failed-to-convert-url-parser-regular-expression-to-ragel
     scheme    = (alpha (any - [:/?#] - "\n")+ ) ;
-    authority = (alpha (any - [/?#] - "\n")* ) ;
+    authority = (alpha (any - [/?#] - "\n")* ) | ( (digit{1,3}) ("." digit{1,3}){3} ) ;
     path      = (any - [?#] - "\n")* ;
     query     = (any - [#] - "\n")* ;
     fragment  = (any - "\n")* ; 
