@@ -527,7 +527,7 @@
     CS = "\t" >tab_break;
 
     # Integer and floating-point numbers
-    any_number      = ("-" | "+")? (digit)* (".")? (digit)+ (("e"|"E") ("+"|"-")? (digit)+)? |
+    any_number      = ("-" | "+")? (digit)+ ("." (digit)+)? (("e"|"E") ("+"|"-")? (digit)+)? |
                       ("-" | "+")? "Inf" |
                       "NaN" ;
     int_number      = ("-" | "+")? (digit)+ ;
@@ -677,6 +677,7 @@
                       bases "." ;
 
     ## Other alternates can be any identifier surrounded by < > symbols
+    ## TODO IUPAC codes
     record_alt_other= ("<" alt_id ">") - ("<DEL>" | "<INS>" | "<DUP>" | "<INV>" | "<CNV>" | "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">");
     ## No variant, must be the only ALT allele
     record_alt_empty= "." ;

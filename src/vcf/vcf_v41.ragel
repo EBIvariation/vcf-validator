@@ -517,7 +517,7 @@
     CS = "\t" >tab_break;
 
     # Integer and floating-point numbers
-    any_number      = ("-" | "+")? (digit)* (".")? (digit)+ (("e"|"E") ("+"|"-")? (digit)+)? |
+    any_number      = ("-" | "+")? (digit)+ ("." (digit)+)? (("e"|"E") ("+"|"-")? (digit)+)? |
                       ("-" | "+")? "Inf" |
                       "NaN" ;
     int_number      = ("-" | "+")? (digit)+ ;
