@@ -423,7 +423,7 @@
     }
     
     action info_CIGAR_error {
-        ErrorPolicy::handle_body_section_error(*this, "Info CIGAR value is not an alphanumeric string");
+        ErrorPolicy::handle_body_section_error(*this, "Info CIGAR value is not an alphanumeric string compliant with the SAM specification");
         fhold; fgoto body_section_skip;
     }
     
@@ -679,7 +679,7 @@
                       "AF=" (any_number ("," any_number)*) 	$err(info_AF_error) |
                       "AN=" nat_number				$err(info_AN_error) |
                       "BQ=" any_number				$err(info_BQ_error) |
-                      "CIGAR=" (alnum)+ 			$err(info_CIGAR_error) |
+                      "CIGAR=" ([0-9]+[MIDNSHPX])+ 		$err(info_CIGAR_error) |
                       "DB" ("=" ("1" | "0"))? 			$err(info_DB_error) |
                       "DP=" nat_number				$err(info_DP_error) |
                       "END=" nat_number 			$err(info_END_error) |
