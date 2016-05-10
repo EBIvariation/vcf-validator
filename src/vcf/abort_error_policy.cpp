@@ -16,21 +16,6 @@
 
 #include "vcf/error_policy.hpp"
 
-namespace
-{
-    using namespace ebi::vcf;
-
-    void throw_syntax_error(ParsingState const &)
-    {
-        throw ParsingError("Invalid VCF syntax");
-    }
-
-    void throw_syntax_error(std::string const & msg)
-    {
-        throw ParsingError(msg);
-    }
-}
-
 namespace ebi
 {
   namespace vcf
@@ -39,46 +24,46 @@ namespace ebi
     void AbortErrorPolicy::handle_fileformat_section_error(ParsingState & state, std::string message)
     {
         state.m_is_valid = false;
-        throw_syntax_error("Line " + std::to_string(state.n_lines) + ": " + message);
+        throw FileformatError(state.n_lines, message);
     }
 
     void AbortErrorPolicy::handle_meta_section_error(ParsingState & state, std::string message)
     {
         state.m_is_valid = false;
-        throw_syntax_error("Line " + std::to_string(state.n_lines) + ": " + message);
+        throw MetaSectionError(state.n_lines, message);
     }
 
     void AbortErrorPolicy::handle_header_section_error(ParsingState & state, std::string message)
     {
         state.m_is_valid = false;
-        throw_syntax_error("Line " + std::to_string(state.n_lines) + ": " + message);
+        throw HeaderSectionError(state.n_lines, message);
     }
 
     void AbortErrorPolicy::handle_body_section_error(ParsingState & state, std::string message)
     {
         state.m_is_valid = false;
-        throw_syntax_error("Line " + std::to_string(state.n_lines) + ": " + message);
+        throw HeaderSectionError(state.n_lines, message);
     }
 
     
     void AbortErrorPolicy::handle_fileformat_section_warning(ParsingState const & state, std::string message)
     {
-        std::cerr << "Line " << state.n_lines << ": " << message << " (warning)" << std::endl;
+        std::cerr << FileformatError(state.n_lines, message + " (warning)").what() << std::endl;
     }
 
     void AbortErrorPolicy::handle_meta_section_warning(ParsingState const & state, std::string message)
     {
-        std::cerr << "Line " << state.n_lines << ": " << message << " (warning)" << std::endl;
+        std::cerr << MetaSectionError(state.n_lines, message + " (warning)").what() << std::endl;
     }
 
     void AbortErrorPolicy::handle_header_section_warning(ParsingState const & state, std::string message)
     {
-        std::cerr << "Line " << state.n_lines << ": " << message << " (warning)" << std::endl;
+        std::cerr << HeaderSectionError(state.n_lines, message + " (warning)").what() << std::endl;
     }
 
     void AbortErrorPolicy::handle_body_section_warning(ParsingState const & state, std::string message)
     {
-        std::cerr << "Line " << state.n_lines << ": " << message << " (warning)" << std::endl;
+        std::cerr << BodySectionError(state.n_lines, message + " (warning)").what() << std::endl;
     }
 
   }

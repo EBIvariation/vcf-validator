@@ -20,6 +20,7 @@
 #include <string>
 
 #include "parsing_utils.hpp"
+#include "error.hpp"
 
 namespace ebi
 {
