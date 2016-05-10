@@ -22,6 +22,8 @@
 #include <vector>
 
 #include "parsing_utils.hpp"
+#include "file_structure.hpp"
+#include "util/string_utils.hpp"
 
 namespace ebi
 {

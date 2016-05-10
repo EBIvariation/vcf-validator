@@ -22,6 +22,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include "file_structure.hpp"
 
 namespace ebi
 {

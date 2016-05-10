@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-#include "vcf/validator.hpp"
-#include "vcf/file_structure.hpp"
-#include "vcf/record.hpp"
+#include "vcf/optional_policy.hpp"
 
 namespace ebi
 {
