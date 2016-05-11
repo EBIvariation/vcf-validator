@@ -42,6 +42,6 @@ The validation level can also be configured. This parameter is optional and acce
 
 * error: Display only errors
 * warning: Display both errors and warnings (default)
-* break: Stop after the first error is found
+* stop: Stop after the first error is found
 
-Example: `vcf_validator -i /path/to/file.vcf -l break`
+Example: `vcf_validator -i /path/to/file.vcf -l stop`
