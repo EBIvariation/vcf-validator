@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "vcf/validator.hpp"
+#include "vcf/parsing_utils.hpp"
 
 namespace ebi
 {

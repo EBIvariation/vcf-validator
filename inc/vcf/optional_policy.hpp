@@ -19,6 +19,7 @@
 
 #include "file_structure.hpp"
 #include "parsing_utils.hpp"
+#include "record.hpp"
 
 namespace ebi
 {
