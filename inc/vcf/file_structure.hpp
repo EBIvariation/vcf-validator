@@ -113,6 +113,8 @@ namespace ebi
     
     struct Record 
     {
+        size_t line;
+
         std::string chromosome;
         size_t position;
         std::vector<std::string> ids;
@@ -131,17 +133,18 @@ namespace ebi
         std::shared_ptr<Source> source;
         
 
-        Record(std::string const & chromosome, 
-               size_t const position, 
-               std::vector<std::string> const & ids, 
-               std::string const & reference_allele, 
-               std::vector<std::string> const & alternate_alleles, 
-               float const quality, 
-               std::vector<std::string> const & filters, 
-               std::map<std::string, std::string> const & info, 
-               std::vector<std::string> const & format, 
-               std::vector<std::string> const & samples,
-               std::shared_ptr<Source> const & source);
+        Record(size_t const line,
+                std::string const & chromosome,
+                size_t const position,
+                std::vector<std::string> const & ids,
+                std::string const & reference_allele,
+                std::vector<std::string> const & alternate_alleles,
+                float const quality,
+                std::vector<std::string> const & filters,
+                std::map<std::string, std::string> const & info,
+                std::vector<std::string> const & format,
+                std::vector<std::string> const & samples,
+                std::shared_ptr<Source> const & source);
         
         bool operator==(Record const &) const;
 

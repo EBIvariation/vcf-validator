@@ -161,37 +161,37 @@ namespace ebi
 
     void StoreParsePolicy::handle_body_line(ParsingState const & state) 
     {
+        // Transform the position token into a size_t
+        auto position = static_cast<size_t>(std::stoi(m_line_tokens["POS"][0]));
+
+        // Transform all the quality tokens into floating point numbers
+        float quality;
         try {
-            // Transform the position token into a size_t
-            auto position = static_cast<size_t>(std::stoi(m_line_tokens["POS"][0]));
+            quality = std::stof(m_line_tokens["QUAL"][0]);
+        } catch (std::invalid_argument ex) {
+            quality = 0;
+        }
 
-            // Transform all the quality tokens into floating point numbers
-            float quality;
-            try {
-                quality = std::stof(m_line_tokens["QUAL"][0]);
-            } catch (std::invalid_argument ex) {
-                quality = 0;
+        // Split the info tokens by the equals (=) symbol
+        std::map<std::string, std::string> info;
+        for (auto & field : m_line_tokens["INFO"]) {
+            std::vector<std::string> subfields;
+            util::string_split(field, "=", subfields);
+            if (subfields.size() > 1) {
+                info.emplace(subfields[0], subfields[1]);
+            } else {
+                info.emplace(subfields[0], "");
             }
+        }
 
-            // Split the info tokens by the equals (=) symbol
-            std::map<std::string, std::string> info;
-            for (auto & field : m_line_tokens["INFO"]) {
-                std::vector<std::string> subfields;
-                util::string_split(field, "=", subfields);
-                if (subfields.size() > 1) {
-                    info.emplace(subfields[0], subfields[1]);
-                } else {
-                    info.emplace(subfields[0], "");
-                }
-            }
-            
-            // Format and samples are optional
-            auto format = m_line_tokens.find("FORMAT") != m_line_tokens.end() ? 
-                m_line_tokens["FORMAT"] : std::vector<std::string>{} ;
-            auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ? 
-                m_line_tokens["SAMPLES"] : std::vector<std::string>{} ; 
+        // Format and samples are optional
+        auto format = m_line_tokens.find("FORMAT") != m_line_tokens.end() ?
+                      m_line_tokens["FORMAT"] : std::vector<std::string>{} ;
+        auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ?
+                       m_line_tokens["SAMPLES"] : std::vector<std::string>{} ;
 
-            state.add_record(Record {
+        state.add_record(Record {
+                state.n_lines,
                 m_line_tokens["CHROM"][0],
                 position,
                 m_line_tokens["ID"],
@@ -203,10 +203,7 @@ namespace ebi
                 format,
                 samples,
                 state.source
-            });
-        } catch (std::invalid_argument ex) {
-            throw BodySectionError(state.n_lines, ex.what());
-        }
+        });
     }
     
     std::string StoreParsePolicy::current_token() const
