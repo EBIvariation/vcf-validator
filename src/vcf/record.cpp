@@ -256,7 +256,7 @@ namespace ebi
             
             if (!found_in_header) {
                 // If not found in header, a null-value meta entry must be created to make sizes match
-                format_meta.push_back(MetaEntry{""});
+                format_meta.push_back(MetaEntry{line, ""});
             }
         }
         

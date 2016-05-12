@@ -15,11 +15,11 @@
  */
 
 #include <memory>
-#include <vcf/error.hpp>
 
 #include "catch/catch.hpp"
 
 #include "vcf/file_structure.hpp"
+#include "vcf/error.hpp"
 
 namespace ebi
 {
@@ -35,6 +35,7 @@ namespace ebi
             
         source.meta_entries.emplace("FORMAT",
             vcf::MetaEntry{
+                1,
                 "FORMAT",
                 {
                     { "ID", "GT" },
@@ -46,6 +47,7 @@ namespace ebi
            
         source.meta_entries.emplace("FORMAT",
             vcf::MetaEntry{
+                1,
                 "FORMAT",
                 {
                     { "ID", "DP" },
@@ -57,6 +59,7 @@ namespace ebi
 
         source.meta_entries.emplace("INFO",
             vcf::MetaEntry{
+                1,
                 "INFO",
                 {
                     { "ID", "AN" },
@@ -68,6 +71,7 @@ namespace ebi
            
         source.meta_entries.emplace("INFO",
             vcf::MetaEntry{
+                1,
                 "INFO",
                 {
                     { "ID", "AF" },

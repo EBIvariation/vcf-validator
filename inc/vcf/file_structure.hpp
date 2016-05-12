@@ -66,6 +66,8 @@ namespace ebi
     struct MetaEntry
     {
         enum class Structure { NoValue, PlainValue, KeyValue };
+
+        size_t line;
         
         std::string id;
         Structure structure; // Union discriminant
@@ -73,12 +75,15 @@ namespace ebi
         boost::variant< std::string, 
                         std::map<std::string, std::string> > value;
         
-        MetaEntry(std::string const & id);
+        MetaEntry(size_t line,
+                  std::string const & id);
         
-        MetaEntry(std::string const & id,
+        MetaEntry(size_t line,
+                  std::string const & id,
                   std::string const & plain_value);
         
-        MetaEntry(std::string const & id,
+        MetaEntry(size_t line,
+                  std::string const & id,
                   std::map<std::string, std::string> const & key_values);
         
         bool operator==(MetaEntry const &) const;
