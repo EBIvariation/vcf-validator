@@ -102,8 +102,7 @@ namespace ebi
                 // TODO Throw exception
             }
         } catch (std::invalid_argument ex) {
-            throw ParsingError(ex.what());
-//            throw MetaSectionError(state.n_lines, ex.what());
+            throw MetaSectionError(state.n_lines, ex.what());
         }
     }
 
@@ -206,7 +205,7 @@ namespace ebi
                 state.source
             });
         } catch (std::invalid_argument ex) {
-            throw ParsingError(ex.what());
+            throw BodySectionError(state.n_lines, ex.what());
         }
     }
     

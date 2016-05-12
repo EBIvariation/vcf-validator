@@ -17,6 +17,9 @@
 #ifndef VCF_ERROR_HPP
 #define VCF_ERROR_HPP
 
+#include <string>
+#include <stdexcept>
+
 namespace ebi
 {
   namespace vcf
@@ -27,13 +30,25 @@ namespace ebi
       public:
         Error(size_t line, const std::string &message)
                 : runtime_error(std::string("Line ") + std::to_string(line) + ": " + message),
-                  line(line) {}
+                  line(line),
+                  message(message) {}
 
         // TODO: leave here or extract? if we will allow several levels of conservative-risky fixes
 //        virtual void fix(Error, ParsingState &state);
 //        virtual void fix(MetaError, ParsingState &state);
+
+        size_t get_line() const
+        {
+          return line;
+        }
+        const std::string &get_raw_message() const
+        {
+          return message;
+        }
+
       private:
         size_t line;
+        std::string message;
     };
 
     // inheritance siblings depending on file location

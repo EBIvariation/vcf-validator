@@ -70,8 +70,8 @@
     action meta_section_end {
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (ParsingWarning warn) {
-          ErrorPolicy::handle_meta_section_warning(*this, warn.what());
+        } catch (MetaSectionError warn) {
+          ErrorPolicy::handle_meta_section_warning(*this, warn.get_raw_message());
         }
     }
 
@@ -81,8 +81,8 @@
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (ParsingWarning warn) {
-          ErrorPolicy::handle_meta_section_warning(*this, warn.what());
+        } catch (MetaSectionError warn) {
+          ErrorPolicy::handle_meta_section_warning(*this, warn.get_raw_message());
         }
         
         fhold; fgoto body_section_skip;
@@ -171,8 +171,8 @@
     action meta_entry_end {
         try {
           ParsePolicy::handle_meta_line(*this);
-        } catch (ParsingError ex) {
-          ErrorPolicy::handle_meta_section_error(*this, ex.what());
+        } catch (MetaSectionError ex) {
+          ErrorPolicy::handle_meta_section_error(*this, ex.get_raw_message());
         }
     }
 
@@ -194,12 +194,16 @@
         try {
           // Handle all columns and build record
           ParsePolicy::handle_body_line(*this);
+            try {
           // Check warnings (non-blocking errors but potential mistakes anyway, only makes sense if the last record parsed was correct)
           OptionalPolicy::optional_check_body_entry(*this, ParsingState::records->back());
-        } catch (ParsingError ex) {
-          ErrorPolicy::handle_body_section_error(*this, ex.what());
-        } catch (ParsingWarning ex) {
-          ErrorPolicy::handle_body_section_warning(*this, ex.what());
+            } catch (MetaSectionError &ex) {
+                ErrorPolicy::handle_meta_section_warning(*this, ex.get_raw_message());
+            } catch (BodySectionError &ex) {
+                ErrorPolicy::handle_body_section_warning(*this, ex.get_raw_message());
+            }
+        } catch (BodySectionError ex) {
+            ErrorPolicy::handle_body_section_error(*this, ex.get_raw_message());
         }
     }
 
@@ -325,8 +329,8 @@
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (ParsingWarning warn) {
-          ErrorPolicy::handle_meta_section_warning(*this, warn.what());
+        } catch (MetaSectionError warn) {
+          ErrorPolicy::handle_meta_section_warning(*this, warn.get_raw_message());
         }
         
         fhold; fgoto body_section_skip;

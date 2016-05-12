@@ -67,17 +67,6 @@ namespace ebi
         
         void add_bad_defined_meta(std::string const & meta_type, std::string const & id);
     };
-
-    class ParsingError : public std::runtime_error
-    {
-        using runtime_error::runtime_error;
-    };
-
-    class ParsingWarning : public std::runtime_error
-    {
-        using runtime_error::runtime_error;
-    };
-
   }
 }
 

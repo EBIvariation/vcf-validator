@@ -24,7 +24,7 @@ namespace ebi
     void ValidateOptionalPolicy::optional_check_meta_section(ParsingState const & state) const
     {
         if (state.source->meta_entries.find("reference") == state.source->meta_entries.end()) {
-          throw ParsingWarning("A valid 'reference' entry is not listed in the meta section");
+          throw MetaSectionError(state.n_lines, "A valid 'reference' entry is not listed in the meta section");
         }
     }
     
@@ -91,8 +91,10 @@ namespace ebi
 
             if (ploidy > 0) {
                 if (alleles.size() != ploidy) {
-                    throw ParsingWarning("Sample #" + std::to_string(i) + " has " + std::to_string(alleles.size()) + 
-                                         " allele(s), but " + std::to_string(ploidy) + " were found in others");
+                    throw SamplesBodyError(
+                            state.n_lines,
+                            "Sample #" + std::to_string(i) + " has " + std::to_string(alleles.size())
+                                    + " allele(s), but " + std::to_string(ploidy) + " were found in others");
                 }
             } else {
                 ploidy = alleles.size();
@@ -105,7 +107,8 @@ namespace ebi
     void ValidateOptionalPolicy::check_body_entry_position_zero(ParsingState & state, Record & record) const
     {
         if (record.position == 0) {
-            throw ParsingWarning("Position zero should only be used to reference a telomere");
+            throw PositionBodyError(state.n_lines,
+                    "Position zero should only be used to reference a telomere");
         }
     }
     
@@ -113,7 +116,8 @@ namespace ebi
     {
         for (auto & id : record.ids) {
             if (std::find(id.begin(), id.end(), ',') != id.end()) {
-                throw ParsingWarning("Comma found in the ID column; if used as separator, please replace it with semi-colon");
+                throw IdBodyError(state.n_lines,
+                        "Comma found in the ID column; if used as separator, please replace it with semi-colon");
             }
         }
     }
@@ -123,9 +127,10 @@ namespace ebi
         for (size_t i = 0; i < record.alternate_alleles.size(); ++i) {
             auto & alternate = record.alternate_alleles[i];
             auto type = record.types[i];
-            
+
             if (type == RecordType::INDEL && alternate[0] != record.reference_allele[0]) {
-                throw ParsingWarning("Reference and alternate alleles do not share the first nucleotide");
+                throw ReferenceAlleleBodyError(state.n_lines,
+                        "Reference and alternate alleles do not share the first nucleotide");
             }
         }
     }
@@ -146,7 +151,8 @@ namespace ebi
             state.add_well_defined_meta("contig", current_chromosome);
         } else {
             state.add_bad_defined_meta("contig", current_chromosome);
-            throw ParsingWarning("Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description");
+            throw MetaSectionError(state.n_lines,
+                    "Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description");
         }
     }
     
@@ -170,7 +176,8 @@ namespace ebi
                     state.add_well_defined_meta("ALT", alt_id);
                 } else {
                     state.add_bad_defined_meta("ALT", alt_id);
-                    throw ParsingWarning("Alternate '<" + alt_id + ">' is not listed in a valid meta-data ALT entry");
+                    throw MetaSectionError(state.n_lines,
+                            "Alternate '<" + alt_id + ">' is not listed in a valid meta-data ALT entry");
                 }
             }
         }
@@ -192,7 +199,8 @@ namespace ebi
                 state.add_well_defined_meta("FILTER", filter);
             } else {
                 state.add_bad_defined_meta("FILTER", filter);
-                throw ParsingWarning("Filter '" + filter + "' is not listed in a valid meta-data FILTER entry");
+                throw MetaSectionError(state.n_lines,
+                        "Filter '" + filter + "' is not listed in a valid meta-data FILTER entry");
             }
         }
     }
@@ -214,7 +222,8 @@ namespace ebi
                 state.add_well_defined_meta("INFO", id);
             } else {
                 state.add_bad_defined_meta("INFO", id);
-                throw ParsingWarning("Info '" + id + "' is not listed in a valid meta-data INFO entry");
+                throw MetaSectionError(state.n_lines,
+                        "Info '" + id + "' is not listed in a valid meta-data INFO entry");
             }
         }
     }
@@ -233,7 +242,8 @@ namespace ebi
                 state.add_well_defined_meta("FORMAT", fm);
             } else {
                 state.add_bad_defined_meta("FORMAT", fm);
-                throw ParsingWarning("Format '" + fm + "' is not listed in a valid meta-data FORMAT entry");
+                throw MetaSectionError(state.n_lines,
+                        "Format '" + fm + "' is not listed in a valid meta-data FORMAT entry");
             }
         }
     }

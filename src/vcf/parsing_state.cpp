@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "vcf/parsing_utils.hpp"
+#include "vcf/parsing_state.hpp"
 
 namespace ebi
 {
