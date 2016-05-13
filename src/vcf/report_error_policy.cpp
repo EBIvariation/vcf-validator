@@ -20,6 +20,16 @@ namespace ebi
 {
   namespace vcf
   {
+    void ReportErrorPolicy::handle_error(ParsingState &state, const Error &error)
+    {
+        state.m_is_valid = false;
+        std::cerr << error.what() << std::endl;
+    }
+
+    void ReportErrorPolicy::handle_warning(ParsingState &state, const Error &error)
+    {
+        std::cerr << error.what() << " (warning)" << std::endl;
+    }
 
     void ReportErrorPolicy::handle_fileformat_section_error(ParsingState & state, std::string message)
     {
@@ -65,6 +75,7 @@ namespace ebi
     {
         std::cerr << BodySectionError(state.n_lines, message + " (warning)").what() << std::endl;
     }
+
 
   }
 }

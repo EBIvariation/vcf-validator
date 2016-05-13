@@ -24,7 +24,7 @@ namespace ebi
     void ValidateOptionalPolicy::optional_check_meta_section(ParsingState const & state) const
     {
         if (state.source->meta_entries.find("reference") == state.source->meta_entries.end()) {
-          throw MetaSectionError(state.n_lines, "A valid 'reference' entry is not listed in the meta section");
+            throw MetaSectionError(state.n_lines, "A valid 'reference' entry is not listed in the meta section");
         }
     }
     

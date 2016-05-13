@@ -21,6 +21,16 @@ namespace ebi
   namespace vcf
   {
 
+    void AbortErrorPolicy::handle_error(ParsingState &state, const Error &error)
+    {
+        state.m_is_valid = false;
+        throw error;
+    }
+    void AbortErrorPolicy::handle_warning(ParsingState &state, const Error &error)
+    {
+        std::cerr << error.what() << " (warning)" << std::endl;
+    }
+
     void AbortErrorPolicy::handle_fileformat_section_error(ParsingState & state, std::string message)
     {
         state.m_is_valid = false;

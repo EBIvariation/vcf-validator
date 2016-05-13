@@ -33,6 +33,9 @@ namespace ebi
     class AbortErrorPolicy
     {
       public:
+        void handle_error(ParsingState &state, const Error &error);
+        void handle_warning(ParsingState &state, const Error &error);
+
         void handle_fileformat_section_error(ParsingState & state, 
                 std::string message = "Error in file format section");
         
@@ -65,6 +68,9 @@ namespace ebi
     class ReportErrorPolicy
     {
       public:
+        void handle_error(ParsingState &state, const Error &error);
+        void handle_warning(ParsingState &state, const Error &error);
+
         void handle_fileformat_section_error(ParsingState & state, 
                 std::string message = "Error in file format section");
         
