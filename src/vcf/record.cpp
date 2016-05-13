@@ -204,7 +204,7 @@ namespace ebi
                         
                         check_field_cardinality(field.second, values, key_values["Number"], 2); // TODO Assumes ploidy=2
                         check_field_type(field.second, values, key_values["Type"]);
-                    } catch (InfoBodyError ex) {
+                    } catch (Error &ex) {
                         throw InfoBodyError(line, "Info " + key_values["ID"] + "=" + ex.get_raw_message());
                     }
                     
@@ -294,7 +294,7 @@ namespace ebi
                     
                     check_field_cardinality(subfield, values, key_values["Number"], alleles.size());
                     check_field_type(subfield, values, key_values["Type"]);
-                } catch (Error ex) {
+                } catch (Error &ex) {
                     throw SamplesBodyError(line, "Sample #" + std::to_string(i+1) + ", " +
                                                 key_values["ID"] + "=" + ex.get_raw_message());
                 }

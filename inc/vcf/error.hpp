@@ -36,7 +36,7 @@ namespace ebi
                   message(message) {}
 
 
-        // TODO: leave here or extract? if we will allow several levels of conservative-risky fixes
+        // TODO: leave here or extract? if we will allow several levels of conservative-risky fixes, it's better to extract
 //        virtual void fix(Error, ParsingState &state);
 //        virtual void fix(MetaError, ParsingState &state);
 
