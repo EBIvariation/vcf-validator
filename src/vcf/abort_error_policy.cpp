@@ -20,7 +20,6 @@ namespace ebi
 {
   namespace vcf
   {
-
     void AbortErrorPolicy::handle_error(ParsingState &state, const Error &error)
     {
         state.m_is_valid = false;
@@ -30,51 +29,5 @@ namespace ebi
     {
         std::cerr << error.what() << " (warning)" << std::endl;
     }
-
-    void AbortErrorPolicy::handle_fileformat_section_error(ParsingState & state, std::string message)
-    {
-        state.m_is_valid = false;
-        throw FileformatError(state.n_lines, message);
-    }
-
-    void AbortErrorPolicy::handle_meta_section_error(ParsingState & state, std::string message)
-    {
-        state.m_is_valid = false;
-        throw MetaSectionError(state.n_lines, message);
-    }
-
-    void AbortErrorPolicy::handle_header_section_error(ParsingState & state, std::string message)
-    {
-        state.m_is_valid = false;
-        throw HeaderSectionError(state.n_lines, message);
-    }
-
-    void AbortErrorPolicy::handle_body_section_error(ParsingState & state, std::string message)
-    {
-        state.m_is_valid = false;
-        throw HeaderSectionError(state.n_lines, message);
-    }
-
-    
-    void AbortErrorPolicy::handle_fileformat_section_warning(ParsingState const & state, std::string message)
-    {
-        std::cerr << FileformatError(state.n_lines, message + " (warning)").what() << std::endl;
-    }
-
-    void AbortErrorPolicy::handle_meta_section_warning(ParsingState const & state, std::string message)
-    {
-        std::cerr << MetaSectionError(state.n_lines, message + " (warning)").what() << std::endl;
-    }
-
-    void AbortErrorPolicy::handle_header_section_warning(ParsingState const & state, std::string message)
-    {
-        std::cerr << HeaderSectionError(state.n_lines, message + " (warning)").what() << std::endl;
-    }
-
-    void AbortErrorPolicy::handle_body_section_warning(ParsingState const & state, std::string message)
-    {
-        std::cerr << BodySectionError(state.n_lines, message + " (warning)").what() << std::endl;
-    }
-
   }
 }

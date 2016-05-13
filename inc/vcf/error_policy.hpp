@@ -35,31 +35,6 @@ namespace ebi
       public:
         void handle_error(ParsingState &state, const Error &error);
         void handle_warning(ParsingState &state, const Error &error);
-
-        void handle_fileformat_section_error(ParsingState & state, 
-                std::string message = "Error in file format section");
-        
-        void handle_meta_section_error(ParsingState & state, 
-                std::string message = "Error in meta-data section");
-        
-        void handle_header_section_error(ParsingState & state, 
-                std::string message = "Error in header section");
-        
-        void handle_body_section_error(ParsingState & state, 
-                std::string message = "Error in body section");
-        
-        
-        void handle_fileformat_section_warning(ParsingState const & state, 
-                std::string message = "Warning in file format section");
-        
-        void handle_meta_section_warning(ParsingState const & state, 
-                std::string message = "Warning in meta-data section");
-        
-        void handle_header_section_warning(ParsingState const & state, 
-                std::string message = "Warning in header section");
-        
-        void handle_body_section_warning(ParsingState const & state, 
-                std::string message = "Warning in body section");
     };
 
     /**
@@ -70,31 +45,6 @@ namespace ebi
       public:
         void handle_error(ParsingState &state, const Error &error);
         void handle_warning(ParsingState &state, const Error &error);
-
-        void handle_fileformat_section_error(ParsingState & state, 
-                std::string message = "Error in file format section");
-        
-        void handle_meta_section_error(ParsingState & state, 
-                std::string message = "Error in meta-data section");
-        
-        void handle_header_section_error(ParsingState & state, 
-                std::string message = "Error in header section");
-        
-        void handle_body_section_error(ParsingState & state, 
-                std::string message = "Error in body section");
-        
-        
-        void handle_fileformat_section_warning(ParsingState const & state, 
-                std::string message = "Warning in file format section");
-        
-        void handle_meta_section_warning(ParsingState const & state, 
-                std::string message = "Warning in fmeta-data section");
-        
-        void handle_header_section_warning(ParsingState const & state, 
-                std::string message = "Warning in header section");
-        
-        void handle_body_section_warning(ParsingState const & state, 
-                std::string message = "Warning in body section");
     };
 
   }
