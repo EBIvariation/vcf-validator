@@ -23,7 +23,7 @@ namespace ebi
     void AbortErrorPolicy::handle_error(ParsingState &state, const Error &error)
     {
         state.m_is_valid = false;
-        throw error;
+        throw;
     }
     void AbortErrorPolicy::handle_warning(ParsingState &state, const Error &error)
     {
