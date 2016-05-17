@@ -59,11 +59,11 @@ namespace ebi
         } else if (m_current_token == "VCFv4.3") {
             fileformat_version = Version::v43;
         } else {
-            throw FileformatError(state.n_lines, "Not allowed VCF fileformat version");
+            throw FileformatError{state.n_lines, "Not allowed VCF fileformat version"};
         }
         
         if (fileformat_version != state.source->version) {
-            throw FileformatError(state.n_lines, "Unexpected VCF fileformat version found");
+            throw FileformatError{state.n_lines, "Unexpected VCF fileformat version found"};
         } else {
             state.set_version(fileformat_version);
         }
@@ -99,7 +99,7 @@ namespace ebi
             state.add_meta(MetaEntry{state.n_lines, m_line_typeid, key_values});
 
         } else {
-            // TODO Throw exception
+            throw MetaSectionError{state.n_lines, "Meta line description is not a value, nor a TypeID=value, nor a TypeID=<Key-value pairs>"};
         }
     }
 
@@ -158,15 +158,22 @@ namespace ebi
 
     void StoreParsePolicy::handle_body_line(ParsingState const & state) 
     {
-        // Transform the position token into a size_t
-        auto position = static_cast<size_t>(std::stoi(m_line_tokens["POS"][0]));
+        size_t position;
+        try {
+            // Transform the position token into a size_t
+            position = static_cast<size_t>(std::stoi(m_line_tokens["POS"][0]));
+        } catch (std::invalid_argument ex) {
+            throw PositionBodyError{state.n_lines};
+        }
 
         // Transform all the quality tokens into floating point numbers
-        float quality;
-        try {
-            quality = std::stof(m_line_tokens["QUAL"][0]);
-        } catch (std::invalid_argument ex) {
-            quality = 0;
+        float quality = 0;
+        if (m_line_tokens["QUAL"][0] != ".") {
+            try {
+                quality = std::stof(m_line_tokens["QUAL"][0]);
+            } catch (std::invalid_argument ex) {
+                throw QualityBodyError{state.n_lines};
+            }
         }
 
         // Split the info tokens by the equals (=) symbol

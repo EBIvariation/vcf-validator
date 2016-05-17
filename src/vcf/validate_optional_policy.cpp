@@ -24,7 +24,7 @@ namespace ebi
     void ValidateOptionalPolicy::optional_check_meta_section(ParsingState const & state) const
     {
         if (state.source->meta_entries.find("reference") == state.source->meta_entries.end()) {
-            throw MetaSectionError(state.n_lines, "A valid 'reference' entry is not listed in the meta section");
+            throw MetaSectionError{state.n_lines, "A valid 'reference' entry is not listed in the meta section"};
         }
     }
     
@@ -72,8 +72,8 @@ namespace ebi
 //            int current_position = std::stoi(ParsePolicy::column_tokens("POS")[0]);
 //            if (previous_record.chromosome == current_chromosome && 
 //                    previous_record.position > current_position) {
-//                throw ParsingWarning("Genomic position " + current_chromosome + ":" + std::to_string(current_position) + 
-//                                     " is listed after " + previous_record.chromosome + ":" + std::to_string(previous_record.position));
+//                throw ParsingWarning{"Genomic position " + current_chromosome + ":" + std::to_string(current_position) +
+//                                     " is listed after " + previous_record.chromosome + ":" + std::to_string(previous_record.position)};
 //            }
 //        }
     }
@@ -91,10 +91,10 @@ namespace ebi
 
             if (ploidy > 0) {
                 if (alleles.size() != ploidy) {
-                    throw SamplesBodyError(
+                    throw SamplesBodyError{
                             state.n_lines,
                             "Sample #" + std::to_string(i) + " has " + std::to_string(alleles.size())
-                                    + " allele(s), but " + std::to_string(ploidy) + " were found in others");
+                                    + " allele(s), but " + std::to_string(ploidy) + " were found in others"};
                 }
             } else {
                 ploidy = alleles.size();
@@ -107,8 +107,8 @@ namespace ebi
     void ValidateOptionalPolicy::check_body_entry_position_zero(ParsingState & state, Record & record) const
     {
         if (record.position == 0) {
-            throw PositionBodyError(state.n_lines,
-                    "Position zero should only be used to reference a telomere");
+            throw PositionBodyError{state.n_lines,
+                    "Position zero should only be used to reference a telomere"};
         }
     }
     
@@ -116,8 +116,8 @@ namespace ebi
     {
         for (auto & id : record.ids) {
             if (std::find(id.begin(), id.end(), ',') != id.end()) {
-                throw IdBodyError(state.n_lines,
-                        "Comma found in the ID column; if used as separator, please replace it with semi-colon");
+                throw IdBodyError{state.n_lines,
+                        "Comma found in the ID column; if used as separator, please replace it with semi-colon"};
             }
         }
     }
@@ -129,8 +129,8 @@ namespace ebi
             auto type = record.types[i];
 
             if (type == RecordType::INDEL && alternate[0] != record.reference_allele[0]) {
-                throw ReferenceAlleleBodyError(state.n_lines,
-                        "Reference and alternate alleles do not share the first nucleotide");
+                throw ReferenceAlleleBodyError{state.n_lines,
+                        "Reference and alternate alleles do not share the first nucleotide"};
             }
         }
     }
@@ -151,8 +151,8 @@ namespace ebi
             state.add_well_defined_meta("contig", current_chromosome);
         } else {
             state.add_bad_defined_meta("contig", current_chromosome);
-            throw MetaSectionError(state.n_lines,
-                    "Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description");
+            throw ChromosomeBodyError{state.n_lines,
+                    "Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description"};
         }
     }
     
@@ -176,8 +176,8 @@ namespace ebi
                     state.add_well_defined_meta("ALT", alt_id);
                 } else {
                     state.add_bad_defined_meta("ALT", alt_id);
-                    throw MetaSectionError(state.n_lines,
-                            "Alternate '<" + alt_id + ">' is not listed in a valid meta-data ALT entry");
+                    throw AlternateAllelesBodyError{state.n_lines,
+                            "Alternate '<" + alt_id + ">' is not listed in a valid meta-data ALT entry"};
                 }
             }
         }
@@ -199,8 +199,8 @@ namespace ebi
                 state.add_well_defined_meta("FILTER", filter);
             } else {
                 state.add_bad_defined_meta("FILTER", filter);
-                throw MetaSectionError(state.n_lines,
-                        "Filter '" + filter + "' is not listed in a valid meta-data FILTER entry");
+                throw FilterBodyError{state.n_lines,
+                        "Filter '" + filter + "' is not listed in a valid meta-data FILTER entry"};
             }
         }
     }
@@ -222,8 +222,8 @@ namespace ebi
                 state.add_well_defined_meta("INFO", id);
             } else {
                 state.add_bad_defined_meta("INFO", id);
-                throw MetaSectionError(state.n_lines,
-                        "Info '" + id + "' is not listed in a valid meta-data INFO entry");
+                throw InfoBodyError{state.n_lines,
+                        "Info '" + id + "' is not listed in a valid meta-data INFO entry"};
             }
         }
     }
@@ -242,8 +242,8 @@ namespace ebi
                 state.add_well_defined_meta("FORMAT", fm);
             } else {
                 state.add_bad_defined_meta("FORMAT", fm);
-                throw MetaSectionError(state.n_lines,
-                        "Format '" + fm + "' is not listed in a valid meta-data FORMAT entry");
+                throw FormatBodyError{state.n_lines,
+                        "Format '" + fm + "' is not listed in a valid meta-data FORMAT entry"};
             }
         }
     }

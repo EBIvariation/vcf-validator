@@ -88,7 +88,7 @@ namespace
             return ValidationLevel::stop;
         }
         
-        throw std::invalid_argument("Please choose one of the accepted validation levels");
+        throw std::invalid_argument{"Please choose one of the accepted validation levels"};
     }
     
     ebi::vcf::Version get_version(std::string const & version_str)
@@ -101,7 +101,7 @@ namespace
             return ebi::vcf::Version::v43;
         }
         
-        throw std::invalid_argument("Please choose one of the accepted VCF fileformat versions");
+        throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
     }
     
     
@@ -130,7 +130,7 @@ namespace
                             std::make_shared<ebi::vcf::Source>(source),
                             std::make_shared<std::vector<ebi::vcf::Record>>(records)));
             default:
-                throw std::invalid_argument("Please choose one of the accepted VCF fileformat versions");
+                throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
             }
         
         case ValidationLevel::warning:
@@ -151,7 +151,7 @@ namespace
                             std::make_shared<ebi::vcf::Source>(source),
                             std::make_shared<std::vector<ebi::vcf::Record>>(records)));
             default:
-                throw std::invalid_argument("Please choose one of the accepted VCF fileformat versions");
+                throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
             }
             
         case ValidationLevel::stop:
@@ -172,11 +172,11 @@ namespace
                             std::make_shared<ebi::vcf::Source>(source),
                             std::make_shared<std::vector<ebi::vcf::Record>>(records)));
             default:
-                throw std::invalid_argument("Please choose one of the accepted VCF fileformat versions");
+                throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
             }
             
         default:
-            throw std::invalid_argument("Please choose one of the accepted validation levels");
+            throw std::invalid_argument{"Please choose one of the accepted validation levels"};
         }
     }
     
