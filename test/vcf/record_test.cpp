@@ -19,11 +19,12 @@
 #include "catch/catch.hpp"
 
 #include "vcf/file_structure.hpp"
+#include "vcf/error.hpp"
 
 namespace ebi
 {
     
-    TEST_CASE("Record constructor", "[constructor]") 
+    TEST_CASE("Record constructor", "[constructor]")
     {
         auto source = vcf::Source {
             "Example VCF source",
@@ -34,6 +35,7 @@ namespace ebi
             
         source.meta_entries.emplace("FORMAT",
             vcf::MetaEntry{
+                1,
                 "FORMAT",
                 {
                     { "ID", "GT" },
@@ -45,6 +47,7 @@ namespace ebi
            
         source.meta_entries.emplace("FORMAT",
             vcf::MetaEntry{
+                1,
                 "FORMAT",
                 {
                     { "ID", "DP" },
@@ -56,6 +59,7 @@ namespace ebi
 
         source.meta_entries.emplace("INFO",
             vcf::MetaEntry{
+                1,
                 "INFO",
                 {
                     { "ID", "AN" },
@@ -67,6 +71,7 @@ namespace ebi
            
         source.meta_entries.emplace("INFO",
             vcf::MetaEntry{
+                1,
                 "INFO",
                 {
                     { "ID", "AF" },
@@ -79,7 +84,8 @@ namespace ebi
          
         SECTION("Correct arguments") 
         {
-            CHECK_NOTHROW( (vcf::Record { 
+            CHECK_NOTHROW( (vcf::Record {
+                                1,
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
@@ -92,7 +98,8 @@ namespace ebi
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)} ) );
                 
-            CHECK_NOTHROW( (vcf::Record{ 
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
                                 "chr1", 
                                 123456, 
                                 { }, 
@@ -108,7 +115,8 @@ namespace ebi
 
         SECTION("Chromosome with whitespaces") 
         {
-            CHECK_THROWS_AS( (vcf::Record{ 
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
                                 "chr 1", 
                                 123456, 
                                 { "id123", "id456" }, 
@@ -120,12 +128,13 @@ namespace ebi
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            std::invalid_argument);
+                            vcf::ChromosomeBodyError);
         }
 
         SECTION("Chromosome with colons") 
         {
-            CHECK_THROWS_AS( (vcf::Record{ 
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
                                 "chr:1", 
                                 123456, 
                                 { "id123", "id456" }, 
@@ -137,12 +146,13 @@ namespace ebi
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            std::invalid_argument);
+                            vcf::ChromosomeBodyError);
         }
 
         SECTION("ID with whitespaces") 
         {
-            CHECK_THROWS_AS( (vcf::Record{ 
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
                                 "chr1", 
                                 123456, 
                                 { "id 123", "id456" }, 
@@ -154,12 +164,13 @@ namespace ebi
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            std::invalid_argument);
+                            vcf::IdBodyError);
         }
 
         SECTION("Different length alleles")
         {
-            CHECK_NOTHROW( (vcf::Record{ 
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
@@ -172,7 +183,8 @@ namespace ebi
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}) );
                                 
-            CHECK_NOTHROW( (vcf::Record{ 
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
@@ -188,8 +200,9 @@ namespace ebi
         
         SECTION("Same length alleles") 
         {
-            CHECK_NOTHROW( (vcf::Record{ 
-                                "chr1", 
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
                                 123456, 
                                 { "id123", "id456" }, 
                                 "A", 
@@ -204,8 +217,9 @@ namespace ebi
 
         SECTION("Same alleles") 
         {
-            CHECK_THROWS_AS( (vcf::Record{ 
-                                "chr1", 
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
+                                "chr1",
                                 123456, 
                                 { "id123", "id456" }, 
                                 "A", 
@@ -216,12 +230,13 @@ namespace ebi
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            std::invalid_argument);
+                            vcf::AlternateAllelesBodyError);
         }
 
         SECTION("Less-than-zero quality") 
         {
-            CHECK_THROWS_AS( (vcf::Record{ 
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
@@ -233,12 +248,13 @@ namespace ebi
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            std::invalid_argument);
+                            vcf::QualityBodyError);
         }
 
         SECTION("Emtpy INFO") 
         {
-            CHECK_NOTHROW( (vcf::Record{ 
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
@@ -254,7 +270,8 @@ namespace ebi
 
         SECTION("Single-field format") 
         {
-            CHECK_NOTHROW( (vcf::Record{ 
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
@@ -267,7 +284,8 @@ namespace ebi
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}) );
                                 
-            CHECK_THROWS_AS( (vcf::Record{ 
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
@@ -279,12 +297,13 @@ namespace ebi
                                 { "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            std::invalid_argument);
+                            vcf::FormatBodyError);
         }
         
         SECTION("Multi-field format") 
         {
-            CHECK_NOTHROW( (vcf::Record{ 
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
@@ -297,19 +316,20 @@ namespace ebi
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}) );
                                 
-            CHECK_THROWS_AS( (vcf::Record{ 
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
                                 "A", 
-                                { "A", "C" }, 
+                                { "T", "C" },
                                 1.0, 
                                 { "PASS" }, 
                                 { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
                                 { "DP", "GT" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            std::invalid_argument);
+                            vcf::FormatBodyError);
         }
         
     }
