@@ -21,8 +21,13 @@ endmacro (declare_mod)
 declare_mod (vcf)
 
 # Dependency libraries
+if (BUILD_STATIC)
+  set(Boost_USE_STATIC_LIBS ON) # only find static libs
+endif (BUILD_STATIC)
 find_package (Boost COMPONENTS filesystem program_options regex system REQUIRED )
 include_directories (${Boost_INCLUDE_DIR} )
+
+add_library(sqlite3 lib/sqlite/sqlite3.c)
 
 # Static build extra flags
 if (BUILD_STATIC)
@@ -48,3 +53,7 @@ add_test (NAME ValidatorTests COMMAND test_validator)
 # Build binary
 add_executable (vcf_validator src/main.cpp)
 target_link_libraries (vcf_validator mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable (test_sqlite_write_read sqlitetest/write_read.cpp)
+target_link_libraries (test_sqlite_write_read mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} sqlite3)
+
