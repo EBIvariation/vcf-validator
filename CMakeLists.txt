@@ -5,6 +5,7 @@ set (vcf-validator_VERSION_MAJOR 0)
 set (vcf-validator_VERSION_MINOR 2)
 
 set (CMAKE_CXX_FLAGS "-std=c++11 -O3 -Wall -g")
+set (CMAKE_C_FLAGS " -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION")
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include_directories (inc)
