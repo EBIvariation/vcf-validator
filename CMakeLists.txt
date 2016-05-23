@@ -5,7 +5,7 @@ set (vcf-validator_VERSION_MAJOR 0)
 set (vcf-validator_VERSION_MINOR 2)
 
 set (CMAKE_CXX_FLAGS "-std=c++11 -O3 -Wall -g")
-set (CMAKE_C_FLAGS " -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION")
+set (CMAKE_C_FLAGS " -DSQLITE_OMIT_LOAD_EXTENSION")
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include_directories (inc)
@@ -29,6 +29,7 @@ find_package (Boost COMPONENTS filesystem program_options regex system REQUIRED 
 include_directories (${Boost_INCLUDE_DIR} )
 
 add_library(sqlite3 lib/sqlite/sqlite3.c)
+find_package (Threads REQUIRED)
 
 # Static build extra flags
 if (BUILD_STATIC)
@@ -40,8 +41,7 @@ if (BUILD_STATIC)
   set (CMAKE_SHARED_LIBRARY_C_FLAGS)         # remove -fPIC
   set (CMAKE_SHARED_LIBRARY_CXX_FLAGS)
   set (CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
-  set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS) 
-  find_package (Threads REQUIRED)
+  set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
 endif (BUILD_STATIC)
 
 # Application tests
@@ -56,5 +56,5 @@ add_executable (vcf_validator src/main.cpp)
 target_link_libraries (vcf_validator mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 add_executable (test_sqlite_write_read sqlitetest/write_read.cpp)
-target_link_libraries (test_sqlite_write_read mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} sqlite3)
+target_link_libraries (test_sqlite_write_read mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
 
