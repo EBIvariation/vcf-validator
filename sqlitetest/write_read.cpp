@@ -6,7 +6,7 @@ using namespace std;
 
 static int callback(void *written, int argc, char **argv, char **azColName){
     int i;
-    if(*(int*)written % 1000 == 0) {
+    if(*(int*)written % 100000 == 0) {
         for(i=0; i<argc; i++){
             cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << endl;
         }
@@ -44,7 +44,7 @@ int main(int argc, char **argv){
     int transactionSize = 1000000;
     int currentTransactionSize = 0;
 
-    for (int i = 0; i < 1000000; ++i) {
+    for (int i = 0; i < 10000000; ++i) {
         if (currentTransactionSize == 0) {
             rc = sqlite3_exec(db, "BEGIN", NULL, 0, &zErrMsg);
             if( rc!=SQLITE_OK ){
