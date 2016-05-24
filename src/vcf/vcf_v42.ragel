@@ -733,7 +733,8 @@
     main            := fileformat_section
                         meta_section
                         header_section
-                        body_section >meta_section_end ;
+                        body_section >meta_section_end 
+                        (NL)* ;
 
     # Error recovery machines that skip until the next line and restart the
     # the most appropriate section state.

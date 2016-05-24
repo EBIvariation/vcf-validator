@@ -1,5 +1,5 @@
 /**
- * Copyright 2014-2015 EMBL - European Bioinformatics Institute
+ * Copyright 2014-2016 EMBL - European Bioinformatics Institute
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -184,13 +184,14 @@ namespace
     std::istream & readline(std::istream & stream, Container & container)
     {
         char c;
-
         container.clear();
 
-        do {
-            stream.get(c);
+        while (!stream.eof() && stream.get(c)) {
             container.push_back(c);
-        } while (!stream.eof() && c != '\n');
+            if (c == '\n') {
+                break;
+            }
+        }
 
         return stream;
     }

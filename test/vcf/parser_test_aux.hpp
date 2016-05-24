@@ -17,6 +17,10 @@
 #ifndef TEST_AUX_HPP
 #define	TEST_AUX_HPP
 
+#include <iostream>
+#include <fstream>
+#include <memory>
+
 #include <boost/filesystem.hpp>
 
 #include "catch/catch.hpp"
@@ -33,14 +37,15 @@ namespace ebi
     std::istream & readline(std::istream & stream, Container & container)
     {
         char c;
-
         container.clear();
 
-        do {
-            stream.get(c);
+        while (!stream.eof() && stream.get(c)) {
             container.push_back(c);
-        } while (!stream.eof() && c != '\n');
-        
+            if (c == '\n') {
+                break;
+            }
+        }
+
         return stream;
     }
     

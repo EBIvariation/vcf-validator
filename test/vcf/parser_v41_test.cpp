@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-#include <iostream>
-#include <fstream>
-#include <memory>
-
 #include "parser_test_aux.hpp"
 
 namespace ebi
@@ -35,13 +31,13 @@ namespace ebi
 
         std::vector<char> line;
         line.reserve(default_line_buffer_size);
-
-        while (readline(input, line)) { 
-           validator.parse(line);
+        
+        while (readline(input, line)) {
+            validator.parse(line);
         }
 
         validator.end();
-        
+
         return validator.is_valid();
     }
 

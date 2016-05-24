@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-#include <iostream>
-#include <fstream>
-#include <memory>
-
 #include "parser_test_aux.hpp"
 
 namespace ebi
@@ -39,7 +35,7 @@ namespace ebi
         while (readline(input, line)) { 
            validator.parse(line);
         }
-
+        
         validator.end();
         
         return validator.is_valid();
