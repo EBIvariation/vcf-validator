@@ -58,3 +58,7 @@ target_link_libraries (vcf_validator mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_L
 add_executable (test_sqlite_write_read sqlitetest/write_read.cpp)
 target_link_libraries (test_sqlite_write_read mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
 
+
+add_executable (test_sqlite_producer_consumer sqlitetest/producer_consumer.cpp)
+target_link_libraries (test_sqlite_producer_consumer mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
+
