@@ -25,6 +25,7 @@
 
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
+#include "vcf/output.hpp"
 
 namespace
 {
@@ -195,13 +196,17 @@ namespace
         return stream;
     }
 
-    bool is_valid_vcf_file(std::istream & input, ebi::vcf::Parser & validator)
+    bool is_valid_vcf_file(std::istream & input, ebi::vcf::Parser & validator, ebi::vcf::Output & output)
     {
         std::vector<char> line;
         line.reserve(default_line_buffer_size);
 
         while (readline(input, line)) { 
-           validator.parse(line);
+            validator.parse(line);
+            // for each output type
+            for (auto error : *validator.errors()) {
+                output.write(*error);
+            }
         }
 
         validator.end();
@@ -228,14 +233,15 @@ int main(int argc, char** argv)
         auto level = vm["level"].as<std::string>();
         auto version = vm["version"].as<std::string>();
         auto validator = build_parser(path, get_validation_level(level), get_version(version));
+        std::shared_ptr<ebi::vcf::Output> output{std::make_shared<ebi::vcf::SqliteOutput>("errors.db")};
     
         if (path == "stdin") {
             std::cout << "Reading from standard input..." << std::endl;
-            is_valid = is_valid_vcf_file(std::cin, *validator);
+            is_valid = is_valid_vcf_file(std::cin, *validator, *output);
         } else {
             std::cout << "Reading from input file..." << std::endl;
             std::ifstream input{path};
-            is_valid = is_valid_vcf_file(input, *validator);
+            is_valid = is_valid_vcf_file(input, *validator, *output);
         }
 
         std::cout << "The input file is " << (is_valid ? "valid" : "not valid") << std::endl;

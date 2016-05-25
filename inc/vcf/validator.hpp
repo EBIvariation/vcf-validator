@@ -72,6 +72,7 @@ namespace ebi
         virtual void end() = 0;
 
         virtual bool is_valid() const = 0;
+        virtual const std::shared_ptr<std::vector<std::shared_ptr<Error>>> errors() const = 0;
     };
     
     class ParserImpl
@@ -82,12 +83,14 @@ namespace ebi
         ParserImpl(std::shared_ptr<Source> const & source,
                    std::shared_ptr<std::vector<Record>> const & records);
         
-        void parse(std::string const & text);
-        void parse(std::vector<char> const & text);
+        void parse(std::string const & text) override;
+        void parse(std::vector<char> const & text) override;
 
-        void end();
+        void end() override;
 
-        bool is_valid() const;
+        bool is_valid() const override;
+        const std::shared_ptr<std::vector<std::shared_ptr<Error>>> errors() const override;
+
        
       protected:
         virtual void parse_buffer(char const * p, char const * pe, char const * eof) = 0;

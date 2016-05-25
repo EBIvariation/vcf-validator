@@ -23,12 +23,14 @@ namespace ebi
     void ReportErrorPolicy::handle_error(ParsingState &state, const Error &error)
     {
         state.m_is_valid = false;
-        std::cerr << error.what() << std::endl;
+        state.add_error(error);
+//        std::cerr << error.what() << std::endl;
     }
 
     void ReportErrorPolicy::handle_warning(ParsingState &state, const Error &error)
     {
-        std::cerr << error.what() << " (warning)" << std::endl;
+        state.add_error(error);
+//        std::cerr << error.what() << " (warning)" << std::endl;
     }
   }
 }

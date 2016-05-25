@@ -1,5 +1,5 @@
 /**
- * Copyright 2014-2015 EMBL - European Bioinformatics Institute
+ * Copyright 2016 EMBL - European Bioinformatics Institute
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,33 @@
  * limitations under the License.
  */
 
-#include "vcf/error_policy.hpp"
+#ifndef VCF_VALIDATOR_OUTPUT_HPP
+#define VCF_VALIDATOR_OUTPUT_HPP
+
+#include <iostream>
+#include <string>
+#include "vcf/error.hpp"
 
 namespace ebi
 {
   namespace vcf
   {
-    void AbortErrorPolicy::handle_error(ParsingState &state, const Error &error)
+    class Output
     {
-        state.m_is_valid = false;
-        throw;
-    }
-    void AbortErrorPolicy::handle_warning(ParsingState &state, const Error &error)
+      public:
+        virtual void write(Error &error) = 0;
+    };
+
+    class SqliteOutput : public Output
     {
-        state.add_error(error);
-//        std::cerr << error.what() << " (warning)" << std::endl;
-    }
+      public:
+        SqliteOutput(std::string db_name);
+
+        void write(Error &error);
+
+    };
   }
 }
+
+
+#endif //VCF_VALIDATOR_OUTPUT_HPP
