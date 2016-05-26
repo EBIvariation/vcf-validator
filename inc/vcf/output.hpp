@@ -19,6 +19,9 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <stdexcept>
+#include "sqlite/sqlite3.h"
 #include "vcf/error.hpp"
 
 namespace ebi
@@ -28,16 +31,30 @@ namespace ebi
     class Output
     {
       public:
+//        virtual ~Output() {}  // needed if using raw pointers, instead of references or shared_ptrs
         virtual void write(Error &error) = 0;
     };
 
+    class StdOutput : public Output
+    {
+      public:
+
+      private:
+        virtual void write(Error &error) override
+        {
+          std::cout << error.what() << std::endl;
+        }
+    };
     class SqliteOutput : public Output
     {
       public:
         SqliteOutput(std::string db_name);
+        ~SqliteOutput();
+        void write(Error &error) override;
 
-        void write(Error &error);
-
+      private:
+        sqlite3* db;
+        const size_t transaction_size = 1000000;
     };
   }
 }
