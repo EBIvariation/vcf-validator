@@ -47,7 +47,7 @@ endif (BUILD_STATIC)
 # Application tests
 file (GLOB ALL_TESTS "test/*/*")
 add_executable (test_validator test/main_test.cpp ${ALL_TESTS})
-target_link_libraries (test_validator mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (test_validator mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
 enable_testing ()
 add_test (NAME ValidatorTests COMMAND test_validator)
 
