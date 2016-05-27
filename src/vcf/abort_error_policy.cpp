@@ -27,8 +27,8 @@ namespace ebi
     }
     void AbortErrorPolicy::handle_warning(ParsingState &state, const Error &error)
     {
+        // TODO store error as a warning. state.add_warning? error.set_severity(Error::warning)?
         state.add_error(error);
-//        std::cerr << error.what() << " (warning)" << std::endl;
     }
   }
 }

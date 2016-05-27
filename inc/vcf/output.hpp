@@ -21,6 +21,8 @@
 #include <string>
 #include <sstream>
 #include <stdexcept>
+#include <chrono>
+#include <thread>
 #include "sqlite/sqlite3.h"
 #include "vcf/error.hpp"
 
@@ -53,8 +55,14 @@ namespace ebi
         void write(Error &error) override;
 
       private:
+        void start_transaction();
+        void finish_transaction();
+
         sqlite3* db;
-        const size_t transaction_size = 1000000;
+        std::string db_name;
+        size_t current_transaction_size;
+        const size_t transaction_size;
+        const std::chrono::milliseconds sleep_time;
     };
   }
 }

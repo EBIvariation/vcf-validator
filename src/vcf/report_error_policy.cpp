@@ -24,13 +24,12 @@ namespace ebi
     {
         state.m_is_valid = false;
         state.add_error(error);
-//        std::cerr << error.what() << std::endl;
     }
 
     void ReportErrorPolicy::handle_warning(ParsingState &state, const Error &error)
     {
+        // TODO store error as a warning. state.add_warning? error.set_severity(Error::warning)?
         state.add_error(error);
-//        std::cerr << error.what() << " (warning)" << std::endl;
     }
   }
 }

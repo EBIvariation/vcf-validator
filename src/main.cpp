@@ -27,6 +27,7 @@
 #include "vcf/validator.hpp"
 #include "vcf/output.hpp"
 
+// TODO any reason why this namespace is indented 4 spaces?
 namespace
 {
     size_t const default_line_buffer_size = 64 * 1024;
@@ -115,7 +116,7 @@ namespace
         std::sort(outs.begin(), outs.end());
         std::unique(outs.begin(), outs.end());
         if (initial_size != outs.size()) {
-            // TODO throw? or just warn?
+            // TODO if there are repeated outputs, throw? or just warn?
         }
 
         std::vector<std::shared_ptr<ebi::vcf::Output>> outputs;
@@ -125,6 +126,8 @@ namespace
                 outputs.push_back(std::make_shared<ebi::vcf::SqliteOutput>(input + ".errors.db"));
             } else if (out == "stdout") {
                 outputs.push_back(std::make_shared<ebi::vcf::StdOutput>());
+            } else {
+                // TODO if there are unrecognized options, throw? or just warn
             }
         }
 

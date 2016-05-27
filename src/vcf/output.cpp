@@ -8,43 +8,94 @@ namespace ebi
 {
   namespace vcf
   {
-    SqliteOutput::SqliteOutput(std::string db_name)
+    SqliteOutput::SqliteOutput(std::string db_name) : db_name{db_name}, current_transaction_size{0},
+                                                      transaction_size{1000000}, sleep_time{500}
     {
         int rc = sqlite3_open(db_name.c_str(), &db);
-        if(rc != SQLITE_OK) {
+        if (rc != SQLITE_OK) {
             sqlite3_close(db);
             throw std::runtime_error(std::string("Can't open database: ") + sqlite3_errmsg(db));
         }
 
         char *zErrMsg = NULL;
-        rc = sqlite3_exec(db, "CREATE TABLE if not exists Errors ( line int, message varchar(255));", NULL, 0, &zErrMsg);
-        if(rc != SQLITE_OK) {
-            std::string errorMessage{std::string("Can't use table: ") + zErrMsg};
+        rc = sqlite3_exec(db, "CREATE TABLE if not exists Errors (line int, message varchar(255));", NULL, 0,
+                          &zErrMsg);
+        if (rc != SQLITE_OK) {
+            std::string error_message{std::string("Can't use table: ") + zErrMsg};
             sqlite3_free(zErrMsg);
             sqlite3_close(db);
-            throw std::runtime_error(errorMessage);
+            throw std::runtime_error{error_message};
         }
     }
 
     void SqliteOutput::write(Error &error)
     {
-        // TODO do with transactions
+        char *zErrMsg = NULL;
+        int rc;
+        if (current_transaction_size == 0) {
+            start_transaction();
+        }
         std::stringstream ss;
         ss << "INSERT INTO Errors ( line , message ) VALUES (";
         ss << error.get_line() << " , \"" << error.get_raw_message() << "\");";
 
-        char *zErrMsg = NULL;
-        int rc = sqlite3_exec(db, ss.str().c_str(), NULL, 0, &zErrMsg);
+        rc = sqlite3_exec(db, ss.str().c_str(), NULL, 0, &zErrMsg);
         if (rc != SQLITE_OK) {
-            std::string errorMessage{std::string("Can't write: ") + zErrMsg};
+            std::string error_message{std::string("Can't write: ") + zErrMsg};
             sqlite3_free(zErrMsg);
-            throw std::runtime_error(errorMessage);
+            throw std::runtime_error{error_message};
+        }
+
+        ++current_transaction_size;
+        if (current_transaction_size == transaction_size) {
+            finish_transaction();
+            current_transaction_size = 0;
+        }
+    }
+
+    void SqliteOutput::start_transaction()
+    {
+        char *zErrMsg = NULL;
+        int rc = sqlite3_exec(db, "BEGIN", NULL, 0, &zErrMsg);
+        if (rc != SQLITE_OK) {
+            std::string error_message{std::string("Can't start transaction: ") + zErrMsg};
+            sqlite3_free(zErrMsg);
+            throw std::runtime_error{error_message};
+        }
+    }
+
+    void SqliteOutput::finish_transaction()
+    {
+        char *zErrMsg = NULL;
+        int rc = sqlite3_exec(db, "COMMIT", NULL, 0, &zErrMsg);
+        if (rc != SQLITE_OK) {
+            std::string error_message{std::string("Can't finish transaction: ") + zErrMsg};
+            sqlite3_free(zErrMsg);
+            throw std::runtime_error{error_message};
         }
     }
 
     SqliteOutput::~SqliteOutput()
     {
-        sqlite3_close(db);
+        // in case the amount of inserts is not a multiple of the transaction size, do the leftover inserts in a smaller transaction
+        if (current_transaction_size != 0) {
+            finish_transaction();
+            current_transaction_size = 0;
+        }
+
+        int rc = sqlite3_close(db);
+        if (rc != SQLITE_OK) {
+            int remaining_tries = 10;
+            while (rc == SQLITE_BUSY && remaining_tries-- > 0) {
+                // maybe sqlite is still writing the last transaction
+                std::cerr << "waiting to finish transactions" << std::endl;
+                std::this_thread::sleep_for(sleep_time);
+                rc = sqlite3_close(db);
+            }
+            if (rc != SQLITE_OK) {
+                throw std::runtime_error{"can not close database " + db_name};
+            }
+        }
     }
   }
 }
