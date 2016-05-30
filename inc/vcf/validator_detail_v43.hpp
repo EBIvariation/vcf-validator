@@ -1111,7 +1111,7 @@ tr757:
 tr761:
 #line 501 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_body_section_error(*this, "Format is not a colon-separated list of alphanumeric strings");
+        ErrorPolicy::handle_body_section_error(*this, "Format does not start with a letter/underscore followed by alphanumeric/underscore/dot characters");
         p--; {goto st734;}
     }
 #line 91 "src/vcf/vcf_v43.ragel"
@@ -17786,7 +17786,7 @@ case 739:
 	case 530: 
 #line 501 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_body_section_error(*this, "Format is not a colon-separated list of alphanumeric strings");
+        ErrorPolicy::handle_body_section_error(*this, "Format does not start with a letter/underscore followed by alphanumeric/underscore/dot characters");
         p--; {goto st734;}
     }
 #line 91 "src/vcf/vcf_v43.ragel"

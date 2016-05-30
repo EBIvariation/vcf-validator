@@ -499,7 +499,7 @@
     
     # Format
     action format_error {
-        ErrorPolicy::handle_body_section_error(*this, "Format is not a colon-separated list of alphanumeric strings");
+        ErrorPolicy::handle_body_section_error(*this, "Format does not start with a letter/underscore followed by alphanumeric/underscore/dot characters");
         fhold; fgoto body_section_skip;
     }
 
