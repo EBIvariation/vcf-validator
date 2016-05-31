@@ -57,7 +57,7 @@ namespace ebi
         
         void clear_records() const;
 
-        void add_error(const Error &error);
+        void add_error(std::shared_ptr<Error> error);
 
         void clear_errors();
         

@@ -20,16 +20,16 @@ namespace ebi
 {
   namespace vcf
   {
-    void ReportErrorPolicy::handle_error(ParsingState &state, const Error &error)
+    void ReportErrorPolicy::handle_error(ParsingState &state, Error *error)
     {
         state.m_is_valid = false;
-        state.add_error(error);
+        state.add_error(std::shared_ptr<Error>(error));
     }
 
-    void ReportErrorPolicy::handle_warning(ParsingState &state, const Error &error)
+    void ReportErrorPolicy::handle_warning(ParsingState &state, Error *error)
     {
         // TODO store error as a warning. state.add_warning? error.set_severity(Error::warning)?
-        state.add_error(error);
+        state.add_error(std::shared_ptr<Error>(error));
     }
   }
 }

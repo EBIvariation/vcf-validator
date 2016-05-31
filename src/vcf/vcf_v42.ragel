@@ -58,30 +58,30 @@
     ######### Global section actions #########
 
     action fileformat_section_error {
-        ErrorPolicy::handle_error(*this, FileformatError{n_lines});
+        ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
         fhold; fgoto meta_section_skip;
     }
 
     action meta_section_error {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         fhold; fgoto meta_section_skip;
     }
     
     action meta_section_end {
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
     }
 
     action header_section_error {
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -89,7 +89,7 @@
     }
 
     action body_section_error {
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         fhold; fgoto body_section_skip;
     }
 
@@ -171,7 +171,7 @@
     action meta_entry_end {
         try {
           ParsePolicy::handle_meta_line(*this);
-        } catch (MetaSectionError &error) {
+        } catch (MetaSectionError *error) {
           ErrorPolicy::handle_error(*this, error);
         }
     }
@@ -197,12 +197,12 @@
             try {
           // Check warnings (non-blocking errors but potential mistakes anyway, only makes sense if the last record parsed was correct)
           OptionalPolicy::optional_check_body_entry(*this, ParsingState::records->back());
-            } catch (MetaSectionError &warn) {
+            } catch (MetaSectionError *warn) {
                 ErrorPolicy::handle_warning(*this, warn);
-            } catch (BodySectionError &warn) {
+            } catch (BodySectionError *warn) {
                 ErrorPolicy::handle_warning(*this, warn);
             }
-        } catch (BodySectionError &error) {
+        } catch (BodySectionError *error) {
             ErrorPolicy::handle_error(*this, error);
         }
     }
@@ -213,125 +213,125 @@
     # Fileformat line
     action fileformat_error {
         ErrorPolicy::handle_error(*this,
-            FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.2'"});
+            new FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.2'"});
         fhold; fgoto meta_section_skip;
     } 
 
     # ALT metadata
     action meta_alt_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in ALT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         fhold; fgoto meta_section_skip;
     }
 
     action meta_alt_id_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines,
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines,
             "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"});
         fhold; fgoto meta_section_skip;
     }
     
     # assembly metadata
     action meta_assembly_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in assembly metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
         fhold; fgoto meta_section_skip;
     }
     
     # contig metadata
     action meta_contig_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in contig metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
         fhold; fgoto meta_section_skip;
     }
     
     # FILTER metadata
     action meta_filter_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FILTER metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         fhold; fgoto meta_section_skip;
     }
 
     # FORMAT metadata
     action meta_format_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         fhold; fgoto meta_section_skip;
     }
 
     action meta_format_number_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G or dot"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G or dot"});
         fhold; fgoto meta_section_skip;
     }
     
     action meta_format_type_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "FORMAT metadata Type is not a Integer, Float, Character or String"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Type is not a Integer, Float, Character or String"});
         fhold; fgoto meta_section_skip;
     }
 
     # INFO metadata
     action meta_info_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in INFO metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         fhold; fgoto meta_section_skip;
     }
 
     action meta_info_number_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "INFO metadata Number is not a number, A, R, G or dot"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Number is not a number, A, R, G or dot"});
         fhold; fgoto meta_section_skip;
     }
     
     action meta_info_type_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "INFO metadata Type is not a Integer, Float, Flag, Character or String"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not a Integer, Float, Flag, Character or String"});
         fhold; fgoto meta_section_skip;
     }
 
     # PEDIGREE metadata
     action meta_pedigree_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         fhold; fgoto meta_section_skip;
     }
     
     # pedigreeDB metadata
     action meta_pedigreedb_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         fhold; fgoto meta_section_skip;
     }
     
     # SAMPLE metadata
     action meta_sample_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         fhold; fgoto meta_section_skip;
     }
     
     action meta_sample_genomes_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
         fhold; fgoto meta_section_skip;
     }
     
     action meta_sample_mixture_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
         fhold; fgoto meta_section_skip;
     }
     
     # Metadata generic errors (do not apply to a specific type)
     action meta_id_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         fhold; fgoto meta_section_skip;
     }
     
     action meta_desc_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata description string is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         fhold; fgoto meta_section_skip;
     }
 
     action meta_url_err {
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata URL is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
         fhold; fgoto meta_section_skip;
     }
     
     # Header errors
     action header_prefix_err {
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines,
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
             "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -342,155 +342,155 @@
 
     # Chromosome
     action chrom_error {
-        ErrorPolicy::handle_error(*this, ChromosomeBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new ChromosomeBodyError{n_lines});
         fhold; fgoto body_section_skip;
     }
 
     # Position
     action pos_error {
-        ErrorPolicy::handle_error(*this, PositionBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new PositionBodyError{n_lines});
         fhold; fgoto body_section_skip;
     }
 
     # ID
     action id_error {
-        ErrorPolicy::handle_error(*this, IdBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new IdBodyError{n_lines});
         fhold; fgoto body_section_skip;
     }
 
     # Reference allele
     action ref_error {
-        ErrorPolicy::handle_error(*this, ReferenceAlleleBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new ReferenceAlleleBodyError{n_lines});
         fhold; fgoto body_section_skip;
     }
 
     # Alternate alleles
     action alt_error {
-        ErrorPolicy::handle_error(*this, AlternateAllelesBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new AlternateAllelesBodyError{n_lines});
         fhold; fgoto body_section_skip;
     }
 
     # Quality
     action qual_error {
-        ErrorPolicy::handle_error(*this, QualityBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new QualityBodyError{n_lines});
         fhold; fgoto body_section_skip;
     }
 
     # Filter
     action filter_error {
-        ErrorPolicy::handle_error(*this, FilterBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new FilterBodyError{n_lines});
         fhold; fgoto body_section_skip;
     }
 
     # Info
     action info_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         fhold; fgoto body_section_skip;
     }
 
     action info_key_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         fhold; fgoto body_section_skip;
     }
     
     action info_value_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
         fhold; fgoto body_section_skip;
     }
     
     action info_AA_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info AA value is not a single dot or a string of bases"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AA value is not a single dot or a string of bases"});
         fhold; fgoto body_section_skip;
     }
     
     action info_AC_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info AC value is not a comma-separated list of numbers"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AC value is not a comma-separated list of numbers"});
         fhold; fgoto body_section_skip;
     }
     
     action info_AF_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info AF value is not a comma-separated list of numbers"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AF value is not a comma-separated list of numbers"});
         fhold; fgoto body_section_skip;
     }
     
     action info_AN_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info AN value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AN value is not an integer number"});
         fhold; fgoto body_section_skip;
     }
     
     action info_BQ_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info BQ value is not a number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info BQ value is not a number"});
         fhold; fgoto body_section_skip;
     }
     
     action info_CIGAR_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info CIGAR value is not an alphanumeric string"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info CIGAR value is not an alphanumeric string"});
         fhold; fgoto body_section_skip;
     }
     
     action info_DB_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info DB is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info DB is not a flag (with 1/0/no value)"});
         fhold; fgoto body_section_skip;
     }
     
     action info_DP_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info DP value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info DP value is not an integer number"});
         fhold; fgoto body_section_skip;
     }
     
     action info_END_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info END value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info END value is not an integer number"});
         fhold; fgoto body_section_skip;
     }
     
     action info_H2_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info H2 is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info H2 is not a flag (with 1/0/no value)"});
         fhold; fgoto body_section_skip;
     }
     
     action info_H3_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info H3 is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info H3 is not a flag (with 1/0/no value)"});
         fhold; fgoto body_section_skip;
     }
     
     action info_MQ_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info MQ value is not a number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info MQ value is not a number"});
         fhold; fgoto body_section_skip;
     }
     
     action info_MQ0_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info MQ0 value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info MQ0 value is not an integer number"});
         fhold; fgoto body_section_skip;
     }
     
     action info_NS_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info NS value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info NS value is not an integer number"});
         fhold; fgoto body_section_skip;
     }
     
     action info_SB_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info SB value is not a number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info SB value is not a number"});
         fhold; fgoto body_section_skip;
     }
     
     action info_SOMATIC_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info SOMATIC is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info SOMATIC is not a flag (with 1/0/no value)"});
         fhold; fgoto body_section_skip;
     }
     
     action info_VALIDATED_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info VALIDATED is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info VALIDATED is not a flag (with 1/0/no value)"});
         fhold; fgoto body_section_skip;
     }
     
     action info_1000G_error {
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info 1000G is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info 1000G is not a flag (with 1/0/no value)"});
         fhold; fgoto body_section_skip;
     }
     
     # Format
     action format_error {
-        ErrorPolicy::handle_error(*this, FormatBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new FormatBodyError{n_lines});
         fhold; fgoto body_section_skip;
     }
 
@@ -498,14 +498,14 @@
     action sample_error {
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
-        ErrorPolicy::handle_error(*this, SamplesBodyError{n_lines, message_stream.str()});
+        ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
         fhold; fgoto body_section_skip;
     }
     
     action sample_gt_error {
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
-        ErrorPolicy::handle_error(*this, SamplesBodyError{n_lines, message_stream.str()});
+        ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
         fhold; fgoto body_section_skip;
     }
 

@@ -128,7 +128,7 @@ namespace ebi
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            vcf::ChromosomeBodyError);
+                            vcf::ChromosomeBodyError*);
         }
 
         SECTION("Chromosome with colons") 
@@ -146,7 +146,7 @@ namespace ebi
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            vcf::ChromosomeBodyError);
+                            vcf::ChromosomeBodyError*);
         }
 
         SECTION("ID with whitespaces") 
@@ -164,7 +164,7 @@ namespace ebi
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            vcf::IdBodyError);
+                            vcf::IdBodyError*);
         }
 
         SECTION("Different length alleles")
@@ -230,7 +230,7 @@ namespace ebi
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            vcf::AlternateAllelesBodyError);
+                            vcf::AlternateAllelesBodyError*);
         }
 
         SECTION("Less-than-zero quality") 
@@ -248,7 +248,7 @@ namespace ebi
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            vcf::QualityBodyError);
+                            vcf::QualityBodyError*);
         }
 
         SECTION("Emtpy INFO") 
@@ -297,7 +297,7 @@ namespace ebi
                                 { "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            vcf::FormatBodyError);
+                            vcf::FormatBodyError*);
         }
         
         SECTION("Multi-field format") 
@@ -329,7 +329,7 @@ namespace ebi
                                 { "DP", "GT" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
-                            vcf::FormatBodyError);
+                            vcf::FormatBodyError*);
         }
         
     }

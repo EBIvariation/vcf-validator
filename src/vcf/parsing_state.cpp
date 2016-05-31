@@ -50,9 +50,9 @@ namespace ebi
         records->clear();
     }
 
-    void ParsingState::add_error(Error const & error)
+    void ParsingState::add_error(std::shared_ptr<Error> error)
     {
-        errors->push_back(std::make_shared<Error>(error));
+        errors->push_back(error);
     }
 
     void ParsingState::clear_errors()

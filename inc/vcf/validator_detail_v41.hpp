@@ -81,7 +81,7 @@ case 1:
 tr0:
 #line 60 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, FileformatError{n_lines});
+        ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
@@ -89,35 +89,35 @@ tr14:
 #line 219 "src/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_error(*this,
-            FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.1'"});
+            new FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.1'"});
         p--; {goto st656;}
     }
 #line 60 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, FileformatError{n_lines});
+        ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr23:
 #line 60 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, FileformatError{n_lines});
+        ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 #line 332 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines,
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
             "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -125,12 +125,12 @@ tr23:
     }
 #line 78 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -140,18 +140,18 @@ tr23:
 tr25:
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 #line 332 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines,
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
             "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -159,12 +159,12 @@ tr25:
     }
 #line 78 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -174,604 +174,604 @@ tr25:
 tr28:
 #line 226 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in ALT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st656;}
     }
 #line 250 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FILTER metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st656;}
     }
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in INFO metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st656;}
     }
 #line 238 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in assembly metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
         p--; {goto st656;}
     }
 #line 244 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in contig metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 288 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st656;}
     }
 #line 294 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr38:
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr121:
 #line 226 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in ALT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr129:
 #line 231 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines,
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines,
             "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"});
         p--; {goto st656;}
     }
 #line 226 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in ALT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr147:
 #line 321 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata description string is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st656;}
     }
 #line 226 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in ALT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr158:
 #line 250 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FILTER metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st656;}
     }
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr161:
 #line 250 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FILTER metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr171:
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 250 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FILTER metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr190:
 #line 321 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata description string is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st656;}
     }
 #line 250 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FILTER metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr200:
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr210:
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr223:
 #line 261 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G or dot"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G or dot"});
         p--; {goto st656;}
     }
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr232:
 #line 282 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "INFO metadata Type is not a Integer, Float, Flag, Character or String"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not a Integer, Float, Flag, Character or String"});
         p--; {goto st656;}
     }
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr249:
 #line 321 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata description string is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st656;}
     }
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr260:
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in INFO metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr269:
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in INFO metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr282:
 #line 277 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "INFO metadata Number is not a number, A, R, G or dot"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Number is not a number, A, R, G or dot"});
         p--; {goto st656;}
     }
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in INFO metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr291:
 #line 282 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "INFO metadata Type is not a Integer, Float, Flag, Character or String"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not a Integer, Float, Flag, Character or String"});
         p--; {goto st656;}
     }
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in INFO metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr308:
 #line 321 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata description string is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st656;}
     }
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in INFO metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr319:
 #line 288 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr329:
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 288 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr341:
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr352:
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr357:
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 305 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr359:
 #line 305 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr369:
 #line 305 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
         p--; {goto st656;}
     }
 #line 310 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr372:
 #line 310 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr382:
 #line 310 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
         p--; {goto st656;}
     }
 #line 321 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata description string is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr385:
 #line 321 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata description string is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr408:
 #line 238 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in assembly metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr417:
 #line 326 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata URL is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
         p--; {goto st656;}
     }
 #line 238 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in assembly metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr424:
 #line 244 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in contig metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr435:
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 244 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in contig metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr474:
 #line 294 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr486:
 #line 326 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata URL is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
         p--; {goto st656;}
     }
 #line 294 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	goto st0;
 tr494:
 #line 332 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines,
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
             "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -779,12 +779,12 @@ tr494:
     }
 #line 78 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -794,12 +794,12 @@ tr494:
 tr533:
 #line 78 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -809,113 +809,113 @@ tr533:
 tr545:
 #line 349 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, ChromosomeBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new ChromosomeBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr549:
 #line 355 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, PositionBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new PositionBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr554:
 #line 361 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, IdBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new IdBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr559:
 #line 367 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, ReferenceAlleleBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new ReferenceAlleleBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr563:
 #line 373 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, AlternateAllelesBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new AlternateAllelesBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr572:
 #line 379 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, QualityBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new QualityBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr584:
 #line 385 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, FilterBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new FilterBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr592:
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr613:
 #line 497 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, FormatBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new FormatBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
@@ -924,19 +924,19 @@ tr618:
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
-        ErrorPolicy::handle_error(*this, SamplesBodyError{n_lines, message_stream.str()});
+        ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
         p--; {goto st657;}
     }
 #line 503 "src/vcf/vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
-        ErrorPolicy::handle_error(*this, SamplesBodyError{n_lines, message_stream.str()});
+        ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
@@ -945,479 +945,479 @@ tr630:
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
-        ErrorPolicy::handle_error(*this, SamplesBodyError{n_lines, message_stream.str()});
+        ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr636:
 #line 401 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr638:
 #line 491 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info 1000G is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info 1000G is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr640:
 #line 491 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info 1000G is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info 1000G is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr647:
 #line 406 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info AA value is not a single dot or a string of bases"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AA value is not a single dot or a string of bases"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr651:
 #line 411 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info AC value is not a comma-separated list of numbers"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AC value is not a comma-separated list of numbers"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr655:
 #line 416 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info AF value is not a comma-separated list of numbers"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AF value is not a comma-separated list of numbers"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr669:
 #line 421 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info AN value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AN value is not an integer number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr674:
 #line 426 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info BQ value is not a number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info BQ value is not a number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr692:
 #line 431 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info CIGAR value is not an alphanumeric string"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info CIGAR value is not an alphanumeric string"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr696:
 #line 436 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info DB is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info DB is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr698:
 #line 436 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info DB is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info DB is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr701:
 #line 441 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info DP value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info DP value is not an integer number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr707:
 #line 446 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info END value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info END value is not an integer number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr712:
 #line 451 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info H2 is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info H2 is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr714:
 #line 451 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info H2 is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info H2 is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr716:
 #line 456 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info H3 is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info H3 is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr718:
 #line 456 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info H3 is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info H3 is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr724:
 #line 466 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info MQ0 value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info MQ0 value is not an integer number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr727:
 #line 461 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info MQ value is not a number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info MQ value is not a number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr742:
 #line 471 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info NS value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info NS value is not an integer number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr748:
 #line 476 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info SB value is not a number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info SB value is not a number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr766:
 #line 481 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info SOMATIC is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info SOMATIC is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr768:
 #line 481 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info SOMATIC is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info SOMATIC is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr778:
 #line 486 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info VALIDATED is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info VALIDATED is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr780:
 #line 486 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info VALIDATED is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info VALIDATED is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
 tr844:
 #line 78 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -1425,12 +1425,12 @@ tr844:
     }
 #line 349 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, ChromosomeBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new ChromosomeBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	goto st0;
@@ -1636,7 +1636,7 @@ tr22:
 	{
         try {
           ParsePolicy::handle_fileformat(*this);
-        } catch (FileformatError &error) {
+        } catch (FileformatError *error) {
           ErrorPolicy::handle_error(*this, error);
           p--; {goto st656;}
         }  
@@ -1768,7 +1768,7 @@ tr44:
 	{
         try {
           ParsePolicy::handle_meta_line(*this);
-        } catch (MetaSectionError &error) {
+        } catch (MetaSectionError *error) {
           ErrorPolicy::handle_error(*this, error);
         }
     }
@@ -1788,7 +1788,7 @@ tr52:
 	{
         try {
           ParsePolicy::handle_meta_line(*this);
-        } catch (MetaSectionError &error) {
+        } catch (MetaSectionError *error) {
           ErrorPolicy::handle_error(*this, error);
         }
     }
@@ -8065,7 +8065,7 @@ tr845:
 	{
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
     }
@@ -8835,12 +8835,12 @@ tr610:
             try {
                 // Check warnings (non-blocking errors but potential mistakes anyway, only makes sense if the last record parsed was correct)
                 OptionalPolicy::optional_check_body_entry(*this, ParsingState::records->back());
-            } catch (MetaSectionError &warn) {
+            } catch (MetaSectionError *warn) {
                 ErrorPolicy::handle_warning(*this, warn);
-            } catch (BodySectionError &warn) {
+            } catch (BodySectionError *warn) {
                 ErrorPolicy::handle_warning(*this, warn);
             }
-        } catch (BodySectionError &error) {
+        } catch (BodySectionError *error) {
             ErrorPolicy::handle_error(*this, error);
         }
     }
@@ -8876,7 +8876,7 @@ tr846:
 	{
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
     }
@@ -14172,7 +14172,7 @@ case 661:
 	case 13: 
 #line 60 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, FileformatError{n_lines});
+        ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14225,7 +14225,7 @@ case 661:
 	case 72: 
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14234,7 +14234,7 @@ case 661:
 	{
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
     }
@@ -14250,12 +14250,12 @@ case 661:
 	case 414: 
 #line 78 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -14273,12 +14273,12 @@ case 661:
 #line 219 "src/vcf/vcf_v41.ragel"
 	{
         ErrorPolicy::handle_error(*this,
-            FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.1'"});
+            new FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.1'"});
         p--; {goto st656;}
     }
 #line 60 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, FileformatError{n_lines});
+        ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14305,12 +14305,12 @@ case 661:
 	case 98: 
 #line 226 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in ALT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14324,12 +14324,12 @@ case 661:
 	case 309: 
 #line 238 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in assembly metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14364,12 +14364,12 @@ case 661:
 	case 349: 
 #line 244 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in contig metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14398,12 +14398,12 @@ case 661:
 	case 132: 
 #line 250 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FILTER metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14444,12 +14444,12 @@ case 661:
 	case 180: 
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14489,12 +14489,12 @@ case 661:
 	case 228: 
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in INFO metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14510,12 +14510,12 @@ case 661:
 	case 248: 
 #line 288 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14532,12 +14532,12 @@ case 661:
 	case 360: 
 #line 294 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14554,12 +14554,12 @@ case 661:
 	case 298: 
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14602,13 +14602,13 @@ case 661:
 	case 405: 
 #line 332 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines,
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
             "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -14616,12 +14616,12 @@ case 661:
     }
 #line 78 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -14638,12 +14638,12 @@ case 661:
 	case 655: 
 #line 349 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, ChromosomeBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new ChromosomeBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -14652,12 +14652,12 @@ case 661:
 	case 418: 
 #line 355 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, PositionBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new PositionBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -14665,12 +14665,12 @@ case 661:
 	case 420: 
 #line 361 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, IdBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new IdBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -14678,12 +14678,12 @@ case 661:
 	case 422: 
 #line 367 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, ReferenceAlleleBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new ReferenceAlleleBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -14746,12 +14746,12 @@ case 661:
 	case 653: 
 #line 373 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, AlternateAllelesBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new AlternateAllelesBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -14771,12 +14771,12 @@ case 661:
 	case 598: 
 #line 379 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, QualityBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new QualityBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -14787,12 +14787,12 @@ case 661:
 	case 588: 
 #line 385 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, FilterBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new FilterBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -14800,12 +14800,12 @@ case 661:
 	case 436: 
 #line 497 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, FormatBodyError{n_lines});
+        ErrorPolicy::handle_error(*this, new FormatBodyError{n_lines});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -14815,12 +14815,12 @@ case 661:
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
-        ErrorPolicy::handle_error(*this, SamplesBodyError{n_lines, message_stream.str()});
+        ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -14828,18 +14828,18 @@ case 661:
 	case 28: 
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 #line 332 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines,
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
             "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -14847,12 +14847,12 @@ case 661:
     }
 #line 78 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -14864,35 +14864,35 @@ case 661:
 	case 102: 
 #line 231 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines,
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines,
             "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"});
         p--; {goto st656;}
     }
 #line 226 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in ALT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
 	case 103: 
 #line 250 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FILTER metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st656;}
     }
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14901,17 +14901,17 @@ case 661:
 	case 184: 
 #line 261 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G or dot"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G or dot"});
         p--; {goto st656;}
     }
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14920,17 +14920,17 @@ case 661:
 	case 232: 
 #line 277 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "INFO metadata Number is not a number, A, R, G or dot"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Number is not a number, A, R, G or dot"});
         p--; {goto st656;}
     }
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in INFO metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14938,17 +14938,17 @@ case 661:
 	case 163: 
 #line 282 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "INFO metadata Type is not a Integer, Float, Flag, Character or String"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not a Integer, Float, Flag, Character or String"});
         p--; {goto st656;}
     }
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14956,17 +14956,17 @@ case 661:
 	case 211: 
 #line 282 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "INFO metadata Type is not a Integer, Float, Flag, Character or String"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not a Integer, Float, Flag, Character or String"});
         p--; {goto st656;}
     }
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in INFO metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -14981,17 +14981,17 @@ case 661:
 	case 270: 
 #line 305 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15006,17 +15006,17 @@ case 661:
 	case 280: 
 #line 310 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15026,17 +15026,17 @@ case 661:
 	case 330: 
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 244 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in contig metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15045,17 +15045,17 @@ case 661:
 	case 115: 
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 250 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FILTER metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15064,17 +15064,17 @@ case 661:
 	case 147: 
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15083,17 +15083,17 @@ case 661:
 	case 195: 
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in INFO metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15105,17 +15105,17 @@ case 661:
 	case 247: 
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 288 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15123,17 +15123,17 @@ case 661:
 	case 260: 
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15145,17 +15145,17 @@ case 661:
 	case 101: 
 #line 321 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata description string is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st656;}
     }
 #line 226 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in ALT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15167,17 +15167,17 @@ case 661:
 	case 135: 
 #line 321 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata description string is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st656;}
     }
 #line 250 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FILTER metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15189,17 +15189,17 @@ case 661:
 	case 183: 
 #line 321 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata description string is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st656;}
     }
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15211,17 +15211,17 @@ case 661:
 	case 231: 
 #line 321 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata description string is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st656;}
     }
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in INFO metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15246,17 +15246,17 @@ case 661:
 	case 301: 
 #line 321 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata description string is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15269,17 +15269,17 @@ case 661:
 	case 316: 
 #line 326 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata URL is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
         p--; {goto st656;}
     }
 #line 238 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in assembly metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15293,17 +15293,17 @@ case 661:
 	case 368: 
 #line 326 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata URL is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
         p--; {goto st656;}
     }
 #line 294 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
@@ -15356,17 +15356,17 @@ case 661:
 	case 586: 
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15374,17 +15374,17 @@ case 661:
 	case 454: 
 #line 401 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15393,17 +15393,17 @@ case 661:
 	case 462: 
 #line 406 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info AA value is not a single dot or a string of bases"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AA value is not a single dot or a string of bases"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15412,17 +15412,17 @@ case 661:
 	case 466: 
 #line 411 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info AC value is not a comma-separated list of numbers"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AC value is not a comma-separated list of numbers"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15441,17 +15441,17 @@ case 661:
 	case 480: 
 #line 416 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info AF value is not a comma-separated list of numbers"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AF value is not a comma-separated list of numbers"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15460,17 +15460,17 @@ case 661:
 	case 484: 
 #line 421 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info AN value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AN value is not an integer number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15489,17 +15489,17 @@ case 661:
 	case 499: 
 #line 426 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info BQ value is not a number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info BQ value is not a number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15507,17 +15507,17 @@ case 661:
 	case 506: 
 #line 431 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info CIGAR value is not an alphanumeric string"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info CIGAR value is not an alphanumeric string"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15525,17 +15525,17 @@ case 661:
 	case 510: 
 #line 436 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info DB is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info DB is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15544,17 +15544,17 @@ case 661:
 	case 514: 
 #line 441 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info DP value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info DP value is not an integer number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15563,17 +15563,17 @@ case 661:
 	case 520: 
 #line 446 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info END value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info END value is not an integer number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15581,17 +15581,17 @@ case 661:
 	case 524: 
 #line 451 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info H2 is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info H2 is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15599,17 +15599,17 @@ case 661:
 	case 527: 
 #line 456 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info H3 is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info H3 is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15628,17 +15628,17 @@ case 661:
 	case 546: 
 #line 461 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info MQ value is not a number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info MQ value is not a number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15647,17 +15647,17 @@ case 661:
 	case 533: 
 #line 466 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info MQ0 value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info MQ0 value is not an integer number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15666,17 +15666,17 @@ case 661:
 	case 551: 
 #line 471 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info NS value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info NS value is not an integer number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15695,17 +15695,17 @@ case 661:
 	case 566: 
 #line 476 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info SB value is not a number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info SB value is not a number"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15713,17 +15713,17 @@ case 661:
 	case 574: 
 #line 481 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info SOMATIC is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info SOMATIC is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15731,17 +15731,17 @@ case 661:
 	case 585: 
 #line 486 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info VALIDATED is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info VALIDATED is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15749,17 +15749,17 @@ case 661:
 	case 457: 
 #line 491 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info 1000G is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info 1000G is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
@@ -15771,42 +15771,42 @@ case 661:
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
-        ErrorPolicy::handle_error(*this, SamplesBodyError{n_lines, message_stream.str()});
+        ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
         p--; {goto st657;}
     }
 #line 503 "src/vcf/vcf_v41.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
-        ErrorPolicy::handle_error(*this, SamplesBodyError{n_lines, message_stream.str()});
+        ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
 	case 22: 
 #line 60 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, FileformatError{n_lines});
+        ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 #line 332 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines,
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
             "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -15814,12 +15814,12 @@ case 661:
     }
 #line 78 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, HeaderSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
         
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError &warn) {
+        } catch (MetaSectionError *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -15829,250 +15829,250 @@ case 661:
 	case 271: 
 #line 305 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
         p--; {goto st656;}
     }
 #line 310 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
 	case 281: 
 #line 310 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
         p--; {goto st656;}
     }
 #line 321 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata description string is not valid"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
 	case 261: 
 #line 316 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st656;}
     }
 #line 305 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;
 	case 508: 
 #line 436 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info DB is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info DB is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
 	case 522: 
 #line 451 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info H2 is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info H2 is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
 	case 525: 
 #line 456 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info H3 is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info H3 is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
 	case 572: 
 #line 481 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info SOMATIC is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info SOMATIC is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
 	case 583: 
 #line 486 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info VALIDATED is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info VALIDATED is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
 	case 455: 
 #line 491 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info 1000G is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info 1000G is not a flag (with 1/0/no value)"});
         p--; {goto st657;}
     }
 #line 396 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st657;}
     }
 #line 391 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st657;}
     }
 #line 91 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, BodySectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st657;}
     }
 	break;
 	case 24: 
 #line 226 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in ALT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st656;}
     }
 #line 250 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FILTER metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st656;}
     }
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st656;}
     }
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in INFO metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st656;}
     }
 #line 238 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in assembly metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
         p--; {goto st656;}
     }
 #line 244 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in contig metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
         p--; {goto st656;}
     }
 #line 300 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st656;}
     }
 #line 288 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st656;}
     }
 #line 294 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         p--; {goto st656;}
     }
 #line 65 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_error(*this, MetaSectionError{n_lines});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st656;}
     }
 	break;

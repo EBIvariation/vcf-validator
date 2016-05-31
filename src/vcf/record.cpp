@@ -101,10 +101,10 @@ namespace ebi
     void Record::check_chromosome() const
     {
         if (chromosome.find(':') != std::string::npos) {
-            throw ChromosomeBodyError{line, "Chromosome must not contain colons"};
+            throw new ChromosomeBodyError{line, "Chromosome must not contain colons"};
         }
         if (chromosome.find(' ') != std::string::npos) {
-            throw ChromosomeBodyError{line, "Chromosome must not contain white-spaces"};
+            throw new ChromosomeBodyError{line, "Chromosome must not contain white-spaces"};
         }
     }
 
@@ -116,7 +116,7 @@ namespace ebi
         
         for (auto & id : ids) {
             if (std::find_if(id.begin(), id.end(), [](char c) { return c == ' ' || c == ';'; }) != id.end()) {
-                throw IdBodyError{line, "ID must not contain semicolons or whitespaces"};
+                throw new IdBodyError{line, "ID must not contain semicolons or whitespaces"};
             }
         }
     }
@@ -141,7 +141,7 @@ namespace ebi
                     !boost::starts_with(alt_id, "DUP") && 
                     !boost::starts_with(alt_id, "INV") && 
                     !boost::starts_with(alt_id, "CNV")) {
-                    throw AlternateAllelesBodyError{line,
+                    throw new AlternateAllelesBodyError{line,
                             "Alternate ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"};
                 }
             }
@@ -154,14 +154,14 @@ namespace ebi
         switch (type) {
             case RecordType::NO_VARIATION:
                 if (alternate_alleles.size() > 1) {
-                    throw AlternateAllelesBodyError{line,
+                    throw new AlternateAllelesBodyError{line,
                             "The no-alternate alleles symbol (dot) can not be combined with others"};
                 }
                 break;
             case RecordType::SNV:
             case RecordType::MNV:
                 if (alternate == reference_allele) {
-                    throw AlternateAllelesBodyError{line, "Reference and alternate alleles must not be the same"};
+                    throw new AlternateAllelesBodyError{line, "Reference and alternate alleles must not be the same"};
                 }
             case RecordType::INDEL:
                 // Nothing to check
@@ -177,7 +177,7 @@ namespace ebi
     void Record::check_quality() const
     {
         if (quality < 0) {
-            throw QualityBodyError{line, "Quality is not equal or greater than zero"};
+            throw new QualityBodyError{line, "Quality is not equal or greater than zero"};
         }
     }
     
@@ -204,8 +204,8 @@ namespace ebi
                         
                         check_field_cardinality(field.second, values, key_values["Number"], 2); // TODO Assumes ploidy=2
                         check_field_type(field.second, values, key_values["Type"]);
-                    } catch (Error &ex) {
-                        throw InfoBodyError{line, "Info " + key_values["ID"] + "=" + ex.get_raw_message()};
+                    } catch (Error *ex) {
+                        throw new InfoBodyError{line, "Info " + key_values["ID"] + "=" + ex->get_raw_message()};
                     }
                     
                     break;
@@ -222,14 +222,14 @@ namespace ebi
         }
             
         if (format[0] != "GT") {
-            throw FormatBodyError{line, "GT must be the first field in the FORMAT column"};
+            throw new FormatBodyError{line, "GT must be the first field in the FORMAT column"};
         }
     }
 
     void Record::check_samples() const
     {
         if (samples.size() != source->samples_names.size()) {
-            throw SamplesBodyError{line, "The number of samples must match those listed in the header line"};
+            throw new SamplesBodyError{line, "The number of samples must match those listed in the header line"};
         }
      
         if (samples.size() == 0) {
@@ -267,7 +267,7 @@ namespace ebi
             
             // The number of subfields can't be greater than the number in the FORMAT column
             if (subfields.size() > format.size()) {
-                throw SamplesBodyError{line, "Sample #" + std::to_string(i+1) +
+                throw new SamplesBodyError{line, "Sample #" + std::to_string(i+1) +
                         " has more fields than specified in the FORMAT column"};
             }
             
@@ -294,9 +294,9 @@ namespace ebi
                     
                     check_field_cardinality(subfield, values, key_values["Number"], alleles.size());
                     check_field_type(subfield, values, key_values["Type"]);
-                } catch (Error &ex) {
-                    throw SamplesBodyError{line, "Sample #" + std::to_string(i+1) + ", " +
-                                                key_values["ID"] + "=" + ex.get_raw_message()};
+                } catch (Error *ex) {
+                    throw new SamplesBodyError{line, "Sample #" + std::to_string(i+1) + ", " +
+                                                key_values["ID"] + "=" + ex->get_raw_message()};
                 }
             }
         }
@@ -309,7 +309,7 @@ namespace ebi
 
             size_t num_allele = std::stoi(allele);
             if (num_allele > alternate_alleles.size()) {
-                throw SamplesBodyError{line, "Allele index " + std::to_string(num_allele) +
+                throw new SamplesBodyError{line, "Allele index " + std::to_string(num_allele) +
                         " is greater than the maximum allowed " + std::to_string(alternate_alleles.size())};
             }
         }
@@ -347,7 +347,7 @@ namespace ebi
             // there will be one empty value that needs to be specifically checked
             if (values.size() != expected && 
                 values.size() > 1 && values[0] != "") {
-                throw Error{line, field + " does not match the meta specification Number=" + number +
+                throw new Error{line, field + " does not match the meta specification Number=" + number +
                         ", expected " + std::to_string(expected) + " values"};
                 
             }
@@ -376,24 +376,24 @@ namespace ebi
                     }
                 } else if (type == "Flag") {
                     if (value.size() > 1) {
-                        throw Error{line, "There can be only 0 or 1 value"};
+                        throw new Error{line, "There can be only 0 or 1 value"};
                     } else if (value.size() == 1) {
                         int numeric_value = std::stoi(value);
                         if (numeric_value != 0 && numeric_value != 1) {
-                            throw Error{line, "A flag must be 0 or 1"};
+                            throw new Error{line, "A flag must be 0 or 1"};
                         }
                     }
                     // If no flag is provided then there is nothing to check
                 } else if (type == "Character") {
                     // ...check the length is 1
                     if (value.size() > 1) {
-                        throw Error{line, "There can be only one character"};
+                        throw new Error{line, "There can be only one character"};
                     }
                 } else if (type == "String") {
                     // ...do nothing, it is guaranteed it will be a string
                 } 
             } catch (...) {
-                throw Error{line, field + " does not match the meta specification Type=" + type};
+                throw new Error{line, field + " does not match the meta specification Type=" + type};
             }
         }
     }
