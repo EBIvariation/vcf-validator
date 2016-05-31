@@ -42,6 +42,7 @@ namespace ebi
         std::shared_ptr<Source> source;
         std::shared_ptr<std::vector<Record>> records;
         std::shared_ptr<std::vector<std::shared_ptr<Error>>> errors;
+        std::shared_ptr<std::vector<std::shared_ptr<Error>>> warnings;
      
         std::multimap<std::string, std::string> defined_metadata;
         std::multimap<std::string, std::string> undefined_metadata;
@@ -54,12 +55,13 @@ namespace ebi
         void add_meta(MetaEntry const & meta) const;
         
         void add_record(Record const & record) const;
-        
         void clear_records() const;
 
         void add_error(std::shared_ptr<Error> error);
-
         void clear_errors();
+
+        void add_warning(std::shared_ptr<Error> error);
+        void clear_warnings();
         
         std::vector<std::string> const & samples() const;
         

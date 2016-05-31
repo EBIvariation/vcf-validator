@@ -26,9 +26,28 @@ namespace ebi
             sqlite3_close(db);
             throw std::runtime_error{error_message};
         }
+        
+        rc = sqlite3_exec(db, "CREATE TABLE if not exists Warnings (line int, message varchar(255));", NULL, 0,
+                          &zErrMsg);
+        if (rc != SQLITE_OK) {
+            std::string error_message{std::string("Can't use table: ") + zErrMsg};
+            sqlite3_free(zErrMsg);
+            sqlite3_close(db);
+            throw std::runtime_error{error_message};
+        }
     }
 
-    void SqliteOutput::write(Error &error)
+    void SqliteOutput::write_error(Error &error)
+    {
+        write(error, "Errors");
+    }
+
+    void SqliteOutput::write_warning(Error &error)
+    {
+        write(error, "Warnings");
+    }
+
+    void SqliteOutput::write(Error &error, std::string table)
     {
         char *zErrMsg = NULL;
         int rc;
@@ -36,7 +55,7 @@ namespace ebi
             start_transaction();
         }
         std::stringstream ss;
-        ss << "INSERT INTO Errors ( line , message ) VALUES (";
+        ss << "INSERT INTO " << table << " ( line , message ) VALUES (";
         ss << error.get_line() << " , \"" << error.get_raw_message() << "\");";
 
         rc = sqlite3_exec(db, ss.str().c_str(), NULL, 0, &zErrMsg);

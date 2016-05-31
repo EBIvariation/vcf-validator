@@ -235,7 +235,12 @@ namespace
 
             for (auto error : *validator.errors()) {
                 for (auto output : outputs) {
-                    output->write(*error);
+                    output->write_error(*error);
+                }
+            }
+            for (auto error : *validator.warnings()) {
+                for (auto output : outputs) {
+                    output->write_warning(*error);
                 }
             }
         }

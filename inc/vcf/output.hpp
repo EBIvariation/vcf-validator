@@ -34,7 +34,8 @@ namespace ebi
     {
       public:
 //        virtual ~Output() {}  // needed if using raw pointers, instead of references or shared_ptrs
-        virtual void write(Error &error) = 0;
+        virtual void write_error(Error &error) = 0;
+        virtual void write_warning(Error &error) = 0;
     };
 
     class StdOutput : public Output
@@ -42,9 +43,13 @@ namespace ebi
       public:
 
       private:
-        virtual void write(Error &error) override
+        virtual void write_error(Error &error) override
         {
           std::cout << error.what() << std::endl;
+        }
+        virtual void write_warning(Error &error) override
+        {
+          std::cout << error.what() << " (warning)" << std::endl;
         }
     };
     class SqliteOutput : public Output
@@ -52,9 +57,11 @@ namespace ebi
       public:
         SqliteOutput(std::string db_name);
         ~SqliteOutput();
-        void write(Error &error) override;
+        void write_error(Error &error) override;
+        void write_warning(Error &error) override;
 
       private:
+        void write(Error &error, std::string table);
         void start_transaction();
         void finish_transaction();
 

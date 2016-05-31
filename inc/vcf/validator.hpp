@@ -73,6 +73,7 @@ namespace ebi
 
         virtual bool is_valid() const = 0;
         virtual const std::shared_ptr<std::vector<std::shared_ptr<Error>>> errors() const = 0;
+        virtual const std::shared_ptr<std::vector<std::shared_ptr<Error>>> warnings() const = 0;
     };
     
     class ParserImpl
@@ -90,6 +91,7 @@ namespace ebi
 
         bool is_valid() const override;
         const std::shared_ptr<std::vector<std::shared_ptr<Error>>> errors() const override;
+        const std::shared_ptr<std::vector<std::shared_ptr<Error>>> warnings() const override;
 
        
       protected:

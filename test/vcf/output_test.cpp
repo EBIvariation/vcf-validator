@@ -67,7 +67,10 @@ namespace ebi
       while (readline(input, line)) {
           validator.parse(line);
           for (auto error : *validator.errors()) {
-              output.write(*error);
+              output.write_error(*error);
+          }
+          for (auto warn : *validator.warnings()) {
+              output.write_warning(*warn);
           }
       }
 
@@ -96,13 +99,26 @@ namespace ebi
           }
 
           char *zErrMsg = NULL;
-          int count = -1;
+          int count_errors = -1;
           rc = sqlite3_exec(db, "SELECT count(*) FROM Errors", [](void* count, int columns, char**values, char**names) {
               if (values[0] != NULL) {
                   *(int*)count = std::stoi(values[0]);
               }
               return 0;
-          }, &count, &zErrMsg);
+          }, &count_errors, &zErrMsg);
+          if (rc != SQLITE_OK) {
+              std::string error_message = std::string("Can't read database: ") + zErrMsg;
+              sqlite3_free(zErrMsg);
+              throw std::runtime_error(error_message);
+          }
+          
+          int count_warnings = -1;
+          rc = sqlite3_exec(db, "SELECT count(*) FROM Warnings", [](void* count, int columns, char**values, char**names) {
+              if (values[0] != NULL) {
+                  *(int*)count = std::stoi(values[0]);
+              }
+              return 0;
+          }, &count_warnings, &zErrMsg);
           if (rc != SQLITE_OK) {
               std::string error_message = std::string("Can't read database: ") + zErrMsg;
               sqlite3_free(zErrMsg);
@@ -112,8 +128,9 @@ namespace ebi
           sqlite3_close(db);
           boost::filesystem::path db_file{db_name};
           boost::filesystem::remove(db_file);
-          REQUIRE(count == 3);
-          REQUIRE_FALSE(boost::filesystem::exists(db_file));
+          CHECK(count_errors == 1);
+          CHECK(count_warnings == 2);
+          CHECK_FALSE(boost::filesystem::exists(db_file));
       }
 
   }
