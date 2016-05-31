@@ -19,7 +19,6 @@
 #include <fstream>
 
 #include <boost/filesystem.hpp>
-#include <vcf/output.hpp>
 
 #include "catch/catch.hpp"
 #include "sqlite/sqlite3.h"
@@ -27,6 +26,7 @@
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
 #include "vcf/error.hpp"
+#include "vcf/report_writer.hpp"
 
 
 namespace ebi

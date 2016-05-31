@@ -2,7 +2,7 @@
 // Created by jmmut on 25/05/16.
 //
 
-#include "vcf/output.hpp"
+#include "vcf/report_writer.hpp"
 
 namespace ebi
 {

@@ -25,7 +25,7 @@
 
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
-#include "vcf/output.hpp"
+#include "vcf/report_writer.hpp"
 
 // TODO any reason why this namespace is indented 4 spaces?
 namespace
