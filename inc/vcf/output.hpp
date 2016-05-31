@@ -30,15 +30,15 @@ namespace ebi
 {
   namespace vcf
   {
-    class Output
+    class ReportWriter
     {
       public:
-//        virtual ~Output() {}  // needed if using raw pointers, instead of references or shared_ptrs
+//        virtual ~ReportWriter() {}  // needed if using raw pointers, instead of references or shared_ptrs
         virtual void write_error(Error &error) = 0;
         virtual void write_warning(Error &error) = 0;
     };
 
-    class StdOutput : public Output
+    class StdoutReportWriter : public ReportWriter
     {
       public:
 
@@ -52,11 +52,11 @@ namespace ebi
           std::cout << error.what() << " (warning)" << std::endl;
         }
     };
-    class SqliteOutput : public Output
+    class SqliteReportWriter : public ReportWriter
     {
       public:
-        SqliteOutput(std::string db_name);
-        ~SqliteOutput();
+        SqliteReportWriter(std::string db_name);
+        ~SqliteReportWriter();
         void write_error(Error &error) override;
         void write_warning(Error &error) override;
 

@@ -48,7 +48,7 @@ namespace ebi
       return stream;
   }
 
-  bool is_valid(std::string path, ebi::vcf::Output &output)
+  bool is_valid(std::string path, ebi::vcf::ReportWriter &output)
   {
       std::ifstream input{path};
       if (!input) {
@@ -89,7 +89,7 @@ namespace ebi
       SECTION(path.string())
       {
           {
-              std::shared_ptr<ebi::vcf::Output> output{std::make_shared<ebi::vcf::SqliteOutput>(db_name)};
+              std::shared_ptr<ebi::vcf::ReportWriter> output{std::make_shared<ebi::vcf::SqliteReportWriter>(db_name)};
               CHECK_FALSE(is_valid(path.string(), *output));
           }
           int rc = sqlite3_open(db_name.c_str(), &db);

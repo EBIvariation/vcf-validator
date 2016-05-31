@@ -8,7 +8,7 @@ namespace ebi
 {
   namespace vcf
   {
-    SqliteOutput::SqliteOutput(std::string db_name) : db_name{db_name}, current_transaction_size{0},
+    SqliteReportWriter::SqliteReportWriter(std::string db_name) : db_name{db_name}, current_transaction_size{0},
                                                       transaction_size{1000000}, sleep_time{500}
     {
         int rc = sqlite3_open(db_name.c_str(), &db);
@@ -37,17 +37,17 @@ namespace ebi
         }
     }
 
-    void SqliteOutput::write_error(Error &error)
+    void SqliteReportWriter::write_error(Error &error)
     {
         write(error, "Errors");
     }
 
-    void SqliteOutput::write_warning(Error &error)
+    void SqliteReportWriter::write_warning(Error &error)
     {
         write(error, "Warnings");
     }
 
-    void SqliteOutput::write(Error &error, std::string table)
+    void SqliteReportWriter::write(Error &error, std::string table)
     {
         char *zErrMsg = NULL;
         int rc;
@@ -72,7 +72,7 @@ namespace ebi
         }
     }
 
-    void SqliteOutput::start_transaction()
+    void SqliteReportWriter::start_transaction()
     {
         char *zErrMsg = NULL;
         int rc = sqlite3_exec(db, "BEGIN", NULL, 0, &zErrMsg);
@@ -83,7 +83,7 @@ namespace ebi
         }
     }
 
-    void SqliteOutput::finish_transaction()
+    void SqliteReportWriter::finish_transaction()
     {
         char *zErrMsg = NULL;
         int rc = sqlite3_exec(db, "COMMIT", NULL, 0, &zErrMsg);
@@ -94,7 +94,7 @@ namespace ebi
         }
     }
 
-    SqliteOutput::~SqliteOutput()
+    SqliteReportWriter::~SqliteReportWriter()
     {
         // in case the amount of inserts is not a multiple of the transaction size, do the leftover inserts in a smaller transaction
         if (current_transaction_size != 0) {
