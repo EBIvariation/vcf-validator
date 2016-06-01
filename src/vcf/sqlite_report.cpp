@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-#include "vcf/report_writer.hpp"
+#include "vcf/sqlite_report.hpp"
 
 namespace ebi
 {
   namespace vcf
   {
-    SqliteReportWriter::SqliteReportWriter(std::string db_name) : db_name{db_name}, current_transaction_size{0},
+    SqliteReportRW::SqliteReportRW(std::string db_name) : db_name{db_name}, current_transaction_size{0},
                                                       transaction_size{1000000}, sleep_time{500}
     {
         int rc = sqlite3_open(db_name.c_str(), &db);
@@ -49,7 +49,7 @@ namespace ebi
         }
     }
 
-    void SqliteReportWriter::close()
+    void SqliteReportRW::close()
     {
         // in case the amount of inserts is not a multiple of the transaction size, do the leftover inserts in a smaller transaction
         if (current_transaction_size != 0) {
@@ -75,7 +75,7 @@ namespace ebi
         }
     }
 
-    SqliteReportWriter::~SqliteReportWriter()
+    SqliteReportRW::~SqliteReportRW()
     {
         try {
             close();
@@ -84,17 +84,17 @@ namespace ebi
         }
     }
 
-    void SqliteReportWriter::write_error(const Error &error)
+    void SqliteReportRW::write_error(const Error &error)
     {
         write(error, "errors");
     }
 
-    void SqliteReportWriter::write_warning(const Error &error)
+    void SqliteReportRW::write_warning(const Error &error)
     {
         write(error, "warnings");
     }
 
-    void SqliteReportWriter::write(const Error &error, std::string table)
+    void SqliteReportRW::write(const Error &error, std::string table)
     {
         char *zErrMsg = NULL;
         int rc;
@@ -120,7 +120,7 @@ namespace ebi
         }
     }
 
-    void SqliteReportWriter::start_transaction()
+    void SqliteReportRW::start_transaction()
     {
         char *zErrMsg = NULL;
         int rc = sqlite3_exec(db, "BEGIN", NULL, 0, &zErrMsg);
@@ -131,7 +131,7 @@ namespace ebi
         }
     }
 
-    void SqliteReportWriter::commit_transaction()
+    void SqliteReportRW::commit_transaction()
     {
         char *zErrMsg = NULL;
         int rc = sqlite3_exec(db, "COMMIT", NULL, 0, &zErrMsg);
@@ -150,8 +150,8 @@ namespace ebi
             throw std::runtime_error{error_message};
         }
     }
-
-    void SqliteReportWriter::rollback_transaction()
+    
+    void SqliteReportRW::rollback_transaction()
     {
         char *zErrMsg = NULL;
         int rc = sqlite3_exec(db, "ROLLBACK", NULL, 0, &zErrMsg);
@@ -160,6 +160,24 @@ namespace ebi
             sqlite3_free(zErrMsg);
             throw std::runtime_error{error_message};
         }
+    }
+
+    // ReportReader implementation
+    Error SqliteReportRW::read_warning()
+    {
+        return vcf::Error(0);
+    }
+    size_t SqliteReportRW::count_warnings()
+    {
+        return 0;
+    }
+    Error SqliteReportRW::read_error()
+    {
+        return vcf::Error(0);
+    }
+    size_t SqliteReportRW::count_errors()
+    {
+        return 0;
     }
   }
 }

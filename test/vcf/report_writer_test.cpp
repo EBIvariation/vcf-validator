@@ -27,6 +27,7 @@
 #include "vcf/validator.hpp"
 #include "vcf/error.hpp"
 #include "vcf/report_writer.hpp"
+#include "vcf/sqlite_report.hpp"
 
 
 namespace ebi
@@ -83,7 +84,7 @@ namespace ebi
   {
       std::string db_name = "test/input_files/sqlite_test.errors.db";
       sqlite3* db;
-      ebi::vcf::SqliteReportWriter output{db_name};
+      ebi::vcf::SqliteReportRW output{db_name};
 
       int rc = sqlite3_open(db_name.c_str(), &db);
       if(rc != SQLITE_OK) {
@@ -154,7 +155,7 @@ namespace ebi
       SECTION(path.string())
       {
           {
-              std::shared_ptr<ebi::vcf::ReportWriter> output{std::make_shared<ebi::vcf::SqliteReportWriter>(db_name)};
+              std::shared_ptr<ebi::vcf::ReportWriter> output{std::make_shared<ebi::vcf::SqliteReportRW>(db_name)};
               CHECK_FALSE(is_valid(path.string(), *output));
           }
           int rc = sqlite3_open(db_name.c_str(), &db);
