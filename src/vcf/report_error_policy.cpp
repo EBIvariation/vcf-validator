@@ -28,7 +28,6 @@ namespace ebi
 
     void ReportErrorPolicy::handle_warning(ParsingState &state, Error *error)
     {
-        // TODO store error as a warning. state.add_warning? error.set_severity(Error::warning)?
         state.add_warning(std::shared_ptr<Error>(error));
     }
   }

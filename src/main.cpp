@@ -116,7 +116,7 @@ namespace
         std::sort(outs.begin(), outs.end());
         std::unique(outs.begin(), outs.end());
         if (initial_size != outs.size()) {
-            // TODO if there are repeated outputs, throw? or just warn?
+            std::cerr << "Warning, duplicated outputs! will write just once to each output specified by -o/--output" << std::endl;
         }
 
         std::vector<std::shared_ptr<ebi::vcf::ReportWriter>> outputs;
@@ -126,8 +126,10 @@ namespace
                 outputs.push_back(std::make_shared<ebi::vcf::SqliteReportWriter>(input + ".errors.db"));
             } else if (out == "stdout") {
                 outputs.push_back(std::make_shared<ebi::vcf::StdoutReportWriter>());
+            } else if (out == "silent") {
+                ; // do nothing, leaving an empty vector if necessary
             } else {
-                // TODO if there are unrecognized options, throw? or just warn
+                throw std::invalid_argument{"Please use only valid outputs"};
             }
         }
 
