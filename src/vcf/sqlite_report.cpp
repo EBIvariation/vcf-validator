@@ -169,7 +169,7 @@ namespace ebi
     }
     size_t SqliteReportRW::count_warnings()
     {
-        return 0;
+        return count("warnings");
     }
     Error SqliteReportRW::read_error()
     {
@@ -177,7 +177,29 @@ namespace ebi
     }
     size_t SqliteReportRW::count_errors()
     {
-        return 0;
+        return count("errors");
+    }
+    size_t SqliteReportRW::count(std::string table)
+    {          
+        char *zErrMsg = NULL;
+        size_t count_errors = 0;
+        
+        std::string query{"SELECT count(*) FROM " + table};
+        
+        int rc = sqlite3_exec(db, query.c_str(), [](void* count, int columns, char**values, char**names) {
+            if (values[0] != NULL) {
+                *(size_t*)count = std::stoul(values[0]);
+            }
+            return 0;
+        }, &count_errors, &zErrMsg);
+        
+        if (rc != SQLITE_OK) {
+            std::string error_message = std::string("Can't read database: ") + zErrMsg;
+            sqlite3_free(zErrMsg);
+            throw std::runtime_error(error_message);
+        }
+
+        return count_errors;
     }
   }
 }

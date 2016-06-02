@@ -150,7 +150,6 @@ namespace ebi
       auto path = boost::filesystem::path("test/input_files/failed/failed_fileformat_000.vcf");
 
       std::string db_name = path.string() + ".errors.db";
-      sqlite3* db;
 
       SECTION(path.string())
       {
@@ -158,40 +157,16 @@ namespace ebi
               std::shared_ptr<ebi::vcf::ReportWriter> output{std::make_shared<ebi::vcf::SqliteReportRW>(db_name)};
               CHECK_FALSE(is_valid(path.string(), *output));
           }
-          int rc = sqlite3_open(db_name.c_str(), &db);
-          if(rc != SQLITE_OK) {
-              sqlite3_close(db);
-              throw std::runtime_error(std::string("Can't open database: ") + sqlite3_errmsg(db));
-          }
 
-          char *zErrMsg = NULL;
-          int count_errors = -1;
-          rc = sqlite3_exec(db, "SELECT count(*) FROM errors", [](void* count, int columns, char**values, char**names) {
-              if (values[0] != NULL) {
-                  *(int*)count = std::stoi(values[0]);
-              }
-              return 0;
-          }, &count_errors, &zErrMsg);
-          if (rc != SQLITE_OK) {
-              std::string error_message = std::string("Can't read database: ") + zErrMsg;
-              sqlite3_free(zErrMsg);
-              throw std::runtime_error(error_message);
+          size_t count_errors;
+          size_t count_warnings;
+          
+          {
+              ebi::vcf::SqliteReportRW errorsDAO{db_name};
+              count_errors = errorsDAO.count_errors();
+              count_warnings = errorsDAO.count_warnings();
           }
           
-          int count_warnings = -1;
-          rc = sqlite3_exec(db, "SELECT count(*) FROM warnings", [](void* count, int columns, char**values, char**names) {
-              if (values[0] != NULL) {
-                  *(int*)count = std::stoi(values[0]);
-              }
-              return 0;
-          }, &count_warnings, &zErrMsg);
-          if (rc != SQLITE_OK) {
-              std::string error_message = std::string("Can't read database: ") + zErrMsg;
-              sqlite3_free(zErrMsg);
-              throw std::runtime_error(error_message);
-          }
-
-          sqlite3_close(db);
           boost::filesystem::path db_file{db_name};
           boost::filesystem::remove(db_file);
           CHECK(count_errors == 1);

@@ -51,6 +51,7 @@ namespace ebi
         
       private:
         void write(const Error &error, std::string table);
+        size_t count(std::string table);
         void start_transaction();
         void commit_transaction();
         void rollback_transaction();
