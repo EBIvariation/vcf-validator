@@ -49,12 +49,18 @@ namespace ebi
         size_t count_warnings() override;
         Error read_warning() override;
         
+        void read_errors(std::function<void(std::shared_ptr<Error>)> user_function);
+        void read_warnings(std::function<void(std::shared_ptr<Error>)> user_function);
+        
       private:
         void write(const Error &error, std::string table);
         size_t count(std::string table);
         void start_transaction();
         void commit_transaction();
         void rollback_transaction();
+        
+        void read(std::string table, std::function<void(std::shared_ptr<Error>)> user_function);
+        
 
         sqlite3* db;
         std::string db_name;

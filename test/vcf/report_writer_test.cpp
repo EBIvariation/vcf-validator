@@ -151,28 +151,50 @@ namespace ebi
 
       std::string db_name = path.string() + ".errors.db";
 
-      SECTION(path.string())
       {
-          {
-              std::shared_ptr<ebi::vcf::ReportWriter> output{std::make_shared<ebi::vcf::SqliteReportRW>(db_name)};
-              CHECK_FALSE(is_valid(path.string(), *output));
-          }
+          std::shared_ptr<ebi::vcf::ReportWriter> output{std::make_shared<ebi::vcf::SqliteReportRW>(db_name)};
+          CHECK_FALSE(is_valid(path.string(), *output));
+      }
 
+      SECTION(path.string() + " error count")
+      {
           size_t count_errors;
           size_t count_warnings;
-          
+
           {
               ebi::vcf::SqliteReportRW errorsDAO{db_name};
               count_errors = errorsDAO.count_errors();
               count_warnings = errorsDAO.count_warnings();
           }
-          
-          boost::filesystem::path db_file{db_name};
-          boost::filesystem::remove(db_file);
+
           CHECK(count_errors == 1);
           CHECK(count_warnings == 2);
-          CHECK_FALSE(boost::filesystem::exists(db_file));
       }
+
+      SECTION(path.string() + " error details")
+      {
+          size_t errors_read = 0;
+          ebi::vcf::SqliteReportRW errorsDAO{db_name};
+          
+          errorsDAO.read_errors([&errors_read] (std::shared_ptr<ebi::vcf::Error> error) {
+              CHECK(error->get_line() == 1);
+              CHECK(error->get_raw_message() == "The fileformat declaration is not 'fileformat=VCFv4.1'");
+              errors_read++;
+          });
+
+          // do we prefer this?
+//          for(ebi::vcf::Error* error : errorsDAO.read_errors()) {
+//              CHECK(error->get_line() == 1);
+//              CHECK(error->get_raw_message() == "The fileformat declaration is not 'fileformat=VCFv4.1'");
+//              errors_read++;
+//          }
+
+          CHECK(errors_read == 1);
+      }
+
+      boost::filesystem::path db_file{db_name};
+      boost::filesystem::remove(db_file);
+      CHECK_FALSE(boost::filesystem::exists(db_file));
 
   }
 }
