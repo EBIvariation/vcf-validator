@@ -49,6 +49,41 @@ namespace ebi
         }
     }
 
+    void SqliteReportWriter::close()
+    {
+        // in case the amount of inserts is not a multiple of the transaction size, do the leftover inserts in a smaller transaction
+        if (current_transaction_size != 0) {
+            commit_transaction();
+            current_transaction_size = 0;
+        }
+
+        if (db != nullptr) {
+            int rc = sqlite3_close(db);
+            db = nullptr;
+            if (rc != SQLITE_OK) {
+                int remaining_tries = 10;
+                while (rc == SQLITE_BUSY && remaining_tries-- > 0) {
+                    // maybe sqlite is still writing the last transaction
+                    std::cerr << "waiting to finish transactions" << std::endl;
+                    std::this_thread::sleep_for(sleep_time);
+                    rc = sqlite3_close(db);
+                }
+                if (rc != SQLITE_OK) {
+                    throw std::runtime_error{"can not close database " + db_name};
+                }
+            }
+        }
+    }
+
+    SqliteReportWriter::~SqliteReportWriter()
+    {
+        try {
+            close();
+        } catch (std::runtime_error e) {
+            std::cerr << "Error at ~SqliteReportRW: " << e.what() << std::endl;
+        }
+    }
+
     void SqliteReportWriter::write_error(Error &error)
     {
         write(error, "errors");
@@ -72,6 +107,7 @@ namespace ebi
 
         rc = sqlite3_exec(db, ss.str().c_str(), NULL, 0, &zErrMsg);
         if (rc != SQLITE_OK) {
+            rollback_transaction();
             std::string error_message{std::string("Can't write: ") + zErrMsg};
             sqlite3_free(zErrMsg);
             throw std::runtime_error{error_message};
@@ -79,7 +115,7 @@ namespace ebi
 
         ++current_transaction_size;
         if (current_transaction_size == transaction_size) {
-            finish_transaction();
+            commit_transaction();
             current_transaction_size = 0;
         }
     }
@@ -95,37 +131,34 @@ namespace ebi
         }
     }
 
-    void SqliteReportWriter::finish_transaction()
+    void SqliteReportWriter::commit_transaction()
     {
         char *zErrMsg = NULL;
         int rc = sqlite3_exec(db, "COMMIT", NULL, 0, &zErrMsg);
         if (rc != SQLITE_OK) {
-            std::string error_message{std::string("Can't finish transaction: ") + zErrMsg};
+            try {
+                rollback_transaction();
+            } catch (std::runtime_error &rollback_error) {
+                std::string message{"Can't rollback (was trying to recover a failed commit: "};
+                message += zErrMsg;
+                message += "): ";
+                sqlite3_free(zErrMsg);
+                throw std::runtime_error{message + rollback_error.what()};
+            }
+            std::string error_message{std::string{"Rollback performed: Couldn't commit transaction: "} + zErrMsg};
             sqlite3_free(zErrMsg);
             throw std::runtime_error{error_message};
         }
     }
 
-    SqliteReportWriter::~SqliteReportWriter()
+    void SqliteReportWriter::rollback_transaction()
     {
-        // in case the amount of inserts is not a multiple of the transaction size, do the leftover inserts in a smaller transaction
-        if (current_transaction_size != 0) {
-            finish_transaction();
-            current_transaction_size = 0;
-        }
-
-        int rc = sqlite3_close(db);
+        char *zErrMsg = NULL;
+        int rc = sqlite3_exec(db, "ROLLBACK", NULL, 0, &zErrMsg);
         if (rc != SQLITE_OK) {
-            int remaining_tries = 10;
-            while (rc == SQLITE_BUSY && remaining_tries-- > 0) {
-                // maybe sqlite is still writing the last transaction
-                std::cerr << "waiting to finish transactions" << std::endl;
-                std::this_thread::sleep_for(sleep_time);
-                rc = sqlite3_close(db);
-            }
-            if (rc != SQLITE_OK) {
-                throw std::runtime_error{"can not close database " + db_name};
-            }
+            std::string error_message{std::string("Can't rollback transaction: ") + zErrMsg};
+            sqlite3_free(zErrMsg);
+            throw std::runtime_error{error_message};
         }
     }
   }

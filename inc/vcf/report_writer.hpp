@@ -56,6 +56,7 @@ namespace ebi
     {
       public:
         SqliteReportWriter(std::string db_name);
+        void close();
         ~SqliteReportWriter();
         void write_error(Error &error) override;
         void write_warning(Error &error) override;
@@ -63,13 +64,14 @@ namespace ebi
       private:
         void write(Error &error, std::string table);
         void start_transaction();
-        void finish_transaction();
+        void commit_transaction();
 
         sqlite3* db;
         std::string db_name;
         size_t current_transaction_size;
         const size_t transaction_size;
         const std::chrono::milliseconds sleep_time;
+        void rollback_transaction();
     };
   }
 }
