@@ -66,10 +66,10 @@ namespace ebi
 
       while (readline(input, line)) {
           validator.parse(line);
-          for (auto error : *validator.errors()) {
+          for (auto &error : *validator.errors()) {
               output.write_error(*error);
           }
-          for (auto warn : *validator.warnings()) {
+          for (auto &warn : *validator.warnings()) {
               output.write_warning(*warn);
           }
       }

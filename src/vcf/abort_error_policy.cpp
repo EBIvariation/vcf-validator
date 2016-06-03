@@ -27,7 +27,7 @@ namespace ebi
     }
     void AbortErrorPolicy::handle_warning(ParsingState &state, Error *error)
     {
-        state.add_warning(std::shared_ptr<Error>(error));
+        state.add_warning(std::unique_ptr<Error>(error));
     }
   }
 }

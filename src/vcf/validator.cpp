@@ -67,12 +67,12 @@ namespace ebi
       return m_is_valid;
     }
 
-    const std::shared_ptr<std::vector<std::shared_ptr<Error>>> ParserImpl::errors() const
+    const std::shared_ptr<std::vector<std::unique_ptr<Error>>> ParserImpl::errors() const
     {
       return ParsingState::errors;
     }
     
-    const std::shared_ptr<std::vector<std::shared_ptr<Error>>> ParserImpl::warnings() const
+    const std::shared_ptr<std::vector<std::unique_ptr<Error>>> ParserImpl::warnings() const
     {
       return ParsingState::warnings;
     }

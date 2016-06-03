@@ -235,12 +235,12 @@ namespace
         while (readline(input, line)) {
             validator.parse(line);
 
-            for (auto error : *validator.errors()) {
+            for (auto &error : *validator.errors()) {
                 for (auto output : outputs) {
                     output->write_error(*error);
                 }
             }
-            for (auto error : *validator.warnings()) {
+            for (auto &error : *validator.warnings()) {
                 for (auto output : outputs) {
                     output->write_warning(*error);
                 }

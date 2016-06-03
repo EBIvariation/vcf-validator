@@ -26,8 +26,8 @@ namespace ebi
         std::shared_ptr<std::vector<Record>> records)
     : n_lines{1}, n_columns{1}, n_batches{0}, cs{0}, m_is_valid{true}, 
       source{source}, records{records}, 
-      errors{std::make_shared<std::vector<std::shared_ptr<Error>>>()},
-      warnings{std::make_shared<std::vector<std::shared_ptr<Error>>>()},
+      errors{std::make_shared<std::vector<std::unique_ptr<Error>>>()},
+      warnings{std::make_shared<std::vector<std::unique_ptr<Error>>>()},
       undefined_metadata{}
     {
     }
@@ -52,9 +52,9 @@ namespace ebi
         records->clear();
     }
 
-    void ParsingState::add_error(std::shared_ptr<Error> error)
+    void ParsingState::add_error(std::unique_ptr<Error> error)
     {
-        errors->push_back(error);
+        errors->push_back(std::move(error));
     }
     
     void ParsingState::clear_errors()
@@ -62,8 +62,9 @@ namespace ebi
         errors->clear();
     }
 
-    void ParsingState::add_warning(std::shared_ptr<Error> error){
-        warnings->push_back(error);
+    void ParsingState::add_warning(std::unique_ptr<Error> error)
+    {
+        warnings->push_back(std::move(error));
     }
 
     void ParsingState::clear_warnings()

@@ -23,12 +23,12 @@ namespace ebi
     void ReportErrorPolicy::handle_error(ParsingState &state, Error *error)
     {
         state.m_is_valid = false;
-        state.add_error(std::shared_ptr<Error>(error));
+        state.add_error(std::unique_ptr<Error>(error));
     }
 
     void ReportErrorPolicy::handle_warning(ParsingState &state, Error *error)
     {
-        state.add_warning(std::shared_ptr<Error>(error));
+        state.add_warning(std::unique_ptr<Error>(error));
     }
   }
 }
