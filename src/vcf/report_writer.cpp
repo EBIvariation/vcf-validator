@@ -1,6 +1,18 @@
-//
-// Created by jmmut on 25/05/16.
-//
+/**
+ * Copyright 2016 EMBL - European Bioinformatics Institute
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #include "vcf/report_writer.hpp"
 
@@ -18,7 +30,7 @@ namespace ebi
         }
 
         char *zErrMsg = NULL;
-        rc = sqlite3_exec(db, "CREATE TABLE if not exists Errors (line int, message varchar(255));", NULL, 0,
+        rc = sqlite3_exec(db, "CREATE TABLE if not exists errors (line int, message varchar(255));", NULL, 0,
                           &zErrMsg);
         if (rc != SQLITE_OK) {
             std::string error_message{std::string("Can't use table: ") + zErrMsg};
@@ -27,7 +39,7 @@ namespace ebi
             throw std::runtime_error{error_message};
         }
         
-        rc = sqlite3_exec(db, "CREATE TABLE if not exists Warnings (line int, message varchar(255));", NULL, 0,
+        rc = sqlite3_exec(db, "CREATE TABLE if not exists warnings (line int, message varchar(255));", NULL, 0,
                           &zErrMsg);
         if (rc != SQLITE_OK) {
             std::string error_message{std::string("Can't use table: ") + zErrMsg};
@@ -39,12 +51,12 @@ namespace ebi
 
     void SqliteReportWriter::write_error(Error &error)
     {
-        write(error, "Errors");
+        write(error, "errors");
     }
 
     void SqliteReportWriter::write_warning(Error &error)
     {
-        write(error, "Warnings");
+        write(error, "warnings");
     }
 
     void SqliteReportWriter::write(Error &error, std::string table)
