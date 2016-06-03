@@ -45,7 +45,7 @@ namespace
             ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
             ("level,l", po::value<std::string>()->default_value("warning"), "Validation level (error, warning, stop)")
             ("version,v", po::value<std::string>(), "VCF fileformat version to validate the file against (v4.1, v4.2, v4.3)")
-            ("output,o", po::value<std::string>()->default_value("stdout"), "Comma separated values for type of output (sqlite, stdout, silent)")
+            ("output,o", po::value<std::string>()->default_value("stdout"), "Comma separated values for type of output (database, stdout, silent)")
         ;
 
         return description;
@@ -122,7 +122,7 @@ namespace
         std::vector<std::shared_ptr<ebi::vcf::ReportWriter>> outputs;
 
         for (auto out : outs) {
-            if (out == "sqlite") {
+            if (out == "database") {
                 outputs.push_back(std::make_shared<ebi::vcf::SqliteReportWriter>(input + ".errors.db"));
             } else if (out == "stdout") {
                 outputs.push_back(std::make_shared<ebi::vcf::StdoutReportWriter>());
