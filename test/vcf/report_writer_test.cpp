@@ -198,6 +198,29 @@ namespace ebi
           CHECK(errors_read == 1);
       }
       
+      SECTION("write and read error codes")
+      {
+          size_t line = 8;
+          std::string message{"testing erros"};
+          ebi::vcf::Error generic_error{line, message};
+          ebi::vcf::MetaSectionError meta_section_error{line, message};
+          ebi::vcf::SamplesBodyError samples_body_error{line, message};
+          errorDAO.write_error(generic_error);
+          errorDAO.write_error(meta_section_error);
+          errorDAO.write_error(samples_body_error);
+          errorDAO.flush();
+          
+          std::vector<std::shared_ptr<ebi::vcf::Error>> errors;
+          errorDAO.for_each_error([&](std::shared_ptr<ebi::vcf::Error> error) {
+              errors.push_back(error);
+          });
+          
+          CHECK(errors.size());
+          CHECK(errors[0]->get_code() == ebi::vcf::ErrorCode::error);
+          CHECK(errors[1]->get_code() == ebi::vcf::ErrorCode::meta_section);
+          CHECK(errors[2]->get_code() == ebi::vcf::ErrorCode::samples_body);
+      }
+      
       boost::filesystem::path db_file{db_name};
       boost::filesystem::remove(db_file);
       CHECK_FALSE(boost::filesystem::exists(db_file));

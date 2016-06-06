@@ -30,7 +30,7 @@ namespace ebi
         }
 
         char *zErrMsg = NULL;
-        rc = sqlite3_exec(db, "CREATE TABLE if not exists errors (line int, message varchar(255));", NULL, 0,
+        rc = sqlite3_exec(db, "CREATE TABLE if not exists errors (line int, code int, message varchar(255));", NULL, 0,
                           &zErrMsg);
         if (rc != SQLITE_OK) {
             std::string error_message{std::string{"Can't use table: "} + zErrMsg};
@@ -39,7 +39,7 @@ namespace ebi
             throw std::runtime_error{error_message};
         }
 
-        rc = sqlite3_exec(db, "CREATE TABLE if not exists warnings (line int, message varchar(255));", NULL, 0,
+        rc = sqlite3_exec(db, "CREATE TABLE if not exists warnings (line int, code int, message varchar(255));", NULL, 0,
                           &zErrMsg);
         if (rc != SQLITE_OK) {
             std::string error_message{std::string{"Can't use table: "} + zErrMsg};
@@ -107,8 +107,10 @@ namespace ebi
             start_transaction();
         }
         std::stringstream ss;
-        ss << "INSERT INTO " << table << " ( line , message ) VALUES (";
-        ss << error.get_line() << " , \"" << error.get_raw_message() << "\");";
+        ss << "INSERT INTO " << table << " ( line , code , message ) VALUES (";
+        ss << error.get_line() << " , "
+        << static_cast<int>(error.get_code()) << " , \""
+        << error.get_raw_message() << "\");";
 
         rc = sqlite3_exec(db, ss.str().c_str(), NULL, 0, &zErrMsg);
         if (rc != SQLITE_OK) {
@@ -224,15 +226,69 @@ namespace ebi
             return 1;
         }
         line = std::stoul(argv[0]);
-
-        std::string message;
-        if (azColName[1] != std::string{"message"}) {
+        
+        ErrorCode code;
+        if (azColName[1] != std::string{"code"}) {
             return 1;
         }
-        message = argv[1];
+        code = static_cast<ErrorCode>(std::stoul(argv[1]));
+        
 
-        // TODO: add a field in the table to choose which child to instantiate
-        (*user_function)(std::shared_ptr<Error>(new Error{line, message}));
+        std::string message;
+        if (azColName[2] != std::string{"message"}) {
+            return 1;
+        }
+        message = argv[2];
+        
+        // no reflection :(
+        switch (code) {
+            default:
+            case ErrorCode::error:
+                (*user_function)(std::shared_ptr<Error>(new Error{line, message}));
+                break;
+            case ErrorCode::meta_section:
+                (*user_function)(std::shared_ptr<Error>(new MetaSectionError{line, message}));
+                break;
+            case ErrorCode::header_section:
+                (*user_function)(std::shared_ptr<Error>(new HeaderSectionError{line, message}));
+                break;
+            case ErrorCode::body_section:
+                (*user_function)(std::shared_ptr<Error>(new BodySectionError{line, message}));
+                break;
+            case ErrorCode::fileformat:
+                (*user_function)(std::shared_ptr<Error>(new FormatBodyError{line, message}));
+                break;
+            case ErrorCode::chromosome_body:
+                (*user_function)(std::shared_ptr<Error>(new ChromosomeBodyError{line, message}));
+                break;
+            case ErrorCode::position_body:
+                (*user_function)(std::shared_ptr<Error>(new PositionBodyError{line, message}));
+                break;
+            case ErrorCode::id_body:
+                (*user_function)(std::shared_ptr<Error>(new IdBodyError{line, message}));
+                break;
+            case ErrorCode::reference_allele_body:
+                (*user_function)(std::shared_ptr<Error>(new ReferenceAlleleBodyError{line, message}));
+                break;
+            case ErrorCode::alternate_alleles_body:
+                (*user_function)(std::shared_ptr<Error>(new AlternateAllelesBodyError{line, message}));
+                break;
+            case ErrorCode::quality_body:
+                (*user_function)(std::shared_ptr<Error>(new QualityBodyError{line, message}));
+                break;
+            case ErrorCode::filter_body:
+                (*user_function)(std::shared_ptr<Error>(new FilterBodyError{line, message}));
+                break;
+            case ErrorCode::info_body:
+                (*user_function)(std::shared_ptr<Error>(new InfoBodyError{line, message}));
+                break;
+            case ErrorCode::format_body:
+                (*user_function)(std::shared_ptr<Error>(new FormatBodyError{line, message}));
+                break;
+            case ErrorCode::samples_body:
+                (*user_function)(std::shared_ptr<Error>(new SamplesBodyError{line, message}));
+                break;
+        }
 
         return 0;
     }
