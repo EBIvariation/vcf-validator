@@ -33,7 +33,7 @@ namespace ebi
     class ReportWriter
     {
       public:
-//        virtual ~ReportWriter() {}  // needed if using raw pointers, instead of references or shared_ptrs
+        virtual ~ReportWriter() {}  // needed if using raw pointers, instead of references or shared_ptrs in children
         virtual void write_error(const Error &error) = 0;
         virtual void write_warning(const Error &error) = 0;
     };

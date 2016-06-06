@@ -49,14 +49,19 @@ namespace ebi
         }
     }
 
-    void SqliteReportRW::close()
+    void SqliteReportRW::flush()
     {
         // in case the amount of inserts is not a multiple of the transaction size, do the leftover inserts in a smaller transaction
         if (current_transaction_size != 0) {
             commit_transaction();
             current_transaction_size = 0;
         }
-
+    }
+    
+    void SqliteReportRW::close()
+    {
+        flush();
+        
         if (db != nullptr) {
             int rc = sqlite3_close(db);
             if (rc != SQLITE_OK) {
@@ -196,22 +201,13 @@ namespace ebi
         return count("warnings");
     }
 
-    Error SqliteReportRW::read_error()
+    void SqliteReportRW::for_each_error(std::function<void(std::shared_ptr<Error>)> user_function)
     {
-        return vcf::Error(0);
+        for_each("errors", user_function);
     }
-    Error SqliteReportRW::read_warning()
+    void SqliteReportRW::for_each_warning(std::function<void(std::shared_ptr<Error>)> user_function)
     {
-        return vcf::Error(0);
-    }
-
-    void SqliteReportRW::read_errors(std::function<void(std::shared_ptr<Error>)> user_function)
-    {
-        read("errors", user_function);
-    }
-    void SqliteReportRW::read_warnings(std::function<void(std::shared_ptr<Error>)> user_function)
-    {
-        read("warnings", user_function);
+        for_each("warnings", user_function);
     }
 
     static int converter_callback(void *user_function_ptr, int argc, char **argv, char **azColName)
@@ -241,7 +237,7 @@ namespace ebi
         return 0;
     }
 
-    void SqliteReportRW::read(std::string table, std::function<void(std::shared_ptr<Error>)> user_function)
+    void SqliteReportRW::for_each(std::string table, std::function<void(std::shared_ptr<Error>)> user_function)
     {
         char *zErrMsg = NULL;
         std::string query{"SELECT * FROM " + table};

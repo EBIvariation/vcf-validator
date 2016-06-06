@@ -33,12 +33,12 @@ namespace ebi
     class ReportReader
     {
       public:
-//        virtual ~ReportReader() {}  // needed if inheriting classes use raw pointers, instead of references or shared_ptrs
+        virtual ~ReportReader() {}  // needed if inheriting classes use raw pointers, instead of references or shared_ptrs
         virtual size_t count_errors() = 0;
-        virtual Error read_error() = 0;
+        virtual void for_each_error(std::function<void(std::shared_ptr<Error>)> user_function) = 0;
         
         virtual size_t count_warnings() = 0;
-        virtual Error read_warning() = 0;
+        virtual void for_each_warning(std::function<void(std::shared_ptr<Error>)> user_function) = 0;
     };
 
   }

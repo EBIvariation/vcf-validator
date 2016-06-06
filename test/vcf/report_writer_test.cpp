@@ -84,7 +84,7 @@ namespace ebi
   {
       std::string db_name = "test/input_files/sqlite_test.errors.db";
       sqlite3* db;
-      ebi::vcf::SqliteReportRW output{db_name};
+      ebi::vcf::SqliteReportRW errorDAO{db_name};
 
       int rc = sqlite3_open(db_name.c_str(), &db);
       if(rc != SQLITE_OK) {
@@ -93,13 +93,13 @@ namespace ebi
       }
       char *zErrMsg = NULL;
       
-      SECTION("write and read errors")
+      SECTION("write errors")
       {
           
           ebi::vcf::Error test_error{1, "testing errors"};
-          output.write_error(test_error);
-          output.write_error(test_error);
-          output.close();
+          errorDAO.write_error(test_error);
+          errorDAO.write_error(test_error);
+          errorDAO.close();
           
 
           int count_errors = -1;
@@ -119,11 +119,11 @@ namespace ebi
           
       }
       
-      SECTION("write and read warnings")
+      SECTION("write warnings")
       {
           ebi::vcf::Error test_warning{1, "testing warnings"};
-          output.write_warning(test_warning);
-          output.close();
+          errorDAO.write_warning(test_warning);
+          errorDAO.close();
 
           int count_warnings = -1;
           rc = sqlite3_exec(db, "SELECT count(*) FROM warnings", [](void* count, int columns, char**values, char**names) {
@@ -141,8 +141,66 @@ namespace ebi
           CHECK(count_warnings == 1);
       }
       
+      SECTION("write and count errors")
+      {
+          ebi::vcf::Error test_error{1, "testing errors"};
+          errorDAO.write_error(test_error);
+          errorDAO.write_error(test_error);
+          errorDAO.flush();
+          size_t count_errors = errorDAO.count_errors();
+          size_t count_warnings = errorDAO.count_warnings();
+          CHECK(count_errors == 2);
+          CHECK(count_warnings == 0);
+      }
+
+      SECTION("write and count warnings")
+      {
+          ebi::vcf::Error test_error{1, "testing warnings"};
+          errorDAO.write_warning(test_error);
+          errorDAO.flush();
+          size_t count_errors = errorDAO.count_errors();
+          size_t count_warnings = errorDAO.count_warnings();
+          CHECK(count_errors == 0);
+          CHECK(count_warnings == 1);
+      }
+      
+      SECTION("write and read errors")
+      {
+          size_t line = 8;
+          std::string message{"testing erros"};
+          ebi::vcf::Error test_error{line, message};
+          errorDAO.write_error(test_error);
+          errorDAO.flush();
+          
+          size_t errors_read = 0;
+          errorDAO.for_each_error([&](std::shared_ptr<ebi::vcf::Error> error) {
+              CHECK(error->get_line() == line);
+              CHECK(error->get_raw_message() == message);
+              errors_read++;
+          });
+          CHECK(errors_read == 1);
+      }
+      
+      SECTION("write and read warnings")
+      {
+          size_t line = 10;
+          std::string message{"testing warnings"};
+          ebi::vcf::Error test_error{line, message};
+          errorDAO.write_warning(test_error);
+          errorDAO.flush();
+          
+          size_t errors_read = 0;
+          errorDAO.for_each_warning([&](std::shared_ptr<ebi::vcf::Error> error) {
+              CHECK(error->get_line() == line);
+              CHECK(error->get_raw_message() == message);
+              errors_read++;
+          });
+          CHECK(errors_read == 1);
+      }
+      
       boost::filesystem::path db_file{db_name};
       boost::filesystem::remove(db_file);
+      CHECK_FALSE(boost::filesystem::exists(db_file));
   }
 
   TEST_CASE("integration test: validator and sqlite", "[output]")
@@ -175,8 +233,8 @@ namespace ebi
       {
           size_t errors_read = 0;
           ebi::vcf::SqliteReportRW errorsDAO{db_name};
-          
-          errorsDAO.read_errors([&errors_read] (std::shared_ptr<ebi::vcf::Error> error) {
+
+          errorsDAO.for_each_error([&errors_read](std::shared_ptr<ebi::vcf::Error> error) {
               CHECK(error->get_line() == 1);
               CHECK(error->get_raw_message() == "The fileformat declaration is not 'fileformat=VCFv4.1'");
               errors_read++;

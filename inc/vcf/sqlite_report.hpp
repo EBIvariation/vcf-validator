@@ -36,8 +36,11 @@ namespace ebi
     {
       public:
         SqliteReportRW(std::string db_name);
+        /** optional, the destructor handles the flushing and closing */
+        void flush();
+        /** optional, the destructor handles the flushing and closing */
         void close();
-        ~SqliteReportRW();
+        ~SqliteReportRW() override;
         
         // ReportWriter implementation
         void write_error(const Error &error) override;
@@ -45,22 +48,19 @@ namespace ebi
         
         // ReportReader implementation
         size_t count_errors() override;
-        Error read_error() override;
         size_t count_warnings() override;
-        Error read_warning() override;
         
-        void read_errors(std::function<void(std::shared_ptr<Error>)> user_function);
-        void read_warnings(std::function<void(std::shared_ptr<Error>)> user_function);
+        void for_each_error(std::function<void(std::shared_ptr<Error>)> user_function);
+        void for_each_warning(std::function<void(std::shared_ptr<Error>)> user_function);
         
       private:
         void write(const Error &error, std::string table);
         size_t count(std::string table);
+        void for_each(std::string table, std::function<void(std::shared_ptr<Error>)> user_function);
+        
         void start_transaction();
         void commit_transaction();
         void rollback_transaction();
-        
-        void read(std::string table, std::function<void(std::shared_ptr<Error>)> user_function);
-        
 
         sqlite3* db;
         std::string db_name;
