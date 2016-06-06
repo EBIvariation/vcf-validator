@@ -78,8 +78,73 @@ namespace ebi
 
       return validator.is_valid();
   }
+  
+  TEST_CASE("unit test: sqlite", "[output]")
+  {
+      std::string db_name = "test/input_files/sqlite_test.errors.db";
+      sqlite3* db;
+      ebi::vcf::SqliteReportWriter output{db_name};
 
-  TEST_CASE("output errors to sqlite", "[output]")
+      int rc = sqlite3_open(db_name.c_str(), &db);
+      if(rc != SQLITE_OK) {
+          sqlite3_close(db);
+          throw std::runtime_error(std::string("Can't open database: ") + sqlite3_errmsg(db));
+      }
+      char *zErrMsg = NULL;
+      
+      SECTION("write and read errors")
+      {
+          
+          ebi::vcf::Error test_error{1, "testing errors"};
+          output.write_error(test_error);
+          output.write_error(test_error);
+          output.close();
+          
+
+          int count_errors = -1;
+          rc = sqlite3_exec(db, "SELECT count(*) FROM errors", [](void* count, int columns, char**values, char**names) {
+              if (values[0] != NULL) {
+                  *(int*)count = std::stoi(values[0]);
+              }
+              return 0;
+          }, &count_errors, &zErrMsg);
+          if (rc != SQLITE_OK) {
+              std::string error_message = std::string("Can't read database: ") + zErrMsg;
+              sqlite3_free(zErrMsg);
+              throw std::runtime_error(error_message);
+          }
+          
+          CHECK(count_errors == 2);
+          
+      }
+      
+      SECTION("write and read warnings")
+      {
+          ebi::vcf::Error test_warning{1, "testing warnings"};
+          output.write_warning(test_warning);
+          output.close();
+
+          int count_warnings = -1;
+          rc = sqlite3_exec(db, "SELECT count(*) FROM warnings", [](void* count, int columns, char**values, char**names) {
+              if (values[0] != NULL) {
+                  *(int*)count = std::stoi(values[0]);
+              }
+              return 0;
+          }, &count_warnings, &zErrMsg);
+          if (rc != SQLITE_OK) {
+              std::string error_message = std::string("Can't read database: ") + zErrMsg;
+              sqlite3_free(zErrMsg);
+              throw std::runtime_error(error_message);
+          }
+
+          CHECK(count_warnings == 1);
+      }
+      
+      boost::filesystem::path db_file{db_name};
+      boost::filesystem::remove(db_file);
+  }
+
+  TEST_CASE("integration test: validator and sqlite", "[output]")
   {
       auto path = boost::filesystem::path("test/input_files/failed/failed_fileformat_000.vcf");
 
@@ -100,7 +165,7 @@ namespace ebi
 
           char *zErrMsg = NULL;
           int count_errors = -1;
-          rc = sqlite3_exec(db, "SELECT count(*) FROM Errors", [](void* count, int columns, char**values, char**names) {
+          rc = sqlite3_exec(db, "SELECT count(*) FROM errors", [](void* count, int columns, char**values, char**names) {
               if (values[0] != NULL) {
                   *(int*)count = std::stoi(values[0]);
               }
@@ -113,7 +178,7 @@ namespace ebi
           }
           
           int count_warnings = -1;
-          rc = sqlite3_exec(db, "SELECT count(*) FROM Warnings", [](void* count, int columns, char**values, char**names) {
+          rc = sqlite3_exec(db, "SELECT count(*) FROM warnings", [](void* count, int columns, char**values, char**names) {
               if (values[0] != NULL) {
                   *(int*)count = std::stoi(values[0]);
               }

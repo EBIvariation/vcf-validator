@@ -59,7 +59,6 @@ namespace ebi
 
         if (db != nullptr) {
             int rc = sqlite3_close(db);
-            db = nullptr;
             if (rc != SQLITE_OK) {
                 int remaining_tries = 10;
                 while (rc == SQLITE_BUSY && remaining_tries-- > 0) {
@@ -72,6 +71,7 @@ namespace ebi
                     throw std::runtime_error{"can not close database " + db_name};
                 }
             }
+            db = nullptr;
         }
     }
 
