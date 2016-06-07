@@ -20,14 +20,14 @@ namespace ebi
 {
   namespace vcf
   {
-    void AbortErrorPolicy::handle_error(ParsingState &state, const Error &error)
+    void AbortErrorPolicy::handle_error(ParsingState &state, Error *error)
     {
         state.m_is_valid = false;
         throw;
     }
-    void AbortErrorPolicy::handle_warning(ParsingState &state, const Error &error)
+    void AbortErrorPolicy::handle_warning(ParsingState &state, Error *error)
     {
-        std::cerr << error.what() << " (warning)" << std::endl;
+        state.add_warning(std::unique_ptr<Error>(error));
     }
   }
 }

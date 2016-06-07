@@ -73,7 +73,7 @@ namespace ebi
     void MetaEntryVisitor::operator()(std::string & value) const
     {
         if (find_if(value.begin(), value.end(), [](char c) { return c == '\n'; }) != value.end()) {
-            throw MetaSectionError{entry.line, "Metadata value contains a line break"};
+            throw new MetaSectionError{entry.line, "Metadata value contains a line break"};
         }
     }
     
@@ -105,10 +105,10 @@ namespace ebi
     {
         // It must contain an ID and Description
         if (value.count("ID") == 0) {
-            throw MetaSectionError{entry.line, "ALT metadata does not contain a field called 'ID'"};
+            throw new MetaSectionError{entry.line, "ALT metadata does not contain a field called 'ID'"};
         }
         if (value.count("Description") == 0) {
-            throw MetaSectionError{entry.line, "ALT metadata does not contain a field called 'Description'"};
+            throw new MetaSectionError{entry.line, "ALT metadata does not contain a field called 'Description'"};
         }
         
         // Check ID prefix is "DEL" | "INS" | "DUP" | "INV" | "CNV"
@@ -122,7 +122,7 @@ namespace ebi
             prefix != "DUP" && 
             prefix != "INV" && 
             prefix != "CNV") {
-            throw MetaSectionError{entry.line, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV"};
+            throw new MetaSectionError{entry.line, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV"};
         }
     }
     
@@ -130,7 +130,7 @@ namespace ebi
     {
         // It must contain an ID and Description
         if (value.count("ID") == 0) {
-            throw MetaSectionError{entry.line, "contig metadata does not contain a field called 'ID'"};
+            throw new MetaSectionError{entry.line, "contig metadata does not contain a field called 'ID'"};
         }
     }
     
@@ -138,10 +138,10 @@ namespace ebi
     {
         // It must contain an ID and Description
         if (value.count("ID") == 0) {
-            throw MetaSectionError{entry.line, "FILTER metadata does not contain a field called 'ID'"};
+            throw new MetaSectionError{entry.line, "FILTER metadata does not contain a field called 'ID'"};
         }
         if (value.count("Description") == 0) {
-            throw MetaSectionError{entry.line, "FILTER metadata does not contain a field called 'Description'"};
+            throw new MetaSectionError{entry.line, "FILTER metadata does not contain a field called 'Description'"};
         }
     }
     
@@ -149,16 +149,16 @@ namespace ebi
     {
         // It must contain an ID, Number, Type and Description
         if (value.count("ID") == 0) {
-            throw MetaSectionError{entry.line, "FORMAT metadata does not contain a field called 'ID'"};
+            throw new MetaSectionError{entry.line, "FORMAT metadata does not contain a field called 'ID'"};
         }
         if (value.count("Number") == 0) {
-            throw MetaSectionError{entry.line, "FORMAT metadata does not contain a field called 'Number'"};
+            throw new MetaSectionError{entry.line, "FORMAT metadata does not contain a field called 'Number'"};
         }
         if (value.count("Type") == 0) {
-            throw MetaSectionError{entry.line, "FORMAT metadata does not contain a field called 'Type'"};
+            throw new MetaSectionError{entry.line, "FORMAT metadata does not contain a field called 'Type'"};
         }
         if (value.count("Description") == 0) {
-            throw MetaSectionError{entry.line, "FORMAT metadata does not contain a field called 'Description'"};
+            throw new MetaSectionError{entry.line, "FORMAT metadata does not contain a field called 'Description'"};
         }
         
         // Check FORMAT Number
@@ -168,7 +168,7 @@ namespace ebi
             value["Number"] != "R" &&
             value["Number"] != "G" &&
             value["Number"] != ".") {
-            throw MetaSectionError{entry.line, "FORMAT metadata Number is not a number, A, R, G or dot"};
+            throw new MetaSectionError{entry.line, "FORMAT metadata Number is not a number, A, R, G or dot"};
         }
 
         // Check FORMAT Type
@@ -176,7 +176,7 @@ namespace ebi
             value["Type"] != "Float" &&
             value["Type"] != "Character" &&
             value["Type"] != "String") {
-            throw MetaSectionError{entry.line, "FORMAT metadata Type is not a Integer, Float, Character or String"};
+            throw new MetaSectionError{entry.line, "FORMAT metadata Type is not a Integer, Float, Character or String"};
         }
     }
     
@@ -184,16 +184,16 @@ namespace ebi
     {
         // It must contain an ID, Number, Type and Description
         if (value.count("ID") == 0) {
-            throw MetaSectionError{entry.line, "INFO metadata does not contain a field called 'ID'"};
+            throw new MetaSectionError{entry.line, "INFO metadata does not contain a field called 'ID'"};
         }
         if (value.count("Number") == 0) {
-            throw MetaSectionError{entry.line, "INFO metadata does not contain a field called 'Number'"};
+            throw new MetaSectionError{entry.line, "INFO metadata does not contain a field called 'Number'"};
         }
         if (value.count("Type") == 0) {
-            throw MetaSectionError{entry.line, "INFO metadata does not contain a field called 'Type'"};
+            throw new MetaSectionError{entry.line, "INFO metadata does not contain a field called 'Type'"};
         }
         if (value.count("Description") == 0) {
-            throw MetaSectionError{entry.line, "INFO metadata does not contain a field called 'Description'"};
+            throw new MetaSectionError{entry.line, "INFO metadata does not contain a field called 'Description'"};
         }
         
         // Check INFO Number
@@ -203,7 +203,7 @@ namespace ebi
             value["Number"] != "R" &&
             value["Number"] != "G" &&
             value["Number"] != ".") {
-            throw MetaSectionError{entry.line, "INFO metadata Number is not a number, A, R, G or dot"};
+            throw new MetaSectionError{entry.line, "INFO metadata Number is not a number, A, R, G or dot"};
         }
 
         // Check INFO Type
@@ -212,7 +212,7 @@ namespace ebi
             value["Type"] != "Flag" &&
             value["Type"] != "Character" &&
             value["Type"] != "String") {
-            throw MetaSectionError{entry.line, "INFO metadata Type is not a Integer, Float, Flag, Character or String"};
+            throw new MetaSectionError{entry.line, "INFO metadata Type is not a Integer, Float, Flag, Character or String"};
         }
     }
     
@@ -220,7 +220,7 @@ namespace ebi
     {
         // It must contain an ID
         if (value.count("ID") == 0) {
-            throw MetaSectionError{entry.line, "SAMPLE metadata does not contain a field called 'ID'"};
+            throw new MetaSectionError{entry.line, "SAMPLE metadata does not contain a field called 'ID'"};
         }
     }
     

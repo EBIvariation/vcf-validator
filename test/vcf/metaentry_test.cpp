@@ -81,7 +81,7 @@ namespace ebi
             SECTION("A multi-line string value should throw an error")
             {
                 CHECK_THROWS_AS( (vcf::MetaEntry { 1, "assembly", "GRCh37\nGRCh37" } ),
-                                vcf::MetaSectionError);
+                                vcf::MetaSectionError* );
             }
     }
 
@@ -142,14 +142,14 @@ namespace ebi
                                 "ALT",
                                 { {"Description", "tag_description"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "ALT",
                                 { {"ID", "TAG_ID"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
         }
         
         SECTION("ID prefixes")
@@ -251,7 +251,7 @@ namespace ebi
                                 "contig",
                                 { {"Description", "tag_description"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
         }
     }
     
@@ -277,14 +277,14 @@ namespace ebi
                                 "FILTER",
                                 { {"Description", "tag_description"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FILTER",
                                 { {"ID", "TAG_ID"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
         }
     }
     
@@ -310,28 +310,28 @@ namespace ebi
                                 "FORMAT",
                                 { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
         }
         
         SECTION("Number field values")
@@ -371,14 +371,14 @@ namespace ebi
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
         }
         
         SECTION("Type field values")
@@ -412,14 +412,14 @@ namespace ebi
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
         }
     }
     
@@ -445,28 +445,28 @@ namespace ebi
                                 "INFO",
                                 { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
         }
         
         SECTION("Number field values")
@@ -506,14 +506,14 @@ namespace ebi
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
         }
         
         SECTION("Type field values")
@@ -553,14 +553,14 @@ namespace ebi
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
         }
     }
     
@@ -592,7 +592,7 @@ namespace ebi
                                 "SAMPLE",
                                 { {"Genomes", "genome_1,genome_2"} }
                             }),
-                            vcf::MetaSectionError );
+                            vcf::MetaSectionError* );
         }
     }
 }

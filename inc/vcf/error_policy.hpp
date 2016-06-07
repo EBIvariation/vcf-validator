@@ -33,8 +33,8 @@ namespace ebi
     class AbortErrorPolicy
     {
       public:
-        void handle_error(ParsingState &state, const Error &error);
-        void handle_warning(ParsingState &state, const Error &error);
+        void handle_error(ParsingState &state, Error *error);
+        void handle_warning(ParsingState &state, Error *error);
     };
 
     /**
@@ -43,8 +43,8 @@ namespace ebi
     class ReportErrorPolicy
     {
       public:
-        void handle_error(ParsingState &state, const Error &error);
-        void handle_warning(ParsingState &state, const Error &error);
+        void handle_error(ParsingState &state, Error *error);
+        void handle_warning(ParsingState &state, Error *error);
     };
 
   }

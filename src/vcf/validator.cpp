@@ -36,6 +36,8 @@ namespace ebi
       char const * eof = nullptr;
 
       clear_records();
+      clear_errors();
+      clear_warnings();
       parse_buffer(p, pe, eof);
     }
 
@@ -46,6 +48,8 @@ namespace ebi
       char const * eof = nullptr;
 
       clear_records();
+      clear_errors();
+      clear_warnings();
       parse_buffer(p, pe, eof);
     }
 
@@ -53,12 +57,24 @@ namespace ebi
     {
       char const * empty = "";
       clear_records();
+      clear_errors();
+      clear_warnings();
       parse_buffer(empty, empty, empty);
     }
 
     bool ParserImpl::is_valid() const
     {
       return m_is_valid;
+    }
+
+    const std::shared_ptr<std::vector<std::unique_ptr<Error>>> ParserImpl::errors() const
+    {
+      return ParsingState::errors;
+    }
+    
+    const std::shared_ptr<std::vector<std::unique_ptr<Error>>> ParserImpl::warnings() const
+    {
+      return ParsingState::warnings;
     }
 
   }

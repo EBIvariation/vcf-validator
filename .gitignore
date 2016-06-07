@@ -27,6 +27,11 @@
 *.out
 *.app
 
+# Construction
+Makefile
+.ninja_*
+*.ninja
+
 # CMake artifacts
 *.cmake
 CMakeFiles
