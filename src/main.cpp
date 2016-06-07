@@ -22,12 +22,12 @@
 #include <stdexcept>
 
 #include <boost/program_options.hpp>
+#include <boost/filesystem/operations.hpp>
 
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
 #include "vcf/report_writer.hpp"
 
-// TODO any reason why this namespace is indented 4 spaces?
 namespace
 {
     size_t const default_line_buffer_size = 64 * 1024;
@@ -107,7 +107,7 @@ namespace
         throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
     }
 
-    std::vector<std::shared_ptr<ebi::vcf::ReportWriter>> get_outputs(std::string const &output_str, std::string const &input) {
+    std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> get_outputs(std::string const &output_str, std::string const &input) {
         std::vector<std::string> outs;
         ebi::util::string_split(output_str, ",", outs);
         size_t initial_size = outs.size();
@@ -119,13 +119,18 @@ namespace
             std::cerr << "Warning, duplicated outputs! will write just once to each output specified by -o/--output" << std::endl;
         }
 
-        std::vector<std::shared_ptr<ebi::vcf::ReportWriter>> outputs;
+        std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
 
         for (auto out : outs) {
             if (out == "database") {
-                outputs.push_back(std::make_shared<ebi::vcf::SqliteReportWriter>(input + ".errors.db"));
+                std::string db_filename = input + ".errors.db";
+                boost::filesystem::path db_file{db_filename};
+                if (boost::filesystem::exists(db_file)) {
+                    throw std::runtime_error{"Report file already exists on " + db_filename + ", please delete it or rename it"};
+                }
+                outputs.emplace_back(new ebi::vcf::SqliteReportWriter(db_filename));
             } else if (out == "stdout") {
-                outputs.push_back(std::make_shared<ebi::vcf::StdoutReportWriter>());
+                outputs.emplace_back(new ebi::vcf::StdoutReportWriter());
             } else if (out == "silent") {
                 ; // do nothing, leaving an empty vector if necessary
             } else {
@@ -227,7 +232,7 @@ namespace
 
     bool is_valid_vcf_file(std::istream &input,
                            ebi::vcf::Parser &validator,
-                           std::vector<std::shared_ptr<ebi::vcf::ReportWriter>> outputs)
+                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
     {
         std::vector<char> line;
         line.reserve(default_line_buffer_size);
@@ -236,12 +241,12 @@ namespace
             validator.parse(line);
 
             for (auto &error : *validator.errors()) {
-                for (auto output : outputs) {
+                for (auto &output : outputs) {
                     output->write_error(*error);
                 }
             }
             for (auto &error : *validator.warnings()) {
-                for (auto output : outputs) {
+                for (auto &output : outputs) {
                     output->write_warning(*error);
                 }
             }

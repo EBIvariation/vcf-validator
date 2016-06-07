@@ -23,7 +23,7 @@ namespace ebi
 
     void StoreParsePolicy::handle_token_begin(ParsingState const & state)
     {
-        m_current_token = std::string();
+        m_current_token = std::string{};
     }
 
     void StoreParsePolicy::handle_token_char(ParsingState const & state, char c)

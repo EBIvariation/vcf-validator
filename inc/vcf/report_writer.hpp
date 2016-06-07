@@ -34,20 +34,18 @@ namespace ebi
     {
       public:
 //        virtual ~ReportWriter() {}  // needed if using raw pointers, instead of references or shared_ptrs
-        virtual void write_error(Error &error) = 0;
-        virtual void write_warning(Error &error) = 0;
+        virtual void write_error(const Error &error) = 0;
+        virtual void write_warning(const Error &error) = 0;
     };
 
     class StdoutReportWriter : public ReportWriter
     {
       public:
-
-      private:
-        virtual void write_error(Error &error) override
+        virtual void write_error(const Error &error) override
         {
           std::cout << error.what() << std::endl;
         }
-        virtual void write_warning(Error &error) override
+        virtual void write_warning(const Error &error) override
         {
           std::cout << error.what() << " (warning)" << std::endl;
         }
@@ -58,11 +56,11 @@ namespace ebi
         SqliteReportWriter(std::string db_name);
         void close();
         ~SqliteReportWriter();
-        void write_error(Error &error) override;
-        void write_warning(Error &error) override;
+        void write_error(const Error &error) override;
+        void write_warning(const Error &error) override;
 
       private:
-        void write(Error &error, std::string table);
+        void write(const Error &error, std::string table);
         void start_transaction();
         void commit_transaction();
 

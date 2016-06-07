@@ -26,14 +26,14 @@ namespace ebi
         int rc = sqlite3_open(db_name.c_str(), &db);
         if (rc != SQLITE_OK) {
             sqlite3_close(db);
-            throw std::runtime_error(std::string("Can't open database: ") + sqlite3_errmsg(db));
+            throw std::runtime_error(std::string{"Can't open database: "} + sqlite3_errmsg(db));
         }
 
         char *zErrMsg = NULL;
         rc = sqlite3_exec(db, "CREATE TABLE if not exists errors (line int, message varchar(255));", NULL, 0,
                           &zErrMsg);
         if (rc != SQLITE_OK) {
-            std::string error_message{std::string("Can't use table: ") + zErrMsg};
+            std::string error_message{std::string{"Can't use table: "} + zErrMsg};
             sqlite3_free(zErrMsg);
             sqlite3_close(db);
             throw std::runtime_error{error_message};
@@ -42,7 +42,7 @@ namespace ebi
         rc = sqlite3_exec(db, "CREATE TABLE if not exists warnings (line int, message varchar(255));", NULL, 0,
                           &zErrMsg);
         if (rc != SQLITE_OK) {
-            std::string error_message{std::string("Can't use table: ") + zErrMsg};
+            std::string error_message{std::string{"Can't use table: "} + zErrMsg};
             sqlite3_free(zErrMsg);
             sqlite3_close(db);
             throw std::runtime_error{error_message};
@@ -63,12 +63,12 @@ namespace ebi
                 int remaining_tries = 10;
                 while (rc == SQLITE_BUSY && remaining_tries-- > 0) {
                     // maybe sqlite is still writing the last transaction
-                    std::cerr << "waiting to finish transactions" << std::endl;
+                    std::cerr << "Waiting to finish transactions" << std::endl;
                     std::this_thread::sleep_for(sleep_time);
                     rc = sqlite3_close(db);
                 }
                 if (rc != SQLITE_OK) {
-                    throw std::runtime_error{"can not close database " + db_name};
+                    throw std::runtime_error{"Can not close database " + db_name};
                 }
             }
             db = nullptr;
@@ -80,21 +80,21 @@ namespace ebi
         try {
             close();
         } catch (std::runtime_error e) {
-            std::cerr << "Error at ~SqliteReportRW: " << e.what() << std::endl;
+            std::cerr << "An error occurred finalizing the error reporting: " << e.what() << std::endl;
         }
     }
 
-    void SqliteReportWriter::write_error(Error &error)
+    void SqliteReportWriter::write_error(const Error &error)
     {
         write(error, "errors");
     }
 
-    void SqliteReportWriter::write_warning(Error &error)
+    void SqliteReportWriter::write_warning(const Error &error)
     {
         write(error, "warnings");
     }
 
-    void SqliteReportWriter::write(Error &error, std::string table)
+    void SqliteReportWriter::write(const Error &error, std::string table)
     {
         char *zErrMsg = NULL;
         int rc;
@@ -108,7 +108,7 @@ namespace ebi
         rc = sqlite3_exec(db, ss.str().c_str(), NULL, 0, &zErrMsg);
         if (rc != SQLITE_OK) {
             rollback_transaction();
-            std::string error_message{std::string("Can't write: ") + zErrMsg};
+            std::string error_message{std::string{"Can't write: "} + zErrMsg};
             sqlite3_free(zErrMsg);
             throw std::runtime_error{error_message};
         }
@@ -125,7 +125,7 @@ namespace ebi
         char *zErrMsg = NULL;
         int rc = sqlite3_exec(db, "BEGIN", NULL, 0, &zErrMsg);
         if (rc != SQLITE_OK) {
-            std::string error_message{std::string("Can't start transaction: ") + zErrMsg};
+            std::string error_message{std::string{"Can't start transaction: "} + zErrMsg};
             sqlite3_free(zErrMsg);
             throw std::runtime_error{error_message};
         }
@@ -156,7 +156,7 @@ namespace ebi
         char *zErrMsg = NULL;
         int rc = sqlite3_exec(db, "ROLLBACK", NULL, 0, &zErrMsg);
         if (rc != SQLITE_OK) {
-            std::string error_message{std::string("Can't rollback transaction: ") + zErrMsg};
+            std::string error_message{std::string{"Can't rollback transaction: "} + zErrMsg};
             sqlite3_free(zErrMsg);
             throw std::runtime_error{error_message};
         }
