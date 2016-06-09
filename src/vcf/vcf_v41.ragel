@@ -717,11 +717,16 @@
     format_value    = (alnum)+ >token_begin $token_middle %token_end ;
     record_format   = format_value (":" format_value)* ;
     
-    ## In a sample, the genotype is mandatory and must be the first field
+    ## In a sample, if a genotype is present it must be the first field
     sample_allele   = (digit)+ | "." ;
     sample_gt       = (sample_allele (("/" | "|") sample_allele)*) ;
     sample_value    = (alnum | (punct - ":"))+ | "." ;
-    record_sample   = (sample_gt $err(sample_gt_error) (":" sample_value)*) >token_begin $token_middle %token_end ;
+    sample_values   = sample_value (":" sample_value)* ;
+    record_sample   = (
+                        sample_gt $err(sample_gt_error) (":" sample_values)? |
+                        sample_values
+                      ) >token_begin $token_middle %token_end ;
+    
     
     record          = (
                         record_chrom 		%record_field_end $err(chrom_error)

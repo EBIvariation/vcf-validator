@@ -216,7 +216,7 @@ namespace ebi
             return; // Nothing to check
         }
             
-        if (format[0] != "GT") {
+        if (std::find(format.begin(), format.end(), "GT") != format.end() && format[0] != "GT") {
             throw std::invalid_argument("GT must be the first field in the FORMAT column");
         }
     }
@@ -267,10 +267,13 @@ namespace ebi
             }
             
             std::vector<std::string> alleles;
-            util::string_split(subfields[0], "|/", alleles);
+            // If the first format field is not a GT, then no alleles need to be checked
+            if (format[0] == "GT") {
+                util::string_split(subfields[0], "|/", alleles);
             
-            // The allele indexes must not be greater than the total number of alleles
-            check_samples_alleles(alleles);
+                // The allele indexes must not be greater than the total number of alleles
+                check_samples_alleles(alleles);
+            }
             
             // The cardinality and type of the fields match the FORMAT meta information
             for (size_t j = 1; j < subfields.size(); ++j) {

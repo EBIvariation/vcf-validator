@@ -263,11 +263,11 @@ namespace ebi
                                 1.0, 
                                 { "PASS" }, 
                                 { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
-                                { "GT", "DP" }, 
+                                { "GT" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}) );
                                 
-            CHECK_THROWS_AS( (vcf::Record{ 
+            CHECK_NOTHROW( (vcf::Record{ 
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
@@ -277,9 +277,8 @@ namespace ebi
                                 { "PASS" }, 
                                 { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
                                 { "DP" }, 
-                                { "0|1" },
-                                std::make_shared<vcf::Source>(source)}),
-                            std::invalid_argument);
+                                { "13" },
+                                std::make_shared<vcf::Source>(source)}) );
         }
         
         SECTION("Multi-field format") 
@@ -297,17 +296,30 @@ namespace ebi
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}) );
                                 
+            CHECK_NOTHROW( (vcf::Record{ 
+                                "chr1", 
+                                123456, 
+                                { "id123", "id456" }, 
+                                "A", 
+                                { "T", "C" }, 
+                                1.0, 
+                                { "PASS" }, 
+                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { "DP", "GL" }, 
+                                { "12:0.5" },
+                                std::make_shared<vcf::Source>(source)}) );
+                                
             CHECK_THROWS_AS( (vcf::Record{ 
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
                                 "A", 
-                                { "A", "C" }, 
+                                { "T", "C" }, 
                                 1.0, 
                                 { "PASS" }, 
                                 { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
                                 { "DP", "GT" }, 
-                                { "0|1" },
+                                { "12:0|1" },
                                 std::make_shared<vcf::Source>(source)}),
                             std::invalid_argument);
         }
