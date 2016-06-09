@@ -27,6 +27,7 @@
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
 #include "vcf/report_writer.hpp"
+#include "util/stream_utils.hpp"
 
 namespace
 {
@@ -215,21 +216,6 @@ namespace
         }
     }
 
-    template <typename Container>
-    std::istream & readline(std::istream & stream, Container & container)
-    {
-        char c;
-
-        container.clear();
-
-        do {
-            stream.get(c);
-            container.push_back(c);
-        } while (!stream.eof() && c != '\n');
-
-        return stream;
-    }
-
     bool is_valid_vcf_file(std::istream &input,
                            ebi::vcf::Parser &validator,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
@@ -237,7 +223,7 @@ namespace
         std::vector<char> line;
         line.reserve(default_line_buffer_size);
 
-        while (readline(input, line)) {
+        while (ebi::util::readline(input, line)) {
             validator.parse(line);
 
             for (auto &error : *validator.errors()) {
@@ -284,7 +270,11 @@ int main(int argc, char** argv)
         } else {
             std::cout << "Reading from input file..." << std::endl;
             std::ifstream input{path};
-            is_valid = is_valid_vcf_file(input, *validator, outputs);
+            if (!input) {
+                throw std::runtime_error{"Couldn't open file " + path};
+            } else {
+                is_valid = is_valid_vcf_file(input, *validator, outputs);
+            }
         }
 
         std::cout << "The input file is " << (is_valid ? "valid" : "not valid") << std::endl;
