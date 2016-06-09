@@ -305,6 +305,12 @@ namespace ebi
         for (auto & allele : alleles) {
             if (allele == ".") { continue; } // No need to check missing alleles
 
+            // Discard non-integer numbers
+            if (std::find_if(allele.begin(), allele.end(), [](char c) { return !std::isdigit(c); }) != allele.end()) {
+                throw std::invalid_argument("Allele index " + allele + " is not an integer number");
+            }
+            
+            // After guaranteeing the number is an integer, check it is in range
             size_t num_allele = std::stoi(allele);
             if (num_allele > alternate_alleles.size()) {
                 throw std::invalid_argument("Allele index " + std::to_string(num_allele) + 
