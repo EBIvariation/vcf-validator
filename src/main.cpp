@@ -20,6 +20,9 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <chrono>
+#include <iomanip>
+#include <ctime>
 
 #include <boost/program_options.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -46,7 +49,8 @@ namespace
             ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
             ("level,l", po::value<std::string>()->default_value("warning"), "Validation level (error, warning, stop)")
             ("version,v", po::value<std::string>(), "VCF fileformat version to validate the file against (v4.1, v4.2, v4.3)")
-            ("output,o", po::value<std::string>()->default_value("stdout"), "Comma separated values for type of output (database, stdout, silent)")
+            ("report,r", po::value<std::string>()->default_value("stdout"), "Comma separated values for types of reports (database, stdout)")
+            ("outdir,o", po::value<std::string>()->default_value(""), "Directory for the output (same as input file)")
         ;
 
         return description;
@@ -108,6 +112,20 @@ namespace
         throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
     }
 
+    std::string get_output_path(const std::string &outdir, const std::string &file_path)
+    {
+        if (outdir == "") {
+            return file_path;
+        }
+        
+        boost::filesystem::path file_boost_path{file_path};
+        boost::filesystem::path outdir_boost_path{outdir};
+        
+        outdir_boost_path /= file_boost_path.filename();
+        
+        return outdir_boost_path.string();
+    }
+
     std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> get_outputs(std::string const &output_str, std::string const &input) {
         std::vector<std::string> outs;
         ebi::util::string_split(output_str, ",", outs);
@@ -124,7 +142,13 @@ namespace
 
         for (auto out : outs) {
             if (out == "database") {
-                std::string db_filename = input + ".errors.db";
+//                time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+//                std::stringstream ss;
+//                std::cout << input << ".errors." << std::put_time(std::localtime(&now), "%F") << ".db";
+//                std::string db_filename = ss.str();
+                auto epoch = std::chrono::system_clock::now().time_since_epoch();
+                auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
+                std::string db_filename = input + ".errors." + std::to_string(timestamp) + ".db";
                 boost::filesystem::path db_file{db_filename};
                 if (boost::filesystem::exists(db_file)) {
                     throw std::runtime_error{"Report file already exists on " + db_filename + ", please delete it or rename it"};
@@ -132,10 +156,8 @@ namespace
                 outputs.emplace_back(new ebi::vcf::SqliteReportWriter(db_filename));
             } else if (out == "stdout") {
                 outputs.emplace_back(new ebi::vcf::StdoutReportWriter());
-            } else if (out == "silent") {
-                ; // do nothing, leaving an empty vector if necessary
             } else {
-                throw std::invalid_argument{"Please use only valid outputs"};
+                throw std::invalid_argument{"Please use only valid report types"};
             }
         }
 
@@ -262,7 +284,8 @@ int main(int argc, char** argv)
         auto level = vm["level"].as<std::string>();
         auto version = vm["version"].as<std::string>();
         auto validator = build_parser(path, get_validation_level(level), get_version(version));
-        auto outputs = get_outputs(vm["output"].as<std::string>(), path);
+        auto outdir = get_output_path(vm["outdir"].as<std::string>(), path);
+        auto outputs = get_outputs(vm["report"].as<std::string>(), outdir);
 
         if (path == "stdin") {
             std::cout << "Reading from standard input..." << std::endl;
