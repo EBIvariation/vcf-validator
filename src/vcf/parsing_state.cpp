@@ -46,6 +46,10 @@ namespace ebi
     {
         records->push_back(record);
     }
+    void ParsingState::add_records(const std::vector<Record> &records) const
+    {
+        this->records->insert(this->records->end(), records.begin(), records.end());
+    }
     
     void ParsingState::clear_records() const
     {

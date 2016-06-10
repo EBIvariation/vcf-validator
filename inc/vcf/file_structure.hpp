@@ -27,6 +27,9 @@
 
 #include <boost/variant.hpp>
 
+#include "util/stream_utils.hpp"
+#include "vcf/error.hpp"
+
 namespace ebi
 {
   namespace vcf
@@ -265,6 +268,7 @@ namespace ebi
                               std::string const & type) const;
         
     };
+    std::ostream &operator<<(std::ostream &os, const Record &record);
 
   }
 }

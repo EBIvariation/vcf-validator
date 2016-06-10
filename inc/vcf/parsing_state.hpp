@@ -55,6 +55,7 @@ namespace ebi
         void add_meta(MetaEntry const & meta) const;
         
         void add_record(Record const & record) const;
+        void add_records(const std::vector<Record> &records) const;
         void clear_records() const;
 
         void add_error(std::unique_ptr<Error> error);
@@ -70,7 +71,7 @@ namespace ebi
         bool is_well_defined_meta(std::string const & meta_type, std::string const & id);
         
         void add_well_defined_meta(std::string const & meta_type, std::string const & id);
-	
+        
         bool is_bad_defined_meta(std::string const & meta_type, std::string const & id);
         
         void add_bad_defined_meta(std::string const & meta_type, std::string const & id);

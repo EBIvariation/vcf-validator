@@ -18,6 +18,10 @@
 #define STREAM_UTILS_HPP
 
 #include <iostream>
+#include <vector>
+#include <map>
+#include <string>
+#include <functional>
 
 namespace ebi
 {
@@ -40,6 +44,31 @@ namespace ebi
 
         return stream;
     }
+
+    /**
+     * This is a generic method that prints a collection if it has the operations ".size()", ".begin()", ".end()" 
+     * defined and they provide iterators, and the inner type has an overloaded "operator<<"
+     */
+    template <typename T>
+    std::ostream &print_container(std::ostream &os, const T &container) {
+        size_t size = container.size();
+        os << "[";
+        if (size > 0) {
+            auto it = container.begin();
+            os << *it;
+            it++;
+            for (; it != container.end(); ++it) {
+                os << ", " << *it;
+            }
+        }
+        os << "]";
+        return os;
+    }
+    
+    // the next functions allow using the previous print_container in a easier syntax
+    std::ostream &operator<<(std::ostream &os, const std::vector<std::string> &container);
+    std::ostream &operator<<(std::ostream &os, const std::pair<std::string, std::string> &container);
+    std::ostream &operator<<(std::ostream &os, const std::map<std::string, std::string> &container);
   }
 }
 

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#include <vcf/error.hpp>
 #include "vcf/file_structure.hpp"
 #include "vcf/record.hpp"
 
@@ -23,7 +22,7 @@ namespace ebi
   namespace vcf
   {
 
-    Record::Record(size_t const line,
+    Record:: Record(size_t const line,
             std::string const & chromosome,
             size_t const position,
             std::vector<std::string> const & ids,
@@ -435,5 +434,38 @@ namespace ebi
         return false;
     }
     
+    std::ostream &operator<<(std::ostream &os, const Record &record)
+    {
+        using util::operator<<;
+        os << "{";
+        os << record.line << ", " << record.chromosome << ", " << record.position << ", ";
+        os << record.ids << ", " << record.reference_allele << ", " << record.alternate_alleles;
+        
+        os << ", [";
+        if (record.types.size() > 0) {
+            auto type_it = record.types.begin();
+            os << static_cast<int>(*type_it);
+            type_it++;
+            for (; type_it != record.types.end(); ++type_it) {
+                os << ", " << static_cast<int>(*type_it);
+            }
+        }
+        os << "]";
+        
+        os << ", " << record.quality;
+        os << ", " << record.filters;
+        os << ", " << record.info;
+        os << ", " << record.format;
+        os << ", " << record.samples;
+//        os << source;
+//        
+//        for(auto &alternate : record.alternate_alleles) {
+//            os << " " << alternate << ",";
+//        }
+        
+        os << "}";
+        return os;
+    }
+
   }
 }
