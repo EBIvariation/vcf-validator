@@ -254,7 +254,7 @@
     }
 
     action meta_format_number_err {
-        ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Number is not a number, A, R, G or dot");
+        ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Number is not a number, A, G or dot");
         fhold; fgoto meta_section_skip;
     }
     
@@ -270,7 +270,7 @@
     }
 
     action meta_info_number_err {
-        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Number is not a number, A, R, G or dot");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Number is not a number, A, G or dot");
         fhold; fgoto meta_section_skip;
     }
     

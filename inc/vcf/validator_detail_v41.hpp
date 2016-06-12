@@ -21,7 +21,7 @@
 #include "vcf/validator.hpp"
 
 
-#line 760 "src/vcf/vcf_v41.ragel"
+#line 761 "src/vcf/vcf_v41.ragel"
 
 
 namespace
@@ -39,7 +39,7 @@ static const int vcf_v41_en_meta_section_skip = 647;
 static const int vcf_v41_en_body_section_skip = 648;
 
 
-#line 766 "src/vcf/vcf_v41.ragel"
+#line 767 "src/vcf/vcf_v41.ragel"
 
 }
 
@@ -60,7 +60,7 @@ namespace ebi
 	cs = vcf_v41_start;
 	}
 
-#line 782 "src/vcf/vcf_v41.ragel"
+#line 783 "src/vcf/vcf_v41.ragel"
 
     }
 
@@ -369,7 +369,7 @@ tr210:
 tr223:
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Number is not a number, A, R, G or dot");
+        ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Number is not a number, A, G or dot");
         p--; {goto st647;}
     }
 #line 251 "src/vcf/vcf_v41.ragel"
@@ -449,7 +449,7 @@ tr269:
 tr282:
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Number is not a number, A, R, G or dot");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Number is not a number, A, G or dot");
         p--; {goto st647;}
     }
 #line 267 "src/vcf/vcf_v41.ragel"
@@ -12804,7 +12804,7 @@ tr837:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 758 "src/vcf/vcf_v41.ragel"
+#line 759 "src/vcf/vcf_v41.ragel"
 	{ {goto st28;} }
 	goto st652;
 st652:
@@ -12831,7 +12831,7 @@ tr839:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 759 "src/vcf/vcf_v41.ragel"
+#line 760 "src/vcf/vcf_v41.ragel"
 	{ {goto st651;} }
 	goto st653;
 st653:
@@ -14213,7 +14213,7 @@ case 653:
 	case 184: 
 #line 256 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Number is not a number, A, R, G or dot");
+        ErrorPolicy::handle_meta_section_error(*this, "FORMAT metadata Number is not a number, A, G or dot");
         p--; {goto st647;}
     }
 #line 251 "src/vcf/vcf_v41.ragel"
@@ -14232,7 +14232,7 @@ case 653:
 	case 232: 
 #line 272 "src/vcf/vcf_v41.ragel"
 	{
-        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Number is not a number, A, R, G or dot");
+        ErrorPolicy::handle_meta_section_error(*this, "INFO metadata Number is not a number, A, G or dot");
         p--; {goto st647;}
     }
 #line 267 "src/vcf/vcf_v41.ragel"
@@ -15411,7 +15411,7 @@ case 653:
 	_out: {}
 	}
 
-#line 790 "src/vcf/vcf_v41.ragel"
+#line 791 "src/vcf/vcf_v41.ragel"
 
     }
    

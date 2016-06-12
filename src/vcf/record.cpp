@@ -347,10 +347,20 @@ namespace ebi
         } 
 
         if (number != ".") { // Forget about the unspecified number
-            // The number of values must match the expected or, if the expected is 0, 
-            // there will be one empty value that needs to be specifically checked
-            if (values.size() != expected && 
-                values.size() > 1 && values[0] != "") {
+            bool number_matches = true;
+            if (expected > 0) {
+                // The number of values must match the expected
+                number_matches = ( values.size() == expected );
+            } else if (expected == 0) {
+                // There will be one empty value that needs to be specifically checked
+                number_matches = values.size() == 0 || 
+                                (values.size() == 1 && (values[0] == "0" || values[0] == "1"));
+            } else {
+                // Negative values are not allowed
+                throw std::invalid_argument(field + " meta specification Number=" + number + " is negative");
+            }
+            
+            if (!number_matches) {
                 throw std::invalid_argument(field + " does not match the meta specification Number=" + number + 
                         ", expected " + std::to_string(expected) + " values");
                 
