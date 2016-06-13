@@ -380,6 +380,10 @@ namespace ebi
                 if (type == "Integer") {
                     // ...try to cast to int
                     std::stoi(value);
+                    // ...and also check it's not a float
+                    if (std::fmod(std::stof(value), 1) != 0) {
+                        throw std::invalid_argument("Float provided instead of Integer");
+                    }
                 } else if (type == "Float") {
                     // ...try to cast to float
                     try {

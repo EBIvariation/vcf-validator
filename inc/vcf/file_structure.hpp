@@ -18,6 +18,7 @@
 #define VCF_FILE_STRUCTURE_HPP
 
 #include <algorithm>
+#include <cmath>
 #include <map>
 #include <memory>
 #include <stdexcept>
