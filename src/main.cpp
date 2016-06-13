@@ -50,7 +50,7 @@ namespace
             ("level,l", po::value<std::string>()->default_value("warning"), "Validation level (error, warning, stop)")
             ("version,v", po::value<std::string>(), "VCF fileformat version to validate the file against (v4.1, v4.2, v4.3)")
             ("report,r", po::value<std::string>()->default_value("stdout"), "Comma separated values for types of reports (database, stdout)")
-            ("outdir,o", po::value<std::string>()->default_value(""), "Directory for the output (same as input file)")
+            ("outdir,o", po::value<std::string>()->default_value(""), "Directory for the output")
         ;
 
         return description;
@@ -135,17 +135,13 @@ namespace
         std::sort(outs.begin(), outs.end());
         std::unique(outs.begin(), outs.end());
         if (initial_size != outs.size()) {
-            std::cerr << "Warning, duplicated outputs! will write just once to each output specified by -o/--output" << std::endl;
+            std::cerr << "Warning, duplicated outputs! will write just once to each output specified by -r/--report" << std::endl;
         }
 
         std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
 
         for (auto out : outs) {
             if (out == "database") {
-//                time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-//                std::stringstream ss;
-//                std::cout << input << ".errors." << std::put_time(std::localtime(&now), "%F") << ".db";
-//                std::string db_filename = ss.str();
                 auto epoch = std::chrono::system_clock::now().time_since_epoch();
                 auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
                 std::string db_filename = input + ".errors." + std::to_string(timestamp) + ".db";
