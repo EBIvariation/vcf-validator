@@ -50,8 +50,8 @@ namespace ebi
         size_t count_errors() override;
         size_t count_warnings() override;
         
-        void for_each_error(std::function<void(std::shared_ptr<Error>)> user_function);
-        void for_each_warning(std::function<void(std::shared_ptr<Error>)> user_function);
+        void for_each_error(std::function<void(std::shared_ptr<Error>)> user_function) override;
+        void for_each_warning(std::function<void(std::shared_ptr<Error>)> user_function) override;
         
       private:
         void write(const Error &error, sqlite3_stmt *statement);

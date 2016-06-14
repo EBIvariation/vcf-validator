@@ -167,7 +167,7 @@ namespace ebi
       SECTION("write and read errors")
       {
           size_t line = 8;
-          std::string message{"testing erros"};
+          std::string message{"testing errors"};
           ebi::vcf::Error test_error{line, message};
           errorDAO.write_error(test_error);
           errorDAO.flush();

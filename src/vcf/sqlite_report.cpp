@@ -26,7 +26,7 @@ namespace ebi
         int rc = sqlite3_open(db_name.c_str(), &db);
         if (rc != SQLITE_OK) {
             sqlite3_close(db);
-            throw std::runtime_error(std::string{"Can't open database: "} + sqlite3_errmsg(db));
+            throw std::runtime_error{std::string{"Can't open database: "} + sqlite3_errmsg(db)};
         }
 
         char *zErrMsg = NULL;
