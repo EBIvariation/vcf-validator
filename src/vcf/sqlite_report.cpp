@@ -47,6 +47,18 @@ namespace ebi
             sqlite3_close(db);
             throw std::runtime_error{error_message};
         }
+        
+        // preparing statements
+        std::string sql = "INSERT INTO errors ( line , code , message ) VALUES ( ? , ? , ? )";
+        rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &statement_error, NULL);
+        if (rc != SQLITE_OK) {
+            throw std::runtime_error{std::string{"Can't write, failed sqlite3_prepare_v2 with code: "} + std::to_string(rc)};
+        }
+        sql = "INSERT INTO warnings ( line , code , message ) VALUES ( ? , ? , ? )";
+        rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &statement_warning, NULL);
+        if (rc != SQLITE_OK) {
+            throw std::runtime_error{std::string{"Can't write, failed sqlite3_prepare_v2 with code: "} + std::to_string(rc)};
+        }
     }
 
     void SqliteReportRW::flush()
@@ -63,14 +75,14 @@ namespace ebi
         flush();
         
         if (db != nullptr) {
-            int rc = sqlite3_close(db);
+            int rc = sqlite3_close_v2(db);
             if (rc != SQLITE_OK) {
                 int remaining_tries = 10;
                 while (rc == SQLITE_BUSY && remaining_tries-- > 0) {
                     // maybe sqlite is still writing the last transaction
                     std::cerr << "Waiting to finish transactions" << std::endl;
                     std::this_thread::sleep_for(sleep_time);
-                    rc = sqlite3_close(db);
+                    rc = sqlite3_close_v2(db);
                 }
                 if (rc != SQLITE_OK) {
                     throw std::runtime_error{"Can not close database " + db_name};
@@ -84,6 +96,15 @@ namespace ebi
     {
         try {
             close();
+            
+            int rc = sqlite3_finalize(statement_error);
+            if (rc != SQLITE_OK) {
+                throw std::runtime_error{std::string{"Failed sqlite3_finalize with code: "} + std::to_string(rc)};
+            }
+            rc = sqlite3_finalize(statement_warning);
+            if (rc != SQLITE_OK) {
+                throw std::runtime_error{std::string{"Failed sqlite3_finalize with code: "} + std::to_string(rc)};
+            }
         } catch (std::runtime_error e) {
             std::cerr << "An error occurred finalizing the error reporting: " << e.what() << std::endl;
         }
@@ -91,35 +112,47 @@ namespace ebi
 
     void SqliteReportRW::write_error(const Error &error)
     {
-        write(error, "errors");
+        write(error, statement_error);
     }
 
     void SqliteReportRW::write_warning(const Error &error)
     {
-        write(error, "warnings");
+        write(error, statement_warning);
     }
 
-    void SqliteReportRW::write(const Error &error, std::string table)
+    void SqliteReportRW::write(const Error &error, sqlite3_stmt * statement)
     {
-        char *zErrMsg = NULL;
         int rc;
         if (current_transaction_size == 0) {
             start_transaction();
         }
-        std::stringstream ss;
-        ss << "INSERT INTO " << table << " ( line , code , message ) VALUES (";
-        ss << error.get_line() << " , "
-        << static_cast<int>(error.get_code()) << " , \""
-        << error.get_raw_message() << "\");";
-
-        rc = sqlite3_exec(db, ss.str().c_str(), NULL, 0, &zErrMsg);
+        
+        rc = sqlite3_bind_int64(statement, 1, error.get_line());
         if (rc != SQLITE_OK) {
             rollback_transaction();
-            std::string error_message{std::string{"Can't write: "} + zErrMsg};
-            sqlite3_free(zErrMsg);
-            throw std::runtime_error{error_message};
+            throw std::runtime_error{std::string{"Can't write, failed sqlite3_bind_int64 with code: "} + std::to_string(rc)};
         }
-
+        rc = sqlite3_bind_int64(statement, 2, static_cast<long>(error.get_code()));
+        if (rc != SQLITE_OK) {
+            rollback_transaction();
+            throw std::runtime_error{std::string{"Can't write, failed sqlite3_bind_int64 with code: "} + std::to_string(rc)};
+        }
+        rc = sqlite3_bind_text(statement, 3, error.get_raw_message().c_str(), -1, SQLITE_TRANSIENT);
+        if (rc != SQLITE_OK) {
+            rollback_transaction();
+            throw std::runtime_error{std::string{"Can't write, failed sqlite3_bind_text with code: "} + std::to_string(rc)};
+        }
+        rc = sqlite3_step(statement);
+        if (rc != SQLITE_DONE) {
+            rollback_transaction();
+            throw std::runtime_error{std::string{"Can't write, failed sqlite_step with code: "} + std::to_string(rc)};
+        }
+        rc = sqlite3_reset(statement);
+        if (rc != SQLITE_OK) {
+            rollback_transaction();
+            throw std::runtime_error{std::string{"Can't write, failed sqlite3_reset with code: "} + std::to_string(rc)};
+        }
+        
         ++current_transaction_size;
         if (current_transaction_size == transaction_size) {
             commit_transaction();

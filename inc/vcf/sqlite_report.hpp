@@ -54,7 +54,7 @@ namespace ebi
         void for_each_warning(std::function<void(std::shared_ptr<Error>)> user_function);
         
       private:
-        void write(const Error &error, std::string table);
+        void write(const Error &error, sqlite3_stmt *statement);
         size_t count(std::string table);
         void for_each(std::string table, std::function<void(std::shared_ptr<Error>)> user_function);
         
@@ -66,6 +66,8 @@ namespace ebi
         std::string db_name;
         size_t current_transaction_size;
         const size_t transaction_size;
+        sqlite3_stmt *statement_error;
+        sqlite3_stmt *statement_warning;
         const std::chrono::milliseconds sleep_time;
     };
   }
