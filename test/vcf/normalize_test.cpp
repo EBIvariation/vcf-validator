@@ -22,12 +22,18 @@
 namespace ebi
 {
 //  TODO: extract common code
-//  bool testNormalization(size_t pos, std::string reference, std::string alternate, 
-//        size_t normalized_pos, std::string normalized_reference, std::string normalized_alternate)
+//  struct RecordTest
+//  {
+//      size_t normalized_pos;
+//      std::string normalized_reference;
+//      std::string normalized_alternate;
+//  };
+//  bool testNormalization(size_t pos, std::string reference, std::vector<std::string> alternate, 
+//                         std::vector<RecordTest> results)
 //  {
 //      
 //  }
-
+//
   TEST_CASE("Record normalization", "[normalize]")
   {
       std::shared_ptr<vcf::Source> source{new vcf::Source{
@@ -49,9 +55,9 @@ namespace ebi
               vcf::Record record{1, "1", 1000, {"."}, "TCACCC", {"TGACGG"}, 0,
                                  {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
 
-              std::vector<vcf::Record> expected_normalization = {
-                  vcf::Record{1, "1", 1000, {"."}, "TCACCC", {"TGACGG"}, 0,
-                              {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source}};
+              std::vector<vcf::RecordCore> expected_normalization = {
+                  vcf::RecordCore{1, "1", 1001, "CACCC", "GACGG"}};
+              
               auto normalization = vcf::normalize(record);
               CHECK((normalization) == expected_normalization);
           } catch (vcf::Error *e) {
@@ -65,24 +71,19 @@ namespace ebi
                              {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
 
 
-          std::vector<vcf::Record> expected_normalization = {vcf::Record{1, "1", 1000, {"."}, "TCACC", {"TGACG"}, 0,
-                                                                         {"."}, {{".", ""}}, {"GT"},
-                                                                         {"0/0", "0/1", "0/1", "1/1"}, source}};
+          std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1001, "CACC", "GACG"}};
 
           CHECK(vcf::normalize(record) == expected_normalization);
       }
 
-      SECTION("Multiallelic") {
+      SECTION("Multiallelic: same length or deletion") {
           vcf::Record record{1, "1", 10040, {"rs123"}, "TGACGTAACGATT", {"T", "TGACGTAACGGTT", "TGACGTAATAC"}, 0,
                              {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/2", "1/2"}, source};
 
-          std::vector<vcf::Record> expected_normalization = {
-              vcf::Record{1, "1", 10040, {"rs123"}, "TGACGTAACGATT", {"T"}, 0,
-                          {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/.", "1/."}, source},
-              vcf::Record{1, "1", 10048, {"rs123"}, "ACGATT", {"ATAC"}, 0,
-                          {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/.", "0/.", "./."}, source},
-              vcf::Record{1, "1", 10050, {"rs123"}, "A", {"G"}, 0,
-                          {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/.", "0/1", "./1"}, source}};
+          std::vector<vcf::RecordCore> expected_normalization = {
+              vcf::RecordCore{1, "1", 10040, "TGACGTAACGATT", "T"},
+              vcf::RecordCore{1, "1", 10048, "ACGATT", "ATAC"},
+              vcf::RecordCore{1, "1", 10050, "A", "G"}};
 
           CHECK(vcf::normalize(record) == expected_normalization);
       }

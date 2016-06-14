@@ -42,15 +42,10 @@ namespace ebi
         source->meta_entries.emplace(meta.id, meta);
     }
     
-    void ParsingState::add_record(Record const & record) const
+    void ParsingState::add_record(Record const & record)
     {
         records->push_back(record);
     }
-    void ParsingState::add_records(const std::vector<Record> &records) const
-    {
-        this->records->insert(this->records->end(), records.begin(), records.end());
-    }
-    
     void ParsingState::clear_records() const
     {
         records->clear();

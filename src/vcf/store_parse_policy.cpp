@@ -156,7 +156,7 @@ namespace ebi
         m_grouped_tokens = std::vector<std::string>{};
     }
 
-    void StoreParsePolicy::handle_body_line(ParsingState const & state) 
+    void StoreParsePolicy::handle_body_line(ParsingState & state) 
     {
         size_t position;
         try {
@@ -194,7 +194,8 @@ namespace ebi
         auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ?
                        m_line_tokens["SAMPLES"] : std::vector<std::string>{} ;
 
-        state.add_records(normalize(Record {
+        
+        state.add_record(Record {
                 state.n_lines,
                 m_line_tokens["CHROM"][0],
                 position,
@@ -207,7 +208,7 @@ namespace ebi
                 format,
                 samples,
                 state.source
-        }));
+        });
     }
     
     std::string StoreParsePolicy::current_token() const

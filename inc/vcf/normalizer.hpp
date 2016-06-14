@@ -16,11 +16,38 @@
 #ifndef VCF_VALIDATOR_NORMALIZER_HPP
 #define VCF_VALIDATOR_NORMALIZER_HPP
 
+#include "file_structure.hpp"
+
 namespace ebi
 {
   namespace vcf
   {
-    std::vector<Record> normalize(const Record &record/* , ParsingState?*/);
+    struct RecordCore
+    {
+        size_t line;
+        std::string chromosome;
+        size_t position;
+        std::string reference_allele;
+        std::string alternate_alleles;
+        
+
+        RecordCore(size_t line, const std::string &chromosome, size_t position, 
+                   const std::string &reference_allele, const std::string &alternate_alleles) 
+            : line(line), chromosome(chromosome), position(position), 
+              reference_allele(reference_allele), alternate_alleles(alternate_alleles)
+        { }
+/** A record "a" is less than another "b" if: 
+         * - the chromosome string from "a" is less than the chromosome string from "b", or if they equal:
+         * - the position from "a" is less than the position from "b", or if they equal:
+         * - the reference_allele string from "a" is less than the reference_allele string from "b", or if they equal:
+         * - the alternate_alleles string from "a" is less than the alternate_alleles string from "b".
+         */
+        bool operator<(const RecordCore &other) const;
+        bool operator==(const RecordCore &other) const;
+    };
+    std::ostream &operator<<(std::ostream &os, const RecordCore &record);
+    
+    std::vector<RecordCore> normalize(const Record &record/* , ParsingState?*/);
   }
 }
 

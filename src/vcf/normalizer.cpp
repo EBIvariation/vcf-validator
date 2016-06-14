@@ -14,13 +14,50 @@
  * limitations under the License.
  */
 
-#include <vcf/file_structure.hpp>
 #include "vcf/normalizer.hpp"
 
 namespace ebi
 {
   namespace vcf
   {
+
+    bool RecordCore::operator<(const RecordCore &other) const
+    {
+        int compare = chromosome.compare(other.chromosome); // <0: a<b; 0: a==b; >0: a>b
+        if (compare != 0) {
+            return compare < 0;
+        }
+        // else: chromosome is the same
+
+        if (position != other.position) {
+            return position < other.position;
+        }
+        compare = reference_allele.compare(other.reference_allele);
+        if (compare != 0) {
+            return compare < 0;
+        }
+        compare = alternate_alleles.compare(other.alternate_alleles);
+        return compare < 0;
+    }
+
+    bool RecordCore::operator==(const RecordCore &other) const
+    {
+        return chromosome == other.chromosome 
+               && position == other.position 
+               && reference_allele == other.reference_allele
+               && alternate_alleles == other.alternate_alleles;
+    }
+    
+    std::ostream &operator<<(std::ostream &os, const RecordCore &record)
+    {
+        using util::operator<<;
+        os << "{";
+        os << record.line << ", " << record.chromosome << ", " << record.position << ", ";
+        os << record.reference_allele << ", " << record.alternate_alleles;
+        os << "}";
+        return os;
+    }
+    
     //result is undefined if passed container.rend()
     template <class ReverseIterator>
     typename ReverseIterator::iterator_type make_forward(ReverseIterator rit)
@@ -28,23 +65,23 @@ namespace ebi
         return --(rit.base()); // move result of .base() back by one.
     }
     
-    std::vector<Record> normalize(const Record &record/* , ParsingState?*/)
+    std::vector<RecordCore> normalize(const Record &record/* , ParsingState?*/)
     {
-        std::vector<Record> records;
-        
+        std::vector<RecordCore> records;
+
         // This index is necessary for getting the samples where the mutated allele is present
         for (size_t i = 0; i < record.alternate_alleles.size(); i++) {
             std::string alternate = record.alternate_alleles[i];
             std::string reference = record.reference_allele;
             size_t position = record.position;
-            
+
             size_t corrected_position;
             std::string corrected_alternate;
             std::string corrected_reference;
             std::vector<std::string> corrected_samples;
             corrected_samples.reserve(record.samples.size());
 
-            //assertions
+            // assertions / preconditions
             if (alternate.size() < 1) {
                 throw new BodySectionError{record.line, "Alternate should not be empty"};
             }
@@ -54,84 +91,74 @@ namespace ebi
             if (reference == alternate) {
                 throw new BodySectionError{record.line, "Reference and alternate should not be identical"};
             }
-            
-            // count trailing matching bases
-            auto trail_mismatch_reverse = std::mismatch(reference.rbegin(), reference.rend(), alternate.rbegin());
-            // rindex is zero: no equal trailing bases
-            // rindex is rend: reference and alternate are equal: error
+
+            // count trailing matching bases using mismatch with reverse iterators
+            std::pair<std::string::reverse_iterator, std::string::reverse_iterator> trail_mismatch_reverse = 
+                    std::mismatch(reference.rbegin(), reference.rend(), alternate.rbegin());
+            // trail_mismatch_reverse is zero: no equal trailing bases
+            // trail_mismatch_reverse is rend: reference and alternate are equal: error
+            std::pair<std::string::iterator, std::string::iterator> lead_mismatch_indices;
             if (reference.size() == alternate.size()) {
                 // polymorphism
 
                 std::string::iterator trail_mismatch_ref = make_forward(trail_mismatch_reverse.first);
                 std::string::iterator trail_mismatch_alt = make_forward(trail_mismatch_reverse.second);
-                auto lead_mismatch_indices = std::mismatch(reference.begin(), trail_mismatch_ref, alternate.begin());
+                lead_mismatch_indices = std::mismatch(reference.begin(), trail_mismatch_ref, alternate.begin());
 
                 // +1 because end is not inclusive: [start, end), and we need to include the mismatch
                 corrected_reference.assign(lead_mismatch_indices.first, trail_mismatch_ref+1);
                 corrected_alternate.assign(lead_mismatch_indices.second, trail_mismatch_alt+1);
                 corrected_position = position + (lead_mismatch_indices.first - reference.begin());
-                for (auto &sample : record.samples) {
-                    
-                }
-                
+
             } else if (reference.size() < alternate.size()){
                 // insertion
                 if (trail_mismatch_reverse.first == reference.rend()) {
-                    // first base changes, with trailing context bases, have to reduce the context to 1 base
+                    // reference is a substring of alternate, located at the end of alternate
+                    // need to reduce reference to 1 base, as trailing context
+                    std::string::iterator trail_mismatch_ref = make_forward(trail_mismatch_reverse.first);
+                    std::string::iterator trail_mismatch_alt = make_forward(trail_mismatch_reverse.second);
+                    lead_mismatch_indices.first = reference.begin();
+                    
+                    corrected_reference.assign(reference.begin(), reference.begin()+1); // preconditions grant it's big enough
+                    corrected_alternate.assign(trail_mismatch_alt, trail_mismatch_alt+1);
+                    corrected_position = position + (lead_mismatch_indices.first - reference.begin());
+                    corrected_reference.assign(lead_mismatch_indices.first, trail_mismatch_ref+1);
+                    corrected_alternate.assign(lead_mismatch_indices.second, trail_mismatch_alt+1);
+                    corrected_position = position + (lead_mismatch_indices.first - reference.begin());
+
+                } else {
+
+                    std::string::iterator trail_mismatch_ref = make_forward(trail_mismatch_reverse.first);
+                    std::string::iterator trail_mismatch_alt = make_forward(trail_mismatch_reverse.second);
+                    lead_mismatch_indices = std::mismatch(reference.begin(), trail_mismatch_ref, alternate.begin());
+
+                    if (lead_mismatch_indices.first > reference.begin()
+                        /* && lead_mismatch_indices.second > alternate.begin() */ ) {
+                        // we leave an initial base for context
+                        --lead_mismatch_indices.first;
+                        --lead_mismatch_indices.second;
+                    } else if (trail_mismatch_ref < reference.end() && trail_mismatch_alt < alternate.end()) {
+                        // we leave a trailing base for context
+                        ++trail_mismatch_ref;
+                        ++trail_mismatch_alt;
+                    }
+                    
+                    // +1 because end is not inclusive: [start, end), and we need to include the base pointed by trail_mismatch
+                    corrected_reference.assign(lead_mismatch_indices.first, trail_mismatch_ref+1);
+                    corrected_alternate.assign(lead_mismatch_indices.second, trail_mismatch_alt+1);
+                    corrected_position = position + (lead_mismatch_indices.first - reference.begin());
 
                 }
+
             } else {
                 // deletion
+                
             }
-            std::string::iterator trail_mismatch = make_forward(trail_mismatch_reverse.first);
-            auto lead_mismatch_indices = std::mismatch(reference.begin(), trail_mismatch, alternate.begin());
-            
-                        
-            /*
-            
-            
-            if (alternate.size() == alternate.size()) {
-                createVariantsFromSameLengthRefAlt(position, reference, alternate);
-            } else if (referenceLen == 0) {
-                createVariantsFromInsertionEmptyRef(position, alternate);
-            } else if (alternateLen == 0) {
-                createVariantsFromDeletionEmptyAlt(position, reference);
-            } else {
-                createVariantsFromIndelNoEmptyRefAlt(position, reference, alternate);
-            }
-    
-            keyFields.setNumAllele(i);
-    
-            // Since the reference and alternate alleles won't necessarily match
-            // the ones read from the VCF file but they are still needed for
-            // instantiating the variants, they must be updated
-            alternateAlleles[i] = keyFields.alternate;
-            generatedKeyFields.add(keyFields);
-            // Now create all the Variant objects read from the VCF record
-            VariantKeyFields keyFields = generatedKeyFields.get(i);
-            Variant variant = new Variant(chromosome, keyFields.start, keyFields.end, keyFields.reference, keyFields.alternate);
-            String[] secondaryAlternates = getSecondaryAlternates(variant, keyFields.getNumAllele(), alternateAlleles);
-            VariantSourceEntry file = new VariantSourceEntry(source.getFileId(), source.getStudyId(), secondaryAlternates, format);
-            variant.addSourceEntry(file);
-    
-            try {
-                parseSplitSampleData(variant, source, fields, alternateAlleles, secondaryAlternates, i + 1);
-                // Fill the rest of fields (after samples because INFO depends on them)
-                setOtherFields(variant, source, ids, quality, filter, info, format, keyFields.getNumAllele(), alternateAlleles, line);
-                variants.add(variant);
-            } catch (NonStandardCompliantSampleField ex) {
-                Logger.getLogger(VariantFactory.class.getName()).log(Level.SEVERE,
-                        String.format("Variant %s:%d:%s>%s will not be saved\n%s",
-                                chromosome, position, reference, alternateAlleles[i], ex.getMessage()));
-            }
-             */
-            // TODO leave empty ids?
-            // TODO parse info and change the indices?
-            records.emplace_back(
-                record.line, record.chromosome, corrected_position, std::vector<std::string>{}, 
-                corrected_reference, std::vector<std::string>{{corrected_alternate}},
-                record.quality, record.filters, record.info, record.format, corrected_samples, record.source
-            );
+//            std::string::iterator trail_mismatch = make_forward(trail_mismatch_reverse.first);
+//            lead_mismatch_indices = std::mismatch(reference.begin(), trail_mismatch, alternate.begin());
+
+            records.emplace_back(record.line, record.chromosome, corrected_position,
+                                 corrected_reference, corrected_alternate);
         }
 
         return std::move(records);
@@ -230,7 +257,7 @@ namespace ebi
     }
      
      // */
-     
+
 
   }
 }

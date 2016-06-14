@@ -24,6 +24,7 @@
 #include <vector>
 #include "file_structure.hpp"
 #include "error.hpp"
+#include "normalizer.hpp"
 
 namespace ebi
 {
@@ -43,7 +44,7 @@ namespace ebi
         std::shared_ptr<std::vector<Record>> records;
         std::shared_ptr<std::vector<std::unique_ptr<Error>>> errors;
         std::shared_ptr<std::vector<std::unique_ptr<Error>>> warnings;
-     
+        
         std::multimap<std::string, std::string> defined_metadata;
         std::multimap<std::string, std::string> undefined_metadata;
         
@@ -54,8 +55,7 @@ namespace ebi
         
         void add_meta(MetaEntry const & meta) const;
         
-        void add_record(Record const & record) const;
-        void add_records(const std::vector<Record> &records) const;
+        void add_record(Record const & record);
         void clear_records() const;
 
         void add_error(std::unique_ptr<Error> error);
