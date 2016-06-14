@@ -32,8 +32,8 @@ namespace ebi
         std::vector<char> line;
         line.reserve(default_line_buffer_size);
 
-        while (readline(input, line)) { 
-           validator.parse(line);
+        while (ebi::util::readline(input, line)) { 
+            validator.parse(line);
         }
 
         validator.end();

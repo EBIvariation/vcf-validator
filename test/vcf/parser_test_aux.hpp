@@ -25,6 +25,7 @@
 
 #include "catch/catch.hpp"
 
+#include "util/stream_utils.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
 
@@ -32,22 +33,6 @@ namespace ebi
 {
     
     size_t const default_line_buffer_size = 64 * 1024;
-    
-    template <typename Container>
-    std::istream & readline(std::istream & stream, Container & container)
-    {
-        char c;
-        container.clear();
-
-        while (!stream.eof() && stream.get(c)) {
-            container.push_back(c);
-            if (c == '\n') {
-                break;
-            }
-        }
-
-        return stream;
-    }
     
 }
 

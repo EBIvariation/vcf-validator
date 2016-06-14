@@ -36,7 +36,7 @@ namespace ebi
     struct Record;
     
     typedef std::multimap<std::string, MetaEntry>::iterator meta_iterator;
-    
+
     enum InputFormat 
     {
         VCF_FILE_VCF    = 0x01,
@@ -67,6 +67,8 @@ namespace ebi
     struct MetaEntry
     {
         enum class Structure { NoValue, PlainValue, KeyValue };
+
+        size_t line;
         
         std::string id;
         Structure structure; // Union discriminant
@@ -74,12 +76,15 @@ namespace ebi
         boost::variant< std::string, 
                         std::map<std::string, std::string> > value;
         
-        MetaEntry(std::string const & id);
+        MetaEntry(size_t line,
+                  std::string const & id);
         
-        MetaEntry(std::string const & id,
+        MetaEntry(size_t line,
+                  std::string const & id,
                   std::string const & plain_value);
         
-        MetaEntry(std::string const & id,
+        MetaEntry(size_t line,
+                  std::string const & id,
                   std::map<std::string, std::string> const & key_values);
         
         bool operator==(MetaEntry const &) const;
@@ -114,6 +119,8 @@ namespace ebi
     
     struct Record 
     {
+        size_t line;
+
         std::string chromosome;
         size_t position;
         std::vector<std::string> ids;
@@ -132,17 +139,18 @@ namespace ebi
         std::shared_ptr<Source> source;
         
 
-        Record(std::string const & chromosome, 
-               size_t const position, 
-               std::vector<std::string> const & ids, 
-               std::string const & reference_allele, 
-               std::vector<std::string> const & alternate_alleles, 
-               float const quality, 
-               std::vector<std::string> const & filters, 
-               std::map<std::string, std::string> const & info, 
-               std::vector<std::string> const & format, 
-               std::vector<std::string> const & samples,
-               std::shared_ptr<Source> const & source);
+        Record(size_t line,
+                std::string const & chromosome,
+                size_t position,
+                std::vector<std::string> const & ids,
+                std::string const & reference_allele,
+                std::vector<std::string> const & alternate_alleles,
+                float quality,
+                std::vector<std::string> const & filters,
+                std::map<std::string, std::string> const & info,
+                std::vector<std::string> const & format,
+                std::vector<std::string> const & samples,
+                std::shared_ptr<Source> const & source);
         
         bool operator==(Record const &) const;
 

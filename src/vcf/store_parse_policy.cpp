@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-#include "vcf/validator.hpp"
-#include "util/string_utils.hpp"
+#include "vcf/parse_policy.hpp"
 
 namespace ebi
 {
@@ -24,7 +23,7 @@ namespace ebi
 
     void StoreParsePolicy::handle_token_begin(ParsingState const & state)
     {
-        m_current_token = std::string();
+        m_current_token = std::string{};
     }
 
     void StoreParsePolicy::handle_token_char(ParsingState const & state, char c)
@@ -60,11 +59,11 @@ namespace ebi
         } else if (m_current_token == "VCFv4.3") {
             fileformat_version = Version::v43;
         } else {
-            throw ParsingError("Not allowed VCF fileformat version");
+            throw new FileformatError{state.n_lines, "Not allowed VCF fileformat version"};
         }
         
         if (fileformat_version != state.source->version) {
-            throw ParsingError("Unexpected VCF fileformat version found");
+            throw new FileformatError{state.n_lines, "Unexpected VCF fileformat version found"};
         } else {
             state.set_version(fileformat_version);
         }
@@ -85,25 +84,22 @@ namespace ebi
     {
         // Put together m_line_typeid and m_grouped_tokens in a single MetaEntry object
         // Add MetaEntry to Source
-        try {
-            if (m_line_typeid == "") { // Plain value
-                state.add_meta(MetaEntry{m_grouped_tokens[0]});
 
-            } else if (m_grouped_tokens.size() == 1) { // TypeID=value
-                state.add_meta(MetaEntry{m_line_typeid, m_grouped_tokens[0]});
+        if (m_line_typeid == "") { // Plain value
+            state.add_meta(MetaEntry{state.n_lines, m_grouped_tokens[0]});
 
-            } else if (m_grouped_tokens.size() % 2 == 0) { // TypeID=<Key-value pairs>
-                auto key_values = std::map<std::string, std::string>{};
-                for (size_t i = 0; i < m_grouped_tokens.size(); i += 2) {
-                    key_values[m_grouped_tokens[i]] = m_grouped_tokens[i+1];
-                }
-                state.add_meta(MetaEntry{m_line_typeid, key_values});
+        } else if (m_grouped_tokens.size() == 1) { // TypeID=value
+            state.add_meta(MetaEntry{state.n_lines, m_line_typeid, m_grouped_tokens[0]});
 
-            } else {
-                // TODO Throw exception
+        } else if (m_grouped_tokens.size() % 2 == 0) { // TypeID=<Key-value pairs>
+            auto key_values = std::map<std::string, std::string>{};
+            for (size_t i = 0; i < m_grouped_tokens.size(); i += 2) {
+                key_values[m_grouped_tokens[i]] = m_grouped_tokens[i+1];
             }
-        } catch (std::invalid_argument ex) {
-            throw ParsingError(ex.what());
+            state.add_meta(MetaEntry{state.n_lines, m_line_typeid, key_values});
+
+        } else {
+            throw new MetaSectionError{state.n_lines, "Meta line description is not a value, nor a TypeID=value, nor a TypeID=<Key-value pairs>"};
         }
     }
 
@@ -162,37 +158,44 @@ namespace ebi
 
     void StoreParsePolicy::handle_body_line(ParsingState const & state) 
     {
+        size_t position;
         try {
             // Transform the position token into a size_t
-            auto position = static_cast<size_t>(std::stoi(m_line_tokens["POS"][0]));
+            position = static_cast<size_t>(std::stoi(m_line_tokens["POS"][0]));
+        } catch (std::invalid_argument ex) {
+            throw new PositionBodyError{state.n_lines};
+        }
 
-            // Transform all the quality tokens into floating point numbers
-            float quality;
+        // Transform all the quality tokens into floating point numbers
+        float quality = 0;
+        if (m_line_tokens["QUAL"][0] != ".") {
             try {
                 quality = std::stof(m_line_tokens["QUAL"][0]);
             } catch (std::invalid_argument ex) {
-                quality = 0;
+                throw new QualityBodyError{state.n_lines};
             }
+        }
 
-            // Split the info tokens by the equals (=) symbol
-            std::map<std::string, std::string> info;
-            for (auto & field : m_line_tokens["INFO"]) {
-                std::vector<std::string> subfields;
-                util::string_split(field, "=", subfields);
-                if (subfields.size() > 1) {
-                    info.emplace(subfields[0], subfields[1]);
-                } else {
-                    info.emplace(subfields[0], "");
-                }
+        // Split the info tokens by the equals (=) symbol
+        std::map<std::string, std::string> info;
+        for (auto & field : m_line_tokens["INFO"]) {
+            std::vector<std::string> subfields;
+            util::string_split(field, "=", subfields);
+            if (subfields.size() > 1) {
+                info.emplace(subfields[0], subfields[1]);
+            } else {
+                info.emplace(subfields[0], "");
             }
-            
-            // Format and samples are optional
-            auto format = m_line_tokens.find("FORMAT") != m_line_tokens.end() ? 
-                m_line_tokens["FORMAT"] : std::vector<std::string>{} ;
-            auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ? 
-                m_line_tokens["SAMPLES"] : std::vector<std::string>{} ; 
+        }
 
-            state.add_record(Record {
+        // Format and samples are optional
+        auto format = m_line_tokens.find("FORMAT") != m_line_tokens.end() ?
+                      m_line_tokens["FORMAT"] : std::vector<std::string>{} ;
+        auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ?
+                       m_line_tokens["SAMPLES"] : std::vector<std::string>{} ;
+
+        state.add_record(Record {
+                state.n_lines,
                 m_line_tokens["CHROM"][0],
                 position,
                 m_line_tokens["ID"],
@@ -204,10 +207,7 @@ namespace ebi
                 format,
                 samples,
                 state.source
-            });
-        } catch (std::invalid_argument ex) {
-            throw ParsingError(ex.what());
-        }
+        });
     }
     
     std::string StoreParsePolicy::current_token() const

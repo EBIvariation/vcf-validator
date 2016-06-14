@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <vcf/error.hpp>
 #include "vcf/file_structure.hpp"
 #include "vcf/record.hpp"
 
@@ -22,20 +23,22 @@ namespace ebi
   namespace vcf
   {
 
-    Record::Record(std::string const & chromosome, 
-                         size_t const position, 
-                         std::vector<std::string> const & ids, 
-                         std::string const & reference_allele, 
-                         std::vector<std::string> const & alternate_alleles, 
-                         float const quality, 
-                         std::vector<std::string> const & filters, 
-                         std::map<std::string, std::string> const & info, 
-                         std::vector<std::string> const & format, 
-                         std::vector<std::string> const & samples,
-                         std::shared_ptr<Source> const & source) 
-    : chromosome{chromosome}, 
-        position{position}, 
-        ids{ids}, 
+    Record::Record(size_t const line,
+            std::string const & chromosome,
+            size_t const position,
+            std::vector<std::string> const & ids,
+            std::string const & reference_allele,
+            std::vector<std::string> const & alternate_alleles,
+            float const quality,
+            std::vector<std::string> const & filters,
+            std::map<std::string, std::string> const & info,
+            std::vector<std::string> const & format,
+            std::vector<std::string> const & samples,
+            std::shared_ptr<Source> const & source)
+    : line(line),
+        chromosome{chromosome},
+        position{position},
+        ids{ids},
         reference_allele{reference_allele}, 
         alternate_alleles{alternate_alleles}, 
         types{},
@@ -98,10 +101,10 @@ namespace ebi
     void Record::check_chromosome() const
     {
         if (chromosome.find(':') != std::string::npos) {
-            throw std::invalid_argument("Chromosome must not contain colons");
+            throw new ChromosomeBodyError{line, "Chromosome must not contain colons"};
         }
         if (chromosome.find(' ') != std::string::npos) {
-            throw std::invalid_argument("Chromosome must not contain white-spaces");
+            throw new ChromosomeBodyError{line, "Chromosome must not contain white-spaces"};
         }
     }
 
@@ -113,7 +116,7 @@ namespace ebi
         
         for (auto & id : ids) {
             if (std::find_if(id.begin(), id.end(), [](char c) { return c == ' ' || c == ';'; }) != id.end()) {
-                throw std::invalid_argument("ID must not contain semicolons or whitespaces");
+                throw new IdBodyError{line, "ID must not contain semicolons or whitespaces"};
             }
         }
     }
@@ -138,7 +141,8 @@ namespace ebi
                     !boost::starts_with(alt_id, "DUP") && 
                     !boost::starts_with(alt_id, "INV") && 
                     !boost::starts_with(alt_id, "CNV")) {
-                    throw std::invalid_argument("Alternate ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence");
+                    throw new AlternateAllelesBodyError{line,
+                            "Alternate ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"};
                 }
             }
         }
@@ -150,13 +154,14 @@ namespace ebi
         switch (type) {
             case RecordType::NO_VARIATION:
                 if (alternate_alleles.size() > 1) {
-                    throw std::invalid_argument("The no-alternate alleles symbol (dot) can not be combined with others");
+                    throw new AlternateAllelesBodyError{line,
+                            "The no-alternate alleles symbol (dot) can not be combined with others"};
                 }
                 break;
             case RecordType::SNV:
             case RecordType::MNV:
                 if (alternate == reference_allele) {
-                    throw std::invalid_argument("Reference and alternate alleles must not be the same");
+                    throw new AlternateAllelesBodyError{line, "Reference and alternate alleles must not be the same"};
                 }
             case RecordType::INDEL:
                 // Nothing to check
@@ -172,7 +177,7 @@ namespace ebi
     void Record::check_quality() const
     {
         if (quality < 0) {
-            throw std::invalid_argument("Quality is not equal or greater than zero");
+            throw new QualityBodyError{line, "Quality is not equal or greater than zero"};
         }
     }
     
@@ -199,8 +204,8 @@ namespace ebi
                         
                         check_field_cardinality(field.second, values, key_values["Number"], 2); // TODO Assumes ploidy=2
                         check_field_type(field.second, values, key_values["Type"]);
-                    } catch (std::invalid_argument ex) {
-                        throw std::invalid_argument("Info " + key_values["ID"] + "=" + ex.what());
+                    } catch (Error *ex) {
+                        throw new InfoBodyError{line, "Info " + key_values["ID"] + "=" + ex->get_raw_message()};
                     }
                     
                     break;
@@ -215,16 +220,16 @@ namespace ebi
         if (format.size() == 0) {
             return; // Nothing to check
         }
-            
+        
         if (std::find(format.begin(), format.end(), "GT") != format.end() && format[0] != "GT") {
-            throw std::invalid_argument("GT must be the first field in the FORMAT column");
+            throw new FormatBodyError{line, "GT must be the first field in the FORMAT column"};
         }
     }
 
     void Record::check_samples() const
     {
         if (samples.size() != source->samples_names.size()) {
-            throw std::invalid_argument("The number of samples must match those listed in the header line");
+            throw new SamplesBodyError{line, "The number of samples must match those listed in the header line"};
         }
      
         if (samples.size() == 0) {
@@ -251,7 +256,7 @@ namespace ebi
             
             if (!found_in_header) {
                 // If not found in header, a null-value meta entry must be created to make sizes match
-                format_meta.push_back(MetaEntry{""});
+                format_meta.push_back(MetaEntry{line, ""});
             }
         }
         
@@ -262,8 +267,8 @@ namespace ebi
             
             // The number of subfields can't be greater than the number in the FORMAT column
             if (subfields.size() > format.size()) {
-                throw std::invalid_argument("Sample #" + std::to_string(i+1) + 
-                        " has more fields than specified in the FORMAT column");
+                throw new SamplesBodyError{line, "Sample #" + std::to_string(i+1) +
+                        " has more fields than specified in the FORMAT column"};
             }
             
             std::vector<std::string> alleles;
@@ -292,9 +297,9 @@ namespace ebi
                     
                     check_field_cardinality(subfield, values, key_values["Number"], alleles.size());
                     check_field_type(subfield, values, key_values["Type"]);
-                } catch (std::invalid_argument ex) {
-                    throw std::invalid_argument("Sample #" + std::to_string(i+1) + ", " + 
-                                                key_values["ID"] + "=" + ex.what());
+                } catch (Error *ex) {
+                    throw new SamplesBodyError{line, "Sample #" + std::to_string(i+1) + ", " +
+                                                key_values["ID"] + "=" + ex->get_raw_message()};
                 }
             }
         }
@@ -307,14 +312,14 @@ namespace ebi
 
             // Discard non-integer numbers
             if (std::find_if(allele.begin(), allele.end(), [](char c) { return !std::isdigit(c); }) != allele.end()) {
-                throw std::invalid_argument("Allele index " + allele + " is not an integer number");
+                throw new SamplesBodyError{line, "Allele index " + allele + " is not an integer number"};
             }
             
             // After guaranteeing the number is an integer, check it is in range
             size_t num_allele = std::stoi(allele);
             if (num_allele > alternate_alleles.size()) {
-                throw std::invalid_argument("Allele index " + std::to_string(num_allele) + 
-                        " is greater than the maximum allowed " + std::to_string(alternate_alleles.size()));
+                throw new SamplesBodyError{line, "Allele index " + std::to_string(num_allele) +
+                        " is greater than the maximum allowed " + std::to_string(alternate_alleles.size())};
             }
         }
     }
@@ -357,13 +362,12 @@ namespace ebi
                                 (values.size() == 1 && (values[0] == "0" || values[0] == "1"));
             } else {
                 // Negative values are not allowed
-                throw std::invalid_argument(field + " meta specification Number=" + number + " is negative");
+                throw new Error{line, field + " meta specification Number=" + number + " is negative"};
             }
             
             if (!number_matches) {
-                throw std::invalid_argument(field + " does not match the meta specification Number=" + number + 
-                        ", expected " + std::to_string(expected) + " values");
-                
+                throw new Error{line, field + " does not match the meta specification Number=" + number + 
+                        ", expected " + std::to_string(expected) + " values"};                
             }
         }
     }
@@ -394,24 +398,24 @@ namespace ebi
                     }
                 } else if (type == "Flag") {
                     if (value.size() > 1) {
-                        throw std::invalid_argument("There can be only 0 or 1 value");
+                        throw new Error{line, "There can be only 0 or 1 value"};
                     } else if (value.size() == 1) {
                         int numeric_value = std::stoi(value);
                         if (numeric_value != 0 && numeric_value != 1) {
-                            throw std::invalid_argument("A flag must be 0 or 1");
+                            throw new Error{line, "A flag must be 0 or 1"};
                         }
                     }
                     // If no flag is provided then there is nothing to check
                 } else if (type == "Character") {
                     // ...check the length is 1
                     if (value.size() > 1) {
-                        throw std::invalid_argument("There can be only one character");
+                        throw new Error{line, "There can be only one character"};
                     }
                 } else if (type == "String") {
                     // ...do nothing, it is guaranteed it will be a string
                 } 
             } catch (...) {
-                throw std::invalid_argument(field + " does not match the meta specification Type=" + type);
+                throw new Error{line, field + " does not match the meta specification Type=" + type};
             }
         }
     }

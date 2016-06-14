@@ -18,7 +18,9 @@
 #define	VCF_OPTIONAL_POLICY_HPP
 
 #include "file_structure.hpp"
-#include "parsing_utils.hpp"
+#include "parsing_state.hpp"
+#include "record.hpp"
+#include "error.hpp"
 
 namespace ebi
 {

@@ -21,6 +21,7 @@
 #include "catch/catch.hpp"
 
 #include "vcf/file_structure.hpp"
+#include "vcf/error.hpp"
 
 namespace ebi
 {
@@ -36,12 +37,12 @@ namespace ebi
             
             SECTION ("It should work with any ID and source")
             {
-                CHECK_NOTHROW( (vcf::MetaEntry { "reference" }) );
+                CHECK_NOTHROW( (vcf::MetaEntry { 1, "reference" }) );
             }
             
             SECTION ("No value should be assigned")
             {
-                auto meta = vcf::MetaEntry { "reference" } ;
+                auto meta = vcf::MetaEntry { 1, "reference" } ;
                 
                 CHECK( meta.id == "reference" );
                 CHECK( meta.structure == vcf::MetaEntry::Structure::NoValue );
@@ -63,12 +64,12 @@ namespace ebi
             
             SECTION("Correct arguments")
             {
-                CHECK_NOTHROW( (vcf::MetaEntry { "assembly", "GRCh37" }) );
+                CHECK_NOTHROW( (vcf::MetaEntry { 1, "assembly", "GRCh37" }) );
             }
             
             SECTION("A one-line string value should be assigned")
             {
-                auto meta = vcf::MetaEntry { "assembly", "GRCh37" } ;
+                auto meta = vcf::MetaEntry { 1, "assembly", "GRCh37" } ;
                         
                 CHECK( meta.structure == vcf::MetaEntry::Structure::PlainValue );
                 CHECK( meta.id == "assembly" );
@@ -79,8 +80,8 @@ namespace ebi
                 
             SECTION("A multi-line string value should throw an error")
             {
-                CHECK_THROWS_AS( (vcf::MetaEntry { "assembly", "GRCh37\nGRCh37" } ),
-                                std::invalid_argument);
+                CHECK_THROWS_AS( (vcf::MetaEntry { 1, "assembly", "GRCh37\nGRCh37" } ),
+                                vcf::MetaSectionError* );
             }
     }
 
@@ -95,7 +96,8 @@ namespace ebi
             
         SECTION("Correct arguments")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                            1,
                             "contig",
                             { {"ID", "contig_1"} }} ) );
         }
@@ -103,7 +105,8 @@ namespace ebi
         
         SECTION("A key-pair map should be assigned")
         {
-            auto meta = vcf::MetaEntry {  
+            auto meta = vcf::MetaEntry {
+                            1,
                             "contig",
                             { {"ID", "contig_1"} }} ;
 
@@ -128,77 +131,91 @@ namespace ebi
             
         SECTION("ID and Description presence")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"ID", "INS"}, {"Description", "tag_description"} }
                             } ) );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry {  
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"Description", "tag_description"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry {  
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"ID", "TAG_ID"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
         }
         
         SECTION("ID prefixes")
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"ID", "DEL"}, {"Description", "tag_description"} }
                             } ) );
                               
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"ID", "INS"}, {"Description", "tag_description"} }
                             } ) );
                              
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"ID", "DUP"}, {"Description", "tag_description"} }
                             } ) );
                              
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"ID", "INV"}, {"Description", "tag_description"} }
                             } ) );
                              
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"ID", "CNV"}, {"Description", "tag_description"} }
                             } ) );
                                
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"ID", "DEL:FOO"}, {"Description", "tag_description"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"ID", "INS:FOO"}, {"Description", "tag_description"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"ID", "DUP:FOO"}, {"Description", "tag_description"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"ID", "INV:FOO"}, {"Description", "tag_description"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"ID", "CNV:FOO"}, {"Description", "tag_description"} }
                             } ) );
                                   
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "ALT",
                                 { {"ID", "CNV:FOO:BAR"}, {"Description", "tag_description"} }
                             } ) );
@@ -217,21 +234,24 @@ namespace ebi
             
         SECTION("ID presence")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "contig",
                                 { {"ID", "contig_1"} }
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
+                                1,
                                 "contig",
                                 { {"ID", "contig_2"}, {"Description", "tag_description"} }
                             } ) );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry {  
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "contig",
                                 { {"Description", "tag_description"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
         }
     }
     
@@ -246,22 +266,25 @@ namespace ebi
             
         SECTION("ID and Description presence")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "FILTER",
                                 { {"ID", "Filter1"}, {"Description", "tag_description"} }
                             } ) );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry {  
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "FILTER",
                                 { {"Description", "tag_description"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry {  
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "FILTER",
                                 { {"ID", "TAG_ID"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
         }
     }
     
@@ -276,109 +299,127 @@ namespace ebi
             
         SECTION("ID, Number, Type and Description presence")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} }
                             }),
-                            std::invalid_argument ); 
+                            vcf::MetaSectionError* );
         }
         
         SECTION("Number field values")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                             
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                             
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
         }
         
         SECTION("Type field values")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Genotype"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "R"}, {"Type", "Character"}, {"Description", "Genotype"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                             
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "FORMAT",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
         }
     }
     
@@ -393,114 +434,133 @@ namespace ebi
             
         SECTION("ID, Number, Type and Description presence")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} }
                             }),
-                            std::invalid_argument ); 
+                            vcf::MetaSectionError* );
         }
         
         SECTION("Number field values")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                             
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                             
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
         }
         
         SECTION("Type field values")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Genotype"} }
                             } ) );
                                      
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Genotype"} }
                             } ) );
                                
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "R"}, {"Type", "Character"}, {"Description", "Genotype"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} }
                             } ) );
                             
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry { 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "INFO",
                                 { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
         }
     }
     
@@ -515,21 +575,24 @@ namespace ebi
             
         SECTION("ID presence")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "SAMPLE",
                                 { {"ID", "Sample_1"} }
                             } ) );
                                 
-            CHECK_NOTHROW( (vcf::MetaEntry { 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
                                 "SAMPLE",
                                 { {"ID", "Sample_2"}, {"Genomes", "genome_1,genome_2"}, {"Mixtures", "mixture_1"} }
                             } ) );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry {  
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
                                 "SAMPLE",
                                 { {"Genomes", "genome_1,genome_2"} }
                             }),
-                            std::invalid_argument );
+                            vcf::MetaSectionError* );
         }
     }
 }
