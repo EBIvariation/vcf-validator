@@ -170,6 +170,7 @@ namespace ebi
         SamplesBodyError(size_t line) : SamplesBodyError{line, "Error in samples columns, in body section"} { }
         virtual ErrorCode get_code() const override { return ErrorCode::samples_body; }
     };
+    // NormalizationError : public BodySectionError
 
   }
 }

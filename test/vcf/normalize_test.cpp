@@ -27,47 +27,53 @@ namespace ebi
 //  {
 //      
 //  }
-  
+
   TEST_CASE("Record normalization", "[normalize]")
   {
       std::shared_ptr<vcf::Source> source{new vcf::Source{
           "filename.vcf", vcf::VCF_FILE_VCF, vcf::Version::v41, {}, {"NA001", "NA002", "NA003", "NA004"}}};
-      
+
       source->meta_entries.emplace("FORMAT",
-                                  vcf::MetaEntry{
-                                      1,
-                                      "FORMAT",
-                                      {
-                                          { "ID", "GT" },
-                                          { "Number", "1" },
-                                          { "Type", "String" },
-                                          { "Description", "Genotype" }
-                                      }
-                                  });
-      SECTION("same length: different ending")
-      {
-          vcf::Record record{1, "1", 1000, {"."}, "TCACCC", {"TGACGG"}, 0,
+                                   vcf::MetaEntry{
+                                       1,
+                                       "FORMAT",
+                                       {
+                                           { "ID", "GT" },
+                                           { "Number", "1" },
+                                           { "Type", "String" },
+                                           { "Description", "Genotype" }
+                                       }
+                                   });
+      SECTION("same length: different ending") {
+          try {
+              vcf::Record record{1, "1", 1000, {"."}, "TCACCC", {"TGACGG"}, 0,
+                                 {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
+
+              std::vector<vcf::Record> expected_normalization = {
+                  vcf::Record{1, "1", 1000, {"."}, "TCACCC", {"TGACGG"}, 0,
+                              {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source}};
+              auto normalization = vcf::normalize(record);
+              CHECK((normalization) == expected_normalization);
+          } catch (vcf::Error *e) {
+              // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
+              REQUIRE_NOTHROW(throw *e);
+          }
+      }
+
+      SECTION("same length: same ending") {
+          vcf::Record record{1, "1", 1000, {"."}, "TCACCC", {"TGACGC"}, 0,
                              {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
 
-          std::vector<vcf::Record> expected_normalization = {vcf::Record{1, "1", 1000, {"."}, "TCACCC", {"TGACGG"}, 0,
-                                                                         {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source}};
-          CHECK( (vcf::normalize(record)) == expected_normalization);
-      }
-      
-      SECTION("same length: same ending") 
-      {
-          vcf::Record record{1, "1", 1000, {"."}, "TCACCC", {"TGACGC"}, 0, 
-                             {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
-          
-          
-          std::vector<vcf::Record> expected_normalization = {vcf::Record{1, "1", 1000, {"."}, "TCACC", {"TGACG"}, 0, 
-                             {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source}};
-          
+
+          std::vector<vcf::Record> expected_normalization = {vcf::Record{1, "1", 1000, {"."}, "TCACC", {"TGACG"}, 0,
+                                                                         {"."}, {{".", ""}}, {"GT"},
+                                                                         {"0/0", "0/1", "0/1", "1/1"}, source}};
+
           CHECK(vcf::normalize(record) == expected_normalization);
       }
-      
+
       SECTION("Multiallelic") {
-          vcf::Record record{1, "1", 10040, {"rs123"}, "TGACGTAACGATT", {"T", "TGACGTAACGGTT", "TGACGTAATAC"}, 0, 
+          vcf::Record record{1, "1", 10040, {"rs123"}, "TGACGTAACGATT", {"T", "TGACGTAACGGTT", "TGACGTAATAC"}, 0,
                              {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/2", "1/2"}, source};
 
           std::vector<vcf::Record> expected_normalization = {
@@ -77,7 +83,7 @@ namespace ebi
                           {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/.", "0/.", "./."}, source},
               vcf::Record{1, "1", 10050, {"rs123"}, "A", {"G"}, 0,
                           {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/.", "0/1", "./1"}, source}};
-          
+
           CHECK(vcf::normalize(record) == expected_normalization);
       }
   }

@@ -21,23 +21,83 @@ namespace ebi
 {
   namespace vcf
   {
+    //result is undefined if passed container.rend()
+    template <class ReverseIterator>
+    typename ReverseIterator::iterator_type make_forward(ReverseIterator rit)
+    {
+        return --(rit.base()); // move result of .base() back by one.
+    }
+    
     std::vector<Record> normalize(const Record &record/* , ParsingState?*/)
     {
-        /*
-        for (int i = 0; i < record.alternate_alleles.size(); i++) { // This index is necessary for getting the samples where the mutated allele is present
-            String alt = alternateAlleles[i];
-            VariantKeyFields keyFields;
-            int referenceLen = reference.length();
-            int alternateLen = alt.length();
-    
-            if (referenceLen == alternateLen) {
-                keyFields = createVariantsFromSameLengthRefAlt(position, reference, alt);
-            } else if (referenceLen == 0) {
-                keyFields = createVariantsFromInsertionEmptyRef(position, alt);
-            } else if (alternateLen == 0) {
-                keyFields = createVariantsFromDeletionEmptyAlt(position, reference);
+        std::vector<Record> records;
+        
+        // This index is necessary for getting the samples where the mutated allele is present
+        for (size_t i = 0; i < record.alternate_alleles.size(); i++) {
+            std::string alternate = record.alternate_alleles[i];
+            std::string reference = record.reference_allele;
+            size_t position = record.position;
+            
+            size_t corrected_position;
+            std::string corrected_alternate;
+            std::string corrected_reference;
+            std::vector<std::string> corrected_samples;
+            corrected_samples.reserve(record.samples.size());
+
+            //assertions
+            if (alternate.size() < 1) {
+                throw new BodySectionError{record.line, "Alternate should not be empty"};
+            }
+            if (reference.size() < 1) {
+                throw new BodySectionError{record.line, "Reference should not be empty"};
+            }
+            if (reference == alternate) {
+                throw new BodySectionError{record.line, "Reference and alternate should not be identical"};
+            }
+            
+            // count trailing matching bases
+            auto trail_mismatch_reverse = std::mismatch(reference.rbegin(), reference.rend(), alternate.rbegin());
+            // rindex is zero: no equal trailing bases
+            // rindex is rend: reference and alternate are equal: error
+            if (reference.size() == alternate.size()) {
+                // polymorphism
+
+                std::string::iterator trail_mismatch_ref = make_forward(trail_mismatch_reverse.first);
+                std::string::iterator trail_mismatch_alt = make_forward(trail_mismatch_reverse.second);
+                auto lead_mismatch_indices = std::mismatch(reference.begin(), trail_mismatch_ref, alternate.begin());
+
+                // +1 because end is not inclusive: [start, end), and we need to include the mismatch
+                corrected_reference.assign(lead_mismatch_indices.first, trail_mismatch_ref+1);
+                corrected_alternate.assign(lead_mismatch_indices.second, trail_mismatch_alt+1);
+                corrected_position = position + (lead_mismatch_indices.first - reference.begin());
+                for (auto &sample : record.samples) {
+                    
+                }
+                
+            } else if (reference.size() < alternate.size()){
+                // insertion
+                if (trail_mismatch_reverse.first == reference.rend()) {
+                    // first base changes, with trailing context bases, have to reduce the context to 1 base
+
+                }
             } else {
-                keyFields = createVariantsFromIndelNoEmptyRefAlt(position, reference, alt);
+                // deletion
+            }
+            std::string::iterator trail_mismatch = make_forward(trail_mismatch_reverse.first);
+            auto lead_mismatch_indices = std::mismatch(reference.begin(), trail_mismatch, alternate.begin());
+            
+                        
+            /*
+            
+            
+            if (alternate.size() == alternate.size()) {
+                createVariantsFromSameLengthRefAlt(position, reference, alternate);
+            } else if (referenceLen == 0) {
+                createVariantsFromInsertionEmptyRef(position, alternate);
+            } else if (alternateLen == 0) {
+                createVariantsFromDeletionEmptyAlt(position, reference);
+            } else {
+                createVariantsFromIndelNoEmptyRefAlt(position, reference, alternate);
             }
     
             keyFields.setNumAllele(i);
@@ -47,10 +107,7 @@ namespace ebi
             // instantiating the variants, they must be updated
             alternateAlleles[i] = keyFields.alternate;
             generatedKeyFields.add(keyFields);
-        }
-    
-        // Now create all the Variant objects read from the VCF record
-        for (int i = 0; i < alternateAlleles.length; i++) {
+            // Now create all the Variant objects read from the VCF record
             VariantKeyFields keyFields = generatedKeyFields.get(i);
             Variant variant = new Variant(chromosome, keyFields.start, keyFields.end, keyFields.reference, keyFields.alternate);
             String[] secondaryAlternates = getSecondaryAlternates(variant, keyFields.getNumAllele(), alternateAlleles);
@@ -67,9 +124,15 @@ namespace ebi
                         String.format("Variant %s:%d:%s>%s will not be saved\n%s",
                                 chromosome, position, reference, alternateAlleles[i], ex.getMessage()));
             }
+             */
+            // TODO leave empty ids?
+            // TODO parse info and change the indices?
+            records.emplace_back(
+                record.line, record.chromosome, corrected_position, std::vector<std::string>{}, 
+                corrected_reference, std::vector<std::string>{{corrected_alternate}},
+                record.quality, record.filters, record.info, record.format, corrected_samples, record.source
+            );
         }
-        // */
-        std::vector<Record> records{{record}};
 
         return std::move(records);
     }
