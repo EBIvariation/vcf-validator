@@ -27,6 +27,7 @@
 #include "vcf/validator.hpp"
 #include "vcf/error.hpp"
 #include "vcf/report_writer.hpp"
+#include "vcf/sqlite_report.hpp"
 
 
 namespace ebi
@@ -83,7 +84,7 @@ namespace ebi
   {
       std::string db_name = "test/input_files/sqlite_test.errors.db";
       sqlite3* db;
-      ebi::vcf::SqliteReportWriter output{db_name};
+      ebi::vcf::SqliteReportRW errorDAO{db_name};
 
       int rc = sqlite3_open(db_name.c_str(), &db);
       if(rc != SQLITE_OK) {
@@ -92,13 +93,13 @@ namespace ebi
       }
       char *zErrMsg = NULL;
       
-      SECTION("write and read errors")
+      SECTION("write errors")
       {
           
           ebi::vcf::Error test_error{1, "testing errors"};
-          output.write_error(test_error);
-          output.write_error(test_error);
-          output.close();
+          errorDAO.write_error(test_error);
+          errorDAO.write_error(test_error);
+          errorDAO.close();
           
 
           int count_errors = -1;
@@ -118,11 +119,11 @@ namespace ebi
           
       }
       
-      SECTION("write and read warnings")
+      SECTION("write warnings")
       {
           ebi::vcf::Error test_warning{1, "testing warnings"};
-          output.write_warning(test_warning);
-          output.close();
+          errorDAO.write_warning(test_warning);
+          errorDAO.close();
 
           int count_warnings = -1;
           rc = sqlite3_exec(db, "SELECT count(*) FROM warnings", [](void* count, int columns, char**values, char**names) {
@@ -140,8 +141,89 @@ namespace ebi
           CHECK(count_warnings == 1);
       }
       
+      SECTION("write and count errors")
+      {
+          ebi::vcf::Error test_error{1, "testing errors"};
+          errorDAO.write_error(test_error);
+          errorDAO.write_error(test_error);
+          errorDAO.flush();
+          size_t count_errors = errorDAO.count_errors();
+          size_t count_warnings = errorDAO.count_warnings();
+          CHECK(count_errors == 2);
+          CHECK(count_warnings == 0);
+      }
+
+      SECTION("write and count warnings")
+      {
+          ebi::vcf::Error test_error{1, "testing warnings"};
+          errorDAO.write_warning(test_error);
+          errorDAO.flush();
+          size_t count_errors = errorDAO.count_errors();
+          size_t count_warnings = errorDAO.count_warnings();
+          CHECK(count_errors == 0);
+          CHECK(count_warnings == 1);
+      }
+      
+      SECTION("write and read errors")
+      {
+          size_t line = 8;
+          std::string message{"testing errors"};
+          ebi::vcf::Error test_error{line, message};
+          errorDAO.write_error(test_error);
+          errorDAO.flush();
+          
+          size_t errors_read = 0;
+          errorDAO.for_each_error([&](std::shared_ptr<ebi::vcf::Error> error) {
+              CHECK(error->get_line() == line);
+              CHECK(error->get_raw_message() == message);
+              errors_read++;
+          });
+          CHECK(errors_read == 1);
+      }
+      
+      SECTION("write and read warnings")
+      {
+          size_t line = 10;
+          std::string message{"testing warnings"};
+          ebi::vcf::Error test_error{line, message};
+          errorDAO.write_warning(test_error);
+          errorDAO.flush();
+          
+          size_t errors_read = 0;
+          errorDAO.for_each_warning([&](std::shared_ptr<ebi::vcf::Error> error) {
+              CHECK(error->get_line() == line);
+              CHECK(error->get_raw_message() == message);
+              errors_read++;
+          });
+          CHECK(errors_read == 1);
+      }
+      
+      SECTION("write and read error codes")
+      {
+          size_t line = 8;
+          std::string message{"testing erros"};
+          ebi::vcf::Error generic_error{line, message};
+          ebi::vcf::MetaSectionError meta_section_error{line, message};
+          ebi::vcf::SamplesBodyError samples_body_error{line, message};
+          errorDAO.write_error(generic_error);
+          errorDAO.write_error(meta_section_error);
+          errorDAO.write_error(samples_body_error);
+          errorDAO.flush();
+          
+          std::vector<std::shared_ptr<ebi::vcf::Error>> errors;
+          errorDAO.for_each_error([&](std::shared_ptr<ebi::vcf::Error> error) {
+              errors.push_back(error);
+          });
+          
+          CHECK(errors.size());
+          CHECK(errors[0]->get_code() == ebi::vcf::ErrorCode::error);
+          CHECK(errors[1]->get_code() == ebi::vcf::ErrorCode::meta_section);
+          CHECK(errors[2]->get_code() == ebi::vcf::ErrorCode::samples_body);
+      }
+      
       boost::filesystem::path db_file{db_name};
       boost::filesystem::remove(db_file);
+      CHECK_FALSE(boost::filesystem::exists(db_file));
   }
 
   TEST_CASE("integration test: validator and sqlite", "[output]")
@@ -149,54 +231,51 @@ namespace ebi
       auto path = boost::filesystem::path("test/input_files/failed/failed_fileformat_000.vcf");
 
       std::string db_name = path.string() + ".errors.db";
-      sqlite3* db;
 
-      SECTION(path.string())
       {
+          std::shared_ptr<ebi::vcf::ReportWriter> output{std::make_shared<ebi::vcf::SqliteReportRW>(db_name)};
+          CHECK_FALSE(is_valid(path.string(), *output));
+      }
+
+      SECTION(path.string() + " error count")
+      {
+          size_t count_errors;
+          size_t count_warnings;
+
           {
-              std::shared_ptr<ebi::vcf::ReportWriter> output{std::make_shared<ebi::vcf::SqliteReportWriter>(db_name)};
-              CHECK_FALSE(is_valid(path.string(), *output));
-          }
-          int rc = sqlite3_open(db_name.c_str(), &db);
-          if(rc != SQLITE_OK) {
-              sqlite3_close(db);
-              throw std::runtime_error(std::string("Can't open database: ") + sqlite3_errmsg(db));
+              ebi::vcf::SqliteReportRW errorsDAO{db_name};
+              count_errors = errorsDAO.count_errors();
+              count_warnings = errorsDAO.count_warnings();
           }
 
-          char *zErrMsg = NULL;
-          int count_errors = -1;
-          rc = sqlite3_exec(db, "SELECT count(*) FROM errors", [](void* count, int columns, char**values, char**names) {
-              if (values[0] != NULL) {
-                  *(int*)count = std::stoi(values[0]);
-              }
-              return 0;
-          }, &count_errors, &zErrMsg);
-          if (rc != SQLITE_OK) {
-              std::string error_message = std::string("Can't read database: ") + zErrMsg;
-              sqlite3_free(zErrMsg);
-              throw std::runtime_error(error_message);
-          }
-          
-          int count_warnings = -1;
-          rc = sqlite3_exec(db, "SELECT count(*) FROM warnings", [](void* count, int columns, char**values, char**names) {
-              if (values[0] != NULL) {
-                  *(int*)count = std::stoi(values[0]);
-              }
-              return 0;
-          }, &count_warnings, &zErrMsg);
-          if (rc != SQLITE_OK) {
-              std::string error_message = std::string("Can't read database: ") + zErrMsg;
-              sqlite3_free(zErrMsg);
-              throw std::runtime_error(error_message);
-          }
-
-          sqlite3_close(db);
-          boost::filesystem::path db_file{db_name};
-          boost::filesystem::remove(db_file);
           CHECK(count_errors == 1);
           CHECK(count_warnings == 2);
-          CHECK_FALSE(boost::filesystem::exists(db_file));
       }
+
+      SECTION(path.string() + " error details")
+      {
+          size_t errors_read = 0;
+          ebi::vcf::SqliteReportRW errorsDAO{db_name};
+
+          errorsDAO.for_each_error([&errors_read](std::shared_ptr<ebi::vcf::Error> error) {
+              CHECK(error->get_line() == 1);
+              CHECK(error->get_raw_message() == "The fileformat declaration is not 'fileformat=VCFv4.1'");
+              errors_read++;
+          });
+
+          // do we prefer this?
+//          for(ebi::vcf::Error* error : errorsDAO.read_errors()) {
+//              CHECK(error->get_line() == 1);
+//              CHECK(error->get_raw_message() == "The fileformat declaration is not 'fileformat=VCFv4.1'");
+//              errors_read++;
+//          }
+
+          CHECK(errors_read == 1);
+      }
+
+      boost::filesystem::path db_file{db_name};
+      boost::filesystem::remove(db_file);
+      CHECK_FALSE(boost::filesystem::exists(db_file));
 
   }
 }

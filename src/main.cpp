@@ -31,6 +31,7 @@
 #include "vcf/validator.hpp"
 #include "vcf/report_writer.hpp"
 #include "util/stream_utils.hpp"
+#include "vcf/sqlite_report.hpp"
 
 namespace
 {
@@ -149,7 +150,7 @@ namespace
                 if (boost::filesystem::exists(db_file)) {
                     throw std::runtime_error{"Report file already exists on " + db_filename + ", please delete it or rename it"};
                 }
-                outputs.emplace_back(new ebi::vcf::SqliteReportWriter(db_filename));
+                outputs.emplace_back(new ebi::vcf::SqliteReportRW(db_filename));
             } else if (out == "stdout") {
                 outputs.emplace_back(new ebi::vcf::StdoutReportWriter());
             } else {

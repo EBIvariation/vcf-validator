@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef VCF_VALIDATOR_REPORT_WRITER_HPP
-#define VCF_VALIDATOR_REPORT_WRITER_HPP
+#ifndef VCF_VALIDATOR_REPORT_READER_HPP
+#define VCF_VALIDATOR_REPORT_READER_HPP
 
 #include <iostream>
 #include <string>
@@ -30,28 +30,19 @@ namespace ebi
 {
   namespace vcf
   {
-    class ReportWriter
+    class ReportReader
     {
       public:
-        virtual ~ReportWriter() {}  // needed if using raw pointers, instead of references or shared_ptrs in children
-        virtual void write_error(const Error &error) = 0;
-        virtual void write_warning(const Error &error) = 0;
+        virtual ~ReportReader() {}  // needed if inheriting classes use raw pointers, instead of references or shared_ptrs
+        virtual size_t count_errors() = 0;
+        virtual void for_each_error(std::function<void(std::shared_ptr<Error>)> user_function) = 0;
+        
+        virtual size_t count_warnings() = 0;
+        virtual void for_each_warning(std::function<void(std::shared_ptr<Error>)> user_function) = 0;
     };
 
-    class StdoutReportWriter : public ReportWriter
-    {
-      public:
-        virtual void write_error(const Error &error) override
-        {
-          std::cout << error.what() << std::endl;
-        }
-        virtual void write_warning(const Error &error) override
-        {
-          std::cout << error.what() << " (warning)" << std::endl;
-        }
-    };
   }
 }
 
 
-#endif //VCF_VALIDATOR_REPORT_WRITER_HPP
+#endif //VCF_VALIDATOR_REPORT_READER_HPP
