@@ -156,7 +156,7 @@ namespace ebi
         m_grouped_tokens = std::vector<std::string>{};
     }
 
-    void StoreParsePolicy::handle_body_line(ParsingState & state) 
+    void StoreParsePolicy::handle_body_line(ParsingState & state)
     {
         size_t position;
         try {
@@ -193,7 +193,6 @@ namespace ebi
                       m_line_tokens["FORMAT"] : std::vector<std::string>{} ;
         auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ?
                        m_line_tokens["SAMPLES"] : std::vector<std::string>{} ;
-
         
         state.add_record(Record {
                 state.n_lines,

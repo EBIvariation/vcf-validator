@@ -22,7 +22,7 @@ namespace ebi
   namespace vcf
   {
 
-    Record:: Record(size_t const line,
+    Record::Record(size_t const line,
             std::string const & chromosome,
             size_t const position,
             std::vector<std::string> const & ids,
