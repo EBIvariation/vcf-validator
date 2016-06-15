@@ -11,15 +11,35 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 include_directories (inc)
 include_directories (lib)
 
-macro (declare_mod MODNAME)
-  file (GLOB MOD_${MODNAME}_INC "inc/${MODNAME}/*")
-  file (GLOB MOD_${MODNAME}_SRC "src/${MODNAME}/*")
-  set (MOD_${MODNAME}_ALL ${MOD_${MODNAME}_INC} ${MOD_${MODNAME}_SRC})
-  add_library (mod_${MODNAME} ${MOD_${MODNAME}_ALL})
-endmacro (declare_mod)
-
 # Application modules
-declare_mod (vcf)
+set (MOD_VCF_SOURCES
+        inc/vcf/error.hpp
+        inc/vcf/error_policy.hpp
+        src/vcf/abort_error_policy.cpp
+        src/vcf/report_error_policy.cpp
+        inc/vcf/file_structure.hpp
+        src/vcf/source.cpp
+        src/vcf/meta_entry.cpp
+        inc/vcf/meta_entry_visitor.hpp
+        inc/vcf/optional_policy.hpp
+        src/vcf/validate_optional_policy.cpp
+        inc/vcf/parse_policy.hpp
+        src/vcf/store_parse_policy.cpp
+        inc/vcf/parsing_state.hpp
+        src/vcf/parsing_state.cpp
+        inc/vcf/record.hpp
+        src/vcf/record.cpp
+        inc/vcf/report_reader.hpp
+        inc/vcf/report_writer.hpp
+        inc/vcf/sqlite_report.hpp
+        src/vcf/sqlite_report.cpp
+        inc/vcf/validator_detail_v41.hpp
+        inc/vcf/validator_detail_v42.hpp
+        inc/vcf/validator_detail_v43.hpp
+        inc/vcf/validator.hpp
+        src/vcf/validator.cpp
+        )
+add_library(mod_vcf ${MOD_VCF_SOURCES})
 
 # Static build extra flags
 if (BUILD_STATIC)
