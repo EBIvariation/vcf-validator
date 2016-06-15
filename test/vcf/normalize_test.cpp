@@ -50,14 +50,106 @@ namespace ebi
                                            { "Description", "Genotype" }
                                        }
                                    });
-      SECTION("same length: different ending") {
+      SECTION("same length: different ending")
+      {
           try {
               vcf::Record record{1, "1", 1000, {"."}, "TCACCC", {"TGACGG"}, 0,
                                  {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
 
               std::vector<vcf::RecordCore> expected_normalization = {
                   vcf::RecordCore{1, "1", 1001, "CACCC", "GACGG"}};
-              
+
+              auto normalization = vcf::normalize(record);
+              CHECK((normalization) == expected_normalization);
+          } catch (vcf::Error *e) {
+              // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
+              throw *e;
+          }
+      }
+
+      SECTION("same length: same ending")
+      {
+          try {
+              vcf::Record record{1, "1", 1000, {"."}, "TCACCC", {"TGACGC"}, 0,
+                                 {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
+
+              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1001, "CACC", "GACG"}};
+
+              auto normalization = vcf::normalize(record);
+              CHECK((normalization) == expected_normalization);
+          } catch (vcf::Error *e) {
+              // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
+              REQUIRE_NOTHROW(throw *e);
+          }
+      }
+      SECTION("insertions: leading context, 1-base context, 1-base insertion")
+      {
+          try {
+              vcf::Record record{1, "1", 1000, {"."}, "A", {"AA"}, 0,
+                                 {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
+
+              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1000, "A", "AA"}};
+
+              auto normalization = vcf::normalize(record);
+              CHECK((normalization) == expected_normalization);
+          } catch (vcf::Error *e) {
+              // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
+              REQUIRE_NOTHROW(throw *e);
+          }
+      }
+      SECTION("insertions: leading context, 1-base context, 2-base insertion")
+      {
+          try {
+              vcf::Record record{1, "1", 1000, {"."}, "A", {"ATC"}, 0,
+                                 {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
+
+              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1000, "A", "ATC"}};
+
+              auto normalization = vcf::normalize(record);
+              CHECK((normalization) == expected_normalization);
+          } catch (vcf::Error *e) {
+              // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
+              REQUIRE_NOTHROW(throw *e);
+          }
+      }
+      SECTION("insertions: leading context, 2-base context, 1-base insertion")
+      {
+          try {
+              vcf::Record record{1, "1", 1000, {"."}, "AC", {"ACT"}, 0,
+                                 {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
+
+              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1001, "C", "CT"}};
+
+              auto normalization = vcf::normalize(record);
+              CHECK((normalization) == expected_normalization);
+          } catch (vcf::Error *e) {
+              // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
+              REQUIRE_NOTHROW(throw *e);
+          }
+      }
+      SECTION("insertions: leading and trailing context")
+      {
+          try {
+              vcf::Record record{1, "1", 1000, {"."}, "AC", {"ATC"}, 0,
+                                 {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
+
+              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1000, "A", "AT"}};
+
+              auto normalization = vcf::normalize(record);
+              CHECK((normalization) == expected_normalization);
+          } catch (vcf::Error *e) {
+              // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
+              REQUIRE_NOTHROW(throw *e);
+          }
+      }
+      SECTION("insertions: trailing context")
+      {
+          try {
+              vcf::Record record{1, "1", 1000, {"."}, "TC", {"ATC"}, 0,
+                                 {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
+
+              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1000, "T", "AT"}};
+
               auto normalization = vcf::normalize(record);
               CHECK((normalization) == expected_normalization);
           } catch (vcf::Error *e) {
@@ -66,17 +158,25 @@ namespace ebi
           }
       }
 
-      SECTION("same length: same ending") {
-          vcf::Record record{1, "1", 1000, {"."}, "TCACCC", {"TGACGC"}, 0,
-                             {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
+      SECTION("Multiallelic splitting: same length") {
+          try {
+              vcf::Record record{1, "1", 10040, {"rs123"}, "T", {"A", "C"}, 0,
+                                 {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/2", "1/2"}, source};
 
+              std::vector<vcf::RecordCore> expected_normalization = {
+                  vcf::RecordCore{1, "1", 10040, "T", "A"},
+                  vcf::RecordCore{1, "1", 10040, "T", "C"}};
 
-          std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1001, "CACC", "GACG"}};
-
-          CHECK(vcf::normalize(record) == expected_normalization);
+              auto normalization = vcf::normalize(record);
+              CHECK((normalization) == expected_normalization);
+          } catch (vcf::Error *e) {
+              // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
+              REQUIRE_NOTHROW(throw *e);
+          }
       }
 
-      SECTION("Multiallelic: same length or deletion") {
+      SECTION("Multiallelic splitting: same length or deletion")
+      {
           vcf::Record record{1, "1", 10040, {"rs123"}, "TGACGTAACGATT", {"T", "TGACGTAACGGTT", "TGACGTAATAC"}, 0,
                              {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/2", "1/2"}, source};
 

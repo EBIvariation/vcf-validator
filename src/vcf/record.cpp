@@ -457,11 +457,6 @@ namespace ebi
         os << ", " << record.info;
         os << ", " << record.format;
         os << ", " << record.samples;
-//        os << source;
-//        
-//        for(auto &alternate : record.alternate_alleles) {
-//            os << " " << alternate << ",";
-//        }
         
         os << "}";
         return os;
