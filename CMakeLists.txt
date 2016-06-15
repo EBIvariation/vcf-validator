@@ -15,28 +15,29 @@ include_directories (lib)
 set (MOD_VCF_SOURCES
         inc/vcf/error.hpp
         inc/vcf/error_policy.hpp
-        src/vcf/abort_error_policy.cpp
-        src/vcf/report_error_policy.cpp
         inc/vcf/file_structure.hpp
-        src/vcf/source.cpp
-        src/vcf/meta_entry.cpp
         inc/vcf/meta_entry_visitor.hpp
         inc/vcf/optional_policy.hpp
-        src/vcf/validate_optional_policy.cpp
         inc/vcf/parse_policy.hpp
-        src/vcf/store_parse_policy.cpp
         inc/vcf/parsing_state.hpp
-        src/vcf/parsing_state.cpp
         inc/vcf/record.hpp
-        src/vcf/record.cpp
         inc/vcf/report_reader.hpp
         inc/vcf/report_writer.hpp
         inc/vcf/sqlite_report.hpp
-        src/vcf/sqlite_report.cpp
         inc/vcf/validator_detail_v41.hpp
         inc/vcf/validator_detail_v42.hpp
         inc/vcf/validator_detail_v43.hpp
         inc/vcf/validator.hpp
+        
+        src/vcf/abort_error_policy.cpp
+        src/vcf/meta_entry.cpp
+        src/vcf/parsing_state.cpp
+        src/vcf/record.cpp
+        src/vcf/report_error_policy.cpp
+        src/vcf/source.cpp
+        src/vcf/sqlite_report.cpp
+        src/vcf/store_parse_policy.cpp
+        src/vcf/validate_optional_policy.cpp
         src/vcf/validator.cpp
         )
 add_library(mod_vcf ${MOD_VCF_SOURCES})
