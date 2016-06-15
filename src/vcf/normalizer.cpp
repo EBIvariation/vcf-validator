@@ -98,6 +98,7 @@ namespace ebi
             // trail_mismatch_reverse is zero: no equal trailing bases
             // trail_mismatch_reverse is rend: reference and alternate are equal: error
             std::pair<std::string::iterator, std::string::iterator> lead_mismatch_indices;
+            
             if (reference.size() == alternate.size()) {
                 // polymorphism
 
@@ -113,53 +114,31 @@ namespace ebi
 
             } else if (reference.size() < alternate.size()) {
                 // insertion
-
+                std::string::iterator trail_match_ref;
+                std::string::iterator trail_match_alt;
                 if (trail_mismatch_reverse.first == reference.rend()) {
                     // reference is a substring of alternate, located at the end of alternate
                     // need to reduce reference to 1 base, as trailing context
 
                     // trail_match_* point to the first match of the trailing bases
                     // -1/+1 because end is not inclusive: [start, end), and we need to include the mismatch
-                    std::string::iterator trail_match_ref = make_forward(trail_mismatch_reverse.first - 1);
-                    std::string::iterator trail_match_alt = make_forward(trail_mismatch_reverse.second) + 1;
+                    trail_match_ref = make_forward(trail_mismatch_reverse.first - 1);
+                    trail_match_alt = make_forward(trail_mismatch_reverse.second) + 1;
                     lead_mismatch_indices.first = reference.begin(); // == trail_match_ref
                     lead_mismatch_indices.second = alternate.begin();
-
-                    // we need a 1-base trailing context
-                    ++trail_match_ref;
-                    ++trail_match_alt;
-
-                    corrected_reference.assign(lead_mismatch_indices.first, trail_match_ref);
-                    corrected_alternate.assign(lead_mismatch_indices.second, trail_match_alt);
-                    corrected_position = position + (lead_mismatch_indices.first - reference.begin());
                 } else {
                     // There is at least 1 base mismatch before trailing mismatch, it may be leading context, or a change
 
                     // trail_match_* point to the first match of the trailing bases
                     // +1 because end is not inclusive: [start, end), and we need to include the mismatch
-                    std::string::iterator trail_mismatch_ref = make_forward(trail_mismatch_reverse.first) + 1;
-                    std::string::iterator trail_mismatch_alt = make_forward(trail_mismatch_reverse.second) + 1;
-                    lead_mismatch_indices = std::mismatch(reference.begin(), trail_mismatch_ref, alternate.begin());
-
-                    if (lead_mismatch_indices.first > reference.begin()
-                        /* && lead_mismatch_indices.second > alternate.begin() */ ) {
-                        // we leave an initial base for context
-                        --lead_mismatch_indices.first;
-                        --lead_mismatch_indices.second;
-                    } else if (trail_mismatch_ref < reference.end() && trail_mismatch_alt < alternate.end()) {
-                        // we leave a trailing base for context
-                        ++trail_mismatch_ref;
-                        ++trail_mismatch_alt;
-                    } else {
-                        // no context? precondition violation
-                        throw new BodySectionError{record.line,
-                                                   "normalization failed: insertion: there should be at least 1 base for context"};
-                    }
-
-                    corrected_reference.assign(lead_mismatch_indices.first, trail_mismatch_ref);
-                    corrected_alternate.assign(lead_mismatch_indices.second, trail_mismatch_alt);
-                    corrected_position = position + (lead_mismatch_indices.first - reference.begin());
+                    trail_match_ref = make_forward(trail_mismatch_reverse.first) + 1;
+                    trail_match_alt = make_forward(trail_mismatch_reverse.second) + 1;
+                    lead_mismatch_indices = std::mismatch(reference.begin(), trail_match_ref, alternate.begin());
                 }
+                
+                corrected_reference.assign(lead_mismatch_indices.first, trail_match_ref);
+                corrected_alternate.assign(lead_mismatch_indices.second, trail_match_alt);
+                corrected_position = position + (lead_mismatch_indices.first - reference.begin());
             } else {
                 // deletion
 

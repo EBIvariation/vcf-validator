@@ -88,7 +88,7 @@ namespace ebi
               vcf::Record record{1, "1", 1000, {"."}, "A", {"AA"}, 0,
                                  {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
 
-              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1000, "A", "AA"}};
+              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1000, "", "A"}};
 
               auto normalization = vcf::normalize(record);
               CHECK((normalization) == expected_normalization);
@@ -103,7 +103,7 @@ namespace ebi
               vcf::Record record{1, "1", 1000, {"."}, "A", {"ATC"}, 0,
                                  {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
 
-              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1000, "A", "ATC"}};
+              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1001, "", "TC"}};
 
               auto normalization = vcf::normalize(record);
               CHECK((normalization) == expected_normalization);
@@ -118,7 +118,7 @@ namespace ebi
               vcf::Record record{1, "1", 1000, {"."}, "AC", {"ACT"}, 0,
                                  {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
 
-              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1001, "C", "CT"}};
+              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1002, "", "T"}};
 
               auto normalization = vcf::normalize(record);
               CHECK((normalization) == expected_normalization);
@@ -133,7 +133,7 @@ namespace ebi
               vcf::Record record{1, "1", 1000, {"."}, "AC", {"ATC"}, 0,
                                  {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
 
-              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1000, "A", "AT"}};
+              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1001, "", "T"}};
 
               auto normalization = vcf::normalize(record);
               CHECK((normalization) == expected_normalization);
@@ -148,7 +148,7 @@ namespace ebi
               vcf::Record record{1, "1", 1000, {"."}, "TC", {"ATC"}, 0,
                                  {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
 
-              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1000, "T", "AT"}};
+              std::vector<vcf::RecordCore> expected_normalization = {vcf::RecordCore{1, "1", 1000, "", "A"}};
 
               auto normalization = vcf::normalize(record);
               CHECK((normalization) == expected_normalization);
@@ -181,8 +181,8 @@ namespace ebi
                              {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/2", "1/2"}, source};
 
           std::vector<vcf::RecordCore> expected_normalization = {
-              vcf::RecordCore{1, "1", 10040, "TGACGTAACGATT", "T"},
-              vcf::RecordCore{1, "1", 10048, "ACGATT", "ATAC"},
+              vcf::RecordCore{1, "1", 10040, "TGACGTAACGAT", ""},
+              vcf::RecordCore{1, "1", 10048, "CGATT", "TAC"},
               vcf::RecordCore{1, "1", 10050, "A", "G"}};
 
           CHECK(vcf::normalize(record) == expected_normalization);
