@@ -11,15 +11,49 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 include_directories (inc)
 include_directories (lib)
 
-macro (declare_mod MODNAME)
-  file (GLOB MOD_${MODNAME}_INC "inc/${MODNAME}/*")
-  file (GLOB MOD_${MODNAME}_SRC "src/${MODNAME}/*")
-  set (MOD_${MODNAME}_ALL ${MOD_${MODNAME}_INC} ${MOD_${MODNAME}_SRC})
-  add_library (mod_${MODNAME} ${MOD_${MODNAME}_ALL})
-endmacro (declare_mod)
-
 # Application modules
-declare_mod (vcf)
+set (MOD_VCF_SOURCES
+        inc/vcf/error.hpp
+        inc/vcf/error_policy.hpp
+        inc/vcf/file_structure.hpp
+        inc/vcf/meta_entry_visitor.hpp
+        inc/vcf/optional_policy.hpp
+        inc/vcf/parse_policy.hpp
+        inc/vcf/parsing_state.hpp
+        inc/vcf/record.hpp
+        inc/vcf/report_reader.hpp
+        inc/vcf/report_writer.hpp
+        inc/vcf/sqlite_report.hpp
+        inc/vcf/validator_detail_v41.hpp
+        inc/vcf/validator_detail_v42.hpp
+        inc/vcf/validator_detail_v43.hpp
+        inc/vcf/validator.hpp
+        
+        src/vcf/abort_error_policy.cpp
+        src/vcf/meta_entry.cpp
+        src/vcf/parsing_state.cpp
+        src/vcf/record.cpp
+        src/vcf/report_error_policy.cpp
+        src/vcf/source.cpp
+        src/vcf/sqlite_report.cpp
+        src/vcf/store_parse_policy.cpp
+        src/vcf/validate_optional_policy.cpp
+        src/vcf/validator.cpp
+        )
+add_library(mod_vcf ${MOD_VCF_SOURCES})
+
+set (V41_TESTS test/vcf/parser_v41_test.cpp)
+set (V42_TESTS test/vcf/parser_v42_test.cpp)
+set (V43_TESTS test/vcf/parser_v43_test.cpp)
+set (ALL_TESTS
+        test/vcf/metaentry_test.cpp
+        test/vcf/parser_test_aux.hpp
+        test/vcf/parser_v41_test.cpp
+        test/vcf/parser_v42_test.cpp
+        test/vcf/parser_v43_test.cpp
+        test/vcf/record_test.cpp
+        test/vcf/report_writer_test.cpp
+        )
 
 # Static build extra flags
 if (BUILD_STATIC)
@@ -43,25 +77,21 @@ add_library(sqlite3 lib/sqlite/sqlite3.c)
 find_package (Threads REQUIRED)
 
 # Application tests
-file (GLOB V41_TESTS "test/vcf/parser_v41_test.cpp")
 add_executable (test_validator_v41 test/main_test.cpp ${V41_TESTS})
 target_link_libraries (test_validator_v41 mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 enable_testing ()
 add_test (NAME ValidatorTests_v41 COMMAND test_validator_v41)
 
-file (GLOB V42_TESTS "test/vcf/parser_v42_test.cpp")
 add_executable (test_validator_v42 test/main_test.cpp ${V42_TESTS})
 target_link_libraries (test_validator_v42 mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 enable_testing ()
 add_test (NAME ValidatorTests_v42 COMMAND test_validator_v42)
 
-file (GLOB V43_TESTS "test/vcf/parser_v43_test.cpp")
 add_executable (test_validator_v43 test/main_test.cpp ${V43_TESTS})
 target_link_libraries (test_validator_v43 mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 enable_testing ()
 add_test (NAME ValidatorTests_v43 COMMAND test_validator_v43)
 
-file (GLOB ALL_TESTS "test/vcf/*.cpp")
 add_executable (test_validator test/main_test.cpp ${ALL_TESTS})
 target_link_libraries (test_validator mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
 enable_testing ()
