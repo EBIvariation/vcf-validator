@@ -228,7 +228,7 @@ namespace ebi
 
   TEST_CASE("integration test: validator and sqlite", "[output]")
   {
-      auto path = boost::filesystem::path("test/input_files/failed/failed_fileformat_000.vcf");
+      auto path = boost::filesystem::path("test/input_files/v4.1/failed/failed_fileformat_000.vcf");
 
       std::string db_name = path.string() + ".errors.db";
 

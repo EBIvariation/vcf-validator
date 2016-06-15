@@ -1,0 +1,5 @@
+##fileformat=VCFv4.1
+##ALT=<ID=INS,Description="Valid ALT metadata ID">
+##ALT=<ID=INS:THIS-IS-VALID,Description="Valid ALT metadata ID with non-alphanumeric characters">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+1	123	.	TC	T	.	.	.

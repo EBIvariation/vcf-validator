@@ -31,10 +31,12 @@ namespace ebi
 
         // using operator bool: http://www.cplusplus.com/reference/ios/ios/fail/
         // `stream.get()` sets failbit as well on eof
-        do {
-            stream.get(c);
+        while (stream && stream.get(c)) {
             container.push_back(c);
-        } while (stream && c != '\n');
+            if (c == '\n') {
+                break;
+            }
+        }
 
         return stream;
     }

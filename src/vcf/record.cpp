@@ -220,8 +220,8 @@ namespace ebi
         if (format.size() == 0) {
             return; // Nothing to check
         }
-            
-        if (format[0] != "GT") {
+        
+        if (std::find(format.begin(), format.end(), "GT") != format.end() && format[0] != "GT") {
             throw new FormatBodyError{line, "GT must be the first field in the FORMAT column"};
         }
     }
@@ -272,10 +272,13 @@ namespace ebi
             }
             
             std::vector<std::string> alleles;
-            util::string_split(subfields[0], "|/", alleles);
+            // If the first format field is not a GT, then no alleles need to be checked
+            if (format[0] == "GT") {
+                util::string_split(subfields[0], "|/", alleles);
             
-            // The allele indexes must not be greater than the total number of alleles
-            check_samples_alleles(alleles);
+                // The allele indexes must not be greater than the total number of alleles
+                check_samples_alleles(alleles);
+            }
             
             // The cardinality and type of the fields match the FORMAT meta information
             for (size_t j = 1; j < subfields.size(); ++j) {
@@ -307,6 +310,12 @@ namespace ebi
         for (auto & allele : alleles) {
             if (allele == ".") { continue; } // No need to check missing alleles
 
+            // Discard non-integer numbers
+            if (std::find_if(allele.begin(), allele.end(), [](char c) { return !std::isdigit(c); }) != allele.end()) {
+                throw new SamplesBodyError{line, "Allele index " + allele + " is not an integer number"};
+            }
+            
+            // After guaranteeing the number is an integer, check it is in range
             size_t num_allele = std::stoi(allele);
             if (num_allele > alternate_alleles.size()) {
                 throw new SamplesBodyError{line, "Allele index " + std::to_string(num_allele) +
@@ -343,13 +352,22 @@ namespace ebi
         } 
 
         if (number != ".") { // Forget about the unspecified number
-            // The number of values must match the expected or, if the expected is 0, 
-            // there will be one empty value that needs to be specifically checked
-            if (values.size() != expected && 
-                values.size() > 1 && values[0] != "") {
-                throw new Error{line, field + " does not match the meta specification Number=" + number +
-                        ", expected " + std::to_string(expected) + " values"};
-                
+            bool number_matches = true;
+            if (expected > 0) {
+                // The number of values must match the expected
+                number_matches = ( values.size() == expected );
+            } else if (expected == 0) {
+                // There will be one empty value that needs to be specifically checked
+                number_matches = values.size() == 0 || 
+                                (values.size() == 1 && (values[0] == "0" || values[0] == "1"));
+            } else {
+                // Negative values are not allowed
+                throw new Error{line, field + " meta specification Number=" + number + " is negative"};
+            }
+            
+            if (!number_matches) {
+                throw new Error{line, field + " does not match the meta specification Number=" + number + 
+                        ", expected " + std::to_string(expected) + " values"};                
             }
         }
     }
@@ -366,6 +384,10 @@ namespace ebi
                 if (type == "Integer") {
                     // ...try to cast to int
                     std::stoi(value);
+                    // ...and also check it's not a float
+                    if (std::fmod(std::stof(value), 1) != 0) {
+                        throw std::invalid_argument("Float provided instead of Integer");
+                    }
                 } else if (type == "Float") {
                     // ...try to cast to float
                     try {

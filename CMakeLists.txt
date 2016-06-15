@@ -43,11 +43,30 @@ add_library(sqlite3 lib/sqlite/sqlite3.c)
 find_package (Threads REQUIRED)
 
 # Application tests
-file (GLOB ALL_TESTS "test/*/*")
+file (GLOB V41_TESTS "test/vcf/parser_v41_test.cpp")
+add_executable (test_validator_v41 test/main_test.cpp ${V41_TESTS})
+target_link_libraries (test_validator_v41 mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+enable_testing ()
+add_test (NAME ValidatorTests_v41 COMMAND test_validator_v41)
+
+file (GLOB V42_TESTS "test/vcf/parser_v42_test.cpp")
+add_executable (test_validator_v42 test/main_test.cpp ${V42_TESTS})
+target_link_libraries (test_validator_v42 mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+enable_testing ()
+add_test (NAME ValidatorTests_v42 COMMAND test_validator_v42)
+
+file (GLOB V43_TESTS "test/vcf/parser_v43_test.cpp")
+add_executable (test_validator_v43 test/main_test.cpp ${V43_TESTS})
+target_link_libraries (test_validator_v43 mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+enable_testing ()
+add_test (NAME ValidatorTests_v43 COMMAND test_validator_v43)
+
+file (GLOB ALL_TESTS "test/vcf/*.cpp")
 add_executable (test_validator test/main_test.cpp ${ALL_TESTS})
 target_link_libraries (test_validator mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
 enable_testing ()
 add_test (NAME ValidatorTests COMMAND test_validator)
+
 
 # Build binary
 add_executable (vcf_validator src/main.cpp)
