@@ -1,5 +1,5 @@
 /**
- * Copyright 2014-2015 EMBL - European Bioinformatics Institute
+ * Copyright 2016 EMBL - European Bioinformatics Institute
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@
 
 #include <boost/program_options.hpp>
 
+#include "util/stream_utils.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
 #include "vcf/report_writer.hpp"
@@ -41,14 +42,13 @@ namespace
 
   po::options_description build_command_line_options()
   {
-      po::options_description description("Usage: vcf-validator [OPTIONS] [< input_file]\nAllowed options");
+      po::options_description description("Usage: vcf-debugulator [OPTIONS] [< input_file]\nAllowed options");
 
       description.add_options()
               ("help,h", "Display this help")
               ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
               ("errors,e", po::value<std::string>(), "Path to the errors DB from the input VCF file")
               ("level,l", po::value<std::string>()->default_value("warning"), "Validation level (error, warning, stop)")
-              ("version,v", po::value<std::string>(), "VCF fileformat version to validate the file against (v4.1, v4.2, v4.3)")
               ("output,o", po::value<std::string>()->default_value("stdout"), "write to a file or stdout")
       ;
 
@@ -69,19 +69,6 @@ namespace
           return 1;
       }
 
-      if (!vm.count("version")) {
-          std::cout << desc << std::endl;
-          std::cout << "Please choose one of the accepted VCF fileformat versions" << std::endl;
-          return 1;
-      }
-
-      std::string version = vm["version"].as<std::string>();
-      if (version != "v4.1" && version != "v4.2" && version != "v4.3") {
-          std::cout << desc << std::endl;
-          std::cout << "Please choose one of the accepted VCF fileformat versions" << std::endl;
-          return 1;
-      }
-
       return 0;
   }
 
@@ -97,127 +84,22 @@ namespace
 
       throw std::invalid_argument{"Please choose one of the accepted validation levels"};
   }
-
-  ebi::vcf::Version get_version(std::string const &version_str)
-  {
-      if (version_str == "v4.1") {
-          return ebi::vcf::Version::v41;
-      } else if (version_str == "v4.2") {
-          return ebi::vcf::Version::v42;
-      } else if (version_str == "v4.3") {
-          return ebi::vcf::Version::v43;
-      }
-
-      throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
-  }
-
-  std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const &path, 
-                                                 ValidationLevel level, 
-                                                 ebi::vcf::Version version)
-  {
-      auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, version};
-      auto records = std::vector<ebi::vcf::Record>{};
-
-      switch (level) {
-          case ValidationLevel::error:
-              switch (version) {
-                  case ebi::vcf::Version::v41:
-                      return std::unique_ptr<ebi::vcf::Parser>(
-                          new ebi::vcf::QuickValidator_v41(
-                              std::make_shared<ebi::vcf::Source>(source),
-                              std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-                  case ebi::vcf::Version::v42:
-                      return std::unique_ptr<ebi::vcf::Parser>(
-                          new ebi::vcf::QuickValidator_v42(
-                              std::make_shared<ebi::vcf::Source>(source),
-                              std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-                  case ebi::vcf::Version::v43:
-                      return std::unique_ptr<ebi::vcf::Parser>(
-                          new ebi::vcf::QuickValidator_v43(
-                              std::make_shared<ebi::vcf::Source>(source),
-                              std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-                  default:
-                      throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
-              }
-
-          case ValidationLevel::warning:
-              switch (version) {
-                  case ebi::vcf::Version::v41:
-                      return std::unique_ptr<ebi::vcf::Parser>(
-                          new ebi::vcf::FullValidator_v41(
-                              std::make_shared<ebi::vcf::Source>(source),
-                              std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-                  case ebi::vcf::Version::v42:
-                      return std::unique_ptr<ebi::vcf::Parser>(
-                          new ebi::vcf::FullValidator_v42(
-                              std::make_shared<ebi::vcf::Source>(source),
-                              std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-                  case ebi::vcf::Version::v43:
-                      return std::unique_ptr<ebi::vcf::Parser>(
-                          new ebi::vcf::FullValidator_v43(
-                              std::make_shared<ebi::vcf::Source>(source),
-                              std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-                  default:
-                      throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
-              }
-
-          case ValidationLevel::stop:
-              switch (version) {
-                  case ebi::vcf::Version::v41:
-                      return std::unique_ptr<ebi::vcf::Parser>(
-                          new ebi::vcf::Reader_v41(
-                              std::make_shared<ebi::vcf::Source>(source),
-                              std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-                  case ebi::vcf::Version::v42:
-                      return std::unique_ptr<ebi::vcf::Parser>(
-                          new ebi::vcf::Reader_v42(
-                              std::make_shared<ebi::vcf::Source>(source),
-                              std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-                  case ebi::vcf::Version::v43:
-                      return std::unique_ptr<ebi::vcf::Parser>(
-                          new ebi::vcf::Reader_v43(
-                              std::make_shared<ebi::vcf::Source>(source),
-                              std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-                  default:
-                      throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
-              }
-
-          default:
-              throw std::invalid_argument{"Please choose one of the accepted validation levels"};
-      }
-  }
-
-  template<typename Container>
-  std::istream &readline(std::istream &stream, Container &container)
-  {
-      char c;
-
-      container.clear();
-
-      do {
-          stream.get(c);
-          container.push_back(c);
-      } while (!stream.eof() && c != '\n');
-
-      return stream;
-  }
-
+  
   bool fix_vcf_file(std::istream &input,
                     ebi::vcf::SqliteReportRW &errorDAO,
-                    ebi::vcf::Parser &validator,
                     std::ostream &output)
   {
       std::vector<char> line;
       line.reserve(default_line_buffer_size);
+      /*
       size_t current_line = 0;  // the first line is the number 1, ParsingState takes this convention too
 
-      /*
       for (auto error : errorDAO.errors()) {
           size_t line_index = error.get_line();
           while (current_line < line_index) {
               // advance input
               
-              if(!readline(input, line)) {
+              if(!ebi::util::readline(input, line)) {
                   // file finished, return ?
               }
               current_line++;
@@ -227,7 +109,6 @@ namespace
       }
 */
       // close outputs?
-      validator.end();
 
       return 0;     // fixer.is_valid();
   }
@@ -244,14 +125,10 @@ int main(int argc, char **argv)
     if (check_options < 0) { return 0; }
     if (check_options > 0) { return check_options; }
 
-    bool is_valid;
-
     try {
         auto input_path = vm["input"].as<std::string>();
         auto level = vm["level"].as<std::string>();
-        auto version = vm["version"].as<std::string>();
         auto errors = vm["errors"].as<std::string>();
-        auto validator = build_parser(input_path, get_validation_level(level), get_version(version));
         auto output_path = vm["output"].as<std::string>();
 
 
@@ -276,7 +153,7 @@ int main(int argc, char **argv)
         auto &input_stream = input_path == "stdin" ? std::cin : input_file;
         auto &output_stream = output_path == "stdout" ? std::cout : output_file;
 
-        is_valid = fix_vcf_file(input_stream, errorDAO, *validator, output_stream);
+        fix_vcf_file(input_stream, errorDAO, output_stream);
 
         return 0; // A valid file returns an exit code 0
 
