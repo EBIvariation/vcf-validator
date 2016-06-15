@@ -71,3 +71,6 @@ add_test (NAME ValidatorTests COMMAND test_validator)
 # Build binary
 add_executable (vcf_validator src/main.cpp)
 target_link_libraries (vcf_validator mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable (vcf_debugulator src/debugulator_main.cpp)
+target_link_libraries (vcf_debugulator mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
