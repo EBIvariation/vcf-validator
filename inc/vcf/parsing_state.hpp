@@ -25,6 +25,7 @@
 #include "file_structure.hpp"
 #include "error.hpp"
 #include "normalizer.hpp"
+#include "record_cache.hpp"
 
 namespace ebi
 {
@@ -44,6 +45,7 @@ namespace ebi
         std::shared_ptr<std::vector<Record>> records;
         std::shared_ptr<std::vector<std::unique_ptr<Error>>> errors;
         std::shared_ptr<std::vector<std::unique_ptr<Error>>> warnings;
+        RecordCache duplicates;
 
         std::multimap<std::string, std::string> defined_metadata;
         std::multimap<std::string, std::string> undefined_metadata;
