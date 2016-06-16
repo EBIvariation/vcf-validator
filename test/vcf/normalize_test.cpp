@@ -21,15 +21,28 @@
 
 namespace ebi
 {
-  struct RecordTest
+  struct TestMultiRecord
+  {
+      size_t normalized_pos;
+      std::string normalized_reference;
+      std::vector<std::string> normalized_alternate;
+  };
+  struct TestRecord
   {
       size_t normalized_pos;
       std::string normalized_reference;
       std::string normalized_alternate;
   };
-  std::pair<std::vector<vcf::RecordCore>, std::vector<vcf::RecordCore>> testNormalization(
-          size_t pos, std::string reference, std::vector<std::string> alternates, 
-          std::vector<RecordTest> results)
+  
+//  std::pair<std::vector<vcf::RecordCore>, std::vector<vcf::RecordCore>> test_normalization(
+//      size_t pos, std::string reference, std::vector<std::string> alternates,
+//      std::vector<TestRecord> results)
+//  {
+//      return test_normalization({pos, reference, alternates}, results);
+//  }
+  std::pair<std::vector<vcf::RecordCore>, std::vector<vcf::RecordCore>> test_normalization(
+      std::function<std::vector<vcf::RecordCore> (const vcf::Record &record)> normalize_function,
+      TestMultiRecord orig, std::vector<TestRecord> results)
   {
       try {
 
@@ -48,8 +61,8 @@ namespace ebi
                                            }
                                        });
           
-          vcf::Record record{1, "1", pos, {"."}, reference, alternates, 0,
-                             {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
+          vcf::Record record{1, "1", orig.normalized_pos, {"."}, orig.normalized_reference, orig.normalized_alternate, 
+                             0, {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
 
           std::vector<vcf::RecordCore> expected_normalization;
           for (auto result : results) {
@@ -57,7 +70,7 @@ namespace ebi
                   {1, "1", result.normalized_pos, result.normalized_reference, result.normalized_alternate});
           }
           
-          return {vcf::normalize(record), expected_normalization};
+          return {normalize_function(record), expected_normalization};
           
       } catch (vcf::Error * e) {
           // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
@@ -69,95 +82,205 @@ namespace ebi
   {
       SECTION("same length: different ending")
       {
-          auto result = testNormalization(1000, "TCACCC", {"TGACGG"}, {{1001, "CACCC", "GACGG"}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "TCACCC", {"TGACGG"}};
+          std::vector<TestRecord> result{{1001, "CACCC", "GACGG"}};
+          
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("same length: same ending")
       {
-          auto result = testNormalization(1000, "TCACCC", {"TGACGC"}, {{1001, "CACC", "GACG"}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "TCACCC", {"TGACGC"}};
+          std::vector<TestRecord> result{{1001, "CACC", "GACG"}};
+          
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       
-      SECTION("insertions: trailing context, 1-base context, 1-base insertion")
+      
+      SECTION("insertions: trailing context, 1-base context ambiguous, 1-base insertion")
       {
-          auto result = testNormalization(1000, "A", {"AA"}, {{1000, "", "A"}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "A", {"AA"}};
+          
+          auto comparison = test_normalization(vcf::normalize, origin, {{1000, "", "A"}});
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1001, "", "A"}});
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
+      SECTION("insertions: trailing context, 1-base context at left, 1-base insertion")
+      {
+          TestMultiRecord origin{1000, "T", {"TA"}};
+          std::vector<TestRecord> result{{1001, "", "A"}};
+          
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
+      SECTION("insertions: leading context, 1-base context at right, 2-base insertion")
+      {
+          TestMultiRecord origin{1000, "T", {"AT"}};
+          std::vector<TestRecord> result{{1000, "", "A"}};
+          
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: leading context, 1-base context, 2-base insertion")
       {
-          auto result = testNormalization(1000, "A", {"ATC"}, {{1001, "", "TC"}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "A", {"ATC"}};
+          std::vector<TestRecord> result{{1001, "", "TC"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: leading context, 2-base context, 1-base insertion")
       {
-          auto result = testNormalization(1000, "AC", {"ACT"}, {{1002, "", "T"}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "AC", {"ACT"}};
+          std::vector<TestRecord> result{{1002, "", "T"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: leading and trailing context")
       {
-          auto result = testNormalization(1000, "AC", {"ATC"}, {{1001, "", "T"}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "AC", {"ATC"}};
+          std::vector<TestRecord> result{{1001, "", "T"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: trailing context")
       {
-          auto result = testNormalization(1000, "TC", {"ATC"}, {{1000, "", "A"}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "TC", {"ATC"}};
+          std::vector<TestRecord> result{{1000, "", "A"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: no context")
       {
-          auto result = testNormalization(1000, "TAC", {"CGATT"}, {{1000, "TAC", "CGATT"}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "TAC", {"CGATT"}};
+          std::vector<TestRecord> result{{1000, "TAC", "CGATT"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       
       SECTION("deletions: leading context, 1-base context, 1-base deletion")
       {
-          auto result = testNormalization(1000, "AT", {"A"}, {{1001, "T", ""}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "AT", {"A"}};
+          std::vector<TestRecord> result{{1001, "T", ""}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: leading context, 1-base context, 3-base deletion")
       {
-          auto result = testNormalization(1000, "GATC", {"G"}, {{1001, "ATC", ""}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "GATC", {"G"}};
+          std::vector<TestRecord> result{{1001, "ATC", ""}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: leading context, 2-base context, 1-base deletion")
       {
-          auto result = testNormalization(1000, "GAT", {"GA"}, {{1002, "T", ""}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "GAT", {"GA"}};
+          std::vector<TestRecord> result{{1002, "T", ""}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: leading and trailing context")
       {
-          auto result = testNormalization(1000, "ATC", {"AC"}, {{1001, "T", ""}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "ATC", {"AC"}};
+          std::vector<TestRecord> result{{1001, "T", ""}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: trailing context, 1-base context, 1-base deletion")
       {
-          auto result = testNormalization(1000, "AA", {"A"}, {{1000, "A", ""}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "AA", {"A"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, {{1000, "A", ""}});
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1001, "A", ""}});
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: trailing context, 1-base context, 2-base deletion")
       {
-          auto result = testNormalization(1000, "ATC", {"GC"}, {{1000, "AT", "G"}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "ATC", {"GC"}};
+          std::vector<TestRecord> result{{1000, "AT", "G"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: no context")
       {
-          auto result = testNormalization(1000, "CGATT", {"TAC"}, {{1000, "CGATT", "TAC"}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{1000, "CGATT", {"TAC"}};
+          std::vector<TestRecord> result{{1000, "CGATT", "TAC"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
 
       SECTION("Multiallelic splitting: same length")
       {
-          auto result = testNormalization(10040, "T", {"A", "C"}, {{10040, "T", "A"}, {10040, "T", "C"}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{10040, "T", {"A", "C"}};
+          std::vector<TestRecord> result{{10040, "T", "A"},
+                                         {10040, "T", "C"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("Multiallelic splitting: same length or deletion")
       {
-          auto result = testNormalization(10040, "TGACGTAACGATT", {"T", "TGACGTAACGGTT", "TGACGTAATAC"}, {
-              {10040, "TGACGTAACGAT", ""},
-              {10050, "A", "G"},
-              {10048, "CGATT", "TAC"}});
-          CHECK((result.first) == (result.second));
+          TestMultiRecord origin{10040, "TGACGTAACGATT", {"T", "TGACGTAACGGTT", "TGACGTAATAC"}};
+          std::vector<TestRecord> result;
+
+          auto comparison = test_normalization(vcf::normalize, origin, {
+                  {10040, "TGACGTAACGAT", ""},
+                  {10050, "A",            "G"},
+                  {10048, "CGATT",        "TAC"}});
+          CHECK((comparison.first) == (comparison.second));
+
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {
+                  {10041, "GACGTAACGATT", ""},
+                  {10050, "A",            "G"},
+                  {10048, "CGATT",        "TAC"}});
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
+       
   }
 }
 

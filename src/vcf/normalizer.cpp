@@ -131,6 +131,117 @@ namespace ebi
 
         return std::move(records);
     }
+    std::vector<RecordCore> normalize_pad_at_left(const Record &record/* , ParsingState?*/)
+    {
+        std::vector<RecordCore> records;
+
+        // This index is necessary for getting the samples where the mutated allele is present
+        for (size_t i = 0; i < record.alternate_alleles.size(); i++) {
+            std::string alternate = record.alternate_alleles[i];
+            std::string reference = record.reference_allele;
+            size_t position = record.position;
+
+            size_t corrected_position;
+            std::string corrected_alternate;
+            std::string corrected_reference;
+
+            // assertions / preconditions
+            if (alternate.size() < 1) {
+                throw new BodySectionError{record.line, "Alternate should not be empty"};
+            }
+            if (reference.size() < 1) {
+                throw new BodySectionError{record.line, "Reference should not be empty"};
+            }
+            if (reference == alternate) {
+                throw new BodySectionError{record.line, "Reference and alternate should not be identical"};
+            }
+
+            // count leading matching bases using mismatch with forward iterators
+            std::pair<std::string::iterator, std::string::iterator> lead_mismatch_indices =
+                std::mismatch(reference.begin(), reference.end(), alternate.begin());
+            // trail_mismatch_reverse is zero: no equal trailing bases
+            // trail_mismatch_reverse is rend: reference and alternate are equal: error
+            std::pair<std::string::reverse_iterator, std::string::reverse_iterator> trail_mismatch_reverse;
+            
+            if (reference.size() == alternate.size()) {
+                // polymorphism
+
+                trail_mismatch_reverse = std::mismatch(reference.rbegin(), 
+                                                       std::string::reverse_iterator(lead_mismatch_indices.first), 
+                                                       alternate.rbegin());
+
+                // trail_match_* point to the first match of the trailing bases
+                // +1 because end is not inclusive: [start, end), and we need to include the mismatch
+                std::string::iterator trail_match_ref = make_forward(trail_mismatch_reverse.first) + 1;
+                std::string::iterator trail_match_alt = make_forward(trail_mismatch_reverse.second) + 1;
+                
+                corrected_reference.assign(lead_mismatch_indices.first, trail_match_ref);
+                corrected_alternate.assign(lead_mismatch_indices.second, trail_match_alt);
+                corrected_position = position + (lead_mismatch_indices.first - reference.begin());
+
+            } else if (reference.size() < alternate.size()) {
+                // insertion
+                std::string::iterator trail_match_ref;
+                std::string::iterator trail_match_alt;
+                if (lead_mismatch_indices.first == reference.end()) {
+                    // reference is a substring of alternate, located at the beginning of alternate
+                    // need to reduce reference to empty string
+
+                    // trail_match_* point to the first match of the trailing bases
+                    trail_match_ref = reference.end();
+                    trail_match_alt = alternate.end();
+                } else {
+                    // There is at least 1 base mismatch before trailing mismatch, it may be leading context, or a change
+
+                    trail_mismatch_reverse = std::mismatch(reference.rbegin(),
+                                                           std::string::reverse_iterator(lead_mismatch_indices.first),
+                                                           alternate.rbegin());
+
+                    // trail_match_* point to the first match of the trailing bases
+                    // +1 because end is not inclusive: [start, end), and we need to include the mismatch
+                    trail_match_ref = make_forward(trail_mismatch_reverse.first) + 1;
+                    trail_match_alt = make_forward(trail_mismatch_reverse.second) + 1;
+                }
+
+                corrected_reference.assign(lead_mismatch_indices.first, trail_match_ref);
+                corrected_alternate.assign(lead_mismatch_indices.second, trail_match_alt);
+                corrected_position = position + (lead_mismatch_indices.first - reference.begin());
+            } else {
+                // deletion
+
+                std::string::iterator trail_match_ref;
+                std::string::iterator trail_match_alt;
+                if (lead_mismatch_indices.second == alternate.end()) {
+                    // alternate is a substring of reference, located at the beginning of alternate
+                    // need to reduce reference to empty string
+
+                    // trail_match_* point to the first match of the trailing bases
+                    trail_match_ref = reference.end();
+                    trail_match_alt = alternate.end();
+                } else {
+                    // There is at least 1 base mismatch before trailing mismatch, it may be leading context, or a change
+
+                    trail_mismatch_reverse = std::mismatch(reference.rbegin(),
+                                                           std::string::reverse_iterator(lead_mismatch_indices.first),
+                                                           alternate.rbegin());
+
+                    // trail_match_* point to the first match of the trailing bases
+                    // +1 because end is not inclusive: [start, end), and we need to include the mismatch
+                    trail_match_ref = make_forward(trail_mismatch_reverse.first) + 1;
+                    trail_match_alt = make_forward(trail_mismatch_reverse.second) + 1;
+                }
+                
+                corrected_reference.assign(lead_mismatch_indices.first, trail_match_ref);
+                corrected_alternate.assign(lead_mismatch_indices.second, trail_match_alt);
+                corrected_position = position + (lead_mismatch_indices.first - reference.begin());
+            }
+
+            records.emplace_back(record.line, record.chromosome, corrected_position,
+                                 corrected_reference, corrected_alternate);
+        }
+
+        return std::move(records);
+    }
   }
 }
 

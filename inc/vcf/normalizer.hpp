@@ -61,8 +61,25 @@ namespace ebi
      * - split the multiallelic variants into several individual ones. They are NOT sorted by position, but by allele as
      *      listed in the original variant.
      * - the repeated bases (which serve as context) in both reference and alternate alleles are removed 
+     * 
+     * These actions are performed trimming the trailing context first, and then the leading context. 
+     * This is NOT compliant with the VCF specification. See normalize_pad_at_left for more information.
      */
     std::vector<RecordCore> normalize(const Record &record/* , ParsingState?*/);
+    
+    /**
+     * This differs from the regular normalize, in that this is more VCF specification-compliant.
+     * 
+     * The spec requires that in case of insertion or deletion where one allele (reference or alternate) would be empty,
+     * it must be added a pad base *before* the insertion. If we remove the trailing context first 
+     * (as `normalize` does), we are interpreting that the context is *after*.
+     * 
+     * This function `normalize_pad_at_left` removes first the leading context, so that the pad is *before*, 
+     * according to the spec. The problem with this function is that some third parties perform as in `normalize`, 
+     * incoherently with the spec, trying to move the position of the variant as few bases as possible. If the same data
+     * is used in this function and those third parties, the same variant may appear as different positions. 
+     */
+    std::vector<RecordCore> normalize_pad_at_left(const Record &record/* , ParsingState?*/);
   }
 }
 
