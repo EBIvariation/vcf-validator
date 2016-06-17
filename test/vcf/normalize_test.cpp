@@ -21,6 +21,7 @@
 
 namespace ebi
 {
+  // Note: This two structures are different from RecordCore used by the normalization. This is only for test purposes
   struct TestMultiRecord
   {
       size_t normalized_pos;
@@ -33,13 +34,15 @@ namespace ebi
       std::string normalized_reference;
       std::string normalized_alternate;
   };
-  
-//  std::pair<std::vector<vcf::RecordCore>, std::vector<vcf::RecordCore>> test_normalization(
-//      size_t pos, std::string reference, std::vector<std::string> alternates,
-//      std::vector<TestRecord> results)
-//  {
-//      return test_normalization({pos, reference, alternates}, results);
-//  }
+
+  /**
+   * This helper function takes a simplified variant (2nd argument, TestMultiRecord) that may be multiallelic, and 
+   * returns its normalization (performed with a user provided function, 1st argument) along with the expected result 
+   * (3rd argument, vector<TestRecord>) in a comparable way (both as vectors of RecordCore). Example:
+   * 
+   * auto comparison = test_normalization(vcf::normalize, {1000, "T", {"G", "A"}}, {{1000, "T", "G"}, {1000, "T", "A"}});
+   * CHECK((comparison.first) == (comparison.second));
+   */
   std::pair<std::vector<vcf::RecordCore>, std::vector<vcf::RecordCore>> test_normalization(
       std::function<std::vector<vcf::RecordCore> (const vcf::Record &record)> normalize_function,
       TestMultiRecord orig, std::vector<TestRecord> results)
@@ -78,31 +81,40 @@ namespace ebi
       }
   }
 
-  TEST_CASE("Record normalization", "[normalize]")
+  TEST_CASE("Record normalization: same length", "[normalize]")
   {
-      SECTION("same length: different ending")
-      {
+      SECTION("Single nucleotide polymorphism") {
+          TestMultiRecord origin{1000, "T", {"G"}};
+          std::vector<TestRecord> result{{1000, "T", "G"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
+      SECTION("different ending") {
           TestMultiRecord origin{1000, "TCACCC", {"TGACGG"}};
           std::vector<TestRecord> result{{1001, "CACCC", "GACGG"}};
-          
+
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
           auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
-      SECTION("same length: same ending")
-      {
+      SECTION("same ending") {
           TestMultiRecord origin{1000, "TCACCC", {"TGACGC"}};
           std::vector<TestRecord> result{{1001, "CACC", "GACG"}};
-          
+
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
           auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
-      
-      
-      SECTION("insertions: trailing context, 1-base context ambiguous, 1-base insertion")
+  }
+  
+  TEST_CASE("Record normalization: insertions", "[normalize]")
+  {
+      SECTION("insertions: ambiguous context, 1-base context ambiguous, 1-base insertion")
       {
           TestMultiRecord origin{1000, "A", {"AA"}};
           
@@ -111,7 +123,7 @@ namespace ebi
           auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1001, "", "A"}});
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
-      SECTION("insertions: trailing context, 1-base context at left, 1-base insertion")
+      SECTION("insertions: leading context, 1-base context at left, 1-base insertion")
       {
           TestMultiRecord origin{1000, "T", {"TA"}};
           std::vector<TestRecord> result{{1001, "", "A"}};
@@ -121,7 +133,7 @@ namespace ebi
           auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
-      SECTION("insertions: leading context, 1-base context at right, 2-base insertion")
+      SECTION("insertions: trailing context, 1-base context at right, 1-base insertion")
       {
           TestMultiRecord origin{1000, "T", {"AT"}};
           std::vector<TestRecord> result{{1000, "", "A"}};
@@ -161,7 +173,17 @@ namespace ebi
           auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
-      SECTION("insertions: trailing context")
+      SECTION("insertions: trailing context, 1-base context, 2-base insertion")
+      {
+          TestMultiRecord origin{1000, "A", {"TCA"}};
+          std::vector<TestRecord> result{{1000, "", "TC"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
+      SECTION("insertions: trailing context, 2-base context, 1-base insertion")
       {
           TestMultiRecord origin{1000, "TC", {"ATC"}};
           std::vector<TestRecord> result{{1000, "", "A"}};
@@ -181,12 +203,34 @@ namespace ebi
           auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
-      
-      SECTION("deletions: leading context, 1-base context, 1-base deletion")
+  }
+  
+  TEST_CASE("Record normalization: deletions", "[normalize]")
+  {
+      SECTION("deletions: ambiguous context, 1-base context ambiguous, 1-base deletion")
       {
-          TestMultiRecord origin{1000, "AT", {"A"}};
-          std::vector<TestRecord> result{{1001, "T", ""}};
-
+          TestMultiRecord origin{1000, "AA", {"A"}};
+          
+          auto comparison = test_normalization(vcf::normalize, origin, {{1000, "A", ""}});
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1001, "A", ""}});
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
+      SECTION("deletions: leading context, 1-base context at left, 1-base deletion")
+      {
+          TestMultiRecord origin{1000, "TA", {"T"}};
+          std::vector<TestRecord> result{{1001, "A", ""}};
+          
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
+      SECTION("deletions: trailing context, 1-base context at right, 1-base deletion")
+      {
+          TestMultiRecord origin{1000, "AT", {"T"}};
+          std::vector<TestRecord> result{{1000, "A", ""}};
+          
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
           auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
@@ -222,19 +266,20 @@ namespace ebi
           auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
-      SECTION("deletions: trailing context, 1-base context, 1-base deletion")
-      {
-          TestMultiRecord origin{1000, "AA", {"A"}};
-
-          auto comparison = test_normalization(vcf::normalize, origin, {{1000, "A", ""}});
-          CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1001, "A", ""}});
-          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
-      }
       SECTION("deletions: trailing context, 1-base context, 2-base deletion")
       {
-          TestMultiRecord origin{1000, "ATC", {"GC"}};
-          std::vector<TestRecord> result{{1000, "AT", "G"}};
+          TestMultiRecord origin{1000, "ATC", {"C"}};
+          std::vector<TestRecord> result{{1000, "AT", ""}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
+      SECTION("insertions: trailing context, 2-base context, 1-base deletion")
+      {
+          TestMultiRecord origin{1000, "ATC", {"TC"}};
+          std::vector<TestRecord> result{{1000, "A", ""}};
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
@@ -251,7 +296,34 @@ namespace ebi
           auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
+  }
+  
+  TEST_CASE("Record normalization: complex variants", "[normalize]")
+  {
+      SECTION("complex variants: leading context, 1-base context, 2-to-1 bases variation")
+      {
+          TestMultiRecord origin{1000, "CAT", {"CG"}};
+          std::vector<TestRecord> result{{1001, "AT", "G"}};
 
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
+      SECTION("complex variants: trailing context, 1-base context, 2-to-1 bases variation")
+      {
+          TestMultiRecord origin{1000, "ATC", {"GC"}};
+          std::vector<TestRecord> result{{1000, "AT", "G"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, result);
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
+  }
+  
+  TEST_CASE("Record normalization: multiallelic", "[normalize]")
+  {
       SECTION("Multiallelic splitting: same length")
       {
           TestMultiRecord origin{10040, "T", {"A", "C"}};
@@ -280,7 +352,6 @@ namespace ebi
                   {10048, "CGATT",        "TAC"}});
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
-       
   }
 }
 

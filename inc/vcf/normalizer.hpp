@@ -39,7 +39,7 @@ namespace ebi
               reference_allele(reference_allele), alternate_alleles(alternate_alleles)
         { }
         
-        /** A record "a" is less than another "b" if: 
+        /** A record "a" is less than another "b" iff:
          * - the chromosome string from "a" is less than the chromosome string from "b", or if they equal:
          * - the position from "a" is less than the position from "b", or if they equal:
          * - the reference_allele string from "a" is less than the reference_allele string from "b", or if they equal:
@@ -48,7 +48,7 @@ namespace ebi
         bool operator<(const RecordCore &other) const;
         
         /**
-         * Equality test without taking into account the line number, only chromosome, position, reference and alternate.
+         * Equality test without taking into account the line number; only chromosome, position, reference and alternate.
          */
         bool operator==(const RecordCore &other) const;
     };
@@ -63,7 +63,9 @@ namespace ebi
      * - the repeated bases (which serve as context) in both reference and alternate alleles are removed 
      * 
      * These actions are performed trimming the trailing context first, and then the leading context. 
-     * This is NOT compliant with the VCF specification. See normalize_pad_at_left for more information.
+     * This is NOT compliant with the VCF specification. See `normalize_pad_at_left` for more information.
+     * 
+     * Please note that this is a naive normalization, the best we can do without the FASTA file.
      */
     std::vector<RecordCore> normalize(const Record &record/* , ParsingState?*/);
     
@@ -76,8 +78,10 @@ namespace ebi
      * 
      * This function `normalize_pad_at_left` removes first the leading context, so that the pad is *before*, 
      * according to the spec. The problem with this function is that some third parties perform as in `normalize`, 
-     * incoherently with the spec, trying to move the position of the variant as few bases as possible. If the same data
-     * is used in this function and those third parties, the same variant may appear as different positions. 
+     * incoherently with the spec, doing alignment to the left. If the same data
+     * is used in this function and those third parties, the same variant may appear as different positions.
+     * 
+     * This function is equally naive as the `normalize` one, as it has not the FASTA file either.
      */
     std::vector<RecordCore> normalize_pad_at_left(const Record &record/* , ParsingState?*/);
   }

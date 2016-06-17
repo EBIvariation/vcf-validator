@@ -131,6 +131,7 @@ namespace ebi
 
         return std::move(records);
     }
+    
     std::vector<RecordCore> normalize_pad_at_left(const Record &record/* , ParsingState?*/)
     {
         std::vector<RecordCore> records;
