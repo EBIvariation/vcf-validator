@@ -87,13 +87,13 @@ namespace ebi
 
             // assertions / preconditions
             if (alternate.size() < 1) {
-                throw new BodySectionError{record.line, "Alternate should not be empty"};
+                throw new NormalizationError{record.line, "Alternate should not be empty"};
             }
             if (reference.size() < 1) {
-                throw new BodySectionError{record.line, "Reference should not be empty"};
+                throw new NormalizationError{record.line, "Reference should not be empty"};
             }
             if (reference == alternate) {
-                throw new BodySectionError{record.line, "Reference and alternate should not be identical"};
+                throw new NormalizationError{record.line, "Reference and alternate should not be identical"};
             }
 
             // count trailing matching bases using mismatch with reverse iterators
@@ -106,7 +106,7 @@ namespace ebi
             std::pair<std::string::iterator, std::string::iterator> lead_mismatch_indices;
 
             // trail_match_* point to the first match of the trailing bases
-            // +1 because end is not inclusive: [start, end), and we need to include the mismatch
+            // +1 because end is not inclusive: [start, end), and we need to include the mismatch in the `.assign` below
             std::string::iterator trail_match_ref = make_forward_and_advance(trail_mismatch_reverse.first);
             std::string::iterator trail_match_alt = make_forward_and_advance(trail_mismatch_reverse.second);
 
@@ -148,21 +148,22 @@ namespace ebi
 
             // assertions / preconditions
             if (alternate.size() < 1) {
-                throw new BodySectionError{record.line, "Alternate should not be empty"};
+                throw new NormalizationError{record.line, "Alternate should not be empty"};
             }
             if (reference.size() < 1) {
-                throw new BodySectionError{record.line, "Reference should not be empty"};
+                throw new NormalizationError{record.line, "Reference should not be empty"};
             }
             if (reference == alternate) {
-                throw new BodySectionError{record.line, "Reference and alternate should not be identical"};
+                throw new NormalizationError{record.line, "Reference and alternate should not be identical"};
             }
 
             // count leading matching bases using mismatch with forward iterators
             std::pair<std::string::iterator, std::string::iterator> lead_mismatch_indices =
                 std::mismatch(reference.begin(), reference.end(), alternate.begin());
-            // trail_mismatch_reverse is zero: no equal trailing bases
-            // trail_mismatch_reverse is rend: reference and alternate are equal: error
-            std::pair<std::string::reverse_iterator, std::string::reverse_iterator> trail_mismatch_reverse;
+            // both inside lead_mismatch_indices are zero: no equal leading bases
+            // one lead_mismatch_indices is rend: one allele is a substring of the other
+            // both lead_mismatch_indices are rend: error, both alleles are identical. this is tested above
+            
 
             // trail_match_* point to the first match of the trailing bases
             std::string::iterator trail_match_ref;
@@ -174,14 +175,16 @@ namespace ebi
                 trail_match_ref = reference.end();  // == lead_mismatch_indices.first in case of insertion
                 trail_match_alt = alternate.end();  // == lead_mismatch_indices.second in case of deletion
             } else {
-                // There is at least 1 base mismatch before trailing mismatch, it may be leading context, or a change
+                // There is at least 1 base mismatch before trailing mismatch, it may be trailing context, or a change
 
-                trail_mismatch_reverse = std::mismatch(reference.rbegin(),
-                                                       std::string::reverse_iterator(lead_mismatch_indices.first),
-                                                       alternate.rbegin());
+                std::pair<std::string::reverse_iterator, std::string::reverse_iterator> trail_mismatch_reverse{
+                        std::mismatch(
+                                reference.rbegin(),
+                                std::string::reverse_iterator(lead_mismatch_indices.first),
+                                alternate.rbegin())};
 
                 // trail_match_* point to the first match of the trailing bases
-                // +1 because end is not inclusive: [start, end), and we need to include the mismatch
+                // +1 because end is not inclusive: [start, end), and we need to include the mismatch in the `.assign` below
                 trail_match_ref = make_forward_and_advance(trail_mismatch_reverse.first);
                 trail_match_alt = make_forward_and_advance(trail_mismatch_reverse.second);
             }

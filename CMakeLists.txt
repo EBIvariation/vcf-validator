@@ -39,6 +39,7 @@ set (MOD_VCF_SOURCES
         inc/vcf/validator.hpp
         
         src/vcf/abort_error_policy.cpp
+        src/vcf/error.cpp
         src/vcf/meta_entry.cpp
         src/vcf/normalizer.cpp
         src/vcf/parsing_state.cpp

@@ -19,6 +19,8 @@
 
 #include <string>
 #include <stdexcept>
+#include <sstream>
+#include <memory>
 
 namespace ebi
 {
@@ -40,10 +42,22 @@ namespace ebi
         info_body,
         format_body,
         samples_body,
+        normalization,
     };
+
+    class Error;
     
-    
-    // parent of vcf errors
+    std::shared_ptr<Error> get_error_instance(ErrorCode code, size_t line, const std::string &message);
+
+    /**
+     * class for VCF errors.
+     *
+     * Child classes may be used for more specific Errors. To add another error type, follow these steps:
+     * - add a class at the end of this file
+     * - change its name, its parent, its message and its error code
+     * - add a new error code to the enum above
+     * - add the new class in the get_error_instance function
+     */
     class Error : public std::runtime_error
     {
       public:
@@ -170,8 +184,13 @@ namespace ebi
         SamplesBodyError(size_t line) : SamplesBodyError{line, "Error in samples columns, in body section"} { }
         virtual ErrorCode get_code() const override { return ErrorCode::samples_body; }
     };
-    // NormalizationError : public BodySectionError
-
+    class NormalizationError : public BodySectionError
+    {
+      public:
+        using BodySectionError::BodySectionError;
+        NormalizationError(size_t line) : NormalizationError{line, "Normalization could not be performed"} { }
+        virtual ErrorCode get_code() const override { return ErrorCode::normalization; }
+    };
   }
 }
 
