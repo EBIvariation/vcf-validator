@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+
 #include "vcf/normalizer.hpp"
+#include "util/string_utils.hpp"
 
 namespace ebi
 {
@@ -68,9 +70,10 @@ namespace ebi
     template <class ReverseIterator>
     typename ReverseIterator::iterator_type make_forward_and_advance(ReverseIterator rit)
     {
-        return rit.base(); // move result of .base() back by one.
+        return rit.base();  // base iterator was already pointing to the next element
     }
-    
+
+
     std::vector<RecordCore> normalize(const Record &record/* , ParsingState?*/)
     {
         std::vector<RecordCore> records;
@@ -97,32 +100,26 @@ namespace ebi
             }
 
             // count trailing matching bases using mismatch with reverse iterators
+            // the result are reverse_iterators, which later must be made forward iterators
             std::pair<std::string::reverse_iterator, std::string::reverse_iterator> trail_mismatch_reverse =
-                std::mismatch(reference.rbegin(), reference.rend(), alternate.rbegin());
-
-            // these will point to the first leading mismatch. These will be the "start" in the .assign [start, end)
-            std::string::iterator lead_mismatch_ref;
-            std::string::iterator lead_mismatch_alt;
-
+                    util::mismatch(reference.rbegin(), reference.rend(),
+                                   alternate.rbegin(), alternate.rend());
             // trail_match_* point to the first match of the trailing bases. These will be the "end" in
             // the .assign [start, end) below. "advance" because trail_mismatch_* were pointing to the last MISmatch
             std::string::iterator trail_match_ref = make_forward_and_advance(trail_mismatch_reverse.first);
             std::string::iterator trail_match_alt = make_forward_and_advance(trail_mismatch_reverse.second);
 
-            // This "if" can be removed with c++14 std::mismatch, as it takes two starts and two ends, not just one end
-            if (reference.size() < alternate.size()) {
-                // using trail_match_ref, which appears before trail_match_alt (reference is shorter)
-                std::tie(lead_mismatch_ref, lead_mismatch_alt) = std::mismatch(reference.begin(), trail_match_ref,
-                                                                               alternate.begin());
-            } else {
-                // using trail_match_alt, which appears before trail_match_ref (alternate is shorter)
-                std::tie(lead_mismatch_alt, lead_mismatch_ref) = std::mismatch(alternate.begin(), trail_match_alt,
-                                                                               reference.begin());
-            }
 
-            corrected_reference.assign(lead_mismatch_ref, trail_match_ref);
-            corrected_alternate.assign(lead_mismatch_alt, trail_match_alt);
-            corrected_position = position + (lead_mismatch_ref - reference.begin());
+            // these will point to the first leading mismatch. These will be the "start" in the .assign [start, end)
+            std::pair<std::string::iterator, std::string::iterator> lead_mismatch_indices =
+                    util::mismatch(reference.begin(), trail_match_ref,
+                                   alternate.begin(), trail_match_alt);
+
+
+            // using the previous iterators, assign only [first_mismatch, last_mismatch+1)
+            corrected_reference.assign(lead_mismatch_indices.first, trail_match_ref);
+            corrected_alternate.assign(lead_mismatch_indices.second, trail_match_alt);
+            corrected_position = position + (lead_mismatch_indices.first - reference.begin());
 
             records.emplace_back(record.line, record.chromosome, corrected_position,
                                  corrected_reference, corrected_alternate);
@@ -159,40 +156,22 @@ namespace ebi
             // count leading matching bases using mismatch with forward iterators
             // these will point to the first leading mismatch. These will be the "start" in the .assign [start, end)
             std::pair<std::string::iterator, std::string::iterator> lead_mismatch_indices =
-                std::mismatch(reference.begin(), reference.end(), alternate.begin());
+                    util::mismatch(reference.begin(), reference.end(),
+                                   alternate.begin(), alternate.end());
 
-            // trail_match_* point to the first match of the trailing bases. These will be the "end" in
-            // the .assign [start, end) below.
-            std::string::iterator trail_match_ref;
-            std::string::iterator trail_match_alt;
 
-            // This "if" can be removed with c++14 std::mismatch, as it takes two starts and two ends, not just one end
-            if (reference.size() < alternate.size()) {
-                // using lead_mismatch_indices.first, which is nearer to its ref.rbegin (reference is shorter)
-                std::pair<std::string::reverse_iterator, std::string::reverse_iterator> trail_mismatch_reverse{
-                        std::mismatch(
-                                reference.rbegin(),
-                                std::string::reverse_iterator(lead_mismatch_indices.first),
-                                alternate.rbegin())};
-                // "advance" because trail_mismatch_reverse.* were pointing to the last MISmatch, we need include that
-                // mismatch and "end" in [start, end) is not inclusive.
-                trail_match_ref = make_forward_and_advance(trail_mismatch_reverse.first);
-                trail_match_alt = make_forward_and_advance(trail_mismatch_reverse.second);
-            } else {
-                // using lead_mismatch_indices.second, which is nearer to its alt.rbegin (alternate is shorter)
-                std::pair<std::string::reverse_iterator, std::string::reverse_iterator> trail_mismatch_reverse{
-                        std::mismatch(
-                                alternate.rbegin(),
-                                std::string::reverse_iterator(lead_mismatch_indices.second),
-                                reference.rbegin())};
+            // count trailing matching bases using mismatch with reverse iterators
+            // the result are reverse_iterators, which later must be made forward iterators
+            std::pair<std::string::reverse_iterator, std::string::reverse_iterator> trail_mismatch_reverse =
+                    util::mismatch(reference.rbegin(), std::string::reverse_iterator(lead_mismatch_indices.first),
+                                   alternate.rbegin(), std::string::reverse_iterator(lead_mismatch_indices.second));
+            // trail_match_* point to the first match of the trailing bases. These will be the "end" in the .assign
+            // [start, end) below. "advance" because trail_mismatch_reverse.* were pointing to the last MISmatch
+            std::string::iterator trail_match_ref = make_forward_and_advance(trail_mismatch_reverse.first);
+            std::string::iterator trail_match_alt = make_forward_and_advance(trail_mismatch_reverse.second);
 
-                // NOTE! ref = second, we were using the alt allele as first argument in this mismatch.
-                // "advance" because trail_mismatch_reverse.* were pointing to the last MISmatch, we need include that
-                // mismatch and "end" in [start, end) is not inclusive.
-                trail_match_ref = make_forward_and_advance(trail_mismatch_reverse.second);
-                trail_match_alt = make_forward_and_advance(trail_mismatch_reverse.first);
-            }
-            
+
+            // using the previous iterators, assign only [first_mismatch, last_mismatch+1)
             corrected_reference.assign(lead_mismatch_indices.first, trail_match_ref);
             corrected_alternate.assign(lead_mismatch_indices.second, trail_match_alt);
             corrected_position = position + (lead_mismatch_indices.first - reference.begin());

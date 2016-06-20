@@ -46,6 +46,21 @@ namespace ebi
 
         output.swap(ret);
     }
+
+    /**
+     * Temporal implementation for mismatch with 2 starts and 2 ends. It is not in STL for c++11, but it will in c++14.
+     *
+     * reference: Third version at http://en.cppreference.com/w/cpp/algorithm/mismatch#Possible_implementation
+     */
+    template<class InputIt1, class InputIt2>
+    std::pair<InputIt1, InputIt2>
+    mismatch(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
+    {
+        while (first1 != last1 && first2 != last2 && *first1 == *first2) {
+            ++first1, ++first2;
+        }
+        return std::make_pair(first1, first2);
+    }
   }
 }
 
