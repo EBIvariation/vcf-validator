@@ -173,6 +173,24 @@ namespace ebi
           auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
+      SECTION("insertions: leading context and trailing ambiguous context (substring)")
+      {
+          TestMultiRecord origin{1000, "GT", {"GTT"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, {{1001, "", "T"}});
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1002, "", "T"}});
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
+      SECTION("insertions: leading ambiguous context and trailing context (substring)")
+      {
+          TestMultiRecord origin{1000, "TG", {"TTG"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, {{1000, "", "T"}});
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1001, "", "T"}});
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
       SECTION("insertions: trailing context, 1-base context, 2-base insertion")
       {
           TestMultiRecord origin{1000, "A", {"TCA"}};
@@ -266,6 +284,24 @@ namespace ebi
           auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
+      SECTION("deletions: leading context and trailing ambiguous context (substring)")
+      {
+          TestMultiRecord origin{1000, "GTT", {"GT"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, {{1001, "T", ""}});
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1002, "T", ""}});
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
+      SECTION("deletions: leading ambiguous context and trailing context (substring)")
+      {
+          TestMultiRecord origin{1000, "TTG", {"TG"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, {{1000, "T", ""}});
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1001, "T", ""}});
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
       SECTION("deletions: trailing context, 1-base context, 2-base deletion")
       {
           TestMultiRecord origin{1000, "ATC", {"C"}};
@@ -338,7 +374,6 @@ namespace ebi
       SECTION("Multiallelic splitting: same length or deletion")
       {
           TestMultiRecord origin{10040, "TGACGTAACGATT", {"T", "TGACGTAACGGTT", "TGACGTAATAC"}};
-          std::vector<TestRecord> result;
 
           auto comparison = test_normalization(vcf::normalize, origin, {
                   {10040, "TGACGTAACGAT", ""},
@@ -350,6 +385,29 @@ namespace ebi
                   {10041, "GACGTAACGATT", ""},
                   {10050, "A",            "G"},
                   {10048, "CGATT",        "TAC"}});
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
+      SECTION("Multiallelic splitting: insertions (substring)")
+      {
+          TestMultiRecord origin{1000, "GT", {"GTGT", "GTT"}};
+
+          auto comparison = test_normalization(vcf::normalize, origin, {{1000, "", "GT"},
+                                                                        {1001, "", "T"}});
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1002, "", "GT"},
+                                                                                                {1002, "", "T"}});
+          CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
+      }
+      SECTION("Multiallelic splitting: deletions (substring)")
+      {
+          TestMultiRecord origin{1000, "GTT", {"GT", "G"}};
+          std::vector<TestRecord> result;
+
+          auto comparison = test_normalization(vcf::normalize, origin, {{1001, "T", ""},
+                                                                        {1001, "TT", ""}});
+          CHECK((comparison.first) == (comparison.second));
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1002, "T", ""},
+                                                                                                {1001, "TT", ""}});
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
   }
