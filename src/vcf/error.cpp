@@ -57,6 +57,8 @@ namespace ebi
             return std::shared_ptr<Error>(new SamplesBodyError{line, message});
         case ErrorCode::normalization:
             return std::shared_ptr<Error>(new NormalizationError{line, message});
+        case ErrorCode::duplication:
+            return std::shared_ptr<Error>(new DuplicationError{line, message});
         }
 
         std::stringstream ss;
@@ -69,3 +71,4 @@ namespace ebi
     }
   }
 }
+

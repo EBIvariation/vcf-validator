@@ -283,7 +283,7 @@ namespace ebi
     void SqliteReportRW::for_each(std::string table, std::function<void(std::shared_ptr<Error>)> user_function)
     {
         char *zErrMsg = NULL;
-        std::string query{"SELECT * FROM " + table};
+        std::string query{"SELECT * FROM " + table + " ORDER BY line"};
 
         int rc = sqlite3_exec(db, query.c_str(), converter_callback, &user_function, &zErrMsg);
         if (rc != SQLITE_OK) {

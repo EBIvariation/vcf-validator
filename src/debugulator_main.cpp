@@ -25,6 +25,7 @@
 
 #include "util/stream_utils.hpp"
 #include "vcf/file_structure.hpp"
+#include "vcf/fixer.hpp"
 #include "vcf/validator.hpp"
 #include "vcf/report_writer.hpp"
 #include "vcf/sqlite_report.hpp"
@@ -47,7 +48,7 @@ namespace
       description.add_options()
               ("help,h", "Display this help")
               ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
-              ("errors,e", po::value<std::string>(), "Path to the errors DB from the input VCF file")
+              ("errors,e", po::value<std::string>()->required(), "Path to the errors DB from the input VCF file")
               ("level,l", po::value<std::string>()->default_value("warning"), "Validation level (error, warning, stop)")
               ("output,o", po::value<std::string>()->default_value("stdout"), "write to a file or stdout")
       ;
@@ -91,23 +92,30 @@ namespace
   {
       std::vector<char> line;
       line.reserve(default_line_buffer_size);
-      /*
+
       size_t current_line = 0;  // the first line is the number 1, ParsingState takes this convention too
 
-      for (auto error : errorDAO.errors()) {
-          size_t line_index = error.get_line();
+      errorDAO.for_each_error([&](std::shared_ptr<ebi::vcf::Error> error) {
+          size_t line_index = error->get_line();
           while (current_line < line_index) {
+
               // advance input
-              
               if(!ebi::util::readline(input, line)) {
                   // file finished, return ?
+                  return;
               }
               current_line++;
+              if (current_line == line_index) {
+                  break;
+              }
+              for (auto c : line) {
+                  output << c;
+              }
           }
-          // assert current_line == line_index
-          // fix(line, error, output);
-      }
-*/
+
+          ebi::vcf::Fixer(line_index, line, output).fix(*error);
+      });
+
       // close outputs?
 
       return 0;     // fixer.is_valid();

@@ -17,6 +17,7 @@ set (MOD_VCF_SOURCES
         inc/vcf/error.hpp
         inc/vcf/error_policy.hpp
         inc/vcf/file_structure.hpp
+        inc/vcf/fixer.hpp
         inc/vcf/meta_entry_visitor.hpp
         inc/vcf/normalizer.hpp
         inc/vcf/optional_policy.hpp

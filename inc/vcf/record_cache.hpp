@@ -81,10 +81,10 @@ namespace ebi
 
                     if (++range.first == range.second) {
                         // if only one match, return an extra error for the first occurrence
-                        duplicates.emplace_back(new BodySectionError{first_occurence_line, ss.str()});
+                        duplicates.emplace_back(new DuplicationError{first_occurence_line, ss.str()});
                     }
 
-                    duplicates.emplace_back(new BodySectionError{record_core.line, ss.str()});
+                    duplicates.emplace_back(new DuplicationError{record_core.line, ss.str()});
                 }
 
                 cache.insert(range.second, record_core);
