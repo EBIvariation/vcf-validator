@@ -12,13 +12,6 @@ include_directories (inc)
 include_directories (lib)
 
 # Application modules
-set (MOD_UTIL_SOURCES
-        inc/util/stream_utils.hpp
-        inc/util/string_utils.hpp
-        
-        src/util/stream_utils.cpp
-        )
-add_library(mod_util ${MOD_UTIL_SOURCES})
 
 set (MOD_VCF_SOURCES
         inc/vcf/error.hpp
@@ -90,29 +83,29 @@ find_package (Threads REQUIRED)
 
 # Application tests
 add_executable (test_validator_v41 test/main_test.cpp ${V41_TESTS})
-target_link_libraries (test_validator_v41 mod_vcf mod_util ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (test_validator_v41 mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 enable_testing ()
 add_test (NAME ValidatorTests_v41 COMMAND test_validator_v41)
 
 add_executable (test_validator_v42 test/main_test.cpp ${V42_TESTS})
-target_link_libraries (test_validator_v42 mod_vcf mod_util ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (test_validator_v42 mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 enable_testing ()
 add_test (NAME ValidatorTests_v42 COMMAND test_validator_v42)
 
 add_executable (test_validator_v43 test/main_test.cpp ${V43_TESTS})
-target_link_libraries (test_validator_v43 mod_vcf mod_util ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (test_validator_v43 mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 enable_testing ()
 add_test (NAME ValidatorTests_v43 COMMAND test_validator_v43)
 
 add_executable (test_validator test/main_test.cpp ${ALL_TESTS})
-target_link_libraries (test_validator mod_vcf mod_util ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (test_validator mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
 enable_testing ()
 add_test (NAME ValidatorTests COMMAND test_validator)
 
 
 # Build binary
 add_executable (vcf_validator src/main.cpp)
-target_link_libraries (vcf_validator mod_vcf mod_util ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (vcf_validator mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
 
 add_executable (vcf_debugulator src/debugulator_main.cpp)
-target_link_libraries (vcf_debugulator mod_vcf mod_util ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (vcf_debugulator mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})

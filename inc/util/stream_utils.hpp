@@ -66,9 +66,21 @@ namespace ebi
     }
     
     // the next functions allow using the previous print_container in a easier syntax
-    std::ostream &operator<<(std::ostream &os, const std::vector<std::string> &container);
-    std::ostream &operator<<(std::ostream &os, const std::pair<std::string, std::string> &container);
-    std::ostream &operator<<(std::ostream &os, const std::map<std::string, std::string> &container);
+    template <typename T>
+    std::ostream &operator<<(std::ostream &os, const std::vector<T> &container)
+    {
+        return print_container<std::vector<T>>(os, container);
+    }
+    template <typename F, typename S>
+    std::ostream &operator<<(std::ostream &os, const std::pair<F, S> &container)
+    {
+        return os << "{" << container.first << ", " << container.second << "}";
+    }
+    template <typename K, typename V>
+    std::ostream &operator<<(std::ostream &os, const std::map<K, V> &container)
+    {
+        return print_container<std::map<std::string, std::string>>(os, container);
+    }
   }
 }
 
