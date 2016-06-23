@@ -25,7 +25,7 @@ namespace ebi
 {
   namespace vcf
   {
-    class Fixer : ErrorVisitor {
+    class Fixer : public ErrorVisitor {
       public:
         Fixer(size_t line_number, std::vector<char> &line, std::ostream &output)
                 : line_number(line_number), line(line), output(output) { }
@@ -106,7 +106,9 @@ namespace ebi
         }
         virtual void visit(DuplicationError &error) override
         {
-            std::cout << "fixing duplicate: removing line " << line_number << std::endl;
+            // TODO better log system, if any
+            std::cerr << "## fixing duplicate: removing line " << line_number << ": "
+            << std::string{line.begin(), line.end()} << std::endl;
         }
     };
   }
