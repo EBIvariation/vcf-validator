@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "vcf/error.hpp"
+#include "vcf/fixer.hpp"
 
 namespace ebi
 {

@@ -219,9 +219,9 @@ namespace ebi
         }, &count_errors, &zErrMsg);
 
         if (rc != SQLITE_OK) {
-            std::string error_message = std::string("Can't read database: ") + zErrMsg;
+            std::string error_message = std::string{"Can't read database: "} + zErrMsg;
             sqlite3_free(zErrMsg);
-            throw std::runtime_error(error_message);
+            throw std::runtime_error{error_message};
         }
 
         return count_errors;
@@ -287,7 +287,7 @@ namespace ebi
 
         int rc = sqlite3_exec(db, query.c_str(), converter_callback, &user_function, &zErrMsg);
         if (rc != SQLITE_OK) {
-            std::string error_message{std::string("Can't continue reading: ") + zErrMsg};
+            std::string error_message{std::string{"Can't continue reading: "} + zErrMsg};
             sqlite3_free(zErrMsg);
             throw std::runtime_error{error_message};
         }

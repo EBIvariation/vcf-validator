@@ -20,6 +20,8 @@
 
 #include "parser_test_aux.hpp"
 #include "vcf/debugulator.hpp"
+#include "vcf/report_writer.hpp"
+#include "vcf/sqlite_report.hpp"
 
 namespace ebi
 {

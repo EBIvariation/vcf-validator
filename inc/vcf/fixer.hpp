@@ -17,8 +17,8 @@
 #ifndef VCF_VALIDATOR_FIXER_HPP
 #define VCF_VALIDATOR_FIXER_HPP
 
-
-#include <boost/shared_ptr.hpp>
+#include <vector>
+#include <iostream>
 #include "error.hpp"
 
 namespace ebi
@@ -28,7 +28,7 @@ namespace ebi
     class Fixer : public ErrorVisitor {
       public:
         Fixer(size_t line_number, std::vector<char> &line, std::ostream &output)
-                : line_number(line_number), line(line), output(output) { }
+                : line_number{line_number}, line(line), output(output) { }
 
         void fix(Error &error)
         {

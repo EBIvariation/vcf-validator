@@ -14,18 +14,87 @@
  * limitations under the License.
  */
 
-#include "vcf/debugulator.hpp"
+#include <fstream>
+#include <string>
 
+#include <boost/program_options.hpp>
+
+#include "vcf/debugulator.hpp"
+#include "vcf/sqlite_report.hpp"
+
+namespace
+{
+  namespace po = boost::program_options;
+
+  enum class ValidationLevel
+  {
+      error, warning, stop
+  };
+
+  po::options_description build_command_line_options()
+  {
+      po::options_description description("Usage: vcf-debugulator [OPTIONS] [< input_file]\nAllowed options");
+
+      description.add_options()
+                         ("help,h", "Display this help")
+                         ("input,i", po::value<std::string>()->default_value("stdin"),
+                          "Path to the input VCF file, or stdin")
+                         ("errors,e", po::value<std::string>(),
+                          "Path to the errors DB from the input VCF file")
+                         ("level,l", po::value<std::string>()->default_value("warning"),
+                          "Validation level (error, warning, stop)")
+                         ("output,o", po::value<std::string>()->default_value("stdout"),
+                          "Write to a file or stdout");
+
+      return description;
+  }
+
+  int check_command_line_options(po::variables_map const &vm, po::options_description const &desc)
+  {
+      if (vm.count("help")) {
+          std::cout << desc << std::endl;
+          return -1;
+      }
+
+      std::string level = vm["level"].as<std::string>();
+      if (level != "error" && level != "warning" && level != "stop") {
+          std::cout << desc << std::endl;
+          std::cout << "Please choose one of the accepted validation levels" << std::endl;
+          return 1;
+      }
+
+      if (!vm.count("errors")) {
+          std::cout << desc << std::endl;
+          std::cout << "Please specify the path to the errors DB (--errors)" << std::endl;
+          return 1;
+      }
+
+      return 0;
+  }
+
+  ValidationLevel get_validation_level(std::string const &level_str)
+  {
+      if (level_str == "error") {
+          return ValidationLevel::error;
+      } else if (level_str == "warning") {
+          return ValidationLevel::warning;
+      } else if (level_str == "stop") {
+          return ValidationLevel::stop;
+      }
+
+      throw std::invalid_argument{"Please choose one of the accepted validation levels"};
+  }
+}
 int main(int argc, char **argv)
 {
     namespace po = boost::program_options;
 
-    po::options_description desc = ebi::vcf::debugulator::build_command_line_options();
+    po::options_description desc = build_command_line_options();
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
 
-    int check_options = ebi::vcf::debugulator::check_command_line_options(vm, desc);
+    int check_options = check_command_line_options(vm, desc);
     if (check_options < 0) { return 0; }
     if (check_options > 0) { return check_options; }
 
@@ -42,6 +111,8 @@ int main(int argc, char **argv)
             if (!input_file) {
                 throw std::runtime_error{"Couldn't open file " + input_path};
             }
+        } else {
+            std::cerr << "Reading from standard input..." << std::endl;
         }
 
         std::ofstream output_file;
@@ -50,6 +121,8 @@ int main(int argc, char **argv)
             if (!output_file) {
                 throw std::runtime_error{"Couldn't open file " + output_path};
             }
+        } else {
+            std::cerr << "Writing to standard output..." << std::endl;
         }
 
         ebi::vcf::SqliteReportRW errorDAO{errors};
@@ -61,8 +134,8 @@ int main(int argc, char **argv)
 
         return 0;
 
-    } catch (std::invalid_argument const &ex) {
-        std::cerr << ex.what() << std::endl;
+    } catch (std::exception const &ex) {
+        std::cerr << "Aborting execution, error: " << ex.what() << std::endl;
         return 1;
     }
 }

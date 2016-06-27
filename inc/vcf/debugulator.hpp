@@ -19,20 +19,13 @@
 
 
 #include <iostream>
-#include <fstream>
 #include <memory>
-#include <string>
 #include <vector>
 #include <stdexcept>
 
-#include <boost/program_options.hpp>
-
 #include "util/stream_utils.hpp"
-#include "vcf/file_structure.hpp"
 #include "vcf/fixer.hpp"
-#include "vcf/validator.hpp"
-#include "vcf/report_writer.hpp"
-#include "vcf/sqlite_report.hpp"
+#include "vcf/report_reader.hpp"
 
 namespace ebi
 {
@@ -43,17 +36,8 @@ namespace ebi
 
       size_t const default_line_buffer_size = 64 * 1024;
 
-      enum class ValidationLevel
-      {
-          error, warning, stop
-      };
-
-      boost::program_options::options_description build_command_line_options();
-      int check_command_line_options(boost::program_options::variables_map const &vm,
-                                     boost::program_options::options_description const &desc);
-      ValidationLevel get_validation_level(std::string const &level_str);
       bool fix_vcf_file(std::istream &input,
-                        ebi::vcf::SqliteReportRW &errorDAO,
+                        ebi::vcf::ReportReader &errorDAO,
                         std::ostream &output);
     }
   }
