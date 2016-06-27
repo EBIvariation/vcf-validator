@@ -45,7 +45,6 @@ namespace ebi
         std::shared_ptr<std::vector<Record>> records;
         std::shared_ptr<std::vector<std::unique_ptr<Error>>> errors;
         std::shared_ptr<std::vector<std::unique_ptr<Error>>> warnings;
-        RecordCache duplicates;
 
         std::multimap<std::string, std::string> defined_metadata;
         std::multimap<std::string, std::string> undefined_metadata;

@@ -193,8 +193,7 @@ namespace ebi
                       m_line_tokens["FORMAT"] : std::vector<std::string>{} ;
         auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ?
                        m_line_tokens["SAMPLES"] : std::vector<std::string>{} ;
-        
-        state.add_record(Record {
+        Record record{
                 state.n_lines,
                 m_line_tokens["CHROM"][0],
                 position,
@@ -207,7 +206,10 @@ namespace ebi
                 format,
                 samples,
                 state.source
-        });
+        };
+
+        duplicates.check_duplicates(record);
+        state.add_record(record);
     }
     
     std::string StoreParsePolicy::current_token() const

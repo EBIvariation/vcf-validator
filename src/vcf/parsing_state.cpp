@@ -45,8 +45,8 @@ namespace ebi
     void ParsingState::add_record(Record const & record)
     {
         records->push_back(record);
-        duplicates.check_duplicates(record);
     }
+
     void ParsingState::clear_records() const
     {
         records->clear();

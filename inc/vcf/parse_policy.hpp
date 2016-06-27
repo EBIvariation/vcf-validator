@@ -109,6 +109,11 @@ namespace ebi
          * Tokens read in a line and grouped by an ID
          */
         std::map<std::string, std::vector<std::string>> m_line_tokens;
+
+        /**
+         * Previously seen records
+         */
+        RecordCache duplicates;
     };
       
   }
