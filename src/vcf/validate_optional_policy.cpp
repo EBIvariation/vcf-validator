@@ -65,17 +65,6 @@ namespace ebi
     
     void ValidateOptionalPolicy::optional_check_body_section(ParsingState const & state) const
     {
-//        // TODO The file should be sorted
-//        if (state.records->size() > 0) {
-//            auto & previous_record = state.records->back();
-//            std::string current_chromosome = ParsePolicy::column_tokens("CHROM")[0];
-//            int current_position = std::stoi(ParsePolicy::column_tokens("POS")[0]);
-//            if (previous_record.chromosome == current_chromosome && 
-//                    previous_record.position > current_position) {
-//                throw new ParsingWarning{"Genomic position " + current_chromosome + ":" + std::to_string(current_position) +
-//                                     " is listed after " + previous_record.chromosome + ":" + std::to_string(previous_record.position)};
-//            }
-//        }
     }
     
     void ValidateOptionalPolicy::check_body_entry_ploidy(ParsingState & state, Record & record)

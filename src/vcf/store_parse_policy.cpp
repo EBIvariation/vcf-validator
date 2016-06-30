@@ -158,8 +158,6 @@ namespace ebi
 
     void StoreParsePolicy::handle_body_line(ParsingState & state)
     {
-        check_contiguous_regions(state);
-
         size_t position;
         try {
             // Transform the position token into a size_t
@@ -167,6 +165,8 @@ namespace ebi
         } catch (std::invalid_argument ex) {
             throw new PositionBodyError{state.n_lines};
         }
+
+        check_sorted(state, position);
 
         // Transform all the quality tokens into floating point numbers
         float quality = 0;
@@ -227,8 +227,9 @@ namespace ebi
             return {};
         }
     }
-    void StoreParsePolicy::check_contiguous_regions(ParsingState &state)
+    void StoreParsePolicy::check_sorted(ParsingState &state, size_t position)
     {
+        // contiguous contig
         auto is_contig_finished = finished_contigs.find(m_line_tokens["CHROM"][0]);
         if (is_contig_finished == finished_contigs.end()) {
             // contig not found in the map: finishing the previous contig, and starting a new one
@@ -238,9 +239,19 @@ namespace ebi
             }
             finished_contigs[m_line_tokens["CHROM"][0]] = false;
             previous_contig = m_line_tokens["CHROM"][0];
+            previous_position = 0;  // position sorting is reset
         } else if (is_contig_finished->second) {
             throw new BodySectionError{state.n_lines, "Found a non-contiguous contig: " + m_line_tokens["CHROM"][0]};
         }
+
+        // sorted positions within contig
+        if (position < previous_position) {
+            std::stringstream ss;
+            ss << "records are not sorted by position inside contig: current ";
+            ss << position << " < previous " << previous_position;
+            throw new PositionBodyError{state.n_lines, ss.str()};
+        }
+        previous_position = position;
     }
   }
 }

@@ -66,6 +66,7 @@ namespace ebi
     class StoreParsePolicy
     {
       public:
+
         void handle_token_begin(ParsingState const & state);
         void handle_token_char(ParsingState const & state, char c);
         void handle_token_end(ParsingState const & state);
@@ -91,7 +92,7 @@ namespace ebi
 
       private:
 
-        void check_contiguous_regions(ParsingState & state);
+        void check_sorted(ParsingState &state, size_t position);
 
         /**
          * Token being currently parsed
@@ -123,6 +124,11 @@ namespace ebi
          */
         std::map<std::string, bool> finished_contigs;
         std::string previous_contig;
+
+        /**
+         * Attribute to check that the positions are sorted within a contig
+         */
+        size_t previous_position;
 
         /**
          * Previously seen records
