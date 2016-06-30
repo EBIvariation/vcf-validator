@@ -90,6 +90,9 @@ namespace ebi
         std::vector<std::string> column_tokens(std::string const & column) const;
 
       private:
+
+        void check_contiguous_regions(ParsingState & state);
+
         /**
          * Token being currently parsed
          */
@@ -109,6 +112,17 @@ namespace ebi
          * Tokens read in a line and grouped by an ID
          */
         std::map<std::string, std::vector<std::string>> m_line_tokens;
+
+        /**
+         * Tool to check that the chromosomes (and contigs) are contiguous.
+         * the map key is the name of the contig, and the value is a boolean that means "already finished". has values:
+         * - not present in the map: this contig has not appeared before.
+         * - false: this contig was found but it hasn't finished listing all its records.
+         * - true: finished contig: some previous record belongs to this contig and a record of another contig was already found.
+         * to check that all the contigs are contiguous, no record should be found that belongs to a "already finished" contig
+         */
+        std::map<std::string, bool> finished_contigs;
+        std::string previous_contig;
 
         /**
          * Previously seen records

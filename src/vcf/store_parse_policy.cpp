@@ -158,6 +158,8 @@ namespace ebi
 
     void StoreParsePolicy::handle_body_line(ParsingState & state)
     {
+        check_contiguous_regions(state);
+
         size_t position;
         try {
             // Transform the position token into a size_t
@@ -178,7 +180,7 @@ namespace ebi
 
         // Split the info tokens by the equals (=) symbol
         std::map<std::string, std::string> info;
-        for (auto & field : m_line_tokens["INFO"]) {
+        for (auto &field : m_line_tokens["INFO"]) {
             std::vector<std::string> subfields;
             util::string_split(field, "=", subfields);
             if (subfields.size() > 1) {
@@ -190,9 +192,9 @@ namespace ebi
 
         // Format and samples are optional
         auto format = m_line_tokens.find("FORMAT") != m_line_tokens.end() ?
-                      m_line_tokens["FORMAT"] : std::vector<std::string>{} ;
+                      m_line_tokens["FORMAT"] : std::vector<std::string>{};
         auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ?
-                       m_line_tokens["SAMPLES"] : std::vector<std::string>{} ;
+                       m_line_tokens["SAMPLES"] : std::vector<std::string>{};
         Record record{
                 state.n_lines,
                 m_line_tokens["CHROM"][0],
@@ -225,6 +227,20 @@ namespace ebi
             return {};
         }
     }
-    
+    void StoreParsePolicy::check_contiguous_regions(ParsingState &state)
+    {
+        auto is_contig_finished = finished_contigs.find(m_line_tokens["CHROM"][0]);
+        if (is_contig_finished == finished_contigs.end()) {
+            // contig not found in the map: finishing the previous contig, and starting a new one
+            if (finished_contigs.size() != 0) {
+                // with the first contig there's no previous contig
+                finished_contigs[previous_contig] = true;
+            }
+            finished_contigs[m_line_tokens["CHROM"][0]] = false;
+            previous_contig = m_line_tokens["CHROM"][0];
+        } else if (is_contig_finished->second) {
+            throw new BodySectionError{state.n_lines, "Found a non-contiguous contig: " + m_line_tokens["CHROM"][0]};
+        }
+    }
   }
 }

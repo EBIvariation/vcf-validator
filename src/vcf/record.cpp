@@ -347,7 +347,9 @@ namespace ebi
             try {
                 // ...check against the specified number
                 expected = std::stoi(number);
-            } catch (...) {}
+            } catch (...) {
+                // this is handled below as expected == -1
+            }
         } 
 
         if (number != ".") { // Forget about the unspecified number
@@ -385,7 +387,7 @@ namespace ebi
                     std::stoi(value);
                     // ...and also check it's not a float
                     if (std::fmod(std::stof(value), 1) != 0) {
-                        throw std::invalid_argument("Float provided instead of Integer");
+                        throw new Error{line, "Float provided instead of Integer"};
                     }
                 } else if (type == "Float") {
                     // ...try to cast to float
