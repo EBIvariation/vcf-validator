@@ -125,10 +125,10 @@ namespace ebi
                                  corrected_reference, corrected_alternate);
         }
 
-        return std::move(records);
+        return records;
     }
     
-    std::vector<RecordCore> normalize_pad_at_left(const Record &record/* , ParsingState?*/)
+    std::vector<RecordCore> normalize_right_alignment(const Record &record/* , ParsingState?*/)
     {
         std::vector<RecordCore> records;
 
@@ -180,7 +180,7 @@ namespace ebi
                                  corrected_reference, corrected_alternate);
         }
 
-        return std::move(records);
+        return records;
     }
   }
 }

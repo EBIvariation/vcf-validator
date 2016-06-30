@@ -89,7 +89,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("different ending") {
@@ -98,7 +98,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("same ending") {
@@ -107,7 +107,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
   }
@@ -120,7 +120,7 @@ namespace ebi
           
           auto comparison = test_normalization(vcf::normalize, origin, {{1000, "", "A"}});
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1001, "", "A"}});
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, {{1001, "", "A"}});
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: leading context, 1-base context at left, 1-base insertion")
@@ -130,7 +130,7 @@ namespace ebi
           
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: trailing context, 1-base context at right, 1-base insertion")
@@ -140,7 +140,7 @@ namespace ebi
           
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: leading context, 1-base context, 2-base insertion")
@@ -150,7 +150,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: leading context, 2-base context, 1-base insertion")
@@ -160,7 +160,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: leading and trailing context")
@@ -170,7 +170,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: leading context and trailing ambiguous context (substring)")
@@ -179,7 +179,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, {{1001, "", "T"}});
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1002, "", "T"}});
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, {{1002, "", "T"}});
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: leading ambiguous context and trailing context (substring)")
@@ -188,7 +188,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, {{1000, "", "T"}});
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1001, "", "T"}});
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, {{1001, "", "T"}});
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: trailing context, 1-base context, 2-base insertion")
@@ -198,7 +198,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: trailing context, 2-base context, 1-base insertion")
@@ -208,7 +208,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: no context")
@@ -218,7 +218,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
   }
@@ -231,7 +231,7 @@ namespace ebi
           
           auto comparison = test_normalization(vcf::normalize, origin, {{1000, "A", ""}});
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1001, "A", ""}});
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, {{1001, "A", ""}});
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: leading context, 1-base context at left, 1-base deletion")
@@ -241,7 +241,7 @@ namespace ebi
           
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: trailing context, 1-base context at right, 1-base deletion")
@@ -251,7 +251,7 @@ namespace ebi
           
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: leading context, 1-base context, 3-base deletion")
@@ -261,7 +261,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: leading context, 2-base context, 1-base deletion")
@@ -271,7 +271,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: leading and trailing context")
@@ -281,7 +281,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: leading context and trailing ambiguous context (substring)")
@@ -290,7 +290,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, {{1001, "T", ""}});
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1002, "T", ""}});
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, {{1002, "T", ""}});
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: leading ambiguous context and trailing context (substring)")
@@ -299,7 +299,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, {{1000, "T", ""}});
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1001, "T", ""}});
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, {{1001, "T", ""}});
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: trailing context, 1-base context, 2-base deletion")
@@ -309,7 +309,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("insertions: trailing context, 2-base context, 1-base deletion")
@@ -319,7 +319,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("deletions: no context")
@@ -329,7 +329,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
   }
@@ -343,7 +343,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("complex variants: trailing context, 1-base context, 2-to-1 bases variation")
@@ -353,7 +353,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
   }
@@ -368,7 +368,7 @@ namespace ebi
 
           auto comparison = test_normalization(vcf::normalize, origin, result);
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, result);
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, result);
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("Multiallelic splitting: same length or deletion")
@@ -381,7 +381,7 @@ namespace ebi
                   {10048, "CGATT",        "TAC"}});
           CHECK((comparison.first) == (comparison.second));
 
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, {
                   {10041, "GACGTAACGATT", ""},
                   {10050, "A",            "G"},
                   {10048, "CGATT",        "TAC"}});
@@ -394,8 +394,8 @@ namespace ebi
           auto comparison = test_normalization(vcf::normalize, origin, {{1000, "", "GT"},
                                                                         {1001, "", "T"}});
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1002, "", "GT"},
-                                                                                                {1002, "", "T"}});
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, {{1002, "", "GT"},
+                                                                                                    {1002, "", "T"}});
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
       SECTION("Multiallelic splitting: deletions (substring)")
@@ -406,8 +406,8 @@ namespace ebi
           auto comparison = test_normalization(vcf::normalize, origin, {{1001, "T", ""},
                                                                         {1001, "TT", ""}});
           CHECK((comparison.first) == (comparison.second));
-          auto comparison_pad_at_left = test_normalization(vcf::normalize_pad_at_left, origin, {{1002, "T", ""},
-                                                                                                {1001, "TT", ""}});
+          auto comparison_pad_at_left = test_normalization(vcf::normalize_right_alignment, origin, {{1002, "T",  ""},
+                                                                                                    {1001, "TT", ""}});
           CHECK((comparison_pad_at_left.first) == (comparison_pad_at_left.second));
       }
   }

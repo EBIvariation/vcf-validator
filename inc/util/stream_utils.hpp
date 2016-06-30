@@ -45,6 +45,11 @@ namespace ebi
         return stream;
     }
 
+    template <typename F, typename S>
+    std::ostream &operator<<(std::ostream &os, const std::pair<F, S> &container)
+    {
+        return os << "{" << container.first << ", " << container.second << "}";
+    }
     /**
      * This is a generic method that prints a collection if it has the operations ".size()", ".begin()", ".end()" 
      * defined and they provide iterators, and the inner type has an overloaded "operator<<"
@@ -70,11 +75,6 @@ namespace ebi
     std::ostream &operator<<(std::ostream &os, const std::vector<T> &container)
     {
         return print_container<std::vector<T>>(os, container);
-    }
-    template <typename F, typename S>
-    std::ostream &operator<<(std::ostream &os, const std::pair<F, S> &container)
-    {
-        return os << "{" << container.first << ", " << container.second << "}";
     }
     template <typename K, typename V>
     std::ostream &operator<<(std::ostream &os, const std::map<K, V> &container)
