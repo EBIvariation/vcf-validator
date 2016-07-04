@@ -83,7 +83,7 @@ namespace ebi
         void handle_header_line(ParsingState const & state);
         
         void handle_column_end(ParsingState const & state, size_t n_columns);
-        void handle_body_line(ParsingState const & state);
+        void handle_body_line(ParsingState & state);
         
         std::string current_token() const;
         

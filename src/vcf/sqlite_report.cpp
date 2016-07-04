@@ -247,8 +247,8 @@ namespace ebi
 
     static int converter_callback(void *user_function_ptr, int argc, char **argv, char **azColName)
     {
-        std::function<void(std::shared_ptr<Error>)> *user_function =
-            static_cast<std::function<void(std::shared_ptr<Error>)> *>(user_function_ptr);
+        std::function<void(std::shared_ptr<Error>)> user_function =
+            *static_cast<std::function<void(std::shared_ptr<Error>)> *>(user_function_ptr);
 
         if (argc < 2) {
             return 1;
@@ -273,55 +273,9 @@ namespace ebi
         }
         message = argv[2];
         
+        
         // no reflection :(
-        switch (code) {
-            default:
-            case ErrorCode::error:
-                (*user_function)(std::shared_ptr<Error>(new Error{line, message}));
-                break;
-            case ErrorCode::meta_section:
-                (*user_function)(std::shared_ptr<Error>(new MetaSectionError{line, message}));
-                break;
-            case ErrorCode::header_section:
-                (*user_function)(std::shared_ptr<Error>(new HeaderSectionError{line, message}));
-                break;
-            case ErrorCode::body_section:
-                (*user_function)(std::shared_ptr<Error>(new BodySectionError{line, message}));
-                break;
-            case ErrorCode::fileformat:
-                (*user_function)(std::shared_ptr<Error>(new FormatBodyError{line, message}));
-                break;
-            case ErrorCode::chromosome_body:
-                (*user_function)(std::shared_ptr<Error>(new ChromosomeBodyError{line, message}));
-                break;
-            case ErrorCode::position_body:
-                (*user_function)(std::shared_ptr<Error>(new PositionBodyError{line, message}));
-                break;
-            case ErrorCode::id_body:
-                (*user_function)(std::shared_ptr<Error>(new IdBodyError{line, message}));
-                break;
-            case ErrorCode::reference_allele_body:
-                (*user_function)(std::shared_ptr<Error>(new ReferenceAlleleBodyError{line, message}));
-                break;
-            case ErrorCode::alternate_alleles_body:
-                (*user_function)(std::shared_ptr<Error>(new AlternateAllelesBodyError{line, message}));
-                break;
-            case ErrorCode::quality_body:
-                (*user_function)(std::shared_ptr<Error>(new QualityBodyError{line, message}));
-                break;
-            case ErrorCode::filter_body:
-                (*user_function)(std::shared_ptr<Error>(new FilterBodyError{line, message}));
-                break;
-            case ErrorCode::info_body:
-                (*user_function)(std::shared_ptr<Error>(new InfoBodyError{line, message}));
-                break;
-            case ErrorCode::format_body:
-                (*user_function)(std::shared_ptr<Error>(new FormatBodyError{line, message}));
-                break;
-            case ErrorCode::samples_body:
-                (*user_function)(std::shared_ptr<Error>(new SamplesBodyError{line, message}));
-                break;
-        }
+        user_function(get_error_instance(code, line, message));
 
         return 0;
     }
