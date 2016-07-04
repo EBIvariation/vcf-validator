@@ -4,7 +4,8 @@ project (vcf-validator CXX C)
 set (vcf-validator_VERSION_MAJOR 0)
 set (vcf-validator_VERSION_MINOR 2)
 
-set (CMAKE_CXX_FLAGS "-std=c++11 -O3 -Wall -g")
+# no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
+set (CMAKE_CXX_FLAGS "-std=c++11 -O3 -Wall -Wno-unknown-pragmas -g")
 set (CMAKE_C_FLAGS " -DSQLITE_OMIT_LOAD_EXTENSION")
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -16,11 +17,14 @@ include_directories (lib)
 set (MOD_VCF_SOURCES
         inc/vcf/debugulator.hpp
         inc/vcf/error.hpp
+        inc/vcf/error-odb.hxx
+        inc/vcf/error-odb.ixx
         inc/vcf/error_policy.hpp
         inc/vcf/file_structure.hpp
         inc/vcf/fixer.hpp
         inc/vcf/meta_entry_visitor.hpp
         inc/vcf/normalizer.hpp
+        inc/vcf/odb_report.hpp
         inc/vcf/optional_policy.hpp
         inc/vcf/parse_policy.hpp
         inc/vcf/parsing_state.hpp
@@ -37,8 +41,10 @@ set (MOD_VCF_SOURCES
         src/vcf/abort_error_policy.cpp
         src/vcf/debugulator.cpp
         src/vcf/error.cpp
+        src/vcf/error-odb.cxx
         src/vcf/meta_entry.cpp
         src/vcf/normalizer.cpp
+        src/vcf/odb_report.cpp
         src/vcf/parsing_state.cpp
         src/vcf/record.cpp
         src/vcf/report_error_policy.cpp
@@ -89,31 +95,41 @@ include_directories (${Boost_INCLUDE_DIR} )
 add_library(sqlite3 lib/sqlite/sqlite3.c)
 find_package (Threads REQUIRED)
 
+set(LIBRARIES_TO_LINK
+        mod_vcf
+        ${Boost_LIBRARIES}
+        sqlite3
+        ${CMAKE_THREAD_LIBS_INIT}
+        odb-sqlite
+        odb
+        )
+
 # Application tests
 add_executable (test_validator_v41 test/main_test.cpp ${V41_TESTS})
-target_link_libraries (test_validator_v41 mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (test_validator_v41 ${LIBRARIES_TO_LINK})
 enable_testing ()
 add_test (NAME ValidatorTests_v41 COMMAND test_validator_v41)
 
 add_executable (test_validator_v42 test/main_test.cpp ${V42_TESTS})
-target_link_libraries (test_validator_v42 mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (test_validator_v42 ${LIBRARIES_TO_LINK})
 enable_testing ()
 add_test (NAME ValidatorTests_v42 COMMAND test_validator_v42)
 
 add_executable (test_validator_v43 test/main_test.cpp ${V43_TESTS})
-target_link_libraries (test_validator_v43 mod_vcf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (test_validator_v43 ${LIBRARIES_TO_LINK})
 enable_testing ()
 add_test (NAME ValidatorTests_v43 COMMAND test_validator_v43)
 
 add_executable (test_validator test/main_test.cpp ${ALL_TESTS})
-target_link_libraries (test_validator mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (test_validator ${LIBRARIES_TO_LINK})
 enable_testing ()
 add_test (NAME ValidatorTests COMMAND test_validator)
 
 
 # Build binary
 add_executable (vcf_validator src/main.cpp)
-target_link_libraries (vcf_validator mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (vcf_validator ${LIBRARIES_TO_LINK})
 
 add_executable (vcf_debugulator src/debugulator_main.cpp)
-target_link_libraries (vcf_debugulator mod_vcf ${Boost_LIBRARIES} sqlite3 ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (vcf_debugulator ${LIBRARIES_TO_LINK})
+

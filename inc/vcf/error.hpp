@@ -17,10 +17,12 @@
 #ifndef VCF_ERROR_HPP
 #define VCF_ERROR_HPP
 
+#include <cstddef>
 #include <string>
 #include <stdexcept>
 #include <sstream>
 #include <memory>
+#include <odb/core.hxx>
 
 namespace ebi
 {
@@ -98,6 +100,7 @@ namespace ebi
      * - add the new class in the get_error_instance function
      * - add a new method visit in ErrorVisitor
      */
+    #pragma db object
     class Error : public std::runtime_error
     {
       public:
@@ -115,8 +118,14 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) { visitor.visit(*this); }
 
       private:
+        friend class odb::access;
+        Error() : Error{0} {}   // default constructor needed for odb
+
         size_t line;
         std::string message;
+
+        #pragma db id auto
+        unsigned long id_;
     };
 
     // inheritance siblings depending on file location
