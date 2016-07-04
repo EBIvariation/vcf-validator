@@ -97,7 +97,12 @@
     ########### Correct meta actions ##########
 
     action fileformat_end {
-        ParsePolicy::handle_fileformat(*this);
+        try {
+          ParsePolicy::handle_fileformat(*this);
+        } catch (FileformatError *error) {
+          ErrorPolicy::handle_error(*this, error);
+          fhold; fgoto meta_section_skip;
+        }
     }
 
     action meta_typeid_alt {
