@@ -202,7 +202,7 @@ namespace ebi
       SECTION("write and read error codes")
       {
           size_t line = 8;
-          std::string message{"testing erros"};
+          std::string message{"testing errors"};
           ebi::vcf::Error generic_error{line, message};
           ebi::vcf::MetaSectionError meta_section_error{line, message};
           ebi::vcf::SamplesBodyError samples_body_error{line, message};
@@ -325,7 +325,7 @@ namespace ebi
       SECTION("write and read error codes")
       {
           size_t line = 8;
-          std::string message{"testing erros"};
+          std::string message{"testing errors"};
           ebi::vcf::Error generic_error{line, message};
           ebi::vcf::MetaSectionError meta_section_error{line, message};
           ebi::vcf::SamplesBodyError samples_body_error{line, message};

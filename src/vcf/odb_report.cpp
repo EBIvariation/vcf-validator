@@ -145,8 +145,6 @@ namespace ebi
     }
     size_t OdbReportRW::count_errors()
     {
-        typedef odb::result<ErrorCount> result;
-
         odb::core::transaction t (db->begin ());
 //        size_t count = db->execute("SELECT COUNT(*) FROM Error");
         ErrorCount count = db->query_value<ErrorCount>();
