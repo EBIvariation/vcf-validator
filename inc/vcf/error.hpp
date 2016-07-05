@@ -48,6 +48,8 @@ namespace ebi
         duplication,
     };
 
+    enum class Severity { WARNING, ERROR };
+
     class Error;
     class MetaSectionError;
     class HeaderSectionError;
@@ -118,13 +120,14 @@ namespace ebi
         const std::string &get_raw_message() const { return message; }
         virtual ErrorCode get_code() const { return ErrorCode::error; }
         virtual void apply_visitor(ErrorVisitor &visitor) { visitor.visit(*this); }
+        Severity &get_severity() { return severity; }
 
-//      protected:
       private:
         friend class odb::access;
 
         size_t line;
         std::string message;
+        Severity severity;
 
         #pragma db id auto
         unsigned long id_;

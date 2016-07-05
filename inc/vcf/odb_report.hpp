@@ -19,8 +19,13 @@
 
 
 #include <odb/database.hxx>
+#include <odb/sqlite/query.hxx>
 #include "report_writer.hpp"
 #include "report_reader.hpp"
+
+#include <odb/schema-catalog.hxx>
+#include <odb/sqlite/database.hxx>
+#include "vcf/error-odb.hxx"
 
 namespace ebi
 {
@@ -32,7 +37,7 @@ namespace ebi
 
         OdbReportRW(const std::string &db_name);
         virtual ~OdbReportRW();
-        void flush();   //
+        void flush();   // before reading, make sure you destroy or flush the writer OdbReportRW
 
         // ReportWriter implementation
         virtual void write_error(Error &error) override;
@@ -50,6 +55,10 @@ namespace ebi
         odb::core::transaction transaction;
         size_t current_transaction_size;
         const size_t transaction_size;
+
+        void write(Error &error);
+        void for_each(std::function<void(std::shared_ptr<Error>)> user_function, odb::query<Error> query);
+        size_t count(odb::query<ErrorCount> query);
     };
   }
 }

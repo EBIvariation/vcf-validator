@@ -17,15 +17,6 @@
 
 #include "vcf/odb_report.hpp"
 
-#include <memory>
-#include <odb/database.hxx>
-#include <odb/transaction.hxx>
-#include <odb/connection.hxx>
-#include <odb/transaction.hxx>
-#include <odb/schema-catalog.hxx>
-#include <odb/sqlite/database.hxx>
-#include "vcf/error-odb.hxx"
-
 namespace ebi
 {
   namespace vcf
@@ -69,7 +60,7 @@ namespace ebi
 
     void OdbReportRW::flush()
     {
-        // possible recovery can be done here
+        // possible recovery can be done here, ODB rollbacks automatically on error, and throws.
         if (transaction.has_current()) {
             transaction.commit();
         }
@@ -77,6 +68,17 @@ namespace ebi
 
     // ReportWriter implementation
     void OdbReportRW::write_error(Error &error)
+    {
+        error.get_severity() = Severity::ERROR;
+        write(error);
+    }
+    void OdbReportRW::write_warning(Error &error)
+    {
+        error.get_severity() = Severity::WARNING;
+        write(error);
+    }
+
+    void OdbReportRW::write(Error &error)
     {
         if (current_transaction_size == 0) {
             // start transaction
@@ -92,21 +94,27 @@ namespace ebi
             current_transaction_size = 0;
         }
     }
-    void OdbReportRW::write_warning(Error &error)
-    {
-        std::cerr << "OdbReportRW::write_warning unimplemented" << std::endl;
-    }
 
     // ReportReader implementation
     size_t OdbReportRW::count_warnings()
     {
-        return 0;
+        return count(odb::query<ErrorCount>::severity == Severity::WARNING);
     }
     void OdbReportRW::for_each_warning(std::function<void(std::shared_ptr<Error>)> user_function)
     {
-
+        for_each(user_function, odb::query<Error>::severity == Severity::WARNING);
     }
+
     size_t OdbReportRW::count_errors()
+    {
+        return count(odb::query<ErrorCount>::severity == Severity::ERROR);
+    }
+    void OdbReportRW::for_each_error(std::function<void(std::shared_ptr<Error>)> user_function)
+    {
+        for_each(user_function, odb::query<Error>::severity == Severity::ERROR);
+    }
+
+    size_t OdbReportRW::count(odb::query<ErrorCount> query)
     {
         ErrorCount count;
         if (transaction.has_current()) {
@@ -114,27 +122,29 @@ namespace ebi
         } else {
             transaction.reset(db->begin());
 //        size_t count = db->execute("SELECT COUNT(*) FROM Error");
-            count = db->query_value<ErrorCount>();
+            count = db->query_value<ErrorCount>(query);
             flush();
         }
         return count.count;
     }
-
-    void OdbReportRW::for_each_error(std::function<void(std::shared_ptr<Error>)> user_function)
+    void OdbReportRW::for_each(std::function<void(std::shared_ptr<Error>)> user_function, odb::query<Error> query)
     {
         typedef odb::result<Error> result;
 
-        odb::core::transaction t (db->begin ());
+        if (transaction.has_current()) {
+            throw std::logic_error{"There's another transaction active. You can only read if the changes were flushed"};
+        } else {
+            transaction.reset(db->begin());
 
-        result r{db->query<Error>((odb::query<Error>::line > 0) + " ORDER BY " + odb::query<Error>::line)};
+            result r{db->query<Error>(query + " ORDER BY " + odb::query<Error>::line)};
 
-        // TODO if result::iterator has operator*, operator!=, operator++, then use ranged for. not if we use shared_ptr
-        for (result::iterator i (r.begin ()); i != r.end (); ++i) {
-            user_function(std::shared_ptr<ebi::vcf::Error>{i.load()});
+            // TODO if result::iterator has operator*, operator!=, operator++, then use ranged for. not if we use shared_ptr
+            for (result::iterator i{r.begin()}; i != r.end(); ++i) {
+                user_function(std::shared_ptr<ebi::vcf::Error>{i.load()});
+            }
+
+            transaction.commit();
         }
-
-        t.commit ();
     }
-
   }
 }

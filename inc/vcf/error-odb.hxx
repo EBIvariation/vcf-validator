@@ -930,6 +930,18 @@ namespace odb
 
     static const message_type_ message;
 
+    // severity
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        ::ebi::vcf::Severity,
+        sqlite::id_integer >::query_type,
+      sqlite::id_integer >
+    severity_type_;
+
+    static const severity_type_ severity;
+
     // id
     //
     typedef
@@ -964,6 +976,11 @@ namespace odb
   const typename query_columns< ::ebi::vcf::Error, id_sqlite, A >::message_type_
   query_columns< ::ebi::vcf::Error, id_sqlite, A >::
   message (A::table_name, "\"message\"", 0);
+
+  template <typename A>
+  const typename query_columns< ::ebi::vcf::Error, id_sqlite, A >::severity_type_
+  query_columns< ::ebi::vcf::Error, id_sqlite, A >::
+  severity (A::table_name, "\"severity\"", 0);
 
   template <typename A>
   const typename query_columns< ::ebi::vcf::Error, id_sqlite, A >::id_type_
@@ -1021,6 +1038,11 @@ namespace odb
       details::buffer message_value;
       std::size_t message_size;
       bool message_null;
+
+      // severity
+      //
+      long long severity_value;
+      bool severity_null;
 
       // id_
       //
@@ -1082,7 +1104,7 @@ namespace odb
 
     typedef sqlite::query_base query_base_type;
 
-    static const std::size_t column_count = 4UL;
+    static const std::size_t column_count = 5UL;
     static const std::size_t id_column_count = 1UL;
     static const std::size_t inverse_column_count = 0UL;
     static const std::size_t readonly_column_count = 1UL;

@@ -125,13 +125,17 @@ namespace odb
       grew = true;
     }
 
-    // id_
+    // severity
     //
     t[2UL] = false;
 
+    // id_
+    //
+    t[3UL] = false;
+
     // typeid_
     //
-    if (t[3UL])
+    if (t[4UL])
     {
       i.typeid_value.capacity (i.typeid_size);
       grew = true;
@@ -167,6 +171,13 @@ namespace odb
     b[n].size = &i.message_size;
     b[n].capacity = i.message_value.capacity ();
     b[n].is_null = &i.message_null;
+    n++;
+
+    // severity
+    //
+    b[n].type = sqlite::bind::integer;
+    b[n].buffer = &i.severity_value;
+    b[n].is_null = &i.severity_null;
     n++;
 
     // id_
@@ -251,6 +262,22 @@ namespace odb
       grew = grew || (cap != i.message_value.capacity ());
     }
 
+    // severity
+    //
+    {
+      ::ebi::vcf::Severity const& v =
+        o.severity;
+
+      bool is_null (false);
+      sqlite::value_traits<
+          ::ebi::vcf::Severity,
+          sqlite::id_integer >::set_image (
+        i.severity_value,
+        is_null,
+        v);
+      i.severity_null = is_null;
+    }
+
     // id_
     //
     if (sk == statement_insert)
@@ -328,6 +355,20 @@ namespace odb
         i.message_null);
     }
 
+    // severity
+    //
+    {
+      ::ebi::vcf::Severity& v =
+        o.severity;
+
+      sqlite::value_traits<
+          ::ebi::vcf::Severity,
+          sqlite::id_integer >::set_value (
+        v,
+        i.severity_value,
+        i.severity_null);
+    }
+
     // id_
     //
     {
@@ -378,15 +419,17 @@ namespace odb
   "INSERT INTO \"Error\" "
   "(\"line\", "
   "\"message\", "
+  "\"severity\", "
   "\"id\", "
   "\"typeid\") "
   "VALUES "
-  "(?, ?, ?, ?)";
+  "(?, ?, ?, ?, ?)";
 
   const char access::object_traits_impl< ::ebi::vcf::Error, id_sqlite >::find_statement[] =
   "SELECT "
   "\"Error\".\"line\", "
   "\"Error\".\"message\", "
+  "\"Error\".\"severity\", "
   "\"Error\".\"id\", "
   "\"Error\".\"typeid\" "
   "FROM \"Error\" "
@@ -403,7 +446,8 @@ namespace odb
   "UPDATE \"Error\" "
   "SET "
   "\"line\"=?, "
-  "\"message\"=? "
+  "\"message\"=?, "
+  "\"severity\"=? "
   "WHERE \"id\"=?";
 
   const char access::object_traits_impl< ::ebi::vcf::Error, id_sqlite >::erase_statement[] =
@@ -414,6 +458,7 @@ namespace odb
   "SELECT "
   "\"Error\".\"line\", "
   "\"Error\".\"message\", "
+  "\"Error\".\"severity\", "
   "\"Error\".\"id\", "
   "\"Error\".\"typeid\" "
   "FROM \"Error\"";
@@ -1300,6 +1345,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"MetaSectionError\" "
@@ -1311,7 +1357,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::MetaSectionError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL
   };
 
@@ -1323,6 +1369,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"MetaSectionError\"\n"
@@ -1969,6 +2016,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"HeaderSectionError\" "
@@ -1980,7 +2028,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::HeaderSectionError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL
   };
 
@@ -1992,6 +2040,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"HeaderSectionError\"\n"
@@ -2638,6 +2687,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"BodySectionError\" "
@@ -2649,7 +2699,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::BodySectionError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL
   };
 
@@ -2661,6 +2711,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"BodySectionError\"\n"
@@ -3307,6 +3358,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"FileformatError\" "
@@ -3320,7 +3372,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::FileformatError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL,
     0UL
   };
@@ -3333,6 +3385,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"FileformatError\"\n"
@@ -3980,6 +4033,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"ChromosomeBodyError\" "
@@ -3993,7 +4047,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::ChromosomeBodyError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL,
     0UL
   };
@@ -4006,6 +4060,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"ChromosomeBodyError\"\n"
@@ -4653,6 +4708,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"PositionBodyError\" "
@@ -4666,7 +4722,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::PositionBodyError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL,
     0UL
   };
@@ -4679,6 +4735,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"PositionBodyError\"\n"
@@ -5326,6 +5383,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"IdBodyError\" "
@@ -5339,7 +5397,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL,
     0UL
   };
@@ -5352,6 +5410,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"IdBodyError\"\n"
@@ -5999,6 +6058,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"ReferenceAlleleBodyError\" "
@@ -6012,7 +6072,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::ReferenceAlleleBodyError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL,
     0UL
   };
@@ -6025,6 +6085,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"ReferenceAlleleBodyError\"\n"
@@ -6672,6 +6733,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"AlternateAllelesBodyError\" "
@@ -6685,7 +6747,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::AlternateAllelesBodyError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL,
     0UL
   };
@@ -6698,6 +6760,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"AlternateAllelesBodyError\"\n"
@@ -7345,6 +7408,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"QualityBodyError\" "
@@ -7358,7 +7422,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::QualityBodyError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL,
     0UL
   };
@@ -7371,6 +7435,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"QualityBodyError\"\n"
@@ -8018,6 +8083,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"FilterBodyError\" "
@@ -8031,7 +8097,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::FilterBodyError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL,
     0UL
   };
@@ -8044,6 +8110,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"FilterBodyError\"\n"
@@ -8691,6 +8758,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"InfoBodyError\" "
@@ -8704,7 +8772,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::InfoBodyError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL,
     0UL
   };
@@ -8717,6 +8785,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"InfoBodyError\"\n"
@@ -9364,6 +9433,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"FormatBodyError\" "
@@ -9377,7 +9447,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL,
     0UL
   };
@@ -9390,6 +9460,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"FormatBodyError\"\n"
@@ -10037,6 +10108,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"SamplesBodyError\" "
@@ -10050,7 +10122,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::SamplesBodyError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL,
     0UL
   };
@@ -10063,6 +10135,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"SamplesBodyError\"\n"
@@ -10710,6 +10783,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"NormalizationError\" "
@@ -10723,7 +10797,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::NormalizationError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL,
     0UL
   };
@@ -10736,6 +10810,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"NormalizationError\"\n"
@@ -11383,6 +11458,7 @@ namespace odb
     "SELECT "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
     "\"Error\".\"id\", "
     "\"Error\".\"typeid\" "
     "FROM \"DuplicationError\" "
@@ -11396,7 +11472,7 @@ namespace odb
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::DuplicationError, id_sqlite >::find_column_counts[] =
   {
-    4UL,
+    5UL,
     0UL,
     0UL
   };
@@ -11409,6 +11485,7 @@ namespace odb
   "SELECT\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
   "\"Error\".\"id\",\n"
   "\"Error\".\"typeid\"\n"
   "FROM \"DuplicationError\"\n"
@@ -11977,6 +12054,7 @@ namespace odb
           db.execute ("CREATE TABLE \"Error\" (\n"
                       "  \"line\" INTEGER NOT NULL,\n"
                       "  \"message\" TEXT NOT NULL,\n"
+                      "  \"severity\" INTEGER NOT NULL,\n"
                       "  \"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n"
                       "  \"typeid\" TEXT NOT NULL)");
           db.execute ("CREATE TABLE \"MetaSectionError\" (\n"
