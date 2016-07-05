@@ -128,6 +128,13 @@ namespace ebi
         unsigned long id_;
     };
 
+    #pragma db view object(Error)
+    struct ErrorCount
+    {
+        #pragma db column("COUNT(" + Error::id_ + ")")
+        std::size_t count;
+    };
+
     // inheritance siblings depending on file location
     class MetaSectionError : public Error
     {

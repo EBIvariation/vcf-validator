@@ -133,7 +133,7 @@ namespace ebi
     }
     void OdbReportRW::write_warning(Error &error)
     {
-
+        std::cerr << "OdbReportRW::write_warning unimplemented" << std::endl;
     }
     size_t OdbReportRW::count_warnings()
     {
@@ -145,7 +145,14 @@ namespace ebi
     }
     size_t OdbReportRW::count_errors()
     {
-        return 0;
+        typedef odb::result<ErrorCount> result;
+
+        odb::core::transaction t (db->begin ());
+//        size_t count = db->execute("SELECT COUNT(*) FROM Error");
+        ErrorCount count = db->query_value<ErrorCount>();
+        t.commit ();
+
+        return count.count;
     }
     void OdbReportRW::for_each_error(std::function<void(std::shared_ptr<Error>)> user_function)
     {
@@ -153,11 +160,11 @@ namespace ebi
 
         odb::core::transaction t (db->begin ());
 
-        result r{db->query<Error>()};
+        result r{db->query<Error>((odb::query<Error>::line > 0) + " ORDER BY " + odb::query<Error>::line)};
 
-        // TODO if result::iterator has operator*, operator!=, operator++, then use ranged for
+        // TODO if result::iterator has operator*, operator!=, operator++, then use ranged for. not if we use shared_ptr
         for (result::iterator i (r.begin ()); i != r.end (); ++i) {
-            user_function(std::shared_ptr<ebi::vcf::Error>{&*i});
+            user_function(std::shared_ptr<ebi::vcf::Error>{i.load()});
         }
 
         t.commit ();
