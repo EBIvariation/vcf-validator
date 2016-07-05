@@ -31,12 +31,14 @@ namespace ebi
       public:
 
         OdbReportRW(const std::string &db_name);
+        virtual ~OdbReportRW();
+        void flush();   //
 
         // ReportWriter implementation
         virtual void write_error(Error &error) override;
         virtual void write_warning(Error &error) override;
 
-        // ReportReader mplementation
+        // ReportReader implementation
         virtual size_t count_warnings() override;
         virtual void for_each_warning(std::function<void(std::shared_ptr<Error>)> user_function) override;
         virtual size_t count_errors() override;
@@ -45,6 +47,9 @@ namespace ebi
       private:
         std::string db_name;
         std::unique_ptr<odb::core::database> db;
+        odb::core::transaction transaction;
+        size_t current_transaction_size;
+        const size_t transaction_size;
     };
   }
 }

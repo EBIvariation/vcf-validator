@@ -30,10 +30,9 @@ namespace ebi
 {
   namespace vcf
   {
-    OdbReportRW::OdbReportRW(const std::string &db_name) : db_name(db_name)
+    OdbReportRW::OdbReportRW(const std::string &db_name) : db_name(db_name), current_transaction_size{0},
+                                                          transaction_size{1000000}
     {
-        using namespace odb::core;
-
         try {
             db = std::unique_ptr<odb::sqlite::database> (
                     new odb::sqlite::database{
@@ -44,97 +43,61 @@ namespace ebi
             // foreign keys.
             //
             {
-                connection_ptr c (db->connection ());
+                odb::core::connection_ptr c{db->connection()};
 
-                c->execute ("PRAGMA foreign_keys=OFF");
+                c->execute("PRAGMA foreign_keys=OFF");
 
-                transaction t (c->begin ());
-                schema_catalog::create_schema (*db);
-                t.commit ();
+                odb::core::transaction t{c->begin()};
+                odb::core::schema_catalog::create_schema(*db);
+                t.commit();
 
-                c->execute ("PRAGMA foreign_keys=ON");
+                c->execute("PRAGMA foreign_keys=ON");
             }
-
-            /*
-
-            // Joe Dirt just had a birthday, so update his age.
-            //
-            {
-                transaction t (db->begin ());
-
-                auto_ptr<person> joe (db->load<person> (joe_id));
-                joe->age (joe->age () + 1);
-                db->update (*joe);
-
-                t.commit ();
-            }
-*/
-            // Alternative implementation without using the id.
-            //
-            /*
-            {
-              transaction t (db->begin ());
-
-              // Here we know that there can be only one Joe Dirt in our
-              // database so we use the query_one() shortcut instead of
-              // manually iterating over the result returned by query().
-              //
-              auto_ptr<person> joe (
-                db->query_one<person> (query::first == "Joe" &&
-                                       query::last == "Dirt"));
-
-              if (joe.get () != 0)
-              {
-                joe->age (joe->age () + 1);
-                db->update (*joe);
-              }
-
-              t.commit ();
-            }
-            */
-
-            /*
-            // Print some statistics about all the people in our database.
-            //
-            {
-                transaction t (db->begin ());
-
-                // The result of this (aggregate) query always has exactly one element
-                // so use the query_value() shortcut.
-                //
-                person_stat ps (db->query_value<person_stat> ());
-
-                cout << endl
-                << "count  : " << ps.count << endl
-                << "min age: " << ps.min_age << endl
-                << "max age: " << ps.max_age << endl;
-
-                t.commit ();
-            }
-
-            // John Doe is no longer in our database.
-            //
-            {
-                transaction t (db->begin ());
-                db->erase<person> (john_id);
-                t.commit ();
-            }*/
         } catch (const odb::exception& e) {
             throw std::runtime_error{std::string{"ODB report: failed ODB initialization: "} + e.what()};
         }
     }
 
+    OdbReportRW::~OdbReportRW()
+    {
+        try {
+            flush();
+        } catch (std::exception &e) {
+            std::cerr << "An error occurred finalizing the error reporting: " << e.what() << std::endl;
+        }
+    }
 
+    void OdbReportRW::flush()
+    {
+        // possible recovery can be done here
+        if (transaction.has_current()) {
+            transaction.commit();
+        }
+    }
+
+    // ReportWriter implementation
     void OdbReportRW::write_error(Error &error)
     {
-        odb::core::transaction t{db->begin()};
+        if (current_transaction_size == 0) {
+            // start transaction
+            transaction.reset(db->begin());
+        }
+
         db->persist(error);
-        t.commit();
+
+        ++current_transaction_size;
+        if (current_transaction_size == transaction_size) {
+            // commit transaction
+            flush();
+            current_transaction_size = 0;
+        }
     }
     void OdbReportRW::write_warning(Error &error)
     {
         std::cerr << "OdbReportRW::write_warning unimplemented" << std::endl;
     }
+
+    // ReportReader implementation
     size_t OdbReportRW::count_warnings()
     {
         return 0;
@@ -145,13 +108,18 @@ namespace ebi
     }
     size_t OdbReportRW::count_errors()
     {
-        odb::core::transaction t (db->begin ());
+        ErrorCount count;
+        if (transaction.has_current()) {
+            throw std::logic_error{"There's another transaction active. You can only read if the changes were flushed"};
+        } else {
+            transaction.reset(db->begin());
 //        size_t count = db->execute("SELECT COUNT(*) FROM Error");
-        ErrorCount count = db->query_value<ErrorCount>();
-        t.commit ();
-
+            count = db->query_value<ErrorCount>();
+            flush();
+        }
         return count.count;
     }
+
     void OdbReportRW::for_each_error(std::function<void(std::shared_ptr<Error>)> user_function)
     {
         typedef odb::result<Error> result;
@@ -167,5 +135,6 @@ namespace ebi
 
         t.commit ();
     }
+
   }
 }

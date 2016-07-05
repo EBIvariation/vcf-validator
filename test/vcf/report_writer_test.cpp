@@ -290,6 +290,7 @@ namespace ebi
           ebi::vcf::Error test_error{1, "testing errors"};
           errorDAO.write_error(test_error);
           errorDAO.write_error(test_error);
+          errorDAO.flush();
           size_t count_errors = errorDAO.count_errors();
           size_t count_warnings = errorDAO.count_warnings();
           CHECK(count_errors == 2);
@@ -300,6 +301,7 @@ namespace ebi
       {
           ebi::vcf::Error test_error{1, "testing warnings"};
           errorDAO.write_warning(test_error);
+          errorDAO.flush();
           size_t count_errors = errorDAO.count_errors();
           size_t count_warnings = errorDAO.count_warnings();
           CHECK(count_errors == 0);
@@ -312,6 +314,7 @@ namespace ebi
           std::string message{"testing errors"};
           ebi::vcf::Error test_error{line, message};
           errorDAO.write_error(test_error);
+          errorDAO.flush();
 
           size_t errors_read = 0;
           errorDAO.for_each_error([&](std::shared_ptr<ebi::vcf::Error> error) {
@@ -321,6 +324,24 @@ namespace ebi
           });
           CHECK(errors_read == 1);
       }
+
+      SECTION("write and read warnings")
+      {
+          size_t line = 10;
+          std::string message{"testing warnings"};
+          ebi::vcf::Error test_error{line, message};
+          errorDAO.write_warning(test_error);
+          errorDAO.flush();
+
+          size_t errors_read = 0;
+          errorDAO.for_each_warning([&](std::shared_ptr<ebi::vcf::Error> error) {
+              CHECK(error->get_line() == line);
+              CHECK(error->get_raw_message() == message);
+              errors_read++;
+          });
+          CHECK(errors_read == 1);
+      }
+
 
       SECTION("write and read error codes")
       {
@@ -332,6 +353,7 @@ namespace ebi
           errorDAO.write_error(generic_error);
           errorDAO.write_error(meta_section_error);
           errorDAO.write_error(samples_body_error);
+          errorDAO.flush();
 
           std::vector<std::shared_ptr<ebi::vcf::Error>> errors;
           errorDAO.for_each_error([&](std::shared_ptr<ebi::vcf::Error> error) {
