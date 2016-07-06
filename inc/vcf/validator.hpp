@@ -31,6 +31,7 @@
 #include "optional_policy.hpp"
 #include "parse_policy.hpp"
 #include "parsing_state.hpp"
+#include "record_cache.hpp"
 #include "util/string_utils.hpp"
 
 
@@ -96,6 +97,11 @@ namespace ebi
        
       protected:
         virtual void parse_buffer(char const * p, char const * pe, char const * eof) = 0;
+
+        /**
+         * Previously seen records
+         */
+        RecordCache duplicates;
     };
     
     template <typename Configuration>

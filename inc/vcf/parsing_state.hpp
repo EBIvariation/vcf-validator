@@ -25,7 +25,6 @@
 #include "file_structure.hpp"
 #include "error.hpp"
 #include "normalizer.hpp"
-#include "record_cache.hpp"
 
 namespace ebi
 {
@@ -60,7 +59,6 @@ namespace ebi
         void clear_records() const;
 
         void add_error(std::unique_ptr<Error> error);
-        void add_errors(std::vector<std::unique_ptr<Error>> errors);
         void clear_errors();
 
         void add_warning(std::unique_ptr<Error> error);

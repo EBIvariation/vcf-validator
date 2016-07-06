@@ -195,7 +195,8 @@ namespace ebi
                       m_line_tokens["FORMAT"] : std::vector<std::string>{};
         auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ?
                        m_line_tokens["SAMPLES"] : std::vector<std::string>{};
-        Record record{
+
+        state.add_record(Record{
                 state.n_lines,
                 m_line_tokens["CHROM"][0],
                 position,
@@ -208,11 +209,7 @@ namespace ebi
                 format,
                 samples,
                 state.source
-        };
-
-//        handle_error(); // not in scope
-        state.add_errors(duplicates.check_duplicates(record));
-        state.add_record(record);
+        });
     }
     
     std::string StoreParsePolicy::current_token() const
@@ -228,6 +225,7 @@ namespace ebi
             return {};
         }
     }
+
     void StoreParsePolicy::check_sorted(ParsingState &state, size_t position)
     {
         // contiguous contig

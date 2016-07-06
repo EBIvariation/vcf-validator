@@ -129,11 +129,6 @@ namespace ebi
          * Attribute to check that the positions are sorted within a contig
          */
         size_t previous_position;
-
-        /**
-         * Previously seen records
-         */
-        RecordCache duplicates;
     };
       
   }
