@@ -56,6 +56,13 @@ namespace ebi
     {
         errors->push_back(std::move(error));
     }
+    void ParsingState::add_errors(std::vector<std::unique_ptr<Error>> errors)
+    {
+        this->errors->reserve(this->errors->size() + errors.size());
+        for (auto &error_ptr : errors) {
+            this->errors->push_back(std::move(error_ptr));
+        }
+    }
     
     void ParsingState::clear_errors()
     {

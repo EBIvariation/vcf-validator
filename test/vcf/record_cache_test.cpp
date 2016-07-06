@@ -24,10 +24,10 @@
 
 namespace ebi
 {
-    void check_duplicates_and_rethrow_error(vcf::RecordCache &cache, TestMultiRecord summary)
+    size_t count_duplicates_and_rethrow_error(vcf::RecordCache &cache, TestMultiRecord summary)
     {
         try {
-            cache.check_duplicates(build_fake_record(summary));
+            return cache.check_duplicates(build_mock_record(summary)).size();
         } catch (vcf::BodySectionError * e) {
           // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
             throw *e;
@@ -38,24 +38,27 @@ namespace ebi
     {
         vcf::RecordCache cache{1};
 
-        cache.check_duplicates(build_fake_record({100, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({100, "A", {"T"}}));
 
-        SECTION("no throw because there's no duplicate") {
-            CHECK_NOTHROW(( check_duplicates_and_rethrow_error(cache, {101, "A", {"T"}}) ));
+        SECTION("there's no duplicate") {
+            CHECK( count_duplicates_and_rethrow_error(cache, {101, "A", {"T"}}) == 0 );
         }
-        SECTION("no throw because capacity is too small") {
-            CHECK_NOTHROW(( check_duplicates_and_rethrow_error(cache, {101, "A", {"T"}}) ));
+        SECTION("no duplicate detected because capacity is too small") {
+            CHECK( count_duplicates_and_rethrow_error(cache, {101, "A", {"T"}}) == 0 );
             // This is not going to throw because capacity is 1, we would need a bigger cache.
-            CHECK_NOTHROW(( check_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) ));
+            CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 0 );
         }
 
-        SECTION("throw, simple duplicate") {
-            CHECK_THROWS_AS(( check_duplicates_and_rethrow_error(cache, {100, "A", {"T"}}) ),
-                            vcf::BodySectionError);
+        SECTION("one simple duplicate") {
+            CHECK( count_duplicates_and_rethrow_error(cache, {100, "A", {"T"}}) == 2 );
         }
-        SECTION("throw, multiallelic duplicate") {
-            CHECK_THROWS_AS(( check_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) ),
-                            vcf::BodySectionError);
+        SECTION("one multiallelic duplicate") {
+            CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 2 );
+        }
+        SECTION("triplicate") {
+            CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 2 );
+            // triplicate missed, reported as duplicate
+            CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT"}}) == 2 );
         }
     }
 
@@ -63,28 +66,32 @@ namespace ebi
     {
         vcf::RecordCache cache{5};
 
-        cache.check_duplicates(build_fake_record({100, "A", {"T"}}));
-        cache.check_duplicates(build_fake_record({101, "A", {"T"}}));
-        cache.check_duplicates(build_fake_record({102, "A", {"T"}}));
-        cache.check_duplicates(build_fake_record({103, "A", {"T"}}));
-        cache.check_duplicates(build_fake_record({104, "A", {"T"}}));
-        cache.check_duplicates(build_fake_record({105, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({100, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({101, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({102, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({103, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({104, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({105, "A", {"T"}}));
 
-        SECTION("no throw because there's no duplicate") {
-            CHECK_NOTHROW(( check_duplicates_and_rethrow_error(cache, {106, "A", {"T"}}) ));
+        SECTION("there's no duplicate") {
+            CHECK( count_duplicates_and_rethrow_error(cache, {106, "A", {"T"}}) == 0 );
         }
-        SECTION("no throw because capacity is too small") {
+        SECTION("no duplicate detected because capacity is too small") {
             // This is not going to throw because capacity is 1, we would need a bigger cache.
-            CHECK_NOTHROW(( check_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) ));
+            CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 0 );
         }
 
-        SECTION("throw, simple duplicate") {
-            CHECK_THROWS_AS(( check_duplicates_and_rethrow_error(cache, {103, "A", {"T"}}) ),
-                            vcf::BodySectionError);
+        SECTION("one simple duplicate") {
+            CHECK( count_duplicates_and_rethrow_error(cache, {103, "A", {"T"}}) == 2 );
         }
-        SECTION("throw, multiallelic duplicate") {
-            CHECK_THROWS_AS(( check_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) ),
-                            vcf::BodySectionError);
+        SECTION("one multiallelic duplicate") {
+            CHECK( count_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) == 2 );
+        }
+        SECTION("triplicate")
+        {
+            CHECK( count_duplicates_and_rethrow_error(cache, {104, "GA", {"GT", "C"}}) == 2 );
+            // the first occurrence should not be reported again
+            CHECK( count_duplicates_and_rethrow_error(cache, {104, "GA", {"GT"}}) == 1 );
         }
     }
 
@@ -92,29 +99,32 @@ namespace ebi
     {
         vcf::RecordCache cache{-1};
 
-        cache.check_duplicates(build_fake_record({100, "A", {"T"}}));
-        cache.check_duplicates(build_fake_record({101, "A", {"T"}}));
-        cache.check_duplicates(build_fake_record({102, "A", {"T"}}));
-        cache.check_duplicates(build_fake_record({103, "A", {"T"}}));
-        cache.check_duplicates(build_fake_record({104, "A", {"T"}}));
-        cache.check_duplicates(build_fake_record({105, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({100, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({101, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({102, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({103, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({104, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({105, "A", {"T"}}));
 
-        SECTION("no throw because there's no duplicate") {
-            CHECK_NOTHROW(( check_duplicates_and_rethrow_error(cache, {106, "A", {"T"}}) ));
+        SECTION("there's no duplicate") {
+            CHECK( count_duplicates_and_rethrow_error(cache, {106, "A", {"T"}}) == 0 );
         }
 
-        SECTION("throw, there's no capacity limitation") {
+        SECTION("duplicate detected because there's no capacity limitation") {
             // This is not going to throw because capacity is 1, we would need a bigger cache.
-            CHECK_THROWS_AS(( check_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) ),
-                            vcf::BodySectionError);
+            CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 2 );
         }
-        SECTION("throw, simple duplicate") {
-            CHECK_THROWS_AS(( check_duplicates_and_rethrow_error(cache, {103, "A", {"T"}}) ),
-                            vcf::BodySectionError);
+        SECTION("one simple duplicate") {
+            CHECK( count_duplicates_and_rethrow_error(cache, {103, "A", {"T"}}) == 2 );
         }
-        SECTION("throw, multiallelic duplicate") {
-            CHECK_THROWS_AS(( check_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) ),
-                            vcf::BodySectionError);
+        SECTION("one multiallelic duplicate") {
+            CHECK( count_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) == 2 );
+        }
+        SECTION("triplicate")
+        {
+            CHECK( count_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) == 2 );
+            // the first occurrence should not be reported again
+            CHECK( count_duplicates_and_rethrow_error(cache, {100, "GA", {"GT"}}) == 1 );
         }
     }
 }

@@ -41,7 +41,7 @@ namespace ebi
                   {1, "1", result.normalized_pos, result.normalized_reference, result.normalized_alternate});
           }
 
-          return {normalize_function(build_fake_record(orig)), expected_normalization};
+          return {normalize_function(build_mock_record(orig)), expected_normalization};
           
       } catch (vcf::Error * e) {
           // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value

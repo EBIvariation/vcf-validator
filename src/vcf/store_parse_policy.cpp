@@ -210,7 +210,8 @@ namespace ebi
                 state.source
         };
 
-        duplicates.check_duplicates(record);
+//        handle_error(); // not in scope
+        state.add_errors(duplicates.check_duplicates(record));
         state.add_record(record);
     }
     

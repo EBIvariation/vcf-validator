@@ -60,6 +60,7 @@ namespace ebi
         void clear_records() const;
 
         void add_error(std::unique_ptr<Error> error);
+        void add_errors(std::vector<std::unique_ptr<Error>> errors);
         void clear_errors();
 
         void add_warning(std::unique_ptr<Error> error);

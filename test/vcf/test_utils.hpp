@@ -38,7 +38,7 @@ namespace ebi
       std::string normalized_alternate;
   };
 
-  inline vcf::Record build_fake_record(TestMultiRecord summary)
+  inline vcf::Record build_mock_record(TestMultiRecord summary)
   {
 
 //      std::shared_ptr<vcf::Source> source{std::make_shared<Source>(
