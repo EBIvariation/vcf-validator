@@ -28,9 +28,31 @@ namespace ebi
   namespace vcf
   {
 
+    /**
+     * Stores a summary of a Record to check that there are no duplicates.
+     *
+     * For memory reasons, this class can be configured to store only the last `n` elements. This will only detect
+     * duplicates if the input is sorted with a
+     */
     class RecordCache
     {
       public:
+        RecordCache() : RecordCache{1000} { }
+
+        /**
+         * @param capacity: maximum amount of RecordCores to store at any time. Default is 1000. A value of 0 is valid
+         * but is useless. A negative value disables the limit, thus storing every RecordCore received, use with caution.
+         */
+        RecordCache(long capacity)
+        {
+            if (capacity >= 0) {
+                this->capacity = static_cast<size_t>(capacity);
+                unlimited = false;
+            } else {
+                this->capacity = 0;
+                unlimited = true;
+            }
+        }
 
         void check_duplicates(const Record &record)
         {
@@ -44,10 +66,30 @@ namespace ebi
                     throw new BodySectionError{record_core.line, ss.str()};
                 }
             }
+            shrink_to_fit();
+        }
+
+        /**
+         * reduce cache size to this->capacity unless this->unlimited is true
+         */
+        void shrink_to_fit()
+        {
+            if (not unlimited) {
+                size_t count = cache.size();
+                if (count > capacity) {
+                    auto erase_until = cache.begin();
+                    for (size_t j = 0; j < count - capacity; ++j) {
+                        erase_until++;
+                    }
+                    cache.erase(cache.begin(), erase_until);
+                }
+            }
         }
 
       private:
         std::set<RecordCore> cache;
+        size_t capacity;    ///< max size of the cache
+        bool unlimited; ///< if true, the set is not capped and will not erase any RecordCore
     };
   }
 }

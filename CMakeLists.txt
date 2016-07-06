@@ -56,8 +56,10 @@ set (ALL_TESTS
         test/vcf/parser_v41_test.cpp
         test/vcf/parser_v42_test.cpp
         test/vcf/parser_v43_test.cpp
+        test/vcf/record_cache_test.cpp
         test/vcf/record_test.cpp
         test/vcf/report_writer_test.cpp
+        test/vcf/test_utils.hpp
         )
 
 # Static build extra flags
