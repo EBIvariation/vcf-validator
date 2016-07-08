@@ -21,6 +21,7 @@
 #include <iostream>
 
 #include "util/stream_utils.hpp"
+#include "util/string_utils.hpp"
 #include "error.hpp"
 
 namespace ebi
@@ -108,9 +109,46 @@ namespace ebi
             util::writeline(output, *line);
             ignored_errors++;
         }
+        /**
+         * fix: remove the info field that caused the error
+         */
         virtual void visit(InfoBodyError &error) override
         {
-            ignored_errors++;
+            // TODO better log system, if any
+            std::cerr << "DEBUG: fixing invalid info field: " << error.get_field() << std::endl;
+            int fixed = 0;
+
+            std::vector<std::string> columns;
+            std::string string_line{line->begin(), line->end()};
+            util::string_split(string_line, "\t", columns);
+            std::vector<std::string> infos;
+            util::string_split(columns[7], ";", infos);
+
+            for (size_t i = 0; i < 7; ++i) {
+                output << columns[i] << "\t";
+            }
+            std::vector<std::string> key_value;
+            for (size_t j = 0; j < infos.size(); ++j) {
+                util::string_split(infos[j], "=", key_value);
+                if (key_value[0] != error.get_field()) {
+                    if ((fixed - j) != 0) { // if this is not the first field we don't remove, then write the separator
+                        output << ";";
+                    }
+                    output << infos[j];
+                } else {
+                    fixed++;
+                }
+            }
+
+            if (fixed == infos.size()) {
+                output << ".";
+            }
+            for (size_t i = 8; i < columns.size(); ++i) {
+                output << "\t" << columns[i];
+            }
+            if (fixed != 1) {
+                std::cerr << "\twarning: field " << error.get_field() << " appeared " << fixed << " times " << std::endl;
+            }
         }
         virtual void visit(FormatBodyError &error) override
         {
@@ -130,7 +168,7 @@ namespace ebi
         virtual void visit(DuplicationError &error) override
         {
             // TODO better log system, if any
-            std::cerr << "## fixing duplicate: removing line " << line_number << ": "
+            std::cerr << "DEBUG: fixing duplicate: removing line " << line_number << ": "
             << std::string{line->begin(), line->end()} << std::endl;
         }
     };

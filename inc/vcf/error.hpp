@@ -269,8 +269,15 @@ namespace ebi
         using BodySectionError::BodySectionError;
         InfoBodyError() : InfoBodyError{0} {}
         InfoBodyError(size_t line) : InfoBodyError{line, "Error in info column, in body section"} { }
+        InfoBodyError(size_t line, const std::string &message, const std::string &field)
+                : InfoBodyError{line, message} {this->field = field;}
         virtual ErrorCode get_code() const override { return ErrorCode::info_body; }
         virtual void apply_visitor(ErrorVisitor &visitor) { visitor.visit(*this); }
+
+        const std::string &get_field() const {return field;};
+        void set_field(const std::string &field) { this->field = field; };
+      protected:
+        std::string field;
     };
     #pragma db object
     class FormatBodyError : public BodySectionError

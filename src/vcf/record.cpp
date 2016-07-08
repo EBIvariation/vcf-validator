@@ -204,7 +204,9 @@ namespace ebi
                         check_field_cardinality(field.second, values, key_values["Number"], 2); // TODO Assumes ploidy=2
                         check_field_type(field.second, values, key_values["Type"]);
                     } catch (Error *ex) {
-                        throw new InfoBodyError{line, "Info " + key_values["ID"] + "=" + ex->get_raw_message()};
+                        throw new InfoBodyError{line,
+                                                "Info " + key_values["ID"] + "=" + ex->get_raw_message(),
+                                                key_values["ID"]};
                     }
                     
                     break;

@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+#include <boost/filesystem.hpp>
 
 #include "catch/catch.hpp"
 
+#include "vcf/odb_report.hpp"
 #include "vcf/debugulator.hpp"
 
 namespace ebi
