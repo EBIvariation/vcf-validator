@@ -31,19 +31,19 @@ namespace ebi
         std::string chromosome;
         size_t position;
         std::string reference_allele;
-        std::string alternate_alleles;
+        std::string alternate_allele;
         
         RecordCore(size_t line, const std::string &chromosome, size_t position, 
                    const std::string &reference_allele, const std::string &alternate_alleles) 
             : line(line), chromosome(chromosome), position(position), 
-              reference_allele(reference_allele), alternate_alleles(alternate_alleles)
+              reference_allele(reference_allele), alternate_allele(alternate_alleles)
         { }
         
         /** A record "a" is less than another "b" iff:
          * - the chromosome string from "a" is lexicographically less than the chromosome string from "b", or if they equal:
          * - the position from "a" is numerically less than the position from "b", or if they equal:
          * - the reference_allele string from "a" is lexicographically less than the reference_allele string from "b", or if they equal:
-         * - the alternate_alleles string from "a" is lexicographically less than the alternate_alleles string from "b".
+         * - the alternate_allele string from "a" is lexicographically less than the alternate_allele string from "b".
          */
         bool operator<(const RecordCore &other) const;
         

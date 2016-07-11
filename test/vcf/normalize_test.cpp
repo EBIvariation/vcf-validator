@@ -18,23 +18,10 @@
 
 #include <vcf/file_structure.hpp>
 #include <vcf/normalizer.hpp>
+#include "test_utils.hpp"
 
 namespace ebi
 {
-  // Note: This two structures are different from RecordCore used by the normalization. This is only for test purposes
-  struct TestMultiRecord
-  {
-      size_t normalized_pos;
-      std::string normalized_reference;
-      std::vector<std::string> normalized_alternate;
-  };
-  struct TestRecord
-  {
-      size_t normalized_pos;
-      std::string normalized_reference;
-      std::string normalized_alternate;
-  };
-
   /**
    * This helper function takes a simplified variant (2nd argument, TestMultiRecord) that may be multiallelic, and 
    * returns its normalization (performed with a user provided function, 1st argument) along with the expected result 
@@ -48,32 +35,13 @@ namespace ebi
       TestMultiRecord orig, std::vector<TestRecord> results)
   {
       try {
-
-          std::shared_ptr<vcf::Source> source{new vcf::Source{
-              "filename.vcf", vcf::VCF_FILE_VCF, vcf::Version::v41, {}, {"NA001", "NA002", "NA003", "NA004"}}};
-
-          source->meta_entries.emplace("FORMAT",
-                                       vcf::MetaEntry{
-                                           1,
-                                           "FORMAT",
-                                           {
-                                               { "ID", "GT" },
-                                               { "Number", "1" },
-                                               { "Type", "String" },
-                                               { "Description", "Genotype" }
-                                           }
-                                       });
-          
-          vcf::Record record{1, "1", orig.normalized_pos, {"."}, orig.normalized_reference, orig.normalized_alternate, 
-                             0, {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
-
           std::vector<vcf::RecordCore> expected_normalization;
           for (auto result : results) {
               expected_normalization.push_back(
                   {1, "1", result.normalized_pos, result.normalized_reference, result.normalized_alternate});
           }
-          
-          return {normalize_function(record), expected_normalization};
+
+          return {normalize_function(build_mock_record(orig)), expected_normalization};
           
       } catch (vcf::Error * e) {
           // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value

@@ -1,0 +1,65 @@
+/**
+ * Copyright 2016 EMBL - European Bioinformatics Institute
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef VCF_VALIDATOR_TEST_UTILS_HPP
+#define VCF_VALIDATOR_TEST_UTILS_HPP
+
+#include <memory>
+#include <vector>
+
+#include "vcf/file_structure.hpp"
+
+namespace ebi
+{
+  // Note: This two structures are different from RecordCore used by the normalization. This is only for test purposes
+  struct TestMultiRecord
+  {
+      size_t normalized_pos;
+      std::string normalized_reference;
+      std::vector <std::string> normalized_alternate;
+  };
+  struct TestRecord
+  {
+      size_t normalized_pos;
+      std::string normalized_reference;
+      std::string normalized_alternate;
+  };
+
+  inline vcf::Record build_mock_record(TestMultiRecord summary)
+  {
+
+//      std::shared_ptr<vcf::Source> source{std::make_shared<Source>(
+      std::shared_ptr<vcf::Source> source{new vcf::Source{
+              "filename.vcf", vcf::VCF_FILE_VCF, vcf::Version::v41, {}, {"NA001", "NA002", "NA003", "NA004"}}};
+
+      source->meta_entries.emplace("FORMAT",
+                                   vcf::MetaEntry{
+                                           1,
+                                           "FORMAT",
+                                           {
+                                                   { "ID", "GT" },
+                                                   { "Number", "1" },
+                                                   { "Type", "String" },
+                                                   { "Description", "Genotype" }
+                                           }
+                                   });
+
+      return vcf::Record{1, "1", summary.normalized_pos, {"."}, summary.normalized_reference, summary.normalized_alternate,
+                         0, {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
+  }
+}
+
+#endif //VCF_VALIDATOR_TEST_UTILS_HPP

@@ -178,7 +178,7 @@ namespace ebi
 
         // Split the info tokens by the equals (=) symbol
         std::map<std::string, std::string> info;
-        for (auto & field : m_line_tokens["INFO"]) {
+        for (auto &field : m_line_tokens["INFO"]) {
             std::vector<std::string> subfields;
             util::string_split(field, "=", subfields);
             if (subfields.size() > 1) {
@@ -190,11 +190,11 @@ namespace ebi
 
         // Format and samples are optional
         auto format = m_line_tokens.find("FORMAT") != m_line_tokens.end() ?
-                      m_line_tokens["FORMAT"] : std::vector<std::string>{} ;
+                      m_line_tokens["FORMAT"] : std::vector<std::string>{};
         auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ?
-                       m_line_tokens["SAMPLES"] : std::vector<std::string>{} ;
-        
-        state.add_record(Record {
+                       m_line_tokens["SAMPLES"] : std::vector<std::string>{};
+
+        state.add_record(Record{
                 state.n_lines,
                 m_line_tokens["CHROM"][0],
                 position,
@@ -208,6 +208,8 @@ namespace ebi
                 samples,
                 state.source
         });
+
+        check_sorted(state, position);
     }
     
     std::string StoreParsePolicy::current_token() const
@@ -223,6 +225,34 @@ namespace ebi
             return {};
         }
     }
-    
+
+    void StoreParsePolicy::check_sorted(ParsingState &state, size_t position)
+    {
+        // contiguous contig
+        auto is_contig_finished = finished_contigs.find(m_line_tokens["CHROM"][0]);
+        if (is_contig_finished == finished_contigs.end()) {
+            // contig not found in the map: finishing the previous contig, and starting a new one
+            if (finished_contigs.size() != 0) {
+                // with the first contig there's no previous contig
+                finished_contigs[previous_contig] = true;
+            }
+            finished_contigs[m_line_tokens["CHROM"][0]] = false;
+            previous_contig = m_line_tokens["CHROM"][0];
+            previous_position = 0;  // position sorting is reset
+        } else if (is_contig_finished->second) {
+            std::stringstream ss;
+            ss << "Variant " << m_line_tokens["CHROM"][0] << ":" << position << " is not contiguous to the rest of the contig";
+            throw new BodySectionError{state.n_lines, ss.str()};
+        }
+
+        // sorted positions within contig
+        if (position < previous_position) {
+            std::stringstream ss;
+            ss << "Contig " << m_line_tokens["CHROM"][0] << " is not sorted by position: "
+               << position << " found after " << previous_position;
+            throw new PositionBodyError{state.n_lines, ss.str()};
+        }
+        previous_position = position;
+    }
   }
 }

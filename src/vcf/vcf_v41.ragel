@@ -199,6 +199,14 @@
         try {
             // Handle all columns and build record
             ParsePolicy::handle_body_line(*this);
+
+            for (auto & record : *(ParsingState::records)){
+                auto duplicated_errors = previous_records.check_duplicates(record);
+                for(auto &error_ptr : duplicated_errors) {
+                    ErrorPolicy::handle_error(*this, error_ptr.release());
+                }
+            }
+
             try {
                 // Check warnings (non-blocking errors but potential mistakes anyway, only makes sense if the last record parsed was correct)
                 OptionalPolicy::optional_check_body_entry(*this, ParsingState::records->back());

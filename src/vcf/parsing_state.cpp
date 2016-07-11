@@ -46,6 +46,7 @@ namespace ebi
     {
         records->push_back(record);
     }
+
     void ParsingState::clear_records() const
     {
         records->clear();

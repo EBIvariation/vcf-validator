@@ -66,6 +66,7 @@ namespace ebi
     class StoreParsePolicy
     {
       public:
+
         void handle_token_begin(ParsingState const & state);
         void handle_token_char(ParsingState const & state, char c);
         void handle_token_end(ParsingState const & state);
@@ -90,6 +91,9 @@ namespace ebi
         std::vector<std::string> column_tokens(std::string const & column) const;
 
       private:
+
+        void check_sorted(ParsingState &state, size_t position);
+
         /**
          * Token being currently parsed
          */
@@ -109,6 +113,29 @@ namespace ebi
          * Tokens read in a line and grouped by an ID
          */
         std::map<std::string, std::vector<std::string>> m_line_tokens;
+
+        /**
+         * Tool to check that the chromosomes (and contigs) are contiguous.
+         * 
+         * Map keys are contig names, and the values flag whether they have been "fully read". Values mean the following:
+         * - Not found in the map: This contig has not appeared yet.
+         * - False: This contig has been found but not all its records have been listed yet.
+         * - True: Previously read records belonged to this contig and a record of another contig has been already found, 
+         *         so the former is considered "fully read".
+         * 
+         * For a contig block to be contiguous, no record should be found that belongs to a "fully read" contig.
+         */
+        std::map<std::string, bool> finished_contigs;
+        
+        /**
+         * Contig name previously read.
+         */
+        std::string previous_contig;
+
+        /**
+         * Position previously read within a contig.
+         */
+        size_t previous_position;
     };
       
   }

@@ -23,6 +23,7 @@ set (MOD_VCF_SOURCES
         inc/vcf/parse_policy.hpp
         inc/vcf/parsing_state.hpp
         inc/vcf/record.hpp
+        inc/vcf/record_cache.hpp
         inc/vcf/report_reader.hpp
         inc/vcf/report_writer.hpp
         inc/vcf/sqlite_report.hpp
@@ -56,8 +57,10 @@ set (ALL_TESTS
         test/vcf/parser_v41_test.cpp
         test/vcf/parser_v42_test.cpp
         test/vcf/parser_v43_test.cpp
+        test/vcf/record_cache_test.cpp
         test/vcf/record_test.cpp
         test/vcf/report_writer_test.cpp
+        test/vcf/test_utils.hpp
         )
 
 # Static build extra flags
