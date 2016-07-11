@@ -31,28 +31,32 @@ namespace ebi
     /**
      * Stores a summary of a Record to check that there are no duplicates.
      *
-     * For memory reasons, this class can be configured to store only the last `n` elements. This will only detect
+     * To limit memory usage, this class can be configured to store only the last `n` elements. This will only detect
      * duplicates if the input is almost sorted (i.e. if no element is unsorted out of its place more than `n` elements)
      */
     class RecordCache
     {
       public:
+          
+        /**
+         * Creates a cache that can hold at most 1000 entries.
+         */
         RecordCache() : RecordCache{1000} { }
 
         /**
          * @param capacity: maximum amount of RecordCores that this instance can hold at any time.
-         * Default is 1000.
-         * A value of 0 disables the limit, thus storing every RecordCore received, use with caution.
+         * A value of 0 disables the limit, thus storing every RecordCore received. Use with caution.
          */
         RecordCache(size_t capacity) : capacity{capacity}, unlimited{capacity == 0} { }
 
         /**
-         * returns a vector of RecordCores that are duplicated within the previously passed Records.
+         * For a given Record, returns a vector of RecordCores that are duplicates.
          *
-         * See the constructors for the capacity description.
-         * The goal is to report all occurrences of a duplicate record just once each.
-         * if one record already processed is equivalent to the new one, both that and the new record are reported in 2 Errors.
-         * if more than one record already processed is equivalent to the new one, only the new one is reported.
+         * Even if more than one duplicate is found for the same variant during the file validation, each occurrence 
+         * is reported only once:
+         * - If just one processed record is equivalent to the parameter, both are reported in 2 different errors.
+         * - If more than one processed record is equivalent to the new one, only the new one is reported.
+         * 
          * Nonetheless, if the capacity is too small, it may cause incorrect reporting, such as reporting several times
          * the first occurrence or failing to report duplicates that are farther apart than the capacity.
          */
@@ -70,8 +74,8 @@ namespace ebi
                 } else {
                     // one or more matches found
                     std::stringstream ss;
-                    ss << "Duplicated variant: {" << record_core.chromosome << ", " << record_core.position << ", "
-                    << record_core.reference_allele << ", " << record_core.alternate_allele << "} found in lines "
+                    ss << "Duplicated variant " << record_core.chromosome << ":" << record_core.position << ":"
+                    << record_core.reference_allele << ">" << record_core.alternate_allele << " found in lines "
                     << range.first->line << " and " << record_core.line;
                     size_t first_occurence_line{range.first->line};
 

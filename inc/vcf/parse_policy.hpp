@@ -116,17 +116,24 @@ namespace ebi
 
         /**
          * Tool to check that the chromosomes (and contigs) are contiguous.
-         * the map key is the name of the contig, and the value is a boolean that means "already finished". has values:
-         * - not present in the map: this contig has not appeared before.
-         * - false: this contig was found but it hasn't finished listing all its records.
-         * - true: finished contig: some previous record belongs to this contig and a record of another contig was already found.
-         * to check that all the contigs are contiguous, no record should be found that belongs to a "already finished" contig
+         * 
+         * Map keys are contig names, and the values flag whether they have been "fully read". Values mean the following:
+         * - Not found in the map: This contig has not appeared yet.
+         * - False: This contig has been found but not all its records have been listed yet.
+         * - True: Previously read records belonged to this contig and a record of another contig has been already found, 
+         *         so the former is considered "fully read".
+         * 
+         * For a contig block to be contiguous, no record should be found that belongs to a "fully read" contig.
          */
         std::map<std::string, bool> finished_contigs;
+        
+        /**
+         * Contig name previously read.
+         */
         std::string previous_contig;
 
         /**
-         * Attribute to check that the positions are sorted within a contig
+         * Position previously read within a contig.
          */
         size_t previous_position;
     };
