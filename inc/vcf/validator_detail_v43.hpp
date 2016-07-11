@@ -11727,7 +11727,7 @@ tr759:
             ParsePolicy::handle_body_line(*this);
 
             for (auto & record : *(ParsingState::records)){
-                auto duplicated_errors = duplicates.check_duplicates(record);
+                auto duplicated_errors = previous_records.check_duplicates(record);
                 for(auto &error_ptr : duplicated_errors) {
                     ErrorPolicy::handle_error(*this, error_ptr.release());
                 }
@@ -11888,7 +11888,7 @@ tr760:
             ParsePolicy::handle_body_line(*this);
 
             for (auto & record : *(ParsingState::records)){
-                auto duplicated_errors = duplicates.check_duplicates(record);
+                auto duplicated_errors = previous_records.check_duplicates(record);
                 for(auto &error_ptr : duplicated_errors) {
                     ErrorPolicy::handle_error(*this, error_ptr.release());
                 }

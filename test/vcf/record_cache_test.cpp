@@ -97,7 +97,7 @@ namespace ebi
 
     TEST_CASE("RecordCache tests: unlimited capacity")
     {
-        vcf::RecordCache cache{-1};
+        vcf::RecordCache cache{0};
 
         cache.check_duplicates(build_mock_record({100, "A", {"T"}}));
         cache.check_duplicates(build_mock_record({101, "A", {"T"}}));

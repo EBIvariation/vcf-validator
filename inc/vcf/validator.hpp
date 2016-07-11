@@ -101,7 +101,7 @@ namespace ebi
         /**
          * Previously seen records
          */
-        RecordCache duplicates;
+        RecordCache previous_records;
     };
     
     template <typename Configuration>

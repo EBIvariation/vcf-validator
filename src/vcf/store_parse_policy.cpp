@@ -166,8 +166,6 @@ namespace ebi
             throw new PositionBodyError{state.n_lines};
         }
 
-        check_sorted(state, position);
-
         // Transform all the quality tokens into floating point numbers
         float quality = 0;
         if (m_line_tokens["QUAL"][0] != ".") {
@@ -210,6 +208,8 @@ namespace ebi
                 samples,
                 state.source
         });
+
+        check_sorted(state, position);
     }
     
     std::string StoreParsePolicy::current_token() const

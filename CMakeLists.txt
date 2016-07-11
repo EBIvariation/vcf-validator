@@ -23,6 +23,7 @@ set (MOD_VCF_SOURCES
         inc/vcf/parse_policy.hpp
         inc/vcf/parsing_state.hpp
         inc/vcf/record.hpp
+        inc/vcf/record_cache.hpp
         inc/vcf/report_reader.hpp
         inc/vcf/report_writer.hpp
         inc/vcf/sqlite_report.hpp

@@ -42,19 +42,9 @@ namespace ebi
         /**
          * @param capacity: maximum amount of RecordCores that this instance can hold at any time.
          * Default is 1000.
-         * A value of 0 is valid but is useless.
-         * A negative value disables the limit, thus storing every RecordCore received, use with caution.
+         * A value of 0 disables the limit, thus storing every RecordCore received, use with caution.
          */
-        RecordCache(long capacity)
-        {
-            if (capacity >= 0) {
-                this->capacity = static_cast<size_t>(capacity);
-                unlimited = false;
-            } else {
-                this->capacity = 0;
-                unlimited = true;
-            }
-        }
+        RecordCache(size_t capacity) : capacity{capacity}, unlimited{capacity == 0} { }
 
         /**
          * returns a vector of RecordCores that are duplicated within the previously passed Records.
@@ -80,8 +70,9 @@ namespace ebi
                 } else {
                     // one or more matches found
                     std::stringstream ss;
-                    ss << "Duplicated record detected: first occurrence: " << *range.first
-                    << ", second occurrence: " << record_core;
+                    ss << "Duplicated variant: {" << record_core.chromosome << ", " << record_core.position << ", "
+                    << record_core.reference_allele << ", " << record_core.alternate_allele << "} found in lines "
+                    << range.first->line << " and " << record_core.line;
                     size_t first_occurence_line{range.first->line};
 
                     if (++range.first == range.second) {

@@ -38,7 +38,7 @@ namespace ebi
         if (compare != 0) {
             return compare < 0;
         }
-        compare = alternate_alleles.compare(other.alternate_alleles);
+        compare = alternate_allele.compare(other.alternate_allele);
         return compare < 0;
     }
 
@@ -47,7 +47,7 @@ namespace ebi
         return chromosome == other.chromosome
                && position == other.position
                && reference_allele == other.reference_allele
-               && alternate_alleles == other.alternate_alleles;
+               && alternate_allele == other.alternate_allele;
     }
     
     std::ostream &operator<<(std::ostream &os, const RecordCore &record)
@@ -55,7 +55,7 @@ namespace ebi
         using util::operator<<;
         os << "{";
         os << record.line << ", " << record.chromosome << ", " << record.position << ", ";
-        os << record.reference_allele << ", " << record.alternate_alleles;
+        os << record.reference_allele << ", " << record.alternate_allele;
         os << "}";
         return os;
     }
