@@ -14,9 +14,11 @@ include_directories (lib)
 # Application modules
 
 set (MOD_VCF_SOURCES
+        inc/vcf/debugulator.hpp
         inc/vcf/error.hpp
         inc/vcf/error_policy.hpp
         inc/vcf/file_structure.hpp
+        inc/vcf/fixer.hpp
         inc/vcf/meta_entry_visitor.hpp
         inc/vcf/normalizer.hpp
         inc/vcf/optional_policy.hpp
@@ -33,6 +35,7 @@ set (MOD_VCF_SOURCES
         inc/vcf/validator.hpp
         
         src/vcf/abort_error_policy.cpp
+        src/vcf/debugulator.cpp
         src/vcf/error.cpp
         src/vcf/meta_entry.cpp
         src/vcf/normalizer.cpp
@@ -51,6 +54,8 @@ set (V41_TESTS test/vcf/parser_v41_test.cpp)
 set (V42_TESTS test/vcf/parser_v42_test.cpp)
 set (V43_TESTS test/vcf/parser_v43_test.cpp)
 set (ALL_TESTS
+        test/vcf/debugulator_integration_test.cpp
+        test/vcf/debugulator_test.cpp
         test/vcf/metaentry_test.cpp
         test/vcf/normalize_test.cpp
         test/vcf/parser_test_aux.hpp

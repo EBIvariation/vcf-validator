@@ -14,31 +14,22 @@
  * limitations under the License.
  */
 
-#include <iostream>
 #include <fstream>
-#include <memory>
 #include <string>
-#include <vector>
-#include <stdexcept>
 
 #include <boost/program_options.hpp>
 
-#include "util/stream_utils.hpp"
-#include "vcf/file_structure.hpp"
-#include "vcf/validator.hpp"
-#include "vcf/report_writer.hpp"
+#include "vcf/debugulator.hpp"
 #include "vcf/sqlite_report.hpp"
 
 namespace
 {
-  size_t const default_line_buffer_size = 64 * 1024;
   namespace po = boost::program_options;
 
   enum class ValidationLevel
   {
       error, warning, stop
   };
-
 
   po::options_description build_command_line_options()
   {
@@ -47,9 +38,9 @@ namespace
       description.add_options()
               ("help,h", "Display this help")
               ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
-              ("errors,e", po::value<std::string>(), "Path to the errors DB from the input VCF file")
+              ("errors,e", po::value<std::string>(), "Path to the errors report from the input VCF file")
               ("level,l", po::value<std::string>()->default_value("warning"), "Validation level (error, warning, stop)")
-              ("output,o", po::value<std::string>()->default_value("stdout"), "write to a file or stdout")
+              ("output,o", po::value<std::string>()->default_value("stdout"), "Write to a file or stdout")
       ;
 
       return description;
@@ -69,6 +60,12 @@ namespace
           return 1;
       }
 
+      if (!vm.count("errors")) {
+          std::cout << desc << std::endl;
+          std::cout << "Please specify the path to the errors report (--errors)" << std::endl;
+          return 1;
+      }
+
       return 0;
   }
 
@@ -84,38 +81,11 @@ namespace
 
       throw std::invalid_argument{"Please choose one of the accepted validation levels"};
   }
-  
-  bool fix_vcf_file(std::istream &input,
-                    ebi::vcf::SqliteReportRW &errorDAO,
-                    std::ostream &output)
-  {
-      std::vector<char> line;
-      line.reserve(default_line_buffer_size);
-      /*
-      size_t current_line = 0;  // the first line is the number 1, ParsingState takes this convention too
-
-      for (auto error : errorDAO.errors()) {
-          size_t line_index = error.get_line();
-          while (current_line < line_index) {
-              // advance input
-              
-              if(!ebi::util::readline(input, line)) {
-                  // file finished, return ?
-              }
-              current_line++;
-          }
-          // assert current_line == line_index
-          // fix(line, error, output);
-      }
-*/
-      // close outputs?
-
-      return 0;     // fixer.is_valid();
-  }
 }
-
 int main(int argc, char **argv)
 {
+    namespace po = boost::program_options;
+
     po::options_description desc = build_command_line_options();
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -138,6 +108,8 @@ int main(int argc, char **argv)
             if (!input_file) {
                 throw std::runtime_error{"Couldn't open file " + input_path};
             }
+        } else {
+            std::cerr << "Reading from standard input..." << std::endl;
         }
 
         std::ofstream output_file;
@@ -146,6 +118,8 @@ int main(int argc, char **argv)
             if (!output_file) {
                 throw std::runtime_error{"Couldn't open file " + output_path};
             }
+        } else {
+            std::cerr << "Writing to standard output..." << std::endl;
         }
 
         ebi::vcf::SqliteReportRW errorDAO{errors};
@@ -153,15 +127,12 @@ int main(int argc, char **argv)
         auto &input_stream = input_path == "stdin" ? std::cin : input_file;
         auto &output_stream = output_path == "stdout" ? std::cout : output_file;
 
-        fix_vcf_file(input_stream, errorDAO, output_stream);
+        ebi::vcf::debugulator::fix_vcf_file(input_stream, errorDAO, output_stream);
 
-        return 0; // A valid file returns an exit code 0
+        return 0;
 
-    } catch (std::invalid_argument const &ex) {
-        std::cerr << ex.what() << std::endl;
-        return 1;
-    } catch (std::runtime_error const &ex) {
-        std::cout << "The input file is not valid: " << ex.what() << std::endl;
+    } catch (std::exception const &ex) {
+        std::cerr << "Aborting execution, error: " << ex.what() << std::endl;
         return 1;
     }
 }
