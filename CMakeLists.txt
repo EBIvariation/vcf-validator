@@ -54,6 +54,7 @@ set (V41_TESTS test/vcf/parser_v41_test.cpp)
 set (V42_TESTS test/vcf/parser_v42_test.cpp)
 set (V43_TESTS test/vcf/parser_v43_test.cpp)
 set (ALL_TESTS
+        test/vcf/debugulator_integration_test.cpp
         test/vcf/debugulator_test.cpp
         test/vcf/metaentry_test.cpp
         test/vcf/normalize_test.cpp
