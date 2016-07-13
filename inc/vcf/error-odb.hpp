@@ -2,8 +2,8 @@
 // compiler for C++.
 //
 
-#ifndef ERROR_ODB_HXX
-#define ERROR_ODB_HXX
+#ifndef ERROR_ODB_HPP
+#define ERROR_ODB_HPP
 
 #include <odb/version.hxx>
 
@@ -4105,8 +4105,8 @@ namespace odb
   //
 }
 
-#include "vcf/error-odb.ixx"
+#include "vcf/error-odb.ipp"
 
 #include <odb/post.hxx>
 
-#endif // ERROR_ODB_HXX
+#endif // ERROR_ODB_HPP

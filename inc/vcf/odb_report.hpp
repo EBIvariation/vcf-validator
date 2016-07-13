@@ -25,7 +25,7 @@
 
 #include <odb/schema-catalog.hxx>
 #include <odb/sqlite/database.hxx>
-#include "vcf/error-odb.hxx"
+#include "vcf/error-odb.hpp"
 
 namespace ebi
 {

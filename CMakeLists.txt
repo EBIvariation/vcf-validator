@@ -14,11 +14,31 @@ include_directories (lib)
 
 # Application modules
 
+set (MOD_ODB_SOURCES)
+
+set(ODB_MAPPING_CLASSES inc/vcf/error.hpp)
+
+foreach(_file ${ODB_MAPPING_CLASSES})
+    string(REPLACE ".hpp" "-odb.cpp" gencppfile ${_file})
+    string(REPLACE "inc" "src" right_place_gencppfile ${gencppfile})
+    add_custom_command(
+            OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/${right_place_gencppfile}
+            COMMAND odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
+            --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp
+            --output-dir ${CMAKE_CURRENT_SOURCE_DIR}/inc/vcf/ ${_file}
+            && mv ${CMAKE_CURRENT_SOURCE_DIR}/${gencppfile} ${CMAKE_CURRENT_SOURCE_DIR}/${right_place_gencppfile}
+            DEPENDS ${_file}
+            COMMENT "Building odb for ${_file}"
+    )
+    list(APPEND MOD_ODB_SOURCES ${right_place_gencppfile})
+endforeach()
+
+add_library(mod_odb ${MOD_ODB_SOURCES})
+
+
+
 set (MOD_VCF_SOURCES
         inc/vcf/debugulator.hpp
-        inc/vcf/error.hpp
-        inc/vcf/error-odb.hxx
-        inc/vcf/error-odb.ixx
         inc/vcf/error_policy.hpp
         inc/vcf/file_structure.hpp
         inc/vcf/fixer.hpp
@@ -41,7 +61,6 @@ set (MOD_VCF_SOURCES
         src/vcf/abort_error_policy.cpp
         src/vcf/debugulator.cpp
         src/vcf/error.cpp
-        src/vcf/error-odb.cxx
         src/vcf/meta_entry.cpp
         src/vcf/normalizer.cpp
         src/vcf/odb_report.cpp
@@ -55,6 +74,7 @@ set (MOD_VCF_SOURCES
         src/vcf/validator.cpp
         )
 add_library(mod_vcf ${MOD_VCF_SOURCES})
+add_dependencies(mod_vcf mod_odb)
 
 set (V41_TESTS test/vcf/parser_v41_test.cpp)
 set (V42_TESTS test/vcf/parser_v42_test.cpp)
@@ -97,6 +117,7 @@ find_package (Threads REQUIRED)
 
 set(LIBRARIES_TO_LINK
         mod_vcf
+        mod_odb
         ${Boost_LIBRARIES}
         sqlite3
         ${CMAKE_THREAD_LIBS_INIT}

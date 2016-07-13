@@ -4,7 +4,7 @@
 
 #include <odb/pre.hxx>
 
-#include "vcf/error-odb.hxx"
+#include "vcf/error-odb.hpp"
 
 #include <cassert>
 #include <cstring>  // std::memcpy
