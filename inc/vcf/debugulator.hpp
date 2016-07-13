@@ -36,7 +36,7 @@ namespace ebi
 
       size_t const default_line_buffer_size = 64 * 1024;
 
-      bool fix_vcf_file(std::istream &input,
+      void fix_vcf_file(std::istream &input,
                         ebi::vcf::ReportReader &errorDAO,
                         std::ostream &output);
     }

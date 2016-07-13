@@ -27,88 +27,94 @@ namespace ebi
   {
     class Fixer : public ErrorVisitor {
       public:
-        Fixer(size_t line_number, std::vector<char> &line, std::ostream &output)
-                : line_number{line_number}, line(line), output(output) { }
+        Fixer(std::ostream &output)
+                : line_number{0}, line{nullptr}, output(output), ignored_errors{0} { }
 
-        void fix(Error &error)
+        void fix(size_t line_number, std::vector<char> &line, Error &error)
         {
+            this->line_number = line_number;
+            this->line = &line; // this will be valid until this function returns
             error.apply_visitor(*this);
+            this->line = nullptr;
         }
+
+        size_t get_ignored_errors() {return ignored_errors;}
 
       private:
         size_t line_number;
-        std::vector<char> &line;
+        std::vector<char> *line;
         std::ostream &output;
+        size_t ignored_errors;
 
         virtual void visit(Error &error) override
         {
-            throw std::runtime_error{"visit(Error &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(MetaSectionError &error) override
         {
-            throw std::runtime_error{"visit(MetaSectionError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(HeaderSectionError &error) override
         {
-            throw std::runtime_error{"visit(HeaderSectionError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(BodySectionError &error) override
         {
-            throw std::runtime_error{"visit(BodySectionError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(FileformatError &error) override
         {
-            throw std::runtime_error{"visit(FileformatError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(ChromosomeBodyError &error) override
         {
-            throw std::runtime_error{"visit(ChromosomeBodyError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(PositionBodyError &error) override
         {
-            throw std::runtime_error{"visit(PositionBodyError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(IdBodyError &error) override
         {
-            throw std::runtime_error{"visit(IdBodyError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(ReferenceAlleleBodyError &error) override
         {
-            throw std::runtime_error{"visit(ReferenceAlleleBodyError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(AlternateAllelesBodyError &error) override
         {
-            throw std::runtime_error{"visit(AlternateAllelesBodyError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(QualityBodyError &error) override
         {
-            throw std::runtime_error{"visit(QualityBodyError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(FilterBodyError &error) override
         {
-            throw std::runtime_error{"visit(FilterBodyError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(InfoBodyError &error) override
         {
-            throw std::runtime_error{"visit(InfoBodyError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(FormatBodyError &error) override
         {
-            throw std::runtime_error{"visit(FormatBodyError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(SamplesBodyError &error) override
         {
-            throw std::runtime_error{"visit(SamplesBodyError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(NormalizationError &error) override
         {
-            throw std::runtime_error{"visit(NormalizationError &error) unimplemented"};
+            ignored_errors++;
         }
         virtual void visit(DuplicationError &error) override
         {
             // TODO better log system, if any
             std::cerr << "## fixing duplicate: removing line " << line_number << ": "
-            << std::string{line.begin(), line.end()} << std::endl;
+            << std::string{line->begin(), line->end()} << std::endl;
         }
     };
   }

@@ -36,15 +36,12 @@ namespace
       po::options_description description("Usage: vcf-debugulator [OPTIONS] [< input_file]\nAllowed options");
 
       description.add_options()
-                         ("help,h", "Display this help")
-                         ("input,i", po::value<std::string>()->default_value("stdin"),
-                          "Path to the input VCF file, or stdin")
-                         ("errors,e", po::value<std::string>(),
-                          "Path to the errors DB from the input VCF file")
-                         ("level,l", po::value<std::string>()->default_value("warning"),
-                          "Validation level (error, warning, stop)")
-                         ("output,o", po::value<std::string>()->default_value("stdout"),
-                          "Write to a file or stdout");
+              ("help,h", "Display this help")
+              ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
+              ("errors,e", po::value<std::string>(), "Path to the errors report from the input VCF file")
+              ("level,l", po::value<std::string>()->default_value("warning"), "Validation level (error, warning, stop)")
+              ("output,o", po::value<std::string>()->default_value("stdout"), "Write to a file or stdout")
+      ;
 
       return description;
   }
@@ -65,7 +62,7 @@ namespace
 
       if (!vm.count("errors")) {
           std::cout << desc << std::endl;
-          std::cout << "Please specify the path to the errors DB (--errors)" << std::endl;
+          std::cout << "Please specify the path to the errors report (--errors)" << std::endl;
           return 1;
       }
 

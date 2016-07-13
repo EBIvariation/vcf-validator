@@ -52,7 +52,29 @@ namespace ebi
       return validator.is_valid();
   }
 
-  TEST_CASE("Fixing a VCF with duplicates", "[debugulator]")
+  TEST_CASE("Fixing errors", "[debugulator]")
+  {
+      SECTION("Fix duplicates")
+      {
+          size_t line_number = 8;
+          std::string message{"testing errors"};
+          ebi::vcf::DuplicationError test_error{line_number, message};
+
+          std::string string_line = "line with duplicate variant";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream ss;
+          ss << "previous line";
+          size_t previous_size = ss.str().size();
+
+          vcf::Fixer{ss}.fix(line_number, line, test_error);
+
+          // the fix for duplicated variants is avoiding to write that line
+          CHECK(ss.str().size() == previous_size);
+      }
+  }
+
+  TEST_CASE("Integration test: Fixing a VCF with duplicates", "[debugulator]")
   {
       auto path = boost::filesystem::path("test/input_files/v4.1/failed/failed_body_duplicated_000.vcf");
       SECTION(path.string())
@@ -71,30 +93,30 @@ namespace ebi
 
           // here we check that the file is not valid:
           // file: ifstream from test files
-          // outputs: ReportWriters (one SqliteReportRW writing to database "errors_before")
+          // reports: ReportWriters (one SqliteReportRW writing to database "errors_before")
           auto db_path = boost::filesystem::path{"/tmp/"} / path.filename();
           db_path += ".debugulator_test.errors_before.db";
           boost::filesystem::remove(db_path);   // make sure the dbs doesn't exist from previous runs
-          auto output = new ebi::vcf::SqliteReportRW{db_path.string()};
-          std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
-          outputs.emplace_back(output);
-          CHECK_FALSE(is_valid_vcf_file(file, validator, outputs));
+          auto report = new ebi::vcf::SqliteReportRW{db_path.string()};
+          std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> reports;
+          reports.emplace_back(report);
+          CHECK_FALSE(is_valid_vcf_file(file, validator, reports));
 
 
           // now we fix the file
           // file: rewind the same ifstream as before
-          // output: SqliteReportRW to read the errors. it must be flushed before this
+          // report: SqliteReportRW to read the errors. it must be flushed before this
           // fixed_vcf: writing result vcf to a stringstream in memory
           file.clear();
           file.seekg(0);
-          output->flush();
+          report->flush();
           std::stringstream fixed_vcf;
-          vcf::debugulator::fix_vcf_file(file, *output, fixed_vcf);
+          vcf::debugulator::fix_vcf_file(file, *report, fixed_vcf);
           file.close();
 
           // here we check that the fixed file is valid:
           // fixed_vcf: stringstream the debugulator::fix_vcf_file wrote
-          // outputs: ReportWriters (one SqliteReportRW writing to database "errors_after")
+          // reports: ReportWriters (one SqliteReportRW writing to database "errors_after")
           fixed_vcf.seekg(0);
           auto validator2 = ebi::vcf::FullValidator_v41{
                   std::make_shared<ebi::vcf::Source>(source),
@@ -103,9 +125,9 @@ namespace ebi
           db_path_after += ".debugulator_test.errors_after.db";
           boost::filesystem::remove(db_path_after);   // make sure the dbs doesn't exist from previous runs
           auto output_after = new ebi::vcf::SqliteReportRW{db_path_after.string()};
-          outputs.clear();
-          outputs.emplace_back(output_after);
-          bool successfully_fixed = is_valid_vcf_file(fixed_vcf, validator2, outputs);
+          reports.clear();
+          reports.emplace_back(output_after);
+          bool successfully_fixed = is_valid_vcf_file(fixed_vcf, validator2, reports);
 
           CHECK(successfully_fixed);
 

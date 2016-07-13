@@ -243,7 +243,7 @@ namespace ebi
     {
       public:
         using BodySectionError::BodySectionError;
-        NormalizationError(size_t line) : NormalizationError{line, "Normalization could not be performed"} { }
+        NormalizationError(size_t line) : NormalizationError{line, "Allele normalization could not be performed"} { }
         virtual ErrorCode get_code() const override { return ErrorCode::normalization; }
         virtual void apply_visitor(ErrorVisitor &visitor) { visitor.visit(*this); }
     };
@@ -251,7 +251,7 @@ namespace ebi
     {
       public:
         using BodySectionError::BodySectionError;
-        DuplicationError(size_t line) : DuplicationError{line, "A duplicated record was found"} { }
+        DuplicationError(size_t line) : DuplicationError{line, "A duplicated variant was found"} { }
         virtual ErrorCode get_code() const override { return ErrorCode::duplication; }
         virtual void apply_visitor(ErrorVisitor &visitor) { visitor.visit(*this); }
     };

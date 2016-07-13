@@ -22,7 +22,7 @@ namespace ebi
   {
     namespace debugulator
     {
-      bool fix_vcf_file(std::istream &input,
+      void fix_vcf_file(std::istream &input,
                         ebi::vcf::ReportReader &errorDAO,
                         std::ostream &output)
       {
@@ -33,8 +33,11 @@ namespace ebi
 
           size_t errors = errorDAO.count_errors();
           if (errors == 0) {
-              throw std::runtime_error{"The errors DB was empty, there are no errors to fix the input"};
+              std::cerr << "The errors report was empty, there are no errors to fix the input" << std::endl;
+              return;
           }
+
+          ebi::vcf::Fixer fixer{output};
 
           errorDAO.for_each_error([&](std::shared_ptr<ebi::vcf::Error> error) {
               size_t line_index = error->get_line();
@@ -53,13 +56,15 @@ namespace ebi
                       output << c;
                   }
               }
-
-              ebi::vcf::Fixer{line_index, line, output}.fix(*error);
+              fixer.fix(line_index, line, *error);
           });
 
-          // close outputs?
+          size_t ignored_errors = fixer.get_ignored_errors();
+          if (ignored_errors != 0) {
+              std::cerr << "There were " << ignored_errors << " errors that couldn't be automatically fixed" << std::endl;
+          }
 
-          return 0;     // fixer.is_valid();
+          return;
       }
     }
   }
