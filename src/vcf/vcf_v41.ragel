@@ -688,7 +688,11 @@
     record_fil_empty= "." >token_begin @token_middle %token_end ;
     record_filter   = (record_fil_value (";" record_fil_value)*) | record_fil_empty ;
 
-    info_entry_snv  = "AA=" (bases | "." | "-") 		$err(info_AA_error) |
+    info_key        = (alnum | (punct - (";" | "=")))+ - ( "AA" | "AC" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G" | (punct)+ ) ;
+    info_value      = (print - (space | ";"))+ ;
+    info_value_list = info_value ("," info_value)* ;
+    info_aa         = (print - (space | "," | ";" | "="))+ ;
+    info_entry_snv  = "AA=" info_aa				$err(info_AA_error) |
                       "AC=" (nat_number ("," nat_number)*) 	$err(info_AC_error) |
                       "AF=" (any_number ("," any_number)*) 	$err(info_AF_error) |
                       "AN=" nat_number				$err(info_AN_error) |
@@ -706,19 +710,6 @@
                       "SOMATIC" ("=" ("1" | "0"))? 		$err(info_SOMATIC_error) |
                       "VALIDATED" ("=" ("1" | "0"))?		$err(info_VALIDATED_error) |
                       "1000G" ("=" ("1" | "0"))? 		$err(info_1000G_error) ;
-    # TODO Precise variants pending
-    info_entry_sv   = "IMPRECISE" ("=" ("1" | "0"))? 		|
-                      "NOVEL" ("=" ("1" | "0"))? 		|
-                      "SVTYPE=" ("DEL" | "INS" | "DUP" | "INV" | "CNV" | "BND")	|
-                      "SVLEN=" (int_number ("," int_number)*) 	|
-                      "CIPOS=" (int_number "," int_number) 	|
-                      "CIEND=" (int_number "," int_number) 	|
-                      "HOMLEN=" (int_number ("," int_number)*) 	|
-                      "HOMSEQ=" ((alnum | punct)+ ("," (alnum | punct)+)*)	|
-                      "BKPTID=" (chromosome ("," chromosome)*)	;
-    info_key        = (alnum | (punct - (";" | "=")))+ - ( "AA" | "AC" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G" | (punct)+ ) ;
-    info_value      = (print - (space | ";"))+ ;
-    info_value_list = info_value ("," info_value)* ;
     info_entry      = (
                         info_entry_snv |
                         info_key $err(info_key_error) | 

@@ -721,8 +721,9 @@
                         ( "AA" | "AC" | "AD" | "ADF" | "ADR" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G" ) ;
     info_value      = (print - ";")+ ;
     info_value_list = info_value ("," info_value)* ;
+    info_aa         = (print - ("," | ";" | "="))+ ;
     info_entry      = (
-                        "AA=" (bases | "." | "-") 		$err(info_AA_error) |
+                        "AA=" info_aa				$err(info_AA_error) |
                         "AC=" (nat_number ("," nat_number)*) 	$err(info_AC_error) |
                         "AD=" (nat_number ("," nat_number)*) 	$err(info_AD_error) |
                         "ADF=" (nat_number ("," nat_number)*) 	$err(info_ADF_error) |
