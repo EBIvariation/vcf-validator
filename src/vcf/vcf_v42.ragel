@@ -692,28 +692,31 @@
     record_fil_empty= "." >token_begin @token_middle %token_end ;
     record_filter   = (record_fil_value (";" record_fil_value)*) | record_fil_empty ;
 
-    info_key        = (alnum | (punct - (";" | "=")))+ - ( "AA" | "AC" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G" | (punct)+ ) ;
+    info_key        = ( alnum | (punct - (";" | "=")) )+ - 
+                        ( "AA" | "AC" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G" | (punct)+ ) ;
     info_value      = (print - (space | ";"))+ ;
     info_value_list = info_value ("," info_value)* ;
+    info_aa         = (print - (space | "," | ";" | "="))+ ;
+    info_entry_snv  = "AA=" info_aa				$err(info_AA_error) |
+                      "AC=" (nat_number ("," nat_number)*) 	$err(info_AC_error) |
+                      "AF=" (any_number ("," any_number)*) 	$err(info_AF_error) |
+                      "AN=" nat_number				$err(info_AN_error) |
+                      "BQ=" any_number				$err(info_BQ_error) |
+                      "CIGAR=" ([0-9]+[MIDNSHPX])+ 		$err(info_CIGAR_error) |
+                      "DB" ("=" ("1" | "0"))? 			$err(info_DB_error) |
+                      "DP=" nat_number				$err(info_DP_error) |
+                      "END=" nat_number 			$err(info_END_error) |
+                      "H2" ("=" ("1" | "0"))? 			$err(info_H2_error) | 
+                      "H3" ("=" ("1" | "0"))? 			$err(info_H3_error) |
+                      "MQ=" any_number 				$err(info_MQ_error) |
+                      "MQ0=" nat_number 			$err(info_MQ0_error) |
+                      "NS="  nat_number 			$err(info_NS_error) |
+                      "SB=" any_number 				$err(info_SB_error) |
+                      "SOMATIC" ("=" ("1" | "0"))? 		$err(info_SOMATIC_error) |
+                      "VALIDATED" ("=" ("1" | "0"))?		$err(info_VALIDATED_error) |
+                      "1000G" ("=" ("1" | "0"))? 		$err(info_1000G_error) ;
     info_entry      = (
-                        "AA=" (bases | "." | "-") 		$err(info_AA_error) |
-                        "AC=" (nat_number ("," nat_number)*) 	$err(info_AC_error) |
-                        "AF=" (any_number ("," any_number)*) 	$err(info_AF_error) |
-                        "AN=" nat_number			$err(info_AN_error) |
-                        "BQ=" any_number			$err(info_BQ_error) |
-                        "CIGAR=" ([0-9]+[MIDNSHPX])+ 		$err(info_CIGAR_error) |
-                        "DB" ("=" ("1" | "0"))? 		$err(info_DB_error) |
-                        "DP=" nat_number			$err(info_DP_error) |
-                        "END=" nat_number 			$err(info_END_error) |
-                        "H2" ("=" ("1" | "0"))? 		$err(info_H2_error) | 
-                        "H3" ("=" ("1" | "0"))? 		$err(info_H3_error) |
-                        "MQ=" any_number 			$err(info_MQ_error) |
-                        "MQ0=" nat_number 			$err(info_MQ0_error) |
-                        "NS="  nat_number 			$err(info_NS_error) |
-                        "SB=" any_number 			$err(info_SB_error) |
-                        "SOMATIC" ("=" ("1" | "0"))? 		$err(info_SOMATIC_error) |
-                        "VALIDATED" ("=" ("1" | "0"))?		$err(info_VALIDATED_error) |
-                        "1000G" ("=" ("1" | "0"))? 		$err(info_1000G_error) |
+                        info_entry_snv |
                         info_key $err(info_key_error) | 
                         info_key $err(info_key_error) "=" info_value_list $err(info_value_error)
                       ) >token_begin $token_middle %token_end ;
@@ -735,7 +738,8 @@
                       ) >token_begin $token_middle %token_end ;
     
     
-    record          = (record_chrom 		%record_field_end $err(chrom_error)
+    record          = (
+                        record_chrom 		%record_field_end $err(chrom_error)
                         CS record_position	%record_field_end $err(pos_error)
                         CS record_id 		%record_field_end $err(id_error)
                         CS record_ref 		%record_field_end $err(ref_error)
