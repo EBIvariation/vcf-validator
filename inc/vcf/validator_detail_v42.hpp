@@ -21,7 +21,7 @@
 #include "vcf/validator.hpp"
 
 
-#line 769 "src/vcf/vcf_v42.ragel"
+#line 771 "src/vcf/vcf_v42.ragel"
 
 
 namespace
@@ -39,7 +39,7 @@ static const int vcf_v42_en_meta_section_skip = 718;
 static const int vcf_v42_en_body_section_skip = 719;
 
 
-#line 775 "src/vcf/vcf_v42.ragel"
+#line 777 "src/vcf/vcf_v42.ragel"
 
 }
 
@@ -60,7 +60,7 @@ namespace ebi
 	cs = vcf_v42_start;
 	}
 
-#line 791 "src/vcf/vcf_v42.ragel"
+#line 793 "src/vcf/vcf_v42.ragel"
 
     }
 
@@ -15284,7 +15284,7 @@ tr957:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 767 "src/vcf/vcf_v42.ragel"
+#line 769 "src/vcf/vcf_v42.ragel"
 	{ {goto st28;} }
 	goto st723;
 st723:
@@ -15311,7 +15311,7 @@ tr959:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 768 "src/vcf/vcf_v42.ragel"
+#line 770 "src/vcf/vcf_v42.ragel"
 	{ {goto st722;} }
 	goto st724;
 st724:
@@ -18221,7 +18221,7 @@ case 724:
 	_out: {}
 	}
 
-#line 799 "src/vcf/vcf_v42.ragel"
+#line 801 "src/vcf/vcf_v42.ragel"
 
     }
    

@@ -21,7 +21,7 @@
 #include "vcf/validator.hpp"
 
 
-#line 796 "src/vcf/vcf_v43.ragel"
+#line 799 "src/vcf/vcf_v43.ragel"
 
 
 namespace
@@ -39,7 +39,7 @@ static const int vcf_v43_en_meta_section_skip = 732;
 static const int vcf_v43_en_body_section_skip = 733;
 
 
-#line 802 "src/vcf/vcf_v43.ragel"
+#line 805 "src/vcf/vcf_v43.ragel"
 
 }
 
@@ -60,7 +60,7 @@ namespace ebi
 	cs = vcf_v43_start;
 	}
 
-#line 818 "src/vcf/vcf_v43.ragel"
+#line 821 "src/vcf/vcf_v43.ragel"
 
     }
 
@@ -12411,7 +12411,7 @@ case 554:
 	if ( (*p) == 60 )
 		goto tr802;
 	if ( (*p) < 45 ) {
-		if ( 33 <= (*p) && (*p) <= 43 )
+		if ( 32 <= (*p) && (*p) <= 43 )
 			goto tr802;
 	} else if ( (*p) > 58 ) {
 		if ( 62 <= (*p) && (*p) <= 126 )
@@ -12437,7 +12437,7 @@ case 555:
 		case 59: goto tr783;
 	}
 	if ( (*p) < 45 ) {
-		if ( 33 <= (*p) && (*p) <= 43 )
+		if ( 32 <= (*p) && (*p) <= 43 )
 			goto tr802;
 	} else if ( (*p) > 60 ) {
 		if ( 62 <= (*p) && (*p) <= 126 )
@@ -16398,7 +16398,7 @@ tr983:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 794 "src/vcf/vcf_v43.ragel"
+#line 797 "src/vcf/vcf_v43.ragel"
 	{ {goto st28;} }
 	goto st737;
 st737:
@@ -16440,7 +16440,7 @@ tr986:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 795 "src/vcf/vcf_v43.ragel"
+#line 798 "src/vcf/vcf_v43.ragel"
 	{ {goto st736;} }
 	goto st738;
 st738:
@@ -19442,7 +19442,7 @@ case 738:
 	_out: {}
 	}
 
-#line 826 "src/vcf/vcf_v43.ragel"
+#line 829 "src/vcf/vcf_v43.ragel"
 
     }
     
