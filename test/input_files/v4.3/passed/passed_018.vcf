@@ -5,6 +5,7 @@
 ##INFO=<ID=DB,Number=0,Type=Flag,Description="dbSNP membership">
 ##INFO=<ID=MY,Number=G,Type=Float,Description="Some field to test an INFO field with Number=G">
 ##INFO=<ID=MY2,Number=R,Type=Float,Description="Some field to test an INFO field with Number=R">
+##INFO=<ID=MY3,Number=1,Type=String,Description="Some field to test capitalized percent encoding">
 ##INFO=<ID=SNPSOURCE,Number=.,Type=String,Description="Characteristics of the source where the SNP was found">
 ##INFO=<ID=VT,Number=A,Type=Character,Description="Variant type, for each ALT allele, in the same order as listed">
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00096	HG00097
@@ -56,3 +57,4 @@
 17	300	rs180734498	C	T	100	PASS	1000G=1	GT:DS:GL	0|0:0.050:-0.13,-0.58,-3.62	0|1:1.000:-2.45,-0.00,-5.00
 18	100	rs180734498	C	T	100	PASS	MY=0.777,-0.123,0.5;VT=S;ASN_AF=0.13;AMR_AF=0.17;AFR_AF=0.04;EUR_AF=0.21	GT:DS:GL	0|0:0.050:-0.13,-0.58,-3.62	0|1:1.000:-2.45,-0.00,-5.00
 18	200	rs180734498	C	T,G,A	100	PASS	MY2=0.777,-0.123,0.5,-0.987;RSQ=0.4319;LDAF=0.2327;ERATE=0.0161;AN=2184;THETA=0.0046;SNPSOURCE=LOWCOV	GT:DS:GL	0|0:0.050:-0.13,-0.58,-3.62	0|1:1.000:-2.45,-0.00,-5.00
+19	100	rs180734498	C	T	100	PASS	MY3=0.777%03A-0.123%03B0.5%3D-0.987%0A;RSQ=0.4319	GT:DS:GL	0|0:0.050:-0.13,-0.58,-3.62	0|1:1.000:-2.45,-0.00,-5.00
