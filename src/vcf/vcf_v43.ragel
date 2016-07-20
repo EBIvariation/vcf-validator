@@ -161,6 +161,10 @@
         ParsePolicy::handle_token_end(*this, "Description");
     }
     
+    action meta_values {
+        ParsePolicy::handle_token_end(*this, "Values");
+    }
+    
     action meta_typeid_generic {
         ParsePolicy::handle_meta_typeid(*this);
     }
@@ -268,7 +272,7 @@
     }
     
     action meta_format_type_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Type is not a Integer, Float, Character or String"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Type is not Integer, Float, Character or String"});
         fhold; fgoto meta_section_skip;
     }
 
@@ -284,7 +288,7 @@
     }
     
     action meta_info_type_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not a Integer, Float, Flag, Character or String"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not Integer, Float, Flag, Character or String"});
         fhold; fgoto meta_section_skip;
     }
 
@@ -303,6 +307,21 @@
     # META metadata
     action meta_meta_err {
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_meta_number_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Number is not a dot"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_meta_type_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Type is not String"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_meta_values_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Values is not a square-bracket delimited list of values"});
         fhold; fgoto meta_section_skip;
     }
     
@@ -624,9 +643,15 @@
     
     meta_pedigreeDB = url $err(meta_url_err) ;
     
-    ## Multiple ways to describe a sample now. Also new META meta entries
+    ## META values don't seem to have any particular restrictions so just applying those critical for parsing
+    meta_meta_value   = (print - ("," | "<" | ">" | space))+ ;
+    meta_meta_values  = (meta_meta_value ("," (space)? meta_meta_value)*) >token_begin $token_middle %token_end ;
     meta_meta       = "ID=" %meta_id identifier $err(meta_id_err)
-                        ("," identifier "=" meta_values)* ;
+                        ",Number=" %meta_number "." $err(meta_meta_number_err) 
+                        ",Type=" %meta_type "String" $err(meta_meta_type_err)
+                        ",Values=" %meta_values "[" meta_meta_values "]" $err(meta_meta_values_err) ;
+                        
+    ## Multiple ways to describe a sample now
     meta_sample     = "ID=" %meta_id identifier $err(meta_id_err)
                         ("," identifier "=" meta_values)* ;
 
