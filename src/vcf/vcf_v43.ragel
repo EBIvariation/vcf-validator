@@ -165,6 +165,18 @@
         ParsePolicy::handle_token_end(*this, "Values");
     }
     
+    action meta_original {
+        ParsePolicy::handle_token_end(*this, "Original");
+    }
+    
+    action meta_father {
+        ParsePolicy::handle_token_end(*this, "Father");
+    }
+    
+    action meta_mother {
+        ParsePolicy::handle_token_end(*this, "Mother");
+    }
+    
     action meta_typeid_generic {
         ParsePolicy::handle_meta_typeid(*this);
     }
@@ -295,6 +307,21 @@
     # PEDIGREE metadata
     action meta_pedigree_err {
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_pedigree_original_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Original is not valid"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_pedigree_parents_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Father or Mother is not valid"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_pedigree_names_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata sequence of Name_N is not valid"});
         fhold; fgoto meta_section_skip;
     }
     
@@ -632,13 +659,18 @@
                         ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
                         ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
 
-    ## TODO For different ways to define a PEDIGREE tag now:
-    # ##PEDIGREE=<ID=TumourSample,Original=GermlineID>
-    # ##PEDIGREE=<ID=SomaticNonTumour,Original=GermlineID>
-    # ##PEDIGREE=<ID=ChildID,Father=FatherID,Mother=MotherID>
-    # ##PEDIGREE=<ID=SampleID,Name_1=Ancestor_1,...,Name_N=Ancestor_N>
-    meta_pedigree   = identifier $err(meta_id_err) "=" identifier $err(meta_id_err)  
-                        ("," identifier $err(meta_id_err) "=" identifier $err(meta_id_err))* ;
+    ## 3 different ways to define a PEDIGREE tag now:
+    ## ID=TumourSample,Original=GermlineID
+    ## ID=ChildID,Father=FatherID,Mother=MotherID
+    ## ID=SampleID,Name_1=Ancestor_1,...,Name_N=Ancestor_N
+    meta_pedigree_name = ("Name_" (digit)+) >token_begin $token_middle %token_end;
+    meta_pedigree   = "ID=" %meta_id identifier $err(meta_id_err)
+                      (
+                        ( ",Original=" %meta_original identifier $err(meta_pedigree_original_err) )	|
+                        ( ",Father=" %meta_father identifier $err(meta_pedigree_parents_err) 
+                          ",Mother=" %meta_mother identifier $err(meta_pedigree_parents_err) )		|
+                        ("," meta_pedigree_name $err(meta_pedigree_names_err) "=" identifier $err(meta_pedigree_names_err))+ 
+                      ) ;
                       
     
     meta_pedigreeDB = url $err(meta_url_err) ;

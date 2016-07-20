@@ -30,8 +30,8 @@
 ##INFO=<ID=SNPSOURCE,Number=.,Type=String,Description="indicates if a snp was called when analysing the low coverage or exome alignment data">
 ##INFO=<ID=ValidSourceVersion,Number=1,Type=Float,Description="Global Allele Frequency based on AC/AN",Source="This source is valid",Version="This version is valid">
 ##assembly=ftp://user@host:8080/path/to/file.fastq
-##PEDIGREE=<Name_0=Something>
-##PEDIGREE=<Name_0=Something,Name_1=Something-else>
+##PEDIGREE=<ID=Pedigree1,Original=Something>
+##PEDIGREE=<ID=Pedigree2,Name_0=Something,Name_1=Something-else>
 ##pedigreeDB=<ftp://user@host:8080/path/to/pedigreeDB?arg1=db1>
 ##contig=<ID=1>
 ##contig=<ID=contig_url,URL=ftp://user@host:8080/path/to/contig>
