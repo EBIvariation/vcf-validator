@@ -137,6 +137,10 @@
         ParsePolicy::handle_meta_typeid(*this, "pedigreeDB");
     }
 
+    action meta_typeid_meta {
+        ParsePolicy::handle_meta_typeid(*this, "META");
+    }
+
     action meta_typeid_sample {
         ParsePolicy::handle_meta_typeid(*this, "SAMPLE");
     }
@@ -293,6 +297,12 @@
     # pedigreeDB metadata
     action meta_pedigreedb_err {
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    # META metadata
+    action meta_meta_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
         fhold; fgoto meta_section_skip;
     }
     
@@ -561,7 +571,7 @@
     fileformat      = "##fileformat=" fileformat_name ;
 
     # Meta-data
-    meta_typeid     = ( ( print - "=" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB") ) >token_begin @token_middle %meta_typeid_generic ;
+    meta_typeid     = ( ( print - "=" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "META" | "SAMPLE" | "PEDIGREE" | "pedigreeDB") ) >token_begin @token_middle %meta_typeid_generic ;
     meta_key        = ( (alnum | "." | "_" | "-" )+ - (punct)+ ) >token_begin @token_middle %meta_key_generic;
     
     ## A value can be expressed in multiple ways:
@@ -614,8 +624,9 @@
     
     meta_pedigreeDB = url $err(meta_url_err) ;
     
-    ## Multiple ways to describe a sample now.
-    ## TODO New META meta entries
+    ## Multiple ways to describe a sample now. Also new META meta entries
+    meta_meta       = "ID=" %meta_id identifier $err(meta_id_err)
+                        ("," identifier "=" meta_values)* ;
     meta_sample     = "ID=" %meta_id identifier $err(meta_id_err)
                         ("," identifier "=" meta_values)* ;
 
@@ -626,6 +637,7 @@
                        ("INFO"		%meta_typeid_info	"=<" meta_info ">" )		$err(meta_info_err) | 
                        ("assembly"	%meta_typeid_assembly	"=" meta_assembly )		$err(meta_assembly_err) |
                        ("contig"	%meta_typeid_contig	"=<" meta_contig ">" )		$err(meta_contig_err) |
+                       ("META"  	%meta_typeid_meta	"=<" meta_meta ">" )		$err(meta_meta_err) |
                        ("SAMPLE"	%meta_typeid_sample	"=<" meta_sample ">" )		$err(meta_sample_err) |
                        ("PEDIGREE"	%meta_typeid_pedigree	"=<" meta_pedigree ">" )	$err(meta_pedigree_err) |
                        ("pedigreeDB"	%meta_typeid_pedigreedb	"=<" meta_pedigreeDB ">" )	$err(meta_pedigreedb_err) |
