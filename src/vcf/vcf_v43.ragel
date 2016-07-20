@@ -157,14 +157,6 @@
         ParsePolicy::handle_token_end(*this, "Description");
     }
     
-    action meta_genomes {
-        ParsePolicy::handle_token_end(*this, "Genomes");
-    }
-    
-    action meta_mixture {
-        ParsePolicy::handle_token_end(*this, "Mixture");
-    }
-    
     action meta_typeid_generic {
         ParsePolicy::handle_meta_typeid(*this);
     }
@@ -307,16 +299,6 @@
     # SAMPLE metadata
     action meta_sample_err {
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
-        fhold; fgoto meta_section_skip;
-    }
-    
-    action meta_sample_genomes_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
-        fhold; fgoto meta_section_skip;
-    }
-    
-    action meta_sample_mixture_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
         fhold; fgoto meta_section_skip;
     }
     
@@ -632,12 +614,10 @@
     
     meta_pedigreeDB = url $err(meta_url_err) ;
     
-    ## TODO The error shown when "Description" is missing shows that Mixture is not a valid string
-    ## TODO Multiple ways to describe a sample now. Also new META meta entries
+    ## Multiple ways to describe a sample now.
+    ## TODO New META meta entries
     meta_sample     = "ID=" %meta_id identifier $err(meta_id_err)
-                        (",Genomes=" %meta_genomes meta_field_value) $err(meta_sample_genomes_err)
-                        (",Mixture=" %meta_mixture meta_field_value) $err(meta_sample_mixture_err)
-                        (",Description=" %meta_description "\"" meta_field_desc "\"") $err(meta_desc_err) ;
+                        ("," identifier "=" meta_values)* ;
 
     meta_entry      = "##" ( 
                        ("ALT"		%meta_typeid_alt 	"=<" meta_alt ">" )		$err(meta_alt_err) | 
