@@ -137,6 +137,10 @@
         ParsePolicy::handle_meta_typeid(*this, "pedigreeDB");
     }
 
+    action meta_typeid_meta {
+        ParsePolicy::handle_meta_typeid(*this, "META");
+    }
+
     action meta_typeid_sample {
         ParsePolicy::handle_meta_typeid(*this, "SAMPLE");
     }
@@ -157,12 +161,20 @@
         ParsePolicy::handle_token_end(*this, "Description");
     }
     
-    action meta_genomes {
-        ParsePolicy::handle_token_end(*this, "Genomes");
+    action meta_values {
+        ParsePolicy::handle_token_end(*this, "Values");
     }
     
-    action meta_mixture {
-        ParsePolicy::handle_token_end(*this, "Mixture");
+    action meta_original {
+        ParsePolicy::handle_token_end(*this, "Original");
+    }
+    
+    action meta_father {
+        ParsePolicy::handle_token_end(*this, "Father");
+    }
+    
+    action meta_mother {
+        ParsePolicy::handle_token_end(*this, "Mother");
     }
     
     action meta_typeid_generic {
@@ -272,7 +284,7 @@
     }
     
     action meta_format_type_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Type is not a Integer, Float, Character or String"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Type is not Integer, Float, Character or String"});
         fhold; fgoto meta_section_skip;
     }
 
@@ -288,7 +300,7 @@
     }
     
     action meta_info_type_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not a Integer, Float, Flag, Character or String"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not Integer, Float, Flag, Character or String"});
         fhold; fgoto meta_section_skip;
     }
 
@@ -298,25 +310,51 @@
         fhold; fgoto meta_section_skip;
     }
     
+    action meta_pedigree_original_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Original is not valid"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_pedigree_parents_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Father or Mother is not valid"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_pedigree_names_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata sequence of Name_N is not valid"});
+        fhold; fgoto meta_section_skip;
+    }
+    
     # pedigreeDB metadata
     action meta_pedigreedb_err {
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         fhold; fgoto meta_section_skip;
     }
     
+    # META metadata
+    action meta_meta_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_meta_number_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Number is not a dot"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_meta_type_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Type is not String"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_meta_values_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Values is not a square-bracket delimited list of values"});
+        fhold; fgoto meta_section_skip;
+    }
+    
     # SAMPLE metadata
     action meta_sample_err {
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
-        fhold; fgoto meta_section_skip;
-    }
-    
-    action meta_sample_genomes_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
-        fhold; fgoto meta_section_skip;
-    }
-    
-    action meta_sample_mixture_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
         fhold; fgoto meta_section_skip;
     }
     
@@ -567,11 +605,11 @@
     chromosome      = chrom_basic | chrom_contig ;
     
     # URL inspired in http://stackoverflow.com/questions/8784903/failed-to-convert-url-parser-regular-expression-to-ragel
-    scheme    = (alpha (any - [:/?#] - "\n")+ ) ;
-    authority = (alpha (any - [/?#] - "\n")* ) | ( (digit{1,3}) ("." digit{1,3}){3} ) ;
-    path      = (any - [?#] - "\n")* ;
-    query     = (any - [#] - "\n")* ;
-    fragment  = (any - "\n")* ; 
+    scheme    = (alpha (any - [:/?#] - NL)+ ) ;
+    authority = (alpha (any - [/?#] - NL)* ) | ( (digit{1,3}) ("." digit{1,3}){3} ) ;
+    path      = (any - [?#] - NL)* ;
+    query     = (any - [#] - NL)* ;
+    fragment  = (any - NL)* ; 
     url       = (scheme "://" authority path ("?" query)? ("#" fragment)?) >token_begin @token_middle %token_end ;
 
     # File format line
@@ -579,14 +617,14 @@
     fileformat      = "##fileformat=" fileformat_name ;
 
     # Meta-data
-    meta_typeid     = ( ( print - "=" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "SAMPLE" | "PEDIGREE" | "pedigreeDB") ) >token_begin @token_middle %meta_typeid_generic ;
+    meta_typeid     = ( ( print - "=" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "META" | "SAMPLE" | "PEDIGREE" | "pedigreeDB") ) >token_begin @token_middle %meta_typeid_generic ;
     meta_key        = ( (alnum | "." | "_" | "-" )+ - (punct)+ ) >token_begin @token_middle %meta_key_generic;
     
     ## A value can be expressed in multiple ways:
     ## - The line is a single key-value pair (meta_value): the value cannot start with an angle bracket, quote or linebreak, but it is free text thereafter
     ## - One of multiple key-value pairs, non-quoted (meta_field_value): the value cannot contain a comma -end of field-, or a closing angle bracket -end of entry-, or quote
     ## - One of multiple key-value pairs, quoted (meta_field_desc): the value can contain any character except for non-escaped quotes
-    meta_value      = ((print - ("<" | "\"" | "\n")) (print)*)	>token_begin $token_middle %token_end ;
+    meta_value      = ((print - ("<" | "\"" | NL)) (print)*)	>token_begin $token_middle %token_end ;
     meta_field_value= (print - ("," | ">" | "\""))+		>token_begin $token_middle %token_end ;
     meta_field_desc = (("\\" print) | (print - "\""))*		>token_begin $token_middle %token_end ;
     
@@ -621,23 +659,33 @@
                         ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
                         ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
 
-    ## TODO For different ways to define a PEDIGREE tag now:
-    # ##PEDIGREE=<ID=TumourSample,Original=GermlineID>
-    # ##PEDIGREE=<ID=SomaticNonTumour,Original=GermlineID>
-    # ##PEDIGREE=<ID=ChildID,Father=FatherID,Mother=MotherID>
-    # ##PEDIGREE=<ID=SampleID,Name_1=Ancestor_1,...,Name_N=Ancestor_N>
-    meta_pedigree   = identifier $err(meta_id_err) "=" identifier $err(meta_id_err)  
-                        ("," identifier $err(meta_id_err) "=" identifier $err(meta_id_err))* ;
+    ## 3 different ways to define a PEDIGREE tag now:
+    ## ID=TumourSample,Original=GermlineID
+    ## ID=ChildID,Father=FatherID,Mother=MotherID
+    ## ID=SampleID,Name_1=Ancestor_1,...,Name_N=Ancestor_N
+    meta_pedigree_name = ("Name_" (digit)+) >token_begin $token_middle %token_end;
+    meta_pedigree   = "ID=" %meta_id identifier $err(meta_id_err)
+                      (
+                        ( ",Original=" %meta_original identifier $err(meta_pedigree_original_err) )	|
+                        ( ",Father=" %meta_father identifier $err(meta_pedigree_parents_err) 
+                          ",Mother=" %meta_mother identifier $err(meta_pedigree_parents_err) )		|
+                        ("," meta_pedigree_name $err(meta_pedigree_names_err) "=" identifier $err(meta_pedigree_names_err))+ 
+                      ) ;
                       
     
     meta_pedigreeDB = url $err(meta_url_err) ;
     
-    ## TODO The error shown when "Description" is missing shows that Mixture is not a valid string
-    ## TODO Multiple ways to describe a sample now. Also new META meta entries
+    ## META values don't seem to have any particular restrictions so just applying those critical for parsing
+    meta_meta_value   = (print - ("," | "<" | ">" | space))+ ;
+    meta_meta_values  = (meta_meta_value ("," (space)? meta_meta_value)*) >token_begin $token_middle %token_end ;
+    meta_meta       = "ID=" %meta_id identifier $err(meta_id_err)
+                        ",Number=" %meta_number "." $err(meta_meta_number_err) 
+                        ",Type=" %meta_type "String" $err(meta_meta_type_err)
+                        ",Values=" %meta_values "[" meta_meta_values "]" $err(meta_meta_values_err) ;
+                        
+    ## Multiple ways to describe a sample now
     meta_sample     = "ID=" %meta_id identifier $err(meta_id_err)
-                        (",Genomes=" %meta_genomes meta_field_value) $err(meta_sample_genomes_err)
-                        (",Mixture=" %meta_mixture meta_field_value) $err(meta_sample_mixture_err)
-                        (",Description=" %meta_description "\"" meta_field_desc "\"") $err(meta_desc_err) ;
+                        ("," identifier "=" meta_values)* ;
 
     meta_entry      = "##" ( 
                        ("ALT"		%meta_typeid_alt 	"=<" meta_alt ">" )		$err(meta_alt_err) | 
@@ -646,6 +694,7 @@
                        ("INFO"		%meta_typeid_info	"=<" meta_info ">" )		$err(meta_info_err) | 
                        ("assembly"	%meta_typeid_assembly	"=" meta_assembly )		$err(meta_assembly_err) |
                        ("contig"	%meta_typeid_contig	"=<" meta_contig ">" )		$err(meta_contig_err) |
+                       ("META"  	%meta_typeid_meta	"=<" meta_meta ">" )		$err(meta_meta_err) |
                        ("SAMPLE"	%meta_typeid_sample	"=<" meta_sample ">" )		$err(meta_sample_err) |
                        ("PEDIGREE"	%meta_typeid_pedigree	"=<" meta_pedigree ">" )	$err(meta_pedigree_err) |
                        ("pedigreeDB"	%meta_typeid_pedigreedb	"=<" meta_pedigreeDB ">" )	$err(meta_pedigreedb_err) |
@@ -660,9 +709,9 @@
                       ) %meta_entry_end;
 
     # Header between meta and records
-    sample_name     = (print - ("\n" | "\t"))+ >token_begin @token_middle %sample_name_end;
-    header          = "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO" $err(header_prefix_err)
-                      ("\tFORMAT" ("\t" sample_name)+ )? %header_end ;
+    sample_name     = (print - (NL | CS))+ >token_begin @token_middle %sample_name_end;
+    header          = ("#CHROM" CS "POS" CS "ID" CS "REF" CS "ALT" CS "QUAL" CS "FILTER" CS "INFO") $err(header_prefix_err)
+                      (CS "FORMAT" (CS sample_name)+ )? %header_end ;
 
     # Records
     position        = nat_number ;
@@ -752,7 +801,7 @@
                       ( "." >token_begin @token_middle %token_end ) ;
 
     ## Accepting non-alphanumeric characters is an addition in v4.3, but widely used in already existing files
-    format_value    = ( (alpha | "_") (alnum | "_" | ".")* ) >token_begin $token_middle %token_end ;
+    format_value    = ( (alpha | "_") (alnum | "_" | "." | "%")* ) >token_begin $token_middle %token_end ;
     record_format   = format_value (":" format_value)* ;
     
     ## In a sample, if a genotype is present it must be the first field
