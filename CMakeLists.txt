@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.8)
 project (vcf-validator CXX C)
 
 set (vcf-validator_VERSION_MAJOR 0)
-set (vcf-validator_VERSION_MINOR 2)
+set (vcf-validator_VERSION_MINOR 3)
 
 set (CMAKE_CXX_FLAGS "-std=c++11 -O3 -Wall -g")
 set (CMAKE_C_FLAGS " -DSQLITE_OMIT_LOAD_EXTENSION")
