@@ -2,6 +2,10 @@ sudo: false
 
 language: cpp
 
+cache:
+  directories:
+    - odb
+
 matrix:
   include:
     # Clang 3.5

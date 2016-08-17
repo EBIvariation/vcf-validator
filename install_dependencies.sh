@@ -2,8 +2,8 @@
 
 
 # download and compile ODB compiler, ODB runtime library, and sqlite DB plugin for ODB
-if [ ! -d "odb" ]; then
-  mkdir odb && cd odb
+if [ ! -d "odb/odb-2.4.0-x86_64-linux-gnu" ]; then
+  mkdir -p odb && cd odb
   wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-x86_64-linux-gnu.tar.bz2 -O /tmp/odb.tar.bz2
   tar jxvf /tmp/odb.tar.bz2
   # the odb compiler is already available as binary: no configure && make
@@ -16,5 +16,8 @@ if [ ! -d "odb" ]; then
   tar jxvf /tmp/libodb-sqlite.tar.bz2
   cd libodb-sqlite-2.4.0 && ./configure --with-libodb=../libodb-2.4.0 && make && cd ..
   cd ..
+else
+  echo "skipping odb installation: odb directory found:"
+  ls odb
 fi
 
