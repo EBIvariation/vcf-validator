@@ -18,7 +18,9 @@ If you are using Ubuntu, the required packages names will be `libboost-dev`, `li
 
 ### ODB
 
-You will need to download the odb compiler, the odb common runtime library, and the sqlite database runtime library from this page: http://codesynthesis.com/products/odb/download.xhtml
+You will need to download the odb compiler, the odb common runtime library, and the sqlite database runtime library from [this page](http://codesynthesis.com/products/odb/download.xhtml).
+
+ODB requires sqlite3 to be installed. The Ubuntu `apt-get`'s packages are `libsqlite3-0` and `libsqlite3-dev`.
 
 To install the odb compiler, the easiest way is to download the `.deb` or `.rpm` version, in order to be installed automatically with `dpkg`. Both the odb runtime and sqlite libraries can be installed with the usual `./configure && make && sudo make install`.
 

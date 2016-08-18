@@ -45,7 +45,7 @@ namespace ebi
                 c->execute("PRAGMA foreign_keys=ON");
             }
         } catch (const odb::exception& e) {
-            throw std::runtime_error{std::string{"ODB report: failed ODB initialization: "} + e.what()};
+            throw std::runtime_error{std::string{"ODB report: Can't initialize database: "} + e.what()};
         }
     }
 
@@ -69,12 +69,12 @@ namespace ebi
     // ReportWriter implementation
     void OdbReportRW::write_error(Error &error)
     {
-        error.get_severity() = Severity::ERROR;
+        error.set_severity(Severity::ERROR);
         write(error);
     }
     void OdbReportRW::write_warning(Error &error)
     {
-        error.get_severity() = Severity::WARNING;
+        error.set_severity(Severity::WARNING);
         write(error);
     }
 
@@ -129,18 +129,17 @@ namespace ebi
     }
     void OdbReportRW::for_each(std::function<void(std::shared_ptr<Error>)> user_function, odb::query<Error> query)
     {
-        typedef odb::result<Error> result;
+        typedef odb::result<Error> result_t;
 
         if (transaction.has_current()) {
             throw std::logic_error{"There's another transaction active. You can only read if the changes were flushed"};
         } else {
             transaction.reset(db->begin());
 
-            result r{db->query<Error>(query + " ORDER BY " + odb::query<Error>::line)};
+            result_t result{db->query<Error>(query + " ORDER BY " + odb::query<Error>::line)};
 
-            // TODO if result::iterator has operator*, operator!=, operator++, then use ranged for. not if we use shared_ptr
-            for (result::iterator i{r.begin()}; i != r.end(); ++i) {
-                user_function(std::shared_ptr<ebi::vcf::Error>{i.load()});
+            for (result_t::iterator it{result.begin()}; it != result.end(); ++it) {
+                user_function(std::shared_ptr<ebi::vcf::Error>{it.load()});
             }
 
             transaction.commit();

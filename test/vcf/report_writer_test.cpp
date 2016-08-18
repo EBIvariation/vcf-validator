@@ -19,11 +19,11 @@
 #include <fstream>
 
 #include <boost/filesystem.hpp>
-#include <vcf/odb_report.hpp>
 
 #include "catch/catch.hpp"
 #include "sqlite/sqlite3.h"
 
+#include "vcf/odb_report.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
 #include "vcf/error.hpp"
