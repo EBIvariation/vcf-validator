@@ -43,8 +43,8 @@ namespace ebi
         ~SqliteReportRW() override;
         
         // ReportWriter implementation
-        void write_error(const Error &error) override;
-        void write_warning(const Error &error) override;
+        void write_error(Error &error) override;
+        void write_warning(Error &error) override;
         
         // ReportReader implementation
         size_t count_errors() override;

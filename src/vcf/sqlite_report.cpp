@@ -110,12 +110,12 @@ namespace ebi
         }
     }
 
-    void SqliteReportRW::write_error(const Error &error)
+    void SqliteReportRW::write_error(Error &error)
     {
         write(error, statement_error);
     }
 
-    void SqliteReportRW::write_warning(const Error &error)
+    void SqliteReportRW::write_warning(Error &error)
     {
         write(error, statement_warning);
     }

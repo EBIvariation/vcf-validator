@@ -32,6 +32,7 @@
 #include "vcf/report_writer.hpp"
 #include "util/stream_utils.hpp"
 #include "vcf/sqlite_report.hpp"
+#include "vcf/odb_report.hpp"
 
 namespace
 {
@@ -50,7 +51,7 @@ namespace
             ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
             ("level,l", po::value<std::string>()->default_value("warning"), "Validation level (error, warning, stop)")
             ("version,v", po::value<std::string>(), "VCF fileformat version to validate the file against (v4.1, v4.2, v4.3)")
-            ("report,r", po::value<std::string>()->default_value("stdout"), "Comma separated values for types of reports (database, stdout)")
+            ("report,r", po::value<std::string>()->default_value("stdout"), "Comma separated values for types of reports (database, stdout, orm)")
             ("outdir,o", po::value<std::string>()->default_value(""), "Directory for the output")
         ;
 
@@ -154,6 +155,15 @@ namespace
                     throw std::runtime_error{"Report file already exists on " + db_filename + ", please delete it or rename it"};
                 }
                 outputs.emplace_back(new ebi::vcf::SqliteReportRW(db_filename));
+            } else if (out == "orm") {
+                auto epoch = std::chrono::system_clock::now().time_since_epoch();
+                auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
+                std::string db_filename = input + ".errors." + std::to_string(timestamp) + ".orm.db";
+                boost::filesystem::path db_file{db_filename};
+                if (boost::filesystem::exists(db_file)) {
+                    throw std::runtime_error{"Report file already exists on " + db_filename + ", please delete it or rename it"};
+                }
+                outputs.emplace_back(new ebi::vcf::OdbReportRW(db_filename));
             } else if (out == "stdout") {
                 outputs.emplace_back(new ebi::vcf::StdoutReportWriter());
             } else {

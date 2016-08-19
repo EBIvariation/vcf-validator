@@ -23,6 +23,7 @@
 #include "catch/catch.hpp"
 #include "sqlite/sqlite3.h"
 
+#include "vcf/odb_report.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
 #include "vcf/error.hpp"
@@ -201,7 +202,7 @@ namespace ebi
       SECTION("write and read error codes")
       {
           size_t line = 8;
-          std::string message{"testing erros"};
+          std::string message{"testing errors"};
           ebi::vcf::Error generic_error{line, message};
           ebi::vcf::MetaSectionError meta_section_error{line, message};
           ebi::vcf::SamplesBodyError samples_body_error{line, message};
@@ -272,6 +273,99 @@ namespace ebi
 
           CHECK(errors_read == 1);
       }
+
+      boost::filesystem::path db_file{db_name};
+      boost::filesystem::remove(db_file);
+      CHECK_FALSE(boost::filesystem::exists(db_file));
+
+  }
+
+  TEST_CASE("unit test: odb", "[output]")
+  {
+
+      std::string db_name = "test/input_files/sqlite_test.errors.odb.db";
+      ebi::vcf::OdbReportRW errorDAO{db_name};
+
+      SECTION("write and count errors") {
+          ebi::vcf::Error test_error{1, "testing errors"};
+          errorDAO.write_error(test_error);
+          errorDAO.write_error(test_error);
+          errorDAO.flush();
+          size_t count_errors = errorDAO.count_errors();
+          size_t count_warnings = errorDAO.count_warnings();
+          CHECK(count_errors == 2);
+          CHECK(count_warnings == 0);
+      }
+
+      SECTION("write and count warnings")
+      {
+          ebi::vcf::Error test_error{1, "testing warnings"};
+          errorDAO.write_warning(test_error);
+          errorDAO.flush();
+          size_t count_errors = errorDAO.count_errors();
+          size_t count_warnings = errorDAO.count_warnings();
+          CHECK(count_errors == 0);
+          CHECK(count_warnings == 1);
+      }
+
+      SECTION("write and read errors")
+      {
+          size_t line = 8;
+          std::string message{"testing errors"};
+          ebi::vcf::Error test_error{line, message};
+          errorDAO.write_error(test_error);
+          errorDAO.flush();
+
+          size_t errors_read = 0;
+          errorDAO.for_each_error([&](std::shared_ptr<ebi::vcf::Error> error) {
+              CHECK(error->get_line() == line);
+              CHECK(error->get_raw_message() == message);
+              errors_read++;
+          });
+          CHECK(errors_read == 1);
+      }
+
+      SECTION("write and read warnings")
+      {
+          size_t line = 10;
+          std::string message{"testing warnings"};
+          ebi::vcf::Error test_error{line, message};
+          errorDAO.write_warning(test_error);
+          errorDAO.flush();
+
+          size_t errors_read = 0;
+          errorDAO.for_each_warning([&](std::shared_ptr<ebi::vcf::Error> error) {
+              CHECK(error->get_line() == line);
+              CHECK(error->get_raw_message() == message);
+              errors_read++;
+          });
+          CHECK(errors_read == 1);
+      }
+
+
+      SECTION("write and read error codes")
+      {
+          size_t line = 8;
+          std::string message{"testing errors"};
+          ebi::vcf::Error generic_error{line, message};
+          ebi::vcf::MetaSectionError meta_section_error{line, message};
+          ebi::vcf::SamplesBodyError samples_body_error{line, message};
+          errorDAO.write_error(generic_error);
+          errorDAO.write_error(meta_section_error);
+          errorDAO.write_error(samples_body_error);
+          errorDAO.flush();
+
+          std::vector<std::shared_ptr<ebi::vcf::Error>> errors;
+          errorDAO.for_each_error([&](std::shared_ptr<ebi::vcf::Error> error) {
+              errors.push_back(error);
+          });
+
+          CHECK(errors.size());
+          CHECK(errors[0]->get_code() == ebi::vcf::ErrorCode::error);
+          CHECK(errors[1]->get_code() == ebi::vcf::ErrorCode::meta_section);
+          CHECK(errors[2]->get_code() == ebi::vcf::ErrorCode::samples_body);
+      }
+
 
       boost::filesystem::path db_file{db_name};
       boost::filesystem::remove(db_file);

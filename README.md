@@ -11,8 +11,20 @@ Please read the wiki for more details about checks already implemented.
 
 ## Dependencies
 
+### Boost
+
 The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.program_options, Boost.regex and Boost.system.
-If you are using Ubuntu, the required packages names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-program-options-dev` and `libboost-regex-dev`.
+If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-program-options-dev` and `libboost-regex-dev`.
+
+### ODB
+
+You will need to download the ODB compiler, the ODB common runtime library, and the SQLite database runtime library from [this page](http://codesynthesis.com/products/odb/download.xhtml).
+
+ODB requires SQLite3 to be installed. If you are using Ubuntu, the required packages' names will be `libsqlite3-0` and `libsqlite3-dev`.
+
+To install the ODB compiler, the easiest way is to download the `.deb` or `.rpm` packages, in order to be installed automatically with `dpkg`. Both the ODB runtime and SQLite database runtime libraries can be installed manually running `./configure && make && sudo make install`. This will install the libraries in `/usr/local/lib`.
+
+If you don't have root permissions, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`, without `sudo`.
 
 ## Build
 
@@ -20,9 +32,15 @@ The build has been tested on the following compilers:
 * Clang 3.5 to 3.7
 * GCC 4.8 to 5.0
 
-In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`. For those users who need static linkage, the option `-DBUILD_STATIC=1` must be provided to the `cmake` command.
+In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`. If the ODB libraries were not found during the build, please run `sudo updatedb && sudo ldconfig`.
 
-In any case, two binaries will be created in the `bin` subfolder: `vcf_validator` (the main application) and `test_validator` (unit tests).
+For those users who need static linkage, the option `-DBUILD_STATIC=1` must be provided to the `cmake` command. Also, if ODB has been installed in a non-default location, the option `-DODB_PATH=/path/to/odb/libraries/folder` must be also provided to the `cmake` command.
+
+In any case, the following binaries will be created in the `bin` subfolder:
+
+* `vcf_validator`: validation tool
+* `vcf_debugulator`: automatic fixing tool
+* `test_validator` and derivatives: testing correct behaviour of the tools listed above
 
 ## Test
 
