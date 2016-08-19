@@ -2,11 +2,12 @@ cmake_minimum_required (VERSION 2.8)
 project (vcf-validator CXX C)
 
 set (vcf-validator_VERSION_MAJOR 0)
-set (vcf-validator_VERSION_MINOR 2)
+set (vcf-validator_VERSION_MINOR 3)
 
 # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -Wall -Wno-unknown-pragmas -g")
-set (CMAKE_C_FLAGS " -DSQLITE_OMIT_LOAD_EXTENSION")
+# Needed to statically link ODB
+set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY")
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include_directories (inc)
@@ -16,7 +17,7 @@ include_directories (lib)
 
 set (MOD_ODB_SOURCES)
 
-set(ODB_MAPPING_CLASSES inc/vcf/error.hpp)
+set (ODB_MAPPING_CLASSES inc/vcf/error.hpp)
 
 foreach(_file ${ODB_MAPPING_CLASSES})
     string(REPLACE ".hpp" "-odb.cpp" gencppfile ${_file})
@@ -115,7 +116,21 @@ include_directories (${Boost_INCLUDE_DIR} )
 add_library(sqlite3 lib/sqlite/sqlite3.c)
 find_package (Threads REQUIRED)
 
-set(LIBRARIES_TO_LINK
+if (BUILD_STATIC)
+  set (ODB_PATH "/usr/local/lib" CACHE STRING "Path to ODB libraries installation folder")
+
+  set (LIBRARIES_TO_LINK
+        mod_vcf
+        mod_odb
+        ${Boost_LIBRARIES}
+        sqlite3
+        ${ODB_PATH}/libodb-sqlite.a
+        ${ODB_PATH}/libodb.a
+        ${CMAKE_THREAD_LIBS_INIT}
+        dl
+       )
+else (BUILD_STATIC)
+  set (LIBRARIES_TO_LINK
         mod_vcf
         mod_odb
         ${Boost_LIBRARIES}
@@ -123,7 +138,9 @@ set(LIBRARIES_TO_LINK
         ${CMAKE_THREAD_LIBS_INIT}
         odb-sqlite
         odb
-        )
+        dl
+       )
+endif (BUILD_STATIC)
 
 # Application tests
 add_executable (test_validator_v41 test/main_test.cpp ${V41_TESTS})
