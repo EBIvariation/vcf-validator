@@ -18,13 +18,15 @@
 #define VCF_VALIDATOR_ODB_REPORT_HPP
 
 
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
 #include <odb/database.hxx>
 #include <odb/sqlite/query.hxx>
-#include "report_writer.hpp"
-#include "report_reader.hpp"
-
 #include <odb/schema-catalog.hxx>
 #include <odb/sqlite/database.hxx>
+
+#include "report_writer.hpp"
+#include "report_reader.hpp"
 #include "vcf/error-odb.hpp"
 
 namespace ebi
