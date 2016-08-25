@@ -59,6 +59,13 @@ namespace ebi
               fixer.fix(line_index, line, *error);
           });
 
+          // advance input from the last error to the end of input
+          while (ebi::util::readline(input, line)) {
+              for (auto c : line) {
+                  output << c;
+              }
+          }
+
           size_t ignored_errors = fixer.get_ignored_errors();
           if (ignored_errors != 0) {
               std::cerr << "There were " << ignored_errors << " errors that couldn't be automatically fixed" << std::endl;
