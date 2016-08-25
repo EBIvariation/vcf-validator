@@ -136,11 +136,22 @@ namespace ebi
       }
   }
 
-  TEST_CASE("Fixing a VCF with wrong info fields", "[debugulator]")
+  TEST_CASE("Fixing a VCF with wrong INFO fields", "[debugulator]")
   {
+      // syntax error, AC must be a positive integer
       auto path = boost::filesystem::path("test/input_files/v4.1/failed/failed_body_info_001.vcf");
       bool first_validation, validation_after_fixing;
       std::string debug_message;
+      SECTION(path.string())
+      {
+          std::tie(first_validation, validation_after_fixing, debug_message) = fix_file(path);
+          CHECK_FALSE(first_validation);
+          INFO(debug_message);
+          CHECK(validation_after_fixing);
+      }
+
+      // semantic error, the number of values doesn't match the description in the meta section
+      path = boost::filesystem::path("test/input_files/v4.1/failed/failed_body_info_034.vcf");
       SECTION(path.string())
       {
           std::tie(first_validation, validation_after_fixing, debug_message) = fix_file(path);

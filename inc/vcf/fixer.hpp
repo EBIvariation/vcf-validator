@@ -115,7 +115,8 @@ namespace ebi
         virtual void visit(InfoBodyError &error) override
         {
             // TODO better log system, if any
-            std::cerr << "DEBUG: fixing invalid info field: " << error.get_field() << std::endl;
+            std::cerr << "DEBUG: line " << error.get_line() << ": fixing invalid INFO field " << error.get_field()
+                      << std::endl;
             int fixed = 0;
 
             std::vector<std::string> columns;
@@ -147,7 +148,8 @@ namespace ebi
                 output << "\t" << columns[i];
             }
             if (fixed != 1) {
-                std::cerr << "\twarning: field " << error.get_field() << " appeared " << fixed << " times " << std::endl;
+                std::cerr << "WARNING: line " << error.get_line() << ": field " << error.get_field() << " appeared "
+                          << fixed << " times " << std::endl;
             }
         }
         virtual void visit(FormatBodyError &error) override
@@ -168,7 +170,7 @@ namespace ebi
         virtual void visit(DuplicationError &error) override
         {
             // TODO better log system, if any
-            std::cerr << "DEBUG: fixing duplicate: removing line " << line_number << ": "
+            std::cerr << "DEBUG: line " << line_number << ": fixing duplicate: removing variant: "
             << std::string{line->begin(), line->end()} << std::endl;
         }
     };
