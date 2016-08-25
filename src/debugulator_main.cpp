@@ -19,8 +19,8 @@
 
 #include <boost/program_options.hpp>
 
+#include "vcf/odb_report.hpp"
 #include "vcf/debugulator.hpp"
-#include "vcf/sqlite_report.hpp"
 
 namespace
 {
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
             std::cerr << "Writing to standard output..." << std::endl;
         }
 
-        ebi::vcf::SqliteReportRW errorDAO{errors};
+        ebi::vcf::OdbReportRW errorDAO{errors};
 
         auto &input_stream = input_path == "stdin" ? std::cin : input_file;
         auto &output_stream = output_path == "stdout" ? std::cout : output_file;
