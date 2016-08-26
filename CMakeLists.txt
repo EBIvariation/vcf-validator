@@ -5,10 +5,13 @@ set (vcf-validator_VERSION_MAJOR 0)
 set (vcf-validator_VERSION_MINOR 3)
 
 # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -Wall -Wno-unknown-pragmas -g")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
 # Needed to statically link ODB
 set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY")
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+if(NOT CMAKE_BUILD_TYPE)
+    set (CMAKE_BUILD_TYPE  "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
 
 include_directories (inc)
 include_directories (lib)
@@ -23,11 +26,11 @@ foreach(_file ${ODB_MAPPING_CLASSES})
     string(REPLACE ".hpp" "-odb.cpp" gencppfile ${_file})
     string(REPLACE "inc" "src" right_place_gencppfile ${gencppfile})
     add_custom_command(
-            OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/${right_place_gencppfile}
-            COMMAND odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
+            OUTPUT ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
+            COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
             --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp
-            --output-dir ${CMAKE_CURRENT_SOURCE_DIR}/inc/vcf/ ${_file}
-            && mv ${CMAKE_CURRENT_SOURCE_DIR}/${gencppfile} ${CMAKE_CURRENT_SOURCE_DIR}/${right_place_gencppfile}
+            --output-dir ${CMAKE_HOME_DIRECTORY}/inc/vcf/ ${_file}
+            && mv ${CMAKE_HOME_DIRECTORY}/${gencppfile} ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
             DEPENDS ${_file}
             COMMENT "Building odb for ${_file}"
     )
