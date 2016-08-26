@@ -52,9 +52,7 @@ namespace ebi
                   if (current_line == line_index) {
                       break;
                   }
-                  for (auto c : line) {
-                      output << c;
-                  }
+                  util::writeline(output, line);
               }
               fixer.fix(line_index, line, *error);
           });
