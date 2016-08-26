@@ -42,7 +42,7 @@ In any case, the following binaries will be created in the `bin` subfolder:
 * `vcf_debugulator`: automatic fixing tool
 * `test_validator` and derivatives: testing correct behaviour of the tools listed above
 
-### ODB & Ragel build
+### Developers build
 
 For basic usage, skip this part. It's not needed that the user runs odb or ragel to generate code. For development or advance usage, this is how the ragel machines are built:
 
@@ -102,11 +102,11 @@ The logs about what the debugulator is doing will be written into the error outp
 ## Examples
 
 Simple example: `vcf_validator -i /path/to/file.vcf -v v4.1`  
-Full example: `vcf_validator -i /path/to/file.vcf -v 4.1 -l stop -r database,stdout -o /path/to/output/folder/`
+Full example: `vcf_validator -i /path/to/file.vcf -v v4.1 -l stop -r database,stdout -o /path/to/output/folder/`
 
 Debugulator example:
 ```
-vcf_validator -i /path/to/file.vcf -v 4.1 -r database -o /path/to/write/report/
+vcf_validator -i /path/to/file.vcf -v v4.1 -r database -o /path/to/write/report/
 vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timestamp.db -o /path/to/fixed.vcf 2>debugulator_log.txt
 ```
 
