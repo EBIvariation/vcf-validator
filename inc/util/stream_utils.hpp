@@ -45,6 +45,15 @@ namespace ebi
         return stream;
     }
 
+    template <typename Container>
+    std::ostream & writeline(std::ostream & stream, Container & container)
+    {
+        for (auto c : container) {
+            stream << c;
+        }
+        return stream;
+    }
+
     template <typename F, typename S>
     std::ostream &operator<<(std::ostream &os, const std::pair<F, S> &container)
     {

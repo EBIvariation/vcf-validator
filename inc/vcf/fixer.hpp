@@ -19,6 +19,8 @@
 
 #include <vector>
 #include <iostream>
+
+#include "util/stream_utils.hpp"
 #include "error.hpp"
 
 namespace ebi
@@ -48,50 +50,62 @@ namespace ebi
 
         virtual void visit(Error &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(MetaSectionError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(HeaderSectionError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(BodySectionError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(FileformatError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(ChromosomeBodyError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(PositionBodyError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(IdBodyError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(ReferenceAlleleBodyError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(AlternateAllelesBodyError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(QualityBodyError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(FilterBodyError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(InfoBodyError &error) override
@@ -100,14 +114,17 @@ namespace ebi
         }
         virtual void visit(FormatBodyError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(SamplesBodyError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(NormalizationError &error) override
         {
+            util::writeline(output, *line);
             ignored_errors++;
         }
         virtual void visit(DuplicationError &error) override

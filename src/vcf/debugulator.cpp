@@ -52,12 +52,17 @@ namespace ebi
                   if (current_line == line_index) {
                       break;
                   }
-                  for (auto c : line) {
-                      output << c;
-                  }
+                  ebi::util::writeline(output, line);
               }
               fixer.fix(line_index, line, *error);
           });
+
+          // advance input from the last error to the end of input
+          while (ebi::util::readline(input, line)) {
+              for (auto c : line) {
+                  output << c;
+              }
+          }
 
           size_t ignored_errors = fixer.get_ignored_errors();
           if (ignored_errors != 0) {
