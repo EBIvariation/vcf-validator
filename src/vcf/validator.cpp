@@ -77,5 +77,78 @@ namespace ebi
       return ParsingState::warnings;
     }
 
+    std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const &path, ValidationLevel level, ebi::vcf::Version version)
+    {
+        auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, version};
+        auto records = std::vector<ebi::vcf::Record>{};
+
+        switch (level) {
+        case ValidationLevel::error:
+            switch (version) {
+            case ebi::vcf::Version::v41:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::QuickValidator_v41(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            case ebi::vcf::Version::v42:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::QuickValidator_v42(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            case ebi::vcf::Version::v43:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::QuickValidator_v43(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            default:
+                throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
+            }
+
+        case ValidationLevel::warning:
+            switch (version) {
+            case ebi::vcf::Version::v41:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::FullValidator_v41(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            case ebi::vcf::Version::v42:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::FullValidator_v42(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            case ebi::vcf::Version::v43:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::FullValidator_v43(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            default:
+                throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
+            }
+
+        case ValidationLevel::stop:
+            switch (version) {
+            case ebi::vcf::Version::v41:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::Reader_v41(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            case ebi::vcf::Version::v42:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::Reader_v42(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            case ebi::vcf::Version::v43:
+                return std::unique_ptr<ebi::vcf::Parser>(
+                        new ebi::vcf::Reader_v43(
+                                std::make_shared<ebi::vcf::Source>(source),
+                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+            default:
+                throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
+            }
+
+        default:
+            throw std::invalid_argument{"Please choose one of the accepted validation levels"};
+        }
+    }
   }
 }

@@ -51,19 +51,18 @@ namespace ebi
       return validator.is_valid();
   }
 
-  std::tuple<bool, bool, std::string> fix_file(boost::filesystem::path path)
+  std::tuple<bool, bool, std::string> fix_file(boost::filesystem::path path, vcf::Version version)
   {
       std::ifstream file{path.c_str()};
       if (not file) {
           throw std::runtime_error{"test file not found: " + path.string()};
       }
 
-      auto source = ebi::vcf::Source{path.string(), ebi::vcf::InputFormat::VCF_FILE_VCF, ebi::vcf::Version::v41};
+      auto source = ebi::vcf::Source{path.string(), ebi::vcf::InputFormat::VCF_FILE_VCF, version};
       auto records = std::vector<ebi::vcf::Record>{};
 
-      auto validator = ebi::vcf::FullValidator_v41{
-              std::make_shared<ebi::vcf::Source>(source),
-              std::make_shared<std::vector<ebi::vcf::Record>>(records)};
+
+      auto validator = ebi::vcf::build_parser(path.string(), ebi::vcf::ValidationLevel::warning, version);
 
       // here we check that the file is not valid:
       // file: ifstream from test files
@@ -74,7 +73,7 @@ namespace ebi
       auto report = new ebi::vcf::OdbReportRW{db_path.string()};
       std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> reports;
       reports.emplace_back(report);
-      bool first_validation = is_valid_vcf_file(file, validator, reports);
+      bool first_validation = is_valid_vcf_file(file, *validator, reports);
 
 
       // now we fix the file
@@ -92,16 +91,14 @@ namespace ebi
       // fixed_vcf: stringstream the debugulator::fix_vcf_file wrote
       // reports: ReportWriters (one OdbReportRW writing to database "errors_after")
       fixed_vcf.seekg(0);
-      auto validator2 = ebi::vcf::FullValidator_v41{
-              std::make_shared<ebi::vcf::Source>(source),
-              std::make_shared<std::vector<ebi::vcf::Record>>(records)};
+      auto validator2 = ebi::vcf::build_parser(path.string(), ebi::vcf::ValidationLevel::warning, version);
       auto db_path_after = boost::filesystem::path{"/tmp/"} / path.filename();
       db_path_after += ".debugulator_test.errors_after.db";
       boost::filesystem::remove(db_path_after);   // make sure the dbs doesn't exist from previous runs
       auto output_after = new ebi::vcf::OdbReportRW{db_path_after.string()};
       reports.clear();
       reports.emplace_back(output_after);
-      bool successfully_fixed = is_valid_vcf_file(fixed_vcf, validator2, reports);
+      bool successfully_fixed = is_valid_vcf_file(fixed_vcf, *validator2, reports);
 
       auto fixed_vcf_path = boost::filesystem::path{"/tmp/"} / path.filename();
       fixed_vcf_path += ".debugulator_test.fixed.vcf";
@@ -124,40 +121,49 @@ namespace ebi
 
   TEST_CASE("Fixing a VCF with duplicates", "[debugulator]")
   {
-      auto path = boost::filesystem::path("test/input_files/v4.1/failed/failed_body_duplicated_000.vcf");
-      bool first_validation, validation_after_fixing;
-      std::string debug_message;
-      SECTION(path.string())
-      {
-          std::tie(first_validation, validation_after_fixing, debug_message) = fix_file(path);
-          CHECK_FALSE(first_validation);
-          INFO(debug_message);
-          CHECK(validation_after_fixing);
+      ebi::vcf::Version version = ebi::vcf::Version::v41;
+      for (size_t i = 1; i <= 3; ++i) {
+          auto path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_duplicated_000.vcf");
+          bool first_validation, validation_after_fixing;
+          std::string debug_message;
+          SECTION(path.string()) {
+              std::tie(first_validation, validation_after_fixing, debug_message) = fix_file(path, version);
+              CHECK_FALSE(first_validation);
+              INFO(debug_message);
+              CHECK(validation_after_fixing);
+          }
+          version = static_cast<ebi::vcf::Version>(i);
       }
   }
 
   TEST_CASE("Fixing a VCF with wrong INFO fields", "[debugulator]")
   {
-      // syntax error, AC must be a positive integer
-      auto path = boost::filesystem::path("test/input_files/v4.1/failed/failed_body_info_001.vcf");
-      bool first_validation, validation_after_fixing;
-      std::string debug_message;
-      SECTION(path.string())
-      {
-          std::tie(first_validation, validation_after_fixing, debug_message) = fix_file(path);
-          CHECK_FALSE(first_validation);
-          INFO(debug_message);
-          CHECK(validation_after_fixing);
-      }
+      boost::filesystem::path path;
+      ebi::vcf::Version version = ebi::vcf::Version::v41;
 
-      // semantic error, the number of values doesn't match the description in the meta section
-      path = boost::filesystem::path("test/input_files/v4.1/failed/failed_body_info_034.vcf");
-      SECTION(path.string())
-      {
-          std::tie(first_validation, validation_after_fixing, debug_message) = fix_file(path);
-          CHECK_FALSE(first_validation);
-          INFO(debug_message);
-          CHECK(validation_after_fixing);
+      for (size_t i = 1; i <= 3; ++i) {
+          // syntax error, AC must be a positive integer
+          path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_info_038.vcf");
+          bool first_validation, validation_after_fixing;
+          std::string debug_message;
+          SECTION(path.string())
+          {
+              std::tie(first_validation, validation_after_fixing, debug_message) = fix_file(path, version);
+              CHECK_FALSE(first_validation);
+              INFO(debug_message);
+              CHECK(validation_after_fixing);
+          }
+
+          // semantic error, the number of values doesn't match the description in the meta section
+          path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_info_034.vcf");
+          SECTION(path.string())
+          {
+              std::tie(first_validation, validation_after_fixing, debug_message) = fix_file(path, version);
+              CHECK_FALSE(first_validation);
+              INFO(debug_message);
+              CHECK(validation_after_fixing);
+          }
+          version = static_cast<ebi::vcf::Version>(i);
       }
   }
 }

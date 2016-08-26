@@ -39,9 +39,6 @@ namespace
     size_t const default_line_buffer_size = 64 * 1024;
     namespace po = boost::program_options;
 
-    enum class ValidationLevel { error, warning, stop };
-
-
     po::options_description build_command_line_options()
     {
         po::options_description description("Usage: vcf-validator [OPTIONS] [< input_file]\nAllowed options");
@@ -88,14 +85,14 @@ namespace
         return 0;
     }
 
-    ValidationLevel get_validation_level(std::string const & level_str)
+    ebi::vcf::ValidationLevel get_validation_level(std::string const & level_str)
     {
         if (level_str == "error") {
-            return ValidationLevel::error;
+            return ebi::vcf::ValidationLevel::error;
         } else if (level_str == "warning") {
-            return ValidationLevel::warning;
+            return ebi::vcf::ValidationLevel::warning;
         } else if (level_str == "stop") {
-            return ValidationLevel::stop;
+            return ebi::vcf::ValidationLevel::stop;
         }
 
         throw std::invalid_argument{"Please choose one of the accepted validation levels"};
@@ -163,80 +160,6 @@ namespace
         }
 
         return outputs;
-    }
-
-    std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const & path, ValidationLevel level, ebi::vcf::Version version)
-    {
-        auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, version};
-        auto records = std::vector<ebi::vcf::Record>{};
-
-        switch (level) {
-        case ValidationLevel::error:
-            switch (version) {
-            case ebi::vcf::Version::v41:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::QuickValidator_v41(
-                            std::make_shared<ebi::vcf::Source>(source),
-                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-            case ebi::vcf::Version::v42:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::QuickValidator_v42(
-                            std::make_shared<ebi::vcf::Source>(source),
-                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-            case ebi::vcf::Version::v43:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::QuickValidator_v43(
-                            std::make_shared<ebi::vcf::Source>(source),
-                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-            default:
-                throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
-            }
-
-        case ValidationLevel::warning:
-            switch (version) {
-            case ebi::vcf::Version::v41:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::FullValidator_v41(
-                            std::make_shared<ebi::vcf::Source>(source),
-                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-            case ebi::vcf::Version::v42:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::FullValidator_v42(
-                            std::make_shared<ebi::vcf::Source>(source),
-                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-            case ebi::vcf::Version::v43:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::FullValidator_v43(
-                            std::make_shared<ebi::vcf::Source>(source),
-                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-            default:
-                throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
-            }
-
-        case ValidationLevel::stop:
-            switch (version) {
-            case ebi::vcf::Version::v41:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::Reader_v41(
-                            std::make_shared<ebi::vcf::Source>(source),
-                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-            case ebi::vcf::Version::v42:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::Reader_v42(
-                            std::make_shared<ebi::vcf::Source>(source),
-                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-            case ebi::vcf::Version::v43:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::Reader_v43(
-                            std::make_shared<ebi::vcf::Source>(source),
-                            std::make_shared<std::vector<ebi::vcf::Record>>(records)));
-            default:
-                throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
-            }
-
-        default:
-            throw std::invalid_argument{"Please choose one of the accepted validation levels"};
-        }
     }
 
     bool is_valid_vcf_file(std::istream &input,
