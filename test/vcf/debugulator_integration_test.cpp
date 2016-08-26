@@ -21,6 +21,7 @@
 #include "parser_test_aux.hpp"
 #include "vcf/odb_report.hpp"
 #include "vcf/debugulator.hpp"
+#include "test_utils.hpp"
 
 namespace ebi
 {
@@ -51,16 +52,12 @@ namespace ebi
       return validator.is_valid();
   }
 
-  std::tuple<bool, bool, std::string> fix_file(boost::filesystem::path path, vcf::Version version)
+  std::tuple<bool, bool, std::string, long> fix_file(boost::filesystem::path path, vcf::Version version)
   {
       std::ifstream file{path.c_str()};
       if (not file) {
           throw std::runtime_error{"test file not found: " + path.string()};
       }
-
-      auto source = ebi::vcf::Source{path.string(), ebi::vcf::InputFormat::VCF_FILE_VCF, version};
-      auto records = std::vector<ebi::vcf::Record>{};
-
 
       auto validator = ebi::vcf::build_parser(path.string(), ebi::vcf::ValidationLevel::warning, version);
 
@@ -86,6 +83,8 @@ namespace ebi
       std::stringstream fixed_vcf;
       vcf::debugulator::fix_vcf_file(file, *report, fixed_vcf);
       file.close();
+      long fixed_vcf_lines = count_lines(fixed_vcf);
+
 
       // here we check that the fixed file is valid:
       // fixed_vcf: stringstream the debugulator::fix_vcf_file wrote
@@ -116,21 +115,26 @@ namespace ebi
           boost::filesystem::remove(db_path);
           boost::filesystem::remove(db_path_after);
       }
-      return std::tuple<bool, bool, std::string>{first_validation, successfully_fixed, debug_message.str()};
+      return std::tuple<bool, bool, std::string, long>{first_validation,
+                                                       successfully_fixed,
+                                                       debug_message.str(),
+                                                       fixed_vcf_lines};
   }
 
   TEST_CASE("Fixing a VCF with duplicates", "[debugulator]")
   {
       ebi::vcf::Version version = ebi::vcf::Version::v41;
+      bool first_validation, validation_after_fixing;
+      std::string debug_message;
+      long lines;
       for (size_t i = 1; i <= 3; ++i) {
-          auto path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_duplicated_000.vcf");
-          bool first_validation, validation_after_fixing;
-          std::string debug_message;
+          auto path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_duplicated_001.vcf");
           SECTION(path.string()) {
-              std::tie(first_validation, validation_after_fixing, debug_message) = fix_file(path, version);
+              std::tie(first_validation, validation_after_fixing, debug_message, lines) = fix_file(path, version);
               CHECK_FALSE(first_validation);
               INFO(debug_message);
               CHECK(validation_after_fixing);
+              CHECK(lines == 6);
           }
           version = static_cast<ebi::vcf::Version>(i);
       }
@@ -140,28 +144,30 @@ namespace ebi
   {
       boost::filesystem::path path;
       ebi::vcf::Version version = ebi::vcf::Version::v41;
+      bool first_validation, validation_after_fixing;
+      std::string debug_message;
+      long lines;
 
       for (size_t i = 1; i <= 3; ++i) {
           // syntax error, AC must be a positive integer
           path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_info_038.vcf");
-          bool first_validation, validation_after_fixing;
-          std::string debug_message;
-          SECTION(path.string())
-          {
-              std::tie(first_validation, validation_after_fixing, debug_message) = fix_file(path, version);
+          SECTION(path.string()) {
+              std::tie(first_validation, validation_after_fixing, debug_message, lines) = fix_file(path, version);
               CHECK_FALSE(first_validation);
               INFO(debug_message);
               CHECK(validation_after_fixing);
+              CHECK(lines == 11);
           }
 
           // semantic error, the number of values doesn't match the description in the meta section
           path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_info_034.vcf");
           SECTION(path.string())
           {
-              std::tie(first_validation, validation_after_fixing, debug_message) = fix_file(path, version);
+              std::tie(first_validation, validation_after_fixing, debug_message, lines) = fix_file(path, version);
               CHECK_FALSE(first_validation);
               INFO(debug_message);
               CHECK(validation_after_fixing);
+              CHECK(lines == 5);
           }
           version = static_cast<ebi::vcf::Version>(i);
       }
