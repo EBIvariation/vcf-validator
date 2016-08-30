@@ -25,8 +25,8 @@
 #include <odb/schema-catalog.hxx>
 #include <odb/sqlite/database.hxx>
 
-#include "report_writer.hpp"
-#include "report_reader.hpp"
+#include "vcf/report_writer.hpp"
+#include "vcf/report_reader.hpp"
 #include "vcf/error-odb.hpp"
 
 namespace ebi

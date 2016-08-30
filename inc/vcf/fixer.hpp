@@ -117,39 +117,38 @@ namespace ebi
             // TODO better log system, if any
             std::cerr << "DEBUG: line " << error.get_line() << ": fixing invalid INFO field " << error.get_field()
                       << std::endl;
-            int fixed = 0;
+            const int info_column_index = 7;
+            const std::string empty_info_column = ".";
 
-            std::vector<std::string> columns;
-            std::string string_line{line->begin(), line->end()};
-            util::string_split(string_line, "\t", columns);
-            std::vector<std::string> infos;
-            util::string_split(columns[7], ";", infos);
+            int num_removed_subfields = 0;
+            std::string string_line = {line->begin(), line->end()};
 
-            for (size_t i = 0; i < 7; ++i) {
-                output << columns[i] << "\t";
-            }
-            std::vector<std::string> key_value;
-            for (size_t j = 0; j < infos.size(); ++j) {
-                util::string_split(infos[j], "=", key_value);
-                if (key_value[0] != error.get_field()) {
-                    if ((fixed - j) != 0) { // if this is not the first field we don't remove, then write the separator
-                        output << ";";
+            fix_column(info_column_index, string_line, "\t", [&](std::string &info_column) {
+                std::vector<std::string> info_subfields, keys_values;
+                util::string_split(info_column, ";", info_subfields);
+
+                for (size_t j = 0; j < info_subfields.size(); ++j) {
+                    util::string_split(info_subfields[j], "=", keys_values);
+                    if (keys_values[0] != error.get_field()) {
+                        if ((num_removed_subfields - j) != 0) {
+                            // if this is not the first field we don't remove, then write the separator
+                            output << ";";
+                        }
+                        output << info_subfields[j];
+                    } else {
+                        num_removed_subfields++;
                     }
-                    output << infos[j];
-                } else {
-                    fixed++;
                 }
-            }
 
-            if (fixed == infos.size()) {
-                output << ".";
-            }
-            for (size_t i = 8; i < columns.size(); ++i) {
-                output << "\t" << columns[i];
-            }
-            if (fixed != 1) {
+                if (num_removed_subfields == info_subfields.size()) {
+                    // we removed all the subfields there were: write empty column
+                    output << empty_info_column;
+                }
+            });
+
+            if (num_removed_subfields != 1) {
                 std::cerr << "WARNING: line " << error.get_line() << ": field " << error.get_field() << " appeared "
-                          << fixed << " times " << std::endl;
+                          << num_removed_subfields << " times " << std::endl;
             }
         }
         virtual void visit(FormatBodyError &error) override
@@ -172,6 +171,32 @@ namespace ebi
             // TODO better log system, if any
             std::cerr << "DEBUG: line " << line_number << ": fixing duplicate: removing variant: "
             << std::string{line->begin(), line->end()} << std::endl;
+        }
+
+      protected:
+        /**
+         * splits a line and allows to rewrite one of the columns, copying the other columns into "output"
+         * @param column_index: index to the column to modify
+         * @param line: whole line that will be split
+         * @param separator: will be used to split the line
+         * @param fix_function: takes a string, which is the column to fix. this function must write to the member "output"
+         */
+        void fix_column(size_t column_index,
+                        const std::string &line,
+                        std::string separator,
+                        std::function<void(std::string &column)> fix_function) {
+
+            std::vector<std::string> columns;
+            util::string_split(line, "\t", columns);
+            for (size_t i = 0; i < column_index; ++i) {
+                output << columns[i] << "\t";
+            }
+
+            fix_function(columns[column_index]);
+
+            for (size_t i = column_index+1; i < columns.size(); ++i) {
+                output << "\t" << columns[i];
+            }
         }
     };
   }
