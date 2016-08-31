@@ -68,20 +68,8 @@ namespace
 
       return 0;
   }
-
-  ValidationLevel get_validation_level(std::string const &level_str)
-  {
-      if (level_str == "error") {
-          return ValidationLevel::error;
-      } else if (level_str == "warning") {
-          return ValidationLevel::warning;
-      } else if (level_str == "stop") {
-          return ValidationLevel::stop;
-      }
-
-      throw std::invalid_argument{"Please choose one of the accepted validation levels"};
-  }
 }
+
 int main(int argc, char **argv)
 {
     namespace po = boost::program_options;

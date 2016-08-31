@@ -120,7 +120,7 @@ namespace ebi
             const int info_column_index = 7;
             const std::string empty_info_column = ".";
 
-            int num_removed_subfields = 0;
+            size_t num_removed_subfields = 0;
             std::string string_line = {line->begin(), line->end()};
 
             fix_column(info_column_index, string_line, "\t", [&](std::string &info_column) {
@@ -187,15 +187,15 @@ namespace ebi
                         std::function<void(std::string &column)> fix_function) {
 
             std::vector<std::string> columns;
-            util::string_split(line, "\t", columns);
+            util::string_split(line, separator.c_str(), columns);
             for (size_t i = 0; i < column_index; ++i) {
-                output << columns[i] << "\t";
+                output << columns[i] << separator;
             }
 
             fix_function(columns[column_index]);
 
             for (size_t i = column_index+1; i < columns.size(); ++i) {
-                output << "\t" << columns[i];
+                output << separator << columns[i];
             }
         }
     };

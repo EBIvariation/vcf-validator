@@ -122,6 +122,7 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) { visitor.visit(*this); }
         Severity get_severity() { return severity; }
         void set_severity(Severity severity) { Error::severity = severity; }
+        unsigned long get_id() const { return id_; }
 
 
       private:
@@ -130,8 +131,6 @@ namespace ebi
         size_t line;
         std::string message;
         Severity severity;
-      public:
-      private:
 
         #pragma db id auto
         unsigned long id_;
