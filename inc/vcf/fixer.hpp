@@ -130,7 +130,7 @@ namespace ebi
                 for (size_t j = 0; j < info_subfields.size(); ++j) {
                     util::string_split(info_subfields[j], "=", keys_values);
                     if (keys_values[0] != error.get_field()) {
-                        if ((num_removed_subfields - j) != 0) {
+                        if (num_removed_subfields != j) {
                             // if this is not the first field we don't remove, then write the separator
                             output << ";";
                         }

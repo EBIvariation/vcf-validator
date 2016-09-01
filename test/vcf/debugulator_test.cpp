@@ -15,6 +15,7 @@
  */
 
 #include <boost/filesystem.hpp>
+#include <fstream>
 
 #include "catch/catch.hpp"
 
@@ -62,5 +63,19 @@ namespace ebi
           CHECK(info_fields.size() == 2);
       }
   }
+
+  TEST_CASE("Empty report", "[debugulator]")
+  {
+      boost::filesystem::path path{"test/input_files/complexfile_passed_000.vcf.errors.1472743634194.db"};
+      std::ifstream file{"test/input_files/v4.1/passed/complexfile_passed_000.vcf"};
+      std::stringstream ss;
+      SECTION(path.string())
+      {
+          vcf::OdbReportRW report{path.string()};
+          size_t fixed_errors = vcf::debugulator::fix_vcf_file(file, report, ss);
+          CHECK(fixed_errors == 0);
+      }
+  }
+
 }
 
