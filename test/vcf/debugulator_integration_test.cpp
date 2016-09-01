@@ -70,7 +70,7 @@ namespace ebi
       return is_valid_vcf_file(file, *validator, reports);
   }
 
-  std::tuple<std::stringstream, long> fix(const boost::filesystem::path &path, std::string report_tag)
+  std::tuple<std::unique_ptr<std::stringstream>, long> fix(const boost::filesystem::path &path, std::string report_tag)
   {
       std::ifstream file{path.c_str()};
 
@@ -79,15 +79,15 @@ namespace ebi
       db_path += ".debugulator_test." + report_tag + ".db";
       ebi::vcf::OdbReportRW report{db_path.string()};
 
-      std::stringstream fixed_vcf; // writing result vcf to a stringstream in memory
+      std::unique_ptr<std::stringstream> fixed_vcf{new std::stringstream{}}; // writing result vcf to a stringstream in memory
 
-      vcf::debugulator::fix_vcf_file(file, report, fixed_vcf);
+      vcf::debugulator::fix_vcf_file(file, report, *fixed_vcf);
       file.close();
-      fixed_vcf.seekg(0);
-      long fixed_vcf_lines = count_lines(fixed_vcf);
-      fixed_vcf.seekg(0);
+      fixed_vcf->seekg(0);
+      long fixed_vcf_lines = count_lines(*fixed_vcf);
+      fixed_vcf->seekg(0);
 
-      return std::tuple<std::stringstream, long>(std::move(fixed_vcf), fixed_vcf_lines);
+      return std::tuple<std::unique_ptr<std::stringstream>, long>(std::move(fixed_vcf), fixed_vcf_lines);
   }
 
   std::string handle_test_results(const boost::filesystem::path &path,
@@ -124,18 +124,18 @@ namespace ebi
       ebi::vcf::Version version = ebi::vcf::Version::v41;
       bool first_validation, second_validation;
       std::string debug_message;
-      std::stringstream fixed_vcf;
+      std::unique_ptr<std::stringstream> fixed_vcf;
       long lines;
 
       for (size_t i = 1; i <= 3; ++i) {
           auto path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_duplicated_001.vcf");
           SECTION(path.string()) {
-              std::ifstream file = std::ifstream{path.c_str()};
+              std::ifstream file{path.c_str()};
               first_validation = validate(file, path, BEFORE_TAG, version);
               REQUIRE_FALSE(first_validation);
               std::tie(fixed_vcf, lines) = fix(path, BEFORE_TAG);
-              second_validation = validate(fixed_vcf, path, AFTER_TAG, version);
-              debug_message = handle_test_results(path, second_validation, fixed_vcf);
+              second_validation = validate(*fixed_vcf, path, AFTER_TAG, version);
+              debug_message = handle_test_results(path, second_validation, *fixed_vcf);
               INFO(debug_message);
               REQUIRE(second_validation);
               REQUIRE(lines == 6);
@@ -150,19 +150,19 @@ namespace ebi
       ebi::vcf::Version version = ebi::vcf::Version::v41;
       bool first_validation, second_validation;
       std::string debug_message;
-      std::stringstream fixed_vcf;
+      std::unique_ptr<std::stringstream> fixed_vcf;
       long lines;
 
       for (size_t i = 1; i <= 3; ++i) {
           // syntax error, AC must be a positive integer
           path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_info_038.vcf");
           SECTION(path.string()) {
-              std::ifstream file = std::ifstream{path.c_str()};
+              std::ifstream file{path.c_str()};
               first_validation = validate(file, path, BEFORE_TAG, version);
               REQUIRE_FALSE(first_validation);
               std::tie(fixed_vcf, lines) = fix(path, BEFORE_TAG);
-              second_validation = validate(fixed_vcf, path, AFTER_TAG, version);
-              debug_message = handle_test_results(path, second_validation, fixed_vcf);
+              second_validation = validate(*fixed_vcf, path, AFTER_TAG, version);
+              debug_message = handle_test_results(path, second_validation, *fixed_vcf);
               INFO(debug_message);
               REQUIRE(second_validation);
               REQUIRE(lines == 11);
@@ -171,12 +171,12 @@ namespace ebi
           // semantic error, the number of values doesn't match the description in the meta section
           path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_info_034.vcf");
           SECTION(path.string()) {
-              std::ifstream file = std::ifstream{path.c_str()};
+              std::ifstream file{path.c_str()};
               first_validation = validate(file, path, BEFORE_TAG, version);
               REQUIRE_FALSE(first_validation);
               std::tie(fixed_vcf, lines) = fix(path, BEFORE_TAG);
-              second_validation = validate(fixed_vcf, path, AFTER_TAG, version);
-              debug_message = handle_test_results(path, second_validation, fixed_vcf);
+              second_validation = validate(*fixed_vcf, path, AFTER_TAG, version);
+              debug_message = handle_test_results(path, second_validation, *fixed_vcf);
               INFO(debug_message);
               REQUIRE(second_validation);
               REQUIRE(lines == 5);
