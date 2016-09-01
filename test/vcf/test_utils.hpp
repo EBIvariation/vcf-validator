@@ -19,6 +19,8 @@
 
 #include <memory>
 #include <vector>
+#include <fstream>
+#include <algorithm>
 
 #include "vcf/file_structure.hpp"
 
@@ -59,6 +61,20 @@ namespace ebi
 
       return vcf::Record{1, "1", summary.normalized_pos, {"."}, summary.normalized_reference, summary.normalized_alternate,
                          0, {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
+  }
+
+  /** simple count for small tests, no need to optimize further */
+  inline long count_lines(std::istream &input_stream)
+  {
+      return std::count(std::istreambuf_iterator<char>(input_stream),
+                        std::istreambuf_iterator<char>(),
+                        '\n');
+  }
+
+  inline long count_lines(std::string filename)
+  {
+      std::ifstream file{filename};
+      return count_lines(file);
   }
 }
 

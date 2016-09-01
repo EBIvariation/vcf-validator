@@ -22,31 +22,40 @@ namespace ebi
   namespace vcf
   {
     OdbReportRW::OdbReportRW(const std::string &db_name) : db_name(db_name), current_transaction_size{0},
-                                                          transaction_size{1000000}
+                                                           transaction_size{1000000}
     {
         try {
-            db = std::unique_ptr<odb::sqlite::database> (
-                    new odb::sqlite::database{
-                            db_name, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE});
+            boost::filesystem::path db_file{db_name};
+            if (boost::filesystem::exists(db_file)) {
+                db = std::unique_ptr<odb::sqlite::database> (
+                        new odb::sqlite::database{
+                                db_name, SQLITE_OPEN_READWRITE});
+            } else {
+                // if the file doesn't exist, create database and schema
+                db = std::unique_ptr<odb::sqlite::database>(
+                        new odb::sqlite::database{
+                                db_name, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE});
 
-            // Create the database schema. Due to bugs in SQLite foreign key
-            // support for DDL statements, we need to temporarily disable
-            // foreign keys.
-            //
-            {
-                odb::core::connection_ptr c{db->connection()};
+                // Create the database schema. Due to bugs in SQLite foreign key
+                // support for DDL statements, we need to temporarily disable
+                // foreign keys.
+                //
+                {
+                    odb::core::connection_ptr c{db->connection()};
 
-                c->execute("PRAGMA foreign_keys=OFF");
+                    c->execute("PRAGMA foreign_keys=OFF");
 
-                odb::core::transaction t{c->begin()};
-                odb::core::schema_catalog::create_schema(*db);
-                t.commit();
+                    odb::core::transaction t{c->begin()};
+                    odb::core::schema_catalog::create_schema(*db);
+                    t.commit();
 
-                c->execute("PRAGMA foreign_keys=ON");
+                    c->execute("PRAGMA foreign_keys=ON");
+                }
             }
         } catch (const odb::exception& e) {
             throw std::runtime_error{std::string{"ODB report: Can't initialize database: "} + e.what()};
         }
+
     }
 
     OdbReportRW::~OdbReportRW()

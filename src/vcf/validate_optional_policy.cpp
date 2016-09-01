@@ -212,7 +212,8 @@ namespace ebi
             } else {
                 state.add_bad_defined_meta("INFO", id);
                 throw new InfoBodyError{state.n_lines,
-                        "Info '" + id + "' is not listed in a valid meta-data INFO entry"};
+                                        "Info '" + id + "' is not listed in a valid meta-data INFO entry",
+                                        id};
             }
         }
     }

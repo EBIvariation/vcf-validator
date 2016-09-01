@@ -21,6 +21,7 @@
 #include <iostream>
 
 #include "util/stream_utils.hpp"
+#include "util/string_utils.hpp"
 #include "error.hpp"
 
 namespace ebi
@@ -108,9 +109,47 @@ namespace ebi
             util::writeline(output, *line);
             ignored_errors++;
         }
+        /**
+         * fix: remove the info field that caused the error
+         */
         virtual void visit(InfoBodyError &error) override
         {
-            ignored_errors++;
+            // TODO better log system, if any
+            std::cerr << "DEBUG: line " << error.get_line() << ": fixing invalid INFO field " << error.get_field()
+                      << std::endl;
+            const int info_column_index = 7;
+            const std::string empty_info_column = ".";
+
+            size_t num_removed_subfields = 0;
+            std::string string_line = {line->begin(), line->end()};
+
+            fix_column(info_column_index, string_line, "\t", [&](std::string &info_column) {
+                std::vector<std::string> info_subfields, keys_values;
+                util::string_split(info_column, ";", info_subfields);
+
+                for (size_t j = 0; j < info_subfields.size(); ++j) {
+                    util::string_split(info_subfields[j], "=", keys_values);
+                    if (keys_values[0] != error.get_field()) {
+                        if (num_removed_subfields != j) {
+                            // if this is not the first field we don't remove, then write the separator
+                            output << ";";
+                        }
+                        output << info_subfields[j];
+                    } else {
+                        num_removed_subfields++;
+                    }
+                }
+
+                if (num_removed_subfields == info_subfields.size()) {
+                    // we removed all the subfields there were: write empty column
+                    output << empty_info_column;
+                }
+            });
+
+            if (num_removed_subfields != 1) {
+                std::cerr << "WARNING: line " << error.get_line() << ": field " << error.get_field() << " appeared "
+                          << num_removed_subfields << " times " << std::endl;
+            }
         }
         virtual void visit(FormatBodyError &error) override
         {
@@ -130,8 +169,34 @@ namespace ebi
         virtual void visit(DuplicationError &error) override
         {
             // TODO better log system, if any
-            std::cerr << "## fixing duplicate: removing line " << line_number << ": "
+            std::cerr << "DEBUG: line " << line_number << ": fixing duplicate: removing variant: "
             << std::string{line->begin(), line->end()} << std::endl;
+        }
+
+      protected:
+        /**
+         * splits a line and allows to rewrite one of the columns, copying the other columns into "output"
+         * @param column_index: index to the column to modify
+         * @param line: whole line that will be split
+         * @param separator: will be used to split the line
+         * @param fix_function: takes a string, which is the column to fix. this function must write to the member "output"
+         */
+        void fix_column(size_t column_index,
+                        const std::string &line,
+                        std::string separator,
+                        std::function<void(std::string &column)> fix_function) {
+
+            std::vector<std::string> columns;
+            util::string_split(line, separator.c_str(), columns);
+            for (size_t i = 0; i < column_index; ++i) {
+                output << columns[i] << separator;
+            }
+
+            fix_function(columns[column_index]);
+
+            for (size_t i = column_index+1; i < columns.size(); ++i) {
+                output << separator << columns[i];
+            }
         }
     };
   }

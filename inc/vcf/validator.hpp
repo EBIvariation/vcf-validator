@@ -39,7 +39,9 @@ namespace ebi
 {
   namespace vcf
   {
-    
+
+    enum class ValidationLevel { error, warning, stop };
+
     // Only check syntax
     struct QuickValidatorCfg
     {
@@ -173,7 +175,8 @@ namespace ebi
     using QuickValidator_v43 = ParserImpl_v43<QuickValidatorCfg>;
     using FullValidator_v43 = ParserImpl_v43<FullValidatorCfg>;
     using Reader_v43 = ParserImpl_v43<ReaderCfg>;
-    
+
+    std::unique_ptr<Parser> build_parser(std::string const & path, ValidationLevel level, Version version);
   }
 }
 

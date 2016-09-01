@@ -450,107 +450,170 @@
     }
     
     action info_AA_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AA value is not a single dot or a string of bases"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AA value is not a single dot or a string of bases",
+                "AA"});
         fhold; fgoto body_section_skip;
     }
     
     action info_AC_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AC value is not a comma-separated list of numbers"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AC value is not a comma-separated list of numbers",
+                "AC"});
         fhold; fgoto body_section_skip;
     }
     
     action info_AD_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AD value is not a comma-separated list of numbers"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AD value is not a comma-separated list of numbers",
+                "AD"});
         fhold; fgoto body_section_skip;
     }
     
     action info_ADF_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info ADF value is not a comma-separated list of numbers"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info ADF value is not a comma-separated list of numbers",
+                "ADF"});
         fhold; fgoto body_section_skip;
     }
     
     action info_ADR_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info ADR value is not a comma-separated list of numbers"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info ADR value is not a comma-separated list of numbers",
+                "ADR"});
         fhold; fgoto body_section_skip;
     }
 
     action info_AF_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AF value is not a comma-separated list of numbers"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AF value is not a comma-separated list of numbers",
+                "AF"});
         fhold; fgoto body_section_skip;
     }
     
     action info_AN_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info AN value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AN value is not an integer number",
+                "AN"});
         fhold; fgoto body_section_skip;
     }
     
     action info_BQ_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info BQ value is not a number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info BQ value is not a number",
+                "BQ"});
         fhold; fgoto body_section_skip;
     }
     
     action info_CIGAR_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info CIGAR value is not an alphanumeric string compliant with the SAM specification"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info CIGAR value is not an alphanumeric string compliant with the SAM specification",
+                "CIGAR"});
         fhold; fgoto body_section_skip;
     }
     
     action info_DB_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info DB is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info DB is not a flag (with 1/0/no value)",
+                "DB"});
         fhold; fgoto body_section_skip;
     }
     
     action info_DP_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info DP value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info DP value is not an integer number",
+                "DP"});
         fhold; fgoto body_section_skip;
     }
     
     action info_END_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info END value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info END value is not an integer number",
+                "END"});
         fhold; fgoto body_section_skip;
     }
     
     action info_H2_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info H2 is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info H2 is not a flag (with 1/0/no value)",
+                "H2"});
         fhold; fgoto body_section_skip;
     }
     
     action info_H3_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info H3 is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info H3 is not a flag (with 1/0/no value)",
+                "H3"});
         fhold; fgoto body_section_skip;
     }
     
     action info_MQ_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info MQ value is not a number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info MQ value is not a number",
+                "MQ"});
         fhold; fgoto body_section_skip;
     }
     
     action info_MQ0_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info MQ0 value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info MQ0 value is not an integer number",
+                "MQ0"});
         fhold; fgoto body_section_skip;
     }
     
     action info_NS_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info NS value is not an integer number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info NS value is not an integer number",
+                "NS"});
         fhold; fgoto body_section_skip;
     }
     
     action info_SB_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info SB value is not a number"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info SB value is not a number",
+                "SB"});
         fhold; fgoto body_section_skip;
     }
     
     action info_SOMATIC_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info SOMATIC is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info SOMATIC is not a flag (with 1/0/no value)",
+                "SOMATIC"});
         fhold; fgoto body_section_skip;
     }
     
     action info_VALIDATED_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info VALIDATED is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info VALIDATED is not a flag (with 1/0/no value)",
+                "VALIDATED"});
         fhold; fgoto body_section_skip;
     }
     
     action info_1000G_error {
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info 1000G is not a flag (with 1/0/no value)"});
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info 1000G is not a flag (with 1/0/no value)",
+                "1000G"});
         fhold; fgoto body_section_skip;
     }
     
