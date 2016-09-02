@@ -83,7 +83,8 @@ namespace ebi
                     throw new SamplesBodyError{
                             state.n_lines,
                             "Sample #" + std::to_string(i) + " has " + std::to_string(alleles.size())
-                                    + " allele(s), but " + std::to_string(ploidy) + " were found in others"};
+                                    + " allele(s), but " + std::to_string(ploidy) + " were found in others",
+                            "GT"};
                 }
             } else {
                 ploidy = alleles.size();

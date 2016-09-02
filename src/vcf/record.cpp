@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <functional>
 #include "vcf/file_structure.hpp"
 #include "vcf/record.hpp"
 
@@ -299,8 +300,10 @@ namespace ebi
                     check_field_cardinality(subfield, values, key_values["Number"], alleles.size());
                     check_field_type(subfield, values, key_values["Type"]);
                 } catch (Error *ex) {
-                    throw new SamplesBodyError{line, "Sample #" + std::to_string(i+1) + ", " +
-                                                key_values["ID"] + "=" + ex->get_raw_message()};
+                    throw new SamplesBodyError{line,
+                                               "Sample #" + std::to_string(i+1) + ", "
+                                                       + key_values["ID"] + "=" + ex->get_raw_message(),
+                                               key_values["ID"]};
                 }
             }
         }
@@ -312,19 +315,22 @@ namespace ebi
             if (allele == ".") { continue; } // No need to check missing alleles
 
             // Discard non-integer numbers
-            if (std::find_if(allele.begin(), allele.end(), [](char c) { return !std::isdigit(c); }) != allele.end()) {
-                throw new SamplesBodyError{line, "Allele index " + allele + " is not an integer number"};
+            if (std::find_if_not(allele.begin(), allele.end(), isdigit) != allele.end()) {
+                throw new SamplesBodyError{line, "Allele index " + allele + " is not an integer number", "GT"};
             }
             
             // After guaranteeing the number is an integer, check it is in range
             size_t num_allele = std::stoi(allele);
             if (num_allele > alternate_alleles.size()) {
-                throw new SamplesBodyError{line, "Allele index " + std::to_string(num_allele) +
-                        " is greater than the maximum allowed " + std::to_string(alternate_alleles.size())};
+                throw new SamplesBodyError{line,
+                                           "Allele index " + std::to_string(num_allele)
+                                                   + " is greater than the maximum allowed "
+                                                   + std::to_string(alternate_alleles.size()),
+                                           "GT"};
             }
         }
     }
-    
+
     void Record::check_field_cardinality(std::string const & field,
                                          std::vector<std::string> const & values,
                                          std::string const & number, 
