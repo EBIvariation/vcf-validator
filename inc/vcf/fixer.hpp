@@ -19,6 +19,7 @@
 
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 #include "util/stream_utils.hpp"
 #include "util/string_utils.hpp"
@@ -156,11 +157,59 @@ namespace ebi
             util::writeline(output, *line);
             ignored_errors++;
         }
+
+        /**
+         * explanation of the fix:
+         * - in error.get_field there will be the field name as it appears in the FORMAT column, e.g. "GT".
+         * - don't do anything if error.get_field() is empty
+         * - get the index in the FORMAT column of error.get_field(), e.g. in GT:AC:AN, the index of AC is 1.
+         * - for each sample column
+         *      - put a "." instead of the value in the index-th position of ":" e.g. 0/0:3:4 becomes 0/0:.:4 for index = 1
+         * @param error
+         */
         virtual void visit(SamplesBodyError &error) override
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            if (error.get_field().empty()) {
+                ignored_errors++;
+            } else {
+                std::cerr << "DEBUG: line " << error.get_line() << ": fixing invalid sample field " << error.get_field()
+                          << std::endl;
+
+                size_t format_column = 8;
+//                size_t first_samples_column = 9;
+                std::string empty_subfield = ".";
+                std::string string_line = {line->begin(), line->end()};
+
+                using iter = std::vector<std::string>::iterator;
+                size_t fixed_samples = fix_columns(format_column, -1, string_line, "\t", [&](iter first, iter last) {
+
+                    size_t subfield_index = split_and_find(*first, ":", error.get_field());
+                    if (subfield_index == first->npos) {
+                        std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field "
+                                  << error.get_field() << " but it was not present in the FORMAT column";
+                        ignored_errors++;
+                        return;
+                    }
+                    output << *first;   // write the FORMAT column
+
+                    // now `it` will point to each SAMPLE column
+                    for(auto it = ++first; it != last; ++it) {
+                        output << "\t";
+                        fix_column(subfield_index, *it, ":", [&](std::string wrong_subfield) {
+                            output << empty_subfield;
+                        });
+                    }
+                });
+
+                if (fixed_samples <= 1) {   // 1 because we started counting since the FORMAT column
+                    std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field " << error.get_field()
+                              << " in the samples column, but sample columns are not present" << std::endl;
+                    ignored_errors++;
+                    return;
+                }
+            }
         }
+
         virtual void visit(NormalizationError &error) override
         {
             util::writeline(output, *line);
@@ -174,29 +223,108 @@ namespace ebi
         }
 
       protected:
+
+        size_t split_and_find(std::string line, std::string separator, std::string value) {
+            std::vector<std::string> columns;
+            util::string_split(line, separator.c_str(), columns);
+            auto found = std::find(columns.begin(), columns.end(), value);
+            return found == columns.end()? line.npos : found - columns.begin();
+        }
+
         /**
          * splits a line and allows to rewrite one of the columns, copying the other columns into "output"
          * @param column_index: index to the column to modify
          * @param line: whole line that will be split
          * @param separator: will be used to split the line
-         * @param fix_function: takes a string, which is the column to fix. this function must write to the member "output"
+         * @param fix_function: takes a string, which is the column to fix. `fix_function` must write to the member "output".
+         * `fix_function` will be called once
          */
-        void fix_column(size_t column_index,
+        size_t fix_column(size_t column_index,
+                        const std::string &line,
+                        std::string separator,
+                        std::function<void(std::string &column)> fix_function) {
+
+            return fix_foreach_column(column_index, column_index + 1, line, separator, fix_function);
+        }
+        /**
+         * splits a line and allows to rewrite one of the columns, copying the other columns into "output"
+         * @param column_index: index to the column to modify
+         * @param column_index_last: NON-INCLUSIVE index. points to the column after the last column to modify. to write all the remaining columns, pass -1
+         * @param line: whole line that will be split
+         * @param separator: will be used to split the line
+         * @param fix_function: takes a string, which is the column to fix. `fix_function` must write to the member
+         * "output". `fix_function` will be called (column_index_last - column_index) times (or less if the range is invalid)
+         */
+        size_t fix_foreach_column(size_t column_index,
+                        long column_index_last,
                         const std::string &line,
                         std::string separator,
                         std::function<void(std::string &column)> fix_function) {
 
             std::vector<std::string> columns;
             util::string_split(line, separator.c_str(), columns);
+            if (column_index_last < 0) {
+                column_index_last = columns.size();
+            } else {
+                // ensure the requested index is in a valid range
+                column_index_last = std::min(static_cast<size_t>(column_index_last), columns.size() - 1);
+            }
+            column_index = std::min(column_index, columns.size() - 1);  // ensure the requested index is in a valid range
+
+            size_t i = 0;
+            for (; i < column_index; ++i) {
+                output << columns[i] << separator;
+            }
+
+            size_t columns_fixed = 0;
+            for (; i < column_index_last; ++i) {
+                fix_function(columns[column_index]);
+                columns_fixed++;
+            }
+
+            for (; i < columns.size(); ++i) {
+                output << separator << columns[i];
+            }
+            return columns_fixed;
+        }
+
+        /**
+         * splits a line and allows to rewrite one of the columns, copying the other columns into "output"
+         * @param column_index: index to the column to modify
+         * @param column_index_last: NON-INCLUSIVE index. points to the column after the last column to modify. to write all the remaining columns, pass -1
+         * @param line: whole line that will be split
+         * @param separator: will be used to split the line
+         * @param fix_function: takes a range [first, last)  of strings, which is the column to fix. `fix_function` must
+         * write to the member "output". `fix_function` will be called once
+         */
+        size_t fix_columns(size_t column_index,
+                        long column_index_last,
+                        const std::string &line,
+                        std::string separator,
+                        std::function<void(std::vector<std::string>::iterator begin,
+                                           std::vector<std::string>::iterator end)> fix_function) {
+
+            std::vector<std::string> columns;
+            util::string_split(line, separator.c_str(), columns);
+            size_t column_index_unsigned;
+            if (column_index_last < 0) {
+                column_index_unsigned = columns.size();
+            } else {
+                // column_index_last is non-negative. ensure the requested index is in a valid range
+                column_index_unsigned = std::min(static_cast<size_t>(column_index_last), columns.size() - 1);
+            }
+            column_index = std::min(column_index, columns.size() - 1);  // ensure the requested index is in a valid range
+
             for (size_t i = 0; i < column_index; ++i) {
                 output << columns[i] << separator;
             }
 
-            fix_function(columns[column_index]);
+            fix_function(columns.begin() + column_index, columns.begin() + column_index_unsigned);
 
-            for (size_t i = column_index+1; i < columns.size(); ++i) {
+            for (size_t i = column_index_unsigned; i < columns.size(); ++i) {
                 output << separator << columns[i];
             }
+            return column_index_last - column_index;
         }
     };
   }

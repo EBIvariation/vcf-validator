@@ -59,24 +59,35 @@ namespace ebi
     {
         return os << "{" << container.first << ", " << container.second << "}";
     }
+
     /**
-     * This is a generic method that prints a collection if it has the operations ".size()", ".begin()", ".end()" 
+     * This is a generic method that prints a collection if it has the operations ".size()", ".begin()", ".end()"
      * defined and they provide iterators, and the inner type has an overloaded "operator<<"
      */
     template <typename T>
-    std::ostream &print_container(std::ostream &os, const T &container) {
+    std::ostream &print_container(std::ostream &os, const T &container,
+                                  std::string open_tag, std::string separator_tag, std::string close_tag) {
         size_t size = container.size();
-        os << "[";
+        os << open_tag;
         if (size > 0) {
             auto it = container.begin();
             os << *it;
             it++;
             for (; it != container.end(); ++it) {
-                os << ", " << *it;
+                os << separator_tag << *it;
             }
         }
-        os << "]";
+        os << close_tag;
         return os;
+    }
+
+    /**
+     * This is a generic method that prints a collection if it has the operations ".size()", ".begin()", ".end()"
+     * defined and they provide iterators, and the inner type has an overloaded "operator<<"
+     */
+    template <typename T>
+    std::ostream &print_container(std::ostream &os, const T &container) {
+        return print_container(os, container, "[", ", ", "]");
     }
     
     // the next functions allow using the previous print_container in a easier syntax
