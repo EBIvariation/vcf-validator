@@ -155,7 +155,8 @@ namespace ebi
 
       for (size_t i = 1; i <= 3; ++i) {
           // syntax error, AC must be a positive integer
-          path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_info_038.vcf");
+          path = boost::filesystem::path(
+                  "test/input_files/v4." + std::to_string(i) + "/failed/failed_body_info_038.vcf");
           SECTION(path.string()) {
               std::ifstream file{path.c_str()};
               first_validation = validate(file, path, BEFORE_TAG, version);
@@ -169,7 +170,8 @@ namespace ebi
           }
 
           // semantic error, the number of values doesn't match the description in the meta section
-          path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_info_034.vcf");
+          path = boost::filesystem::path(
+                  "test/input_files/v4." + std::to_string(i) + "/failed/failed_body_info_034.vcf");
           SECTION(path.string()) {
               std::ifstream file{path.c_str()};
               first_validation = validate(file, path, BEFORE_TAG, version);
@@ -180,6 +182,48 @@ namespace ebi
               INFO(debug_message);
               REQUIRE(second_validation);
               REQUIRE(lines == 5);
+          }
+
+          version = static_cast<ebi::vcf::Version>(i);
+      }
+  }
+
+  TEST_CASE("Fixing a VCF with wrong SAMPLE fields", "[debugulator]")
+  {
+      boost::filesystem::path path;
+      ebi::vcf::Version version = ebi::vcf::Version::v41;
+      bool first_validation, second_validation;
+      std::string debug_message;
+      std::unique_ptr<std::stringstream> fixed_vcf;
+      long lines;
+
+      for (size_t i = 1; i <= 3; ++i) {
+          // syntax error, AC must be a positive integer
+          path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_sample_002.vcf");
+          SECTION(path.string()) {
+              std::ifstream file{path.c_str()};
+              first_validation = validate(file, path, BEFORE_TAG, version);
+              REQUIRE_FALSE(first_validation);
+              std::tie(fixed_vcf, lines) = fix(path, BEFORE_TAG);
+              second_validation = validate(*fixed_vcf, path, AFTER_TAG, version);
+              debug_message = handle_test_results(path, second_validation, *fixed_vcf);
+              INFO(debug_message);
+              REQUIRE(second_validation);
+              REQUIRE(lines == 4);
+          }
+
+          // semantic error, the number of values doesn't match the description in the meta section
+          path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_sample_005.vcf");
+          SECTION(path.string()) {
+              std::ifstream file{path.c_str()};
+              first_validation = validate(file, path, BEFORE_TAG, version);
+              REQUIRE_FALSE(first_validation);
+              std::tie(fixed_vcf, lines) = fix(path, BEFORE_TAG);
+              second_validation = validate(*fixed_vcf, path, AFTER_TAG, version);
+              debug_message = handle_test_results(path, second_validation, *fixed_vcf);
+              INFO(debug_message);
+              REQUIRE(second_validation);
+              REQUIRE(lines == 4);
           }
 
           version = static_cast<ebi::vcf::Version>(i);

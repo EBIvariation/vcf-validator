@@ -62,6 +62,25 @@ namespace ebi
           util::string_split(columns[7], ";", info_fields);
           CHECK(info_fields.size() == 2);
       }
+
+      SECTION("Fix SAMPLE field")
+      {
+          size_t line_number = 8;
+          std::string message{"the genotype in the sample column has an illegal value"};
+          ebi::vcf::SamplesBodyError test_error{line_number, message, "GT"};
+
+          std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C\tGT:GS:GL\t1/C:0.000:-0.18,-0.48,-2.49";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns, info_fields;
+          util::string_split(output.str(), "\t", columns);
+          util::string_split(columns[9], ":", info_fields);
+          INFO(output.str());
+          CHECK(info_fields[0] == ".");
+      }
   }
 
   TEST_CASE("Empty report", "[debugulator]")

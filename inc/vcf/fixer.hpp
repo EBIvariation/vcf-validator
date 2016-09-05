@@ -118,7 +118,7 @@ namespace ebi
             // TODO better log system, if any
             std::cerr << "DEBUG: line " << error.get_line() << ": fixing invalid INFO field " << error.get_field()
                       << std::endl;
-            const int info_column_index = 7;
+            const size_t info_column_index = 7;
             const std::string empty_info_column = ".";
 
             size_t num_removed_subfields = 0;
@@ -175,9 +175,9 @@ namespace ebi
                 std::cerr << "DEBUG: line " << error.get_line() << ": fixing invalid sample field " << error.get_field()
                           << std::endl;
 
-                size_t format_column = 8;
+                const size_t format_column = 8;
 //                size_t first_samples_column = 9;
-                std::string empty_subfield = ".";
+                const std::string empty_subfield = ".";
                 std::string string_line = {line->begin(), line->end()};
 
                 using iter = std::vector<std::string>::iterator;
@@ -267,9 +267,9 @@ namespace ebi
                 column_index_last = columns.size();
             } else {
                 // ensure the requested index is in a valid range
-                column_index_last = std::min(static_cast<size_t>(column_index_last), columns.size() - 1);
+                column_index_last = std::min(static_cast<size_t>(column_index_last), columns.size());
             }
-            column_index = std::min(column_index, columns.size() - 1);  // ensure the requested index is in a valid range
+            column_index = std::min(column_index, columns.size());  // ensure the requested index is in a valid range
 
             size_t i = 0;
             for (; i < column_index; ++i) {
@@ -306,22 +306,22 @@ namespace ebi
 
             std::vector<std::string> columns;
             util::string_split(line, separator.c_str(), columns);
-            size_t column_index_unsigned;
+            size_t column_index_last_unsigned;
             if (column_index_last < 0) {
-                column_index_unsigned = columns.size();
+                column_index_last_unsigned = columns.size();
             } else {
                 // column_index_last is non-negative. ensure the requested index is in a valid range
-                column_index_unsigned = std::min(static_cast<size_t>(column_index_last), columns.size() - 1);
+                column_index_last_unsigned = std::min(static_cast<size_t>(column_index_last), columns.size());
             }
-            column_index = std::min(column_index, columns.size() - 1);  // ensure the requested index is in a valid range
+            column_index = std::min(column_index, columns.size());  // ensure the requested index is in a valid range
 
             for (size_t i = 0; i < column_index; ++i) {
                 output << columns[i] << separator;
             }
 
-            fix_function(columns.begin() + column_index, columns.begin() + column_index_unsigned);
+            fix_function(columns.begin() + column_index, columns.begin() + column_index_last_unsigned);
 
-            for (size_t i = column_index_unsigned; i < columns.size(); ++i) {
+            for (size_t i = column_index_last_unsigned; i < columns.size(); ++i) {
                 output << separator << columns[i];
             }
             return column_index_last - column_index;
