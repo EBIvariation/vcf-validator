@@ -3585,6 +3585,18 @@ namespace odb
     field_type_;
 
     static const field_type_ field;
+
+    // field_cardinality
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        long int,
+        sqlite::id_integer >::query_type,
+      sqlite::id_integer >
+    field_cardinality_type_;
+
+    static const field_cardinality_type_ field_cardinality;
   };
 
   template <typename A>
@@ -3596,6 +3608,11 @@ namespace odb
   const typename query_columns< ::ebi::vcf::SamplesBodyError, id_sqlite, A >::field_type_
   query_columns< ::ebi::vcf::SamplesBodyError, id_sqlite, A >::
   field (A::table_name, "\"field\"", 0);
+
+  template <typename A>
+  const typename query_columns< ::ebi::vcf::SamplesBodyError, id_sqlite, A >::field_cardinality_type_
+  query_columns< ::ebi::vcf::SamplesBodyError, id_sqlite, A >::
+  field_cardinality (A::table_name, "\"field_cardinality\"", 0);
 
   template <typename A>
   struct pointer_query_columns< ::ebi::vcf::SamplesBodyError, id_sqlite, A >:
@@ -3630,6 +3647,11 @@ namespace odb
       details::buffer field_value;
       std::size_t field_size;
       bool field_null;
+
+      // field_cardinality
+      //
+      long long field_cardinality_value;
+      bool field_cardinality_null;
 
       std::size_t version;
     };
@@ -3683,7 +3705,7 @@ namespace odb
 
     typedef sqlite::query_base query_base_type;
 
-    static const std::size_t column_count = 2UL;
+    static const std::size_t column_count = 3UL;
     static const std::size_t id_column_count = 1UL;
     static const std::size_t inverse_column_count = 0UL;
     static const std::size_t readonly_column_count = 0UL;

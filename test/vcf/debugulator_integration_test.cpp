@@ -223,7 +223,21 @@ namespace ebi
               debug_message = handle_test_results(path, second_validation, *fixed_vcf);
               INFO(debug_message);
               REQUIRE(second_validation);
-              REQUIRE(lines == 4);
+              REQUIRE(lines == 5);
+          }
+
+          // semantic error, the number of values doesn't match the description in the meta section
+          path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_sample_006.vcf");
+          SECTION(path.string()) {
+              std::ifstream file{path.c_str()};
+              first_validation = validate(file, path, BEFORE_TAG, version);
+              REQUIRE_FALSE(first_validation);
+              std::tie(fixed_vcf, lines) = fix(path, BEFORE_TAG);
+              second_validation = validate(*fixed_vcf, path, AFTER_TAG, version);
+              debug_message = handle_test_results(path, second_validation, *fixed_vcf);
+              INFO(debug_message);
+              REQUIRE(second_validation);
+              REQUIRE(lines == 5);
           }
 
           version = static_cast<ebi::vcf::Version>(i);

@@ -170,6 +170,7 @@ namespace ebi
         virtual void visit(SamplesBodyError &error) override
         {
             if (error.get_field().empty()) {
+                util::writeline(output, *line);
                 ignored_errors++;
             } else {
                 std::cerr << "DEBUG: line " << error.get_line() << ": fixing invalid sample field " << error.get_field()
@@ -177,7 +178,7 @@ namespace ebi
 
                 const size_t format_column = 8;
 //                size_t first_samples_column = 9;
-                const std::string empty_subfield = ".";
+                const char empty_subfield = '.';
                 std::string string_line = {line->begin(), line->end()};
 
                 using iter = std::vector<std::string>::iterator;
@@ -192,11 +193,18 @@ namespace ebi
                     }
                     output << *first;   // write the FORMAT column
 
+                    // if the field is GT, the values must use "/", as in "./."
+                    const std::string subfield_separator = subfield_index == 0? "/" : ",";
+
+                    // error.number should be -1 if the cardinality is unknown, and any positive number otherwise
+                    // so, if unknown, put 1, so that a single "." is written
+                    size_t number = error.get_field_cardinality() <= -1? 1 : static_cast<size_t>(error.get_field_cardinality());
+
                     // now `it` will point to each SAMPLE column
                     for(auto it = ++first; it != last; ++it) {
                         output << "\t";
                         fix_column(subfield_index, *it, ":", [&](std::string wrong_subfield) {
-                            output << empty_subfield;
+                            util::print_container(output, std::string(number, empty_subfield), "", subfield_separator, "");
                         });
                     }
                 });
@@ -204,6 +212,7 @@ namespace ebi
                 if (fixed_samples <= 1) {   // 1 because we started counting since the FORMAT column
                     std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field " << error.get_field()
                               << " in the samples column, but sample columns are not present" << std::endl;
+                    util::writeline(output, *line);
                     ignored_errors++;
                     return;
                 }
@@ -236,8 +245,9 @@ namespace ebi
          * @param column_index: index to the column to modify
          * @param line: whole line that will be split
          * @param separator: will be used to split the line
-         * @param fix_function: takes a string, which is the column to fix. `fix_function` must write to the member "output".
-         * `fix_function` will be called once
+         * @param fix_function: takes a string, which is the column to fix. `fix_function` must write to
+         * the member "output". `fix_function` will be called once
+         * @return the number of times `fix_function` was called, that should be 1 if ranges were valid
          */
         size_t fix_column(size_t column_index,
                         const std::string &line,
@@ -246,14 +256,19 @@ namespace ebi
 
             return fix_foreach_column(column_index, column_index + 1, line, separator, fix_function);
         }
+
         /**
          * splits a line and allows to rewrite one of the columns, copying the other columns into "output"
          * @param column_index: index to the column to modify
-         * @param column_index_last: NON-INCLUSIVE index. points to the column after the last column to modify. to write all the remaining columns, pass -1
+         * @param column_index_last: NON-INCLUSIVE index. points to the column after the last column to modify.
+         * to write all the remaining columns, pass -1
          * @param line: whole line that will be split
          * @param separator: will be used to split the line
          * @param fix_function: takes a string, which is the column to fix. `fix_function` must write to the member
-         * "output". `fix_function` will be called (column_index_last - column_index) times (or less if the range is invalid)
+         * "output". `fix_function` will be called (column_index_last - column_index) times
+         * (or less if the range is invalid)
+         * @return the number of times `fix_function` was called, that should be (column_index_last - column_index)
+         * if ranges were valid
          */
         size_t fix_foreach_column(size_t column_index,
                         long column_index_last,
@@ -261,41 +276,25 @@ namespace ebi
                         std::string separator,
                         std::function<void(std::string &column)> fix_function) {
 
-            std::vector<std::string> columns;
-            util::string_split(line, separator.c_str(), columns);
-            if (column_index_last < 0) {
-                column_index_last = columns.size();
-            } else {
-                // ensure the requested index is in a valid range
-                column_index_last = std::min(static_cast<size_t>(column_index_last), columns.size());
-            }
-            column_index = std::min(column_index, columns.size());  // ensure the requested index is in a valid range
-
-            size_t i = 0;
-            for (; i < column_index; ++i) {
-                output << columns[i] << separator;
-            }
-
-            size_t columns_fixed = 0;
-            for (; i < column_index_last; ++i) {
-                fix_function(columns[column_index]);
-                columns_fixed++;
-            }
-
-            for (; i < columns.size(); ++i) {
-                output << separator << columns[i];
-            }
-            return columns_fixed;
+            using iter = std::vector<std::string>::iterator;
+            return fix_columns(column_index, column_index_last, line, separator, [fix_function](iter first, iter last) {
+                for (auto it = first; it != last; ++it) {
+                    fix_function(*it);
+                }
+            });
         }
 
         /**
          * splits a line and allows to rewrite one of the columns, copying the other columns into "output"
          * @param column_index: index to the column to modify
-         * @param column_index_last: NON-INCLUSIVE index. points to the column after the last column to modify. to write all the remaining columns, pass -1
+         * @param column_index_last: NON-INCLUSIVE index. points to the column after the last column to modify.
+         * to write all the remaining columns, pass -1
          * @param line: whole line that will be split
          * @param separator: will be used to split the line
          * @param fix_function: takes a range [first, last)  of strings, which is the column to fix. `fix_function` must
          * write to the member "output". `fix_function` will be called once
+         * @return the number of columns passed to `fix_function`, that should be (column_index_last - column_index)
+         * if ranges were valid
          */
         size_t fix_columns(size_t column_index,
                         long column_index_last,
@@ -306,6 +305,13 @@ namespace ebi
 
             std::vector<std::string> columns;
             util::string_split(line, separator.c_str(), columns);
+            std::string eol;
+            if (columns.back().back() == '\n') {
+                //remove (and add it later) the newline so that the `fix_function` doesn't have to deal with it.
+                columns.back().pop_back();
+                eol = "\n";
+            }
+
             size_t column_index_last_unsigned;
             if (column_index_last < 0) {
                 column_index_last_unsigned = columns.size();
@@ -324,6 +330,9 @@ namespace ebi
             for (size_t i = column_index_last_unsigned; i < columns.size(); ++i) {
                 output << separator << columns[i];
             }
+
+            output << eol;
+
             return column_index_last - column_index;
         }
     };

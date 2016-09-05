@@ -10098,7 +10098,7 @@ namespace odb
     //
     if (--d != 0)
     {
-      if (base_traits::grow (*i.base, t + 1UL, d))
+      if (base_traits::grow (*i.base, t + 2UL, d))
         i.base->version++;
     }
 
@@ -10109,6 +10109,10 @@ namespace odb
       i.field_value.capacity (i.field_size);
       grew = true;
     }
+
+    // field_cardinality
+    //
+    t[1UL] = false;
 
     return grew;
   }
@@ -10144,6 +10148,13 @@ namespace odb
     b[n].size = &i.field_size;
     b[n].capacity = i.field_value.capacity ();
     b[n].is_null = &i.field_null;
+    n++;
+
+    // field_cardinality
+    //
+    b[n].type = sqlite::bind::integer;
+    b[n].buffer = &i.field_cardinality_value;
+    b[n].is_null = &i.field_cardinality_null;
     n++;
 
     // id_
@@ -10193,6 +10204,22 @@ namespace odb
       grew = grew || (cap != i.field_value.capacity ());
     }
 
+    // field_cardinality
+    //
+    {
+      long int const& v =
+        o.get_field_cardinality ();
+
+      bool is_null (false);
+      sqlite::value_traits<
+          long int,
+          sqlite::id_integer >::set_image (
+        i.field_cardinality_value,
+        is_null,
+        v);
+      i.field_cardinality_null = is_null;
+    }
+
     return grew;
   }
 
@@ -10226,6 +10253,21 @@ namespace odb
 
       o.set_field (v);
     }
+
+    // field_cardinality
+    //
+    {
+      long int v;
+
+      sqlite::value_traits<
+          long int,
+          sqlite::id_integer >::set_value (
+        v,
+        i.field_cardinality_value,
+        i.field_cardinality_null);
+
+      o.set_field_cardinality (v);
+    }
   }
 
   const access::object_traits_impl< ::ebi::vcf::SamplesBodyError, id_sqlite >::info_type
@@ -10244,14 +10286,16 @@ namespace odb
   const char access::object_traits_impl< ::ebi::vcf::SamplesBodyError, id_sqlite >::persist_statement[] =
   "INSERT INTO \"SamplesBodyError\" "
   "(\"id\", "
-  "\"field\") "
+  "\"field\", "
+  "\"field_cardinality\") "
   "VALUES "
-  "(?, ?)";
+  "(?, ?, ?)";
 
   const char* const access::object_traits_impl< ::ebi::vcf::SamplesBodyError, id_sqlite >::find_statements[] =
   {
     "SELECT "
     "\"SamplesBodyError\".\"field\", "
+    "\"SamplesBodyError\".\"field_cardinality\", "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
     "\"Error\".\"severity\", "
@@ -10262,27 +10306,30 @@ namespace odb
     "WHERE \"SamplesBodyError\".\"id\"=?",
 
     "SELECT "
-    "\"SamplesBodyError\".\"field\" "
+    "\"SamplesBodyError\".\"field\", "
+    "\"SamplesBodyError\".\"field_cardinality\" "
     "FROM \"SamplesBodyError\" "
     "WHERE \"SamplesBodyError\".\"id\"=?",
 
     "SELECT "
-    "\"SamplesBodyError\".\"field\" "
+    "\"SamplesBodyError\".\"field\", "
+    "\"SamplesBodyError\".\"field_cardinality\" "
     "FROM \"SamplesBodyError\" "
     "WHERE \"SamplesBodyError\".\"id\"=?"
   };
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::SamplesBodyError, id_sqlite >::find_column_counts[] =
   {
-    6UL,
-    1UL,
-    1UL
+    7UL,
+    2UL,
+    2UL
   };
 
   const char access::object_traits_impl< ::ebi::vcf::SamplesBodyError, id_sqlite >::update_statement[] =
   "UPDATE \"SamplesBodyError\" "
   "SET "
-  "\"field\"=? "
+  "\"field\"=?, "
+  "\"field_cardinality\"=? "
   "WHERE \"id\"=?";
 
   const char access::object_traits_impl< ::ebi::vcf::SamplesBodyError, id_sqlite >::erase_statement[] =
@@ -10292,6 +10339,7 @@ namespace odb
   const char access::object_traits_impl< ::ebi::vcf::SamplesBodyError, id_sqlite >::query_statement[] =
   "SELECT\n"
   "\"SamplesBodyError\".\"field\",\n"
+  "\"SamplesBodyError\".\"field_cardinality\",\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
   "\"Error\".\"severity\",\n"
@@ -12319,6 +12367,7 @@ namespace odb
           db.execute ("CREATE TABLE \"SamplesBodyError\" (\n"
                       "  \"id\" INTEGER NOT NULL PRIMARY KEY,\n"
                       "  \"field\" TEXT NOT NULL,\n"
+                      "  \"field_cardinality\" INTEGER NOT NULL,\n"
                       "  CONSTRAINT \"id_fk\"\n"
                       "    FOREIGN KEY (\"id\")\n"
                       "    REFERENCES \"BodySectionError\" (\"id\")\n"

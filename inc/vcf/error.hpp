@@ -293,15 +293,19 @@ namespace ebi
       public:
         SamplesBodyError(size_t line = 0,
                          const std::string &message = "Error in samples columns, in body section",
-                         std::string field = "")
-                : BodySectionError{line, message}, field(field) {}
+                         std::string field = "",
+                         long field_cardinality = -1)
+                : BodySectionError{line, message}, field(field), field_cardinality(field_cardinality) {}
         virtual ErrorCode get_code() const override { return ErrorCode::samples_body; }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
 
         std::string get_field() const { return field; };
         void set_field(std::string field) { this->field = field; };
+        long get_field_cardinality() const { return field_cardinality; }
+        void set_field_cardinality(long field_cardinality) { this->field_cardinality = field_cardinality; }
       protected:
         std::string field;
+        long field_cardinality;    // [0, inf): valid number of values. -1: unknown amount of values
     };
     #pragma db object
     class NormalizationError : public BodySectionError

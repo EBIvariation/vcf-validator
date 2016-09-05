@@ -300,10 +300,14 @@ namespace ebi
                     check_field_cardinality(subfield, values, key_values["Number"], alleles.size());
                     check_field_type(subfield, values, key_values["Type"]);
                 } catch (Error *ex) {
+                    long cardinality;
+                    bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), alleles.size(), cardinality);
+                    long number = valid ? cardinality : -1;
                     throw new SamplesBodyError{line,
                                                "Sample #" + std::to_string(i+1) + ", "
                                                        + key_values["ID"] + "=" + ex->get_raw_message(),
-                                               key_values["ID"]};
+                                               key_values["ID"],
+                                               number};
                 }
             }
         }
@@ -331,56 +335,65 @@ namespace ebi
         }
     }
 
+    bool is_valid_cardinality(const std::string &number, size_t alternate_allele_number, size_t ploidy, long &cardinality)
+    {
+        bool valid = true;
+
+        if (number == "A") {
+            // ...the number of alternate alleles
+            cardinality = alternate_allele_number;
+        } else if (number == "R") {
+            // ...the number of alternate alleles + reference
+            cardinality = alternate_allele_number + 1;
+        } else if (number == "G") {
+            // ...the number of possible genotypes
+            // The binomial coefficient is calculated considering the ploidy of the sample
+            cardinality = boost::math::binomial_coefficient<float>(alternate_allele_number + ploidy, ploidy);
+        } else if (number == ".") {
+            // ...it is unspecified
+            cardinality = -1;
+        } else {
+            // ...specified as a number in range [0, +MAX_LONG)
+            try {
+                cardinality = stoi(number);
+                if (cardinality < 0) {
+                    valid = false;
+                }
+            } catch (...) {
+                valid = false;
+            }
+        }
+        return valid;
+    }
+
     void Record::check_field_cardinality(std::string const & field,
                                          std::vector<std::string> const & values,
                                          std::string const & number, 
                                          size_t ploidy) const
     {
-        // To check the field cardinality...
-        size_t expected = -1;
-        
-        if (number == "A") {
-            // ...check against the number of alternate alleles
-            expected = alternate_alleles.size();
-        } else if (number == "R") {
-            // ...check against the number of alternate alleles + 1
-            expected = alternate_alleles.size() + 1;
-        } else if (number == "G") {
-            // ...check against the number of possible genotypes
-            // The binomial coefficient is calculated considering the ploidy of the sample
-            expected = boost::math::binomial_coefficient<float>(alternate_alleles.size() + ploidy, ploidy);
-        } else if (number == ".") {
-            // ...do nothing, it is unspecified
-        } else {
-            try {
-                // ...check against the specified number
-                expected = std::stoi(number);
-            } catch (...) {
-                // this is handled below as expected == -1
-            }
-        } 
+        long expected;
+        if(not is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected)) {
+            throw new Error{line, field + " meta specification Number=" + number + " is not one of [A, R, G, ., <non-negative number>]"};
+        }
 
-        if (number != ".") { // Forget about the unspecified number
-            bool number_matches = true;
-            if (expected > 0) {
-                // The number of values must match the expected
-                number_matches = ( values.size() == expected );
-            } else if (expected == 0) {
-                // There will be one empty value that needs to be specifically checked
-                number_matches = values.size() == 0 || 
-                                (values.size() == 1 && (values[0] == "0" || values[0] == "1"));
-            } else {
-                // Negative values are not allowed
-                throw new Error{line, field + " meta specification Number=" + number + " is negative"};
-            }
-            
-            if (!number_matches) {
-                throw new Error{line, field + " does not match the meta specification Number=" + number + 
-                        ", expected " + std::to_string(expected) + " values"};                
-            }
+        bool number_matches = true;
+        if (expected > 0) {
+            // The number of values must match the expected
+            number_matches = ( values.size() == expected );
+        } else if (expected == 0) {
+            // There will be one empty value that needs to be specifically checked
+            number_matches = values.size() == 0 ||
+                    (values.size() == 1 && (values[0] == "0" || values[0] == "1"));
+        } else {
+            // if number=".", then `expected` was set to -1, and it should always match, letting `number_matches` as true
+        }
+
+        if (!number_matches) {
+            throw new Error{line, field + " does not match the meta specification Number=" + number +
+                    ", expected " + std::to_string(expected) + " values"};
         }
     }
-    
+
     void Record::check_field_type(std::string const & field,
                                   std::vector<std::string> const & values,
                                   std::string const & type) const
