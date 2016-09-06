@@ -44,6 +44,7 @@ namespace ebi
         info_body,
         format_body,
         samples_body,
+        samples_field_body,
         normalization,
         duplication,
     };
@@ -65,6 +66,7 @@ namespace ebi
     class InfoBodyError;
     class FormatBodyError;
     class SamplesBodyError;
+    class SamplesFieldBodyError;
     class NormalizationError;
     class DuplicationError;
 
@@ -87,6 +89,7 @@ namespace ebi
         virtual void visit(InfoBodyError &error) = 0;
         virtual void visit(FormatBodyError &error) = 0;
         virtual void visit(SamplesBodyError &error) = 0;
+        virtual void visit(SamplesFieldBodyError &error) = 0;
         virtual void visit(NormalizationError &error) = 0;
         virtual void visit(DuplicationError &error) = 0;
     };
@@ -291,12 +294,25 @@ namespace ebi
     class SamplesBodyError : public BodySectionError
     {
       public:
-        SamplesBodyError(size_t line = 0,
-                         const std::string &message = "Error in samples columns, in body section",
-                         std::string field = "",
-                         long field_cardinality = -1)
-                : BodySectionError{line, message}, field(field), field_cardinality(field_cardinality) {}
+        using BodySectionError::BodySectionError;
+        SamplesBodyError() : SamplesBodyError{0} {}
+        SamplesBodyError(size_t line) : SamplesBodyError{line, "Error in samples columns, in body section"} { }
         virtual ErrorCode get_code() const override { return ErrorCode::samples_body; }
+        virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
+    };
+    #pragma db object
+    class SamplesFieldBodyError : public BodySectionError
+    {
+      private:
+        friend class odb::access;
+        SamplesFieldBodyError() {}  // necessary for ODB
+      public:
+        SamplesFieldBodyError(size_t line,
+                         const std::string &message,
+                         std::string field,
+                         long field_cardinality = -1)
+                : BodySectionError{line, message}, field(field), field_cardinality(field_cardinality) { }
+        virtual ErrorCode get_code() const override { return ErrorCode::samples_field_body; }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
 
         std::string get_field() const { return field; };

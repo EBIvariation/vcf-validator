@@ -157,6 +157,11 @@ namespace ebi
             util::writeline(output, *line);
             ignored_errors++;
         }
+        virtual void visit(SamplesBodyError &error) override
+        {
+            util::writeline(output, *line);
+            ignored_errors++;
+        }
 
         /**
          * explanation of the fix:
@@ -174,7 +179,7 @@ namespace ebi
          * field "AC", FORMAT: "GT:AC:AN", sample: "0/0:3,5:4"; becomes 0/0:.,.:4. (index = 1, cardinality = 2)
          * @param error
          */
-        virtual void visit(SamplesBodyError &error) override
+        virtual void visit(SamplesFieldBodyError &error) override
         {
             if (error.get_field().empty()) {
                 util::writeline(output, *line);

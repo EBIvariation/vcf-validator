@@ -67,7 +67,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"the genotype in the sample column has an illegal value"};
-          ebi::vcf::SamplesBodyError test_error{line_number, message, "GT"};
+          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, "GT"};
 
           std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C\tGT:GS:GL\t1/C:0.000:-0.18,-0.48,-2.49";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -86,7 +86,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"requested to remove a wrong file"};
-          ebi::vcf::SamplesBodyError test_error{line_number, message, "AC"};
+          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, "AC"};
 
           std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C\tGT:GS:GL\t1/C:0.000:-0.18,-0.48,-2.49";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -101,7 +101,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"requested to remove a wrong file"};
-          ebi::vcf::SamplesBodyError test_error{line_number, message, "AC"};
+          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, "AC"};
 
           std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C";
 
@@ -109,10 +109,6 @@ namespace ebi
 
           std::stringstream output;
           vcf::Fixer{output}.fix(line_number, line, test_error);
-          std::cout << string_line << std::endl;
-          std::cout << output.str() << std::endl;
-          INFO(string_line);
-          INFO(output.str());
 
           CHECK(output.str() == string_line);
       }

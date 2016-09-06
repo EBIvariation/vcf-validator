@@ -572,7 +572,7 @@
     action sample_gt_error {
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
-        ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str(), "GT"});
+        ErrorPolicy::handle_error(*this, new SamplesFieldBodyError{n_lines, message_stream.str(), "GT"});
         fhold; fgoto body_section_skip;
     }
 

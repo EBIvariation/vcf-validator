@@ -303,7 +303,7 @@ namespace ebi
                     long cardinality;
                     bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), alleles.size(), cardinality);
                     long number = valid ? cardinality : -1;
-                    throw new SamplesBodyError{line,
+                    throw new SamplesFieldBodyError{line,
                                                "Sample #" + std::to_string(i+1) + ", "
                                                        + key_values["ID"] + "=" + ex->get_raw_message(),
                                                key_values["ID"],
@@ -320,13 +320,13 @@ namespace ebi
 
             // Discard non-integer numbers
             if (std::find_if_not(allele.begin(), allele.end(), isdigit) != allele.end()) {
-                throw new SamplesBodyError{line, "Allele index " + allele + " is not an integer number", "GT"};
+                throw new SamplesFieldBodyError{line, "Allele index " + allele + " is not an integer number", "GT"};
             }
             
             // After guaranteeing the number is an integer, check it is in range
             size_t num_allele = std::stoi(allele);
             if (num_allele > alternate_alleles.size()) {
-                throw new SamplesBodyError{line,
+                throw new SamplesFieldBodyError{line,
                                            "Allele index " + std::to_string(num_allele)
                                                    + " is greater than the maximum allowed "
                                                    + std::to_string(alternate_alleles.size()),
