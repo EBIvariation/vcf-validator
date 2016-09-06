@@ -81,6 +81,41 @@ namespace ebi
           INFO(output.str());
           CHECK(info_fields[0] == ".");
       }
+
+      SECTION("Fix SAMPLE invalid field")
+      {
+          size_t line_number = 8;
+          std::string message{"requested to remove a wrong file"};
+          ebi::vcf::SamplesBodyError test_error{line_number, message, "AC"};
+
+          std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C\tGT:GS:GL\t1/C:0.000:-0.18,-0.48,-2.49";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          CHECK(output.str() == string_line);
+      }
+
+      SECTION("Fix SAMPLE without samples")
+      {
+          size_t line_number = 8;
+          std::string message{"requested to remove a wrong file"};
+          ebi::vcf::SamplesBodyError test_error{line_number, message, "AC"};
+
+          std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C";
+
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+          std::cout << string_line << std::endl;
+          std::cout << output.str() << std::endl;
+          INFO(string_line);
+          INFO(output.str());
+
+          CHECK(output.str() == string_line);
+      }
   }
 
   TEST_CASE("Empty report", "[debugulator]")

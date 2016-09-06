@@ -161,10 +161,17 @@ namespace ebi
         /**
          * explanation of the fix:
          * - in error.get_field there will be the field name as it appears in the FORMAT column, e.g. "GT".
-         * - don't do anything if error.get_field() is empty
+         * - skip fix (copy the line as-is) if error.get_field() is empty
          * - get the index in the FORMAT column of error.get_field(), e.g. in GT:AC:AN, the index of AC is 1.
+         *      if the field is not found, skip fix (copy as-is)
          * - for each sample column
-         *      - put a "." instead of the value in the index-th position of ":" e.g. 0/0:3:4 becomes 0/0:.:4 for index = 1
+         *      - put a "missing value" instead of the value in the index-th position after splitting by ":".
+         *      - the "missing value" is a `.` repeated `n` times, where `n` is the cardinality of the field,
+         *          with "," as separators, or "/" if the field is "GT"
+         * - if there were no sample columns, skip fix (copy as-is)
+         *
+         * complete example:
+         * field "AC", FORMAT: "GT:AC:AN", sample: "0/0:3,5:4"; becomes 0/0:.,.:4. (index = 1, cardinality = 2)
          * @param error
          */
         virtual void visit(SamplesBodyError &error) override
@@ -176,42 +183,56 @@ namespace ebi
                 std::cerr << "DEBUG: line " << error.get_line() << ": fixing invalid sample field " << error.get_field()
                           << std::endl;
 
-                const size_t format_column = 8;
-//                size_t first_samples_column = 9;
+                const size_t format_column_index = 8;
+//                size_t first_samples_column_index = 9;
                 const char empty_subfield = '.';
                 std::string string_line = {line->begin(), line->end()};
 
-                using iter = std::vector<std::string>::iterator;
-                size_t fixed_samples = fix_columns(format_column, -1, string_line, "\t", [&](iter first, iter last) {
+                size_t fixed_samples;
+                std::string message;
+                try {
+                    using iter = std::vector<std::string>::iterator;
+                    fixed_samples = fix_columns(
+                            format_column_index, -1, string_line, "\t",
+                            [&](iter first, iter last) {
 
-                    size_t subfield_index = split_and_find(*first, ":", error.get_field());
-                    if (subfield_index == first->npos) {
-                        std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field "
-                                  << error.get_field() << " but it was not present in the FORMAT column";
-                        ignored_errors++;
-                        return;
-                    }
-                    output << *first;   // write the FORMAT column
+                                size_t subfield_index = split_and_find(*first, ":", error.get_field());
+                                if (subfield_index == first->npos) {
+                                    std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field "
+                                              << error.get_field() << " but it was not present in the FORMAT column"
+                                              << std::endl;
+                                    ignored_errors++;
+                                    util::print_container(output, std::vector<std::string>{first, last}, "", "\t", "");
+                                    return;
+                                }
+                                output << *first;   // write the FORMAT column
 
-                    // if the field is GT, the values must use "/", as in "./."
-                    const std::string subfield_separator = subfield_index == 0? "/" : ",";
+                                // if the field is GT, the values must use "/", as in "./."
+                                const std::string subfield_separator = subfield_index == 0 ? "/" : ",";
 
-                    // error.number should be -1 if the cardinality is unknown, and any positive number otherwise
-                    // so, if unknown, put 1, so that a single "." is written
-                    size_t number = error.get_field_cardinality() <= -1? 1 : static_cast<size_t>(error.get_field_cardinality());
+                                // error.number should be -1 if the cardinality is unknown, and any positive number otherwise
+                                // so, if unknown, put 1, so that a single "." is written
+                                size_t number = error.get_field_cardinality() <= -1 ?
+                                                1 : static_cast<size_t>(error.get_field_cardinality());
 
-                    // now `it` will point to each SAMPLE column
-                    for(auto it = ++first; it != last; ++it) {
-                        output << "\t";
-                        fix_column(subfield_index, *it, ":", [&](std::string wrong_subfield) {
-                            util::print_container(output, std::string(number, empty_subfield), "", subfield_separator, "");
-                        });
-                    }
-                });
+                                // now `it` will point to each SAMPLE column
+                                for (auto it = ++first; it != last; ++it) {
+                                    output << "\t";
+                                    fix_column(subfield_index, *it, ":", [&](std::string wrong_subfield) {
+                                        util::print_container(output, std::string(number, empty_subfield),
+                                                              "", subfield_separator, "");
+                                    });
+                                }
+                            });
+                } catch (std::out_of_range bad_range) {
+                    // there were not enough lines
+                    fixed_samples = 0;
+                    message = bad_range.what();
+                }
 
                 if (fixed_samples <= 1) {   // 1 because we started counting since the FORMAT column
                     std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field " << error.get_field()
-                              << " in the samples column, but sample columns are not present" << std::endl;
+                              << " in the samples column, but sample columns are not present. " << message << std::endl;
                     util::writeline(output, *line);
                     ignored_errors++;
                     return;
@@ -233,7 +254,15 @@ namespace ebi
 
       protected:
 
-        size_t split_and_find(std::string line, std::string separator, std::string value) {
+        /**
+         * returns an index (NOT an iterator) to the column in `line` (split by `separator`) where `value` is found. Or `line.npos`
+         * if value is not found.
+         * @param line to be split
+         * @param separator to use when splitting the line
+         * @param value to search
+         * @return an index (not an iterator) if found, or `line.npos` if not found.
+         */
+        size_t split_and_find(const std::string &line, const std::string &separator, const std::string &value) {
             std::vector<std::string> columns;
             util::string_split(line, separator.c_str(), columns);
             auto found = std::find(columns.begin(), columns.end(), value);
@@ -254,7 +283,12 @@ namespace ebi
                         std::string separator,
                         std::function<void(std::string &column)> fix_function) {
 
-            return fix_foreach_column(column_index, column_index + 1, line, separator, fix_function);
+            using iter = std::vector<std::string>::iterator;
+            return fix_columns(column_index, column_index +1, line, separator, [fix_function](iter first, iter last) {
+                for (auto it = first; it != last; ++it) {
+                    fix_function(*it);
+                }
+            });
         }
 
         /**
@@ -278,14 +312,14 @@ namespace ebi
 
             using iter = std::vector<std::string>::iterator;
             return fix_columns(column_index, column_index_last, line, separator, [fix_function](iter first, iter last) {
-                for (auto it = first; it != last; ++it) {
-                    fix_function(*it);
-                }
+                fix_function(*first);
             });
         }
 
         /**
-         * splits a line and allows to rewrite one of the columns, copying the other columns into "output"
+         * splits a line and allows to rewrite one of the columns, copying the other columns into "output".
+         * If column_index* specify an empty range or a past-the-end range, a std::out_of_range is thrown without
+         * writing anything.
          * @param column_index: index to the column to modify
          * @param column_index_last: NON-INCLUSIVE index. points to the column after the last column to modify.
          * to write all the remaining columns, pass -1
@@ -309,18 +343,35 @@ namespace ebi
             if (columns.back().back() == '\n') {
                 //remove (and add it later) the newline so that the `fix_function` doesn't have to deal with it.
                 columns.back().pop_back();
-                eol = "\n";
+                if (columns.back().back() == '\r') {
+                    columns.back().pop_back();
+                    eol += "\r";
+                }
+                eol += "\n";
             }
 
+            // check ranges. don't allow an empty range, the fix_function should be called at least once
             size_t column_index_last_unsigned;
             if (column_index_last < 0) {
                 column_index_last_unsigned = columns.size();
             } else {
-                // column_index_last is non-negative. ensure the requested index is in a valid range
-                column_index_last_unsigned = std::min(static_cast<size_t>(column_index_last), columns.size());
+                column_index_last_unsigned = static_cast<size_t>(column_index_last);
             }
-            column_index = std::min(column_index, columns.size());  // ensure the requested index is in a valid range
 
+            if (column_index >= columns.size()) {
+                std::string message{"fix_columns requires a non-empty range: asked to fix columns["};
+                message += std::to_string(column_index) + "] (0-based index) but there are only "
+                        + std::to_string(columns.size()) + " columns: \"" + line + "\"";
+                throw std::out_of_range{message};
+            }
+            if (column_index_last_unsigned > columns.size()) {
+                std::string message{"fix_columns: asked to fix until past-the end, until (non-including) columns["};
+                message += std::to_string(column_index_last_unsigned) + "] (0-based index) but there are only "
+                        + std::to_string(columns.size()) + " columns: \"" + line + "\"";
+                throw std::out_of_range{message};
+            }
+
+            // write before, call fix_function, write after
             for (size_t i = 0; i < column_index; ++i) {
                 output << columns[i] << separator;
             }
@@ -333,7 +384,7 @@ namespace ebi
 
             output << eol;
 
-            return column_index_last - column_index;
+            return column_index_last_unsigned - column_index;
         }
     };
   }
