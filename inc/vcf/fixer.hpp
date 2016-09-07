@@ -153,7 +153,7 @@ namespace ebi
         /**
          * explanation of the fix:
          * - in error.get_field there will be the field name as it appears in the FORMAT column, e.g. "GT".
-         * - skip fix (copy the line as-is) if error.get_field() is empty
+         * - if error.get_field() is empty, skip fix (copy the line as-is)
          * - get the index in the FORMAT column of error.get_field(), e.g. in GT:AC:AN, the index of AC is 1.
          *      if the field is not found, skip fix (copy as-is)
          * - for each sample column
@@ -188,24 +188,14 @@ namespace ebi
                 try {
                     using iter = std::vector<std::string>::iterator;
                     fixed_samples = fix_columns(format_column_index, -1, string_line, "\t", [&](iter first, iter last) {
-                        size_t subfield_index = split_and_find(*first, ":", error.get_field());
-                        if (subfield_index == first->npos) {
-                            std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field "
-                                      << error.get_field() << " but it was not present in the FORMAT column"
-                                      << std::endl;
-                            ignored_errors++;
-                            util::print_container(output, std::vector<std::string>{first, last}, "", "\t", "");
-                            return;
-                        }
-
-                        if (subfield_index == 0) {
-                            fix_format_gt(first, last, error.get_field_cardinality());
+                        if (error.get_field() == "GT") {
+                            fix_format_gt(first, last, error);
                         } else {
-                            remove_format(first, last, subfield_index);
+                            remove_format(first, last, error);
                         }
                     });
                 } catch (std::out_of_range bad_range) {
-                    // there were not enough lines
+                    // there were not enough columns. maybe an aggregate vcf without genotypes?
                     fixed_samples = 0;
                     message = bad_range.what();
                 }
@@ -234,21 +224,38 @@ namespace ebi
 
       protected:
 
+        /**
+         * puts the genotype as missing. if the error.cardinality is know, it uses the proper ploidy
+         * @param first iterator to the FORMAT column string
+         * @param last iterator past the last sample column
+         * @param error needed for the field (that must be "GT") the cardinality, and the line number
+         */
         void fix_format_gt(std::vector<std::string>::iterator first,
                            std::vector<std::string>::iterator last,
-                           long cardinality)
+                           SamplesFieldBodyError &error)
         {
-            output << *first;   // write the FORMAT column
-
             const std::string field_separator = ":";
             size_t gt_column_index = 0;
             // if the field is GT, the values must use "/", as in "./."
             const std::string subfield_separator = "/";
             const char empty_subfield = '.';
 
+            // check that GT is present and is the first field
+            size_t subfield_index = split_and_find(*first, field_separator, error.get_field());
+            if (subfield_index != gt_column_index) {
+                std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field " << error.get_field()
+                          << " but it was not present in the FORMAT column \"" + *first + "\"" << std::endl;
+                ignored_errors++;
+                util::print_container(output, std::vector<std::string>{first, last}, "", "\t", "");
+                return;
+            }
+
+            // write the FORMAT column
+            output << *first;
+
             // `cardinality` should be -1 if the cardinality is unknown, and any positive number otherwise
             // so, if unknown, put 1, so that a single "." is written
-            size_t repeat = cardinality <= -1 ? 1 : static_cast<size_t>(cardinality);
+            size_t repeat = error.get_field_cardinality() <= -1 ? 1 : static_cast<size_t>(error.get_field_cardinality());
 
             // now `it` will point to each SAMPLE column
             for (auto it = ++first; it != last; ++it) {
@@ -259,23 +266,48 @@ namespace ebi
             }
         }
 
+        /**
+         * remove a field from the FORMAT column and the samples columns
+         * @param first iterator to the FORMAT column string
+         * @param last iterator past the last sample column
+         * @param error needed for the field the cardinality, and the line number
+         */
         void remove_format(std::vector<std::string>::iterator first,
                            std::vector<std::string>::iterator last,
-                           size_t index_column)
+                           SamplesFieldBodyError &error)
         {
-            for (; first != last; ++first) {
-                size_t removed = remove_column(*first, ":", [&](std::string &field, size_t index) {
-                    return index == index_column;
+            // remove from FORMAT column
+            const std::string field_separator = ":";
+            size_t field_index;
+            size_t removed = remove_column(*first, field_separator, [&](std::string &field, size_t index) {
+                if (field == error.get_field()) {
+                    field_index = index;
+                    return field == error.get_field();
+                } else {
+                    return false;
+                }
+            });
+            if (removed == 0) {
+                std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field " << error.get_field()
+                          << " but it was not present in the FORMAT column \"" + *first + "\"" << std::endl;
+                ignored_errors++;
+                util::print_container(output, std::vector<std::string>{++first, last}, "\t", "\t", "");
+                return;
+            }
+
+            // remove from the samples columns
+            for (++first; first != last; ++first) {
+                output << "\t";
+                removed = remove_column(*first, field_separator, [&](std::string &field, size_t index) {
+                    return index == field_index;
                 });
                 if (removed == 0) {
-                    std::cerr << "WARNING: tried to remove field with index " << index_column << " in \"" << *first
+                    std::cerr << "WARNING: tried to remove field with index " << field_index << " in \"" << *first
                               << "\" but couldn't do it, this is likely to happen in all samples" << std::endl;
                     ignored_errors++;
+                    // copy the rest of samples, as we already copied one and don't want to repeat the log for everyone
                     util::print_container(output, std::vector<std::string>{++first, last}, "\t", "\t", "");
                     return;
-                }
-                if (first + 1 != last) {    // don't write a tab after the last sample
-                    output << "\t";
                 }
             }
         }
@@ -288,8 +320,9 @@ namespace ebi
         }
 
         /**
-         * @param line
-         * @param separator
+         * don't write to output the columns in `line` that satisfy the `condition_to_remove`
+         * @param line: some of its columns will not be written into output
+         * @param separator to be used to split `line`
          * @param empty_column in case all the columns were remove, write an especial empty column
          * @param condition_to_remove return true if the column has to be removed. can decide using the column and its index
          * @return amount of columns removed
