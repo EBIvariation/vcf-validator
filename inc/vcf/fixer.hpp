@@ -190,7 +190,6 @@ namespace ebi
 
                 const size_t format_column_index = 8;
 //                size_t first_samples_column_index = 9;
-                const char empty_subfield = '.';
                 std::string string_line = {line->begin(), line->end()};
 
                 size_t fixed_samples;
@@ -210,23 +209,11 @@ namespace ebi
                                     util::print_container(output, std::vector<std::string>{first, last}, "", "\t", "");
                                     return;
                                 }
-                                output << *first;   // write the FORMAT column
 
-                                // if the field is GT, the values must use "/", as in "./."
-                                const std::string subfield_separator = subfield_index == 0 ? "/" : ",";
-
-                                // error.number should be -1 if the cardinality is unknown, and any positive number otherwise
-                                // so, if unknown, put 1, so that a single "." is written
-                                size_t number = error.get_field_cardinality() <= -1 ?
-                                                1 : static_cast<size_t>(error.get_field_cardinality());
-
-                                // now `it` will point to each SAMPLE column
-                                for (auto it = ++first; it != last; ++it) {
-                                    output << "\t";
-                                    fix_column(subfield_index, *it, ":", [&](std::string wrong_subfield) {
-                                        util::print_container(output, std::string(number, empty_subfield),
-                                                              "", subfield_separator, "");
-                                    });
+                                if (subfield_index == 0) {
+                                    fix_format_gt(first, last, error.get_field_cardinality());
+                                } else {
+                                    remove_format(first, last, subfield_index);
                                 }
                             });
                 } catch (std::out_of_range bad_range) {
@@ -258,6 +245,58 @@ namespace ebi
         }
 
       protected:
+
+        void fix_format_gt(std::vector<std::string>::iterator first,
+                           std::vector<std::string>::iterator last,
+                           long cardinality)
+        {
+            output << *first;   // write the FORMAT column
+
+            const std::string field_separator = ":";
+            size_t gt_column_index = 0;
+            // if the field is GT, the values must use "/", as in "./."
+            const std::string subfield_separator = "/";
+            const char empty_subfield = '.';
+
+            // `cardinality` should be -1 if the cardinality is unknown, and any positive number otherwise
+            // so, if unknown, put 1, so that a single "." is written
+            size_t repeat = cardinality <= -1 ? 1 : static_cast<size_t>(cardinality);
+
+            // now `it` will point to each SAMPLE column
+            for (auto it = ++first; it != last; ++it) {
+                output << "\t";
+                fix_column(gt_column_index, *it, field_separator, [&](std::string wrong_subfield) {
+                    util::print_container(output, std::string(repeat, empty_subfield), "", subfield_separator, "");
+                });
+            }
+        }
+
+        void remove_format(std::vector<std::string>::iterator first,
+                           std::vector<std::string>::iterator last,
+                           size_t subfield_index)
+        {
+
+            const std::string field_separator = ":";
+            std::vector<std::string> fields;
+
+            for (; first != last; ++first) {
+                util::string_split(*first, field_separator.c_str(), fields);
+
+                auto it = fields.begin() + subfield_index;
+                if (it >= fields.end()) {
+                    throw std::out_of_range{"remove_format: asked to remove column " + std::to_string(subfield_index)
+                                                    + " in string \"" + *first + "\" which has only "
+                                                    + std::to_string(fields.size()) + " columns"};
+                }
+                fields.erase(it);
+
+                util::print_container(output, fields, "", field_separator, "");
+
+                if (first + 1 != last) {    // don't print separator in the last column
+                    output << "\t";
+                }
+            }
+        }
 
         /**
          * returns an index (NOT an iterator) to the column in `line` (split by `separator`) where `value` is found. Or `line.npos`
