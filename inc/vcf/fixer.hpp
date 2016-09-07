@@ -124,27 +124,14 @@ namespace ebi
             size_t num_removed_subfields = 0;
             std::string string_line = {line->begin(), line->end()};
 
+            auto remove_info_field_if = [&](std::string &info_subfield, size_t index) -> bool {
+                std::vector<std::string> key_value;
+                util::string_split(info_subfield, "=", key_value);
+                return key_value[0] == error.get_field();
+            };
+
             fix_column(info_column_index, string_line, "\t", [&](std::string &info_column) {
-                std::vector<std::string> info_subfields, keys_values;
-                util::string_split(info_column, ";", info_subfields);
-
-                for (size_t j = 0; j < info_subfields.size(); ++j) {
-                    util::string_split(info_subfields[j], "=", keys_values);
-                    if (keys_values[0] != error.get_field()) {
-                        if (num_removed_subfields != j) {
-                            // if this is not the first field we don't remove, then write the separator
-                            output << ";";
-                        }
-                        output << info_subfields[j];
-                    } else {
-                        num_removed_subfields++;
-                    }
-                }
-
-                if (num_removed_subfields == info_subfields.size()) {
-                    // we removed all the subfields there were: write empty column
-                    output << empty_info_column;
-                }
+                num_removed_subfields = remove_column(info_column, ";", empty_info_column, remove_info_field_if);
             });
 
             if (num_removed_subfields != 1) {
@@ -170,13 +157,17 @@ namespace ebi
          * - get the index in the FORMAT column of error.get_field(), e.g. in GT:AC:AN, the index of AC is 1.
          *      if the field is not found, skip fix (copy as-is)
          * - for each sample column
-         *      - put a "missing value" instead of the value in the index-th position after splitting by ":".
-         *      - the "missing value" is a `.` repeated `n` times, where `n` is the cardinality of the field,
-         *          with "," as separators, or "/" if the field is "GT"
+         *      - if the field is GT
+         *          - put a "missing value" instead of the value in the index-th position after splitting by ":".
+         *          - the "missing value" is a `.` repeated `n` times, where `n` is the cardinality of the field,
+         *              with "/" as separators
+         *      - if the field is not GT
+         *          - remove it from the FORMAT and samples columns
          * - if there were no sample columns, skip fix (copy as-is)
          *
          * complete example:
-         * field "AC", FORMAT: "GT:AC:AN", sample: "0/0:3,5:4"; becomes 0/0:.,.:4. (index = 1, cardinality = 2)
+         * field "GT", FORMAT: "GT:AC:AN", sample: "0/0:3,5:4"; becomes "./.:3,5:4". (index = 0, cardinality = 2)
+         * field "AC", FORMAT: "GT:AC:AN", sample: "0/0:3,5:4"; becomes "GT:AN   0/0:4". (index = 1)
          * @param error
          */
         virtual void visit(SamplesFieldBodyError &error) override
@@ -196,26 +187,23 @@ namespace ebi
                 std::string message;
                 try {
                     using iter = std::vector<std::string>::iterator;
-                    fixed_samples = fix_columns(
-                            format_column_index, -1, string_line, "\t",
-                            [&](iter first, iter last) {
+                    fixed_samples = fix_columns(format_column_index, -1, string_line, "\t", [&](iter first, iter last) {
+                        size_t subfield_index = split_and_find(*first, ":", error.get_field());
+                        if (subfield_index == first->npos) {
+                            std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field "
+                                      << error.get_field() << " but it was not present in the FORMAT column"
+                                      << std::endl;
+                            ignored_errors++;
+                            util::print_container(output, std::vector<std::string>{first, last}, "", "\t", "");
+                            return;
+                        }
 
-                                size_t subfield_index = split_and_find(*first, ":", error.get_field());
-                                if (subfield_index == first->npos) {
-                                    std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field "
-                                              << error.get_field() << " but it was not present in the FORMAT column"
-                                              << std::endl;
-                                    ignored_errors++;
-                                    util::print_container(output, std::vector<std::string>{first, last}, "", "\t", "");
-                                    return;
-                                }
-
-                                if (subfield_index == 0) {
-                                    fix_format_gt(first, last, error.get_field_cardinality());
-                                } else {
-                                    remove_format(first, last, subfield_index);
-                                }
-                            });
+                        if (subfield_index == 0) {
+                            fix_format_gt(first, last, error.get_field_cardinality());
+                        } else {
+                            remove_format(first, last, subfield_index);
+                        }
+                    });
                 } catch (std::out_of_range bad_range) {
                     // there were not enough lines
                     fixed_samples = 0;
@@ -273,29 +261,68 @@ namespace ebi
 
         void remove_format(std::vector<std::string>::iterator first,
                            std::vector<std::string>::iterator last,
-                           size_t subfield_index)
+                           size_t index_column)
         {
-
-            const std::string field_separator = ":";
-            std::vector<std::string> fields;
-
             for (; first != last; ++first) {
-                util::string_split(*first, field_separator.c_str(), fields);
-
-                auto it = fields.begin() + subfield_index;
-                if (it >= fields.end()) {
-                    throw std::out_of_range{"remove_format: asked to remove column " + std::to_string(subfield_index)
-                                                    + " in string \"" + *first + "\" which has only "
-                                                    + std::to_string(fields.size()) + " columns"};
+                size_t removed = remove_column(*first, ":", [&](std::string &field, size_t index) {
+                    return index == index_column;
+                });
+                if (removed == 0) {
+                    std::cerr << "WARNING: tried to remove field with index " << index_column << " in \"" << *first
+                              << "\" but couldn't do it, this is likely to happen in all samples" << std::endl;
+                    ignored_errors++;
+                    util::print_container(output, std::vector<std::string>{++first, last}, "\t", "\t", "");
+                    return;
                 }
-                fields.erase(it);
-
-                util::print_container(output, fields, "", field_separator, "");
-
-                if (first + 1 != last) {    // don't print separator in the last column
+                if (first + 1 != last) {    // don't write a tab after the last sample
                     output << "\t";
                 }
             }
+        }
+
+        size_t remove_column(const std::string &line,
+                             const std::string &separator,
+                             std::function<bool(std::string &column, size_t index)> condition_to_remove)
+        {
+            return remove_column(line, separator, "", condition_to_remove);
+        }
+
+        /**
+         * @param line
+         * @param separator
+         * @param empty_column in case all the columns were remove, write an especial empty column
+         * @param condition_to_remove return true if the column has to be removed. can decide using the column and its index
+         * @return amount of columns removed
+         */
+        size_t remove_column(const std::string &line,
+                             const std::string &separator,
+                             const std::string &empty_column,
+                             std::function<bool(std::string &column, size_t index)> condition_to_remove)
+        {
+            std::vector<std::string> columns;
+            util::string_split(line, separator.c_str(), columns);
+            size_t written = 0;
+
+            if (columns.size() > 0) {
+                size_t j = 0;
+                if (not condition_to_remove(columns[j], j)) {
+                    written++;
+                    output << columns[j];
+                }
+                for (j = 1; j < columns.size(); ++j) {
+                    if (not condition_to_remove(columns[j], j)) {
+                        if (written > 0) {
+                            output << separator;
+                        }
+                        written++;
+                        output << columns[j];
+                    }
+                }
+            }
+            if (written == 0) {
+                output << empty_column;
+            }
+            return columns.size() - written;
         }
 
         /**
@@ -324,7 +351,7 @@ namespace ebi
          */
         size_t fix_column(size_t column_index,
                         const std::string &line,
-                        std::string separator,
+                        const std::string &separator,
                         std::function<void(std::string &column)> fix_function) {
 
             using iter = std::vector<std::string>::iterator;
@@ -351,7 +378,7 @@ namespace ebi
         size_t fix_foreach_column(size_t column_index,
                         long column_index_last,
                         const std::string &line,
-                        std::string separator,
+                        const std::string &separator,
                         std::function<void(std::string &column)> fix_function) {
 
             using iter = std::vector<std::string>::iterator;
@@ -377,7 +404,7 @@ namespace ebi
         size_t fix_columns(size_t column_index,
                         long column_index_last,
                         const std::string &line,
-                        std::string separator,
+                        const std::string &separator,
                         std::function<void(std::vector<std::string>::iterator begin,
                                            std::vector<std::string>::iterator end)> fix_function) {
 

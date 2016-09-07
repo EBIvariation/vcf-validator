@@ -60,7 +60,41 @@ namespace ebi
           std::vector<std::string> columns, info_fields;
           util::string_split(output.str(), "\t", columns);
           util::string_split(columns[7], ";", info_fields);
+          INFO(columns[7]);
           CHECK(info_fields.size() == 2);
+      }
+      SECTION("Fix first INFO field")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: There's an invalid info field"};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "wrong_field"};
+
+          std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\twrong_field=x;AC=1\tformat\tsamples";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns, info_fields;
+          util::string_split(output.str(), "\t", columns);
+          util::string_split(columns[7], ";", info_fields);
+          CHECK(info_fields.size() == 1);
+      }
+      SECTION("Fix unique INFO field")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: There's an invalid info field"};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "wrong_field"};
+
+          std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\twrong_field=x\tformat\tsamples";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns, info_fields;
+          util::string_split(output.str(), "\t", columns);
+          CHECK(columns[7] == ".");
       }
 
       SECTION("Fix SAMPLE field")
