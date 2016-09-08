@@ -73,15 +73,15 @@ namespace ebi
         void handle_token_end(ParsingState const & state, std::string token);
         void handle_newline(ParsingState const & state);
         
-        void handle_fileformat(ParsingState const & state);
+        void handle_fileformat(ParsingState & state);
         
         void handle_meta_typeid(ParsingState const & state);
         void handle_meta_typeid(ParsingState const & state, std::string type_id);
-        void handle_meta_line(ParsingState const & state);
+        void handle_meta_line(ParsingState & state);
         
         
         void handle_sample_name(ParsingState const & state);
-        void handle_header_line(ParsingState const & state);
+        void handle_header_line(ParsingState & state);
         
         void handle_column_end(ParsingState const & state, size_t n_columns);
         void handle_body_line(ParsingState & state);

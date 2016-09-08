@@ -48,7 +48,7 @@ namespace ebi
         m_line_tokens.clear();
     }
 
-    void StoreParsePolicy::handle_fileformat(ParsingState const & state)
+    void StoreParsePolicy::handle_fileformat(ParsingState & state)
     {
         Version fileformat_version = Version::v41;
 
@@ -80,7 +80,7 @@ namespace ebi
     }
 
     
-    void StoreParsePolicy::handle_meta_line(ParsingState const & state) 
+    void StoreParsePolicy::handle_meta_line(ParsingState & state)
     {
         // Put together m_line_typeid and m_grouped_tokens in a single MetaEntry object
         // Add MetaEntry to Source
@@ -109,7 +109,7 @@ namespace ebi
         m_grouped_tokens.push_back(m_current_token);
     }
 
-    void StoreParsePolicy::handle_header_line(ParsingState const & state) 
+    void StoreParsePolicy::handle_header_line(ParsingState & state)
     {
         state.set_samples(m_grouped_tokens);
     }
@@ -194,7 +194,7 @@ namespace ebi
         auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ?
                        m_line_tokens["SAMPLES"] : std::vector<std::string>{};
 
-        state.add_record(Record{
+        state.set_record(std::unique_ptr<Record>{new Record{
                 state.n_lines,
                 m_line_tokens["CHROM"][0],
                 position,
@@ -207,7 +207,7 @@ namespace ebi
                 format,
                 samples,
                 state.source
-        });
+        }});
 
         check_sorted(state, position);
     }

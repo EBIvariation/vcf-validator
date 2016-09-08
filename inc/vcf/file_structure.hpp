@@ -138,9 +138,8 @@ namespace ebi
         std::vector<std::string> format;
 
         std::vector<std::string> samples;
-        
+
         std::shared_ptr<Source> source;
-        
 
         Record(size_t line,
                 std::string const & chromosome,
@@ -153,7 +152,7 @@ namespace ebi
                 std::map<std::string, std::string> const & info,
                 std::vector<std::string> const & format,
                 std::vector<std::string> const & samples,
-                std::shared_ptr<Source> const & source);
+                std::shared_ptr<Source> source);
         
         bool operator==(Record const &) const;
 

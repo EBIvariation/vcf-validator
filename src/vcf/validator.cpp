@@ -20,86 +20,77 @@ namespace ebi
 {
   namespace vcf
   {
-  
-    ParserImpl::ParserImpl(std::shared_ptr<Source> const & source,
-                           std::shared_ptr<std::vector<Record>> const & records
+
+    ParserImpl::ParserImpl(std::shared_ptr<Source> source
     )
-    : ParsingState{source, records}
+    : ParsingState{source}
     {
         
     }
 
     void ParserImpl::parse(std::vector<char> const & text)
     {
-      char const * p = &text[0];
-      char const * pe = &text[0] + text.size();
-      char const * eof = nullptr;
+        char const * p = &text[0];
+        char const * pe = &text[0] + text.size();
+        char const * eof = nullptr;
 
-      clear_records();
-      clear_errors();
-      clear_warnings();
-      parse_buffer(p, pe, eof);
+        unset_record();
+        clear_errors();
+        clear_warnings();
+        parse_buffer(p, pe, eof);
     }
 
     void ParserImpl::parse(std::string const & text)
     {
-      char const * p = text.data();
-      char const * pe = text.data() + text.size();
-      char const * eof = nullptr;
+        char const * p = text.data();
+        char const * pe = text.data() + text.size();
+        char const * eof = nullptr;
 
-      clear_records();
-      clear_errors();
-      clear_warnings();
-      parse_buffer(p, pe, eof);
+        unset_record();
+        clear_errors();
+        clear_warnings();
+        parse_buffer(p, pe, eof);
     }
 
     void ParserImpl::end()
     {
-      char const * empty = "";
-      clear_records();
-      clear_errors();
-      clear_warnings();
-      parse_buffer(empty, empty, empty);
+        char const * empty = "";
+        unset_record();
+        clear_errors();
+        clear_warnings();
+        parse_buffer(empty, empty, empty);
     }
 
     bool ParserImpl::is_valid() const
     {
-      return m_is_valid;
+        return m_is_valid;
     }
 
-    const std::shared_ptr<std::vector<std::unique_ptr<Error>>> ParserImpl::errors() const
+    const std::vector<std::unique_ptr<Error>> & ParserImpl::errors() const
     {
-      return ParsingState::errors;
+        return ParsingState::errors;
     }
-    
-    const std::shared_ptr<std::vector<std::unique_ptr<Error>>> ParserImpl::warnings() const
+
+    const std::vector<std::unique_ptr<Error>> & ParserImpl::warnings() const
     {
-      return ParsingState::warnings;
+        return ParsingState::warnings;
     }
 
     std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const &path, ValidationLevel level, ebi::vcf::Version version)
     {
-        auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, version};
+        auto source_ptr = new ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, version};
+        std::shared_ptr<Source> source{source_ptr};
         auto records = std::vector<ebi::vcf::Record>{};
 
         switch (level) {
         case ValidationLevel::error:
             switch (version) {
             case ebi::vcf::Version::v41:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::QuickValidator_v41(
-                                std::make_shared<ebi::vcf::Source>(source),
-                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::QuickValidator_v41(source));
             case ebi::vcf::Version::v42:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::QuickValidator_v42(
-                                std::make_shared<ebi::vcf::Source>(source),
-                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::QuickValidator_v42(source));
             case ebi::vcf::Version::v43:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::QuickValidator_v43(
-                                std::make_shared<ebi::vcf::Source>(source),
-                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::QuickValidator_v43(source));
             default:
                 throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
             }
@@ -107,20 +98,11 @@ namespace ebi
         case ValidationLevel::warning:
             switch (version) {
             case ebi::vcf::Version::v41:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::FullValidator_v41(
-                                std::make_shared<ebi::vcf::Source>(source),
-                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::FullValidator_v41(source));
             case ebi::vcf::Version::v42:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::FullValidator_v42(
-                                std::make_shared<ebi::vcf::Source>(source),
-                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::FullValidator_v42(source));
             case ebi::vcf::Version::v43:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::FullValidator_v43(
-                                std::make_shared<ebi::vcf::Source>(source),
-                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::FullValidator_v43(source));
             default:
                 throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
             }
@@ -128,20 +110,11 @@ namespace ebi
         case ValidationLevel::stop:
             switch (version) {
             case ebi::vcf::Version::v41:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::Reader_v41(
-                                std::make_shared<ebi::vcf::Source>(source),
-                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::Reader_v41(source));
             case ebi::vcf::Version::v42:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::Reader_v42(
-                                std::make_shared<ebi::vcf::Source>(source),
-                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::Reader_v42(source));
             case ebi::vcf::Version::v43:
-                return std::unique_ptr<ebi::vcf::Parser>(
-                        new ebi::vcf::Reader_v43(
-                                std::make_shared<ebi::vcf::Source>(source),
-                                std::make_shared<std::vector<ebi::vcf::Record>>(records)));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::Reader_v43(source));
             default:
                 throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
             }

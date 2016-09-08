@@ -56,22 +56,20 @@ namespace ebi
       if (!input) {
           throw std::runtime_error("file not found: " + path);
       }
-      auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, ebi::vcf::Version::v41};
-      auto records = std::vector<ebi::vcf::Record>{};
 
       auto validator = ebi::vcf::FullValidator_v41{
-          std::make_shared<ebi::vcf::Source>(source),
-          std::make_shared<std::vector<ebi::vcf::Record>>(records)};
+              std::make_shared<ebi::vcf::Source>(path, ebi::vcf::InputFormat::VCF_FILE_VCF, ebi::vcf::Version::v41)
+      };
 
       std::vector<char> line;
       line.reserve(default_line_buffer_size);
 
       while (readline(input, line)) {
           validator.parse(line);
-          for (auto &error : *validator.errors()) {
+          for (auto &error : validator.errors()) {
               output.write_error(*error);
           }
-          for (auto &warn : *validator.warnings()) {
+          for (auto &warn : validator.warnings()) {
               output.write_warning(*warn);
           }
       }
