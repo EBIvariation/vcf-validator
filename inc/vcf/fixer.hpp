@@ -121,22 +121,22 @@ namespace ebi
             const size_t info_column_index = 7;
             const std::string empty_info_column = ".";
 
-            size_t num_removed_subfields = 0;
+            size_t num_removed_fields = 0;
             std::string string_line = {line->begin(), line->end()};
 
-            auto remove_info_field_if = [&](std::string &info_subfield, size_t index) -> bool {
+            auto condition_to_remove_info_field = [&](std::string &info_subfield, size_t index) -> bool {
                 std::vector<std::string> key_value;
                 util::string_split(info_subfield, "=", key_value);
                 return key_value[0] == error.get_field();
             };
 
             fix_column(info_column_index, string_line, "\t", [&](std::string &info_column) {
-                num_removed_subfields = remove_column(info_column, ";", empty_info_column, remove_info_field_if);
+                num_removed_fields = remove_column(info_column, ";", empty_info_column, condition_to_remove_info_field);
             });
 
-            if (num_removed_subfields != 1) {
+            if (num_removed_fields != 1) {
                 std::cerr << "WARNING: line " << error.get_line() << ": field " << error.get_field() << " appeared "
-                          << num_removed_subfields << " times " << std::endl;
+                          << num_removed_fields << " times " << std::endl;
             }
         }
         virtual void visit(FormatBodyError &error) override
@@ -172,41 +172,36 @@ namespace ebi
          */
         virtual void visit(SamplesFieldBodyError &error) override
         {
-            if (error.get_field().empty()) {
+            std::cerr << "DEBUG: line " << error.get_line() << ": fixing invalid sample field " << error.get_field()
+                      << std::endl;
+
+            const size_t format_column_index = 8;
+//                size_t first_samples_column_index = 9;
+            std::string string_line = {line->begin(), line->end()};
+
+            size_t fixed_samples;
+            std::string message;
+            try {
+                using iter = std::vector<std::string>::iterator;
+                fixed_samples = fix_columns(format_column_index, -1, string_line, "\t", [&](iter first, iter last) {
+                    if (error.get_field() == "GT") {
+                        fix_format_gt(first, last, error);
+                    } else {
+                        remove_format(first, last, error);
+                    }
+                });
+            } catch (std::out_of_range bad_range) {
+                // there were not enough columns. maybe an aggregate vcf without genotypes?
+                fixed_samples = 0;
+                message = bad_range.what();
+            }
+
+            if (fixed_samples <= 1) {   // 1 because we started counting since the FORMAT column
+                std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field " << error.get_field()
+                          << " in the samples column, but sample columns are not present. " << message << std::endl;
                 util::writeline(output, *line);
                 ignored_errors++;
-            } else {
-                std::cerr << "DEBUG: line " << error.get_line() << ": fixing invalid sample field " << error.get_field()
-                          << std::endl;
-
-                const size_t format_column_index = 8;
-//                size_t first_samples_column_index = 9;
-                std::string string_line = {line->begin(), line->end()};
-
-                size_t fixed_samples;
-                std::string message;
-                try {
-                    using iter = std::vector<std::string>::iterator;
-                    fixed_samples = fix_columns(format_column_index, -1, string_line, "\t", [&](iter first, iter last) {
-                        if (error.get_field() == "GT") {
-                            fix_format_gt(first, last, error);
-                        } else {
-                            remove_format(first, last, error);
-                        }
-                    });
-                } catch (std::out_of_range bad_range) {
-                    // there were not enough columns. maybe an aggregate vcf without genotypes?
-                    fixed_samples = 0;
-                    message = bad_range.what();
-                }
-
-                if (fixed_samples <= 1) {   // 1 because we started counting since the FORMAT column
-                    std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field " << error.get_field()
-                              << " in the samples column, but sample columns are not present. " << message << std::endl;
-                    util::writeline(output, *line);
-                    ignored_errors++;
-                    return;
-                }
+                return;
             }
         }
 
@@ -243,8 +238,8 @@ namespace ebi
             // check that GT is present and is the first field
             size_t subfield_index = split_and_find(*first, field_separator, error.get_field());
             if (subfield_index != gt_column_index) {
-                std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field " << error.get_field()
-                          << " but it was not present in the FORMAT column \"" + *first + "\"" << std::endl;
+                std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field \"" << error.get_field()
+                          << "\" but it was not present in the FORMAT column \"" + *first + "\"" << std::endl;
                 ignored_errors++;
                 util::print_container(output, std::vector<std::string>{first, last}, "", "\t", "");
                 return;
@@ -288,8 +283,8 @@ namespace ebi
                 }
             });
             if (removed == 0) {
-                std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field " << error.get_field()
-                          << " but it was not present in the FORMAT column \"" + *first + "\"" << std::endl;
+                std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field \"" << error.get_field()
+                          << "\" but it was not present in the FORMAT column \"" + *first + "\"" << std::endl;
                 ignored_errors++;
                 util::print_container(output, std::vector<std::string>{++first, last}, "\t", "\t", "");
                 return;

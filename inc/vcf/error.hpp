@@ -309,9 +309,14 @@ namespace ebi
       public:
         SamplesFieldBodyError(size_t line,
                          const std::string &message,
-                         std::string field,
+                         const std::string &field,
                          long field_cardinality = -1)
-                : BodySectionError{line, message}, field(field), field_cardinality(field_cardinality) { }
+                : BodySectionError{line, message}, field(field), field_cardinality(field_cardinality) {
+            if (field.empty()) {
+                throw std::invalid_argument{"SamplesFieldBodyError: field should not be an empty string. Use "
+                                               "SamplesBodyError for unknown errors in the samples columns"};
+            }
+        }
         virtual ErrorCode get_code() const override { return ErrorCode::samples_field_body; }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
 
