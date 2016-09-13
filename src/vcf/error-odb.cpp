@@ -157,21 +157,27 @@ namespace odb
 
     // line
     //
-    b[n].type = sqlite::bind::integer;
-    b[n].buffer = &i.line_value;
-    b[n].is_null = &i.line_null;
-    n++;
+    if (sk != statement_update)
+    {
+      b[n].type = sqlite::bind::integer;
+      b[n].buffer = &i.line_value;
+      b[n].is_null = &i.line_null;
+      n++;
+    }
 
     // message
     //
-    b[n].type = sqlite::image_traits<
-      ::std::string,
-      sqlite::id_text>::bind_value;
-    b[n].buffer = i.message_value.data ();
-    b[n].size = &i.message_size;
-    b[n].capacity = i.message_value.capacity ();
-    b[n].is_null = &i.message_null;
-    n++;
+    if (sk != statement_update)
+    {
+      b[n].type = sqlite::image_traits<
+        ::std::string,
+        sqlite::id_text>::bind_value;
+      b[n].buffer = i.message_value.data ();
+      b[n].size = &i.message_size;
+      b[n].capacity = i.message_value.capacity ();
+      b[n].is_null = &i.message_null;
+      n++;
+    }
 
     // severity
     //
@@ -229,6 +235,7 @@ namespace odb
 
     // line
     //
+    if (sk == statement_insert)
     {
       ::size_t const& v =
         o.line;
@@ -245,6 +252,7 @@ namespace odb
 
     // message
     //
+    if (sk == statement_insert)
     {
       ::std::string const& v =
         o.message;
@@ -330,7 +338,8 @@ namespace odb
     //
     {
       ::size_t& v =
-        o.line;
+        const_cast< ::size_t& > (
+        o.line);
 
       sqlite::value_traits<
           ::size_t,
@@ -344,7 +353,8 @@ namespace odb
     //
     {
       ::std::string& v =
-        o.message;
+        const_cast< ::std::string& > (
+        o.message);
 
       sqlite::value_traits<
           ::std::string,
@@ -445,8 +455,6 @@ namespace odb
   const char access::object_traits_impl< ::ebi::vcf::Error, id_sqlite >::update_statement[] =
   "UPDATE \"Error\" "
   "SET "
-  "\"line\"=?, "
-  "\"message\"=?, "
   "\"severity\"=? "
   "WHERE \"id\"=?";
 
@@ -8738,7 +8746,7 @@ namespace odb
     //
     {
       ::std::string const& v =
-        o.get_field ();
+        o.field;
 
       bool is_null (false);
       std::size_t cap (i.field_value.capacity ());
@@ -8774,7 +8782,8 @@ namespace odb
     // field
     //
     {
-      ::std::string v;
+      ::std::string& v =
+        o.field;
 
       sqlite::value_traits<
           ::std::string,
@@ -8783,8 +8792,6 @@ namespace odb
         i.field_value,
         i.field_size,
         i.field_null);
-
-      o.set_field (v);
     }
   }
 

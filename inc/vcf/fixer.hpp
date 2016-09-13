@@ -116,8 +116,7 @@ namespace ebi
         virtual void visit(InfoBodyError &error) override
         {
             // TODO better log system, if any
-            std::cerr << "DEBUG: line " << error.get_line() << ": fixing invalid INFO field " << error.get_field()
-                      << std::endl;
+            std::cerr << "DEBUG: line " << error.line << ": fixing invalid INFO field " << error.field << std::endl;
             const size_t info_column_index = 7;
             const std::string empty_info_column = ".";
 
@@ -127,7 +126,7 @@ namespace ebi
             auto condition_to_remove_info_field = [&](std::string &info_subfield, size_t index) -> bool {
                 std::vector<std::string> key_value;
                 util::string_split(info_subfield, "=", key_value);
-                return key_value[0] == error.get_field();
+                return key_value[0] == error.field;
             };
 
             fix_column(info_column_index, string_line, "\t", [&](std::string &info_column) {
@@ -135,7 +134,7 @@ namespace ebi
             });
 
             if (num_removed_fields != 1) {
-                std::cerr << "WARNING: line " << error.get_line() << ": field " << error.get_field() << " appeared "
+                std::cerr << "WARNING: line " << error.line << ": field " << error.field << " appeared "
                           << num_removed_fields << " times " << std::endl;
             }
         }
@@ -153,8 +152,8 @@ namespace ebi
         /**
          * explanation of the fix:
          * - in error.get_field there will be the field name as it appears in the FORMAT column, e.g. "GT".
-         * - if error.get_field() is empty, skip fix (copy the line as-is)
-         * - get the index in the FORMAT column of error.get_field(), e.g. in GT:AC:AN, the index of AC is 1.
+         * - if error.field is empty, skip fix (copy the line as-is)
+         * - get the index in the FORMAT column of error.field, e.g. in GT:AC:AN, the index of AC is 1.
          *      if the field is not found, skip fix (copy as-is)
          * - for each sample column
          *      - if the field is GT
@@ -172,7 +171,7 @@ namespace ebi
          */
         virtual void visit(SamplesFieldBodyError &error) override
         {
-            std::cerr << "DEBUG: line " << error.get_line() << ": fixing invalid sample field " << error.get_field()
+            std::cerr << "DEBUG: line " << error.line << ": fixing invalid sample field " << error.field
                       << std::endl;
 
             const size_t format_column_index = 8;
@@ -184,7 +183,7 @@ namespace ebi
             try {
                 using iter = std::vector<std::string>::iterator;
                 fixed_samples = fix_columns(format_column_index, -1, string_line, "\t", [&](iter first, iter last) {
-                    if (error.get_field() == "GT") {
+                    if (error.field == "GT") {
                         fix_format_gt(first, last, error);
                     } else {
                         remove_format(first, last, error);
@@ -197,7 +196,7 @@ namespace ebi
             }
 
             if (fixed_samples <= 1) {   // 1 because we started counting since the FORMAT column
-                std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field " << error.get_field()
+                std::cerr << "WARNING: line " << error.line << ": tried to fix field " << error.field
                           << " in the samples column, but sample columns are not present. " << message << std::endl;
                 util::writeline(output, *line);
                 ignored_errors++;
@@ -236,9 +235,9 @@ namespace ebi
             const char empty_subfield = '.';
 
             // check that GT is present and is the first field
-            size_t subfield_index = split_and_find(*first, field_separator, error.get_field());
+            size_t subfield_index = split_and_find(*first, field_separator, error.field);
             if (subfield_index != gt_column_index) {
-                std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field \"" << error.get_field()
+                std::cerr << "WARNING: line " << error.line << ": tried to fix field \"" << error.field
                           << "\" but it was not present in the FORMAT column \"" + *first + "\"" << std::endl;
                 ignored_errors++;
                 util::print_container(output, std::vector<std::string>{first, last}, "", "\t", "");
@@ -250,7 +249,7 @@ namespace ebi
 
             // `cardinality` should be -1 if the cardinality is unknown, and any positive number otherwise
             // so, if unknown, put 1, so that a single "." is written
-            size_t repeat = error.get_field_cardinality() <= -1 ? 1 : static_cast<size_t>(error.get_field_cardinality());
+            size_t repeat = error.field_cardinality <= -1 ? 1 : static_cast<size_t>(error.field_cardinality);
 
             // now `it` will point to each SAMPLE column
             for (auto it = ++first; it != last; ++it) {
@@ -275,15 +274,15 @@ namespace ebi
             const std::string field_separator = ":";
             size_t field_index;
             size_t removed = remove_column(*first, field_separator, [&](std::string &field, size_t index) {
-                if (field == error.get_field()) {
+                if (field == error.field) {
                     field_index = index;
-                    return field == error.get_field();
+                    return field == error.field;
                 } else {
                     return false;
                 }
             });
             if (removed == 0) {
-                std::cerr << "WARNING: line " << error.get_line() << ": tried to fix field \"" << error.get_field()
+                std::cerr << "WARNING: line " << error.line << ": tried to fix field \"" << error.field
                           << "\" but it was not present in the FORMAT column \"" + *first + "\"" << std::endl;
                 ignored_errors++;
                 util::print_container(output, std::vector<std::string>{++first, last}, "\t", "\t", "");

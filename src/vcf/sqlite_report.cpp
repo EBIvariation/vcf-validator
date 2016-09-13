@@ -127,7 +127,7 @@ namespace ebi
             start_transaction();
         }
         
-        rc = sqlite3_bind_int64(statement, 1, error.get_line());
+        rc = sqlite3_bind_int64(statement, 1, error.line);
         if (rc != SQLITE_OK) {
             rollback_transaction();
             throw std::runtime_error{std::string{"Can't write, failed sqlite3_bind_int64 with code: "} + std::to_string(rc)};
@@ -137,7 +137,7 @@ namespace ebi
             rollback_transaction();
             throw std::runtime_error{std::string{"Can't write, failed sqlite3_bind_int64 with code: "} + std::to_string(rc)};
         }
-        rc = sqlite3_bind_text(statement, 3, error.get_raw_message().c_str(), -1, SQLITE_TRANSIENT);
+        rc = sqlite3_bind_text(statement, 3, error.message.c_str(), -1, SQLITE_TRANSIENT);
         if (rc != SQLITE_OK) {
             rollback_transaction();
             throw std::runtime_error{std::string{"Can't write, failed sqlite3_bind_text with code: "} + std::to_string(rc)};

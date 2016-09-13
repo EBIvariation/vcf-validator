@@ -78,12 +78,12 @@ namespace ebi
     // ReportWriter implementation
     void OdbReportRW::write_error(Error &error)
     {
-        error.set_severity(Severity::ERROR);
+        error.severity = Severity::ERROR;
         write(error);
     }
     void OdbReportRW::write_warning(Error &error)
     {
-        error.set_severity(Severity::WARNING);
+        error.severity = Severity::WARNING;
         write(error);
     }
 

@@ -1156,7 +1156,7 @@ namespace odb
     static const std::size_t column_count = 5UL;
     static const std::size_t id_column_count = 1UL;
     static const std::size_t inverse_column_count = 0UL;
-    static const std::size_t readonly_column_count = 1UL;
+    static const std::size_t readonly_column_count = 3UL;
     static const std::size_t managed_optimistic_column_count = 0UL;
     static const std::size_t discriminator_column_count = 1UL;
 

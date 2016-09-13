@@ -206,7 +206,7 @@ namespace ebi
                         check_field_type(field.second, values, key_values["Type"]);
                     } catch (Error *ex) {
                         throw new InfoBodyError{line,
-                                                "Info " + key_values["ID"] + "=" + ex->get_raw_message(),
+                                                "Info " + key_values["ID"] + "=" + ex->message,
                                                 key_values["ID"]};
                     }
                     
@@ -305,7 +305,7 @@ namespace ebi
                     long number = valid ? cardinality : -1;
                     throw new SamplesFieldBodyError{line,
                                                "Sample #" + std::to_string(i+1) + ", "
-                                                       + key_values["ID"] + "=" + ex->get_raw_message(),
+                                                       + key_values["ID"] + "=" + ex->message,
                                                key_values["ID"],
                                                number};
                 }
