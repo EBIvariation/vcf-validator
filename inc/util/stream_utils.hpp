@@ -46,7 +46,7 @@ namespace ebi
     }
 
     template <typename Container>
-    std::ostream & writeline(std::ostream & stream, Container & container)
+    std::ostream & writeline(std::ostream & stream, const Container & container)
     {
         for (auto c : container) {
             stream << c;
@@ -59,24 +59,43 @@ namespace ebi
     {
         return os << "{" << container.first << ", " << container.second << "}";
     }
+
     /**
-     * This is a generic method that prints a collection if it has the operations ".size()", ".begin()", ".end()" 
+     * This is a generic method that prints a collection if its inner type is printable with "operator<<"
+     *
+     * @param os ostream to write into
+     * @param container must have he operations ".begin()" and ".end()"
      * defined and they provide iterators, and the inner type has an overloaded "operator<<"
+     * @param open_tag will be written before the first element (e.g. "[", if you want something like "[2,4]"), can be an empty string
+     * @param separator_tag will be written between elements (e.g. "," in "[2,4]"), can be empty string
+     * @param close_tag will be written after the last element (e.g. "]" in "[2,4]"), can be emtpy string
+     * @return the ostream passed, in the questionable case you want to do `print_containter(cout, ...) << "more messages"`;
+     */
+    template <typename T>
+    std::ostream &print_container(std::ostream &os, const T &container,
+                                  std::string open_tag, std::string separator_tag, std::string close_tag) {
+        os << open_tag;
+        auto it = container.begin();
+        auto end = container.end();
+        if (it != end) {
+            os << *it;
+            for (++it; it != container.end(); ++it) {
+                os << separator_tag << *it;
+            }
+        }
+        os << close_tag;
+        return os;
+    }
+
+    /**
+     * This is a generic method that prints a collection if it has the operations ".begin()" and ".end()"
+     * defined and they provide iterators, and the inner type has an overloaded "operator<<"
+     *
+     * provides the default open/close/separator tags to print collections like this: [2,4]
      */
     template <typename T>
     std::ostream &print_container(std::ostream &os, const T &container) {
-        size_t size = container.size();
-        os << "[";
-        if (size > 0) {
-            auto it = container.begin();
-            os << *it;
-            it++;
-            for (; it != container.end(); ++it) {
-                os << ", " << *it;
-            }
-        }
-        os << "]";
-        return os;
+        return print_container(os, container, "[", ", ", "]");
     }
     
     // the next functions allow using the previous print_container in a easier syntax
@@ -88,7 +107,7 @@ namespace ebi
     template <typename K, typename V>
     std::ostream &operator<<(std::ostream &os, const std::map<K, V> &container)
     {
-        return print_container<std::map<std::string, std::string>>(os, container);
+        return print_container<std::map<K, V>>(os, container);
     }
   }
 }

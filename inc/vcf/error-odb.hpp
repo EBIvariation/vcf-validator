@@ -792,6 +792,55 @@ namespace odb
     callback (database&, const object_type&, callback_event);
   };
 
+  // SamplesFieldBodyError
+  //
+  template <>
+  struct class_traits< ::ebi::vcf::SamplesFieldBodyError >
+  {
+    static const class_kind kind = class_object;
+  };
+
+  template <>
+  class access::object_traits< ::ebi::vcf::SamplesFieldBodyError >
+  {
+    public:
+    typedef ::ebi::vcf::SamplesFieldBodyError object_type;
+    typedef ::ebi::vcf::SamplesFieldBodyError* pointer_type;
+    typedef odb::pointer_traits<pointer_type> pointer_traits;
+
+    static const bool polymorphic = true;
+
+    typedef ::ebi::vcf::Error root_type;
+    typedef ::ebi::vcf::BodySectionError base_type;
+    typedef object_traits<root_type>::discriminator_type discriminator_type;
+    typedef polymorphic_concrete_info<root_type> info_type;
+
+    static const std::size_t depth = 3UL;
+
+    typedef object_traits< ::ebi::vcf::Error >::id_type id_type;
+
+    static const bool auto_id = false;
+
+    static const bool abstract = false;
+
+    static id_type
+    id (const object_type&);
+
+    typedef
+    no_op_pointer_cache_traits<object_traits<root_type>::pointer_type>
+    pointer_cache_traits;
+
+    typedef
+    no_op_reference_cache_traits<root_type>
+    reference_cache_traits;
+
+    static void
+    callback (database&, object_type&, callback_event);
+
+    static void
+    callback (database&, const object_type&, callback_event);
+  };
+
   // NormalizationError
   //
   template <>
@@ -1107,7 +1156,7 @@ namespace odb
     static const std::size_t column_count = 5UL;
     static const std::size_t id_column_count = 1UL;
     static const std::size_t inverse_column_count = 0UL;
-    static const std::size_t readonly_column_count = 1UL;
+    static const std::size_t readonly_column_count = 3UL;
     static const std::size_t managed_optimistic_column_count = 0UL;
     static const std::size_t discriminator_column_count = 1UL;
 
@@ -3729,6 +3778,229 @@ namespace odb
   {
   };
 
+  // SamplesFieldBodyError
+  //
+  template <typename A>
+  struct query_columns< ::ebi::vcf::SamplesFieldBodyError, id_sqlite, A >:
+    query_columns< ::ebi::vcf::BodySectionError, id_sqlite, typename A::base_traits >
+  {
+    // BodySectionError
+    //
+    typedef query_columns< ::ebi::vcf::BodySectionError, id_sqlite, typename A::base_traits > BodySectionError;
+
+    // id
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        long unsigned int,
+        sqlite::id_integer >::query_type,
+      sqlite::id_integer >
+    id_type_;
+
+    static const id_type_ id;
+
+    // field
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        ::std::string,
+        sqlite::id_text >::query_type,
+      sqlite::id_text >
+    field_type_;
+
+    static const field_type_ field;
+
+    // field_cardinality
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        long int,
+        sqlite::id_integer >::query_type,
+      sqlite::id_integer >
+    field_cardinality_type_;
+
+    static const field_cardinality_type_ field_cardinality;
+  };
+
+  template <typename A>
+  const typename query_columns< ::ebi::vcf::SamplesFieldBodyError, id_sqlite, A >::id_type_
+  query_columns< ::ebi::vcf::SamplesFieldBodyError, id_sqlite, A >::
+  id (A::table_name, "\"id\"", 0);
+
+  template <typename A>
+  const typename query_columns< ::ebi::vcf::SamplesFieldBodyError, id_sqlite, A >::field_type_
+  query_columns< ::ebi::vcf::SamplesFieldBodyError, id_sqlite, A >::
+  field (A::table_name, "\"field\"", 0);
+
+  template <typename A>
+  const typename query_columns< ::ebi::vcf::SamplesFieldBodyError, id_sqlite, A >::field_cardinality_type_
+  query_columns< ::ebi::vcf::SamplesFieldBodyError, id_sqlite, A >::
+  field_cardinality (A::table_name, "\"field_cardinality\"", 0);
+
+  template <typename A>
+  struct pointer_query_columns< ::ebi::vcf::SamplesFieldBodyError, id_sqlite, A >:
+    query_columns< ::ebi::vcf::SamplesFieldBodyError, id_sqlite, A >
+  {
+  };
+
+  template <>
+  class access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >:
+    public access::object_traits< ::ebi::vcf::SamplesFieldBodyError >
+  {
+    public:
+    typedef polymorphic_entry<object_type, id_sqlite> entry_type;
+    typedef object_traits_impl<root_type, id_sqlite> root_traits;
+    typedef object_traits_impl<base_type, id_sqlite> base_traits;
+
+    typedef root_traits::id_image_type id_image_type;
+
+    static const info_type info;
+
+    struct image_type
+    {
+      base_traits::image_type* base;
+
+      // id_
+      //
+      long long id_value;
+      bool id_null;
+
+      // field
+      //
+      details::buffer field_value;
+      std::size_t field_size;
+      bool field_null;
+
+      // field_cardinality
+      //
+      long long field_cardinality_value;
+      bool field_cardinality_null;
+
+      std::size_t version;
+    };
+
+    struct extra_statement_cache_type;
+
+    using object_traits<object_type>::id;
+
+    static bool
+    grow (image_type&,
+          bool*,
+          std::size_t = depth);
+
+    static void
+    bind (sqlite::bind*,
+          const sqlite::bind* id,
+          std::size_t id_size,
+          image_type&,
+          sqlite::statement_kind);
+
+    static void
+    bind (sqlite::bind*, id_image_type&);
+
+    static bool
+    init (image_type&,
+          const object_type&,
+          sqlite::statement_kind);
+
+    static void
+    init (object_type&,
+          const image_type&,
+          database*,
+          std::size_t = depth);
+
+    static void
+    init (id_image_type&, const id_type&);
+
+    static bool
+    check_version (const std::size_t*, const image_type&);
+
+    static void
+    update_version (std::size_t*, const image_type&, sqlite::binding*);
+
+    typedef
+    sqlite::polymorphic_derived_object_statements<object_type>
+    statements_type;
+
+    typedef
+    sqlite::polymorphic_root_object_statements<root_type>
+    root_statements_type;
+
+    typedef sqlite::query_base query_base_type;
+
+    static const std::size_t column_count = 3UL;
+    static const std::size_t id_column_count = 1UL;
+    static const std::size_t inverse_column_count = 0UL;
+    static const std::size_t readonly_column_count = 0UL;
+    static const std::size_t managed_optimistic_column_count = 0UL;
+
+    static const std::size_t separate_load_column_count = 0UL;
+    static const std::size_t separate_update_column_count = 0UL;
+
+    static const bool versioned = false;
+
+    static const char persist_statement[];
+    static const char* const find_statements[depth];
+    static const std::size_t find_column_counts[depth];
+    static const char update_statement[];
+    static const char erase_statement[];
+    static const char query_statement[];
+    static const char erase_query_statement[];
+
+    static const char table_name[];
+
+    static void
+    persist (database&, object_type&, bool top = true, bool dyn = true);
+
+    static pointer_type
+    find (database&, const id_type&);
+
+    static bool
+    find (database&, const id_type&, object_type&, bool dyn = true);
+
+    static bool
+    reload (database&, object_type&, bool dyn = true);
+
+    static void
+    update (database&, const object_type&, bool top = true, bool dyn = true);
+
+    static void
+    erase (database&, const id_type&, bool top = true, bool dyn = true);
+
+    static void
+    erase (database&, const object_type&, bool top = true, bool dyn = true);
+
+    static result<object_type>
+    query (database&, const query_base_type&);
+
+    static unsigned long long
+    erase_query (database&, const query_base_type&);
+
+    public:
+    static bool
+    find_ (statements_type&,
+           const id_type*,
+           std::size_t = depth);
+
+    static void
+    load_ (statements_type&,
+           object_type&,
+           bool reload,
+           std::size_t = depth);
+
+    static void
+    load_ (database&, root_type&, std::size_t);
+  };
+
+  template <>
+  class access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_common >:
+    public access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >
+  {
+  };
+
   // NormalizationError
   //
   template <typename A>
@@ -4122,6 +4394,8 @@ namespace odb
   // FormatBodyError
   //
   // SamplesBodyError
+  //
+  // SamplesFieldBodyError
   //
   // NormalizationError
   //

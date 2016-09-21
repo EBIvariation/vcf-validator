@@ -44,29 +44,31 @@ namespace ebi
         info_body,
         format_body,
         samples_body,
+        samples_field_body,
         normalization,
         duplication,
     };
 
     enum class Severity { WARNING, ERROR };
 
-    class Error;
-    class MetaSectionError;
-    class HeaderSectionError;
-    class BodySectionError;
-    class FileformatError;
-    class ChromosomeBodyError;
-    class PositionBodyError;
-    class IdBodyError;
-    class ReferenceAlleleBodyError;
-    class AlternateAllelesBodyError;
-    class QualityBodyError;
-    class FilterBodyError;
-    class InfoBodyError;
-    class FormatBodyError;
-    class SamplesBodyError;
-    class NormalizationError;
-    class DuplicationError;
+    struct Error;
+    struct MetaSectionError;
+    struct HeaderSectionError;
+    struct BodySectionError;
+    struct FileformatError;
+    struct ChromosomeBodyError;
+    struct PositionBodyError;
+    struct IdBodyError;
+    struct ReferenceAlleleBodyError;
+    struct AlternateAllelesBodyError;
+    struct QualityBodyError;
+    struct FilterBodyError;
+    struct InfoBodyError;
+    struct FormatBodyError;
+    struct SamplesBodyError;
+    struct SamplesFieldBodyError;
+    struct NormalizationError;
+    struct DuplicationError;
 
     std::shared_ptr<Error> get_error_instance(ErrorCode code, size_t line, const std::string &message);
 
@@ -87,6 +89,7 @@ namespace ebi
         virtual void visit(InfoBodyError &error) = 0;
         virtual void visit(FormatBodyError &error) = 0;
         virtual void visit(SamplesBodyError &error) = 0;
+        virtual void visit(SamplesFieldBodyError &error) = 0;
         virtual void visit(NormalizationError &error) = 0;
         virtual void visit(DuplicationError &error) = 0;
     };
@@ -103,9 +106,8 @@ namespace ebi
      * - add a new method visit in ErrorVisitor
      */
     #pragma db object polymorphic
-    class Error : public std::runtime_error
+    struct Error : public std::runtime_error
     {
-      public:
         Error() : Error{0} {}
 
         Error(size_t line) : Error{line, "Error, invalid file."} {}
@@ -116,21 +118,17 @@ namespace ebi
                   message{message} {}
 
 
-        size_t get_line() const { return line; }
-        const std::string &get_raw_message() const { return message; }
         virtual ErrorCode get_code() const { return ErrorCode::error; }
         virtual void apply_visitor(ErrorVisitor &visitor) { visitor.visit(*this); }
-        Severity get_severity() { return severity; }
-        void set_severity(Severity severity) { Error::severity = severity; }
         unsigned long get_id() const { return id_; }
+
+        const size_t line;
+        const std::string message;
+        Severity severity;
 
 
       private:
         friend class odb::access;
-
-        size_t line;
-        std::string message;
-        Severity severity;
 
         #pragma db id auto
         unsigned long id_;
@@ -145,9 +143,8 @@ namespace ebi
 
     // inheritance siblings depending on file location
     #pragma db object
-    class MetaSectionError : public Error
+    struct MetaSectionError : public Error
     {
-      public:
         using Error::Error;
         MetaSectionError() : MetaSectionError{0} { }
         MetaSectionError(size_t line) : MetaSectionError{line, "Error in meta-data section"} { }
@@ -156,9 +153,8 @@ namespace ebi
     };
 
     #pragma db object
-    class HeaderSectionError : public Error
+    struct HeaderSectionError : public Error
     {
-      public:
         using Error::Error;
         HeaderSectionError() : HeaderSectionError{0} { }
         HeaderSectionError(size_t line) : HeaderSectionError{line, "Error in header section"} { }
@@ -167,9 +163,8 @@ namespace ebi
     };
 
     #pragma db object
-    class BodySectionError : public Error
+    struct BodySectionError : public Error
     {
-      public:
         using Error::Error;
         BodySectionError() : BodySectionError{0} { }
         BodySectionError(size_t line) : BodySectionError{line, "Error in body section"} { }
@@ -179,9 +174,8 @@ namespace ebi
 
     // inheritance siblings about detailed errors
     #pragma db object
-    class FileformatError : public MetaSectionError
+    struct FileformatError : public MetaSectionError
     {
-      public:
         using MetaSectionError::MetaSectionError;
         FileformatError() : FileformatError{0} {}
         FileformatError(size_t line) : FileformatError{line, "Error in file format section"} { }
@@ -190,9 +184,8 @@ namespace ebi
     };
 
     #pragma db object
-    class ChromosomeBodyError : public BodySectionError
+    struct ChromosomeBodyError : public BodySectionError
     {
-      public:
         using BodySectionError::BodySectionError;
         ChromosomeBodyError() : ChromosomeBodyError{0} {}
         ChromosomeBodyError(size_t line) : ChromosomeBodyError{line,
@@ -202,9 +195,8 @@ namespace ebi
     };
 
     #pragma db object
-    class PositionBodyError : public BodySectionError
+    struct PositionBodyError : public BodySectionError
     {
-      public:
         using BodySectionError::BodySectionError;
         PositionBodyError() : PositionBodyError{0} {}
         PositionBodyError(size_t line) : PositionBodyError{line, "Position is not a positive number"} { }
@@ -212,9 +204,8 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
-    class IdBodyError : public BodySectionError
+    struct IdBodyError : public BodySectionError
     {
-      public:
         using BodySectionError::BodySectionError;
         IdBodyError() : IdBodyError{0} {}
         IdBodyError(size_t line) : IdBodyError{line, "ID is not a single dot or a list of strings without semicolons or whitespaces"} { }
@@ -222,9 +213,8 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
-    class ReferenceAlleleBodyError : public BodySectionError
+    struct ReferenceAlleleBodyError : public BodySectionError
     {
-      public:
         using BodySectionError::BodySectionError;
         ReferenceAlleleBodyError() : ReferenceAlleleBodyError{0} {}
         ReferenceAlleleBodyError(size_t line) : ReferenceAlleleBodyError{line, "Reference is not a string of bases"} { }
@@ -232,9 +222,8 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
-    class AlternateAllelesBodyError : public BodySectionError
+    struct AlternateAllelesBodyError : public BodySectionError
     {
-      public:
         using BodySectionError::BodySectionError;
         AlternateAllelesBodyError() : AlternateAllelesBodyError{0} {}
         AlternateAllelesBodyError(size_t line) : AlternateAllelesBodyError{line, "Alternate is not a single dot or a comma-separated list of bases"} { }
@@ -242,9 +231,8 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
-    class QualityBodyError : public BodySectionError
+    struct QualityBodyError : public BodySectionError
     {
-      public:
         using BodySectionError::BodySectionError;
         QualityBodyError() : QualityBodyError{0} {}
         QualityBodyError(size_t line) : QualityBodyError{line, "Quality is not a single dot or a positive number"} { }
@@ -252,9 +240,8 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
-    class FilterBodyError : public BodySectionError
+    struct FilterBodyError : public BodySectionError
     {
-      public:
         using BodySectionError::BodySectionError;
         FilterBodyError() : FilterBodyError{0} {}
         FilterBodyError(size_t line) : FilterBodyError{line, "Filter is not a single dot or a semicolon-separated list of strings"} { }
@@ -262,26 +249,20 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
-    class InfoBodyError : public BodySectionError
+    struct InfoBodyError : public BodySectionError
     {
-      public:
-        using BodySectionError::BodySectionError;
-        InfoBodyError() : InfoBodyError{0} {}
-        InfoBodyError(size_t line) : InfoBodyError{line, "Error in info column, in body section"} { }
-        InfoBodyError(size_t line, const std::string &message, const std::string &field)
-                : InfoBodyError{line, message} {this->field = field;}
+        InfoBodyError(size_t line = 0,
+                      const std::string &message = "Error in info column, in body section",
+                      const std::string &field = "")
+                : BodySectionError{line, message}, field(field) {}
         virtual ErrorCode get_code() const override { return ErrorCode::info_body; }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
 
-        const std::string &get_field() const {return field;};
-        void set_field(const std::string &field) { this->field = field; };
-      protected:
         std::string field;
     };
     #pragma db object
-    class FormatBodyError : public BodySectionError
+    struct FormatBodyError : public BodySectionError
     {
-      public:
         using BodySectionError::BodySectionError;
         FormatBodyError() : FormatBodyError{0} {}
         FormatBodyError(size_t line) : FormatBodyError{line, "Format is not a colon-separated list of alphanumeric strings"} { }
@@ -289,9 +270,8 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
-    class SamplesBodyError : public BodySectionError
+    struct SamplesBodyError : public BodySectionError
     {
-      public:
         using BodySectionError::BodySectionError;
         SamplesBodyError() : SamplesBodyError{0} {}
         SamplesBodyError(size_t line) : SamplesBodyError{line, "Error in samples columns, in body section"} { }
@@ -299,9 +279,31 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
-    class NormalizationError : public BodySectionError
+    struct SamplesFieldBodyError : public BodySectionError
     {
+      private:
+        friend class odb::access;
+        SamplesFieldBodyError() {}  // necessary for ODB
       public:
+        SamplesFieldBodyError(size_t line,
+                         const std::string &message,
+                         const std::string &field,
+                         long field_cardinality = -1)
+                : BodySectionError{line, message}, field(field), field_cardinality(field_cardinality) {
+            if (field.empty()) {
+                throw std::invalid_argument{"SamplesFieldBodyError: field should not be an empty string. Use "
+                                               "SamplesBodyError for unknown errors in the samples columns"};
+            }
+        }
+        virtual ErrorCode get_code() const override { return ErrorCode::samples_field_body; }
+        virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
+
+        std::string field;
+        long field_cardinality;    // [0, inf): valid number of values. -1: unknown amount of values
+    };
+    #pragma db object
+    struct NormalizationError : public BodySectionError
+    {
         using BodySectionError::BodySectionError;
         NormalizationError() : NormalizationError{0} {}
         NormalizationError(size_t line) : NormalizationError{line, "Allele normalization could not be performed"} { }
@@ -309,9 +311,8 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
-    class DuplicationError : public BodySectionError
+    struct DuplicationError : public BodySectionError
     {
-      public:
         using BodySectionError::BodySectionError;
         DuplicationError() : DuplicationError{0} {}
         DuplicationError(size_t line) : DuplicationError{line, "A duplicated variant was found"} { }

@@ -80,10 +80,12 @@ namespace ebi
 
             if (ploidy > 0) {
                 if (alleles.size() != ploidy) {
-                    throw new SamplesBodyError{
+                    throw new SamplesFieldBodyError{
                             state.n_lines,
                             "Sample #" + std::to_string(i) + " has " + std::to_string(alleles.size())
-                                    + " allele(s), but " + std::to_string(ploidy) + " were found in others"};
+                                    + " allele(s), but " + std::to_string(ploidy) + " were found in others",
+                            "GT",
+                            static_cast<long>(ploidy)};
                 }
             } else {
                 ploidy = alleles.size();

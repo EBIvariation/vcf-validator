@@ -175,8 +175,8 @@ namespace ebi
           
           size_t errors_read = 0;
           errorDAO.for_each_error([&](std::shared_ptr<ebi::vcf::Error> error) {
-              CHECK(error->get_line() == line);
-              CHECK(error->get_raw_message() == message);
+              CHECK(error->line == line);
+              CHECK(error->message == message);
               errors_read++;
           });
           CHECK(errors_read == 1);
@@ -192,8 +192,8 @@ namespace ebi
           
           size_t errors_read = 0;
           errorDAO.for_each_warning([&](std::shared_ptr<ebi::vcf::Error> error) {
-              CHECK(error->get_line() == line);
-              CHECK(error->get_raw_message() == message);
+              CHECK(error->line == line);
+              CHECK(error->message == message);
               errors_read++;
           });
           CHECK(errors_read == 1);
@@ -259,8 +259,8 @@ namespace ebi
           ebi::vcf::SqliteReportRW errorsDAO{db_name};
 
           errorsDAO.for_each_error([&errors_read](std::shared_ptr<ebi::vcf::Error> error) {
-              CHECK(error->get_line() == 1);
-              CHECK(error->get_raw_message() == "The fileformat declaration is not 'fileformat=VCFv4.1'");
+              CHECK(error->line == 1);
+              CHECK(error->message == "The fileformat declaration is not 'fileformat=VCFv4.1'");
               errors_read++;
           });
 
@@ -318,8 +318,8 @@ namespace ebi
 
           size_t errors_read = 0;
           errorDAO.for_each_error([&](std::shared_ptr<ebi::vcf::Error> error) {
-              CHECK(error->get_line() == line);
-              CHECK(error->get_raw_message() == message);
+              CHECK(error->line == line);
+              CHECK(error->message == message);
               errors_read++;
           });
           CHECK(errors_read == 1);
@@ -335,8 +335,8 @@ namespace ebi
 
           size_t errors_read = 0;
           errorDAO.for_each_warning([&](std::shared_ptr<ebi::vcf::Error> error) {
-              CHECK(error->get_line() == line);
-              CHECK(error->get_raw_message() == message);
+              CHECK(error->line == line);
+              CHECK(error->message == message);
               errors_read++;
           });
           CHECK(errors_read == 1);

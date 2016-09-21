@@ -40,7 +40,7 @@ namespace ebi
           ebi::vcf::Fixer fixer{output};
 
           errorDAO.for_each_error([&](std::shared_ptr<ebi::vcf::Error> error) {
-              size_t line_index = error->get_line();
+              size_t line_index = error->line;
               while (current_line < line_index) {
 
                   // advance input

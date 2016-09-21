@@ -60,7 +60,110 @@ namespace ebi
           std::vector<std::string> columns, info_fields;
           util::string_split(output.str(), "\t", columns);
           util::string_split(columns[7], ";", info_fields);
+          INFO(columns[7]);
           CHECK(info_fields.size() == 2);
+      }
+      SECTION("Fix first INFO field")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: There's an invalid info field"};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "wrong_field"};
+
+          std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\twrong_field=x;AC=1\tformat\tsamples";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns, info_fields;
+          util::string_split(output.str(), "\t", columns);
+          util::string_split(columns[7], ";", info_fields);
+          CHECK(info_fields.size() == 1);
+      }
+      SECTION("Fix unique INFO field")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: There's an invalid info field"};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "wrong_field"};
+
+          std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\twrong_field=x\tformat\tsamples";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns, info_fields;
+          util::string_split(output.str(), "\t", columns);
+          CHECK(columns[7] == ".");
+      }
+
+      SECTION("Fix SAMPLE field GT")
+      {
+          size_t line_number = 8;
+          std::string message{"the genotype in the sample column has an illegal value"};
+          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, "GT"};
+
+          std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C\tGT:GS:GL\t1/C:0.000:-0.18,-0.48,-2.49";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns, sample_fields;
+          util::string_split(output.str(), "\t", columns);
+          util::string_split(columns[9], ":", sample_fields);
+          INFO(output.str());
+          CHECK(sample_fields[0] == ".");
+          CHECK(columns[8] == "GT:GS:GL");
+      }
+      SECTION("Fix SAMPLE field AC")
+      {
+          size_t line_number = 8;
+          std::string message{"the genotype in the sample column has an illegal value"};
+          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, "AC"};
+
+          std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C\tGT:AC:GL\t1/1:0.000:-0.18,-0.48,-2.49";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns, sample_fields;
+          util::string_split(output.str(), "\t", columns);
+          util::string_split(columns[9], ":", sample_fields);
+          INFO(output.str());
+          CHECK(sample_fields.size() == 2);
+          CHECK(columns[8] == "GT:GL");
+      }
+      SECTION("Fix SAMPLE field that doesn't exist")
+      {
+          size_t line_number = 8;
+          std::string message{"requested to remove a wrong field"};
+          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, "AC"};
+
+          std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C\tGT:GS:GL\t1/1:0.000:-0.18,-0.48,-2.49";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          INFO("the line should be left identical, because we told it to remove a wrong field")
+          CHECK(output.str() == string_line);
+      }
+      SECTION("Fix SAMPLE without samples")
+      {
+          size_t line_number = 8;
+          std::string message{"requested to remove a wrong file"};
+          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, "AC"};
+
+          std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C";
+
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          CHECK(output.str() == string_line);
       }
   }
 

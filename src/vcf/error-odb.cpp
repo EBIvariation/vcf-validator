@@ -157,21 +157,27 @@ namespace odb
 
     // line
     //
-    b[n].type = sqlite::bind::integer;
-    b[n].buffer = &i.line_value;
-    b[n].is_null = &i.line_null;
-    n++;
+    if (sk != statement_update)
+    {
+      b[n].type = sqlite::bind::integer;
+      b[n].buffer = &i.line_value;
+      b[n].is_null = &i.line_null;
+      n++;
+    }
 
     // message
     //
-    b[n].type = sqlite::image_traits<
-      ::std::string,
-      sqlite::id_text>::bind_value;
-    b[n].buffer = i.message_value.data ();
-    b[n].size = &i.message_size;
-    b[n].capacity = i.message_value.capacity ();
-    b[n].is_null = &i.message_null;
-    n++;
+    if (sk != statement_update)
+    {
+      b[n].type = sqlite::image_traits<
+        ::std::string,
+        sqlite::id_text>::bind_value;
+      b[n].buffer = i.message_value.data ();
+      b[n].size = &i.message_size;
+      b[n].capacity = i.message_value.capacity ();
+      b[n].is_null = &i.message_null;
+      n++;
+    }
 
     // severity
     //
@@ -229,6 +235,7 @@ namespace odb
 
     // line
     //
+    if (sk == statement_insert)
     {
       ::size_t const& v =
         o.line;
@@ -245,6 +252,7 @@ namespace odb
 
     // message
     //
+    if (sk == statement_insert)
     {
       ::std::string const& v =
         o.message;
@@ -330,7 +338,8 @@ namespace odb
     //
     {
       ::size_t& v =
-        o.line;
+        const_cast< ::size_t& > (
+        o.line);
 
       sqlite::value_traits<
           ::size_t,
@@ -344,7 +353,8 @@ namespace odb
     //
     {
       ::std::string& v =
-        o.message;
+        const_cast< ::std::string& > (
+        o.message);
 
       sqlite::value_traits<
           ::std::string,
@@ -445,8 +455,6 @@ namespace odb
   const char access::object_traits_impl< ::ebi::vcf::Error, id_sqlite >::update_statement[] =
   "UPDATE \"Error\" "
   "SET "
-  "\"line\"=?, "
-  "\"message\"=?, "
   "\"severity\"=? "
   "WHERE \"id\"=?";
 
@@ -8738,7 +8746,7 @@ namespace odb
     //
     {
       ::std::string const& v =
-        o.get_field ();
+        o.field;
 
       bool is_null (false);
       std::size_t cap (i.field_value.capacity ());
@@ -8774,7 +8782,8 @@ namespace odb
     // field
     //
     {
-      ::std::string v;
+      ::std::string& v =
+        o.field;
 
       sqlite::value_traits<
           ::std::string,
@@ -8783,8 +8792,6 @@ namespace odb
         i.field_value,
         i.field_size,
         i.field_null);
-
-      o.set_field (v);
     }
   }
 
@@ -10744,6 +10751,817 @@ namespace odb
     return st.execute ();
   }
 
+  // SamplesFieldBodyError
+  //
+
+  struct access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::extra_statement_cache_type
+  {
+    extra_statement_cache_type (
+      sqlite::connection&,
+      image_type&,
+      id_image_type&,
+      sqlite::binding&,
+      sqlite::binding&)
+    {
+    }
+  };
+
+  bool access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  grow (image_type& i,
+        bool* t,
+        std::size_t d)
+  {
+    ODB_POTENTIALLY_UNUSED (i);
+    ODB_POTENTIALLY_UNUSED (t);
+
+    bool grew (false);
+
+    // BodySectionError base
+    //
+    if (--d != 0)
+    {
+      if (base_traits::grow (*i.base, t + 2UL, d))
+        i.base->version++;
+    }
+
+    // field
+    //
+    if (t[0UL])
+    {
+      i.field_value.capacity (i.field_size);
+      grew = true;
+    }
+
+    // field_cardinality
+    //
+    t[1UL] = false;
+
+    return grew;
+  }
+
+  void access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  bind (sqlite::bind* b,
+        const sqlite::bind* id,
+        std::size_t id_size,
+        image_type& i,
+        sqlite::statement_kind sk)
+  {
+    ODB_POTENTIALLY_UNUSED (sk);
+
+    using namespace sqlite;
+
+    std::size_t n (0);
+
+    // id_
+    //
+    if (sk == statement_insert)
+    {
+      if (id != 0)
+        std::memcpy (&b[n], id, id_size * sizeof (id[0]));
+      n += id_size;
+    }
+
+    // field
+    //
+    b[n].type = sqlite::image_traits<
+      ::std::string,
+      sqlite::id_text>::bind_value;
+    b[n].buffer = i.field_value.data ();
+    b[n].size = &i.field_size;
+    b[n].capacity = i.field_value.capacity ();
+    b[n].is_null = &i.field_null;
+    n++;
+
+    // field_cardinality
+    //
+    b[n].type = sqlite::bind::integer;
+    b[n].buffer = &i.field_cardinality_value;
+    b[n].is_null = &i.field_cardinality_null;
+    n++;
+
+    // id_
+    //
+    if (sk == statement_update)
+    {
+      if (id != 0)
+        std::memcpy (&b[n], id, id_size * sizeof (id[0]));
+      n += id_size;
+    }
+
+    // BodySectionError base
+    //
+    if (sk == statement_select)
+      base_traits::bind (b + n, id, id_size, *i.base, sk);
+  }
+
+  bool access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  init (image_type& i,
+        const object_type& o,
+        sqlite::statement_kind sk)
+  {
+    ODB_POTENTIALLY_UNUSED (i);
+    ODB_POTENTIALLY_UNUSED (o);
+    ODB_POTENTIALLY_UNUSED (sk);
+
+    using namespace sqlite;
+
+    bool grew (false);
+
+    // field
+    //
+    {
+      ::std::string const& v =
+        o.field;
+
+      bool is_null (false);
+      std::size_t cap (i.field_value.capacity ());
+      sqlite::value_traits<
+          ::std::string,
+          sqlite::id_text >::set_image (
+        i.field_value,
+        i.field_size,
+        is_null,
+        v);
+      i.field_null = is_null;
+      grew = grew || (cap != i.field_value.capacity ());
+    }
+
+    // field_cardinality
+    //
+    {
+      long int const& v =
+        o.field_cardinality;
+
+      bool is_null (false);
+      sqlite::value_traits<
+          long int,
+          sqlite::id_integer >::set_image (
+        i.field_cardinality_value,
+        is_null,
+        v);
+      i.field_cardinality_null = is_null;
+    }
+
+    return grew;
+  }
+
+  void access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  init (object_type& o,
+        const image_type& i,
+        database* db,
+        std::size_t d)
+  {
+    ODB_POTENTIALLY_UNUSED (o);
+    ODB_POTENTIALLY_UNUSED (i);
+    ODB_POTENTIALLY_UNUSED (db);
+
+    // BodySectionError base
+    //
+    if (--d != 0)
+      base_traits::init (o, *i.base, db, d);
+
+    // field
+    //
+    {
+      ::std::string& v =
+        o.field;
+
+      sqlite::value_traits<
+          ::std::string,
+          sqlite::id_text >::set_value (
+        v,
+        i.field_value,
+        i.field_size,
+        i.field_null);
+    }
+
+    // field_cardinality
+    //
+    {
+      long int& v =
+        o.field_cardinality;
+
+      sqlite::value_traits<
+          long int,
+          sqlite::id_integer >::set_value (
+        v,
+        i.field_cardinality_value,
+        i.field_cardinality_null);
+    }
+  }
+
+  const access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::info_type
+  access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::info (
+    typeid (::ebi::vcf::SamplesFieldBodyError),
+    &object_traits_impl< ::ebi::vcf::BodySectionError, id_sqlite >::info,
+    0,
+    "ebi::vcf::SamplesFieldBodyError",
+    &odb::create_impl< ::ebi::vcf::SamplesFieldBodyError >,
+    &odb::dispatch_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >,
+    &statements_type::delayed_loader);
+
+  static const access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::entry_type
+  polymorphic_entry_for_ebi_vcf_SamplesFieldBodyError;
+
+  const char access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::persist_statement[] =
+  "INSERT INTO \"SamplesFieldBodyError\" "
+  "(\"id\", "
+  "\"field\", "
+  "\"field_cardinality\") "
+  "VALUES "
+  "(?, ?, ?)";
+
+  const char* const access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::find_statements[] =
+  {
+    "SELECT "
+    "\"SamplesFieldBodyError\".\"field\", "
+    "\"SamplesFieldBodyError\".\"field_cardinality\", "
+    "\"Error\".\"line\", "
+    "\"Error\".\"message\", "
+    "\"Error\".\"severity\", "
+    "\"Error\".\"id\", "
+    "\"Error\".\"typeid\" "
+    "FROM \"SamplesFieldBodyError\" "
+    "LEFT JOIN \"Error\" ON \"Error\".\"id\"=\"SamplesFieldBodyError\".\"id\" "
+    "WHERE \"SamplesFieldBodyError\".\"id\"=?",
+
+    "SELECT "
+    "\"SamplesFieldBodyError\".\"field\", "
+    "\"SamplesFieldBodyError\".\"field_cardinality\" "
+    "FROM \"SamplesFieldBodyError\" "
+    "WHERE \"SamplesFieldBodyError\".\"id\"=?",
+
+    "SELECT "
+    "\"SamplesFieldBodyError\".\"field\", "
+    "\"SamplesFieldBodyError\".\"field_cardinality\" "
+    "FROM \"SamplesFieldBodyError\" "
+    "WHERE \"SamplesFieldBodyError\".\"id\"=?"
+  };
+
+  const std::size_t access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::find_column_counts[] =
+  {
+    7UL,
+    2UL,
+    2UL
+  };
+
+  const char access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::update_statement[] =
+  "UPDATE \"SamplesFieldBodyError\" "
+  "SET "
+  "\"field\"=?, "
+  "\"field_cardinality\"=? "
+  "WHERE \"id\"=?";
+
+  const char access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::erase_statement[] =
+  "DELETE FROM \"SamplesFieldBodyError\" "
+  "WHERE \"id\"=?";
+
+  const char access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::query_statement[] =
+  "SELECT\n"
+  "\"SamplesFieldBodyError\".\"field\",\n"
+  "\"SamplesFieldBodyError\".\"field_cardinality\",\n"
+  "\"Error\".\"line\",\n"
+  "\"Error\".\"message\",\n"
+  "\"Error\".\"severity\",\n"
+  "\"Error\".\"id\",\n"
+  "\"Error\".\"typeid\"\n"
+  "FROM \"SamplesFieldBodyError\"\n"
+  "LEFT JOIN \"BodySectionError\" ON \"BodySectionError\".\"id\"=\"SamplesFieldBodyError\".\"id\"\n"
+  "LEFT JOIN \"Error\" ON \"Error\".\"id\"=\"SamplesFieldBodyError\".\"id\"";
+
+  const char access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::erase_query_statement[] =
+  "DELETE FROM \"SamplesFieldBodyError\"";
+
+  const char access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::table_name[] =
+  "\"SamplesFieldBodyError\"";
+
+  void access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  persist (database& db, object_type& obj, bool top, bool dyn)
+  {
+    ODB_POTENTIALLY_UNUSED (db);
+    ODB_POTENTIALLY_UNUSED (top);
+
+    using namespace sqlite;
+
+    if (dyn)
+    {
+      const std::type_info& t (typeid (obj));
+
+      if (t != info.type)
+      {
+        const info_type& pi (root_traits::map->find (t));
+        pi.dispatch (info_type::call_persist, db, &obj, 0);
+        return;
+      }
+    }
+
+    sqlite::connection& conn (
+      sqlite::transaction::current ().connection ());
+    statements_type& sts (
+      conn.statement_cache ().find_object<object_type> ());
+
+    if (top)
+      callback (db,
+                static_cast<const object_type&> (obj),
+                callback_event::pre_persist);
+
+    base_traits::persist (db, obj, false, false);
+
+    image_type& im (sts.image ());
+    binding& imb (sts.insert_image_binding ());
+    const binding& idb (sts.id_image_binding ());
+
+    if (init (im, obj, statement_insert))
+      im.version++;
+
+    if (idb.version != sts.insert_id_binding_version () ||
+        im.version != sts.insert_image_version () ||
+        imb.version == 0)
+    {
+      bind (imb.bind, idb.bind, idb.count, im, statement_insert);
+      sts.insert_id_binding_version (idb.version);
+      sts.insert_image_version (im.version);
+      imb.version++;
+    }
+
+    insert_statement& st (sts.persist_statement ());
+    if (!st.execute ())
+      throw object_already_persistent ();
+
+    if (top)
+      callback (db,
+                static_cast<const object_type&> (obj),
+                callback_event::post_persist);
+  }
+
+  void access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  update (database& db, const object_type& obj, bool top, bool dyn)
+  {
+    ODB_POTENTIALLY_UNUSED (db);
+    ODB_POTENTIALLY_UNUSED (top);
+
+    using namespace sqlite;
+    using sqlite::update_statement;
+
+    if (dyn)
+    {
+      const std::type_info& t (typeid (obj));
+
+      if (t != info.type)
+      {
+        const info_type& pi (root_traits::map->find (t));
+        pi.dispatch (info_type::call_update, db, &obj, 0);
+        return;
+      }
+    }
+
+    if (top)
+      callback (db, obj, callback_event::pre_update);
+
+    sqlite::transaction& tr (sqlite::transaction::current ());
+    sqlite::connection& conn (tr.connection ());
+    statements_type& sts (
+      conn.statement_cache ().find_object<object_type> ());
+
+    base_traits::update (db, obj, false, false);
+
+    image_type& im (sts.image ());
+    if (init (im, obj, statement_update))
+      im.version++;
+
+    const binding& idb (sts.id_image_binding ());
+    binding& imb (sts.update_image_binding ());
+    if (idb.version != sts.update_id_binding_version () ||
+        im.version != sts.update_image_version () ||
+        imb.version == 0)
+    {
+      bind (imb.bind, idb.bind, idb.count, im, statement_update);
+      sts.update_id_binding_version (idb.version);
+      sts.update_image_version (im.version);
+      imb.version++;
+    }
+
+    update_statement& st (sts.update_statement ());
+    if (st.execute () == 0)
+      throw object_not_persistent ();
+
+    if (top)
+    {
+      callback (db, obj, callback_event::post_update);
+      pointer_cache_traits::update (db, obj);
+    }
+  }
+
+  void access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  erase (database& db, const id_type& id, bool top, bool dyn)
+  {
+    using namespace sqlite;
+
+    ODB_POTENTIALLY_UNUSED (db);
+    ODB_POTENTIALLY_UNUSED (top);
+
+    sqlite::connection& conn (
+      sqlite::transaction::current ().connection ());
+    statements_type& sts (
+      conn.statement_cache ().find_object<object_type> ());
+
+    if (dyn)
+    {
+      discriminator_type d;
+      root_traits::discriminator_ (sts.root_statements (), id, &d);
+
+      if (d != info.discriminator)
+      {
+        const info_type& pi (root_traits::map->find (d));
+
+        if (!pi.derived (info))
+          throw object_not_persistent ();
+
+        pi.dispatch (info_type::call_erase, db, 0, &id);
+        return;
+      }
+    }
+
+    if (top)
+    {
+      id_image_type& i (sts.id_image ());
+      init (i, id);
+
+      binding& idb (sts.id_image_binding ());
+      if (i.version != sts.id_image_version () || idb.version == 0)
+      {
+        bind (idb.bind, i);
+        sts.id_image_version (i.version);
+        idb.version++;
+      }
+    }
+
+    if (sts.erase_statement ().execute () != 1)
+      throw object_not_persistent ();
+
+    base_traits::erase (db, id, false, false);
+
+    if (top)
+      pointer_cache_traits::erase (db, id);
+  }
+
+  void access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  erase (database& db, const object_type& obj, bool top, bool dyn)
+  {
+    ODB_POTENTIALLY_UNUSED (db);
+    ODB_POTENTIALLY_UNUSED (top);
+
+    if (dyn)
+    {
+      const std::type_info& t (typeid (obj));
+
+      if (t != info.type)
+      {
+        const info_type& pi (root_traits::map->find (t));
+        pi.dispatch (info_type::call_erase, db, &obj, 0);
+        return;
+      }
+    }
+
+    callback (db, obj, callback_event::pre_erase);
+    erase (db, id (obj), true, false);
+    callback (db, obj, callback_event::post_erase);
+  }
+
+  access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::pointer_type
+  access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  find (database& db, const id_type& id)
+  {
+    using namespace sqlite;
+
+    {
+      root_traits::pointer_type rp (pointer_cache_traits::find (db, id));
+
+      if (!root_traits::pointer_traits::null_ptr (rp))
+        return
+          root_traits::pointer_traits::dynamic_pointer_cast<object_type> (rp);
+    }
+
+    sqlite::connection& conn (
+      sqlite::transaction::current ().connection ());
+    statements_type& sts (
+      conn.statement_cache ().find_object<object_type> ());
+    root_statements_type& rsts (sts.root_statements ());
+
+    statements_type::auto_lock l (rsts);
+    root_traits::discriminator_type d;
+
+    if (l.locked ())
+    {
+      if (!find_ (sts, &id))
+        return pointer_type ();
+      d = root_traits::discriminator (rsts.image ());
+    }
+    else
+      root_traits::discriminator_ (rsts, id, &d);
+
+    const info_type& pi (
+      d == info.discriminator ? info : root_traits::map->find (d));
+
+    root_traits::pointer_type rp (pi.create ());
+    pointer_type p (
+      root_traits::pointer_traits::static_pointer_cast<object_type> (rp));
+    pointer_traits::guard pg (p);
+
+    pointer_cache_traits::insert_guard ig (
+      pointer_cache_traits::insert (db, id, rp));
+
+    object_type& obj (pointer_traits::get_ref (p));
+
+    if (l.locked ())
+    {
+      select_statement& st (sts.find_statement (depth));
+      ODB_POTENTIALLY_UNUSED (st);
+
+      callback_event ce (callback_event::pre_load);
+      pi.dispatch (info_type::call_callback, db, &obj, &ce);
+      init (obj, sts.image (), &db);
+      load_ (sts, obj, false);
+
+      if (&pi != &info)
+      {
+        std::size_t d (depth);
+        pi.dispatch (info_type::call_load, db, &obj, &d);
+      }
+
+      rsts.load_delayed (0);
+      l.unlock ();
+      ce = callback_event::post_load;
+      pi.dispatch (info_type::call_callback, db, &obj, &ce);
+      pointer_cache_traits::load (ig.position ());
+    }
+    else
+      rsts.delay_load (id, obj, ig.position (), pi.delayed_loader);
+
+    ig.release ();
+    pg.release ();
+    return p;
+  }
+
+  bool access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  find (database& db, const id_type& id, object_type& obj, bool dyn)
+  {
+    ODB_POTENTIALLY_UNUSED (dyn);
+
+    using namespace sqlite;
+
+    if (dyn)
+    {
+      const std::type_info& t (typeid (obj));
+
+      if (t != info.type)
+      {
+        const info_type& pi (root_traits::map->find (t));
+        return pi.dispatch (info_type::call_find, db, &obj, &id);
+      }
+    }
+
+    sqlite::connection& conn (
+      sqlite::transaction::current ().connection ());
+    statements_type& sts (
+      conn.statement_cache ().find_object<object_type> ());
+    root_statements_type& rsts (sts.root_statements ());
+
+    statements_type::auto_lock l (rsts);
+
+    if (!find_ (sts, &id))
+      return false;
+
+    select_statement& st (sts.find_statement (depth));
+    ODB_POTENTIALLY_UNUSED (st);
+
+    reference_cache_traits::position_type pos (
+      reference_cache_traits::insert (db, id, obj));
+    reference_cache_traits::insert_guard ig (pos);
+
+    callback (db, obj, callback_event::pre_load);
+    init (obj, sts.image (), &db);
+    load_ (sts, obj, false);
+    rsts.load_delayed (0);
+    l.unlock ();
+    callback (db, obj, callback_event::post_load);
+    reference_cache_traits::load (pos);
+    ig.release ();
+    return true;
+  }
+
+  bool access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  reload (database& db, object_type& obj, bool dyn)
+  {
+    ODB_POTENTIALLY_UNUSED (dyn);
+
+    using namespace sqlite;
+
+    if (dyn)
+    {
+      const std::type_info& t (typeid (obj));
+
+      if (t != info.type)
+      {
+        const info_type& pi (root_traits::map->find (t));
+        return pi.dispatch (info_type::call_reload, db, &obj, 0);
+      }
+    }
+
+    sqlite::connection& conn (
+      sqlite::transaction::current ().connection ());
+    statements_type& sts (
+      conn.statement_cache ().find_object<object_type> ());
+    root_statements_type& rsts (sts.root_statements ());
+
+    statements_type::auto_lock l (rsts);
+
+    const id_type& id  (
+      obj.id_);
+
+    if (!find_ (sts, &id))
+      return false;
+
+    select_statement& st (sts.find_statement (depth));
+    ODB_POTENTIALLY_UNUSED (st);
+
+    callback (db, obj, callback_event::pre_load);
+    init (obj, sts.image (), &db);
+    load_ (sts, obj, true);
+    rsts.load_delayed (0);
+    l.unlock ();
+    callback (db, obj, callback_event::post_load);
+    return true;
+  }
+
+  bool access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  find_ (statements_type& sts,
+         const id_type* id,
+         std::size_t d)
+  {
+    using namespace sqlite;
+
+    if (d == depth)
+    {
+      id_image_type& i (sts.id_image ());
+      init (i, *id);
+
+      binding& idb (sts.id_image_binding ());
+      if (i.version != sts.id_image_version () || idb.version == 0)
+      {
+        bind (idb.bind, i);
+        sts.id_image_version (i.version);
+        idb.version++;
+      }
+    }
+
+    image_type& im (sts.image ());
+    binding& imb (sts.select_image_binding (d));
+
+    if (imb.version == 0 ||
+        check_version (sts.select_image_versions (), im))
+    {
+      bind (imb.bind, 0, 0, im, statement_select);
+      update_version (sts.select_image_versions (),
+                      im,
+                      sts.select_image_bindings ());
+    }
+
+    select_statement& st (sts.find_statement (d));
+
+    st.execute ();
+    auto_result ar (st);
+    select_statement::result r (st.fetch ());
+
+    if (r == select_statement::truncated)
+    {
+      if (grow (im, sts.select_image_truncated (), d))
+        im.version++;
+
+      if (check_version (sts.select_image_versions (), im))
+      {
+        bind (imb.bind, 0, 0, im, statement_select);
+        update_version (sts.select_image_versions (),
+                        im,
+                        sts.select_image_bindings ());
+        st.refetch ();
+      }
+    }
+
+    return r != select_statement::no_data;
+  }
+
+  void access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  load_ (statements_type& sts,
+         object_type& obj,
+         bool reload,
+         std::size_t d)
+  {
+    ODB_POTENTIALLY_UNUSED (reload);
+
+    if (--d != 0)
+      base_traits::load_ (sts.base_statements (), obj, reload, d);
+  }
+
+  void access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  load_ (database& db, root_type& r, std::size_t d)
+  {
+    using namespace sqlite;
+
+    object_type& obj (static_cast<object_type&> (r));
+    sqlite::connection& conn (
+      sqlite::transaction::current ().connection ());
+    statements_type& sts (
+      conn.statement_cache ().find_object<object_type> ());
+
+    d = depth - d;
+
+    if (!find_ (sts, 0, d))
+      throw object_not_persistent ();
+
+    select_statement& st (sts.find_statement (d));
+    ODB_POTENTIALLY_UNUSED (st);
+
+    init (obj, sts.image (), &db, d);
+    load_ (sts, obj, false, d);
+  }
+
+  result< access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::object_type >
+  access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  query (database&, const query_base_type& q)
+  {
+    using namespace sqlite;
+    using odb::details::shared;
+    using odb::details::shared_ptr;
+
+    sqlite::connection& conn (
+      sqlite::transaction::current ().connection ());
+
+    statements_type& sts (
+      conn.statement_cache ().find_object<object_type> ());
+
+    image_type& im (sts.image ());
+    binding& imb (sts.select_image_binding (depth));
+
+    if (imb.version == 0 ||
+        check_version (sts.select_image_versions (), im))
+    {
+      bind (imb.bind, 0, 0, im, statement_select);
+      update_version (sts.select_image_versions (),
+                      im,
+                      sts.select_image_bindings ());
+    }
+
+    std::string text (query_statement);
+    if (!q.empty ())
+    {
+      text += "\n";
+      text += q.clause ();
+    }
+
+    q.init_parameters ();
+    shared_ptr<select_statement> st (
+      new (shared) select_statement (
+        conn,
+        text,
+        true,
+        true,
+        q.parameters_binding (),
+        imb));
+
+    st->execute ();
+
+    shared_ptr< odb::polymorphic_object_result_impl<object_type> > r (
+      new (shared) sqlite::polymorphic_object_result_impl<object_type> (
+        q, st, sts, 0));
+
+    return result<object_type> (r);
+  }
+
+  unsigned long long access::object_traits_impl< ::ebi::vcf::SamplesFieldBodyError, id_sqlite >::
+  erase_query (database&, const query_base_type& q)
+  {
+    using namespace sqlite;
+
+    sqlite::connection& conn (
+      sqlite::transaction::current ().connection ());
+
+    std::string text (erase_query_statement);
+    if (!q.empty ())
+    {
+      text += ' ';
+      text += q.clause ();
+    }
+
+    q.init_parameters ();
+    delete_statement st (
+      conn,
+      text,
+      q.parameters_binding ());
+
+    return st.execute ();
+  }
+
   // NormalizationError
   //
 
@@ -12116,6 +12934,7 @@ namespace odb
         {
           db.execute ("DROP TABLE IF EXISTS \"DuplicationError\"");
           db.execute ("DROP TABLE IF EXISTS \"NormalizationError\"");
+          db.execute ("DROP TABLE IF EXISTS \"SamplesFieldBodyError\"");
           db.execute ("DROP TABLE IF EXISTS \"SamplesBodyError\"");
           db.execute ("DROP TABLE IF EXISTS \"FormatBodyError\"");
           db.execute ("DROP TABLE IF EXISTS \"InfoBodyError\"");
@@ -12228,6 +13047,14 @@ namespace odb
                       "    ON DELETE CASCADE)");
           db.execute ("CREATE TABLE \"SamplesBodyError\" (\n"
                       "  \"id\" INTEGER NOT NULL PRIMARY KEY,\n"
+                      "  CONSTRAINT \"id_fk\"\n"
+                      "    FOREIGN KEY (\"id\")\n"
+                      "    REFERENCES \"BodySectionError\" (\"id\")\n"
+                      "    ON DELETE CASCADE)");
+          db.execute ("CREATE TABLE \"SamplesFieldBodyError\" (\n"
+                      "  \"id\" INTEGER NOT NULL PRIMARY KEY,\n"
+                      "  \"field\" TEXT NOT NULL,\n"
+                      "  \"field_cardinality\" INTEGER NOT NULL,\n"
                       "  CONSTRAINT \"id_fk\"\n"
                       "    FOREIGN KEY (\"id\")\n"
                       "    REFERENCES \"BodySectionError\" (\"id\")\n"

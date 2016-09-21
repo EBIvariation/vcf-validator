@@ -55,6 +55,8 @@ namespace ebi
             return std::shared_ptr<Error>(new FormatBodyError{line, message});
         case ErrorCode::samples_body:
             return std::shared_ptr<Error>(new SamplesBodyError{line, message});
+        case ErrorCode::samples_field_body:
+            return std::shared_ptr<Error>(new SamplesFieldBodyError{line, message, ""});
         case ErrorCode::normalization:
             return std::shared_ptr<Error>(new NormalizationError{line, message});
         case ErrorCode::duplication:
