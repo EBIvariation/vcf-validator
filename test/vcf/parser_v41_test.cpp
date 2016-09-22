@@ -22,12 +22,10 @@ namespace ebi
     bool is_valid_v41(std::string path)
     {
         std::ifstream input{path};
-        auto source = ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, ebi::vcf::Version::v41};
-        auto records = std::vector<ebi::vcf::Record>{};
 
         auto validator = ebi::vcf::FullValidator_v41{
-            std::make_shared<ebi::vcf::Source>(source),
-            std::make_shared<std::vector<ebi::vcf::Record>>(records)};
+                std::make_shared<ebi::vcf::Source>(path, ebi::vcf::InputFormat::VCF_FILE_VCF, ebi::vcf::Version::v41)
+        };
 
         std::vector<char> line;
         line.reserve(default_line_buffer_size);

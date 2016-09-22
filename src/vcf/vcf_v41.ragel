@@ -200,16 +200,14 @@
             // Handle all columns and build record
             ParsePolicy::handle_body_line(*this);
 
-            for (auto & record : *(ParsingState::records)){
-                auto duplicated_errors = previous_records.check_duplicates(record);
-                for(auto &error_ptr : duplicated_errors) {
+            auto duplicated_errors = previous_records.check_duplicates(*record);
+            for(auto &error_ptr : duplicated_errors) {
                     ErrorPolicy::handle_error(*this, error_ptr.release());
-                }
             }
 
             try {
                 // Check warnings (non-blocking errors but potential mistakes anyway, only makes sense if the last record parsed was correct)
-                OptionalPolicy::optional_check_body_entry(*this, ParsingState::records->back());
+                OptionalPolicy::optional_check_body_entry(*this, *record);
             } catch (MetaSectionError *warn) {
                 ErrorPolicy::handle_warning(*this, warn);
             } catch (BodySectionError *warn) {
@@ -833,10 +831,8 @@ namespace ebi
   {
     
     template <typename Configuration>
-    ParserImpl_v41<Configuration>::ParserImpl_v41(std::shared_ptr<Source> const & source,
-                                                  std::shared_ptr<std::vector<Record>> const & records
-    )
-    : ParserImpl{source, records}
+    ParserImpl_v41<Configuration>::ParserImpl_v41(std::shared_ptr<Source> source)
+    : ParserImpl{source}
     {
       %%{
       write init;

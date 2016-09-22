@@ -34,7 +34,7 @@ namespace ebi
             std::map<std::string, std::string> const & info,
             std::vector<std::string> const & format,
             std::vector<std::string> const & samples,
-            std::shared_ptr<Source> const & source)
+            std::shared_ptr<Source> source)
     : line(line),
         chromosome{chromosome},
         position{position},
@@ -441,7 +441,7 @@ namespace ebi
             }
         }
     }
-    
+
     bool is_record_subfield_in_header(std::string const & field_value,
                                       std::multimap<std::string, MetaEntry>::iterator begin,
                                       std::multimap<std::string, MetaEntry>::iterator end)

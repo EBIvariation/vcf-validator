@@ -41,22 +41,21 @@ namespace ebi
         bool m_is_valid;
         
         std::shared_ptr<Source> source;
-        std::shared_ptr<std::vector<Record>> records;
-        std::shared_ptr<std::vector<std::unique_ptr<Error>>> errors;
-        std::shared_ptr<std::vector<std::unique_ptr<Error>>> warnings;
+        std::unique_ptr<Record> record;
+        std::vector<std::unique_ptr<Error>> errors;
+        std::vector<std::unique_ptr<Error>> warnings;
 
         std::multimap<std::string, std::string> defined_metadata;
         std::multimap<std::string, std::string> undefined_metadata;
         
-        ParsingState(std::shared_ptr<Source> source,
-                     std::shared_ptr<std::vector<Record>> records);
+        ParsingState(std::shared_ptr<Source> source);
         
-        void set_version(Version version) const;
+        void set_version(Version version);
         
-        void add_meta(MetaEntry const & meta) const;
-        
-        void add_record(Record const & record);
-        void clear_records() const;
+        void add_meta(MetaEntry const & meta);
+
+        void set_record(std::unique_ptr<Record> record);
+        void unset_record();
 
         void add_error(std::unique_ptr<Error> error);
         void clear_errors();
@@ -66,13 +65,13 @@ namespace ebi
         
         std::vector<std::string> const & samples() const;
         
-        void set_samples(std::vector<std::string> & samples) const;
+        void set_samples(std::vector<std::string> & samples);
         
-        bool is_well_defined_meta(std::string const & meta_type, std::string const & id);
+        bool is_well_defined_meta(std::string const & meta_type, std::string const & id) const;
         
         void add_well_defined_meta(std::string const & meta_type, std::string const & id);
         
-        bool is_bad_defined_meta(std::string const & meta_type, std::string const & id);
+        bool is_bad_defined_meta(std::string const & meta_type, std::string const & id) const;
         
         void add_bad_defined_meta(std::string const & meta_type, std::string const & id);
     };
