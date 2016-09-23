@@ -126,9 +126,9 @@ if (BUILD_STATIC)
         mod_vcf
         mod_odb
         ${Boost_LIBRARIES}
-        sqlite3
         ${ODB_PATH}/libodb-sqlite.a
         ${ODB_PATH}/libodb.a
+        sqlite3
         ${CMAKE_THREAD_LIBS_INIT}
         dl
        )
