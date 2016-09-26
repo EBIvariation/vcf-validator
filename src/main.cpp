@@ -29,6 +29,7 @@
 
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
+#include "vcf/ploidy.hpp"
 #include "vcf/report_writer.hpp"
 #include "util/stream_utils.hpp"
 #include "vcf/sqlite_report.hpp"
@@ -50,6 +51,7 @@ namespace
             ("version,v", po::value<std::string>(), "VCF fileformat version to validate the file against (v4.1, v4.2, v4.3)")
             ("report,r", po::value<std::string>()->default_value("stdout"), "Comma separated values for types of reports (database, stdout)")
             ("outdir,o", po::value<std::string>()->default_value(""), "Directory for the output")
+            ("ploidy,p", po::value<size_t>()->default_value(2), "Genomic ploidy")
         ;
 
         return description;
@@ -79,6 +81,12 @@ namespace
         if (version != "v4.1" && version != "v4.2" && version != "v4.3") {
             std::cout << desc << std::endl;
             std::cout << "Please choose one of the accepted VCF fileformat versions" << std::endl;
+            return 1;
+        }
+
+        size_t ploidy = vm["ploidy"].as<size_t>();
+        if (ploidy == 0) {
+            std::cout << "Ploidy must be greater that 0" << std::endl;
             return 1;
         }
 
@@ -124,8 +132,19 @@ namespace
         }
         
         outdir_boost_path /= file_boost_path.filename();
-        
+
         return outdir_boost_path.string();
+    }
+
+
+    /**
+     * TODO: accept a string that allows setting a ploidy per contig
+     * @param ploidy
+     * @return
+     */
+    ebi::vcf::Ploidy get_ploidy(size_t ploidy)
+    {
+        return ebi::vcf::Ploidy{ploidy};
     }
 
     std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> get_outputs(std::string const &output_str, std::string const &input) {
@@ -210,6 +229,7 @@ int main(int argc, char** argv)
         auto validator = build_parser(path, get_validation_level(level), get_version(version));
         auto outdir = get_output_path(vm["outdir"].as<std::string>(), path);
         auto outputs = get_outputs(vm["report"].as<std::string>(), outdir);
+        size_t ploidy = get_ploidy(vm["ploidy"].as<size_t>());
 
         if (path == "stdin") {
             std::cout << "Reading from standard input..." << std::endl;

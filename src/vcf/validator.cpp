@@ -76,7 +76,7 @@ namespace ebi
         return ParsingState::warnings;
     }
 
-    std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const &path, ValidationLevel level, ebi::vcf::Version version)
+    std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const &path, ValidationLevel level, ebi::vcf::Version version, )
     {
         auto source_ptr = new ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, version};
         std::shared_ptr<Source> source{source_ptr};

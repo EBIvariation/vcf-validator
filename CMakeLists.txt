@@ -52,6 +52,7 @@ set (MOD_VCF_SOURCES
         inc/vcf/optional_policy.hpp
         inc/vcf/parse_policy.hpp
         inc/vcf/parsing_state.hpp
+        inc/vcf/ploidy.hpp
         inc/vcf/record.hpp
         inc/vcf/record_cache.hpp
         inc/vcf/report_reader.hpp
