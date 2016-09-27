@@ -101,7 +101,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"the genotype in the sample column has an illegal value"};
-          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, "GT"};
+          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, "GT", 2};
 
           std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C\tGT:GS:GL\t1/C:0.000:-0.18,-0.48,-2.49";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -113,7 +113,7 @@ namespace ebi
           util::string_split(output.str(), "\t", columns);
           util::string_split(columns[9], ":", sample_fields);
           INFO(output.str());
-          CHECK(sample_fields[0] == ".");
+          CHECK(sample_fields[0] == "./.");
           CHECK(columns[8] == "GT:GS:GL");
       }
       SECTION("Fix SAMPLE field AC")

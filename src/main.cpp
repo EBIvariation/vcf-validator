@@ -51,7 +51,8 @@ namespace
             ("version,v", po::value<std::string>(), "VCF fileformat version to validate the file against (v4.1, v4.2, v4.3)")
             ("report,r", po::value<std::string>()->default_value("stdout"), "Comma separated values for types of reports (database, stdout)")
             ("outdir,o", po::value<std::string>()->default_value(""), "Directory for the output")
-            ("ploidy,p", po::value<size_t>()->default_value(2), "Genomic ploidy")
+            ("ploidy,p", po::value<size_t>()->default_value(2), "Genomic ploidy to use if unspecified by --special-ploidy")
+            ("special-ploidy,s", po::value<std::string>(), "Exceptions to -p. Given contig names, tell its ploidy, e.g. -s Y=1;MyTriploidContig=3")
         ;
 
         return description;
@@ -226,10 +227,10 @@ int main(int argc, char** argv)
         auto path = vm["input"].as<std::string>();
         auto level = vm["level"].as<std::string>();
         auto version = vm["version"].as<std::string>();
-        auto validator = build_parser(path, get_validation_level(level), get_version(version));
+        ebi::vcf::Ploidy ploidy = get_ploidy(vm["ploidy"].as<size_t>());
+        auto validator = build_parser(path, get_validation_level(level), get_version(version), ploidy);
         auto outdir = get_output_path(vm["outdir"].as<std::string>(), path);
         auto outputs = get_outputs(vm["report"].as<std::string>(), outdir);
-        size_t ploidy = get_ploidy(vm["ploidy"].as<size_t>());
 
         if (path == "stdin") {
             std::cout << "Reading from standard input..." << std::endl;

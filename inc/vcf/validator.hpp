@@ -33,6 +33,7 @@
 #include "parsing_state.hpp"
 #include "record_cache.hpp"
 #include "util/string_utils.hpp"
+#include "vcf/ploidy.hpp"
 
 
 namespace ebi
@@ -172,7 +173,8 @@ namespace ebi
     using FullValidator_v43 = ParserImpl_v43<FullValidatorCfg>;
     using Reader_v43 = ParserImpl_v43<ReaderCfg>;
 
-    std::unique_ptr<Parser> build_parser(std::string const & path, ValidationLevel level, Version version);
+    std::unique_ptr<Parser>
+    build_parser(std::string const & path, ValidationLevel level, Version version, Ploidy ploidy);
   }
 }
 

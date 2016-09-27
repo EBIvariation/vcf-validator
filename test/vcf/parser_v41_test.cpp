@@ -24,7 +24,7 @@ namespace ebi
         std::ifstream input{path};
 
         auto validator = ebi::vcf::FullValidator_v41{
-                std::make_shared<ebi::vcf::Source>(path, ebi::vcf::InputFormat::VCF_FILE_VCF, ebi::vcf::Version::v41)
+                std::make_shared<ebi::vcf::Source>(path, ebi::vcf::InputFormat::VCF_FILE_VCF, ebi::vcf::Version::v41, 2)
         };
 
         std::vector<char> line;

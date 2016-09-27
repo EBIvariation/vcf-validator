@@ -23,14 +23,30 @@ namespace ebi
 {
   namespace vcf
   {
+    /**
+     * Class that keeps track of the ploidy of every contig.
+     *
+     * The ploidy is the amount of copies of a region/contig/chromosome.
+     * You can give a simple number if the ploidy is the same across all the contigs/chromosomes, and additionally
+     * you can specify a map (contig to ploidy) to tell the exceptions to the ploidy. Examples:
+     *
+     * For a typical VCF with all variants with the same ploidy:
+     *  Ploidy{2}
+     *
+     * For humans, with ploidy 2 except for chromosome Y which is haploid (assuming X as diploid even for males):
+     *  Ploidy{2, {{"Y", 1}}}
+     *
+     * For a VCF of an organism that has 4 copies of chromosome "1", 1 copy of chromosome "Y"
+     * and 3 copies of all the other chromosomes:
+     *  Ploidy{3, {{"1", 4}, {"Y", 1}}};
+     */
     class Ploidy
     {
       public:
-        Ploidy(size_t default_ploidy) : Ploidy(default_ploidy, {})
-        {}
+        Ploidy(size_t default_ploidy) : Ploidy(default_ploidy, {}) {}
+
         Ploidy(size_t default_ploidy, const std::map<std::string, size_t> &contig_ploidies)
-                : default_ploidy(default_ploidy), contig_ploidies(contig_ploidies)
-        {}
+                : default_ploidy(default_ploidy), contig_ploidies(contig_ploidies) {}
 
         size_t get_ploidy()
         {

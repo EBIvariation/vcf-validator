@@ -24,11 +24,13 @@ namespace ebi
     Source::Source(std::string const & name,
                    unsigned const input_format,
                    Version version,
+                   Ploidy ploidy,
                    std::multimap<std::string, MetaEntry> const & meta_entries,
                    std::vector<std::string> const & samples_names) 
     : name{name},
       input_format{input_format},
       version{version},
+      ploidy{ploidy},
       meta_entries{meta_entries},
       samples_names{samples_names}
     {

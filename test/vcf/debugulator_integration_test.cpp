@@ -57,7 +57,7 @@ namespace ebi
 
   bool validate(std::istream &file, const boost::filesystem::path &path, std::string report_tag, vcf::Version version)
   {
-      auto validator = ebi::vcf::build_parser("", ebi::vcf::ValidationLevel::warning, version);
+      auto validator = ebi::vcf::build_parser("", ebi::vcf::ValidationLevel::warning, version, 2);
 
       auto db_path = boost::filesystem::path{"/tmp/"} / path.filename();
       db_path += ".debugulator_test." + report_tag + ".db";

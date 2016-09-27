@@ -30,6 +30,7 @@ namespace ebi
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             vcf::Version::v41,
+            2,
             {},
             { "Sample1" }};
             
