@@ -49,7 +49,7 @@ namespace
             ("report,r", po::value<std::string>()->default_value("stdout"), "Comma separated values for types of reports (database, stdout)")
             ("outdir,o", po::value<std::string>()->default_value(""), "Directory for the output")
             ("ploidy,p", po::value<size_t>()->default_value(2), "Genomic ploidy to use if unspecified by --special-ploidy")
-            ("special-ploidy,s", po::value<std::string>(), "Exceptions to -p. Given contig names, tell its ploidy, e.g. -s Y=1;MyTriploidContig=3")
+            ("special-ploidy,s", po::value<std::string>(), "Exceptions to -p. Given contig names, tell its ploidy, e.g. -s Y=1,MyTriploidContig=3")
         ;
 
         return description;
@@ -134,15 +134,35 @@ namespace
         return outdir_boost_path.string();
     }
 
-
-    /**
-     * TODO: accept a string that allows setting a ploidy per contig
-     * @param ploidy
-     * @return
-     */
-    ebi::vcf::Ploidy get_ploidy(size_t ploidy)
+    ebi::vcf::Ploidy get_ploidy(size_t default_ploidy, po::variables_map const & vm)
     {
-        return ebi::vcf::Ploidy{ploidy};
+        const std::string message= "Please write the special ploidies as comma-separated values of "
+                "CONTIG=PLOIDY where CONTIG is a string as it appears in the "
+                "VCF, and PLOIDY is the amount of copies of that contig "
+                "(strictly greater than 0). E.g. -s Y=1,MyTriploidContig=3";
+
+        std::map<std::string, size_t> special_ploidies;
+        if (vm.count("special-ploidy")) {
+            std::string parameter{vm["special-ploidy"].as<std::string>()};
+            std::vector<std::string> ploidies;
+            ebi::util::string_split(parameter, ",", ploidies);
+            for (std::string &ploidy_assignment : ploidies) {
+                std::vector<std::string> contig_and_ploidy;
+                ebi::util::string_split(ploidy_assignment, "=", contig_and_ploidy);
+                if (contig_and_ploidy.size() != 2) {
+                    throw std::invalid_argument{message};
+                }
+                size_t ploidy;
+                try {
+                    ploidy = std::stoul(contig_and_ploidy[1]);
+                } catch (std::exception e) {
+                    throw std::invalid_argument{message + ". inner exception: " + e.what()};
+                }
+                special_ploidies[contig_and_ploidy[0]] = ploidy;
+            }
+        }
+
+        return ebi::vcf::Ploidy{default_ploidy, special_ploidies};
     }
 
     std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> get_outputs(std::string const &output_str, std::string const &input) {
@@ -198,7 +218,7 @@ int main(int argc, char** argv)
         auto path = vm["input"].as<std::string>();
         auto level = vm["level"].as<std::string>();
         auto version = vm["version"].as<std::string>();
-        ebi::vcf::Ploidy ploidy = get_ploidy(vm["ploidy"].as<size_t>());
+        ebi::vcf::Ploidy ploidy = get_ploidy(vm["ploidy"].as<size_t>(), vm);
         auto validator = build_parser(path, get_validation_level(level), get_version(version), ploidy);
         auto outdir = get_output_path(vm["outdir"].as<std::string>(), path);
         auto outputs = get_outputs(vm["report"].as<std::string>(), outdir);
