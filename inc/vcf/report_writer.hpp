@@ -18,12 +18,6 @@
 #define VCF_VALIDATOR_REPORT_WRITER_HPP
 
 #include <iostream>
-#include <string>
-#include <sstream>
-#include <stdexcept>
-#include <chrono>
-#include <thread>
-#include "sqlite/sqlite3.h"
 #include "vcf/error.hpp"
 
 namespace ebi

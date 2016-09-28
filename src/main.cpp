@@ -22,7 +22,6 @@
 #include <stdexcept>
 #include <chrono>
 #include <iomanip>
-#include <ctime>
 
 #include <boost/program_options.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -31,13 +30,11 @@
 #include "vcf/validator.hpp"
 #include "vcf/ploidy.hpp"
 #include "vcf/report_writer.hpp"
-#include "util/stream_utils.hpp"
 #include "vcf/sqlite_report.hpp"
 #include "vcf/odb_report.hpp"
 
 namespace
 {
-    size_t const default_line_buffer_size = 64 * 1024;
     namespace po = boost::program_options;
 
     po::options_description build_command_line_options()
@@ -182,32 +179,6 @@ namespace
         return outputs;
     }
 
-    bool is_valid_vcf_file(std::istream &input,
-                           ebi::vcf::Parser &validator,
-                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
-    {
-        std::vector<char> line;
-        line.reserve(default_line_buffer_size);
-
-        while (ebi::util::readline(input, line)) {
-            validator.parse(line);
-
-            for (auto &error : validator.errors()) {
-                for (auto &output : outputs) {
-                    output->write_error(*error);
-                }
-            }
-            for (auto &error : validator.warnings()) {
-                for (auto &output : outputs) {
-                    output->write_warning(*error);
-                }
-            }
-        }
-
-        validator.end();
-
-        return validator.is_valid();
-    }
 }
 
 int main(int argc, char** argv)

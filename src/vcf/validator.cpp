@@ -124,5 +124,32 @@ namespace ebi
             throw std::invalid_argument{"Please choose one of the accepted validation levels"};
         }
     }
+
+    bool is_valid_vcf_file(std::istream &input,
+                           ebi::vcf::Parser &validator,
+                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
+    {
+        std::vector<char> line;
+        line.reserve(default_line_buffer_size);
+
+        while (ebi::util::readline(input, line)) {
+            validator.parse(line);
+
+            for (auto &error : validator.errors()) {
+                for (auto &output : outputs) {
+                    output->write_error(*error);
+                }
+            }
+            for (auto &error : validator.warnings()) {
+                for (auto &output : outputs) {
+                    output->write_warning(*error);
+                }
+            }
+        }
+
+        validator.end();
+
+        return validator.is_valid();
+    }
   }
 }

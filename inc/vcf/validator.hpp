@@ -34,6 +34,7 @@
 #include "record_cache.hpp"
 #include "util/string_utils.hpp"
 #include "vcf/ploidy.hpp"
+#include "vcf/report_writer.hpp"
 
 
 namespace ebi
@@ -41,6 +42,7 @@ namespace ebi
   namespace vcf
   {
 
+    size_t const default_line_buffer_size = 64 * 1024;
     enum class ValidationLevel { error, warning, stop };
 
     // Only check syntax
@@ -175,6 +177,10 @@ namespace ebi
 
     std::unique_ptr<Parser>
     build_parser(std::string const & path, ValidationLevel level, Version version, Ploidy ploidy);
+
+    bool is_valid_vcf_file(std::istream &input,
+                           ebi::vcf::Parser &validator,
+                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
   }
 }
 
