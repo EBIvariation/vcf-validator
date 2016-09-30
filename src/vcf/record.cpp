@@ -383,7 +383,7 @@ namespace ebi
         bool number_matches = true;
         if (expected > 0) {
             // The number of values must match the expected
-            number_matches = ( values.size() == expected );
+            number_matches = (values.size() == static_cast<size_t>(expected));
         } else if (expected == 0) {
             // There will be one empty value that needs to be specifically checked
             number_matches = values.size() == 0 ||

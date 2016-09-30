@@ -17,6 +17,7 @@
 #ifndef VCF_VALIDATOR_REPORT_READER_HPP
 #define VCF_VALIDATOR_REPORT_READER_HPP
 
+#include <memory>
 #include "vcf/error.hpp"
 
 namespace ebi
