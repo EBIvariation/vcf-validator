@@ -141,6 +141,8 @@ namespace ebi
 
         std::shared_ptr<Source> source;
 
+        Record() { }
+        
         Record(size_t line,
                 std::string const & chromosome,
                 size_t position,

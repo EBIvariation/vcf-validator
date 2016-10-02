@@ -41,9 +41,9 @@ namespace ebi
         bool m_is_valid;
         
         std::shared_ptr<Source> source;
-        std::unique_ptr<Record> record;
         std::vector<std::unique_ptr<Error>> errors;
         std::vector<std::unique_ptr<Error>> warnings;
+        Record record;
 
         std::multimap<std::string, std::string> defined_metadata;
         std::multimap<std::string, std::string> undefined_metadata;
@@ -54,14 +54,13 @@ namespace ebi
         
         void add_meta(MetaEntry const & meta);
 
-        void set_record(std::unique_ptr<Record> record);
-        void unset_record();
-
+        void set_record(Record record);
+        
         void add_error(std::unique_ptr<Error> error);
-        void clear_errors();
-
+        
         void add_warning(std::unique_ptr<Error> error);
-        void clear_warnings();
+        
+        void clear();
         
         std::vector<std::string> const & samples() const;
         

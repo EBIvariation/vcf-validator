@@ -23,8 +23,7 @@ namespace ebi
 
     ParsingState::ParsingState(std::shared_ptr<Source> source)
     : n_lines{1}, n_columns{1}, n_batches{0}, cs{0}, m_is_valid{true}, 
-      source{source}, record{},
-      errors{}, warnings{},
+      source{source}, errors{}, warnings{}, record{},
       undefined_metadata{}
     {
     }
@@ -39,14 +38,9 @@ namespace ebi
         source->meta_entries.emplace(meta.id, meta);
     }
     
-    void ParsingState::set_record(std::unique_ptr<Record> record)
+    void ParsingState::set_record(Record record)
     {
-        this->record = std::move(record);
-    }
-
-    void ParsingState::unset_record()
-    {
-        record.release();
+        this->record = record;
     }
 
     void ParsingState::add_error(std::unique_ptr<Error> error)
@@ -54,18 +48,15 @@ namespace ebi
         errors.push_back(std::move(error));
     }
     
-    void ParsingState::clear_errors()
-    {
-        errors.clear();
-    }
-
     void ParsingState::add_warning(std::unique_ptr<Error> error)
     {
         warnings.push_back(std::move(error));
     }
 
-    void ParsingState::clear_warnings()
+    void ParsingState::clear()
     {
+        record = Record{};
+        errors.clear();
         warnings.clear();
     }
 
