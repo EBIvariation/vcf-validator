@@ -21,8 +21,7 @@ namespace ebi
   namespace vcf
   {
 
-    ParserImpl::ParserImpl(std::shared_ptr<Source> source
-    )
+    ParserImpl::ParserImpl(std::shared_ptr<Source> source)
     : ParsingState{source}
     {
         
@@ -34,9 +33,7 @@ namespace ebi
         char const * pe = &text[0] + text.size();
         char const * eof = nullptr;
 
-        unset_record();
-        clear_errors();
-        clear_warnings();
+        clear();
         parse_buffer(p, pe, eof);
     }
 
@@ -46,18 +43,14 @@ namespace ebi
         char const * pe = text.data() + text.size();
         char const * eof = nullptr;
 
-        unset_record();
-        clear_errors();
-        clear_warnings();
+        clear();
         parse_buffer(p, pe, eof);
     }
 
     void ParserImpl::end()
     {
         char const * empty = "";
-        unset_record();
-        clear_errors();
-        clear_warnings();
+        clear();
         parse_buffer(empty, empty, empty);
     }
 

@@ -194,7 +194,7 @@ namespace ebi
         auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ?
                        m_line_tokens["SAMPLES"] : std::vector<std::string>{};
 
-        state.set_record(std::unique_ptr<Record>{new Record{
+        state.set_record(Record{
                 state.n_lines,
                 m_line_tokens["CHROM"][0],
                 position,
@@ -207,7 +207,7 @@ namespace ebi
                 format,
                 samples,
                 state.source
-        }});
+        });
 
         check_sorted(state, position);
     }
