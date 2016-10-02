@@ -8,6 +8,7 @@ libboost-filesystem-dev \
 libboost-program-options-dev \
 libboost-regex-dev \
 libsqlite3-dev \
+ragel \
 wget
 
 # Ubuntu-native ODB packages don't seem to work due to a broken ABI, see this thread: http://codesynthesis.com/pipermail/odb-users/2016-May/003277.html
