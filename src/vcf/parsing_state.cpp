@@ -46,7 +46,7 @@ namespace ebi
 
     void ParsingState::unset_record()
     {
-        record.release();
+        record.reset();
     }
 
     void ParsingState::add_error(std::unique_ptr<Error> error)
