@@ -44,19 +44,9 @@ namespace ebi
         this->record = std::move(record);
     }
 
-    void ParsingState::unset_record()
-    {
-        record.reset();
-    }
-
     void ParsingState::add_error(std::unique_ptr<Error> error)
     {
         errors.push_back(std::move(error));
-    }
-    
-    void ParsingState::clear_errors()
-    {
-        errors.clear();
     }
 
     void ParsingState::add_warning(std::unique_ptr<Error> error)
@@ -64,8 +54,10 @@ namespace ebi
         warnings.push_back(std::move(error));
     }
 
-    void ParsingState::clear_warnings()
+    void ParsingState::clear()
     {
+        record.reset();
+        errors.clear();
         warnings.clear();
     }
 
