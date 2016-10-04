@@ -15,7 +15,7 @@
  */
 
 #ifndef VCF_PARSE_POLICY_HPP
-#define	VCF_PARSE_POLICY_HPP
+#define VCF_PARSE_POLICY_HPP
 
 #include <map>
 #include <string>
@@ -141,5 +141,5 @@ namespace ebi
   }
 }
 
-#endif	/* PARSE_POLICY_HPP */
+#endif // VCF_PARSE_POLICY_HPP
 

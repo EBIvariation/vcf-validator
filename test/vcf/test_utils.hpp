@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef VCF_VALIDATOR_TEST_UTILS_HPP
-#define VCF_VALIDATOR_TEST_UTILS_HPP
+#ifndef EBI_TEST_UTILS_HPP
+#define EBI_TEST_UTILS_HPP
 
 #include <memory>
 #include <vector>
@@ -78,4 +78,4 @@ namespace ebi
   }
 }
 
-#endif //VCF_VALIDATOR_TEST_UTILS_HPP
+#endif // EBI_TEST_UTILS_HPP

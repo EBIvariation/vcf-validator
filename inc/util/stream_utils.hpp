@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef STREAM_UTILS_HPP
-#define STREAM_UTILS_HPP
+#ifndef UTIL_STREAM_UTILS_HPP
+#define UTIL_STREAM_UTILS_HPP
 
 #include <iostream>
 #include <vector>
@@ -112,5 +112,5 @@ namespace ebi
   }
 }
 
-#endif  /* STREAM_UTILS_HPP */
+#endif // UTIL_STREAM_UTILS_HPP
 

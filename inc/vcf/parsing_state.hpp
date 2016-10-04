@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef VCF_PARSING_UTILS_HPP
-#define	VCF_PARSING_UTILS_HPP
+#ifndef VCF_PARSING_STATE_HPP
+#define VCF_PARSING_STATE_HPP
 
 #include <map>
 #include <memory>
@@ -74,5 +74,5 @@ namespace ebi
   }
 }
 
-#endif	/* VCF_PARSING_UTILS_HPP */
+#endif // VCF_PARSING_STATE_HPP
 

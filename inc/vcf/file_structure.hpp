@@ -290,5 +290,5 @@ namespace ebi
   }
 }
 
-#endif
+#endif // VCF_FILE_STRUCTURE_HPP
 

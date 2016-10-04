@@ -190,4 +190,4 @@ namespace ebi
 #include "validator_detail_v42.hpp"
 #include "validator_detail_v43.hpp"
 
-#endif
+#endif // VCF_VALIDATOR_HPP

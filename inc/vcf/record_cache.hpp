@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef VCF_VALIDATOR_RECORDCACHE_HPP
-#define VCF_VALIDATOR_RECORDCACHE_HPP
+#ifndef VCF_RECORD_CACHE_HPP
+#define VCF_RECORD_CACHE_HPP
 
 
 #include <set>
@@ -119,4 +119,4 @@ namespace ebi
   }
 }
 
-#endif //VCF_VALIDATOR_RECORDCACHE_HPP
+#endif // VCF_RECORD_CACHE_HPP

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef VCF_VALIDATOR_FIXER_HPP
-#define VCF_VALIDATOR_FIXER_HPP
+#ifndef VCF_FIXER_HPP
+#define VCF_FIXER_HPP
 
 #include <vector>
 #include <iostream>
@@ -488,4 +488,4 @@ namespace ebi
   }
 }
 
-#endif //VCF_VALIDATOR_FIXER_HPP
+#endif // VCF_FIXER_HPP

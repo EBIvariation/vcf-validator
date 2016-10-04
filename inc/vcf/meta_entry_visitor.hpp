@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef VCF_META_ENTRY_HPP
-#define VCF_META_ENTRY_HPP
+#ifndef VCF_META_ENTRY_VISITOR_HPP
+#define VCF_META_ENTRY_VISITOR_HPP
 
 #include <map>
 #include <string>
@@ -51,5 +51,5 @@ namespace ebi
   }
 }
 
-#endif
+#endif // VCF_META_ENTRY_VISITOR_HPP
 

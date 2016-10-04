@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef VCF_VALIDATOR_ODB_REPORT_HPP
-#define VCF_VALIDATOR_ODB_REPORT_HPP
+#ifndef VCF_ODB_REPORT_HPP
+#define VCF_ODB_REPORT_HPP
 
 
 #include <boost/filesystem/path.hpp>
@@ -66,4 +66,4 @@ namespace ebi
 }
 
 
-#endif //VCF_VALIDATOR_ODB_REPORT_HPP
+#endif // VCF_ODB_REPORT_HPP

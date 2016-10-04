@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef VCF_VALIDATOR_REPORT_READER_HPP
-#define VCF_VALIDATOR_REPORT_READER_HPP
+#ifndef VCF_REPORT_READER_HPP
+#define VCF_REPORT_READER_HPP
 
 #include <memory>
 #include "vcf/error.hpp"
@@ -39,4 +39,4 @@ namespace ebi
 }
 
 
-#endif //VCF_VALIDATOR_REPORT_READER_HPP
+#endif // VCF_REPORT_READER_HPP
