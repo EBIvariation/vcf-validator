@@ -76,9 +76,13 @@ namespace ebi
         return ParsingState::warnings;
     }
 
-    std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const &path, ValidationLevel level, ebi::vcf::Version version)
+    std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const &path,
+                                                   ValidationLevel level,
+                                                   ebi::vcf::Version version,
+                                                   ebi::vcf::Ploidy ploidy)
     {
-        auto source_ptr = new ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, version};
+
+        auto source_ptr = new ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, version, ploidy};
         std::shared_ptr<Source> source{source_ptr};
         auto records = std::vector<ebi::vcf::Record>{};
 
@@ -122,6 +126,34 @@ namespace ebi
         default:
             throw std::invalid_argument{"Please choose one of the accepted validation levels"};
         }
+    }
+
+    bool is_valid_vcf_file(std::istream &input,
+                           ebi::vcf::Parser &validator,
+                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
+    {
+
+        std::vector<char> line;
+        line.reserve(default_line_buffer_size);
+
+        while (ebi::util::readline(input, line)) {
+            validator.parse(line);
+
+            for (auto &error : validator.errors()) {
+                for (auto &output : outputs) {
+                    output->write_error(*error);
+                }
+            }
+            for (auto &error : validator.warnings()) {
+                for (auto &output : outputs) {
+                    output->write_warning(*error);
+                }
+            }
+        }
+
+        validator.end();
+
+        return validator.is_valid();
     }
   }
 }

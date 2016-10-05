@@ -23,6 +23,7 @@
 *.lib
 
 # Executables
+bin/
 *.exe
 *.out
 *.app
@@ -36,3 +37,7 @@ Makefile
 *.cmake
 CMakeFiles
 CMakeCache.txt
+
+# IDE
+.idea
+

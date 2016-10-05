@@ -52,6 +52,7 @@ set (MOD_VCF_SOURCES
         inc/vcf/optional_policy.hpp
         inc/vcf/parse_policy.hpp
         inc/vcf/parsing_state.hpp
+        inc/vcf/ploidy.hpp
         inc/vcf/record.hpp
         inc/vcf/record_cache.hpp
         inc/vcf/report_reader.hpp
@@ -92,6 +93,7 @@ set (ALL_TESTS
         test/vcf/parser_v41_test.cpp
         test/vcf/parser_v42_test.cpp
         test/vcf/parser_v43_test.cpp
+        test/vcf/ploidy_test.cpp
         test/vcf/record_cache_test.cpp
         test/vcf/record_test.cpp
         test/vcf/report_writer_test.cpp
@@ -126,9 +128,9 @@ if (BUILD_STATIC)
         mod_vcf
         mod_odb
         ${Boost_LIBRARIES}
-        sqlite3
         ${ODB_PATH}/libodb-sqlite.a
         ${ODB_PATH}/libodb.a
+        sqlite3
         ${CMAKE_THREAD_LIBS_INIT}
         dl
        )

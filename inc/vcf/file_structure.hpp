@@ -29,6 +29,7 @@
 
 #include "util/stream_utils.hpp"
 #include "vcf/error.hpp"
+#include "vcf/ploidy.hpp"
 
 namespace ebi
 {
@@ -108,6 +109,7 @@ namespace ebi
         std::string name;           /**< Name of the source to interact with (file, stdin...) */
         unsigned int input_format;  /**< Mask that stores whether the input is plain/gzipped VCF, BCF, etc */
         Version version;            /**< VCF version */
+        Ploidy ploidy;              /**< Class that keeps track of the ploidy of every contig */
 
         std::multimap<std::string, MetaEntry> meta_entries; /**< Entries in the file meta-data */
         std::vector<std::string> samples_names; /**< Names of the sequenced samples */
@@ -115,6 +117,7 @@ namespace ebi
         Source(std::string const & name,
                unsigned const input_format,
                Version version,
+               Ploidy ploidy,
                std::multimap<std::string, MetaEntry> const & meta_entries = {},
                std::vector<std::string> const & samples_names = {});
         

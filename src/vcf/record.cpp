@@ -201,8 +201,9 @@ namespace ebi
                     try {
                         std::vector<std::string> values;
                         util::string_split(field.second, ",", values);
-                        
-                        check_field_cardinality(field.second, values, key_values["Number"], 2); // TODO Assumes ploidy=2
+
+                        size_t ploidy = source->ploidy.get_ploidy(chromosome);
+                        check_field_cardinality(field.second, values, key_values["Number"], ploidy);
                         check_field_type(field.second, values, key_values["Type"]);
                     } catch (Error *ex) {
                         std::string message = "Info " + key_values["ID"] + "=" + ex->message;
@@ -293,15 +294,17 @@ namespace ebi
                 }
                 
                 auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
+
+                size_t ploidy = source->ploidy.get_ploidy(chromosome);
                 try {
                     std::vector<std::string> values;
                     util::string_split(subfield, ",", values);
-                    
-                    check_field_cardinality(subfield, values, key_values["Number"], alleles.size());
+
+                    check_field_cardinality(subfield, values, key_values["Number"], ploidy);
                     check_field_type(subfield, values, key_values["Type"]);
                 } catch (Error *ex) {
                     long cardinality;
-                    bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), alleles.size(), cardinality);
+                    bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), ploidy, cardinality);
                     long number = valid ? cardinality : -1;
                     std::string message = "Sample #" + std::to_string(i + 1) + ", "
                             + key_values["ID"] + "=" + ex->message;
@@ -314,22 +317,24 @@ namespace ebi
     
     void Record::check_samples_alleles(std::vector<std::string> const & alleles) const
     {
+        long ploidy = static_cast<long>(source->ploidy.get_ploidy(chromosome));
         for (auto & allele : alleles) {
             if (allele == ".") { continue; } // No need to check missing alleles
 
             // Discard non-integer numbers
             if (std::find_if_not(allele.begin(), allele.end(), isdigit) != allele.end()) {
-                throw new SamplesFieldBodyError{line, "Allele index " + allele + " is not an integer number", "GT"};
+                throw new SamplesFieldBodyError{line, "Allele index " + allele + " is not an integer number",
+                                                "GT", ploidy};
             }
-            
+
             // After guaranteeing the number is an integer, check it is in range
             size_t num_allele = std::stoi(allele);
             if (num_allele > alternate_alleles.size()) {
                 throw new SamplesFieldBodyError{line,
-                                           "Allele index " + std::to_string(num_allele)
-                                                   + " is greater than the maximum allowed "
-                                                   + std::to_string(alternate_alleles.size()),
-                                           "GT"};
+                                                "Allele index " + std::to_string(num_allele)
+                                                        + " is greater than the maximum allowed "
+                                                        + std::to_string(alternate_alleles.size()),
+                                                "GT", ploidy};
             }
         }
     }

@@ -18,55 +18,36 @@
 
 namespace ebi
 {
-    
-    bool is_valid_v41(std::string path)
-    {
-        std::ifstream input{path};
 
-        auto validator = ebi::vcf::FullValidator_v41{
-                std::make_shared<ebi::vcf::Source>(path, ebi::vcf::InputFormat::VCF_FILE_VCF, ebi::vcf::Version::v41)
-        };
+  TEST_CASE("Files that fail the validation under specification v4.1", "[failed]")
+  {
+      auto folder = boost::filesystem::path("test/input_files/v4.1/failed");
+      std::vector<boost::filesystem::path> v;
+      copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
-        std::vector<char> line;
-        line.reserve(default_line_buffer_size);
-        while (ebi::util::readline(input, line)) { 
-            validator.parse(line);
-        }
+      for (auto path : v)
+      {
+          SECTION(path.string())
+          {
+              CHECK_FALSE(is_valid(path.string(), vcf::Version::v41));
+          }
+      }
+  }
 
-        validator.end();
+  TEST_CASE("Files that pass the validation under specification v4.1", "[passed]")
+  {
+      auto folder = boost::filesystem::path("test/input_files/v4.1/passed");
+      std::vector<boost::filesystem::path> v;
+      copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
-        return validator.is_valid();
-    }
-
-    TEST_CASE("Files that fail the validation under specification v4.1", "[failed]") 
-    {
-        auto folder = boost::filesystem::path("test/input_files/v4.1/failed");
-        std::vector<boost::filesystem::path> v;
-        copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
-        
-        for (auto path : v)
-        {
-            SECTION(path.string())
-            {
-                CHECK_FALSE(is_valid_v41(path.string()));
-            }
-        }
-    }
-
-    TEST_CASE("Files that pass the validation under specification v4.1", "[passed]") 
-    {
-        auto folder = boost::filesystem::path("test/input_files/v4.1/passed");
-        std::vector<boost::filesystem::path> v;
-        copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
-        
-        for (auto path : v)
-        {
-            SECTION(path.string())
-            {
-                CHECK(is_valid_v41(path.string()));
-            }
-        }
-    }
+      for (auto path : v)
+      {
+          SECTION(path.string())
+          {
+              CHECK(is_valid(path.string(), vcf::Version::v41));
+          }
+      }
+  }
 
 }
 

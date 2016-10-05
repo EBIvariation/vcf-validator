@@ -32,6 +32,7 @@ namespace ebi
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             vcf::Version::v41,
+            2,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -58,6 +59,7 @@ namespace ebi
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             vcf::Version::v42,
+            2,
             {},
             { "Sample1", "Sample2", "Sample3" }};
 
@@ -91,6 +93,7 @@ namespace ebi
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             vcf::Version::v43,
+            2,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -126,6 +129,7 @@ namespace ebi
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             vcf::Version::v41,
+            2,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -229,6 +233,7 @@ namespace ebi
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             vcf::Version::v42,
+            2,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -261,6 +266,7 @@ namespace ebi
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             vcf::Version::v43,
+            2,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -294,6 +300,7 @@ namespace ebi
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             vcf::Version::v41,
+            2,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -429,6 +436,7 @@ namespace ebi
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             vcf::Version::v42,
+            2,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             
@@ -570,6 +578,7 @@ namespace ebi
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
             vcf::Version::v43,
+            2,
             {},
             { "Sample1", "Sample2", "Sample3" }};
             

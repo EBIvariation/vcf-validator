@@ -286,13 +286,13 @@ namespace ebi
         SamplesFieldBodyError() {}  // necessary for ODB
       public:
         SamplesFieldBodyError(size_t line,
-                         const std::string &message,
-                         const std::string &field,
-                         long field_cardinality = -1)
+                              const std::string &message,
+                              const std::string &field,
+                              long field_cardinality = -1)
                 : BodySectionError{line, message}, field(field), field_cardinality(field_cardinality) {
             if (field.empty()) {
                 throw std::invalid_argument{"SamplesFieldBodyError: field should not be an empty string. Use "
-                                               "SamplesBodyError for unknown errors in the samples columns"};
+                                                    "SamplesBodyError for unknown errors in the samples columns"};
             }
         }
         virtual ErrorCode get_code() const override { return ErrorCode::samples_field_body; }

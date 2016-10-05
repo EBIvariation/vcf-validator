@@ -18,7 +18,7 @@
 
 #include "catch/catch.hpp"
 
-#include "parser_test_aux.hpp"
+#include "vcf/validator.hpp"
 #include "vcf/odb_report.hpp"
 #include "vcf/debugulator.hpp"
 #include "test_utils.hpp"
@@ -28,36 +28,9 @@ namespace ebi
   static const std::string BEFORE_TAG = "before";
   static const std::string AFTER_TAG = "after";
 
-  bool is_valid_vcf_file(std::istream &input,
-                         ebi::vcf::Parser &validator,
-                         std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
-  {
-      std::vector<char> line;
-      line.reserve(default_line_buffer_size);
-
-      while (ebi::util::readline(input, line)) {
-          validator.parse(line);
-
-          for (auto &error : validator.errors()) {
-              for (auto &output : outputs) {
-                  output->write_error(*error);
-              }
-          }
-          for (auto &error : validator.warnings()) {
-              for (auto &output : outputs) {
-                  output->write_warning(*error);
-              }
-          }
-      }
-
-      validator.end();
-
-      return validator.is_valid();
-  }
-
   bool validate(std::istream &file, const boost::filesystem::path &path, std::string report_tag, vcf::Version version)
   {
-      auto validator = ebi::vcf::build_parser("", ebi::vcf::ValidationLevel::warning, version);
+      auto validator = ebi::vcf::build_parser("", ebi::vcf::ValidationLevel::warning, version, 2);
 
       auto db_path = boost::filesystem::path{"/tmp/"} / path.filename();
       db_path += ".debugulator_test." + report_tag + ".db";

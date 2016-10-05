@@ -22,21 +22,19 @@
 #include <stdexcept>
 #include <chrono>
 #include <iomanip>
-#include <ctime>
 
 #include <boost/program_options.hpp>
 #include <boost/filesystem/operations.hpp>
 
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
+#include "vcf/ploidy.hpp"
 #include "vcf/report_writer.hpp"
-#include "util/stream_utils.hpp"
 #include "vcf/sqlite_report.hpp"
 #include "vcf/odb_report.hpp"
 
 namespace
 {
-    size_t const default_line_buffer_size = 64 * 1024;
     namespace po = boost::program_options;
 
     po::options_description build_command_line_options()
@@ -50,6 +48,8 @@ namespace
             ("version,v", po::value<std::string>(), "VCF fileformat version to validate the file against (v4.1, v4.2, v4.3)")
             ("report,r", po::value<std::string>()->default_value("stdout"), "Comma separated values for types of reports (database, stdout)")
             ("outdir,o", po::value<std::string>()->default_value(""), "Directory for the output")
+            ("ploidy,p", po::value<long>()->default_value(2), "Genome ploidy to expect through most or the whole VCF file (can be overwritten with --special-ploidy)")
+            ("special-ploidy,s", po::value<std::string>(), "Ploidy expected in specific chromosomes/contigs, e.g Y=1,MyTriploidContig=3")
         ;
 
         return description;
@@ -79,6 +79,12 @@ namespace
         if (version != "v4.1" && version != "v4.2" && version != "v4.3") {
             std::cout << desc << std::endl;
             std::cout << "Please choose one of the accepted VCF fileformat versions" << std::endl;
+            return 1;
+        }
+
+        long ploidy = vm["ploidy"].as<long>();
+        if (ploidy <= 0) {
+            std::cout << "Ploidy must be greater that 0" << std::endl;
             return 1;
         }
 
@@ -124,8 +130,45 @@ namespace
         }
         
         outdir_boost_path /= file_boost_path.filename();
-        
+
         return outdir_boost_path.string();
+    }
+
+    ebi::vcf::Ploidy get_ploidy(long default_ploidy, po::variables_map const & vm)
+    {
+        const std::string message = "Please provide the special ploidies as a comma-separated list of pairs "
+                "CHROM=PLOIDY where CHROM is the name as in the VCF, and PLOIDY is a number strictly greater than 0.";
+
+
+        size_t unsigned_ploidy;
+        if (default_ploidy <= 0) {
+            throw std::invalid_argument{std::to_string(default_ploidy)
+                                                + " is not a valid ploidy, must be a number strictly greater than 0."};
+        }
+        unsigned_ploidy = static_cast<size_t>(default_ploidy);
+
+        std::map<std::string, size_t> special_ploidies;
+        if (vm.count("special-ploidy")) {
+            std::string parameter{vm["special-ploidy"].as<std::string>()};
+            std::vector<std::string> ploidies;
+            ebi::util::string_split(parameter, ",", ploidies);
+            for (std::string &ploidy_assignment : ploidies) {
+                std::vector<std::string> contig_and_ploidy;
+                ebi::util::string_split(ploidy_assignment, "=", contig_and_ploidy);
+                if (contig_and_ploidy.size() != 2) {
+                    throw std::invalid_argument{ploidy_assignment + " is not a valid CHROM=PLOIDY pair. " + message};
+                }
+                size_t ploidy;
+                try {
+                    ploidy = std::stoul(contig_and_ploidy[1]);
+                } catch (std::exception e) {
+                    throw std::invalid_argument{contig_and_ploidy[1] + " is not a valid ploidy. " + message};
+                }
+                special_ploidies[contig_and_ploidy[0]] = ploidy;
+            }
+        }
+
+        return ebi::vcf::Ploidy{unsigned_ploidy, special_ploidies};
     }
 
     std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> get_outputs(std::string const &output_str, std::string const &input) {
@@ -162,32 +205,6 @@ namespace
         return outputs;
     }
 
-    bool is_valid_vcf_file(std::istream &input,
-                           ebi::vcf::Parser &validator,
-                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
-    {
-        std::vector<char> line;
-        line.reserve(default_line_buffer_size);
-
-        while (ebi::util::readline(input, line)) {
-            validator.parse(line);
-
-            for (auto &error : validator.errors()) {
-                for (auto &output : outputs) {
-                    output->write_error(*error);
-                }
-            }
-            for (auto &error : validator.warnings()) {
-                for (auto &output : outputs) {
-                    output->write_warning(*error);
-                }
-            }
-        }
-
-        validator.end();
-
-        return validator.is_valid();
-    }
 }
 
 int main(int argc, char** argv)
@@ -207,7 +224,8 @@ int main(int argc, char** argv)
         auto path = vm["input"].as<std::string>();
         auto level = vm["level"].as<std::string>();
         auto version = vm["version"].as<std::string>();
-        auto validator = build_parser(path, get_validation_level(level), get_version(version));
+        ebi::vcf::Ploidy ploidy = get_ploidy(vm["ploidy"].as<long>(), vm);
+        auto validator = build_parser(path, get_validation_level(level), get_version(version), ploidy);
         auto outdir = get_output_path(vm["outdir"].as<std::string>(), path);
         auto outputs = get_outputs(vm["report"].as<std::string>(), outdir);
 
@@ -232,6 +250,9 @@ int main(int argc, char** argv)
         return 1;
     } catch (std::runtime_error const & ex) {
         std::cout << "The input file is not valid: " << ex.what() << std::endl;
+        return 1;
+    } catch (std::exception const &ex) {
+        std::cerr << ex.what() << std::endl;
         return 1;
     }
 }

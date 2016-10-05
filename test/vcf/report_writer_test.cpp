@@ -33,53 +33,20 @@
 
 namespace ebi
 {
-  size_t const default_line_buffer_size = 64 * 1024;
-
-  template <typename Container>
-  std::istream & readline(std::istream & stream, Container & container)
-  {
-      char c;
-
-      container.clear();
-
-      do {
-          stream.get(c);
-          container.push_back(c);
-      } while (!stream.eof() && c != '\n');
-
-      return stream;
-  }
-
-  bool is_valid(std::string path, ebi::vcf::ReportWriter &output)
+  bool is_valid(std::string path, std::unique_ptr<ebi::vcf::ReportWriter> output)
   {
       std::ifstream input{path};
       if (!input) {
           throw std::runtime_error("file not found: " + path);
       }
+      auto validator = ebi::vcf::build_parser(path, ebi::vcf::ValidationLevel::warning, ebi::vcf::Version::v41, 2);
+      std::vector<std::unique_ptr<vcf::ReportWriter>> outputs;
+      outputs.push_back(std::move(output));
 
-      auto validator = ebi::vcf::FullValidator_v41{
-              std::make_shared<ebi::vcf::Source>(path, ebi::vcf::InputFormat::VCF_FILE_VCF, ebi::vcf::Version::v41)
-      };
-
-      std::vector<char> line;
-      line.reserve(default_line_buffer_size);
-
-      while (readline(input, line)) {
-          validator.parse(line);
-          for (auto &error : validator.errors()) {
-              output.write_error(*error);
-          }
-          for (auto &warn : validator.warnings()) {
-              output.write_warning(*warn);
-          }
-      }
-
-      validator.end();
-
-      return validator.is_valid();
+      return ebi::vcf::is_valid_vcf_file(input, *validator, outputs);
   }
   
-  TEST_CASE("unit test: sqlite", "[output]")
+  TEST_CASE("Unit test: sqlite", "[output]")
   {
       std::string db_name = "test/input_files/sqlite_test.errors.db";
       sqlite3* db;
@@ -92,7 +59,7 @@ namespace ebi
       }
       char *zErrMsg = NULL;
       
-      SECTION("write errors")
+      SECTION("Write errors")
       {
           
           ebi::vcf::Error test_error{1, "testing errors"};
@@ -118,7 +85,7 @@ namespace ebi
           
       }
       
-      SECTION("write warnings")
+      SECTION("Write warnings")
       {
           ebi::vcf::Error test_warning{1, "testing warnings"};
           errorDAO.write_warning(test_warning);
@@ -140,7 +107,7 @@ namespace ebi
           CHECK(count_warnings == 1);
       }
       
-      SECTION("write and count errors")
+      SECTION("Write and count errors")
       {
           ebi::vcf::Error test_error{1, "testing errors"};
           errorDAO.write_error(test_error);
@@ -152,7 +119,7 @@ namespace ebi
           CHECK(count_warnings == 0);
       }
 
-      SECTION("write and count warnings")
+      SECTION("Write and count warnings")
       {
           ebi::vcf::Error test_error{1, "testing warnings"};
           errorDAO.write_warning(test_error);
@@ -163,7 +130,7 @@ namespace ebi
           CHECK(count_warnings == 1);
       }
       
-      SECTION("write and read errors")
+      SECTION("Write and read errors")
       {
           size_t line = 8;
           std::string message{"testing errors"};
@@ -180,7 +147,7 @@ namespace ebi
           CHECK(errors_read == 1);
       }
       
-      SECTION("write and read warnings")
+      SECTION("Write and read warnings")
       {
           size_t line = 10;
           std::string message{"testing warnings"};
@@ -197,7 +164,7 @@ namespace ebi
           CHECK(errors_read == 1);
       }
       
-      SECTION("write and read error codes")
+      SECTION("Write and read error codes")
       {
           size_t line = 8;
           std::string message{"testing errors"};
@@ -225,15 +192,15 @@ namespace ebi
       CHECK_FALSE(boost::filesystem::exists(db_file));
   }
 
-  TEST_CASE("integration test: validator and sqlite", "[output]")
+  TEST_CASE("Integration test: validator and sqlite", "[output]")
   {
       auto path = boost::filesystem::path("test/input_files/v4.1/failed/failed_fileformat_000.vcf");
 
       std::string db_name = path.string() + ".errors.db";
 
       {
-          std::shared_ptr<ebi::vcf::ReportWriter> output{std::make_shared<ebi::vcf::SqliteReportRW>(db_name)};
-          CHECK_FALSE(is_valid(path.string(), *output));
+          std::unique_ptr<ebi::vcf::ReportWriter> output{new ebi::vcf::SqliteReportRW{db_name}};
+          CHECK_FALSE(is_valid(path.string(), std::move(output)));
       }
 
       SECTION(path.string() + " error count")
@@ -278,13 +245,13 @@ namespace ebi
 
   }
 
-  TEST_CASE("unit test: odb", "[output]")
+  TEST_CASE("Unit test: odb", "[output]")
   {
 
       std::string db_name = "test/input_files/sqlite_test.errors.odb.db";
       ebi::vcf::OdbReportRW errorDAO{db_name};
 
-      SECTION("write and count errors") {
+      SECTION("Write and count errors") {
           ebi::vcf::Error test_error{1, "testing errors"};
           errorDAO.write_error(test_error);
           errorDAO.write_error(test_error);
@@ -295,7 +262,7 @@ namespace ebi
           CHECK(count_warnings == 0);
       }
 
-      SECTION("write and count warnings")
+      SECTION("Write and count warnings")
       {
           ebi::vcf::Error test_error{1, "testing warnings"};
           errorDAO.write_warning(test_error);
@@ -306,7 +273,7 @@ namespace ebi
           CHECK(count_warnings == 1);
       }
 
-      SECTION("write and read errors")
+      SECTION("Write and read errors")
       {
           size_t line = 8;
           std::string message{"testing errors"};
@@ -323,7 +290,7 @@ namespace ebi
           CHECK(errors_read == 1);
       }
 
-      SECTION("write and read warnings")
+      SECTION("Write and read warnings")
       {
           size_t line = 10;
           std::string message{"testing warnings"};
@@ -341,7 +308,7 @@ namespace ebi
       }
 
 
-      SECTION("write and read error codes")
+      SECTION("Write and read error codes")
       {
           size_t line = 8;
           std::string message{"testing errors"};
@@ -364,6 +331,59 @@ namespace ebi
           CHECK(errors[2]->get_code() == ebi::vcf::ErrorCode::samples_body);
       }
 
+
+      boost::filesystem::path db_file{db_name};
+      boost::filesystem::remove(db_file);
+      CHECK_FALSE(boost::filesystem::exists(db_file));
+
+  }
+
+  TEST_CASE("Integration test: validator and odb", "[output]")
+  {
+      auto path = boost::filesystem::path("test/input_files/v4.1/failed/failed_fileformat_000.vcf");
+
+      std::string db_name = path.string() + ".errors.db";
+
+      {
+          std::unique_ptr<ebi::vcf::ReportWriter> output{new ebi::vcf::OdbReportRW{db_name}};
+          CHECK_FALSE(is_valid(path.string(), std::move(output)));
+      }
+
+      SECTION(path.string() + " error count")
+      {
+          size_t count_errors;
+          size_t count_warnings;
+
+          {
+              ebi::vcf::OdbReportRW errorsDAO{db_name};
+              count_errors = errorsDAO.count_errors();
+              count_warnings = errorsDAO.count_warnings();
+          }
+
+          CHECK(count_errors == 1);
+          CHECK(count_warnings == 2);
+      }
+
+      SECTION(path.string() + " error details")
+      {
+          size_t errors_read = 0;
+          ebi::vcf::OdbReportRW errorsDAO{db_name};
+
+          errorsDAO.for_each_error([&errors_read](std::shared_ptr<ebi::vcf::Error> error) {
+              CHECK(error->line == 1);
+              CHECK(error->message == "The fileformat declaration is not 'fileformat=VCFv4.1'");
+              errors_read++;
+          });
+
+          // do we prefer this?
+//          for(ebi::vcf::Error* error : errorsDAO.read_errors()) {
+//              CHECK(error->get_line() == 1);
+//              CHECK(error->get_raw_message() == "The fileformat declaration is not 'fileformat=VCFv4.1'");
+//              errors_read++;
+//          }
+
+          CHECK(errors_read == 1);
+      }
 
       boost::filesystem::path db_file{db_name};
       boost::filesystem::remove(db_file);
