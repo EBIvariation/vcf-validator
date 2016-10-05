@@ -205,9 +205,9 @@ namespace ebi
                         check_field_cardinality(field.second, values, key_values["Number"], 2); // TODO Assumes ploidy=2
                         check_field_type(field.second, values, key_values["Type"]);
                     } catch (Error *ex) {
-                        throw new InfoBodyError{line,
-                                                "Info " + key_values["ID"] + "=" + ex->message,
-                                                key_values["ID"]};
+                        std::string message = "Info " + key_values["ID"] + "=" + ex->message;
+                        delete ex;
+                        throw new InfoBodyError{line, message, key_values["ID"]};
                     }
                     
                     break;
@@ -303,11 +303,10 @@ namespace ebi
                     long cardinality;
                     bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), alleles.size(), cardinality);
                     long number = valid ? cardinality : -1;
-                    throw new SamplesFieldBodyError{line,
-                                               "Sample #" + std::to_string(i+1) + ", "
-                                                       + key_values["ID"] + "=" + ex->message,
-                                               key_values["ID"],
-                                               number};
+                    std::string message = "Sample #" + std::to_string(i + 1) + ", "
+                            + key_values["ID"] + "=" + ex->message;
+                    delete ex;
+                    throw new SamplesFieldBodyError{line, message, key_values["ID"], number};
                 }
             }
         }
