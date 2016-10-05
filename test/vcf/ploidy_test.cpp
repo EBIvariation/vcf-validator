@@ -26,7 +26,7 @@ namespace ebi
 
   TEST_CASE("Validate files with combined ploidy", "[ploidy]")
   {
-      SECTION("file with 3 as default ploidy")
+      SECTION("File with 3 as default ploidy")
       {
           std::string path = "test/input_files/v4.1/ploidy/passed_ploidy_000.vcf";
           std::ifstream input{path};
@@ -37,7 +37,7 @@ namespace ebi
           CHECK(vcf::is_valid_vcf_file(input, *validator, outputs));
       }
 
-      SECTION("file with 2 different ploidies")
+      SECTION("File with 2 different ploidies")
       {
           std::string path = "test/input_files/v4.1/ploidy/passed_ploidy_001.vcf";
           std::ifstream input{path};
@@ -48,7 +48,7 @@ namespace ebi
           CHECK(vcf::is_valid_vcf_file(input, *validator, outputs));
       }
 
-      SECTION("file with several ploidies")
+      SECTION("File with several ploidies")
       {
           std::string path = "test/input_files/v4.1/ploidy/passed_ploidy_002.vcf";
           std::ifstream input{path};

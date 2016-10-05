@@ -326,25 +326,16 @@ namespace ebi
                 throw new SamplesFieldBodyError{line, "Allele index " + allele + " is not an integer number",
                                                 "GT", ploidy};
             }
-            
+
             // After guaranteeing the number is an integer, check it is in range
             size_t num_allele = std::stoi(allele);
             if (num_allele > alternate_alleles.size()) {
                 throw new SamplesFieldBodyError{line,
-                                           "Allele index " + std::to_string(num_allele)
-                                                   + " is greater than the maximum allowed "
-                                                   + std::to_string(alternate_alleles.size()),
-                                           "GT", ploidy};
+                                                "Allele index " + std::to_string(num_allele)
+                                                        + " is greater than the maximum allowed "
+                                                        + std::to_string(alternate_alleles.size()),
+                                                "GT", ploidy};
             }
-        }
-
-        if (alleles.size() != ploidy) {
-            std::stringstream ss;
-            ss << "The specified ploidy for contig \"" << chromosome << "\" was " << ploidy
-               << ", which doesn't match the genotype \"";
-            util::print_container(ss, alleles, "", "/", "");
-            ss << "\" which has ploidy " << alleles.size();
-            throw new SamplesFieldBodyError{line, ss.str(), "GT", ploidy};
         }
     }
 

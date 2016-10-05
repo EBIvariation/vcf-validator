@@ -40,22 +40,22 @@ namespace ebi
 
         cache.check_duplicates(build_mock_record({100, "A", {"T"}}));
 
-        SECTION("there's no duplicate") {
+        SECTION("There's no duplicate") {
             CHECK( count_duplicates_and_rethrow_error(cache, {101, "A", {"T"}}) == 0 );
         }
-        SECTION("no duplicate detected because capacity is too small") {
+        SECTION("No duplicate detected because capacity is too small") {
             CHECK( count_duplicates_and_rethrow_error(cache, {101, "A", {"T"}}) == 0 );
             // This is not going to throw because capacity is 1, we would need a bigger cache.
             CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 0 );
         }
 
-        SECTION("one simple duplicate") {
+        SECTION("One simple duplicate") {
             CHECK( count_duplicates_and_rethrow_error(cache, {100, "A", {"T"}}) == 2 );
         }
-        SECTION("one multiallelic duplicate") {
+        SECTION("One multiallelic duplicate") {
             CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 2 );
         }
-        SECTION("triplicate") {
+        SECTION("Triplicate") {
             CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 2 );
             // triplicate missed, reported as duplicate
             CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT"}}) == 2 );
@@ -73,21 +73,21 @@ namespace ebi
         cache.check_duplicates(build_mock_record({104, "A", {"T"}}));
         cache.check_duplicates(build_mock_record({105, "A", {"T"}}));
 
-        SECTION("there's no duplicate") {
+        SECTION("There's no duplicate") {
             CHECK( count_duplicates_and_rethrow_error(cache, {106, "A", {"T"}}) == 0 );
         }
-        SECTION("no duplicate detected because capacity is too small") {
+        SECTION("No duplicate detected because capacity is too small") {
             // This is not going to throw because capacity is 1, we would need a bigger cache.
             CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 0 );
         }
 
-        SECTION("one simple duplicate") {
+        SECTION("One simple duplicate") {
             CHECK( count_duplicates_and_rethrow_error(cache, {103, "A", {"T"}}) == 2 );
         }
-        SECTION("one multiallelic duplicate") {
+        SECTION("One multiallelic duplicate") {
             CHECK( count_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) == 2 );
         }
-        SECTION("triplicate")
+        SECTION("Triplicate")
         {
             CHECK( count_duplicates_and_rethrow_error(cache, {104, "GA", {"GT", "C"}}) == 2 );
             // the first occurrence should not be reported again
@@ -106,21 +106,21 @@ namespace ebi
         cache.check_duplicates(build_mock_record({104, "A", {"T"}}));
         cache.check_duplicates(build_mock_record({105, "A", {"T"}}));
 
-        SECTION("there's no duplicate") {
+        SECTION("There's no duplicate") {
             CHECK( count_duplicates_and_rethrow_error(cache, {106, "A", {"T"}}) == 0 );
         }
 
-        SECTION("duplicate detected because there's no capacity limitation") {
+        SECTION("Duplicate detected because there's no capacity limitation") {
             // This is not going to throw because capacity is 1, we would need a bigger cache.
             CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 2 );
         }
-        SECTION("one simple duplicate") {
+        SECTION("One simple duplicate") {
             CHECK( count_duplicates_and_rethrow_error(cache, {103, "A", {"T"}}) == 2 );
         }
-        SECTION("one multiallelic duplicate") {
+        SECTION("One multiallelic duplicate") {
             CHECK( count_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) == 2 );
         }
-        SECTION("triplicate")
+        SECTION("Triplicate")
         {
             CHECK( count_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) == 2 );
             // the first occurrence should not be reported again

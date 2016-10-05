@@ -376,20 +376,21 @@ namespace ebi
                                 { "0" },
                                 std::make_shared<vcf::Source>(source)}) );
 
-            CHECK_THROWS_AS( (vcf::Record{
-                                1,
-                                "UnspecifiedTriploid",
-                                123456,
-                                { "id123", "id456" },
-                                "A",
-                                { "T", "C" },
-                                1.0,
-                                { "PASS" },
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} },
-                                { "GT" },
-                                { "0|1|1" },
-                                std::make_shared<vcf::Source>(source)}),
-                            vcf::SamplesFieldBodyError*);
+// The next check is commented because a mismatch is currently only a warning, but we will process it as an error in the future
+//            CHECK_THROWS_AS( (vcf::Record{
+//                                1,
+//                                "UnspecifiedTriploid",
+//                                123456,
+//                                { "id123", "id456" },
+//                                "A",
+//                                { "T", "C" },
+//                                1.0,
+//                                { "PASS" },
+//                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} },
+//                                { "GT" },
+//                                { "0|1|1" },
+//                                std::make_shared<vcf::Source>(source)}),
+//                            vcf::SamplesFieldBodyError*);
         }
     }
 

@@ -93,6 +93,14 @@ namespace ebi
             
             ++i;
         }
+
+        size_t provided_ploidy = state.source->ploidy.get_ploidy(record.chromosome);
+        if (provided_ploidy != ploidy) {
+            std::stringstream ss;
+            ss << "The specified ploidy for contig \"" << record.chromosome << "\" was " << provided_ploidy
+               << ", which doesn't match the genotypes, which show ploidy " << ploidy;
+            throw new SamplesFieldBodyError{state.n_lines, ss.str(), "GT", static_cast<long>(provided_ploidy)};
+        }
     }
   
     void ValidateOptionalPolicy::check_body_entry_position_zero(ParsingState & state, Record & record) const

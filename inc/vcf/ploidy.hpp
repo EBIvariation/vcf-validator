@@ -26,7 +26,7 @@ namespace ebi
     /**
      * Class that keeps track of the ploidy of every contig.
      *
-     * The ploidy is the amount of copies of a region/contig/chromosome.
+     * Ploidy is the number of sets of chromosomes in a cell, or in the cells of an organism.
      * You can give a simple number if the ploidy is the same across all the contigs/chromosomes, and additionally
      * you can specify a map (contig to ploidy) to tell the exceptions to the ploidy. Examples:
      *
@@ -43,9 +43,7 @@ namespace ebi
     class Ploidy
     {
       public:
-        Ploidy(size_t default_ploidy) : Ploidy(default_ploidy, {}) {}
-
-        Ploidy(size_t default_ploidy, const std::map<std::string, size_t> &contig_ploidies)
+        Ploidy(size_t default_ploidy, const std::map<std::string, size_t> &contig_ploidies = {})
                 : default_ploidy(default_ploidy), contig_ploidies(contig_ploidies) {}
 
         size_t get_ploidy()

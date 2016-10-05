@@ -46,7 +46,7 @@ namespace ebi
       return ebi::vcf::is_valid_vcf_file(input, *validator, outputs);
   }
   
-  TEST_CASE("unit test: sqlite", "[output]")
+  TEST_CASE("Unit test: sqlite", "[output]")
   {
       std::string db_name = "test/input_files/sqlite_test.errors.db";
       sqlite3* db;
@@ -59,7 +59,7 @@ namespace ebi
       }
       char *zErrMsg = NULL;
       
-      SECTION("write errors")
+      SECTION("Write errors")
       {
           
           ebi::vcf::Error test_error{1, "testing errors"};
@@ -85,7 +85,7 @@ namespace ebi
           
       }
       
-      SECTION("write warnings")
+      SECTION("Write warnings")
       {
           ebi::vcf::Error test_warning{1, "testing warnings"};
           errorDAO.write_warning(test_warning);
@@ -107,7 +107,7 @@ namespace ebi
           CHECK(count_warnings == 1);
       }
       
-      SECTION("write and count errors")
+      SECTION("Write and count errors")
       {
           ebi::vcf::Error test_error{1, "testing errors"};
           errorDAO.write_error(test_error);
@@ -119,7 +119,7 @@ namespace ebi
           CHECK(count_warnings == 0);
       }
 
-      SECTION("write and count warnings")
+      SECTION("Write and count warnings")
       {
           ebi::vcf::Error test_error{1, "testing warnings"};
           errorDAO.write_warning(test_error);
@@ -130,7 +130,7 @@ namespace ebi
           CHECK(count_warnings == 1);
       }
       
-      SECTION("write and read errors")
+      SECTION("Write and read errors")
       {
           size_t line = 8;
           std::string message{"testing errors"};
@@ -147,7 +147,7 @@ namespace ebi
           CHECK(errors_read == 1);
       }
       
-      SECTION("write and read warnings")
+      SECTION("Write and read warnings")
       {
           size_t line = 10;
           std::string message{"testing warnings"};
@@ -164,7 +164,7 @@ namespace ebi
           CHECK(errors_read == 1);
       }
       
-      SECTION("write and read error codes")
+      SECTION("Write and read error codes")
       {
           size_t line = 8;
           std::string message{"testing errors"};
@@ -192,7 +192,7 @@ namespace ebi
       CHECK_FALSE(boost::filesystem::exists(db_file));
   }
 
-  TEST_CASE("integration test: validator and sqlite", "[output]")
+  TEST_CASE("Integration test: validator and sqlite", "[output]")
   {
       auto path = boost::filesystem::path("test/input_files/v4.1/failed/failed_fileformat_000.vcf");
 
@@ -245,13 +245,13 @@ namespace ebi
 
   }
 
-  TEST_CASE("unit test: odb", "[output]")
+  TEST_CASE("Unit test: odb", "[output]")
   {
 
       std::string db_name = "test/input_files/sqlite_test.errors.odb.db";
       ebi::vcf::OdbReportRW errorDAO{db_name};
 
-      SECTION("write and count errors") {
+      SECTION("Write and count errors") {
           ebi::vcf::Error test_error{1, "testing errors"};
           errorDAO.write_error(test_error);
           errorDAO.write_error(test_error);
@@ -262,7 +262,7 @@ namespace ebi
           CHECK(count_warnings == 0);
       }
 
-      SECTION("write and count warnings")
+      SECTION("Write and count warnings")
       {
           ebi::vcf::Error test_error{1, "testing warnings"};
           errorDAO.write_warning(test_error);
@@ -273,7 +273,7 @@ namespace ebi
           CHECK(count_warnings == 1);
       }
 
-      SECTION("write and read errors")
+      SECTION("Write and read errors")
       {
           size_t line = 8;
           std::string message{"testing errors"};
@@ -290,7 +290,7 @@ namespace ebi
           CHECK(errors_read == 1);
       }
 
-      SECTION("write and read warnings")
+      SECTION("Write and read warnings")
       {
           size_t line = 10;
           std::string message{"testing warnings"};
@@ -308,7 +308,7 @@ namespace ebi
       }
 
 
-      SECTION("write and read error codes")
+      SECTION("Write and read error codes")
       {
           size_t line = 8;
           std::string message{"testing errors"};
@@ -338,7 +338,7 @@ namespace ebi
 
   }
 
-  TEST_CASE("integration test: validator and odb", "[output]")
+  TEST_CASE("Integration test: validator and odb", "[output]")
   {
       auto path = boost::filesystem::path("test/input_files/v4.1/failed/failed_fileformat_000.vcf");
 

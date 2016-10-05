@@ -76,9 +76,12 @@ namespace ebi
         return ParsingState::warnings;
     }
 
-    std::unique_ptr<ebi::vcf::Parser>
-    build_parser(std::string const &path, ValidationLevel level, ebi::vcf::Version version, ebi::vcf::Ploidy ploidy)
+    std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const &path,
+                                                   ValidationLevel level,
+                                                   ebi::vcf::Version version,
+                                                   ebi::vcf::Ploidy ploidy)
     {
+
         auto source_ptr = new ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, version, ploidy};
         std::shared_ptr<Source> source{source_ptr};
         auto records = std::vector<ebi::vcf::Record>{};
@@ -129,6 +132,7 @@ namespace ebi
                            ebi::vcf::Parser &validator,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
     {
+
         std::vector<char> line;
         line.reserve(default_line_buffer_size);
 
