@@ -72,6 +72,8 @@ namespace ebi
     class Parser
     {
       public:
+        virtual ~Parser() = default;
+
         virtual void parse(std::string const & text) = 0;
         virtual void parse(std::vector<char> const & text) = 0;
 
@@ -88,7 +90,8 @@ namespace ebi
     {
       public:
         ParserImpl(std::shared_ptr<Source> source);
-        
+        virtual ~ParserImpl() = default;
+
         void parse(std::string const & text) override;
         void parse(std::vector<char> const & text) override;
 

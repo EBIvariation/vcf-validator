@@ -49,7 +49,8 @@ namespace ebi
         std::multimap<std::string, std::string> undefined_metadata;
         
         ParsingState(std::shared_ptr<Source> source);
-        
+        virtual ~ParsingState() = default;
+
         void set_version(Version version);
         
         void add_meta(MetaEntry const & meta);
