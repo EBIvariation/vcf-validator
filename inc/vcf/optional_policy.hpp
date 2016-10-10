@@ -15,7 +15,7 @@
  */
 
 #ifndef VCF_OPTIONAL_POLICY_HPP
-#define	VCF_OPTIONAL_POLICY_HPP
+#define VCF_OPTIONAL_POLICY_HPP
 
 #include "file_structure.hpp"
 #include "parsing_state.hpp"
@@ -64,5 +64,5 @@ namespace ebi
   }
 }
 
-#endif	/* VCF_OPTIONAL_POLICY_HPP */
+#endif // VCF_OPTIONAL_POLICY_HPP
 

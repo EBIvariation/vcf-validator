@@ -254,7 +254,7 @@ namespace ebi
         InfoBodyError(size_t line = 0,
                       const std::string &message = "Error in info column, in body section",
                       const std::string &field = "")
-                : BodySectionError{line, message}, field(field) {}
+                : BodySectionError{line, message}, field{field} {}
         virtual ErrorCode get_code() const override { return ErrorCode::info_body; }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
 
@@ -289,10 +289,10 @@ namespace ebi
                               const std::string &message,
                               const std::string &field,
                               long field_cardinality = -1)
-                : BodySectionError{line, message}, field(field), field_cardinality(field_cardinality) {
+                : BodySectionError{line, message}, field{field}, field_cardinality{field_cardinality} {
             if (field.empty()) {
                 throw std::invalid_argument{"SamplesFieldBodyError: field should not be an empty string. Use "
-                                                    "SamplesBodyError for unknown errors in the samples columns"};
+                                               "SamplesBodyError for unknown errors in the samples columns"};
             }
         }
         virtual ErrorCode get_code() const override { return ErrorCode::samples_field_body; }

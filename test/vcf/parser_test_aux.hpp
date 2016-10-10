@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TEST_AUX_HPP
-#define	TEST_AUX_HPP
+#ifndef EBI_PARSER_TEST_AUX_HPP
+#define EBI_PARSER_TEST_AUX_HPP
 
 #include <iostream>
 #include <fstream>
@@ -41,5 +41,5 @@ namespace ebi
     }
 }
 
-#endif
+#endif // EBI_PARSER_TEST_AUX_HPP
 

@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef VCF_VALIDATOR_NORMALIZER_HPP
-#define VCF_VALIDATOR_NORMALIZER_HPP
+#ifndef VCF_NORMALIZER_HPP
+#define VCF_NORMALIZER_HPP
 
 #include "file_structure.hpp"
 
@@ -87,4 +87,4 @@ namespace ebi
   }
 }
 
-#endif //VCF_VALIDATOR_NORMALIZER_HPP
+#endif // VCF_NORMALIZER_HPP

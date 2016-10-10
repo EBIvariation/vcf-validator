@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef VCF_VALIDATOR_SQLITE_REPORT_HPP
-#define VCF_VALIDATOR_SQLITE_REPORT_HPP
+#ifndef VCF_SQLITE_REPORT_HPP
+#define VCF_SQLITE_REPORT_HPP
 
 #include <iostream>
 #include <string>
@@ -74,4 +74,4 @@ namespace ebi
 }
 
 
-#endif //VCF_VALIDATOR_SQLITE_REPORT_HPP
+#endif // VCF_SQLITE_REPORT_HPP

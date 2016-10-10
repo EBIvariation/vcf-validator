@@ -15,7 +15,7 @@
  */
 
 #ifndef VCF_ERROR_POLICY_HPP
-#define	VCF_ERROR_POLICY_HPP
+#define VCF_ERROR_POLICY_HPP
 
 #include <string>
 
@@ -50,5 +50,5 @@ namespace ebi
   }
 }
 
-#endif	/* VCF_ERROR_POLICY_HPP */
+#endif // VCF_ERROR_POLICY_HPP
 

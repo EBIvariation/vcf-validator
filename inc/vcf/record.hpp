@@ -37,5 +37,5 @@ namespace ebi
   }
 }
 
-#endif
+#endif // VCF_RECORD_HPP
 

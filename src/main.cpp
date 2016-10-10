@@ -242,7 +242,8 @@ int main(int argc, char** argv)
             }
         }
 
-        std::cout << "The input file is " << (is_valid ? "valid" : "not valid") << std::endl;
+        std::cout << "According to the VCF " << version << " specification, the input file is "
+                  << (is_valid ? "valid" : "not valid") << std::endl;
         return !is_valid; // A valid file returns an exit code 0
         
     } catch (std::invalid_argument const & ex) {

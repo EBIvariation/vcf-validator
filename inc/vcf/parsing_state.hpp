@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef VCF_PARSING_UTILS_HPP
-#define	VCF_PARSING_UTILS_HPP
+#ifndef VCF_PARSING_STATE_HPP
+#define VCF_PARSING_STATE_HPP
 
 #include <map>
 #include <memory>
@@ -49,19 +49,16 @@ namespace ebi
         std::multimap<std::string, std::string> undefined_metadata;
         
         ParsingState(std::shared_ptr<Source> source);
-        
+        virtual ~ParsingState() = default;
+
         void set_version(Version version);
         
         void add_meta(MetaEntry const & meta);
 
         void set_record(std::unique_ptr<Record> record);
-        void unset_record();
-
         void add_error(std::unique_ptr<Error> error);
-        void clear_errors();
-
         void add_warning(std::unique_ptr<Error> error);
-        void clear_warnings();
+        void clear();
         
         std::vector<std::string> const & samples() const;
         
@@ -78,5 +75,5 @@ namespace ebi
   }
 }
 
-#endif	/* VCF_PARSING_UTILS_HPP */
+#endif // VCF_PARSING_STATE_HPP
 

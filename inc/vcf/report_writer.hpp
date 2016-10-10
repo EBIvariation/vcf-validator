@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-#ifndef VCF_VALIDATOR_REPORT_WRITER_HPP
-#define VCF_VALIDATOR_REPORT_WRITER_HPP
+#ifndef VCF_REPORT_WRITER_HPP
+#define VCF_REPORT_WRITER_HPP
 
 #include <iostream>
+#include <string>
+#include <stdexcept>
 #include "vcf/error.hpp"
 
 namespace ebi
@@ -48,4 +50,4 @@ namespace ebi
 }
 
 
-#endif //VCF_VALIDATOR_REPORT_WRITER_HPP
+#endif // VCF_REPORT_WRITER_HPP

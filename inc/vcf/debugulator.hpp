@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef VCF_VALIDATOR_DEBUGULATOR_HPP
-#define VCF_VALIDATOR_DEBUGULATOR_HPP
+#ifndef VCF_DEBUGULATOR_HPP
+#define VCF_DEBUGULATOR_HPP
 
 
 #include <iostream>
@@ -43,4 +43,4 @@ namespace ebi
   }
 }
 
-#endif //VCF_VALIDATOR_FIXER_HPP
+#endif // VCF_DEBUGULATOR_HPP
