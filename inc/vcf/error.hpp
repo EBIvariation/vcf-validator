@@ -183,8 +183,11 @@ namespace ebi
         friend class odb::access;
         NoMetaDefinitionError() {}
       public:
-        NoMetaDefinitionError(size_t line, std::string message, std::string column, std::string field)
-                : Error{line, field  + " from column " + column + " was not defined in meta section"} { }
+        NoMetaDefinitionError(size_t line,
+                              const std::string &message,
+                              const std::string &column,
+                              const std::string &field)
+                : Error{line, message}, column{column}, field{field} {}
         virtual ErrorCode get_code() const override { return ErrorCode::body_section; }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
         std::string column;

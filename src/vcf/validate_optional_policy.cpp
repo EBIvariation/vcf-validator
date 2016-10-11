@@ -148,8 +148,12 @@ namespace ebi
         if (is_record_subfield_in_header(current_chromosome, range.first, range.second)) {
             state.add_well_defined_meta("contig", current_chromosome);
         } else {
-            throw new ChromosomeBodyError{state.n_lines,
-                    "Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description"};
+            throw new NoMetaDefinitionError{
+                    state.n_lines,
+                    "Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description",
+                    "CHROM",
+                    current_chromosome
+            };
         }
     }
     
@@ -171,8 +175,12 @@ namespace ebi
                 if (is_record_subfield_in_header(alt_id, range.first, range.second)) {
                     state.add_well_defined_meta("ALT", alt_id);
                 } else {
-                    throw new AlternateAllelesBodyError{state.n_lines,
-                            "Alternate '<" + alt_id + ">' is not listed in a valid meta-data ALT entry"};
+                    throw new NoMetaDefinitionError{
+                            state.n_lines,
+                            "Alternate '<" + alt_id + ">' is not listed in a valid meta-data ALT entry",
+                            "ALT",
+                            alt_id
+                    };
                 }
             }
         }
@@ -192,8 +200,12 @@ namespace ebi
             if (is_record_subfield_in_header(filter, range.first, range.second)) {
                 state.add_well_defined_meta("FILTER", filter);
             } else {
-                throw new FilterBodyError{state.n_lines,
-                        "Filter '" + filter + "' is not listed in a valid meta-data FILTER entry"};
+                throw new NoMetaDefinitionError{
+                        state.n_lines,
+                        "Filter '" + filter + "' is not listed in a valid meta-data FILTER entry",
+                        "FILTER",
+                        filter
+                };
             }
         }
     }
@@ -213,9 +225,12 @@ namespace ebi
             if (is_record_subfield_in_header(id, range.first, range.second)) {
                 state.add_well_defined_meta("INFO", id);
             } else {
-                throw new InfoBodyError{state.n_lines,
-                                        "Info '" + id + "' is not listed in a valid meta-data INFO entry",
-                                        id};
+                throw new NoMetaDefinitionError{
+                        state.n_lines,
+                        "Info '" + id + "' is not listed in a valid meta-data INFO entry",
+                        "INFO",
+                        id
+                };
             }
         }
     }
@@ -232,8 +247,12 @@ namespace ebi
             if (is_record_subfield_in_header(fm, range.first, range.second)) {
                 state.add_well_defined_meta("FORMAT", fm);
             } else {
-                throw new FormatBodyError{state.n_lines,
-                        "Format '" + fm + "' is not listed in a valid meta-data FORMAT entry"};
+                throw new NoMetaDefinitionError{
+                        state.n_lines,
+                        "Format '" + fm + "' is not listed in a valid meta-data FORMAT entry",
+                        "FORMAT",
+                        fm
+                };
             }
         }
     }

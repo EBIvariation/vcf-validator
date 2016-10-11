@@ -87,7 +87,7 @@ namespace ebi
       public:
         virtual void write_error(Error &error)
         {
-          std::cout << error.what() << std::endl;
+            std::cout << error.what() << std::endl;
         }
 
         virtual void write_warning(Error &error)
