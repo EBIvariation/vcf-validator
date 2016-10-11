@@ -70,6 +70,11 @@ namespace ebi
             util::writeline(output, *line);
             ignored_errors++;
         }
+        virtual void visit(NoMetaDefinitionError &error)
+        {
+            util::writeline(output, *line);
+            ignored_errors++;
+        }
         virtual void visit(FileformatError &error) override
         {
             util::writeline(output, *line);

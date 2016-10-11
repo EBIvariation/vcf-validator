@@ -33,6 +33,7 @@ namespace ebi
         meta_section,
         header_section,
         body_section,
+        no_meta_definition,
         fileformat,
         chromosome_body,
         position_body,
@@ -55,6 +56,7 @@ namespace ebi
     struct MetaSectionError;
     struct HeaderSectionError;
     struct BodySectionError;
+    struct NoMetaDefinitionError;
     struct FileformatError;
     struct ChromosomeBodyError;
     struct PositionBodyError;
@@ -74,10 +76,12 @@ namespace ebi
 
     class ErrorVisitor {
       public:
+        virtual ~ErrorVisitor() {};
         virtual void visit(Error& error) = 0;
         virtual void visit(MetaSectionError &error) = 0;
         virtual void visit(HeaderSectionError &error) = 0;
         virtual void visit(BodySectionError &error) = 0;
+        virtual void visit(NoMetaDefinitionError &error) = 0;
         virtual void visit(FileformatError &error) = 0;
         virtual void visit(ChromosomeBodyError &error) = 0;
         virtual void visit(PositionBodyError &error) = 0;
@@ -170,6 +174,21 @@ namespace ebi
         BodySectionError(size_t line) : BodySectionError{line, "Error in body section"} { }
         virtual ErrorCode get_code() const override { return ErrorCode::body_section; }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
+    };
+
+    #pragma db object
+    struct NoMetaDefinitionError : public Error
+    {
+      private:
+        friend class odb::access;
+        NoMetaDefinitionError() {}
+      public:
+        NoMetaDefinitionError(size_t line, std::string message, std::string column, std::string field)
+                : Error{line, field  + " from column " + column + " was not defined in meta section"} { }
+        virtual ErrorCode get_code() const override { return ErrorCode::body_section; }
+        virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
+        std::string column;
+        std::string field;
     };
 
     // inheritance siblings about detailed errors

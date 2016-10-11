@@ -25,7 +25,7 @@ namespace ebi
     : n_lines{1}, n_columns{1}, n_batches{0}, cs{0}, m_is_valid{true}, 
       source{source}, record{},
       errors{}, warnings{},
-      undefined_metadata{}
+      defined_metadata{}
     {
     }
 
@@ -86,23 +86,6 @@ namespace ebi
     void ParsingState::add_well_defined_meta(std::string const & meta_type, std::string const & id)
     {
         defined_metadata.emplace(meta_type, id);
-    }
-    
-    bool ParsingState::is_bad_defined_meta(std::string const & meta_type, std::string const & id) const
-    {
-        typedef std::multimap<std::string,std::string>::const_iterator iter;
-        std::pair<iter, iter> range = undefined_metadata.equal_range(meta_type);
-        for (auto & current = range.first; current != range.second; ++current) {
-            if (current->second == id) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    void ParsingState::add_bad_defined_meta(std::string const & meta_type, std::string const & id)
-    {
-        undefined_metadata.emplace(meta_type, id);
     }
   }
 }

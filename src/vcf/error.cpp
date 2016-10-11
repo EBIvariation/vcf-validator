@@ -33,6 +33,8 @@ namespace ebi
             return std::shared_ptr<Error>(new HeaderSectionError{line, message});
         case ErrorCode::body_section:
             return std::shared_ptr<Error>(new BodySectionError{line, message});
+        case ErrorCode::no_meta_definition:
+            return std::shared_ptr<Error>(new NoMetaDefinitionError{line, message, "", ""});
         case ErrorCode::fileformat:
             return std::shared_ptr<Error>(new FormatBodyError{line, message});
         case ErrorCode::chromosome_body:

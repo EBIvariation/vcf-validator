@@ -139,9 +139,8 @@ namespace ebi
         // The associated 'contig' meta entry should exist (notify only once)
         std::string current_chromosome = record.chromosome;
 
-        if (state.is_bad_defined_meta("contig", current_chromosome) ||
-            state.is_well_defined_meta("contig", current_chromosome)) {
-            return; // Notify only once
+        if (state.is_well_defined_meta("contig", current_chromosome)) {
+            return; // Check only once
         }
         
         std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range("contig");
@@ -149,7 +148,6 @@ namespace ebi
         if (is_record_subfield_in_header(current_chromosome, range.first, range.second)) {
             state.add_well_defined_meta("contig", current_chromosome);
         } else {
-            state.add_bad_defined_meta("contig", current_chromosome);
             throw new ChromosomeBodyError{state.n_lines,
                     "Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description"};
         }
@@ -166,15 +164,13 @@ namespace ebi
             if (alternate[0] == '<' && boost::regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
                 std::string alt_id = pieces_match[1];
                 
-                if (state.is_bad_defined_meta("ALT", alt_id) ||
-                    state.is_well_defined_meta("ALT", alt_id)) {
-                    continue; // Notify only once
+                if (state.is_well_defined_meta("ALT", alt_id)) {
+                    continue; // Check only once
                 }
                 
                 if (is_record_subfield_in_header(alt_id, range.first, range.second)) {
                     state.add_well_defined_meta("ALT", alt_id);
                 } else {
-                    state.add_bad_defined_meta("ALT", alt_id);
                     throw new AlternateAllelesBodyError{state.n_lines,
                             "Alternate '<" + alt_id + ">' is not listed in a valid meta-data ALT entry"};
                 }
@@ -189,15 +185,13 @@ namespace ebi
         for (auto & filter : record.filters) {
             if (filter == "PASS" || filter == ".") { continue; } // No need to check PASS or missing data
             
-            if (state.is_bad_defined_meta("FILTER", filter) ||
-                state.is_well_defined_meta("FILTER", filter)) {
-                continue; // Notify only once
+            if (state.is_well_defined_meta("FILTER", filter)) {
+                continue; // Check only once
             }
             
             if (is_record_subfield_in_header(filter, range.first, range.second)) {
                 state.add_well_defined_meta("FILTER", filter);
             } else {
-                state.add_bad_defined_meta("FILTER", filter);
                 throw new FilterBodyError{state.n_lines,
                         "Filter '" + filter + "' is not listed in a valid meta-data FILTER entry"};
             }
@@ -212,15 +206,13 @@ namespace ebi
             auto & id = field.first;
             if (field.first == ".") { continue; } // No need to check missing data
             
-            if (state.is_bad_defined_meta("INFO", id) ||
-                state.is_well_defined_meta("INFO", id)) {
-                continue; // Notify only once
+            if (state.is_well_defined_meta("INFO", id)) {
+                continue; // Check only once
             }
             
             if (is_record_subfield_in_header(id, range.first, range.second)) {
                 state.add_well_defined_meta("INFO", id);
             } else {
-                state.add_bad_defined_meta("INFO", id);
                 throw new InfoBodyError{state.n_lines,
                                         "Info '" + id + "' is not listed in a valid meta-data INFO entry",
                                         id};
@@ -233,15 +225,13 @@ namespace ebi
         std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range("FORMAT");
         
         for (auto & fm : record.format) {
-            if (state.is_bad_defined_meta("FORMAT", fm) ||
-                state.is_well_defined_meta("FORMAT", fm)) {
-                continue; // Notify only once
+            if (state.is_well_defined_meta("FORMAT", fm)) {
+                continue; // Check only once
             }
             
             if (is_record_subfield_in_header(fm, range.first, range.second)) {
                 state.add_well_defined_meta("FORMAT", fm);
             } else {
-                state.add_bad_defined_meta("FORMAT", fm);
                 throw new FormatBodyError{state.n_lines,
                         "Format '" + fm + "' is not listed in a valid meta-data FORMAT entry"};
             }
