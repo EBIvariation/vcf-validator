@@ -9,62 +9,22 @@ It includes all the checks from the vcftools suite, and some more that involve l
 
 Please read the wiki for more details about checks already implemented.
 
-## Dependencies
-
-### Boost
-
-The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.program_options, Boost.regex and Boost.system.
-If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-program-options-dev` and `libboost-regex-dev`.
-
-### ODB
-
-You will need to download the ODB compiler, the ODB common runtime library, and the SQLite database runtime library from [this page](http://codesynthesis.com/products/odb/download.xhtml).
-
-ODB requires SQLite3 to be installed. If you are using Ubuntu, the required packages' names will be `libsqlite3-0` and `libsqlite3-dev`.
-
-To install the ODB compiler, the easiest way is to download the `.deb` or `.rpm` packages, in order to be installed automatically with `dpkg`. Both the ODB runtime and SQLite database runtime libraries can be installed manually running `./configure && make && sudo make install`. This will install the libraries in `/usr/local/lib`.
-
-If you don't have root permissions, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`, without `sudo`.
-
 ## Build
 
-The build has been tested on the following compilers:
-* Clang 3.5 to 3.7
-* GCC 4.8 to 5.0
+The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create an executable that can be run in any Linux machine.
 
-In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`. If the ODB libraries were not found during the build, please run `sudo updatedb && sudo ldconfig`.
+1. Install and configure Docker following [their tutorial](https://docs.docker.com/engine/getstarted/).
+2. Create the Docker image:
+    1. Clone this Git repository: `git clone https://github.com/EBIvariation/vcf-validator.git`
+    2. Move to the folder the code was downloaded to: `cd vcf-validator`
+    3. Build the image: `docker build -t ebivariation/vcf-validator docker/`. Please replace `ebivariation` with your user account if you plan to push this image to [Docker Hub](https://hub.docker.com).
+3. Build the executable running `docker run -v ${PWD}:/tmp ebivariation/vcf-validator`. Again, replace `ebivariation` with your user name if necessary.
 
-For those users who need static linkage, the option `-DBUILD_STATIC=1` must be provided to the `cmake` command. Also, if ODB has been installed in a non-default location, the option `-DODB_PATH=/path/to/odb/libraries/folder` must be also provided to the `cmake` command.
-
-In any case, the following binaries will be created in the `bin` subfolder:
+The following executables will be created in the `build/bin` subfolder:
 
 * `vcf_validator`: validation tool
 * `vcf_debugulator`: automatic fixing tool
 * `test_validator` and derivatives: testing correct behaviour of the tools listed above
-
-### Developers build
-
-For basic usage, skip this part. It's not needed that the user runs odb or ragel to generate code. For development or advance usage, this is how the ragel machines are built:
-
-```
-ragel -G2 src/vcf/vcf_v41.ragel -o inc/vcf/validator_detail_v41.hpp
-ragel -G2 src/vcf/vcf_v42.ragel -o inc/vcf/validator_detail_v42.hpp
-ragel -G2 src/vcf/vcf_v43.ragel -o inc/vcf/validator_detail_v43.hpp
-```
-
-and this is how the ODB code is built:
-
-```
-odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp --output-dir inc/vcf/ inc/vcf/error.hpp
-mv inc/vcf/error-odb.cpp src/vcf/error-odb.cpp
-```
-
-
-## Test
-
-Unit tests can be run using the binary `bin/test_validator` or, if the generator supports it, a command like `make test`. The first option may provide a more detailed output in case of test failure.
-
-**Note**: Tests that require input files will only work when executed with `make test` or running the binary from the project root folder (not the `bin` subfolder).
 
 ## Run
 
@@ -97,9 +57,9 @@ There are some simple errors that can be automatically fixed. The most common er
  
 The fixed VCF will be written into the standard output, which you can redirect to a file, or use the `-o` / `--output` option and specify the desired file name.
 
-The logs about what the debugulator is doing will be written into the error output. The logs may be redirected to a log file `2>debugulator_log.txt` or completely discarded ` 2>/dev/null`
+The logs about what the debugulator is doing will be written into the error output. The logs may be redirected to a log file `2>debugulator_log.txt` or completely discarded ` 2>/dev/null`.
 
-## Examples
+### Examples
 
 Simple example: `vcf_validator -i /path/to/file.vcf -v v4.1`  
 Full example: `vcf_validator -i /path/to/file.vcf -v v4.1 -l stop -r database,stdout -o /path/to/output/folder/`
@@ -110,3 +70,64 @@ vcf_validator -i /path/to/file.vcf -v v4.1 -r database -o /path/to/write/report/
 vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timestamp.db -o /path/to/fixed.vcf 2>debugulator_log.txt
 ```
 
+## Developers build
+
+**Note:** Please ignore this section if you only want to use the application.
+
+The end-users build is perfectly valid during development to generate a static binary. Please follow the instructions below if you would like to generate a dynamically linked binary.
+
+### Dependencies
+
+#### Boost
+
+The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.program_options, Boost.regex and Boost.system.
+If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-program-options-dev` and `libboost-regex-dev`.
+
+#### ODB
+
+You will need to download the ODB compiler, the ODB common runtime library, and the SQLite database runtime library from [this page](http://codesynthesis.com/products/odb/download.xhtml).
+
+ODB requires SQLite3 to be installed. If you are using Ubuntu, the required packages' names will be `libsqlite3-0` and `libsqlite3-dev`.
+
+To install the ODB compiler, the easiest way is to download the `.deb` or `.rpm` packages, in order to be installed automatically with `dpkg`. Both the ODB runtime and SQLite database runtime libraries can be installed manually running `./configure && make && sudo make install`. This will install the libraries in `/usr/local/lib`.
+
+If you don't have root permissions, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`, without `sudo`.
+
+### Compile
+
+The build has been tested on the following compilers:
+* Clang 3.5 to 3.7
+* GCC 4.8 to 5.0
+
+In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`. If the ODB libraries were not found during the build, please run `sudo updatedb && sudo ldconfig`.
+
+For those users who need static linkage, the option `-DBUILD_STATIC=1` must be provided to the `cmake` command. Also, if ODB has been installed in a non-default location, the option `-DODB_PATH=/path/to/odb/libraries/folder` must be also provided to the `cmake` command.
+
+In any case, the following binaries will be created in the `bin` subfolder:
+
+* `vcf_validator`: validation tool
+* `vcf_debugulator`: automatic fixing tool
+* `test_validator` and derivatives: testing correct behaviour of the tools listed above
+
+### Test
+
+Unit tests can be run using the binary `bin/test_validator` or, if the generator supports it, a command like `make test`. The first option may provide a more detailed output in case of test failure.
+
+**Note**: Tests that require input files will only work when executed with `make test` or running the binary from the project root folder (not the `bin` subfolder).
+
+### Generate code from descriptors
+
+Code generated from descriptors shall be always up-to-date in the GitHub repository. If changes to the source descriptors were necessary, please generate the Ragel machines C code from `.ragel` files using:
+
+```
+ragel -G2 src/vcf/vcf_v41.ragel -o inc/vcf/validator_detail_v41.hpp
+ragel -G2 src/vcf/vcf_v42.ragel -o inc/vcf/validator_detail_v42.hpp
+ragel -G2 src/vcf/vcf_v43.ragel -o inc/vcf/validator_detail_v43.hpp
+```
+
+And the full ODB-based code from the classes definitions using:
+
+```
+odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp --output-dir inc/vcf/ inc/vcf/error.hpp
+mv inc/vcf/error-odb.cpp src/vcf/error-odb.cpp
+```
