@@ -11,16 +11,16 @@ Please read the wiki for more details about checks already implemented.
 
 ## Build
 
-The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create a binary that can be run in any Linux machine.
+The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create an executable that can be run in any Linux machine.
 
 1. Install and configure Docker following [their tutorial](https://docs.docker.com/engine/getstarted/).
 2. Create the Docker image:
-    1. Clone this Git repository
-    2. Move to the folder the code was downloaded to
-    3. Run `docker build -t my-name/vcf-validator docker/`. You can replace `my-name` with your name of choice.
-3. Build the application running `docker run -v ${PWD}:/tmp my-name/vcf-validator`. Replace `my-name` with the name used in the previous step.
+    1. Clone this Git repository: `git clone https://github.com/EBIvariation/vcf-validator.git`
+    2. Move to the folder the code was downloaded to: `cd vcf-validator`
+    3. Build the image: `docker build -t ebivariation/vcf-validator docker/`. Please replace `ebivariation` with your user account if you plan to push this image to [Docker Hub](https://hub.docker.com).
+3. Build the executable running `docker run -v ${PWD}:/tmp ebivariation/vcf-validator`. Again, replace `ebivariation` with your user name if necessary.
 
-The following binaries will be created in the `build/bin` subfolder:
+The following executables will be created in the `build/bin` subfolder:
 
 * `vcf_validator`: validation tool
 * `vcf_debugulator`: automatic fixing tool
