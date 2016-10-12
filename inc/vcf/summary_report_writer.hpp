@@ -24,10 +24,33 @@ namespace ebi
 {
   namespace vcf
   {
-    class ReportVisitor : public ErrorVisitor
+    /**
+     * Class that tells whether an error should be written or skipped.
+     *
+     * The intended algorithm is that all errors will be printed the first time they appear, but some of them won't
+     * be printed again.
+     *
+     * To differentiate the Error dynamic type, this class implements ErrorVisitor. As the visitor interface returns
+     * `void`, we have to store the decision in the class' state, in the variable `skip`.
+     *
+     * Use this class like this:
+     * ~~~
+     * if (summary.should_write_report(error)) {
+     *     std::cout << error.what() << " (warning)" << std::endl;
+     * }
+     * ~~~
+     */
+    class SummaryTracker : public ErrorVisitor
     {
       public:
-        ReportVisitor() : undefined_metadata{}, skip(false) {}
+        SummaryTracker() : undefined_metadata{}, skip(false) {}
+
+        bool should_write_report(Error &error)
+        {
+            error.apply_visitor(*this);
+            return not skip;
+        }
+
 
         virtual void visit(Error &error) {}
         virtual void visit(MetaSectionError &error) {}
@@ -35,10 +58,10 @@ namespace ebi
         virtual void visit(BodySectionError &error) {}
         virtual void visit(NoMetaDefinitionError &error)
         {
-            if (is_bad_defined_meta(error.column, error.field)) {
+            if (is_already_reported(error.column, error.field)) {
                 skip = true;
             } else {
-                add_bad_defined_meta(error.column, error.field);
+                add_already_reported(error.column, error.field);
                 skip = false;
             }
         }
@@ -57,10 +80,8 @@ namespace ebi
         virtual void visit(NormalizationError &error) {}
         virtual void visit(DuplicationError &error) {}
 
-        bool should_skip_report() { return skip; }
-
       private:
-        bool is_bad_defined_meta(std::string const & meta_type, std::string const & id) const
+        bool is_already_reported(std::string const &meta_type, std::string const &id) const
         {
             typedef std::multimap<std::string,std::string>::const_iterator iter;
             std::pair<iter, iter> range = undefined_metadata.equal_range(meta_type);
@@ -72,7 +93,7 @@ namespace ebi
             return false;
         }
 
-        void add_bad_defined_meta(std::string const & meta_type, std::string const & id)
+        void add_already_reported(std::string const &meta_type, std::string const &id)
         {
             undefined_metadata.emplace(meta_type, id);
         }
@@ -82,6 +103,10 @@ namespace ebi
     };
 
 
+
+    /**
+     * Implements a ReportWriter that writes to stdout, but small warnings are written only once.
+     */
     class SummaryReportWriter : public ReportWriter
     {
       public:
@@ -92,14 +117,13 @@ namespace ebi
 
         virtual void write_warning(Error &error)
         {
-            error.apply_visitor(visitor);
-            if (not visitor.should_skip_report()) {
+            if (summary.should_write_report(error)) {
                 std::cout << error.what() << " (warning)" << std::endl;
             }
         }
 
       private:
-        ReportVisitor visitor;
+        SummaryTracker summary;
     };
   }
 }

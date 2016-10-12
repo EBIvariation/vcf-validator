@@ -29,6 +29,7 @@
 #include "vcf/error.hpp"
 #include "vcf/report_writer.hpp"
 #include "vcf/sqlite_report.hpp"
+#include "vcf/summary_report_writer.hpp"
 
 
 namespace ebi
@@ -389,5 +390,33 @@ namespace ebi
       boost::filesystem::remove(db_file);
       CHECK_FALSE(boost::filesystem::exists(db_file));
 
+  }
+
+  TEST_CASE("Unit test: summary report", "[output]")
+  {
+      SECTION("SummaryTracker should skip repeated NoMetaDefinitionError")
+      {
+          ebi::vcf::SummaryTracker reporter;
+          ebi::vcf::NoMetaDefinitionError error{0, "no definition", "column", "field"};
+
+          REQUIRE(reporter.should_write_report(error)); // first time it should write
+
+          REQUIRE_FALSE(reporter.should_write_report(error)); // second time it should skip
+
+          error.column = "other column";    // now the error is a different one, so it should write
+          REQUIRE(reporter.should_write_report(error));
+      }
+
+      SECTION("SummaryTracker should write every time important Errors")
+      {
+          ebi::vcf::SummaryTracker reporter;
+          ebi::vcf::BodySectionError error{0, "regular body error"};
+
+          // first time it should write
+          REQUIRE(reporter.should_write_report(error));
+
+          // second time it should skip
+          REQUIRE(reporter.should_write_report(error));
+      }
   }
 }
