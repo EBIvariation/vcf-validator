@@ -110,20 +110,23 @@ namespace ebi
     class SummaryReportWriter : public ReportWriter
     {
       public:
+        SummaryReportWriter(std::ostream &out) : out(out) {}
+
         virtual void write_error(Error &error)
         {
-            std::cout << error.what() << std::endl;
+            out << error.what() << std::endl;
         }
 
         virtual void write_warning(Error &error)
         {
             if (summary.should_write_report(error)) {
-                std::cout << error.what() << " (warning)" << std::endl;
+                out << error.what() << " (warning)" << std::endl;
             }
         }
 
       private:
         SummaryTracker summary;
+        std::ostream &out;
     };
   }
 }

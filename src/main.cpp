@@ -47,7 +47,7 @@ namespace
             ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
             ("level,l", po::value<std::string>()->default_value("warning"), "Validation level (error, warning, stop)")
             ("version,v", po::value<std::string>(), "VCF fileformat version to validate the file against (v4.1, v4.2, v4.3)")
-            ("report,r", po::value<std::string>()->default_value("stdout"), "Comma separated values for types of reports (database, stdout, complete)")
+            ("report,r", po::value<std::string>()->default_value("stdout"), "Comma separated values for types of reports (database, stdout)")
             ("outdir,o", po::value<std::string>()->default_value(""), "Directory for the output")
             ("ploidy,p", po::value<long>()->default_value(2), "Genome ploidy to expect through most or the whole VCF file (can be overwritten with --special-ploidy)")
             ("special-ploidy,s", po::value<std::string>(), "Ploidy expected in specific chromosomes/contigs, e.g Y=1,MyTriploidContig=3")
@@ -197,9 +197,7 @@ namespace
                 }
                 outputs.emplace_back(new ebi::vcf::OdbReportRW(db_filename));
             } else if (out == "stdout") {
-                outputs.emplace_back(new ebi::vcf::SummaryReportWriter());
-            } else if (out == "complete") {
-                outputs.emplace_back(new ebi::vcf::StdoutReportWriter());
+                outputs.emplace_back(new ebi::vcf::SummaryReportWriter(std::cout));
             } else {
                 throw std::invalid_argument{"Please use only valid report types"};
             }
