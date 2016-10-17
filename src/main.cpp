@@ -32,6 +32,7 @@
 #include "vcf/report_writer.hpp"
 #include "vcf/sqlite_report.hpp"
 #include "vcf/odb_report.hpp"
+#include "vcf/summary_report_writer.hpp"
 
 namespace
 {
@@ -196,7 +197,7 @@ namespace
                 }
                 outputs.emplace_back(new ebi::vcf::OdbReportRW(db_filename));
             } else if (out == "stdout") {
-                outputs.emplace_back(new ebi::vcf::StdoutReportWriter());
+                outputs.emplace_back(new ebi::vcf::SummaryReportWriter(std::cout));
             } else {
                 throw std::invalid_argument{"Please use only valid report types"};
             }

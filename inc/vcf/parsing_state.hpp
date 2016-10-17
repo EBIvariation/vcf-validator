@@ -46,8 +46,7 @@ namespace ebi
         std::vector<std::unique_ptr<Error>> warnings;
 
         std::multimap<std::string, std::string> defined_metadata;
-        std::multimap<std::string, std::string> undefined_metadata;
-        
+
         ParsingState(std::shared_ptr<Source> source);
         virtual ~ParsingState() = default;
 
@@ -67,10 +66,6 @@ namespace ebi
         bool is_well_defined_meta(std::string const & meta_type, std::string const & id) const;
         
         void add_well_defined_meta(std::string const & meta_type, std::string const & id);
-        
-        bool is_bad_defined_meta(std::string const & meta_type, std::string const & id) const;
-        
-        void add_bad_defined_meta(std::string const & meta_type, std::string const & id);
     };
   }
 }

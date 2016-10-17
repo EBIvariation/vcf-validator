@@ -70,7 +70,7 @@
     action meta_section_end {
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError *warn) {
+        } catch (Error *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
     }
@@ -81,7 +81,7 @@
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError *warn) {
+        } catch (Error *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         
@@ -99,7 +99,7 @@
     action fileformat_end {
         try {
           ParsePolicy::handle_fileformat(*this);
-        } catch (FileformatError *error) {
+        } catch (Error *error) {
           ErrorPolicy::handle_error(*this, error);
           fhold; fgoto meta_section_skip;
         }
@@ -188,7 +188,7 @@
     action meta_entry_end {
         try {
           ParsePolicy::handle_meta_line(*this);
-        } catch (MetaSectionError *error) {
+        } catch (Error *error) {
           ErrorPolicy::handle_error(*this, error);
         }
     }
@@ -220,12 +220,10 @@
             try {
                 // Check warnings (non-blocking errors but potential mistakes anyway, only makes sense if the last record parsed was correct)
                 OptionalPolicy::optional_check_body_entry(*this, *record);
-            } catch (MetaSectionError *warn) {
-                ErrorPolicy::handle_warning(*this, warn);
-            } catch (BodySectionError *warn) {
+            } catch (Error *warn) {
                 ErrorPolicy::handle_warning(*this, warn);
             }
-        } catch (BodySectionError *error) {
+        } catch (Error *error) {
             ErrorPolicy::handle_error(*this, error);
         }
     }
@@ -380,7 +378,7 @@
         // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
         try {
           OptionalPolicy::optional_check_meta_section(*this);
-        } catch (MetaSectionError *warn) {
+        } catch (Error *warn) {
           ErrorPolicy::handle_warning(*this, warn);
         }
         

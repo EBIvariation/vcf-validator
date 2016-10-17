@@ -33,6 +33,7 @@ namespace ebi
         meta_section,
         header_section,
         body_section,
+        no_meta_definition,
         fileformat,
         chromosome_body,
         position_body,
@@ -55,6 +56,7 @@ namespace ebi
     struct MetaSectionError;
     struct HeaderSectionError;
     struct BodySectionError;
+    struct NoMetaDefinitionError;
     struct FileformatError;
     struct ChromosomeBodyError;
     struct PositionBodyError;
@@ -74,10 +76,12 @@ namespace ebi
 
     class ErrorVisitor {
       public:
+        virtual ~ErrorVisitor() {};
         virtual void visit(Error& error) = 0;
         virtual void visit(MetaSectionError &error) = 0;
         virtual void visit(HeaderSectionError &error) = 0;
         virtual void visit(BodySectionError &error) = 0;
+        virtual void visit(NoMetaDefinitionError &error) = 0;
         virtual void visit(FileformatError &error) = 0;
         virtual void visit(ChromosomeBodyError &error) = 0;
         virtual void visit(PositionBodyError &error) = 0;
@@ -170,6 +174,24 @@ namespace ebi
         BodySectionError(size_t line) : BodySectionError{line, "Error in body section"} { }
         virtual ErrorCode get_code() const override { return ErrorCode::body_section; }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
+    };
+
+    #pragma db object
+    struct NoMetaDefinitionError : public Error
+    {
+      public:
+        NoMetaDefinitionError(size_t line,
+                              const std::string &message,
+                              const std::string &column,
+                              const std::string &field)
+                : Error{line, message}, column{column}, field{field} {}
+        virtual ErrorCode get_code() const override { return ErrorCode::body_section; }
+        virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
+        std::string column;
+        std::string field;
+      private:
+        friend class odb::access;
+        NoMetaDefinitionError() {}
     };
 
     // inheritance siblings about detailed errors
@@ -281,9 +303,6 @@ namespace ebi
     #pragma db object
     struct SamplesFieldBodyError : public BodySectionError
     {
-      private:
-        friend class odb::access;
-        SamplesFieldBodyError() {}  // necessary for ODB
       public:
         SamplesFieldBodyError(size_t line,
                               const std::string &message,
@@ -292,7 +311,7 @@ namespace ebi
                 : BodySectionError{line, message}, field{field}, field_cardinality{field_cardinality} {
             if (field.empty()) {
                 throw std::invalid_argument{"SamplesFieldBodyError: field should not be an empty string. Use "
-                                               "SamplesBodyError for unknown errors in the samples columns"};
+                                                    "SamplesBodyError for unknown errors in the samples columns"};
             }
         }
         virtual ErrorCode get_code() const override { return ErrorCode::samples_field_body; }
@@ -300,6 +319,9 @@ namespace ebi
 
         std::string field;
         long field_cardinality;    // [0, inf): valid number of values. -1: unknown amount of values
+      private:
+        friend class odb::access;
+        SamplesFieldBodyError() {}  // necessary for ODB
     };
     #pragma db object
     struct NormalizationError : public BodySectionError
