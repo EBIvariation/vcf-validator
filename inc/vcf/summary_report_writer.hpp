@@ -43,7 +43,7 @@ namespace ebi
     class SummaryTracker : public ErrorVisitor
     {
       public:
-        SummaryTracker() : undefined_metadata{}, skip(false) {}
+        SummaryTracker() : already_reported{}, skip{false} {}
 
         bool should_write_report(Error &error)
         {
@@ -84,7 +84,7 @@ namespace ebi
         bool is_already_reported(std::string const &meta_type, std::string const &id) const
         {
             typedef std::multimap<std::string,std::string>::const_iterator iter;
-            std::pair<iter, iter> range = undefined_metadata.equal_range(meta_type);
+            std::pair<iter, iter> range = already_reported.equal_range(meta_type);
             for (auto & current = range.first; current != range.second; ++current) {
                 if (current->second == id) {
                     return true;
@@ -95,10 +95,10 @@ namespace ebi
 
         void add_already_reported(std::string const &meta_type, std::string const &id)
         {
-            undefined_metadata.emplace(meta_type, id);
+            already_reported.emplace(meta_type, id);
         }
 
-        std::multimap<std::string, std::string> undefined_metadata;
+        std::multimap<std::string, std::string> already_reported;
         bool skip;
     };
 

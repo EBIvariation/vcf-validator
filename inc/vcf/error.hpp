@@ -179,9 +179,6 @@ namespace ebi
     #pragma db object
     struct NoMetaDefinitionError : public Error
     {
-      private:
-        friend class odb::access;
-        NoMetaDefinitionError() {}
       public:
         NoMetaDefinitionError(size_t line,
                               const std::string &message,
@@ -192,6 +189,9 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
         std::string column;
         std::string field;
+      private:
+        friend class odb::access;
+        NoMetaDefinitionError() {}
     };
 
     // inheritance siblings about detailed errors
@@ -303,9 +303,6 @@ namespace ebi
     #pragma db object
     struct SamplesFieldBodyError : public BodySectionError
     {
-      private:
-        friend class odb::access;
-        SamplesFieldBodyError() {}  // necessary for ODB
       public:
         SamplesFieldBodyError(size_t line,
                               const std::string &message,
@@ -314,7 +311,7 @@ namespace ebi
                 : BodySectionError{line, message}, field{field}, field_cardinality{field_cardinality} {
             if (field.empty()) {
                 throw std::invalid_argument{"SamplesFieldBodyError: field should not be an empty string. Use "
-                                               "SamplesBodyError for unknown errors in the samples columns"};
+                                                    "SamplesBodyError for unknown errors in the samples columns"};
             }
         }
         virtual ErrorCode get_code() const override { return ErrorCode::samples_field_body; }
@@ -322,6 +319,9 @@ namespace ebi
 
         std::string field;
         long field_cardinality;    // [0, inf): valid number of values. -1: unknown amount of values
+      private:
+        friend class odb::access;
+        SamplesFieldBodyError() {}  // necessary for ODB
     };
     #pragma db object
     struct NormalizationError : public BodySectionError
