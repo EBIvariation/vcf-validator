@@ -9,28 +9,16 @@ It includes all the checks from the vcftools suite, and some more that involve l
 
 Please read the wiki for more details about checks already implemented.
 
-## Build
+## Download
 
-The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create an executable that can be run in any Linux machine.
+We recommend using the [latest release](https://github.com/EBIvariation/vcf-validator/releases) for the most stable experience using vcf-validator. Along with the release notes, you will find the executables `vcf_validator` and `vcf_debugulator`, which will allow you to validate and fix VCF files.
 
-1. Install and configure Docker following [their tutorial](https://docs.docker.com/engine/getstarted/).
-2. Create the Docker image:
-    1. Clone this Git repository: `git clone https://github.com/EBIvariation/vcf-validator.git`
-    2. Move to the folder the code was downloaded to: `cd vcf-validator`
-    3. Build the image: `docker build -t ebivariation/vcf-validator docker/`. Please replace `ebivariation` with your user account if you plan to push this image to [Docker Hub](https://hub.docker.com).
-3. Build the executable running `docker run -v ${PWD}:/tmp ebivariation/vcf-validator`. Again, replace `ebivariation` with your user name if necessary.
-
-The following executables will be created in the `build/bin` subfolder:
-
-* `vcf_validator`: validation tool
-* `vcf_debugulator`: automatic fixing tool
-* `test_validator` and derivatives: testing correct behaviour of the tools listed above
 
 ## Run
 
 ### Validator
 
-vcf-validator only needs an input VCF file to be run. It accepts input in the following ways:
+vcf-validator only needs an input VCF file to run. It accepts input in the following ways:
 
 * File path as argument: `vcf_validator -v v4.1 -i /path/to/file.vcf`
 * Standard input: `vcf_validator -v v4.1 < /path/to/file.vcf`
@@ -70,7 +58,24 @@ vcf_validator -i /path/to/file.vcf -v v4.1 -r database -o /path/to/write/report/
 vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timestamp.db -o /path/to/fixed.vcf 2>debugulator_log.txt
 ```
 
-## Developers build
+## Static build (Docker-based)
+
+The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create an executable that can be run in any Linux machine.
+
+1. Install and configure Docker following [their tutorial](https://docs.docker.com/engine/getstarted/).
+2. Create the Docker image:
+    1. Clone this Git repository: `git clone https://github.com/EBIvariation/vcf-validator.git`
+    2. Move to the folder the code was downloaded to: `cd vcf-validator`
+    3. Build the image: `docker build -t ebivariation/vcf-validator docker/`. Please replace `ebivariation` with your user account if you plan to push this image to [Docker Hub](https://hub.docker.com).
+3. Build the executable running `docker run -v ${PWD}:/tmp ebivariation/vcf-validator`. Again, replace `ebivariation` with your user name if necessary.
+
+The following executables will be created in the `build/bin` subfolder:
+
+* `vcf_validator`: validation tool
+* `vcf_debugulator`: automatic fixing tool
+* `test_validator` and derivatives: testing correct behaviour of the tools listed above
+
+## Dynamic build
 
 **Note:** Please ignore this section if you only want to use the application.
 
@@ -109,13 +114,13 @@ In any case, the following binaries will be created in the `bin` subfolder:
 * `vcf_debugulator`: automatic fixing tool
 * `test_validator` and derivatives: testing correct behaviour of the tools listed above
 
-### Test
+## Tests
 
 Unit tests can be run using the binary `bin/test_validator` or, if the generator supports it, a command like `make test`. The first option may provide a more detailed output in case of test failure.
 
 **Note**: Tests that require input files will only work when executed with `make test` or running the binary from the project root folder (not the `bin` subfolder).
 
-### Generate code from descriptors
+## Generate code from descriptors
 
 Code generated from descriptors shall be always up-to-date in the GitHub repository. If changes to the source descriptors were necessary, please generate the Ragel machines C code from `.ragel` files using:
 
