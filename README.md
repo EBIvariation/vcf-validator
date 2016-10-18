@@ -18,7 +18,7 @@ We recommend using the [latest release](https://github.com/EBIvariation/vcf-vali
 
 ### Validator
 
-vcf-validator only needs an input VCF file to run. It accepts input in the following ways:
+vcf-validator only needs a non-compressed input VCF file to run, although pipes can be used for compressed files (see below). It accepts input in the following ways:
 
 * File path as argument: `vcf_validator -v v4.1 -i /path/to/file.vcf`
 * Standard input: `vcf_validator -v v4.1 < /path/to/file.vcf`
