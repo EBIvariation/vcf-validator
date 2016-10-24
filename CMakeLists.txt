@@ -57,7 +57,6 @@ set (MOD_VCF_SOURCES
         inc/vcf/record_cache.hpp
         inc/vcf/report_reader.hpp
         inc/vcf/report_writer.hpp
-        inc/vcf/sqlite_report.hpp
         inc/vcf/summary_report_writer.hpp
         inc/vcf/validator_detail_v41.hpp
         inc/vcf/validator_detail_v42.hpp
@@ -66,7 +65,6 @@ set (MOD_VCF_SOURCES
         
         src/vcf/abort_error_policy.cpp
         src/vcf/debugulator.cpp
-        src/vcf/error.cpp
         src/vcf/meta_entry.cpp
         src/vcf/normalizer.cpp
         src/vcf/odb_report.cpp
@@ -74,7 +72,6 @@ set (MOD_VCF_SOURCES
         src/vcf/record.cpp
         src/vcf/report_error_policy.cpp
         src/vcf/source.cpp
-        src/vcf/sqlite_report.cpp
         src/vcf/store_parse_policy.cpp
         src/vcf/validate_optional_policy.cpp
         src/vcf/validator.cpp
@@ -139,10 +136,10 @@ else (BUILD_STATIC)
         mod_vcf
         mod_odb
         ${Boost_LIBRARIES}
-        sqlite3
-        ${CMAKE_THREAD_LIBS_INIT}
         odb-sqlite
         odb
+        sqlite3
+        ${CMAKE_THREAD_LIBS_INIT}
        )
 endif (BUILD_STATIC)
 

@@ -72,8 +72,6 @@ namespace ebi
     struct NormalizationError;
     struct DuplicationError;
 
-    std::shared_ptr<Error> get_error_instance(ErrorCode code, size_t line, const std::string &message);
-
     class ErrorVisitor {
       public:
         virtual ~ErrorVisitor() {};
