@@ -126,9 +126,9 @@ namespace ebi
           });
 
           CHECK(errors.size());
-          CHECK(errors[0]->get_code() == ebi::vcf::ErrorCode::error);
-          CHECK(errors[1]->get_code() == ebi::vcf::ErrorCode::meta_section);
-          CHECK(errors[2]->get_code() == ebi::vcf::ErrorCode::samples_body);
+          CHECK(typeid(*errors[0]).name() == typeid(ebi::vcf::Error).name());
+          CHECK(typeid(*errors[1]).name() == typeid(ebi::vcf::MetaSectionError).name());
+          CHECK(typeid(*errors[2]).name() == typeid(ebi::vcf::SamplesBodyError).name());
       }
 
 
