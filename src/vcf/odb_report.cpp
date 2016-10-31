@@ -73,6 +73,11 @@ namespace ebi
         if (transaction.has_current()) {
             transaction.commit();
         }
+
+        {
+            odb::core::connection_ptr c{db->connection()};
+            c->execute("PRAGMA shrink_memory");
+        }
     }
 
     // ReportWriter implementation
