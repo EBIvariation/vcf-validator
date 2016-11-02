@@ -205,9 +205,8 @@ namespace ebi
                         size_t ploidy = source->ploidy.get_ploidy(chromosome);
                         check_field_cardinality(field.second, values, key_values["Number"], ploidy);
                         check_field_type(field.second, values, key_values["Type"]);
-                    } catch (Error *ex) {
+                    } catch (std::shared_ptr<Error> ex) {
                         std::string message = "Info " + key_values["ID"] + "=" + ex->message;
-                        delete ex;
                         throw new InfoBodyError{line, message, key_values["ID"]};
                     }
                     
@@ -302,13 +301,12 @@ namespace ebi
 
                     check_field_cardinality(subfield, values, key_values["Number"], ploidy);
                     check_field_type(subfield, values, key_values["Type"]);
-                } catch (Error *ex) {
+                } catch (std::shared_ptr<Error> ex) {
                     long cardinality;
                     bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), ploidy, cardinality);
                     long number = valid ? cardinality : -1;
                     std::string message = "Sample #" + std::to_string(i + 1) + ", "
                             + key_values["ID"] + "=" + ex->message;
-                    delete ex;
                     throw new SamplesFieldBodyError{line, message, key_values["ID"], number};
                 }
             }
@@ -377,7 +375,7 @@ namespace ebi
     {
         long expected;
         if(not is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected)) {
-            throw new Error{line, field + " meta specification Number=" + number + " is not one of [A, R, G, ., <non-negative number>]"};
+            raise(std::make_shared<Error>(line, field + " meta specification Number=" + number + " is not one of [A, R, G, ., <non-negative number>]"));
         }
 
         bool number_matches = true;
@@ -393,8 +391,8 @@ namespace ebi
         }
 
         if (!number_matches) {
-            throw new Error{line, field + " does not match the meta specification Number=" + number +
-                    ", expected " + std::to_string(expected) + " values"};
+            raise(std::make_shared<Error>(line, field + " does not match the meta specification Number=" + number +
+                    ", expected " + std::to_string(expected) + " values"));
         }
     }
 
@@ -412,7 +410,7 @@ namespace ebi
                     std::stoi(value);
                     // ...and also check it's not a float
                     if (std::fmod(std::stof(value), 1) != 0) {
-                        throw new Error{line, "Float provided instead of Integer"};
+                        raise(std::make_shared<Error>(line, "Float provided instead of Integer"));
                     }
                 } else if (type == "Float") {
                     // ...try to cast to float
@@ -424,24 +422,24 @@ namespace ebi
                     }
                 } else if (type == "Flag") {
                     if (value.size() > 1) {
-                        throw new Error{line, "There can be only 0 or 1 value"};
+                        raise(std::make_shared<Error>(line, "There can be only 0 or 1 value"));
                     } else if (value.size() == 1) {
                         int numeric_value = std::stoi(value);
                         if (numeric_value != 0 && numeric_value != 1) {
-                            throw new Error{line, "A flag must be 0 or 1"};
+                            raise(std::make_shared<Error>(line, "A flag must be 0 or 1"));
                         }
                     }
                     // If no flag is provided then there is nothing to check
                 } else if (type == "Character") {
                     // ...check the length is 1
                     if (value.size() > 1) {
-                        throw new Error{line, "There can be only one character"};
+                        raise(std::make_shared<Error>(line, "There can be only one character"));
                     }
                 } else if (type == "String") {
                     // ...do nothing, it is guaranteed it will be a string
                 } 
             } catch (...) {
-                throw new Error{line, field + " does not match the meta specification Type=" + type};
+                raise(std::make_shared<Error>(line, field + " does not match the meta specification Type=" + type));
             }
         }
     }

@@ -50,6 +50,25 @@ namespace ebi
     struct NormalizationError;
     struct DuplicationError;
 
+    /**
+     *
+     * This function allows throwing Error with some polymorphism, without using raw pointers.
+     * This is intended to be called like ``.
+     *
+     * Example usage (the idiom of several `catch`es by type won't work!):
+     * ```
+     *  try {
+     *      raise(std::make_shared<WhateverErrorChild>(params, more_params))
+     *  } catch(shared_ptr<ErrorChildA> &a) {    // WRONG never will get here
+     *  } catch(shared_ptr<ErrorChildB> &b) {    // WRONG never will get here
+     *  } catch(shared_ptr<Error> &e) {
+     *      e->apply_visitor();     // correct, will get polymorphic behaviour
+     *  }
+     * ```
+     * @param error can be a shared pointer to a child class, but will be assigned to a shared pointer to Error.
+     */
+    inline void raise(std::shared_ptr<Error> error) { throw error; }
+
     class ErrorVisitor {
       public:
         virtual ~ErrorVisitor() {};
