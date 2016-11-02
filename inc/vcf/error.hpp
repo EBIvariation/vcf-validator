@@ -28,28 +28,6 @@ namespace ebi
 {
   namespace vcf
   {
-    enum class ErrorCode {
-        error,
-        meta_section,
-        header_section,
-        body_section,
-        no_meta_definition,
-        fileformat,
-        chromosome_body,
-        position_body,
-        id_body,
-        reference_allele_body,
-        alternate_alleles_body,
-        quality_body,
-        filter_body,
-        info_body,
-        format_body,
-        samples_body,
-        samples_field_body,
-        normalization,
-        duplication,
-    };
-
     enum class Severity { WARNING, ERROR };
 
     struct Error;
@@ -71,8 +49,6 @@ namespace ebi
     struct SamplesFieldBodyError;
     struct NormalizationError;
     struct DuplicationError;
-
-    std::shared_ptr<Error> get_error_instance(ErrorCode code, size_t line, const std::string &message);
 
     class ErrorVisitor {
       public:
@@ -121,8 +97,6 @@ namespace ebi
                   line{line},
                   message{message} {}
 
-
-        virtual ErrorCode get_code() const { return ErrorCode::error; }
         virtual void apply_visitor(ErrorVisitor &visitor) { visitor.visit(*this); }
         unsigned long get_id() const { return id_; }
 
@@ -152,7 +126,7 @@ namespace ebi
         using Error::Error;
         MetaSectionError() : MetaSectionError{0} { }
         MetaSectionError(size_t line) : MetaSectionError{line, "Error in meta-data section"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::meta_section; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
 
@@ -162,7 +136,7 @@ namespace ebi
         using Error::Error;
         HeaderSectionError() : HeaderSectionError{0} { }
         HeaderSectionError(size_t line) : HeaderSectionError{line, "Error in header section"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::header_section; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
 
@@ -172,7 +146,7 @@ namespace ebi
         using Error::Error;
         BodySectionError() : BodySectionError{0} { }
         BodySectionError(size_t line) : BodySectionError{line, "Error in body section"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::body_section; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
 
@@ -185,7 +159,7 @@ namespace ebi
                               const std::string &column,
                               const std::string &field)
                 : Error{line, message}, column{column}, field{field} {}
-        virtual ErrorCode get_code() const override { return ErrorCode::body_section; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
         std::string column;
         std::string field;
@@ -201,7 +175,7 @@ namespace ebi
         using MetaSectionError::MetaSectionError;
         FileformatError() : FileformatError{0} {}
         FileformatError(size_t line) : FileformatError{line, "Error in file format section"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::fileformat; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
 
@@ -212,7 +186,7 @@ namespace ebi
         ChromosomeBodyError() : ChromosomeBodyError{0} {}
         ChromosomeBodyError(size_t line) : ChromosomeBodyError{line,
             "Chromosome is not a string without colons or whitespaces, optionally wrapped with angle brackets (<>)"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::chromosome_body; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
 
@@ -222,7 +196,7 @@ namespace ebi
         using BodySectionError::BodySectionError;
         PositionBodyError() : PositionBodyError{0} {}
         PositionBodyError(size_t line) : PositionBodyError{line, "Position is not a positive number"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::position_body; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
@@ -231,7 +205,7 @@ namespace ebi
         using BodySectionError::BodySectionError;
         IdBodyError() : IdBodyError{0} {}
         IdBodyError(size_t line) : IdBodyError{line, "ID is not a single dot or a list of strings without semicolons or whitespaces"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::id_body; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
@@ -240,7 +214,7 @@ namespace ebi
         using BodySectionError::BodySectionError;
         ReferenceAlleleBodyError() : ReferenceAlleleBodyError{0} {}
         ReferenceAlleleBodyError(size_t line) : ReferenceAlleleBodyError{line, "Reference is not a string of bases"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::reference_allele_body; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
@@ -249,7 +223,7 @@ namespace ebi
         using BodySectionError::BodySectionError;
         AlternateAllelesBodyError() : AlternateAllelesBodyError{0} {}
         AlternateAllelesBodyError(size_t line) : AlternateAllelesBodyError{line, "Alternate is not a single dot or a comma-separated list of bases"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::alternate_alleles_body; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
@@ -258,7 +232,7 @@ namespace ebi
         using BodySectionError::BodySectionError;
         QualityBodyError() : QualityBodyError{0} {}
         QualityBodyError(size_t line) : QualityBodyError{line, "Quality is not a single dot or a positive number"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::quality_body; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
@@ -267,7 +241,7 @@ namespace ebi
         using BodySectionError::BodySectionError;
         FilterBodyError() : FilterBodyError{0} {}
         FilterBodyError(size_t line) : FilterBodyError{line, "Filter is not a single dot or a semicolon-separated list of strings"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::filter_body; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
@@ -277,7 +251,7 @@ namespace ebi
                       const std::string &message = "Error in info column, in body section",
                       const std::string &field = "")
                 : BodySectionError{line, message}, field{field} {}
-        virtual ErrorCode get_code() const override { return ErrorCode::info_body; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
 
         std::string field;
@@ -288,7 +262,7 @@ namespace ebi
         using BodySectionError::BodySectionError;
         FormatBodyError() : FormatBodyError{0} {}
         FormatBodyError(size_t line) : FormatBodyError{line, "Format is not a colon-separated list of alphanumeric strings"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::format_body; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
@@ -297,7 +271,7 @@ namespace ebi
         using BodySectionError::BodySectionError;
         SamplesBodyError() : SamplesBodyError{0} {}
         SamplesBodyError(size_t line) : SamplesBodyError{line, "Error in samples columns, in body section"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::samples_body; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
@@ -314,7 +288,7 @@ namespace ebi
                                                     "SamplesBodyError for unknown errors in the samples columns"};
             }
         }
-        virtual ErrorCode get_code() const override { return ErrorCode::samples_field_body; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
 
         std::string field;
@@ -329,7 +303,7 @@ namespace ebi
         using BodySectionError::BodySectionError;
         NormalizationError() : NormalizationError{0} {}
         NormalizationError(size_t line) : NormalizationError{line, "Allele normalization could not be performed"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::normalization; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
     #pragma db object
@@ -338,7 +312,7 @@ namespace ebi
         using BodySectionError::BodySectionError;
         DuplicationError() : DuplicationError{0} {}
         DuplicationError(size_t line) : DuplicationError{line, "A duplicated variant was found"} { }
-        virtual ErrorCode get_code() const override { return ErrorCode::duplication; }
+
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
   }

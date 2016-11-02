@@ -30,7 +30,6 @@
 #include "vcf/validator.hpp"
 #include "vcf/ploidy.hpp"
 #include "vcf/report_writer.hpp"
-#include "vcf/sqlite_report.hpp"
 #include "vcf/odb_report.hpp"
 #include "vcf/summary_report_writer.hpp"
 
