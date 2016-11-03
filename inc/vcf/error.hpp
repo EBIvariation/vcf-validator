@@ -53,7 +53,6 @@ namespace ebi
     /**
      *
      * This function allows throwing Error with some polymorphism, without using raw pointers.
-     * This is intended to be called like ``.
      *
      * Example usage (the idiom of several `catch`es by type won't work!):
      * ```
