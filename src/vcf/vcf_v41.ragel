@@ -743,12 +743,14 @@
     info_value      = (print - (space | ";"))+ ;
     info_value_list = info_value ("," info_value)* ;
     info_aa         = (print - (space | "," | ";" | "="))+ ;
+    cigar_value     = ([0-9]+[MIDNSHPX])+ ;
+    info_cigar      = cigar_value ("," cigar_value)* ;
     info_entry_snv  = "AA=" info_aa				$err(info_AA_error) |
                       "AC=" (nat_number ("," nat_number)*) 	$err(info_AC_error) |
                       "AF=" (any_number ("," any_number)*) 	$err(info_AF_error) |
                       "AN=" nat_number				$err(info_AN_error) |
                       "BQ=" any_number				$err(info_BQ_error) |
-                      "CIGAR=" ([0-9]+[MIDNSHPX])+ 		$err(info_CIGAR_error) |
+                      "CIGAR=" info_cigar	 		$err(info_CIGAR_error) |
                       "DB" ("=" ("1" | "0"))? 			$err(info_DB_error) |
                       "DP=" nat_number				$err(info_DP_error) |
                       "END=" nat_number 			$err(info_END_error) |
