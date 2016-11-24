@@ -892,7 +892,7 @@
     fileformat_section = (fileformat NL) $err(fileformat_section_error);
     meta_section    = (meta_entry NL)* $err(meta_section_error);
     header_section  = (header NL) $err(header_section_error);
-    body_section    = (record NL)* $err(body_section_error);
+    body_section    = (record (NL record)*)? $err(body_section_error);
 
 
     # Machine start (fileformat, then optional meta, header, then optional records)

@@ -144,7 +144,31 @@ namespace ebi
             }
         }
 
+        if (not line.empty()) {
+            validator.parse(line);
+            for (auto &error : validator.errors()) {
+                for (auto &output : outputs) {
+                    output->write_error(*error);
+                }
+            }
+            for (auto &error : validator.warnings()) {
+                for (auto &output : outputs) {
+                    output->write_warning(*error);
+                }
+            }
+        }
+
         validator.end();
+        for (auto &error : validator.errors()) {
+            for (auto &output : outputs) {
+                output->write_error(*error);
+            }
+        }
+        for (auto &error : validator.warnings()) {
+            for (auto &output : outputs) {
+                output->write_warning(*error);
+            }
+        }
 
         return validator.is_valid();
     }
