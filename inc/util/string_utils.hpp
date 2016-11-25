@@ -25,23 +25,33 @@ namespace ebi
 {
   namespace util
   {
+    /**
+     * Splits `s` using `delims` as separator and fills the container `ret` with the parts.
+     * An empty string results in an empty container `ret`.
+     * @param s input string to split
+     * @param delims any character here acts as a separator
+     * @param ret return by reference the container filled with the string split.
+     */
     template<typename C>
     void string_split(std::string const & s, char const * delims, C & ret)
     {
         C output;
-        char const* p = s.c_str();
-        char const* q = strpbrk(p+1, delims);
 
-        // Insert first to last-1 elements
-        for( ; q != NULL; q = strpbrk(p, delims) )
-        {
-            output.push_back(typename C::value_type(p, q));
-            p = q + 1;
-        }
+        if (s.size() > 0) {
+            char const* p = s.c_str();
+            char const* q = strpbrk(p+1, delims);
 
-        // Insert last element
-        if (p < &(s.back()) + 1) {
-            output.push_back(typename C::value_type(p));
+            // Insert first to last-1 elements
+            for( ; q != NULL; q = strpbrk(p, delims) )
+            {
+                output.push_back(typename C::value_type(p, q));
+                p = q + 1;
+            }
+
+            // Insert last element
+            if (p < &(s.back()) + 1) {
+                output.push_back(typename C::value_type(p));
+            }
         }
 
         output.swap(ret);
