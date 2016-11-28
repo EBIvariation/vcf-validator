@@ -634,6 +634,11 @@
         fhold; fgoto body_section_skip;
     }
 
+    action body_section_no_nl_error {
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        fhold; fgoto body_section_skip;
+    }
+
     #################################################
     #               Machine definition              #
     #################################################
@@ -871,7 +876,7 @@
     sample_value    = (alnum | (punct - ":"))+ | "." ;
     sample_values   = sample_value (":" sample_value)* ;
     record_sample   = (
-                        sample_gt $err(sample_gt_error) (":" sample_values)? |
+                        sample_gt $eof(body_section_no_nl_error) $err(sample_gt_error) (":" sample_values)? |
                         sample_values
                       ) >token_begin $token_middle %token_end ;
     
@@ -884,9 +889,9 @@
                         CS record_alt 		%record_field_end $err(alt_error) 
                         CS record_qual		%record_field_end $err(qual_error) 
                         CS record_filter 	%record_field_end $err(filter_error) 
-                        CS record_info		%record_field_end $err(info_error) 
+                        CS record_info		%record_field_end $eof(body_section_no_nl_error) $err(info_error)
                         (CS record_format	%record_field_end $err(format_error)
-                        (CS record_sample	%record_field_end $err(sample_error))+ )?
+                        (CS record_sample	%record_field_end $eof(body_section_no_nl_error) $err(sample_error))+ )?
                       ) %record_end;
 
     fileformat_section = (fileformat NL) $err(fileformat_section_error);

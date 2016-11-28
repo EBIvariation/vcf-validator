@@ -44,7 +44,7 @@ namespace ebi
               while (current_line < line_index) {
 
                   // advance input
-                  if (!ebi::util::readline(input, line)) {
+                  if (ebi::util::readline(input, line).empty()) {
                       // file finished, return ?
                       return;
                   }
@@ -58,7 +58,7 @@ namespace ebi
           });
 
           // advance input from the last error to the end of input
-          while (ebi::util::readline(input, line)) {
+          while (ebi::util::readline(input, line).size() != 0) {
               for (auto c : line) {
                   output << c;
               }

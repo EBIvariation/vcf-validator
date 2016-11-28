@@ -21,7 +21,7 @@
 #include "vcf/validator.hpp"
 
 
-#line 909 "src/vcf/vcf_v43.ragel"
+#line 914 "src/vcf/vcf_v43.ragel"
 
 
 namespace
@@ -39,7 +39,7 @@ static const int vcf_v43_en_meta_section_skip = 722;
 static const int vcf_v43_en_body_section_skip = 723;
 
 
-#line 915 "src/vcf/vcf_v43.ragel"
+#line 920 "src/vcf/vcf_v43.ragel"
 
 }
 
@@ -58,7 +58,7 @@ namespace ebi
 	cs = vcf_v43_start;
 	}
 
-#line 929 "src/vcf/vcf_v43.ragel"
+#line 934 "src/vcf/vcf_v43.ragel"
 
     }
 
@@ -17819,7 +17819,7 @@ tr1006:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 907 "src/vcf/vcf_v43.ragel"
+#line 912 "src/vcf/vcf_v43.ragel"
 	{ {goto st28;} }
 	goto st803;
 st803:
@@ -17861,7 +17861,7 @@ tr1009:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 908 "src/vcf/vcf_v43.ragel"
+#line 913 "src/vcf/vcf_v43.ragel"
 	{ {goto st728;} }
 	goto st804;
 st804:
@@ -19404,126 +19404,6 @@ case 804:
         p--; {goto st723;}
     }
 	break;
-	case 601: 
-#line 623 "src/vcf/vcf_v43.ragel"
-	{
-        std::ostringstream message_stream;
-        message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
-        ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 726: 
-	case 727: 
-	case 729: 
-	case 730: 
-	case 731: 
-	case 732: 
-	case 733: 
-	case 734: 
-	case 735: 
-	case 736: 
-	case 737: 
-	case 738: 
-	case 739: 
-	case 740: 
-	case 741: 
-	case 742: 
-	case 743: 
-	case 744: 
-	case 745: 
-	case 746: 
-	case 747: 
-	case 748: 
-	case 749: 
-	case 750: 
-	case 751: 
-	case 752: 
-	case 753: 
-	case 754: 
-	case 755: 
-	case 756: 
-	case 757: 
-	case 758: 
-	case 759: 
-	case 760: 
-	case 761: 
-	case 762: 
-	case 763: 
-	case 764: 
-	case 765: 
-	case 766: 
-	case 767: 
-	case 768: 
-	case 769: 
-	case 770: 
-	case 771: 
-	case 772: 
-	case 773: 
-	case 774: 
-	case 775: 
-	case 776: 
-	case 777: 
-	case 778: 
-	case 779: 
-	case 780: 
-	case 781: 
-	case 782: 
-	case 783: 
-	case 784: 
-	case 785: 
-	case 786: 
-	case 787: 
-	case 788: 
-	case 789: 
-	case 790: 
-	case 791: 
-	case 792: 
-	case 793: 
-	case 794: 
-	case 795: 
-	case 796: 
-	case 797: 
-	case 798: 
-	case 799: 
-	case 800: 
-	case 801: 
-	case 802: 
-#line 39 "src/vcf/vcf_v43.ragel"
-	{
-        ParsePolicy::handle_token_end(*this);
-    }
-#line 206 "src/vcf/vcf_v43.ragel"
-	{
-        ParsePolicy::handle_column_end(*this, n_columns);
-    }
-#line 210 "src/vcf/vcf_v43.ragel"
-	{
-        try {
-            // Handle all columns and build record
-            ParsePolicy::handle_body_line(*this);
-
-            auto duplicated_errors = previous_records.check_duplicates(*record);
-            for(auto &error_ptr : duplicated_errors) {
-                ErrorPolicy::handle_error(*this, error_ptr.release());
-            }
-
-            try {
-                // Check warnings (non-blocking errors but potential mistakes anyway, only makes sense if the last record parsed was correct)
-                OptionalPolicy::optional_check_body_entry(*this, *record);
-            } catch (Error *warn) {
-                ErrorPolicy::handle_warning(*this, warn);
-            }
-        } catch (Error *error) {
-            ErrorPolicy::handle_error(*this, error);
-        }
-    }
-	break;
 	case 23: 
 	case 28: 
 #line 65 "src/vcf/vcf_v43.ragel"
@@ -20149,515 +20029,10 @@ case 804:
         p--; {goto st722;}
     }
 	break;
-	case 593: 
-	case 602: 
-	case 605: 
-	case 607: 
-	case 609: 
-	case 611: 
-	case 613: 
-	case 615: 
-	case 625: 
-	case 627: 
-	case 637: 
-	case 641: 
-	case 643: 
-	case 647: 
-	case 648: 
-	case 659: 
-	case 661: 
-#line 438 "src/vcf/vcf_v43.ragel"
+	case 601: 
+#line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 603: 
-#line 443 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 606: 
-#line 448 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info AA value is not a single dot or a string of bases",
-                "AA"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 608: 
-#line 456 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info AC value is not a comma-separated list of numbers",
-                "AC"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 610: 
-#line 464 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info AD value is not a comma-separated list of numbers",
-                "AD"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 612: 
-#line 472 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info ADF value is not a comma-separated list of numbers",
-                "ADF"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 614: 
-#line 480 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info ADR value is not a comma-separated list of numbers",
-                "ADR"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 616: 
-	case 617: 
-	case 618: 
-	case 619: 
-	case 620: 
-	case 621: 
-	case 622: 
-	case 623: 
-	case 624: 
-#line 488 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info AF value is not a comma-separated list of numbers",
-                "AF"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 626: 
-#line 496 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info AN value is not an integer number",
-                "AN"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 628: 
-	case 629: 
-	case 630: 
-	case 631: 
-	case 632: 
-	case 633: 
-	case 634: 
-	case 635: 
-	case 636: 
-#line 504 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info BQ value is not a number",
-                "BQ"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 638: 
-	case 639: 
-#line 512 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info CIGAR value is not an alphanumeric string compliant with the SAM specification",
-                "CIGAR"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 640: 
-#line 520 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info DB is not a flag (with 1/0/no value)",
-                "DB"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 642: 
-#line 528 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info DP value is not an integer number",
-                "DP"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 644: 
-#line 536 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info END value is not an integer number",
-                "END"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 645: 
-#line 544 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info H2 is not a flag (with 1/0/no value)",
-                "H2"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 646: 
-#line 552 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info H3 is not a flag (with 1/0/no value)",
-                "H3"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 650: 
-	case 651: 
-	case 652: 
-	case 653: 
-	case 654: 
-	case 655: 
-	case 656: 
-	case 657: 
-	case 658: 
-#line 560 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info MQ value is not a number",
-                "MQ"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 649: 
-#line 568 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info MQ0 value is not an integer number",
-                "MQ0"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 660: 
-#line 576 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info NS value is not an integer number",
-                "NS"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 662: 
-	case 663: 
-	case 664: 
-	case 665: 
-	case 666: 
-	case 667: 
-	case 668: 
-	case 669: 
-	case 670: 
-#line 584 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info SB value is not a number",
-                "SB"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 671: 
-#line 592 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info SOMATIC is not a flag (with 1/0/no value)",
-                "SOMATIC"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 672: 
-#line 600 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info VALIDATED is not a flag (with 1/0/no value)",
-                "VALIDATED"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 604: 
-#line 608 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{
-                n_lines,
-                "Info 1000G is not a flag (with 1/0/no value)",
-                "1000G"});
-        p--; {goto st723;}
-    }
-#line 433 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st723;}
-    }
-#line 91 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st723;}
-    }
-	break;
-	case 596: 
-#line 630 "src/vcf/vcf_v43.ragel"
-	{
-        std::ostringstream message_stream;
-        message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
-        ErrorPolicy::handle_error(*this, new SamplesFieldBodyError{n_lines, message_stream.str(), "GT"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
         p--; {goto st723;}
     }
 #line 623 "src/vcf/vcf_v43.ragel"
@@ -20671,6 +20046,114 @@ case 804:
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
         p--; {goto st723;}
+    }
+	break;
+	case 726: 
+	case 727: 
+	case 732: 
+	case 733: 
+	case 734: 
+	case 735: 
+	case 736: 
+	case 737: 
+	case 738: 
+	case 739: 
+	case 740: 
+	case 741: 
+	case 742: 
+	case 743: 
+	case 744: 
+	case 745: 
+	case 746: 
+	case 747: 
+	case 748: 
+	case 749: 
+	case 750: 
+	case 751: 
+	case 752: 
+	case 753: 
+	case 754: 
+	case 755: 
+	case 756: 
+	case 757: 
+	case 758: 
+	case 759: 
+	case 760: 
+	case 761: 
+	case 762: 
+	case 763: 
+	case 764: 
+	case 765: 
+	case 766: 
+	case 767: 
+	case 768: 
+	case 769: 
+	case 770: 
+	case 771: 
+	case 772: 
+	case 773: 
+	case 774: 
+	case 775: 
+	case 776: 
+	case 777: 
+	case 778: 
+	case 779: 
+	case 780: 
+	case 781: 
+	case 782: 
+	case 783: 
+	case 784: 
+	case 785: 
+	case 786: 
+	case 787: 
+	case 788: 
+	case 789: 
+	case 790: 
+	case 791: 
+	case 792: 
+	case 793: 
+	case 794: 
+	case 795: 
+	case 796: 
+	case 797: 
+	case 798: 
+	case 799: 
+	case 800: 
+	case 801: 
+	case 802: 
+#line 39 "src/vcf/vcf_v43.ragel"
+	{
+        ParsePolicy::handle_token_end(*this);
+    }
+#line 206 "src/vcf/vcf_v43.ragel"
+	{
+        ParsePolicy::handle_column_end(*this, n_columns);
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 210 "src/vcf/vcf_v43.ragel"
+	{
+        try {
+            // Handle all columns and build record
+            ParsePolicy::handle_body_line(*this);
+
+            auto duplicated_errors = previous_records.check_duplicates(*record);
+            for(auto &error_ptr : duplicated_errors) {
+                ErrorPolicy::handle_error(*this, error_ptr.release());
+            }
+
+            try {
+                // Check warnings (non-blocking errors but potential mistakes anyway, only makes sense if the last record parsed was correct)
+                OptionalPolicy::optional_check_body_entry(*this, *record);
+            } catch (Error *warn) {
+                ErrorPolicy::handle_warning(*this, warn);
+            }
+        } catch (Error *error) {
+            ErrorPolicy::handle_error(*this, error);
+        }
     }
 	break;
 	case 22: 
@@ -20904,6 +20387,688 @@ case 804:
         p--; {goto st722;}
     }
 	break;
+	case 593: 
+	case 602: 
+	case 605: 
+	case 607: 
+	case 609: 
+	case 611: 
+	case 613: 
+	case 615: 
+	case 625: 
+	case 627: 
+	case 637: 
+	case 641: 
+	case 643: 
+	case 647: 
+	case 648: 
+	case 659: 
+	case 661: 
+#line 438 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 603: 
+#line 443 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 606: 
+#line 448 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AA value is not a single dot or a string of bases",
+                "AA"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 608: 
+#line 456 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AC value is not a comma-separated list of numbers",
+                "AC"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 610: 
+#line 464 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AD value is not a comma-separated list of numbers",
+                "AD"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 612: 
+#line 472 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info ADF value is not a comma-separated list of numbers",
+                "ADF"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 614: 
+#line 480 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info ADR value is not a comma-separated list of numbers",
+                "ADR"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 616: 
+	case 617: 
+	case 618: 
+	case 619: 
+	case 620: 
+	case 621: 
+	case 622: 
+	case 623: 
+	case 624: 
+#line 488 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AF value is not a comma-separated list of numbers",
+                "AF"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 626: 
+#line 496 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AN value is not an integer number",
+                "AN"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 628: 
+	case 629: 
+	case 630: 
+	case 631: 
+	case 632: 
+	case 633: 
+	case 634: 
+	case 635: 
+	case 636: 
+#line 504 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info BQ value is not a number",
+                "BQ"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 638: 
+	case 639: 
+#line 512 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info CIGAR value is not an alphanumeric string compliant with the SAM specification",
+                "CIGAR"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 640: 
+#line 520 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info DB is not a flag (with 1/0/no value)",
+                "DB"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 642: 
+#line 528 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info DP value is not an integer number",
+                "DP"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 644: 
+#line 536 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info END value is not an integer number",
+                "END"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 645: 
+#line 544 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info H2 is not a flag (with 1/0/no value)",
+                "H2"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 646: 
+#line 552 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info H3 is not a flag (with 1/0/no value)",
+                "H3"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 650: 
+	case 651: 
+	case 652: 
+	case 653: 
+	case 654: 
+	case 655: 
+	case 656: 
+	case 657: 
+	case 658: 
+#line 560 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info MQ value is not a number",
+                "MQ"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 649: 
+#line 568 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info MQ0 value is not an integer number",
+                "MQ0"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 660: 
+#line 576 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info NS value is not an integer number",
+                "NS"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 662: 
+	case 663: 
+	case 664: 
+	case 665: 
+	case 666: 
+	case 667: 
+	case 668: 
+	case 669: 
+	case 670: 
+#line 584 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info SB value is not a number",
+                "SB"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 671: 
+#line 592 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info SOMATIC is not a flag (with 1/0/no value)",
+                "SOMATIC"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 672: 
+#line 600 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info VALIDATED is not a flag (with 1/0/no value)",
+                "VALIDATED"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 604: 
+#line 608 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info 1000G is not a flag (with 1/0/no value)",
+                "1000G"});
+        p--; {goto st723;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 433 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 729: 
+	case 730: 
+	case 731: 
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 39 "src/vcf/vcf_v43.ragel"
+	{
+        ParsePolicy::handle_token_end(*this);
+    }
+#line 206 "src/vcf/vcf_v43.ragel"
+	{
+        ParsePolicy::handle_column_end(*this, n_columns);
+    }
+#line 210 "src/vcf/vcf_v43.ragel"
+	{
+        try {
+            // Handle all columns and build record
+            ParsePolicy::handle_body_line(*this);
+
+            auto duplicated_errors = previous_records.check_duplicates(*record);
+            for(auto &error_ptr : duplicated_errors) {
+                ErrorPolicy::handle_error(*this, error_ptr.release());
+            }
+
+            try {
+                // Check warnings (non-blocking errors but potential mistakes anyway, only makes sense if the last record parsed was correct)
+                OptionalPolicy::optional_check_body_entry(*this, *record);
+            } catch (Error *warn) {
+                ErrorPolicy::handle_warning(*this, warn);
+            }
+        } catch (Error *error) {
+            ErrorPolicy::handle_error(*this, error);
+        }
+    }
+	break;
+	case 596: 
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        p--; {goto st723;}
+    }
+#line 630 "src/vcf/vcf_v43.ragel"
+	{
+        std::ostringstream message_stream;
+        message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
+        ErrorPolicy::handle_error(*this, new SamplesFieldBodyError{n_lines, message_stream.str(), "GT"});
+        p--; {goto st723;}
+    }
+#line 623 "src/vcf/vcf_v43.ragel"
+	{
+        std::ostringstream message_stream;
+        message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
+        ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
+        p--; {goto st723;}
+    }
+#line 91 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
 	case 24: 
 #line 242 "src/vcf/vcf_v43.ragel"
 	{
@@ -20961,14 +21126,14 @@ case 804:
         p--; {goto st722;}
     }
 	break;
-#line 20965 "inc/vcf/validator_detail_v43.hpp"
+#line 21130 "inc/vcf/validator_detail_v43.hpp"
 	}
 	}
 
 	_out: {}
 	}
 
-#line 937 "src/vcf/vcf_v43.ragel"
+#line 942 "src/vcf/vcf_v43.ragel"
 
     }
     
