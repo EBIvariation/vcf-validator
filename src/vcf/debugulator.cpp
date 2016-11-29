@@ -44,7 +44,7 @@ namespace ebi
               while (current_line < line_index) {
 
                   // advance input
-                  if (ebi::util::readline(input, line).empty()) {
+                  if (ebi::util::readline(input, line).size() == 0) {
                       // file finished, return ?
                       return;
                   }

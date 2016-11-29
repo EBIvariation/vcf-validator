@@ -634,8 +634,8 @@
         fhold; fgoto body_section_skip;
     }
 
-    action body_section_no_nl_error {
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+    action no_newline_at_eof_error {
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         fhold; fgoto body_section_skip;
     }
 
@@ -774,8 +774,9 @@
 
     # Header between meta and records
     sample_name     = (print - (NL | CS))+ >token_begin @token_middle %sample_name_end;
-    header          = ("#CHROM" CS "POS" CS "ID" CS "REF" CS "ALT" CS "QUAL" CS "FILTER" CS "INFO") $err(header_prefix_err)
-                      (CS "FORMAT" (CS sample_name)+ )? %header_end ;
+    header          = ("#CHROM" CS "POS" CS "ID" CS "REF" CS "ALT" CS "QUAL" CS "FILTER" CS "INFO" )
+                           $eof(no_newline_at_eof_error) $err(header_prefix_err)
+                      (CS "FORMAT" (CS sample_name)+ )? $eof(no_newline_at_eof_error) %header_end ;
 
     # Records
     position        = nat_number ;
@@ -876,7 +877,7 @@
     sample_value    = (alnum | (punct - ":"))+ | "." ;
     sample_values   = sample_value (":" sample_value)* ;
     record_sample   = (
-                        sample_gt $eof(body_section_no_nl_error) $err(sample_gt_error) (":" sample_values)? |
+                        sample_gt $eof(no_newline_at_eof_error) $err(sample_gt_error) (":" sample_values)? |
                         sample_values
                       ) >token_begin $token_middle %token_end ;
     
@@ -889,9 +890,9 @@
                         CS record_alt 		%record_field_end $err(alt_error) 
                         CS record_qual		%record_field_end $err(qual_error) 
                         CS record_filter 	%record_field_end $err(filter_error) 
-                        CS record_info		%record_field_end $eof(body_section_no_nl_error) $err(info_error)
+                        CS record_info		%record_field_end $eof(no_newline_at_eof_error) $err(info_error)
                         (CS record_format	%record_field_end $err(format_error)
-                        (CS record_sample	%record_field_end $eof(body_section_no_nl_error) $err(sample_error))+ )?
+                        (CS record_sample	%record_field_end $eof(no_newline_at_eof_error) $err(sample_error))+ )?
                       ) %record_end;
 
     fileformat_section = (fileformat NL) $err(fileformat_section_error);

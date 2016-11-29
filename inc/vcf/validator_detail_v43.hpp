@@ -21,7 +21,7 @@
 #include "vcf/validator.hpp"
 
 
-#line 914 "src/vcf/vcf_v43.ragel"
+#line 915 "src/vcf/vcf_v43.ragel"
 
 
 namespace
@@ -39,7 +39,7 @@ static const int vcf_v43_en_meta_section_skip = 722;
 static const int vcf_v43_en_body_section_skip = 723;
 
 
-#line 920 "src/vcf/vcf_v43.ragel"
+#line 921 "src/vcf/vcf_v43.ragel"
 
 }
 
@@ -58,7 +58,7 @@ namespace ebi
 	cs = vcf_v43_start;
 	}
 
-#line 934 "src/vcf/vcf_v43.ragel"
+#line 935 "src/vcf/vcf_v43.ragel"
 
     }
 
@@ -17819,7 +17819,7 @@ tr1006:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 912 "src/vcf/vcf_v43.ragel"
+#line 913 "src/vcf/vcf_v43.ragel"
 	{ {goto st28;} }
 	goto st803;
 st803:
@@ -17861,7 +17861,7 @@ tr1009:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 913 "src/vcf/vcf_v43.ragel"
+#line 914 "src/vcf/vcf_v43.ragel"
 	{ {goto st728;} }
 	goto st804;
 st804:
@@ -18763,15 +18763,6 @@ case 804:
         }
     }
 	break;
-	case 568: 
-	case 569: 
-	case 570: 
-	case 571: 
-	case 572: 
-	case 573: 
-	case 574: 
-	case 575: 
-	case 576: 
 	case 720: 
 #line 78 "src/vcf/vcf_v43.ragel"
 	{
@@ -19184,71 +19175,6 @@ case 804:
         p--; {goto st722;}
     }
 	break;
-	case 531: 
-	case 532: 
-	case 533: 
-	case 534: 
-	case 535: 
-	case 536: 
-	case 537: 
-	case 538: 
-	case 539: 
-	case 540: 
-	case 541: 
-	case 542: 
-	case 543: 
-	case 544: 
-	case 545: 
-	case 546: 
-	case 547: 
-	case 548: 
-	case 549: 
-	case 550: 
-	case 551: 
-	case 552: 
-	case 553: 
-	case 554: 
-	case 555: 
-	case 556: 
-	case 557: 
-	case 558: 
-	case 559: 
-	case 560: 
-	case 561: 
-	case 562: 
-	case 563: 
-	case 564: 
-	case 565: 
-	case 566: 
-	case 567: 
-#line 374 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
-            "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
-        
-        // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
-        try {
-          OptionalPolicy::optional_check_meta_section(*this);
-        } catch (Error *warn) {
-          ErrorPolicy::handle_warning(*this, warn);
-        }
-        
-        p--; {goto st723;}
-    }
-#line 78 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
-        
-        // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
-        try {
-          OptionalPolicy::optional_check_meta_section(*this);
-        } catch (Error *warn) {
-          ErrorPolicy::handle_warning(*this, warn);
-        }
-        
-        p--; {goto st723;}
-    }
-	break;
 	case 578: 
 	case 597: 
 	case 598: 
@@ -19404,25 +19330,18 @@ case 804:
         p--; {goto st723;}
     }
 	break;
-	case 23: 
-	case 28: 
-#line 65 "src/vcf/vcf_v43.ragel"
+	case 568: 
+	case 569: 
+	case 570: 
+	case 571: 
+	case 572: 
+	case 573: 
+	case 574: 
+	case 575: 
+	case 576: 
+#line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st722;}
-    }
-#line 374 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
-            "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
-        
-        // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
-        try {
-          OptionalPolicy::optional_check_meta_section(*this);
-        } catch (Error *warn) {
-          ErrorPolicy::handle_warning(*this, warn);
-        }
-        
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 78 "src/vcf/vcf_v43.ragel"
@@ -20029,10 +19948,80 @@ case 804:
         p--; {goto st722;}
     }
 	break;
+	case 531: 
+	case 532: 
+	case 533: 
+	case 534: 
+	case 535: 
+	case 536: 
+	case 537: 
+	case 538: 
+	case 539: 
+	case 540: 
+	case 541: 
+	case 542: 
+	case 543: 
+	case 544: 
+	case 545: 
+	case 546: 
+	case 547: 
+	case 548: 
+	case 549: 
+	case 550: 
+	case 551: 
+	case 552: 
+	case 553: 
+	case 554: 
+	case 555: 
+	case 556: 
+	case 557: 
+	case 558: 
+	case 559: 
+	case 560: 
+	case 561: 
+	case 562: 
+	case 563: 
+	case 564: 
+	case 565: 
+	case 566: 
+	case 567: 
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
+        p--; {goto st723;}
+    }
+#line 374 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
+            "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
+        
+        // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
+        try {
+          OptionalPolicy::optional_check_meta_section(*this);
+        } catch (Error *warn) {
+          ErrorPolicy::handle_warning(*this, warn);
+        }
+        
+        p--; {goto st723;}
+    }
+#line 78 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
+        
+        // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
+        try {
+          OptionalPolicy::optional_check_meta_section(*this);
+        } catch (Error *warn) {
+          ErrorPolicy::handle_warning(*this, warn);
+        }
+        
+        p--; {goto st723;}
+    }
+	break;
 	case 601: 
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 623 "src/vcf/vcf_v43.ragel"
@@ -20131,7 +20120,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 210 "src/vcf/vcf_v43.ragel"
@@ -20156,16 +20145,17 @@ case 804:
         }
     }
 	break;
-	case 22: 
-#line 60 "src/vcf/vcf_v43.ragel"
-	{
-        ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
-        p--; {goto st722;}
-    }
+	case 23: 
+	case 28: 
 #line 65 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st722;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
+        p--; {goto st723;}
     }
 #line 374 "src/vcf/vcf_v43.ragel"
 	{
@@ -20411,7 +20401,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20433,7 +20423,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20458,7 +20448,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20483,7 +20473,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20508,7 +20498,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20533,7 +20523,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20558,7 +20548,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20591,7 +20581,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20616,7 +20606,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20649,7 +20639,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20675,7 +20665,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20700,7 +20690,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20725,7 +20715,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20750,7 +20740,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20775,7 +20765,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20800,7 +20790,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20833,7 +20823,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20858,7 +20848,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20883,7 +20873,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20916,7 +20906,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20941,7 +20931,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20966,7 +20956,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -20991,7 +20981,7 @@ case 804:
     }
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 433 "src/vcf/vcf_v43.ragel"
@@ -21010,7 +21000,7 @@ case 804:
 	case 731: 
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 39 "src/vcf/vcf_v43.ragel"
@@ -21046,7 +21036,7 @@ case 804:
 	case 596: 
 #line 637 "src/vcf/vcf_v43.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There's no newline character before the end of file"});
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
 #line 630 "src/vcf/vcf_v43.ragel"
@@ -21066,6 +21056,50 @@ case 804:
 #line 91 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        p--; {goto st723;}
+    }
+	break;
+	case 22: 
+#line 60 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
+        p--; {goto st722;}
+    }
+#line 65 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
+        p--; {goto st722;}
+    }
+#line 637 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
+        p--; {goto st723;}
+    }
+#line 374 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
+            "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
+        
+        // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
+        try {
+          OptionalPolicy::optional_check_meta_section(*this);
+        } catch (Error *warn) {
+          ErrorPolicy::handle_warning(*this, warn);
+        }
+        
+        p--; {goto st723;}
+    }
+#line 78 "src/vcf/vcf_v43.ragel"
+	{
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
+        
+        // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
+        try {
+          OptionalPolicy::optional_check_meta_section(*this);
+        } catch (Error *warn) {
+          ErrorPolicy::handle_warning(*this, warn);
+        }
+        
         p--; {goto st723;}
     }
 	break;
@@ -21126,14 +21160,14 @@ case 804:
         p--; {goto st722;}
     }
 	break;
-#line 21130 "inc/vcf/validator_detail_v43.hpp"
+#line 21164 "inc/vcf/validator_detail_v43.hpp"
 	}
 	}
 
 	_out: {}
 	}
 
-#line 942 "src/vcf/vcf_v43.ragel"
+#line 943 "src/vcf/vcf_v43.ragel"
 
     }
     
