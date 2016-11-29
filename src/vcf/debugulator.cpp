@@ -32,6 +32,7 @@ namespace ebi
           size_t current_line = 0;  // the first line is the number 1, ParsingState takes this convention too
 
           size_t errors = errorDAO.count_errors();
+          size_t errors_fixed = 0;
           if (errors == 0) {
               std::cerr << "The errors report was empty, there are no errors to fix the input" << std::endl;
               return 0;
@@ -44,9 +45,10 @@ namespace ebi
               while (current_line < line_index) {
 
                   // advance input
-                  if (!ebi::util::readline(input, line)) {
-                      // file finished, return ?
-                      return;
+                  if (ebi::util::readline(input, line).size() == 0) {
+                      throw std::runtime_error("The file was shorter than expected, only "
+                                                       + std::to_string(errors_fixed) + "/" + std::to_string(errors)
+                                                       + " error reports were processed");
                   }
                   current_line++;
                   if (current_line == line_index) {
@@ -55,10 +57,11 @@ namespace ebi
                   ebi::util::writeline(output, line);
               }
               fixer.fix(line_index, line, *error);
+              ++errors_fixed;
           });
 
           // advance input from the last error to the end of input
-          while (ebi::util::readline(input, line)) {
+          while (ebi::util::readline(input, line).size() != 0) {
               for (auto c : line) {
                   output << c;
               }

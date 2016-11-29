@@ -27,8 +27,26 @@ namespace ebi
 {
   namespace util
   {
+    /**
+     * Reads until the end of line ('\n') or end of file ('\0'), and returns the string read.
+     * This includes any line that doesn't end with newline before EOF.
+     *
+     * To detect if the last line in the file does not end with a newline just before the end of file, the function
+     * will return a non-empty string, but the stream state will be failed
+     *  ```
+     *  while (readline(stream, line).size() != 0) {
+     *      if (not stream) {
+     *          std::cout << "no newline at end of file: " << line << std::endl;
+     *      }
+     *  }
+     *  ```
+     * @param stream input stream that will be consumed
+     * @param container will be cleared and filled with the string from the current stream position until
+     * the next newline or eof
+     * @return the string read. this is another reference to the second parameter.
+     */
     template <typename Container>
-    std::istream & readline(std::istream & stream, Container & container)
+    Container &readline(std::istream & stream, Container & container)
     {
         char c;
         container.clear();
@@ -42,7 +60,7 @@ namespace ebi
             }
         }
 
-        return stream;
+        return container;
     }
 
     template <typename Container>
