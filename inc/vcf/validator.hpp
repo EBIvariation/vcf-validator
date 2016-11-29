@@ -186,6 +186,8 @@ namespace ebi
     bool is_valid_vcf_file(std::istream &input,
                            ebi::vcf::Parser &validator,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
+
+    void write_errors(const Parser &validator, const std::vector<std::unique_ptr<ReportWriter>> &outputs);
   }
 }
 

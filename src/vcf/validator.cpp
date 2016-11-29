@@ -131,20 +131,17 @@ namespace ebi
 
         while (ebi::util::readline(input, line).size() != 0) {
             validator.parse(line);
-
-            for (auto &error : validator.errors()) {
-                for (auto &output : outputs) {
-                    output->write_error(*error);
-                }
-            }
-            for (auto &error : validator.warnings()) {
-                for (auto &output : outputs) {
-                    output->write_warning(*error);
-                }
-            }
+            write_errors(validator, outputs);
         }
 
         validator.end();
+        write_errors(validator, outputs);
+
+        return validator.is_valid();
+    }
+
+    void write_errors(const Parser &validator, const std::vector<std::unique_ptr<ReportWriter>> &outputs)
+    {
         for (auto &error : validator.errors()) {
             for (auto &output : outputs) {
                 output->write_error(*error);
@@ -155,8 +152,6 @@ namespace ebi
                 output->write_warning(*error);
             }
         }
-
-        return validator.is_valid();
     }
   }
 }
