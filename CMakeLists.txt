@@ -3,6 +3,7 @@ project (vcf-validator CXX C)
 
 set (vcf-validator_VERSION_MAJOR 0)
 set (vcf-validator_VERSION_MINOR 4)
+set (vcf-validator_VERSION_PATCH 2)
 
 # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
