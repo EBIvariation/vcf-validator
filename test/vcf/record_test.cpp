@@ -112,6 +112,19 @@ namespace ebi
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}) );
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { },
+                                "A",
+                                { "AC", "AT" },
+                                1.0,
+                                { "PASS" },
+                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} },
+                                { "DP" },
+                                { "1" },
+                                std::make_shared<vcf::Source>(source)}) );
         }
 
         SECTION("Chromosome with whitespaces") 
