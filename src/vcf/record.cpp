@@ -283,7 +283,7 @@ namespace ebi
             }
             
             // The cardinality and type of the fields match the FORMAT meta information
-            for (size_t j = 1; j < subfields.size(); ++j) {
+            for (size_t j = 0; j < subfields.size(); ++j) {
                 MetaEntry meta = format_meta[j];
                 auto & subfield = subfields[j];
                 
