@@ -69,37 +69,40 @@ namespace ebi
     
     void ValidateOptionalPolicy::check_body_entry_ploidy(ParsingState & state, Record & record)
     {
-        // All samples should have the same ploidy
-        size_t ploidy = 0;
-        size_t i = 1;
-        for (auto & sample : record.samples) {
-            std::vector<std::string> subfields;
-            util::string_split(sample, ":", subfields);
-            std::vector<std::string> alleles;
-            util::string_split(subfields[0], "|/", alleles);
+        bool format_column_contains_gt = record.format.size() >= 1 and record.format[0] == "GT";
+        if (format_column_contains_gt) {
+            // All samples should have the same ploidy
+            size_t ploidy = 0;
+            size_t i = 1;
+            for (auto &sample : record.samples) {
+                std::vector<std::string> subfields;
+                util::string_split(sample, ":", subfields);
+                std::vector<std::string> alleles;
+                util::string_split(subfields[0], "|/", alleles);
 
-            if (ploidy > 0) {
-                if (alleles.size() != ploidy) {
-                    throw new SamplesFieldBodyError{
-                            state.n_lines,
-                            "Sample #" + std::to_string(i) + " has " + std::to_string(alleles.size())
-                                    + " allele(s), but " + std::to_string(ploidy) + " were found in others",
-                            "GT",
-                            static_cast<long>(ploidy)};
+                if (ploidy > 0) {
+                    if (alleles.size() != ploidy) {
+                        throw new SamplesFieldBodyError{
+                                state.n_lines,
+                                "Sample #" + std::to_string(i) + " has " + std::to_string(alleles.size())
+                                        + " allele(s), but " + std::to_string(ploidy) + " were found in others",
+                                "GT",
+                                static_cast<long>(ploidy)};
+                    }
+                } else {
+                    ploidy = alleles.size();
                 }
-            } else {
-                ploidy = alleles.size();
-            }
-            
-            ++i;
-        }
 
-        size_t provided_ploidy = state.source->ploidy.get_ploidy(record.chromosome);
-        if (provided_ploidy != ploidy) {
-            std::stringstream ss;
-            ss << "The specified ploidy for contig \"" << record.chromosome << "\" was " << provided_ploidy
-               << ", which doesn't match the genotypes, which show ploidy " << ploidy;
-            throw new SamplesFieldBodyError{state.n_lines, ss.str(), "GT", static_cast<long>(provided_ploidy)};
+                ++i;
+            }
+
+            size_t provided_ploidy = state.source->ploidy.get_ploidy(record.chromosome);
+            if (provided_ploidy != ploidy) {
+                std::stringstream ss;
+                ss << "The specified ploidy for contig \"" << record.chromosome << "\" was " << provided_ploidy
+                   << ", which doesn't match the genotypes, which show ploidy " << ploidy;
+                throw new SamplesFieldBodyError{state.n_lines, ss.str(), "GT", static_cast<long>(provided_ploidy)};
+            }
         }
     }
   
