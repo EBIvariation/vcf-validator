@@ -228,9 +228,11 @@ namespace ebi
 
     void StoreParsePolicy::check_sorted(ParsingState &state, size_t position)
     {
-        // contiguous contig
-        auto is_contig_finished = finished_contigs.find(m_line_tokens["CHROM"][0]);
-        if (is_contig_finished == finished_contigs.end()) {
+        // check contigs are contiguous
+        auto iterator = finished_contigs.find(m_line_tokens["CHROM"][0]);
+        bool contig_not_found = iterator == finished_contigs.end();
+        bool contig_already_finished = iterator->second;
+        if (contig_not_found) {
             // contig not found in the map: finishing the previous contig, and starting a new one
             if (finished_contigs.size() != 0) {
                 // with the first contig there's no previous contig
@@ -239,13 +241,13 @@ namespace ebi
             finished_contigs[m_line_tokens["CHROM"][0]] = false;
             previous_contig = m_line_tokens["CHROM"][0];
             previous_position = 0;  // position sorting is reset
-        } else if (is_contig_finished->second) {
+        } else if (contig_already_finished) {
             std::stringstream ss;
             ss << "Variant " << m_line_tokens["CHROM"][0] << ":" << position << " is not contiguous to the rest of the contig";
             throw new BodySectionError{state.n_lines, ss.str()};
         }
 
-        // sorted positions within contig
+        // check all positions are sorted within a contig
         if (position < previous_position) {
             std::stringstream ss;
             ss << "Contig " << m_line_tokens["CHROM"][0] << " is not sorted by position: "
