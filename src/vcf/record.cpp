@@ -119,6 +119,14 @@ namespace ebi
                 throw new IdBodyError{line, "ID must not contain semicolons or whitespaces"};
             }
         }
+        
+        std::map<std::string, int> counter;
+        for (auto id = ids.begin(); id != ids.end(); ++id) {
+            counter[*id]++;
+            if (counter[*id] >= 2) {
+                throw new IdBodyError{line, "ID must not have duplicate values"};   
+            }
+        }
     }
 
     void Record::check_alternate_alleles() const
