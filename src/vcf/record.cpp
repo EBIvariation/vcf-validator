@@ -121,10 +121,10 @@ namespace ebi
         }
         
         std::map<std::string, int> counter;
-        for (auto id = ids.begin(); id != ids.end(); ++id) {
+        for (auto & id : ids) {
             counter[*id]++;
             if (counter[*id] >= 2) {
-                throw new IdBodyError{line, "ID must not have duplicate values"};   
+                throw new IdBodyError{line, "ID must not have duplicate values"};
             }
         }
     }
