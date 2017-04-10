@@ -236,6 +236,16 @@ namespace ebi
         if (std::find(format.begin(), format.end(), "GT") != format.end() && format[0] != "GT") {
             throw new FormatBodyError{line, "GT must be the first field in the FORMAT column"};
         }
+
+        if (format.size() > 1) {
+            std::map<std::string, int> counter;
+            for (auto & form : format) {
+                counter[form]++;
+                if (counter[form] >= 2) {
+                    throw new FormatBodyError{line, "FORMAT must not have duplicate fields"};
+                }
+            }
+        }
     }
 
     void Record::check_samples() const
