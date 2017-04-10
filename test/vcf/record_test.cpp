@@ -375,6 +375,21 @@ namespace ebi
                                 { "12:0|1" },
                                 std::make_shared<vcf::Source>(source)}),
                             vcf::FormatBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
+                                "chr1", 
+                                123456, 
+                                { "id123", "id456" }, 
+                                "A",
+                                { "T", "C" },
+                                1.0, 
+                                { "PASS" }, 
+                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { "DP", "DP" }, 
+                                { "12:13" },
+                                std::make_shared<vcf::Source>(source)}),
+                            vcf::FormatBodyError*);
         }
 
         SECTION("Unusual ploidy")
