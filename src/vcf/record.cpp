@@ -237,7 +237,7 @@ namespace ebi
             throw new FormatBodyError{line, "GT must be the first field in the FORMAT column"};
         }
 
-        if (format.size() > 1) {
+        if (format.size() > 1 && source->version == Version::v43) {
             std::map<std::string, int> counter;
             for (auto & form : format) {
                 counter[form]++;

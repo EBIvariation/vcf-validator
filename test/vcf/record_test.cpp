@@ -24,7 +24,7 @@
 namespace ebi
 {
     
-    TEST_CASE("Record constructor", "[constructor]")
+    TEST_CASE("Record constructor v41", "[constructor]")
     {
         auto source = vcf::Source {
             "Example VCF source",
@@ -375,21 +375,6 @@ namespace ebi
                                 { "12:0|1" },
                                 std::make_shared<vcf::Source>(source)}),
                             vcf::FormatBodyError*);
-
-            CHECK_THROWS_AS( (vcf::Record{
-                                1,
-                                "chr1", 
-                                123456, 
-                                { "id123", "id456" }, 
-                                "A",
-                                { "T", "C" },
-                                1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
-                                { "DP", "DP" }, 
-                                { "12:13" },
-                                std::make_shared<vcf::Source>(source)}),
-                            vcf::FormatBodyError*);
         }
 
         SECTION("Unusual ploidy")
@@ -440,4 +425,80 @@ namespace ebi
         }
     }
 
+    TEST_CASE("Record constructor v43", "[constructor]")
+    {
+        auto source = vcf::Source {
+            "Example VCF source",
+            vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+            vcf::Version::v43,
+            {2, {{"Y", 1}}},
+            {},
+            { "Sample1" }};
+            
+        source.meta_entries.emplace("FORMAT",
+            vcf::MetaEntry{
+                1,
+                "FORMAT",
+                {
+                    { "ID", "GT" },
+                    { "Number", "1" },
+                    { "Type", "String" },
+                    { "Description", "Genotype" }
+                }
+        });
+           
+        source.meta_entries.emplace("FORMAT",
+            vcf::MetaEntry{
+                1,
+                "FORMAT",
+                {
+                    { "ID", "DP" },
+                    { "Number", "1" },
+                    { "Type", "Integer" },
+                    { "Description", "Read depth" }
+                }
+            });
+
+        source.meta_entries.emplace("INFO",
+            vcf::MetaEntry{
+                1,
+                "INFO",
+                {
+                    { "ID", "AN" },
+                    { "Number", "A" },
+                    { "Type", "Integer" },
+                    { "Description", "Allele number" }
+                }
+        });
+           
+        source.meta_entries.emplace("INFO",
+            vcf::MetaEntry{
+                1,
+                "INFO",
+                {
+                    { "ID", "AF" },
+                    { "Number", "A" },
+                    { "Type", "Float" },
+                    { "Description", "Allele frequency" }
+                }
+            });
+
+        SECTION("Multi-field format") 
+        {
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
+                                "chr1", 
+                                123456, 
+                                { "id123", "id456" }, 
+                                "A",
+                                { "T", "C" },
+                                1.0, 
+                                { "PASS" }, 
+                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { "DP", "DP" }, 
+                                { "12:13" },
+                                std::make_shared<vcf::Source>(source)}),
+                            vcf::FormatBodyError*);
+        }
+    }
 }
