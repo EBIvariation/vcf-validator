@@ -21,7 +21,7 @@
 #include "vcf/validator.hpp"
 
 
-#line 918 "src/vcf/vcf_v43.ragel"
+#line 919 "src/vcf/vcf_v43.ragel"
 
 
 namespace
@@ -39,7 +39,7 @@ static const int vcf_v43_en_meta_section_skip = 722;
 static const int vcf_v43_en_body_section_skip = 723;
 
 
-#line 924 "src/vcf/vcf_v43.ragel"
+#line 925 "src/vcf/vcf_v43.ragel"
 
 }
 
@@ -58,7 +58,7 @@ namespace ebi
 	cs = vcf_v43_start;
 	}
 
-#line 938 "src/vcf/vcf_v43.ragel"
+#line 939 "src/vcf/vcf_v43.ragel"
 
     }
 
@@ -87,7 +87,8 @@ tr14:
 #line 238 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this,
-            new FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.3'"});
+            new FileformatError{n_lines,
+                "The fileformat declaration is not valid (value must be one of 'VCFv4.1', 'VCFv4.2' or 'VCFv4.3')"});
         p--; {goto st722;}
     }
 #line 60 "src/vcf/vcf_v43.ragel"
@@ -107,7 +108,7 @@ tr24:
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st722;}
     }
-#line 377 "src/vcf/vcf_v43.ragel"
+#line 378 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
             "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
@@ -141,7 +142,7 @@ tr26:
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st722;}
     }
-#line 377 "src/vcf/vcf_v43.ragel"
+#line 378 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
             "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
@@ -170,52 +171,52 @@ tr26:
     }
 	goto st0;
 tr29:
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
     }
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
     }
-#line 257 "src/vcf/vcf_v43.ragel"
+#line 258 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
         p--; {goto st722;}
     }
-#line 263 "src/vcf/vcf_v43.ragel"
+#line 264 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
         p--; {goto st722;}
     }
-#line 334 "src/vcf/vcf_v43.ragel"
+#line 335 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
         p--; {goto st722;}
     }
-#line 355 "src/vcf/vcf_v43.ragel"
+#line 356 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st722;}
     }
-#line 307 "src/vcf/vcf_v43.ragel"
+#line 308 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st722;}
     }
-#line 328 "src/vcf/vcf_v43.ragel"
+#line 329 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         p--; {goto st722;}
@@ -234,7 +235,7 @@ tr40:
     }
 	goto st0;
 tr126:
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
@@ -246,13 +247,13 @@ tr126:
     }
 	goto st0;
 tr134:
-#line 250 "src/vcf/vcf_v43.ragel"
+#line 251 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines,
             "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"});
         p--; {goto st722;}
     }
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
@@ -264,12 +265,12 @@ tr134:
     }
 	goto st0;
 tr153:
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
@@ -281,12 +282,12 @@ tr153:
     }
 	goto st0;
 tr162:
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
@@ -298,17 +299,17 @@ tr162:
     }
 	goto st0;
 tr176:
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
@@ -320,17 +321,17 @@ tr176:
     }
 	goto st0;
 tr188:
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
@@ -342,12 +343,12 @@ tr188:
     }
 	goto st0;
 tr194:
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -359,7 +360,7 @@ tr194:
     }
 	goto st0;
 tr197:
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
@@ -371,12 +372,12 @@ tr197:
     }
 	goto st0;
 tr207:
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
@@ -388,12 +389,12 @@ tr207:
     }
 	goto st0;
 tr226:
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
@@ -405,17 +406,17 @@ tr226:
     }
 	goto st0;
 tr248:
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
@@ -427,17 +428,17 @@ tr248:
     }
 	goto st0;
 tr260:
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
@@ -449,7 +450,7 @@ tr260:
     }
 	goto st0;
 tr266:
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -461,12 +462,12 @@ tr266:
     }
 	goto st0;
 tr276:
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -478,12 +479,12 @@ tr276:
     }
 	goto st0;
 tr289:
-#line 280 "src/vcf/vcf_v43.ragel"
+#line 281 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G or dot"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -495,12 +496,12 @@ tr289:
     }
 	goto st0;
 tr298:
-#line 301 "src/vcf/vcf_v43.ragel"
+#line 302 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not Integer, Float, Flag, Character or String"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -512,12 +513,12 @@ tr298:
     }
 	goto st0;
 tr315:
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -529,17 +530,17 @@ tr315:
     }
 	goto st0;
 tr337:
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -551,17 +552,17 @@ tr337:
     }
 	goto st0;
 tr349:
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -573,7 +574,7 @@ tr349:
     }
 	goto st0;
 tr356:
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -585,12 +586,12 @@ tr356:
     }
 	goto st0;
 tr365:
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -602,12 +603,12 @@ tr365:
     }
 	goto st0;
 tr378:
-#line 296 "src/vcf/vcf_v43.ragel"
+#line 297 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Number is not a number, A, R, G or dot"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -619,12 +620,12 @@ tr378:
     }
 	goto st0;
 tr387:
-#line 301 "src/vcf/vcf_v43.ragel"
+#line 302 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not Integer, Float, Flag, Character or String"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -636,12 +637,12 @@ tr387:
     }
 	goto st0;
 tr404:
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -653,17 +654,17 @@ tr404:
     }
 	goto st0;
 tr426:
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -675,17 +676,17 @@ tr426:
     }
 	goto st0;
 tr438:
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -697,7 +698,7 @@ tr438:
     }
 	goto st0;
 tr445:
-#line 334 "src/vcf/vcf_v43.ragel"
+#line 335 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
         p--; {goto st722;}
@@ -709,12 +710,12 @@ tr445:
     }
 	goto st0;
 tr454:
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 334 "src/vcf/vcf_v43.ragel"
+#line 335 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
         p--; {goto st722;}
@@ -726,12 +727,12 @@ tr454:
     }
 	goto st0;
 tr467:
-#line 339 "src/vcf/vcf_v43.ragel"
+#line 340 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Number is not a dot"});
         p--; {goto st722;}
     }
-#line 334 "src/vcf/vcf_v43.ragel"
+#line 335 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
         p--; {goto st722;}
@@ -743,12 +744,12 @@ tr467:
     }
 	goto st0;
 tr475:
-#line 344 "src/vcf/vcf_v43.ragel"
+#line 345 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Type is not String"});
         p--; {goto st722;}
     }
-#line 334 "src/vcf/vcf_v43.ragel"
+#line 335 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
         p--; {goto st722;}
@@ -760,12 +761,12 @@ tr475:
     }
 	goto st0;
 tr492:
-#line 349 "src/vcf/vcf_v43.ragel"
+#line 350 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Values is not a square-bracket delimited list of values"});
         p--; {goto st722;}
     }
-#line 334 "src/vcf/vcf_v43.ragel"
+#line 335 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
         p--; {goto st722;}
@@ -777,7 +778,7 @@ tr492:
     }
 	goto st0;
 tr498:
-#line 307 "src/vcf/vcf_v43.ragel"
+#line 308 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st722;}
@@ -789,12 +790,12 @@ tr498:
     }
 	goto st0;
 tr511:
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 307 "src/vcf/vcf_v43.ragel"
+#line 308 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st722;}
@@ -806,12 +807,12 @@ tr511:
     }
 	goto st0;
 tr517:
-#line 322 "src/vcf/vcf_v43.ragel"
+#line 323 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata sequence of Name_N is not valid"});
         p--; {goto st722;}
     }
-#line 307 "src/vcf/vcf_v43.ragel"
+#line 308 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st722;}
@@ -823,12 +824,12 @@ tr517:
     }
 	goto st0;
 tr527:
-#line 317 "src/vcf/vcf_v43.ragel"
+#line 318 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Father or Mother is not valid"});
         p--; {goto st722;}
     }
-#line 307 "src/vcf/vcf_v43.ragel"
+#line 308 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st722;}
@@ -840,12 +841,12 @@ tr527:
     }
 	goto st0;
 tr564:
-#line 312 "src/vcf/vcf_v43.ragel"
+#line 313 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Original is not valid"});
         p--; {goto st722;}
     }
-#line 307 "src/vcf/vcf_v43.ragel"
+#line 308 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st722;}
@@ -857,7 +858,7 @@ tr564:
     }
 	goto st0;
 tr569:
-#line 355 "src/vcf/vcf_v43.ragel"
+#line 356 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st722;}
@@ -869,12 +870,12 @@ tr569:
     }
 	goto st0;
 tr580:
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 355 "src/vcf/vcf_v43.ragel"
+#line 356 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st722;}
@@ -886,7 +887,7 @@ tr580:
     }
 	goto st0;
 tr620:
-#line 257 "src/vcf/vcf_v43.ragel"
+#line 258 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
         p--; {goto st722;}
@@ -898,12 +899,12 @@ tr620:
     }
 	goto st0;
 tr629:
-#line 371 "src/vcf/vcf_v43.ragel"
+#line 372 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
         p--; {goto st722;}
     }
-#line 257 "src/vcf/vcf_v43.ragel"
+#line 258 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
         p--; {goto st722;}
@@ -915,7 +916,7 @@ tr629:
     }
 	goto st0;
 tr650:
-#line 263 "src/vcf/vcf_v43.ragel"
+#line 264 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
         p--; {goto st722;}
@@ -927,12 +928,12 @@ tr650:
     }
 	goto st0;
 tr661:
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 263 "src/vcf/vcf_v43.ragel"
+#line 264 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
         p--; {goto st722;}
@@ -944,7 +945,7 @@ tr661:
     }
 	goto st0;
 tr699:
-#line 328 "src/vcf/vcf_v43.ragel"
+#line 329 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         p--; {goto st722;}
@@ -956,12 +957,12 @@ tr699:
     }
 	goto st0;
 tr711:
-#line 371 "src/vcf/vcf_v43.ragel"
+#line 372 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
         p--; {goto st722;}
     }
-#line 328 "src/vcf/vcf_v43.ragel"
+#line 329 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         p--; {goto st722;}
@@ -973,7 +974,7 @@ tr711:
     }
 	goto st0;
 tr734:
-#line 377 "src/vcf/vcf_v43.ragel"
+#line 378 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
             "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
@@ -1017,7 +1018,7 @@ tr774:
     }
 	goto st0;
 tr789:
-#line 394 "src/vcf/vcf_v43.ragel"
+#line 395 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new ChromosomeBodyError{n_lines});
         p--; {goto st723;}
@@ -1029,7 +1030,7 @@ tr789:
     }
 	goto st0;
 tr792:
-#line 400 "src/vcf/vcf_v43.ragel"
+#line 401 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new PositionBodyError{n_lines});
         p--; {goto st723;}
@@ -1041,7 +1042,7 @@ tr792:
     }
 	goto st0;
 tr796:
-#line 406 "src/vcf/vcf_v43.ragel"
+#line 407 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new IdBodyError{n_lines});
         p--; {goto st723;}
@@ -1053,7 +1054,7 @@ tr796:
     }
 	goto st0;
 tr801:
-#line 412 "src/vcf/vcf_v43.ragel"
+#line 413 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new ReferenceAlleleBodyError{n_lines});
         p--; {goto st723;}
@@ -1065,7 +1066,7 @@ tr801:
     }
 	goto st0;
 tr805:
-#line 418 "src/vcf/vcf_v43.ragel"
+#line 419 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new AlternateAllelesBodyError{n_lines});
         p--; {goto st723;}
@@ -1077,7 +1078,7 @@ tr805:
     }
 	goto st0;
 tr814:
-#line 424 "src/vcf/vcf_v43.ragel"
+#line 425 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new QualityBodyError{n_lines});
         p--; {goto st723;}
@@ -1089,7 +1090,7 @@ tr814:
     }
 	goto st0;
 tr825:
-#line 430 "src/vcf/vcf_v43.ragel"
+#line 431 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FilterBodyError{n_lines});
         p--; {goto st723;}
@@ -1101,12 +1102,12 @@ tr825:
     }
 	goto st0;
 tr833:
-#line 441 "src/vcf/vcf_v43.ragel"
+#line 442 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1118,7 +1119,7 @@ tr833:
     }
 	goto st0;
 tr847:
-#line 620 "src/vcf/vcf_v43.ragel"
+#line 621 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FormatBodyError{n_lines, "Format does not start with a letter/underscore followed by alphanumeric/underscore/dot characters"});
         p--; {goto st723;}
@@ -1130,14 +1131,14 @@ tr847:
     }
 	goto st0;
 tr852:
-#line 633 "src/vcf/vcf_v43.ragel"
+#line 634 "src/vcf/vcf_v43.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
         ErrorPolicy::handle_error(*this, new SamplesFieldBodyError{n_lines, message_stream.str(), "GT"});
         p--; {goto st723;}
     }
-#line 626 "src/vcf/vcf_v43.ragel"
+#line 627 "src/vcf/vcf_v43.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
@@ -1158,7 +1159,7 @@ tr860:
     }
 	goto st0;
 tr862:
-#line 626 "src/vcf/vcf_v43.ragel"
+#line 627 "src/vcf/vcf_v43.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
@@ -1172,12 +1173,12 @@ tr862:
     }
 	goto st0;
 tr864:
-#line 446 "src/vcf/vcf_v43.ragel"
+#line 447 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1189,7 +1190,7 @@ tr864:
     }
 	goto st0;
 tr866:
-#line 611 "src/vcf/vcf_v43.ragel"
+#line 612 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1197,7 +1198,7 @@ tr866:
                 "1000G"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1209,7 +1210,7 @@ tr866:
     }
 	goto st0;
 tr870:
-#line 451 "src/vcf/vcf_v43.ragel"
+#line 452 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1217,7 +1218,7 @@ tr870:
                 "AA"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1229,7 +1230,7 @@ tr870:
     }
 	goto st0;
 tr873:
-#line 459 "src/vcf/vcf_v43.ragel"
+#line 460 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1237,7 +1238,7 @@ tr873:
                 "AC"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1249,7 +1250,7 @@ tr873:
     }
 	goto st0;
 tr878:
-#line 467 "src/vcf/vcf_v43.ragel"
+#line 468 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1257,7 +1258,7 @@ tr878:
                 "AD"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1269,7 +1270,7 @@ tr878:
     }
 	goto st0;
 tr881:
-#line 475 "src/vcf/vcf_v43.ragel"
+#line 476 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1277,7 +1278,7 @@ tr881:
                 "ADF"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1289,7 +1290,7 @@ tr881:
     }
 	goto st0;
 tr884:
-#line 483 "src/vcf/vcf_v43.ragel"
+#line 484 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1297,7 +1298,7 @@ tr884:
                 "ADR"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1309,7 +1310,7 @@ tr884:
     }
 	goto st0;
 tr887:
-#line 491 "src/vcf/vcf_v43.ragel"
+#line 492 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1317,7 +1318,7 @@ tr887:
                 "AF"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1329,7 +1330,7 @@ tr887:
     }
 	goto st0;
 tr899:
-#line 499 "src/vcf/vcf_v43.ragel"
+#line 500 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1337,7 +1338,7 @@ tr899:
                 "AN"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1349,7 +1350,7 @@ tr899:
     }
 	goto st0;
 tr902:
-#line 507 "src/vcf/vcf_v43.ragel"
+#line 508 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1357,7 +1358,7 @@ tr902:
                 "BQ"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1369,7 +1370,7 @@ tr902:
     }
 	goto st0;
 tr914:
-#line 515 "src/vcf/vcf_v43.ragel"
+#line 516 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1377,7 +1378,7 @@ tr914:
                 "CIGAR"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1389,7 +1390,7 @@ tr914:
     }
 	goto st0;
 tr917:
-#line 523 "src/vcf/vcf_v43.ragel"
+#line 524 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1397,7 +1398,7 @@ tr917:
                 "DB"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1409,7 +1410,7 @@ tr917:
     }
 	goto st0;
 tr920:
-#line 531 "src/vcf/vcf_v43.ragel"
+#line 532 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1417,7 +1418,7 @@ tr920:
                 "DP"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1429,7 +1430,7 @@ tr920:
     }
 	goto st0;
 tr923:
-#line 539 "src/vcf/vcf_v43.ragel"
+#line 540 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1437,7 +1438,7 @@ tr923:
                 "END"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1449,7 +1450,7 @@ tr923:
     }
 	goto st0;
 tr925:
-#line 547 "src/vcf/vcf_v43.ragel"
+#line 548 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1457,7 +1458,7 @@ tr925:
                 "H2"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1469,7 +1470,7 @@ tr925:
     }
 	goto st0;
 tr927:
-#line 555 "src/vcf/vcf_v43.ragel"
+#line 556 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1477,7 +1478,7 @@ tr927:
                 "H3"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1489,7 +1490,7 @@ tr927:
     }
 	goto st0;
 tr932:
-#line 571 "src/vcf/vcf_v43.ragel"
+#line 572 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1497,7 +1498,7 @@ tr932:
                 "MQ0"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1509,7 +1510,7 @@ tr932:
     }
 	goto st0;
 tr934:
-#line 563 "src/vcf/vcf_v43.ragel"
+#line 564 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1517,7 +1518,7 @@ tr934:
                 "MQ"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1529,7 +1530,7 @@ tr934:
     }
 	goto st0;
 tr946:
-#line 579 "src/vcf/vcf_v43.ragel"
+#line 580 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1537,7 +1538,7 @@ tr946:
                 "NS"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1549,7 +1550,7 @@ tr946:
     }
 	goto st0;
 tr949:
-#line 587 "src/vcf/vcf_v43.ragel"
+#line 588 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1557,7 +1558,7 @@ tr949:
                 "SB"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1569,7 +1570,7 @@ tr949:
     }
 	goto st0;
 tr960:
-#line 595 "src/vcf/vcf_v43.ragel"
+#line 596 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1577,7 +1578,7 @@ tr960:
                 "SOMATIC"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1589,7 +1590,7 @@ tr960:
     }
 	goto st0;
 tr962:
-#line 603 "src/vcf/vcf_v43.ragel"
+#line 604 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1597,7 +1598,7 @@ tr962:
                 "VALIDATED"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1622,7 +1623,7 @@ tr1011:
         
         p--; {goto st723;}
     }
-#line 394 "src/vcf/vcf_v43.ragel"
+#line 395 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new ChromosomeBodyError{n_lines});
         p--; {goto st723;}
@@ -1634,7 +1635,7 @@ tr1011:
     }
 	goto st0;
 tr1018:
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1646,7 +1647,7 @@ tr1018:
     }
 	goto st0;
 tr1034:
-#line 611 "src/vcf/vcf_v43.ragel"
+#line 612 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1654,12 +1655,12 @@ tr1034:
                 "1000G"});
         p--; {goto st723;}
     }
-#line 441 "src/vcf/vcf_v43.ragel"
+#line 442 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1671,7 +1672,7 @@ tr1034:
     }
 	goto st0;
 tr1052:
-#line 523 "src/vcf/vcf_v43.ragel"
+#line 524 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1679,12 +1680,12 @@ tr1052:
                 "DB"});
         p--; {goto st723;}
     }
-#line 441 "src/vcf/vcf_v43.ragel"
+#line 442 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1696,7 +1697,7 @@ tr1052:
     }
 	goto st0;
 tr1058:
-#line 547 "src/vcf/vcf_v43.ragel"
+#line 548 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1704,12 +1705,12 @@ tr1058:
                 "H2"});
         p--; {goto st723;}
     }
-#line 441 "src/vcf/vcf_v43.ragel"
+#line 442 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1721,7 +1722,7 @@ tr1058:
     }
 	goto st0;
 tr1060:
-#line 555 "src/vcf/vcf_v43.ragel"
+#line 556 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1729,12 +1730,12 @@ tr1060:
                 "H3"});
         p--; {goto st723;}
     }
-#line 441 "src/vcf/vcf_v43.ragel"
+#line 442 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1746,7 +1747,7 @@ tr1060:
     }
 	goto st0;
 tr1075:
-#line 595 "src/vcf/vcf_v43.ragel"
+#line 596 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1754,12 +1755,12 @@ tr1075:
                 "SOMATIC"});
         p--; {goto st723;}
     }
-#line 441 "src/vcf/vcf_v43.ragel"
+#line 442 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1771,7 +1772,7 @@ tr1075:
     }
 	goto st0;
 tr1085:
-#line 603 "src/vcf/vcf_v43.ragel"
+#line 604 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -1779,12 +1780,12 @@ tr1085:
                 "VALIDATED"});
         p--; {goto st723;}
     }
-#line 441 "src/vcf/vcf_v43.ragel"
+#line 442 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -1795,7 +1796,7 @@ tr1085:
         p--; {goto st723;}
     }
 	goto st0;
-#line 1799 "inc/vcf/validator_detail_v43.hpp"
+#line 1800 "inc/vcf/validator_detail_v43.hpp"
 st0:
 cs = 0;
 	goto _out;
@@ -1904,7 +1905,7 @@ st15:
 	if ( ++p == pe )
 		goto _test_eof15;
 case 15:
-#line 1908 "inc/vcf/validator_detail_v43.hpp"
+#line 1909 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 67 )
 		goto tr16;
 	goto tr14;
@@ -1918,7 +1919,7 @@ st16:
 	if ( ++p == pe )
 		goto _test_eof16;
 case 16:
-#line 1922 "inc/vcf/validator_detail_v43.hpp"
+#line 1923 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 70 )
 		goto tr17;
 	goto tr14;
@@ -1932,7 +1933,7 @@ st17:
 	if ( ++p == pe )
 		goto _test_eof17;
 case 17:
-#line 1936 "inc/vcf/validator_detail_v43.hpp"
+#line 1937 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 118 )
 		goto tr18;
 	goto tr14;
@@ -1946,7 +1947,7 @@ st18:
 	if ( ++p == pe )
 		goto _test_eof18;
 case 18:
-#line 1950 "inc/vcf/validator_detail_v43.hpp"
+#line 1951 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 52 )
 		goto tr19;
 	goto tr14;
@@ -1960,7 +1961,7 @@ st19:
 	if ( ++p == pe )
 		goto _test_eof19;
 case 19:
-#line 1964 "inc/vcf/validator_detail_v43.hpp"
+#line 1965 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 46 )
 		goto tr20;
 	goto tr14;
@@ -1974,7 +1975,7 @@ st20:
 	if ( ++p == pe )
 		goto _test_eof20;
 case 20:
-#line 1978 "inc/vcf/validator_detail_v43.hpp"
+#line 1979 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 51 )
 		goto tr21;
 	goto tr14;
@@ -1988,7 +1989,7 @@ st21:
 	if ( ++p == pe )
 		goto _test_eof21;
 case 21:
-#line 1992 "inc/vcf/validator_detail_v43.hpp"
+#line 1993 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr22;
 		case 13: goto tr23;
@@ -2019,7 +2020,7 @@ st22:
 	if ( ++p == pe )
 		goto _test_eof22;
 case 22:
-#line 2023 "inc/vcf/validator_detail_v43.hpp"
+#line 2024 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 35 )
 		goto st23;
 	goto tr24;
@@ -2073,7 +2074,7 @@ st25:
 	if ( ++p == pe )
 		goto _test_eof25;
 case 25:
-#line 2077 "inc/vcf/validator_detail_v43.hpp"
+#line 2078 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 61 )
 		goto tr42;
 	if ( 32 <= (*p) && (*p) <= 126 )
@@ -2089,7 +2090,7 @@ st26:
 	if ( ++p == pe )
 		goto _test_eof26;
 case 26:
-#line 2093 "inc/vcf/validator_detail_v43.hpp"
+#line 2094 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto st30;
 		case 60: goto st35;
@@ -2117,7 +2118,7 @@ st27:
 	if ( ++p == pe )
 		goto _test_eof27;
 case 27:
-#line 2121 "inc/vcf/validator_detail_v43.hpp"
+#line 2122 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr46;
 		case 13: goto tr47;
@@ -2173,7 +2174,7 @@ st28:
 	if ( ++p == pe )
 		goto _test_eof28;
 case 28:
-#line 2177 "inc/vcf/validator_detail_v43.hpp"
+#line 2178 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 35 )
 		goto st23;
 	goto tr26;
@@ -2225,7 +2226,7 @@ st29:
 	if ( ++p == pe )
 		goto _test_eof29;
 case 29:
-#line 2229 "inc/vcf/validator_detail_v43.hpp"
+#line 2230 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 10 )
 		goto st28;
 	goto tr40;
@@ -2260,7 +2261,7 @@ st31:
 	if ( ++p == pe )
 		goto _test_eof31;
 case 31:
-#line 2264 "inc/vcf/validator_detail_v43.hpp"
+#line 2265 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr54;
 		case 92: goto tr55;
@@ -2288,7 +2289,7 @@ st32:
 	if ( ++p == pe )
 		goto _test_eof32;
 case 32:
-#line 2292 "inc/vcf/validator_detail_v43.hpp"
+#line 2293 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -2314,7 +2315,7 @@ st33:
 	if ( ++p == pe )
 		goto _test_eof33;
 case 33:
-#line 2318 "inc/vcf/validator_detail_v43.hpp"
+#line 2319 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr58;
 		case 92: goto tr55;
@@ -2336,7 +2337,7 @@ st34:
 	if ( ++p == pe )
 		goto _test_eof34;
 case 34:
-#line 2340 "inc/vcf/validator_detail_v43.hpp"
+#line 2341 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -2397,7 +2398,7 @@ st37:
 	if ( ++p == pe )
 		goto _test_eof37;
 case 37:
-#line 2401 "inc/vcf/validator_detail_v43.hpp"
+#line 2402 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr66;
 		case 92: goto tr67;
@@ -2425,7 +2426,7 @@ st38:
 	if ( ++p == pe )
 		goto _test_eof38;
 case 38:
-#line 2429 "inc/vcf/validator_detail_v43.hpp"
+#line 2430 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 62 )
 		goto st32;
 	goto tr40;
@@ -2449,7 +2450,7 @@ st39:
 	if ( ++p == pe )
 		goto _test_eof39;
 case 39:
-#line 2453 "inc/vcf/validator_detail_v43.hpp"
+#line 2454 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr69;
 		case 92: goto tr67;
@@ -2471,7 +2472,7 @@ st40:
 	if ( ++p == pe )
 		goto _test_eof40;
 case 40:
-#line 2475 "inc/vcf/validator_detail_v43.hpp"
+#line 2476 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr66;
 		case 62: goto tr70;
@@ -2490,7 +2491,7 @@ st41:
 	if ( ++p == pe )
 		goto _test_eof41;
 case 41:
-#line 2494 "inc/vcf/validator_detail_v43.hpp"
+#line 2495 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -2510,7 +2511,7 @@ st42:
 	if ( ++p == pe )
 		goto _test_eof42;
 case 42:
-#line 2514 "inc/vcf/validator_detail_v43.hpp"
+#line 2515 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st42;
 	if ( (*p) < 48 ) {
@@ -2545,7 +2546,7 @@ st43:
 	if ( ++p == pe )
 		goto _test_eof43;
 case 43:
-#line 2549 "inc/vcf/validator_detail_v43.hpp"
+#line 2550 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr73;
 		case 95: goto tr72;
@@ -2572,7 +2573,7 @@ st44:
 	if ( ++p == pe )
 		goto _test_eof44;
 case 44:
-#line 2576 "inc/vcf/validator_detail_v43.hpp"
+#line 2577 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st63;
 	if ( (*p) < 45 ) {
@@ -2604,7 +2605,7 @@ st45:
 	if ( ++p == pe )
 		goto _test_eof45;
 case 45:
-#line 2608 "inc/vcf/validator_detail_v43.hpp"
+#line 2609 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr77;
 		case 62: goto tr54;
@@ -2625,7 +2626,7 @@ st46:
 	if ( ++p == pe )
 		goto _test_eof46;
 case 46:
-#line 2629 "inc/vcf/validator_detail_v43.hpp"
+#line 2630 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto tr78;
 	if ( (*p) < 48 ) {
@@ -2650,7 +2651,7 @@ st47:
 	if ( ++p == pe )
 		goto _test_eof47;
 case 47:
-#line 2654 "inc/vcf/validator_detail_v43.hpp"
+#line 2655 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st47;
 	if ( (*p) < 48 ) {
@@ -2685,7 +2686,7 @@ st48:
 	if ( ++p == pe )
 		goto _test_eof48;
 case 48:
-#line 2689 "inc/vcf/validator_detail_v43.hpp"
+#line 2690 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr82;
 		case 95: goto tr81;
@@ -2712,7 +2713,7 @@ st49:
 	if ( ++p == pe )
 		goto _test_eof49;
 case 49:
-#line 2716 "inc/vcf/validator_detail_v43.hpp"
+#line 2717 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st50;
 	if ( (*p) < 45 ) {
@@ -2755,7 +2756,7 @@ st51:
 	if ( ++p == pe )
 		goto _test_eof51;
 case 51:
-#line 2759 "inc/vcf/validator_detail_v43.hpp"
+#line 2760 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr88;
 		case 92: goto tr89;
@@ -2783,7 +2784,7 @@ st52:
 	if ( ++p == pe )
 		goto _test_eof52;
 case 52:
-#line 2787 "inc/vcf/validator_detail_v43.hpp"
+#line 2788 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto st46;
 		case 62: goto st32;
@@ -2809,7 +2810,7 @@ st53:
 	if ( ++p == pe )
 		goto _test_eof53;
 case 53:
-#line 2813 "inc/vcf/validator_detail_v43.hpp"
+#line 2814 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr91;
 		case 92: goto tr89;
@@ -2831,7 +2832,7 @@ st54:
 	if ( ++p == pe )
 		goto _test_eof54;
 case 54:
-#line 2835 "inc/vcf/validator_detail_v43.hpp"
+#line 2836 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr88;
 		case 44: goto tr92;
@@ -2871,7 +2872,7 @@ st55:
 	if ( ++p == pe )
 		goto _test_eof55;
 case 55:
-#line 2875 "inc/vcf/validator_detail_v43.hpp"
+#line 2876 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr88;
 		case 47: goto tr87;
@@ -2922,7 +2923,7 @@ st56:
 	if ( ++p == pe )
 		goto _test_eof56;
 case 56:
-#line 2926 "inc/vcf/validator_detail_v43.hpp"
+#line 2927 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr88;
 		case 47: goto tr87;
@@ -2973,7 +2974,7 @@ st57:
 	if ( ++p == pe )
 		goto _test_eof57;
 case 57:
-#line 2977 "inc/vcf/validator_detail_v43.hpp"
+#line 2978 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr88;
 		case 47: goto tr87;
@@ -3016,7 +3017,7 @@ st58:
 	if ( ++p == pe )
 		goto _test_eof58;
 case 58:
-#line 3020 "inc/vcf/validator_detail_v43.hpp"
+#line 3021 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr100;
 		case 44: goto tr87;
@@ -3046,7 +3047,7 @@ st59:
 	if ( ++p == pe )
 		goto _test_eof59;
 case 59:
-#line 3050 "inc/vcf/validator_detail_v43.hpp"
+#line 3051 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr88;
 		case 44: goto tr103;
@@ -3086,7 +3087,7 @@ st60:
 	if ( ++p == pe )
 		goto _test_eof60;
 case 60:
-#line 3090 "inc/vcf/validator_detail_v43.hpp"
+#line 3091 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -3116,7 +3117,7 @@ st61:
 	if ( ++p == pe )
 		goto _test_eof61;
 case 61:
-#line 3120 "inc/vcf/validator_detail_v43.hpp"
+#line 3121 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr91;
 		case 44: goto tr103;
@@ -3136,7 +3137,7 @@ st62:
 	if ( ++p == pe )
 		goto _test_eof62;
 case 62:
-#line 3140 "inc/vcf/validator_detail_v43.hpp"
+#line 3141 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr85;
 		case 44: goto tr106;
@@ -3177,7 +3178,7 @@ st64:
 	if ( ++p == pe )
 		goto _test_eof64;
 case 64:
-#line 3181 "inc/vcf/validator_detail_v43.hpp"
+#line 3182 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr88;
 		case 92: goto tr111;
@@ -3205,7 +3206,7 @@ st65:
 	if ( ++p == pe )
 		goto _test_eof65;
 case 65:
-#line 3209 "inc/vcf/validator_detail_v43.hpp"
+#line 3210 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr112;
 		case 92: goto tr111;
@@ -3227,7 +3228,7 @@ st66:
 	if ( ++p == pe )
 		goto _test_eof66;
 case 66:
-#line 3231 "inc/vcf/validator_detail_v43.hpp"
+#line 3232 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr88;
 		case 44: goto tr113;
@@ -3257,7 +3258,7 @@ st67:
 	if ( ++p == pe )
 		goto _test_eof67;
 case 67:
-#line 3261 "inc/vcf/validator_detail_v43.hpp"
+#line 3262 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr88;
 		case 47: goto tr110;
@@ -3308,7 +3309,7 @@ st68:
 	if ( ++p == pe )
 		goto _test_eof68;
 case 68:
-#line 3312 "inc/vcf/validator_detail_v43.hpp"
+#line 3313 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr88;
 		case 47: goto tr110;
@@ -3359,7 +3360,7 @@ st69:
 	if ( ++p == pe )
 		goto _test_eof69;
 case 69:
-#line 3363 "inc/vcf/validator_detail_v43.hpp"
+#line 3364 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr88;
 		case 47: goto tr110;
@@ -3402,7 +3403,7 @@ st70:
 	if ( ++p == pe )
 		goto _test_eof70;
 case 70:
-#line 3406 "inc/vcf/validator_detail_v43.hpp"
+#line 3407 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr100;
 		case 44: goto tr110;
@@ -3432,7 +3433,7 @@ st71:
 	if ( ++p == pe )
 		goto _test_eof71;
 case 71:
-#line 3436 "inc/vcf/validator_detail_v43.hpp"
+#line 3437 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr88;
 		case 44: goto tr123;
@@ -3462,7 +3463,7 @@ st72:
 	if ( ++p == pe )
 		goto _test_eof72;
 case 72:
-#line 3466 "inc/vcf/validator_detail_v43.hpp"
+#line 3467 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -3492,7 +3493,7 @@ st73:
 	if ( ++p == pe )
 		goto _test_eof73;
 case 73:
-#line 3496 "inc/vcf/validator_detail_v43.hpp"
+#line 3497 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr112;
 		case 44: goto tr123;
@@ -3516,7 +3517,7 @@ st74:
 	if ( ++p == pe )
 		goto _test_eof74;
 case 74:
-#line 3520 "inc/vcf/validator_detail_v43.hpp"
+#line 3521 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 76: goto tr127;
@@ -3534,7 +3535,7 @@ st75:
 	if ( ++p == pe )
 		goto _test_eof75;
 case 75:
-#line 3538 "inc/vcf/validator_detail_v43.hpp"
+#line 3539 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 84: goto st76;
@@ -3561,7 +3562,7 @@ st77:
 	if ( ++p == pe )
 		goto _test_eof77;
 case 77:
-#line 3565 "inc/vcf/validator_detail_v43.hpp"
+#line 3566 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st78;
 	goto tr126;
@@ -3633,7 +3634,7 @@ st82:
 	if ( ++p == pe )
 		goto _test_eof82;
 case 82:
-#line 3637 "inc/vcf/validator_detail_v43.hpp"
+#line 3638 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 61 )
 		goto st82;
 	if ( (*p) < 63 ) {
@@ -3687,7 +3688,7 @@ st83:
 	if ( ++p == pe )
 		goto _test_eof83;
 case 83:
-#line 3691 "inc/vcf/validator_detail_v43.hpp"
+#line 3692 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr139;
 		case 61: goto tr138;
@@ -3708,7 +3709,7 @@ st84:
 	if ( ++p == pe )
 		goto _test_eof84;
 case 84:
-#line 3712 "inc/vcf/validator_detail_v43.hpp"
+#line 3713 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 68 )
 		goto st85;
 	goto tr126;
@@ -3806,7 +3807,7 @@ st97:
 	if ( ++p == pe )
 		goto _test_eof97;
 case 97:
-#line 3810 "inc/vcf/validator_detail_v43.hpp"
+#line 3811 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr155;
 		case 92: goto tr156;
@@ -3834,7 +3835,7 @@ st98:
 	if ( ++p == pe )
 		goto _test_eof98;
 case 98:
-#line 3838 "inc/vcf/validator_detail_v43.hpp"
+#line 3839 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
 		case 92: goto tr159;
@@ -3862,7 +3863,7 @@ st99:
 	if ( ++p == pe )
 		goto _test_eof99;
 case 99:
-#line 3866 "inc/vcf/validator_detail_v43.hpp"
+#line 3867 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto st100;
 		case 62: goto st114;
@@ -3896,7 +3897,7 @@ st101:
 	if ( ++p == pe )
 		goto _test_eof101;
 case 101:
-#line 3900 "inc/vcf/validator_detail_v43.hpp"
+#line 3901 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st101;
 	if ( (*p) < 48 ) {
@@ -3931,7 +3932,7 @@ st102:
 	if ( ++p == pe )
 		goto _test_eof102;
 case 102:
-#line 3935 "inc/vcf/validator_detail_v43.hpp"
+#line 3936 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr167;
 		case 95: goto tr166;
@@ -3958,7 +3959,7 @@ st103:
 	if ( ++p == pe )
 		goto _test_eof103;
 case 103:
-#line 3962 "inc/vcf/validator_detail_v43.hpp"
+#line 3963 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st104;
 	goto tr126;
@@ -3993,7 +3994,7 @@ st105:
 	if ( ++p == pe )
 		goto _test_eof105;
 case 105:
-#line 3997 "inc/vcf/validator_detail_v43.hpp"
+#line 3998 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
 		case 92: goto tr172;
@@ -4021,7 +4022,7 @@ st106:
 	if ( ++p == pe )
 		goto _test_eof106;
 case 106:
-#line 4025 "inc/vcf/validator_detail_v43.hpp"
+#line 4026 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr173;
 		case 92: goto tr172;
@@ -4043,7 +4044,7 @@ st107:
 	if ( ++p == pe )
 		goto _test_eof107;
 case 107:
-#line 4047 "inc/vcf/validator_detail_v43.hpp"
+#line 4048 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
 		case 44: goto tr174;
@@ -4073,7 +4074,7 @@ st108:
 	if ( ++p == pe )
 		goto _test_eof108;
 case 108:
-#line 4077 "inc/vcf/validator_detail_v43.hpp"
+#line 4078 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
 		case 47: goto tr171;
@@ -4124,7 +4125,7 @@ st109:
 	if ( ++p == pe )
 		goto _test_eof109;
 case 109:
-#line 4128 "inc/vcf/validator_detail_v43.hpp"
+#line 4129 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
 		case 47: goto tr171;
@@ -4175,7 +4176,7 @@ st110:
 	if ( ++p == pe )
 		goto _test_eof110;
 case 110:
-#line 4179 "inc/vcf/validator_detail_v43.hpp"
+#line 4180 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
 		case 47: goto tr171;
@@ -4218,7 +4219,7 @@ st111:
 	if ( ++p == pe )
 		goto _test_eof111;
 case 111:
-#line 4222 "inc/vcf/validator_detail_v43.hpp"
+#line 4223 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr182;
 		case 92: goto tr172;
@@ -4236,7 +4237,7 @@ st112:
 	if ( ++p == pe )
 		goto _test_eof112;
 case 112:
-#line 4240 "inc/vcf/validator_detail_v43.hpp"
+#line 4241 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr155;
 		case 44: goto tr183;
@@ -4266,7 +4267,7 @@ st113:
 	if ( ++p == pe )
 		goto _test_eof113;
 case 113:
-#line 4270 "inc/vcf/validator_detail_v43.hpp"
+#line 4271 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -4305,7 +4306,7 @@ st115:
 	if ( ++p == pe )
 		goto _test_eof115;
 case 115:
-#line 4309 "inc/vcf/validator_detail_v43.hpp"
+#line 4310 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr185;
 		case 92: goto tr159;
@@ -4327,7 +4328,7 @@ st116:
 	if ( ++p == pe )
 		goto _test_eof116;
 case 116:
-#line 4331 "inc/vcf/validator_detail_v43.hpp"
+#line 4332 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
 		case 44: goto tr186;
@@ -4347,7 +4348,7 @@ st117:
 	if ( ++p == pe )
 		goto _test_eof117;
 case 117:
-#line 4351 "inc/vcf/validator_detail_v43.hpp"
+#line 4352 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
 		case 47: goto tr157;
@@ -4398,7 +4399,7 @@ st118:
 	if ( ++p == pe )
 		goto _test_eof118;
 case 118:
-#line 4402 "inc/vcf/validator_detail_v43.hpp"
+#line 4403 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
 		case 47: goto tr157;
@@ -4449,7 +4450,7 @@ st119:
 	if ( ++p == pe )
 		goto _test_eof119;
 case 119:
-#line 4453 "inc/vcf/validator_detail_v43.hpp"
+#line 4454 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
 		case 47: goto tr157;
@@ -4492,7 +4493,7 @@ st120:
 	if ( ++p == pe )
 		goto _test_eof120;
 case 120:
-#line 4496 "inc/vcf/validator_detail_v43.hpp"
+#line 4497 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr182;
 		case 92: goto tr159;
@@ -4510,7 +4511,7 @@ st121:
 	if ( ++p == pe )
 		goto _test_eof121;
 case 121:
-#line 4514 "inc/vcf/validator_detail_v43.hpp"
+#line 4515 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -4534,7 +4535,7 @@ st122:
 	if ( ++p == pe )
 		goto _test_eof122;
 case 122:
-#line 4538 "inc/vcf/validator_detail_v43.hpp"
+#line 4539 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 73: goto tr195;
@@ -4553,7 +4554,7 @@ st123:
 	if ( ++p == pe )
 		goto _test_eof123;
 case 123:
-#line 4557 "inc/vcf/validator_detail_v43.hpp"
+#line 4558 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 76: goto tr198;
@@ -4571,7 +4572,7 @@ st124:
 	if ( ++p == pe )
 		goto _test_eof124;
 case 124:
-#line 4575 "inc/vcf/validator_detail_v43.hpp"
+#line 4576 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 84: goto tr199;
@@ -4589,7 +4590,7 @@ st125:
 	if ( ++p == pe )
 		goto _test_eof125;
 case 125:
-#line 4593 "inc/vcf/validator_detail_v43.hpp"
+#line 4594 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 69: goto tr200;
@@ -4607,7 +4608,7 @@ st126:
 	if ( ++p == pe )
 		goto _test_eof126;
 case 126:
-#line 4611 "inc/vcf/validator_detail_v43.hpp"
+#line 4612 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 82: goto st127;
@@ -4634,7 +4635,7 @@ st128:
 	if ( ++p == pe )
 		goto _test_eof128;
 case 128:
-#line 4638 "inc/vcf/validator_detail_v43.hpp"
+#line 4639 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st129;
 	goto tr197;
@@ -4691,7 +4692,7 @@ st133:
 	if ( ++p == pe )
 		goto _test_eof133;
 case 133:
-#line 4695 "inc/vcf/validator_detail_v43.hpp"
+#line 4696 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st133;
 	if ( (*p) < 48 ) {
@@ -4730,7 +4731,7 @@ st134:
 	if ( ++p == pe )
 		goto _test_eof134;
 case 134:
-#line 4734 "inc/vcf/validator_detail_v43.hpp"
+#line 4735 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr212;
 		case 95: goto tr211;
@@ -4757,7 +4758,7 @@ st135:
 	if ( ++p == pe )
 		goto _test_eof135;
 case 135:
-#line 4761 "inc/vcf/validator_detail_v43.hpp"
+#line 4762 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 68 )
 		goto st136;
 	goto tr197;
@@ -4855,7 +4856,7 @@ st148:
 	if ( ++p == pe )
 		goto _test_eof148;
 case 148:
-#line 4859 "inc/vcf/validator_detail_v43.hpp"
+#line 4860 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr228;
 		case 92: goto tr229;
@@ -4883,7 +4884,7 @@ st149:
 	if ( ++p == pe )
 		goto _test_eof149;
 case 149:
-#line 4887 "inc/vcf/validator_detail_v43.hpp"
+#line 4888 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 92: goto tr232;
@@ -4911,7 +4912,7 @@ st150:
 	if ( ++p == pe )
 		goto _test_eof150;
 case 150:
-#line 4915 "inc/vcf/validator_detail_v43.hpp"
+#line 4916 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto st151;
 		case 62: goto st165;
@@ -4945,7 +4946,7 @@ st152:
 	if ( ++p == pe )
 		goto _test_eof152;
 case 152:
-#line 4949 "inc/vcf/validator_detail_v43.hpp"
+#line 4950 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st152;
 	if ( (*p) < 48 ) {
@@ -4980,7 +4981,7 @@ st153:
 	if ( ++p == pe )
 		goto _test_eof153;
 case 153:
-#line 4984 "inc/vcf/validator_detail_v43.hpp"
+#line 4985 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr239;
 		case 95: goto tr238;
@@ -5007,7 +5008,7 @@ st154:
 	if ( ++p == pe )
 		goto _test_eof154;
 case 154:
-#line 5011 "inc/vcf/validator_detail_v43.hpp"
+#line 5012 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st155;
 	goto tr197;
@@ -5042,7 +5043,7 @@ st156:
 	if ( ++p == pe )
 		goto _test_eof156;
 case 156:
-#line 5046 "inc/vcf/validator_detail_v43.hpp"
+#line 5047 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 92: goto tr244;
@@ -5070,7 +5071,7 @@ st157:
 	if ( ++p == pe )
 		goto _test_eof157;
 case 157:
-#line 5074 "inc/vcf/validator_detail_v43.hpp"
+#line 5075 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr245;
 		case 92: goto tr244;
@@ -5092,7 +5093,7 @@ st158:
 	if ( ++p == pe )
 		goto _test_eof158;
 case 158:
-#line 5096 "inc/vcf/validator_detail_v43.hpp"
+#line 5097 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 44: goto tr246;
@@ -5122,7 +5123,7 @@ st159:
 	if ( ++p == pe )
 		goto _test_eof159;
 case 159:
-#line 5126 "inc/vcf/validator_detail_v43.hpp"
+#line 5127 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 47: goto tr243;
@@ -5173,7 +5174,7 @@ st160:
 	if ( ++p == pe )
 		goto _test_eof160;
 case 160:
-#line 5177 "inc/vcf/validator_detail_v43.hpp"
+#line 5178 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 47: goto tr243;
@@ -5224,7 +5225,7 @@ st161:
 	if ( ++p == pe )
 		goto _test_eof161;
 case 161:
-#line 5228 "inc/vcf/validator_detail_v43.hpp"
+#line 5229 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 47: goto tr243;
@@ -5267,7 +5268,7 @@ st162:
 	if ( ++p == pe )
 		goto _test_eof162;
 case 162:
-#line 5271 "inc/vcf/validator_detail_v43.hpp"
+#line 5272 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr254;
 		case 92: goto tr244;
@@ -5285,7 +5286,7 @@ st163:
 	if ( ++p == pe )
 		goto _test_eof163;
 case 163:
-#line 5289 "inc/vcf/validator_detail_v43.hpp"
+#line 5290 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr228;
 		case 44: goto tr255;
@@ -5315,7 +5316,7 @@ st164:
 	if ( ++p == pe )
 		goto _test_eof164;
 case 164:
-#line 5319 "inc/vcf/validator_detail_v43.hpp"
+#line 5320 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -5354,7 +5355,7 @@ st166:
 	if ( ++p == pe )
 		goto _test_eof166;
 case 166:
-#line 5358 "inc/vcf/validator_detail_v43.hpp"
+#line 5359 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr257;
 		case 92: goto tr232;
@@ -5376,7 +5377,7 @@ st167:
 	if ( ++p == pe )
 		goto _test_eof167;
 case 167:
-#line 5380 "inc/vcf/validator_detail_v43.hpp"
+#line 5381 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 44: goto tr258;
@@ -5396,7 +5397,7 @@ st168:
 	if ( ++p == pe )
 		goto _test_eof168;
 case 168:
-#line 5400 "inc/vcf/validator_detail_v43.hpp"
+#line 5401 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 47: goto tr230;
@@ -5447,7 +5448,7 @@ st169:
 	if ( ++p == pe )
 		goto _test_eof169;
 case 169:
-#line 5451 "inc/vcf/validator_detail_v43.hpp"
+#line 5452 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 47: goto tr230;
@@ -5498,7 +5499,7 @@ st170:
 	if ( ++p == pe )
 		goto _test_eof170;
 case 170:
-#line 5502 "inc/vcf/validator_detail_v43.hpp"
+#line 5503 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 47: goto tr230;
@@ -5541,7 +5542,7 @@ st171:
 	if ( ++p == pe )
 		goto _test_eof171;
 case 171:
-#line 5545 "inc/vcf/validator_detail_v43.hpp"
+#line 5546 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr254;
 		case 92: goto tr232;
@@ -5559,7 +5560,7 @@ st172:
 	if ( ++p == pe )
 		goto _test_eof172;
 case 172:
-#line 5563 "inc/vcf/validator_detail_v43.hpp"
+#line 5564 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -5579,7 +5580,7 @@ st173:
 	if ( ++p == pe )
 		goto _test_eof173;
 case 173:
-#line 5583 "inc/vcf/validator_detail_v43.hpp"
+#line 5584 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 82: goto tr267;
@@ -5597,7 +5598,7 @@ st174:
 	if ( ++p == pe )
 		goto _test_eof174;
 case 174:
-#line 5601 "inc/vcf/validator_detail_v43.hpp"
+#line 5602 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 77: goto tr268;
@@ -5615,7 +5616,7 @@ st175:
 	if ( ++p == pe )
 		goto _test_eof175;
 case 175:
-#line 5619 "inc/vcf/validator_detail_v43.hpp"
+#line 5620 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 65: goto tr269;
@@ -5633,7 +5634,7 @@ st176:
 	if ( ++p == pe )
 		goto _test_eof176;
 case 176:
-#line 5637 "inc/vcf/validator_detail_v43.hpp"
+#line 5638 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 84: goto st177;
@@ -5660,7 +5661,7 @@ st178:
 	if ( ++p == pe )
 		goto _test_eof178;
 case 178:
-#line 5664 "inc/vcf/validator_detail_v43.hpp"
+#line 5665 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st179;
 	goto tr266;
@@ -5717,7 +5718,7 @@ st183:
 	if ( ++p == pe )
 		goto _test_eof183;
 case 183:
-#line 5721 "inc/vcf/validator_detail_v43.hpp"
+#line 5722 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st183;
 	if ( (*p) < 48 ) {
@@ -5756,7 +5757,7 @@ st184:
 	if ( ++p == pe )
 		goto _test_eof184;
 case 184:
-#line 5760 "inc/vcf/validator_detail_v43.hpp"
+#line 5761 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr281;
 		case 95: goto tr280;
@@ -5783,7 +5784,7 @@ st185:
 	if ( ++p == pe )
 		goto _test_eof185;
 case 185:
-#line 5787 "inc/vcf/validator_detail_v43.hpp"
+#line 5788 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto st186;
 	goto tr266;
@@ -5860,7 +5861,7 @@ st193:
 	if ( ++p == pe )
 		goto _test_eof193;
 case 193:
-#line 5864 "inc/vcf/validator_detail_v43.hpp"
+#line 5865 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto tr292;
 	goto tr289;
@@ -5874,7 +5875,7 @@ st194:
 	if ( ++p == pe )
 		goto _test_eof194;
 case 194:
-#line 5878 "inc/vcf/validator_detail_v43.hpp"
+#line 5879 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 84 )
 		goto st195;
 	goto tr266;
@@ -5940,7 +5941,7 @@ st200:
 	if ( ++p == pe )
 		goto _test_eof200;
 case 200:
-#line 5944 "inc/vcf/validator_detail_v43.hpp"
+#line 5945 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto tr300;
 	if ( (*p) > 90 ) {
@@ -5959,7 +5960,7 @@ st201:
 	if ( ++p == pe )
 		goto _test_eof201;
 case 201:
-#line 5963 "inc/vcf/validator_detail_v43.hpp"
+#line 5964 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 68 )
 		goto st202;
 	goto tr266;
@@ -6057,7 +6058,7 @@ st214:
 	if ( ++p == pe )
 		goto _test_eof214;
 case 214:
-#line 6061 "inc/vcf/validator_detail_v43.hpp"
+#line 6062 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr317;
 		case 92: goto tr318;
@@ -6085,7 +6086,7 @@ st215:
 	if ( ++p == pe )
 		goto _test_eof215;
 case 215:
-#line 6089 "inc/vcf/validator_detail_v43.hpp"
+#line 6090 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 92: goto tr321;
@@ -6113,7 +6114,7 @@ st216:
 	if ( ++p == pe )
 		goto _test_eof216;
 case 216:
-#line 6117 "inc/vcf/validator_detail_v43.hpp"
+#line 6118 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto st217;
 		case 62: goto st231;
@@ -6147,7 +6148,7 @@ st218:
 	if ( ++p == pe )
 		goto _test_eof218;
 case 218:
-#line 6151 "inc/vcf/validator_detail_v43.hpp"
+#line 6152 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st218;
 	if ( (*p) < 48 ) {
@@ -6182,7 +6183,7 @@ st219:
 	if ( ++p == pe )
 		goto _test_eof219;
 case 219:
-#line 6186 "inc/vcf/validator_detail_v43.hpp"
+#line 6187 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr328;
 		case 95: goto tr327;
@@ -6209,7 +6210,7 @@ st220:
 	if ( ++p == pe )
 		goto _test_eof220;
 case 220:
-#line 6213 "inc/vcf/validator_detail_v43.hpp"
+#line 6214 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st221;
 	goto tr266;
@@ -6244,7 +6245,7 @@ st222:
 	if ( ++p == pe )
 		goto _test_eof222;
 case 222:
-#line 6248 "inc/vcf/validator_detail_v43.hpp"
+#line 6249 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 92: goto tr333;
@@ -6272,7 +6273,7 @@ st223:
 	if ( ++p == pe )
 		goto _test_eof223;
 case 223:
-#line 6276 "inc/vcf/validator_detail_v43.hpp"
+#line 6277 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr334;
 		case 92: goto tr333;
@@ -6294,7 +6295,7 @@ st224:
 	if ( ++p == pe )
 		goto _test_eof224;
 case 224:
-#line 6298 "inc/vcf/validator_detail_v43.hpp"
+#line 6299 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 44: goto tr335;
@@ -6324,7 +6325,7 @@ st225:
 	if ( ++p == pe )
 		goto _test_eof225;
 case 225:
-#line 6328 "inc/vcf/validator_detail_v43.hpp"
+#line 6329 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 47: goto tr332;
@@ -6375,7 +6376,7 @@ st226:
 	if ( ++p == pe )
 		goto _test_eof226;
 case 226:
-#line 6379 "inc/vcf/validator_detail_v43.hpp"
+#line 6380 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 47: goto tr332;
@@ -6426,7 +6427,7 @@ st227:
 	if ( ++p == pe )
 		goto _test_eof227;
 case 227:
-#line 6430 "inc/vcf/validator_detail_v43.hpp"
+#line 6431 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 47: goto tr332;
@@ -6469,7 +6470,7 @@ st228:
 	if ( ++p == pe )
 		goto _test_eof228;
 case 228:
-#line 6473 "inc/vcf/validator_detail_v43.hpp"
+#line 6474 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr343;
 		case 92: goto tr333;
@@ -6487,7 +6488,7 @@ st229:
 	if ( ++p == pe )
 		goto _test_eof229;
 case 229:
-#line 6491 "inc/vcf/validator_detail_v43.hpp"
+#line 6492 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr317;
 		case 44: goto tr344;
@@ -6517,7 +6518,7 @@ st230:
 	if ( ++p == pe )
 		goto _test_eof230;
 case 230:
-#line 6521 "inc/vcf/validator_detail_v43.hpp"
+#line 6522 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -6556,7 +6557,7 @@ st232:
 	if ( ++p == pe )
 		goto _test_eof232;
 case 232:
-#line 6560 "inc/vcf/validator_detail_v43.hpp"
+#line 6561 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr346;
 		case 92: goto tr321;
@@ -6578,7 +6579,7 @@ st233:
 	if ( ++p == pe )
 		goto _test_eof233;
 case 233:
-#line 6582 "inc/vcf/validator_detail_v43.hpp"
+#line 6583 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 44: goto tr347;
@@ -6598,7 +6599,7 @@ st234:
 	if ( ++p == pe )
 		goto _test_eof234;
 case 234:
-#line 6602 "inc/vcf/validator_detail_v43.hpp"
+#line 6603 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 47: goto tr319;
@@ -6649,7 +6650,7 @@ st235:
 	if ( ++p == pe )
 		goto _test_eof235;
 case 235:
-#line 6653 "inc/vcf/validator_detail_v43.hpp"
+#line 6654 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 47: goto tr319;
@@ -6700,7 +6701,7 @@ st236:
 	if ( ++p == pe )
 		goto _test_eof236;
 case 236:
-#line 6704 "inc/vcf/validator_detail_v43.hpp"
+#line 6705 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 47: goto tr319;
@@ -6743,7 +6744,7 @@ st237:
 	if ( ++p == pe )
 		goto _test_eof237;
 case 237:
-#line 6747 "inc/vcf/validator_detail_v43.hpp"
+#line 6748 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr343;
 		case 92: goto tr321;
@@ -6761,7 +6762,7 @@ st238:
 	if ( ++p == pe )
 		goto _test_eof238;
 case 238:
-#line 6765 "inc/vcf/validator_detail_v43.hpp"
+#line 6766 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -6795,7 +6796,7 @@ st239:
 	if ( ++p == pe )
 		goto _test_eof239;
 case 239:
-#line 6799 "inc/vcf/validator_detail_v43.hpp"
+#line 6800 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto tr292;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -6815,7 +6816,7 @@ st240:
 	if ( ++p == pe )
 		goto _test_eof240;
 case 240:
-#line 6819 "inc/vcf/validator_detail_v43.hpp"
+#line 6820 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 78: goto tr357;
@@ -6833,7 +6834,7 @@ st241:
 	if ( ++p == pe )
 		goto _test_eof241;
 case 241:
-#line 6837 "inc/vcf/validator_detail_v43.hpp"
+#line 6838 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 70: goto tr358;
@@ -6851,7 +6852,7 @@ st242:
 	if ( ++p == pe )
 		goto _test_eof242;
 case 242:
-#line 6855 "inc/vcf/validator_detail_v43.hpp"
+#line 6856 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 79: goto st243;
@@ -6878,7 +6879,7 @@ st244:
 	if ( ++p == pe )
 		goto _test_eof244;
 case 244:
-#line 6882 "inc/vcf/validator_detail_v43.hpp"
+#line 6883 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st245;
 	goto tr356;
@@ -6935,7 +6936,7 @@ st249:
 	if ( ++p == pe )
 		goto _test_eof249;
 case 249:
-#line 6939 "inc/vcf/validator_detail_v43.hpp"
+#line 6940 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st249;
 	if ( (*p) < 48 ) {
@@ -6974,7 +6975,7 @@ st250:
 	if ( ++p == pe )
 		goto _test_eof250;
 case 250:
-#line 6978 "inc/vcf/validator_detail_v43.hpp"
+#line 6979 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr370;
 		case 95: goto tr369;
@@ -7001,7 +7002,7 @@ st251:
 	if ( ++p == pe )
 		goto _test_eof251;
 case 251:
-#line 7005 "inc/vcf/validator_detail_v43.hpp"
+#line 7006 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto st252;
 	goto tr356;
@@ -7078,7 +7079,7 @@ st259:
 	if ( ++p == pe )
 		goto _test_eof259;
 case 259:
-#line 7082 "inc/vcf/validator_detail_v43.hpp"
+#line 7083 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto tr381;
 	goto tr378;
@@ -7092,7 +7093,7 @@ st260:
 	if ( ++p == pe )
 		goto _test_eof260;
 case 260:
-#line 7096 "inc/vcf/validator_detail_v43.hpp"
+#line 7097 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 84 )
 		goto st261;
 	goto tr356;
@@ -7158,7 +7159,7 @@ st266:
 	if ( ++p == pe )
 		goto _test_eof266;
 case 266:
-#line 7162 "inc/vcf/validator_detail_v43.hpp"
+#line 7163 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto tr389;
 	if ( (*p) > 90 ) {
@@ -7177,7 +7178,7 @@ st267:
 	if ( ++p == pe )
 		goto _test_eof267;
 case 267:
-#line 7181 "inc/vcf/validator_detail_v43.hpp"
+#line 7182 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 68 )
 		goto st268;
 	goto tr356;
@@ -7275,7 +7276,7 @@ st280:
 	if ( ++p == pe )
 		goto _test_eof280;
 case 280:
-#line 7279 "inc/vcf/validator_detail_v43.hpp"
+#line 7280 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr406;
 		case 92: goto tr407;
@@ -7303,7 +7304,7 @@ st281:
 	if ( ++p == pe )
 		goto _test_eof281;
 case 281:
-#line 7307 "inc/vcf/validator_detail_v43.hpp"
+#line 7308 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 92: goto tr410;
@@ -7331,7 +7332,7 @@ st282:
 	if ( ++p == pe )
 		goto _test_eof282;
 case 282:
-#line 7335 "inc/vcf/validator_detail_v43.hpp"
+#line 7336 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto st283;
 		case 62: goto st297;
@@ -7365,7 +7366,7 @@ st284:
 	if ( ++p == pe )
 		goto _test_eof284;
 case 284:
-#line 7369 "inc/vcf/validator_detail_v43.hpp"
+#line 7370 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st284;
 	if ( (*p) < 48 ) {
@@ -7400,7 +7401,7 @@ st285:
 	if ( ++p == pe )
 		goto _test_eof285;
 case 285:
-#line 7404 "inc/vcf/validator_detail_v43.hpp"
+#line 7405 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr417;
 		case 95: goto tr416;
@@ -7427,7 +7428,7 @@ st286:
 	if ( ++p == pe )
 		goto _test_eof286;
 case 286:
-#line 7431 "inc/vcf/validator_detail_v43.hpp"
+#line 7432 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st287;
 	goto tr356;
@@ -7462,7 +7463,7 @@ st288:
 	if ( ++p == pe )
 		goto _test_eof288;
 case 288:
-#line 7466 "inc/vcf/validator_detail_v43.hpp"
+#line 7467 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 92: goto tr422;
@@ -7490,7 +7491,7 @@ st289:
 	if ( ++p == pe )
 		goto _test_eof289;
 case 289:
-#line 7494 "inc/vcf/validator_detail_v43.hpp"
+#line 7495 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr423;
 		case 92: goto tr422;
@@ -7512,7 +7513,7 @@ st290:
 	if ( ++p == pe )
 		goto _test_eof290;
 case 290:
-#line 7516 "inc/vcf/validator_detail_v43.hpp"
+#line 7517 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 44: goto tr424;
@@ -7542,7 +7543,7 @@ st291:
 	if ( ++p == pe )
 		goto _test_eof291;
 case 291:
-#line 7546 "inc/vcf/validator_detail_v43.hpp"
+#line 7547 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 47: goto tr421;
@@ -7593,7 +7594,7 @@ st292:
 	if ( ++p == pe )
 		goto _test_eof292;
 case 292:
-#line 7597 "inc/vcf/validator_detail_v43.hpp"
+#line 7598 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 47: goto tr421;
@@ -7644,7 +7645,7 @@ st293:
 	if ( ++p == pe )
 		goto _test_eof293;
 case 293:
-#line 7648 "inc/vcf/validator_detail_v43.hpp"
+#line 7649 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 47: goto tr421;
@@ -7687,7 +7688,7 @@ st294:
 	if ( ++p == pe )
 		goto _test_eof294;
 case 294:
-#line 7691 "inc/vcf/validator_detail_v43.hpp"
+#line 7692 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr432;
 		case 92: goto tr422;
@@ -7705,7 +7706,7 @@ st295:
 	if ( ++p == pe )
 		goto _test_eof295;
 case 295:
-#line 7709 "inc/vcf/validator_detail_v43.hpp"
+#line 7710 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr406;
 		case 44: goto tr433;
@@ -7735,7 +7736,7 @@ st296:
 	if ( ++p == pe )
 		goto _test_eof296;
 case 296:
-#line 7739 "inc/vcf/validator_detail_v43.hpp"
+#line 7740 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -7774,7 +7775,7 @@ st298:
 	if ( ++p == pe )
 		goto _test_eof298;
 case 298:
-#line 7778 "inc/vcf/validator_detail_v43.hpp"
+#line 7779 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr435;
 		case 92: goto tr410;
@@ -7796,7 +7797,7 @@ st299:
 	if ( ++p == pe )
 		goto _test_eof299;
 case 299:
-#line 7800 "inc/vcf/validator_detail_v43.hpp"
+#line 7801 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 44: goto tr436;
@@ -7816,7 +7817,7 @@ st300:
 	if ( ++p == pe )
 		goto _test_eof300;
 case 300:
-#line 7820 "inc/vcf/validator_detail_v43.hpp"
+#line 7821 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 47: goto tr408;
@@ -7867,7 +7868,7 @@ st301:
 	if ( ++p == pe )
 		goto _test_eof301;
 case 301:
-#line 7871 "inc/vcf/validator_detail_v43.hpp"
+#line 7872 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 47: goto tr408;
@@ -7918,7 +7919,7 @@ st302:
 	if ( ++p == pe )
 		goto _test_eof302;
 case 302:
-#line 7922 "inc/vcf/validator_detail_v43.hpp"
+#line 7923 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 47: goto tr408;
@@ -7961,7 +7962,7 @@ st303:
 	if ( ++p == pe )
 		goto _test_eof303;
 case 303:
-#line 7965 "inc/vcf/validator_detail_v43.hpp"
+#line 7966 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr432;
 		case 92: goto tr410;
@@ -7979,7 +7980,7 @@ st304:
 	if ( ++p == pe )
 		goto _test_eof304;
 case 304:
-#line 7983 "inc/vcf/validator_detail_v43.hpp"
+#line 7984 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -8013,7 +8014,7 @@ st305:
 	if ( ++p == pe )
 		goto _test_eof305;
 case 305:
-#line 8017 "inc/vcf/validator_detail_v43.hpp"
+#line 8018 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto tr381;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -8033,7 +8034,7 @@ st306:
 	if ( ++p == pe )
 		goto _test_eof306;
 case 306:
-#line 8037 "inc/vcf/validator_detail_v43.hpp"
+#line 8038 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 69: goto tr446;
@@ -8051,7 +8052,7 @@ st307:
 	if ( ++p == pe )
 		goto _test_eof307;
 case 307:
-#line 8055 "inc/vcf/validator_detail_v43.hpp"
+#line 8056 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 84: goto tr447;
@@ -8069,7 +8070,7 @@ st308:
 	if ( ++p == pe )
 		goto _test_eof308;
 case 308:
-#line 8073 "inc/vcf/validator_detail_v43.hpp"
+#line 8074 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 65: goto st309;
@@ -8096,7 +8097,7 @@ st310:
 	if ( ++p == pe )
 		goto _test_eof310;
 case 310:
-#line 8100 "inc/vcf/validator_detail_v43.hpp"
+#line 8101 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st311;
 	goto tr445;
@@ -8153,7 +8154,7 @@ st315:
 	if ( ++p == pe )
 		goto _test_eof315;
 case 315:
-#line 8157 "inc/vcf/validator_detail_v43.hpp"
+#line 8158 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st315;
 	if ( (*p) < 48 ) {
@@ -8192,7 +8193,7 @@ st316:
 	if ( ++p == pe )
 		goto _test_eof316;
 case 316:
-#line 8196 "inc/vcf/validator_detail_v43.hpp"
+#line 8197 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr459;
 		case 95: goto tr458;
@@ -8219,7 +8220,7 @@ st317:
 	if ( ++p == pe )
 		goto _test_eof317;
 case 317:
-#line 8223 "inc/vcf/validator_detail_v43.hpp"
+#line 8224 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto st318;
 	goto tr445;
@@ -8282,7 +8283,7 @@ st325:
 	if ( ++p == pe )
 		goto _test_eof325;
 case 325:
-#line 8286 "inc/vcf/validator_detail_v43.hpp"
+#line 8287 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto st326;
 	goto tr467;
@@ -8338,7 +8339,7 @@ st332:
 	if ( ++p == pe )
 		goto _test_eof332;
 case 332:
-#line 8342 "inc/vcf/validator_detail_v43.hpp"
+#line 8343 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 116 )
 		goto st333;
 	goto tr475;
@@ -8443,7 +8444,7 @@ st346:
 	if ( ++p == pe )
 		goto _test_eof346;
 case 346:
-#line 8447 "inc/vcf/validator_detail_v43.hpp"
+#line 8448 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 61 )
 		goto tr491;
 	if ( (*p) < 45 ) {
@@ -8475,7 +8476,7 @@ st347:
 	if ( ++p == pe )
 		goto _test_eof347;
 case 347:
-#line 8479 "inc/vcf/validator_detail_v43.hpp"
+#line 8480 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr494;
 		case 61: goto tr493;
@@ -8497,7 +8498,7 @@ st348:
 	if ( ++p == pe )
 		goto _test_eof348;
 case 348:
-#line 8501 "inc/vcf/validator_detail_v43.hpp"
+#line 8502 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 32: goto tr496;
 		case 61: goto tr493;
@@ -8524,7 +8525,7 @@ st349:
 	if ( ++p == pe )
 		goto _test_eof349;
 case 349:
-#line 8528 "inc/vcf/validator_detail_v43.hpp"
+#line 8529 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 61 )
 		goto tr493;
 	if ( (*p) < 45 ) {
@@ -8550,7 +8551,7 @@ st350:
 	if ( ++p == pe )
 		goto _test_eof350;
 case 350:
-#line 8554 "inc/vcf/validator_detail_v43.hpp"
+#line 8555 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr494;
 		case 62: goto st351;
@@ -8585,7 +8586,7 @@ st352:
 	if ( ++p == pe )
 		goto _test_eof352;
 case 352:
-#line 8589 "inc/vcf/validator_detail_v43.hpp"
+#line 8590 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 69: goto tr499;
@@ -8603,7 +8604,7 @@ st353:
 	if ( ++p == pe )
 		goto _test_eof353;
 case 353:
-#line 8607 "inc/vcf/validator_detail_v43.hpp"
+#line 8608 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 68: goto tr500;
@@ -8621,7 +8622,7 @@ st354:
 	if ( ++p == pe )
 		goto _test_eof354;
 case 354:
-#line 8625 "inc/vcf/validator_detail_v43.hpp"
+#line 8626 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 73: goto tr501;
@@ -8639,7 +8640,7 @@ st355:
 	if ( ++p == pe )
 		goto _test_eof355;
 case 355:
-#line 8643 "inc/vcf/validator_detail_v43.hpp"
+#line 8644 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 71: goto tr502;
@@ -8657,7 +8658,7 @@ st356:
 	if ( ++p == pe )
 		goto _test_eof356;
 case 356:
-#line 8661 "inc/vcf/validator_detail_v43.hpp"
+#line 8662 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 82: goto tr503;
@@ -8675,7 +8676,7 @@ st357:
 	if ( ++p == pe )
 		goto _test_eof357;
 case 357:
-#line 8679 "inc/vcf/validator_detail_v43.hpp"
+#line 8680 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 69: goto tr504;
@@ -8693,7 +8694,7 @@ st358:
 	if ( ++p == pe )
 		goto _test_eof358;
 case 358:
-#line 8697 "inc/vcf/validator_detail_v43.hpp"
+#line 8698 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 69: goto st359;
@@ -8720,7 +8721,7 @@ st360:
 	if ( ++p == pe )
 		goto _test_eof360;
 case 360:
-#line 8724 "inc/vcf/validator_detail_v43.hpp"
+#line 8725 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st361;
 	goto tr498;
@@ -8777,7 +8778,7 @@ st365:
 	if ( ++p == pe )
 		goto _test_eof365;
 case 365:
-#line 8781 "inc/vcf/validator_detail_v43.hpp"
+#line 8782 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st365;
 	if ( (*p) < 48 ) {
@@ -8816,7 +8817,7 @@ st366:
 	if ( ++p == pe )
 		goto _test_eof366;
 case 366:
-#line 8820 "inc/vcf/validator_detail_v43.hpp"
+#line 8821 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr516;
 		case 95: goto tr515;
@@ -8843,7 +8844,7 @@ st367:
 	if ( ++p == pe )
 		goto _test_eof367;
 case 367:
-#line 8847 "inc/vcf/validator_detail_v43.hpp"
+#line 8848 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 70: goto st368;
 		case 78: goto tr519;
@@ -8924,7 +8925,7 @@ st375:
 	if ( ++p == pe )
 		goto _test_eof375;
 case 375:
-#line 8928 "inc/vcf/validator_detail_v43.hpp"
+#line 8929 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st375;
 	if ( (*p) < 48 ) {
@@ -8963,7 +8964,7 @@ st376:
 	if ( ++p == pe )
 		goto _test_eof376;
 case 376:
-#line 8967 "inc/vcf/validator_detail_v43.hpp"
+#line 8968 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr532;
 		case 95: goto tr531;
@@ -8990,7 +8991,7 @@ st377:
 	if ( ++p == pe )
 		goto _test_eof377;
 case 377:
-#line 8994 "inc/vcf/validator_detail_v43.hpp"
+#line 8995 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 77 )
 		goto st378;
 	goto tr498;
@@ -9068,7 +9069,7 @@ st385:
 	if ( ++p == pe )
 		goto _test_eof385;
 case 385:
-#line 9072 "inc/vcf/validator_detail_v43.hpp"
+#line 9073 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st385;
 	if ( (*p) < 48 ) {
@@ -9107,7 +9108,7 @@ st386:
 	if ( ++p == pe )
 		goto _test_eof386;
 case 386:
-#line 9111 "inc/vcf/validator_detail_v43.hpp"
+#line 9112 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 62: goto tr544;
 		case 95: goto tr543;
@@ -9134,7 +9135,7 @@ st387:
 	if ( ++p == pe )
 		goto _test_eof387;
 case 387:
-#line 9138 "inc/vcf/validator_detail_v43.hpp"
+#line 9139 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -9154,7 +9155,7 @@ st388:
 	if ( ++p == pe )
 		goto _test_eof388;
 case 388:
-#line 9158 "inc/vcf/validator_detail_v43.hpp"
+#line 9159 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 97 )
 		goto tr545;
 	goto tr517;
@@ -9168,7 +9169,7 @@ st389:
 	if ( ++p == pe )
 		goto _test_eof389;
 case 389:
-#line 9172 "inc/vcf/validator_detail_v43.hpp"
+#line 9173 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 109 )
 		goto tr546;
 	goto tr517;
@@ -9182,7 +9183,7 @@ st390:
 	if ( ++p == pe )
 		goto _test_eof390;
 case 390:
-#line 9186 "inc/vcf/validator_detail_v43.hpp"
+#line 9187 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 101 )
 		goto tr547;
 	goto tr517;
@@ -9196,7 +9197,7 @@ st391:
 	if ( ++p == pe )
 		goto _test_eof391;
 case 391:
-#line 9200 "inc/vcf/validator_detail_v43.hpp"
+#line 9201 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto tr548;
 	goto tr517;
@@ -9210,7 +9211,7 @@ st392:
 	if ( ++p == pe )
 		goto _test_eof392;
 case 392:
-#line 9214 "inc/vcf/validator_detail_v43.hpp"
+#line 9215 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr549;
 	goto tr517;
@@ -9224,7 +9225,7 @@ st393:
 	if ( ++p == pe )
 		goto _test_eof393;
 case 393:
-#line 9228 "inc/vcf/validator_detail_v43.hpp"
+#line 9229 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 61 )
 		goto tr550;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -9240,7 +9241,7 @@ st394:
 	if ( ++p == pe )
 		goto _test_eof394;
 case 394:
-#line 9244 "inc/vcf/validator_detail_v43.hpp"
+#line 9245 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto tr551;
 	if ( (*p) < 48 ) {
@@ -9265,7 +9266,7 @@ st395:
 	if ( ++p == pe )
 		goto _test_eof395;
 case 395:
-#line 9269 "inc/vcf/validator_detail_v43.hpp"
+#line 9270 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st395;
 	if ( (*p) < 48 ) {
@@ -9300,7 +9301,7 @@ st396:
 	if ( ++p == pe )
 		goto _test_eof396;
 case 396:
-#line 9304 "inc/vcf/validator_detail_v43.hpp"
+#line 9305 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr555;
 		case 62: goto tr544;
@@ -9328,7 +9329,7 @@ st397:
 	if ( ++p == pe )
 		goto _test_eof397;
 case 397:
-#line 9332 "inc/vcf/validator_detail_v43.hpp"
+#line 9333 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto tr519;
 	goto tr517;
@@ -9420,7 +9421,7 @@ st407:
 	if ( ++p == pe )
 		goto _test_eof407;
 case 407:
-#line 9424 "inc/vcf/validator_detail_v43.hpp"
+#line 9425 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st407;
 	if ( (*p) < 48 ) {
@@ -9459,7 +9460,7 @@ st408:
 	if ( ++p == pe )
 		goto _test_eof408;
 case 408:
-#line 9463 "inc/vcf/validator_detail_v43.hpp"
+#line 9464 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 62: goto tr544;
 		case 95: goto tr568;
@@ -9490,7 +9491,7 @@ st409:
 	if ( ++p == pe )
 		goto _test_eof409;
 case 409:
-#line 9494 "inc/vcf/validator_detail_v43.hpp"
+#line 9495 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 65: goto tr570;
@@ -9508,7 +9509,7 @@ st410:
 	if ( ++p == pe )
 		goto _test_eof410;
 case 410:
-#line 9512 "inc/vcf/validator_detail_v43.hpp"
+#line 9513 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 77: goto tr571;
@@ -9526,7 +9527,7 @@ st411:
 	if ( ++p == pe )
 		goto _test_eof411;
 case 411:
-#line 9530 "inc/vcf/validator_detail_v43.hpp"
+#line 9531 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 80: goto tr572;
@@ -9544,7 +9545,7 @@ st412:
 	if ( ++p == pe )
 		goto _test_eof412;
 case 412:
-#line 9548 "inc/vcf/validator_detail_v43.hpp"
+#line 9549 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 76: goto tr573;
@@ -9562,7 +9563,7 @@ st413:
 	if ( ++p == pe )
 		goto _test_eof413;
 case 413:
-#line 9566 "inc/vcf/validator_detail_v43.hpp"
+#line 9567 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 69: goto st414;
@@ -9589,7 +9590,7 @@ st415:
 	if ( ++p == pe )
 		goto _test_eof415;
 case 415:
-#line 9593 "inc/vcf/validator_detail_v43.hpp"
+#line 9594 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st416;
 	goto tr569;
@@ -9646,7 +9647,7 @@ st420:
 	if ( ++p == pe )
 		goto _test_eof420;
 case 420:
-#line 9650 "inc/vcf/validator_detail_v43.hpp"
+#line 9651 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st420;
 	if ( (*p) < 48 ) {
@@ -9685,7 +9686,7 @@ st421:
 	if ( ++p == pe )
 		goto _test_eof421;
 case 421:
-#line 9689 "inc/vcf/validator_detail_v43.hpp"
+#line 9690 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr585;
 		case 62: goto tr586;
@@ -9713,7 +9714,7 @@ st422:
 	if ( ++p == pe )
 		goto _test_eof422;
 case 422:
-#line 9717 "inc/vcf/validator_detail_v43.hpp"
+#line 9718 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto tr587;
 	if ( (*p) < 48 ) {
@@ -9738,7 +9739,7 @@ st423:
 	if ( ++p == pe )
 		goto _test_eof423;
 case 423:
-#line 9742 "inc/vcf/validator_detail_v43.hpp"
+#line 9743 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st423;
 	if ( (*p) < 48 ) {
@@ -9773,7 +9774,7 @@ st424:
 	if ( ++p == pe )
 		goto _test_eof424;
 case 424:
-#line 9777 "inc/vcf/validator_detail_v43.hpp"
+#line 9778 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr591;
 		case 95: goto tr590;
@@ -9800,7 +9801,7 @@ st425:
 	if ( ++p == pe )
 		goto _test_eof425;
 case 425:
-#line 9804 "inc/vcf/validator_detail_v43.hpp"
+#line 9805 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st428;
 	if ( (*p) < 45 ) {
@@ -9832,7 +9833,7 @@ st426:
 	if ( ++p == pe )
 		goto _test_eof426;
 case 426:
-#line 9836 "inc/vcf/validator_detail_v43.hpp"
+#line 9837 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr585;
 		case 62: goto tr586;
@@ -9853,7 +9854,7 @@ st427:
 	if ( ++p == pe )
 		goto _test_eof427;
 case 427:
-#line 9857 "inc/vcf/validator_detail_v43.hpp"
+#line 9858 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -9890,7 +9891,7 @@ st429:
 	if ( ++p == pe )
 		goto _test_eof429;
 case 429:
-#line 9894 "inc/vcf/validator_detail_v43.hpp"
+#line 9895 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr599;
 		case 92: goto tr600;
@@ -9918,7 +9919,7 @@ st430:
 	if ( ++p == pe )
 		goto _test_eof430;
 case 430:
-#line 9922 "inc/vcf/validator_detail_v43.hpp"
+#line 9923 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto st422;
 		case 62: goto st427;
@@ -9944,7 +9945,7 @@ st431:
 	if ( ++p == pe )
 		goto _test_eof431;
 case 431:
-#line 9948 "inc/vcf/validator_detail_v43.hpp"
+#line 9949 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr603;
 		case 92: goto tr600;
@@ -9966,7 +9967,7 @@ st432:
 	if ( ++p == pe )
 		goto _test_eof432;
 case 432:
-#line 9970 "inc/vcf/validator_detail_v43.hpp"
+#line 9971 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr599;
 		case 44: goto tr604;
@@ -10006,7 +10007,7 @@ st433:
 	if ( ++p == pe )
 		goto _test_eof433;
 case 433:
-#line 10010 "inc/vcf/validator_detail_v43.hpp"
+#line 10011 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr599;
 		case 47: goto tr598;
@@ -10057,7 +10058,7 @@ st434:
 	if ( ++p == pe )
 		goto _test_eof434;
 case 434:
-#line 10061 "inc/vcf/validator_detail_v43.hpp"
+#line 10062 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr599;
 		case 47: goto tr598;
@@ -10108,7 +10109,7 @@ st435:
 	if ( ++p == pe )
 		goto _test_eof435;
 case 435:
-#line 10112 "inc/vcf/validator_detail_v43.hpp"
+#line 10113 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr599;
 		case 47: goto tr598;
@@ -10151,7 +10152,7 @@ st436:
 	if ( ++p == pe )
 		goto _test_eof436;
 case 436:
-#line 10155 "inc/vcf/validator_detail_v43.hpp"
+#line 10156 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr612;
 		case 44: goto tr598;
@@ -10181,7 +10182,7 @@ st437:
 	if ( ++p == pe )
 		goto _test_eof437;
 case 437:
-#line 10185 "inc/vcf/validator_detail_v43.hpp"
+#line 10186 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr599;
 		case 44: goto tr615;
@@ -10221,7 +10222,7 @@ st438:
 	if ( ++p == pe )
 		goto _test_eof438;
 case 438:
-#line 10225 "inc/vcf/validator_detail_v43.hpp"
+#line 10226 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -10251,7 +10252,7 @@ st439:
 	if ( ++p == pe )
 		goto _test_eof439;
 case 439:
-#line 10255 "inc/vcf/validator_detail_v43.hpp"
+#line 10256 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr603;
 		case 44: goto tr615;
@@ -10271,7 +10272,7 @@ st440:
 	if ( ++p == pe )
 		goto _test_eof440;
 case 440:
-#line 10275 "inc/vcf/validator_detail_v43.hpp"
+#line 10276 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr596;
 		case 44: goto tr618;
@@ -10295,7 +10296,7 @@ st441:
 	if ( ++p == pe )
 		goto _test_eof441;
 case 441:
-#line 10299 "inc/vcf/validator_detail_v43.hpp"
+#line 10300 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 115: goto tr621;
@@ -10313,7 +10314,7 @@ st442:
 	if ( ++p == pe )
 		goto _test_eof442;
 case 442:
-#line 10317 "inc/vcf/validator_detail_v43.hpp"
+#line 10318 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 115: goto tr622;
@@ -10331,7 +10332,7 @@ st443:
 	if ( ++p == pe )
 		goto _test_eof443;
 case 443:
-#line 10335 "inc/vcf/validator_detail_v43.hpp"
+#line 10336 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 101: goto tr623;
@@ -10349,7 +10350,7 @@ st444:
 	if ( ++p == pe )
 		goto _test_eof444;
 case 444:
-#line 10353 "inc/vcf/validator_detail_v43.hpp"
+#line 10354 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 109: goto tr624;
@@ -10367,7 +10368,7 @@ st445:
 	if ( ++p == pe )
 		goto _test_eof445;
 case 445:
-#line 10371 "inc/vcf/validator_detail_v43.hpp"
+#line 10372 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 98: goto tr625;
@@ -10385,7 +10386,7 @@ st446:
 	if ( ++p == pe )
 		goto _test_eof446;
 case 446:
-#line 10389 "inc/vcf/validator_detail_v43.hpp"
+#line 10390 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 108: goto tr626;
@@ -10403,7 +10404,7 @@ st447:
 	if ( ++p == pe )
 		goto _test_eof447;
 case 447:
-#line 10407 "inc/vcf/validator_detail_v43.hpp"
+#line 10408 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 121: goto st448;
@@ -10430,7 +10431,7 @@ st449:
 	if ( ++p == pe )
 		goto _test_eof449;
 case 449:
-#line 10434 "inc/vcf/validator_detail_v43.hpp"
+#line 10435 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
 			goto tr630;
@@ -10447,7 +10448,7 @@ st450:
 	if ( ++p == pe )
 		goto _test_eof450;
 case 450:
-#line 10451 "inc/vcf/validator_detail_v43.hpp"
+#line 10452 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr629;
 		case 13: goto tr632;
@@ -10473,7 +10474,7 @@ st451:
 	if ( ++p == pe )
 		goto _test_eof451;
 case 451:
-#line 10477 "inc/vcf/validator_detail_v43.hpp"
+#line 10478 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr629;
 		case 13: goto tr632;
@@ -10596,7 +10597,7 @@ st461:
 	if ( ++p == pe )
 		goto _test_eof461;
 case 461:
-#line 10600 "inc/vcf/validator_detail_v43.hpp"
+#line 10601 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr46;
 		case 13: goto tr646;
@@ -10664,7 +10665,7 @@ st468:
 	if ( ++p == pe )
 		goto _test_eof468;
 case 468:
-#line 10668 "inc/vcf/validator_detail_v43.hpp"
+#line 10669 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 111: goto tr651;
@@ -10682,7 +10683,7 @@ st469:
 	if ( ++p == pe )
 		goto _test_eof469;
 case 469:
-#line 10686 "inc/vcf/validator_detail_v43.hpp"
+#line 10687 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 110: goto tr652;
@@ -10700,7 +10701,7 @@ st470:
 	if ( ++p == pe )
 		goto _test_eof470;
 case 470:
-#line 10704 "inc/vcf/validator_detail_v43.hpp"
+#line 10705 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 116: goto tr653;
@@ -10718,7 +10719,7 @@ st471:
 	if ( ++p == pe )
 		goto _test_eof471;
 case 471:
-#line 10722 "inc/vcf/validator_detail_v43.hpp"
+#line 10723 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 105: goto tr654;
@@ -10736,7 +10737,7 @@ st472:
 	if ( ++p == pe )
 		goto _test_eof472;
 case 472:
-#line 10740 "inc/vcf/validator_detail_v43.hpp"
+#line 10741 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 103: goto st473;
@@ -10763,7 +10764,7 @@ st474:
 	if ( ++p == pe )
 		goto _test_eof474;
 case 474:
-#line 10767 "inc/vcf/validator_detail_v43.hpp"
+#line 10768 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st475;
 	goto tr650;
@@ -10836,7 +10837,7 @@ st479:
 	if ( ++p == pe )
 		goto _test_eof479;
 case 479:
-#line 10840 "inc/vcf/validator_detail_v43.hpp"
+#line 10841 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr664;
 		case 59: goto tr663;
@@ -10865,7 +10866,7 @@ st480:
 	if ( ++p == pe )
 		goto _test_eof480;
 case 480:
-#line 10869 "inc/vcf/validator_detail_v43.hpp"
+#line 10870 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto tr666;
 	if ( (*p) < 48 ) {
@@ -10890,7 +10891,7 @@ st481:
 	if ( ++p == pe )
 		goto _test_eof481;
 case 481:
-#line 10894 "inc/vcf/validator_detail_v43.hpp"
+#line 10895 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto st481;
 	if ( (*p) < 48 ) {
@@ -10925,7 +10926,7 @@ st482:
 	if ( ++p == pe )
 		goto _test_eof482;
 case 482:
-#line 10929 "inc/vcf/validator_detail_v43.hpp"
+#line 10930 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr670;
 		case 95: goto tr669;
@@ -10952,7 +10953,7 @@ st483:
 	if ( ++p == pe )
 		goto _test_eof483;
 case 483:
-#line 10956 "inc/vcf/validator_detail_v43.hpp"
+#line 10957 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st486;
 	if ( (*p) < 45 ) {
@@ -10984,7 +10985,7 @@ st484:
 	if ( ++p == pe )
 		goto _test_eof484;
 case 484:
-#line 10988 "inc/vcf/validator_detail_v43.hpp"
+#line 10989 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr664;
 		case 62: goto tr665;
@@ -11005,7 +11006,7 @@ st485:
 	if ( ++p == pe )
 		goto _test_eof485;
 case 485:
-#line 11009 "inc/vcf/validator_detail_v43.hpp"
+#line 11010 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -11042,7 +11043,7 @@ st487:
 	if ( ++p == pe )
 		goto _test_eof487;
 case 487:
-#line 11046 "inc/vcf/validator_detail_v43.hpp"
+#line 11047 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr678;
 		case 92: goto tr679;
@@ -11070,7 +11071,7 @@ st488:
 	if ( ++p == pe )
 		goto _test_eof488;
 case 488:
-#line 11074 "inc/vcf/validator_detail_v43.hpp"
+#line 11075 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto st480;
 		case 62: goto st485;
@@ -11096,7 +11097,7 @@ st489:
 	if ( ++p == pe )
 		goto _test_eof489;
 case 489:
-#line 11100 "inc/vcf/validator_detail_v43.hpp"
+#line 11101 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr682;
 		case 92: goto tr679;
@@ -11118,7 +11119,7 @@ st490:
 	if ( ++p == pe )
 		goto _test_eof490;
 case 490:
-#line 11122 "inc/vcf/validator_detail_v43.hpp"
+#line 11123 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr678;
 		case 44: goto tr683;
@@ -11158,7 +11159,7 @@ st491:
 	if ( ++p == pe )
 		goto _test_eof491;
 case 491:
-#line 11162 "inc/vcf/validator_detail_v43.hpp"
+#line 11163 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr678;
 		case 47: goto tr677;
@@ -11209,7 +11210,7 @@ st492:
 	if ( ++p == pe )
 		goto _test_eof492;
 case 492:
-#line 11213 "inc/vcf/validator_detail_v43.hpp"
+#line 11214 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr678;
 		case 47: goto tr677;
@@ -11260,7 +11261,7 @@ st493:
 	if ( ++p == pe )
 		goto _test_eof493;
 case 493:
-#line 11264 "inc/vcf/validator_detail_v43.hpp"
+#line 11265 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr678;
 		case 47: goto tr677;
@@ -11303,7 +11304,7 @@ st494:
 	if ( ++p == pe )
 		goto _test_eof494;
 case 494:
-#line 11307 "inc/vcf/validator_detail_v43.hpp"
+#line 11308 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr691;
 		case 44: goto tr677;
@@ -11333,7 +11334,7 @@ st495:
 	if ( ++p == pe )
 		goto _test_eof495;
 case 495:
-#line 11337 "inc/vcf/validator_detail_v43.hpp"
+#line 11338 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr678;
 		case 44: goto tr694;
@@ -11373,7 +11374,7 @@ st496:
 	if ( ++p == pe )
 		goto _test_eof496;
 case 496:
-#line 11377 "inc/vcf/validator_detail_v43.hpp"
+#line 11378 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -11403,7 +11404,7 @@ st497:
 	if ( ++p == pe )
 		goto _test_eof497;
 case 497:
-#line 11407 "inc/vcf/validator_detail_v43.hpp"
+#line 11408 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr682;
 		case 44: goto tr694;
@@ -11423,7 +11424,7 @@ st498:
 	if ( ++p == pe )
 		goto _test_eof498;
 case 498:
-#line 11427 "inc/vcf/validator_detail_v43.hpp"
+#line 11428 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr675;
 		case 44: goto tr697;
@@ -11447,7 +11448,7 @@ st499:
 	if ( ++p == pe )
 		goto _test_eof499;
 case 499:
-#line 11451 "inc/vcf/validator_detail_v43.hpp"
+#line 11452 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 101: goto tr700;
@@ -11465,7 +11466,7 @@ st500:
 	if ( ++p == pe )
 		goto _test_eof500;
 case 500:
-#line 11469 "inc/vcf/validator_detail_v43.hpp"
+#line 11470 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 100: goto tr701;
@@ -11483,7 +11484,7 @@ st501:
 	if ( ++p == pe )
 		goto _test_eof501;
 case 501:
-#line 11487 "inc/vcf/validator_detail_v43.hpp"
+#line 11488 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 105: goto tr702;
@@ -11501,7 +11502,7 @@ st502:
 	if ( ++p == pe )
 		goto _test_eof502;
 case 502:
-#line 11505 "inc/vcf/validator_detail_v43.hpp"
+#line 11506 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 103: goto tr703;
@@ -11519,7 +11520,7 @@ st503:
 	if ( ++p == pe )
 		goto _test_eof503;
 case 503:
-#line 11523 "inc/vcf/validator_detail_v43.hpp"
+#line 11524 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 114: goto tr704;
@@ -11537,7 +11538,7 @@ st504:
 	if ( ++p == pe )
 		goto _test_eof504;
 case 504:
-#line 11541 "inc/vcf/validator_detail_v43.hpp"
+#line 11542 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 101: goto tr705;
@@ -11555,7 +11556,7 @@ st505:
 	if ( ++p == pe )
 		goto _test_eof505;
 case 505:
-#line 11559 "inc/vcf/validator_detail_v43.hpp"
+#line 11560 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 101: goto tr706;
@@ -11573,7 +11574,7 @@ st506:
 	if ( ++p == pe )
 		goto _test_eof506;
 case 506:
-#line 11577 "inc/vcf/validator_detail_v43.hpp"
+#line 11578 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 68: goto tr707;
@@ -11591,7 +11592,7 @@ st507:
 	if ( ++p == pe )
 		goto _test_eof507;
 case 507:
-#line 11595 "inc/vcf/validator_detail_v43.hpp"
+#line 11596 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 66: goto st508;
@@ -11618,7 +11619,7 @@ st509:
 	if ( ++p == pe )
 		goto _test_eof509;
 case 509:
-#line 11622 "inc/vcf/validator_detail_v43.hpp"
+#line 11623 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st510;
 	goto tr699;
@@ -11642,7 +11643,7 @@ st511:
 	if ( ++p == pe )
 		goto _test_eof511;
 case 511:
-#line 11646 "inc/vcf/validator_detail_v43.hpp"
+#line 11647 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr711;
 		case 13: goto tr714;
@@ -11668,7 +11669,7 @@ st512:
 	if ( ++p == pe )
 		goto _test_eof512;
 case 512:
-#line 11672 "inc/vcf/validator_detail_v43.hpp"
+#line 11673 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr711;
 		case 13: goto tr714;
@@ -11779,7 +11780,7 @@ st522:
 	if ( ++p == pe )
 		goto _test_eof522;
 case 522:
-#line 11783 "inc/vcf/validator_detail_v43.hpp"
+#line 11784 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr711;
 		case 13: goto tr728;
@@ -11800,7 +11801,7 @@ st523:
 	if ( ++p == pe )
 		goto _test_eof523;
 case 523:
-#line 11804 "inc/vcf/validator_detail_v43.hpp"
+#line 11805 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr730;
@@ -11835,7 +11836,7 @@ st524:
 	if ( ++p == pe )
 		goto _test_eof524;
 case 524:
-#line 11839 "inc/vcf/validator_detail_v43.hpp"
+#line 11840 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto st28;
 		case 13: goto tr728;
@@ -11935,7 +11936,7 @@ st536:
 	if ( ++p == pe )
 		goto _test_eof536;
 case 536:
-#line 11939 "inc/vcf/validator_detail_v43.hpp"
+#line 11940 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 80 )
 		goto st537;
 	goto tr734;
@@ -11970,7 +11971,7 @@ st540:
 	if ( ++p == pe )
 		goto _test_eof540;
 case 540:
-#line 11974 "inc/vcf/validator_detail_v43.hpp"
+#line 11975 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 73 )
 		goto st541;
 	goto tr734;
@@ -11998,7 +11999,7 @@ st543:
 	if ( ++p == pe )
 		goto _test_eof543;
 case 543:
-#line 12002 "inc/vcf/validator_detail_v43.hpp"
+#line 12003 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 82 )
 		goto st544;
 	goto tr734;
@@ -12033,7 +12034,7 @@ st547:
 	if ( ++p == pe )
 		goto _test_eof547;
 case 547:
-#line 12037 "inc/vcf/validator_detail_v43.hpp"
+#line 12038 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 65 )
 		goto st548;
 	goto tr734;
@@ -12068,7 +12069,7 @@ st551:
 	if ( ++p == pe )
 		goto _test_eof551;
 case 551:
-#line 12072 "inc/vcf/validator_detail_v43.hpp"
+#line 12073 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 81 )
 		goto st552;
 	goto tr734;
@@ -12110,7 +12111,7 @@ st556:
 	if ( ++p == pe )
 		goto _test_eof556;
 case 556:
-#line 12114 "inc/vcf/validator_detail_v43.hpp"
+#line 12115 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 70 )
 		goto st557;
 	goto tr734;
@@ -12166,7 +12167,7 @@ st563:
 	if ( ++p == pe )
 		goto _test_eof563;
 case 563:
-#line 12170 "inc/vcf/validator_detail_v43.hpp"
+#line 12171 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 73 )
 		goto st564;
 	goto tr734;
@@ -12211,7 +12212,7 @@ st568:
 	if ( ++p == pe )
 		goto _test_eof568;
 case 568:
-#line 12215 "inc/vcf/validator_detail_v43.hpp"
+#line 12216 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 70 )
 		goto st569;
 	goto tr774;
@@ -12277,7 +12278,7 @@ st575:
 	if ( ++p == pe )
 		goto _test_eof575;
 case 575:
-#line 12281 "inc/vcf/validator_detail_v43.hpp"
+#line 12282 "inc/vcf/validator_detail_v43.hpp"
 	if ( 32 <= (*p) && (*p) <= 126 )
 		goto tr782;
 	goto tr774;
@@ -12301,7 +12302,7 @@ st576:
 	if ( ++p == pe )
 		goto _test_eof576;
 case 576:
-#line 12305 "inc/vcf/validator_detail_v43.hpp"
+#line 12306 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr783;
 		case 10: goto tr784;
@@ -12350,7 +12351,7 @@ st724:
 	if ( ++p == pe )
 		goto _test_eof724;
 case 724:
-#line 12354 "inc/vcf/validator_detail_v43.hpp"
+#line 12355 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr1012;
 		case 13: goto tr1013;
@@ -12410,7 +12411,7 @@ st725:
 	if ( ++p == pe )
 		goto _test_eof725;
 case 725:
-#line 12414 "inc/vcf/validator_detail_v43.hpp"
+#line 12415 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr1016;
 		case 13: goto tr1017;
@@ -12452,7 +12453,7 @@ st577:
 	if ( ++p == pe )
 		goto _test_eof577;
 case 577:
-#line 12456 "inc/vcf/validator_detail_v43.hpp"
+#line 12457 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 10 )
 		goto st725;
 	goto st0;
@@ -12494,7 +12495,7 @@ st578:
 	if ( ++p == pe )
 		goto _test_eof578;
 case 578:
-#line 12498 "inc/vcf/validator_detail_v43.hpp"
+#line 12499 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr790;
 		case 43: goto tr791;
@@ -12541,7 +12542,7 @@ st579:
 	if ( ++p == pe )
 		goto _test_eof579;
 case 579:
-#line 12545 "inc/vcf/validator_detail_v43.hpp"
+#line 12546 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr793;
 	goto tr792;
@@ -12565,7 +12566,7 @@ st580:
 	if ( ++p == pe )
 		goto _test_eof580;
 case 580:
-#line 12569 "inc/vcf/validator_detail_v43.hpp"
+#line 12570 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 9 )
 		goto tr794;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -12595,7 +12596,7 @@ st581:
 	if ( ++p == pe )
 		goto _test_eof581;
 case 581:
-#line 12599 "inc/vcf/validator_detail_v43.hpp"
+#line 12600 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) > 58 ) {
 		if ( 60 <= (*p) && (*p) <= 126 )
 			goto tr797;
@@ -12622,7 +12623,7 @@ st582:
 	if ( ++p == pe )
 		goto _test_eof582;
 case 582:
-#line 12626 "inc/vcf/validator_detail_v43.hpp"
+#line 12627 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr798;
 		case 59: goto tr800;
@@ -12648,7 +12649,7 @@ st583:
 	if ( ++p == pe )
 		goto _test_eof583;
 case 583:
-#line 12652 "inc/vcf/validator_detail_v43.hpp"
+#line 12653 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 65: goto tr802;
 		case 67: goto tr802;
@@ -12682,7 +12683,7 @@ st584:
 	if ( ++p == pe )
 		goto _test_eof584;
 case 584:
-#line 12686 "inc/vcf/validator_detail_v43.hpp"
+#line 12687 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr803;
 		case 65: goto tr804;
@@ -12715,7 +12716,7 @@ st585:
 	if ( ++p == pe )
 		goto _test_eof585;
 case 585:
-#line 12719 "inc/vcf/validator_detail_v43.hpp"
+#line 12720 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 42: goto tr806;
 		case 46: goto tr807;
@@ -12754,7 +12755,7 @@ st586:
 	if ( ++p == pe )
 		goto _test_eof586;
 case 586:
-#line 12758 "inc/vcf/validator_detail_v43.hpp"
+#line 12759 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr812;
 		case 44: goto tr813;
@@ -12778,7 +12779,7 @@ st587:
 	if ( ++p == pe )
 		goto _test_eof587;
 case 587:
-#line 12782 "inc/vcf/validator_detail_v43.hpp"
+#line 12783 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr815;
 		case 45: goto tr815;
@@ -12803,7 +12804,7 @@ st588:
 	if ( ++p == pe )
 		goto _test_eof588;
 case 588:
-#line 12807 "inc/vcf/validator_detail_v43.hpp"
+#line 12808 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 73 )
 		goto tr821;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -12829,7 +12830,7 @@ st589:
 	if ( ++p == pe )
 		goto _test_eof589;
 case 589:
-#line 12833 "inc/vcf/validator_detail_v43.hpp"
+#line 12834 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr822;
 		case 46: goto tr823;
@@ -12857,7 +12858,7 @@ st590:
 	if ( ++p == pe )
 		goto _test_eof590;
 case 590:
-#line 12861 "inc/vcf/validator_detail_v43.hpp"
+#line 12862 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr827;
 		case 58: goto tr826;
@@ -12893,7 +12894,7 @@ st591:
 	if ( ++p == pe )
 		goto _test_eof591;
 case 591:
-#line 12897 "inc/vcf/validator_detail_v43.hpp"
+#line 12898 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 58 )
 		goto st591;
 	if ( (*p) < 65 ) {
@@ -12937,7 +12938,7 @@ st592:
 	if ( ++p == pe )
 		goto _test_eof592;
 case 592:
-#line 12941 "inc/vcf/validator_detail_v43.hpp"
+#line 12942 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr831;
 		case 59: goto tr832;
@@ -12963,7 +12964,7 @@ st593:
 	if ( ++p == pe )
 		goto _test_eof593;
 case 593:
-#line 12967 "inc/vcf/validator_detail_v43.hpp"
+#line 12968 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr834;
 		case 49: goto tr836;
@@ -13002,7 +13003,7 @@ st726:
 	if ( ++p == pe )
 		goto _test_eof726;
 case 726:
-#line 13006 "inc/vcf/validator_detail_v43.hpp"
+#line 13007 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -13033,7 +13034,7 @@ st594:
 	if ( ++p == pe )
 		goto _test_eof594;
 case 594:
-#line 13037 "inc/vcf/validator_detail_v43.hpp"
+#line 13038 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto tr848;
 	if ( (*p) > 90 ) {
@@ -13062,7 +13063,7 @@ st595:
 	if ( ++p == pe )
 		goto _test_eof595;
 case 595:
-#line 13066 "inc/vcf/validator_detail_v43.hpp"
+#line 13067 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr849;
 		case 37: goto tr850;
@@ -13097,7 +13098,7 @@ st596:
 	if ( ++p == pe )
 		goto _test_eof596;
 case 596:
-#line 13101 "inc/vcf/validator_detail_v43.hpp"
+#line 13102 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 46 )
 		goto tr854;
 	if ( (*p) < 48 ) {
@@ -13129,7 +13130,7 @@ st727:
 	if ( ++p == pe )
 		goto _test_eof727;
 case 727:
-#line 13133 "inc/vcf/validator_detail_v43.hpp"
+#line 13134 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr849;
 		case 10: goto tr1020;
@@ -13188,7 +13189,7 @@ st728:
 	if ( ++p == pe )
 		goto _test_eof728;
 case 728:
-#line 13192 "inc/vcf/validator_detail_v43.hpp"
+#line 13193 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr1016;
 		case 13: goto tr1017;
@@ -13226,7 +13227,7 @@ st597:
 	if ( ++p == pe )
 		goto _test_eof597;
 case 597:
-#line 13230 "inc/vcf/validator_detail_v43.hpp"
+#line 13231 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr856;
 		case 59: goto tr856;
@@ -13267,7 +13268,7 @@ st598:
 	if ( ++p == pe )
 		goto _test_eof598;
 case 598:
-#line 13271 "inc/vcf/validator_detail_v43.hpp"
+#line 13272 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr857;
 		case 59: goto tr857;
@@ -13296,7 +13297,7 @@ st599:
 	if ( ++p == pe )
 		goto _test_eof599;
 case 599:
-#line 13300 "inc/vcf/validator_detail_v43.hpp"
+#line 13301 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 9 )
 		goto tr859;
 	goto tr789;
@@ -13349,7 +13350,7 @@ st600:
 	if ( ++p == pe )
 		goto _test_eof600;
 case 600:
-#line 13353 "inc/vcf/validator_detail_v43.hpp"
+#line 13354 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 10 )
 		goto st728;
 	goto tr860;
@@ -13363,7 +13364,7 @@ st601:
 	if ( ++p == pe )
 		goto _test_eof601;
 case 601:
-#line 13367 "inc/vcf/validator_detail_v43.hpp"
+#line 13368 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) > 57 ) {
 		if ( 59 <= (*p) && (*p) <= 126 )
 			goto tr863;
@@ -13390,7 +13391,7 @@ st729:
 	if ( ++p == pe )
 		goto _test_eof729;
 case 729:
-#line 13394 "inc/vcf/validator_detail_v43.hpp"
+#line 13395 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr849;
 		case 10: goto tr1020;
@@ -13412,7 +13413,7 @@ st730:
 	if ( ++p == pe )
 		goto _test_eof730;
 case 730:
-#line 13416 "inc/vcf/validator_detail_v43.hpp"
+#line 13417 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr849;
 		case 10: goto tr1020;
@@ -13449,7 +13450,7 @@ st731:
 	if ( ++p == pe )
 		goto _test_eof731;
 case 731:
-#line 13453 "inc/vcf/validator_detail_v43.hpp"
+#line 13454 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr849;
 		case 10: goto tr1020;
@@ -13487,7 +13488,7 @@ st732:
 	if ( ++p == pe )
 		goto _test_eof732;
 case 732:
-#line 13491 "inc/vcf/validator_detail_v43.hpp"
+#line 13492 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -13516,7 +13517,7 @@ st602:
 	if ( ++p == pe )
 		goto _test_eof602;
 case 602:
-#line 13520 "inc/vcf/validator_detail_v43.hpp"
+#line 13521 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 49: goto tr836;
 		case 65: goto tr837;
@@ -13554,7 +13555,7 @@ st733:
 	if ( ++p == pe )
 		goto _test_eof733;
 case 733:
-#line 13558 "inc/vcf/validator_detail_v43.hpp"
+#line 13559 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -13584,7 +13585,7 @@ st734:
 	if ( ++p == pe )
 		goto _test_eof734;
 case 734:
-#line 13588 "inc/vcf/validator_detail_v43.hpp"
+#line 13589 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -13614,7 +13615,7 @@ st735:
 	if ( ++p == pe )
 		goto _test_eof735;
 case 735:
-#line 13618 "inc/vcf/validator_detail_v43.hpp"
+#line 13619 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -13644,7 +13645,7 @@ st736:
 	if ( ++p == pe )
 		goto _test_eof736;
 case 736:
-#line 13648 "inc/vcf/validator_detail_v43.hpp"
+#line 13649 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -13674,7 +13675,7 @@ st603:
 	if ( ++p == pe )
 		goto _test_eof603;
 case 603:
-#line 13678 "inc/vcf/validator_detail_v43.hpp"
+#line 13679 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) > 58 ) {
 		if ( 60 <= (*p) && (*p) <= 126 )
 			goto tr865;
@@ -13691,7 +13692,7 @@ st737:
 	if ( ++p == pe )
 		goto _test_eof737;
 case 737:
-#line 13695 "inc/vcf/validator_detail_v43.hpp"
+#line 13696 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -13711,7 +13712,7 @@ st738:
 	if ( ++p == pe )
 		goto _test_eof738;
 case 738:
-#line 13715 "inc/vcf/validator_detail_v43.hpp"
+#line 13716 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -13740,7 +13741,7 @@ st604:
 	if ( ++p == pe )
 		goto _test_eof604;
 case 604:
-#line 13744 "inc/vcf/validator_detail_v43.hpp"
+#line 13745 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto tr867;
 	goto tr866;
@@ -13754,7 +13755,7 @@ st739:
 	if ( ++p == pe )
 		goto _test_eof739;
 case 739:
-#line 13758 "inc/vcf/validator_detail_v43.hpp"
+#line 13759 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -13776,7 +13777,7 @@ st740:
 	if ( ++p == pe )
 		goto _test_eof740;
 case 740:
-#line 13780 "inc/vcf/validator_detail_v43.hpp"
+#line 13781 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -13810,7 +13811,7 @@ st605:
 	if ( ++p == pe )
 		goto _test_eof605;
 case 605:
-#line 13814 "inc/vcf/validator_detail_v43.hpp"
+#line 13815 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr869;
@@ -13835,7 +13836,7 @@ st606:
 	if ( ++p == pe )
 		goto _test_eof606;
 case 606:
-#line 13839 "inc/vcf/validator_detail_v43.hpp"
+#line 13840 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto tr871;
 	if ( (*p) < 45 ) {
@@ -13857,7 +13858,7 @@ st741:
 	if ( ++p == pe )
 		goto _test_eof741;
 case 741:
-#line 13861 "inc/vcf/validator_detail_v43.hpp"
+#line 13862 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -13883,7 +13884,7 @@ st607:
 	if ( ++p == pe )
 		goto _test_eof607;
 case 607:
-#line 13887 "inc/vcf/validator_detail_v43.hpp"
+#line 13888 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr872;
@@ -13908,7 +13909,7 @@ st608:
 	if ( ++p == pe )
 		goto _test_eof608;
 case 608:
-#line 13912 "inc/vcf/validator_detail_v43.hpp"
+#line 13913 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr874;
 	goto tr873;
@@ -13922,7 +13923,7 @@ st742:
 	if ( ++p == pe )
 		goto _test_eof742;
 case 742:
-#line 13926 "inc/vcf/validator_detail_v43.hpp"
+#line 13927 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -13943,7 +13944,7 @@ st609:
 	if ( ++p == pe )
 		goto _test_eof609;
 case 609:
-#line 13947 "inc/vcf/validator_detail_v43.hpp"
+#line 13948 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr875;
@@ -13970,7 +13971,7 @@ st610:
 	if ( ++p == pe )
 		goto _test_eof610;
 case 610:
-#line 13974 "inc/vcf/validator_detail_v43.hpp"
+#line 13975 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr879;
 	goto tr878;
@@ -13984,7 +13985,7 @@ st743:
 	if ( ++p == pe )
 		goto _test_eof743;
 case 743:
-#line 13988 "inc/vcf/validator_detail_v43.hpp"
+#line 13989 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14005,7 +14006,7 @@ st611:
 	if ( ++p == pe )
 		goto _test_eof611;
 case 611:
-#line 14009 "inc/vcf/validator_detail_v43.hpp"
+#line 14010 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr880;
@@ -14030,7 +14031,7 @@ st612:
 	if ( ++p == pe )
 		goto _test_eof612;
 case 612:
-#line 14034 "inc/vcf/validator_detail_v43.hpp"
+#line 14035 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr882;
 	goto tr881;
@@ -14044,7 +14045,7 @@ st744:
 	if ( ++p == pe )
 		goto _test_eof744;
 case 744:
-#line 14048 "inc/vcf/validator_detail_v43.hpp"
+#line 14049 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14065,7 +14066,7 @@ st613:
 	if ( ++p == pe )
 		goto _test_eof613;
 case 613:
-#line 14069 "inc/vcf/validator_detail_v43.hpp"
+#line 14070 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr883;
@@ -14090,7 +14091,7 @@ st614:
 	if ( ++p == pe )
 		goto _test_eof614;
 case 614:
-#line 14094 "inc/vcf/validator_detail_v43.hpp"
+#line 14095 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr885;
 	goto tr884;
@@ -14104,7 +14105,7 @@ st745:
 	if ( ++p == pe )
 		goto _test_eof745;
 case 745:
-#line 14108 "inc/vcf/validator_detail_v43.hpp"
+#line 14109 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14125,7 +14126,7 @@ st615:
 	if ( ++p == pe )
 		goto _test_eof615;
 case 615:
-#line 14129 "inc/vcf/validator_detail_v43.hpp"
+#line 14130 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr886;
@@ -14150,7 +14151,7 @@ st616:
 	if ( ++p == pe )
 		goto _test_eof616;
 case 616:
-#line 14154 "inc/vcf/validator_detail_v43.hpp"
+#line 14155 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr888;
 		case 45: goto tr888;
@@ -14170,7 +14171,7 @@ st617:
 	if ( ++p == pe )
 		goto _test_eof617;
 case 617:
-#line 14174 "inc/vcf/validator_detail_v43.hpp"
+#line 14175 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 73 )
 		goto tr890;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -14186,7 +14187,7 @@ st746:
 	if ( ++p == pe )
 		goto _test_eof746;
 case 746:
-#line 14190 "inc/vcf/validator_detail_v43.hpp"
+#line 14191 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14210,7 +14211,7 @@ st618:
 	if ( ++p == pe )
 		goto _test_eof618;
 case 618:
-#line 14214 "inc/vcf/validator_detail_v43.hpp"
+#line 14215 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr892;
 	goto tr887;
@@ -14224,7 +14225,7 @@ st747:
 	if ( ++p == pe )
 		goto _test_eof747;
 case 747:
-#line 14228 "inc/vcf/validator_detail_v43.hpp"
+#line 14229 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14247,7 +14248,7 @@ st619:
 	if ( ++p == pe )
 		goto _test_eof619;
 case 619:
-#line 14251 "inc/vcf/validator_detail_v43.hpp"
+#line 14252 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr893;
 		case 45: goto tr893;
@@ -14265,7 +14266,7 @@ st620:
 	if ( ++p == pe )
 		goto _test_eof620;
 case 620:
-#line 14269 "inc/vcf/validator_detail_v43.hpp"
+#line 14270 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr894;
 	goto tr887;
@@ -14279,7 +14280,7 @@ st748:
 	if ( ++p == pe )
 		goto _test_eof748;
 case 748:
-#line 14283 "inc/vcf/validator_detail_v43.hpp"
+#line 14284 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14300,7 +14301,7 @@ st621:
 	if ( ++p == pe )
 		goto _test_eof621;
 case 621:
-#line 14304 "inc/vcf/validator_detail_v43.hpp"
+#line 14305 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 110 )
 		goto tr895;
 	goto tr887;
@@ -14314,7 +14315,7 @@ st622:
 	if ( ++p == pe )
 		goto _test_eof622;
 case 622:
-#line 14318 "inc/vcf/validator_detail_v43.hpp"
+#line 14319 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 102 )
 		goto tr896;
 	goto tr887;
@@ -14328,7 +14329,7 @@ st749:
 	if ( ++p == pe )
 		goto _test_eof749;
 case 749:
-#line 14332 "inc/vcf/validator_detail_v43.hpp"
+#line 14333 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14347,7 +14348,7 @@ st623:
 	if ( ++p == pe )
 		goto _test_eof623;
 case 623:
-#line 14351 "inc/vcf/validator_detail_v43.hpp"
+#line 14352 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 97 )
 		goto tr897;
 	goto tr887;
@@ -14361,7 +14362,7 @@ st624:
 	if ( ++p == pe )
 		goto _test_eof624;
 case 624:
-#line 14365 "inc/vcf/validator_detail_v43.hpp"
+#line 14366 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto tr896;
 	goto tr887;
@@ -14375,7 +14376,7 @@ st625:
 	if ( ++p == pe )
 		goto _test_eof625;
 case 625:
-#line 14379 "inc/vcf/validator_detail_v43.hpp"
+#line 14380 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr898;
@@ -14400,7 +14401,7 @@ st626:
 	if ( ++p == pe )
 		goto _test_eof626;
 case 626:
-#line 14404 "inc/vcf/validator_detail_v43.hpp"
+#line 14405 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr900;
 	goto tr899;
@@ -14414,7 +14415,7 @@ st750:
 	if ( ++p == pe )
 		goto _test_eof750;
 case 750:
-#line 14418 "inc/vcf/validator_detail_v43.hpp"
+#line 14419 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14438,7 +14439,7 @@ st751:
 	if ( ++p == pe )
 		goto _test_eof751;
 case 751:
-#line 14442 "inc/vcf/validator_detail_v43.hpp"
+#line 14443 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14468,7 +14469,7 @@ st627:
 	if ( ++p == pe )
 		goto _test_eof627;
 case 627:
-#line 14472 "inc/vcf/validator_detail_v43.hpp"
+#line 14473 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr901;
@@ -14493,7 +14494,7 @@ st628:
 	if ( ++p == pe )
 		goto _test_eof628;
 case 628:
-#line 14497 "inc/vcf/validator_detail_v43.hpp"
+#line 14498 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr903;
 		case 45: goto tr903;
@@ -14513,7 +14514,7 @@ st629:
 	if ( ++p == pe )
 		goto _test_eof629;
 case 629:
-#line 14517 "inc/vcf/validator_detail_v43.hpp"
+#line 14518 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 73 )
 		goto tr905;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -14529,7 +14530,7 @@ st752:
 	if ( ++p == pe )
 		goto _test_eof752;
 case 752:
-#line 14533 "inc/vcf/validator_detail_v43.hpp"
+#line 14534 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14552,7 +14553,7 @@ st630:
 	if ( ++p == pe )
 		goto _test_eof630;
 case 630:
-#line 14556 "inc/vcf/validator_detail_v43.hpp"
+#line 14557 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr907;
 	goto tr902;
@@ -14566,7 +14567,7 @@ st753:
 	if ( ++p == pe )
 		goto _test_eof753;
 case 753:
-#line 14570 "inc/vcf/validator_detail_v43.hpp"
+#line 14571 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14588,7 +14589,7 @@ st631:
 	if ( ++p == pe )
 		goto _test_eof631;
 case 631:
-#line 14592 "inc/vcf/validator_detail_v43.hpp"
+#line 14593 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr908;
 		case 45: goto tr908;
@@ -14606,7 +14607,7 @@ st632:
 	if ( ++p == pe )
 		goto _test_eof632;
 case 632:
-#line 14610 "inc/vcf/validator_detail_v43.hpp"
+#line 14611 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr909;
 	goto tr902;
@@ -14620,7 +14621,7 @@ st754:
 	if ( ++p == pe )
 		goto _test_eof754;
 case 754:
-#line 14624 "inc/vcf/validator_detail_v43.hpp"
+#line 14625 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14640,7 +14641,7 @@ st633:
 	if ( ++p == pe )
 		goto _test_eof633;
 case 633:
-#line 14644 "inc/vcf/validator_detail_v43.hpp"
+#line 14645 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 110 )
 		goto tr910;
 	goto tr902;
@@ -14654,7 +14655,7 @@ st634:
 	if ( ++p == pe )
 		goto _test_eof634;
 case 634:
-#line 14658 "inc/vcf/validator_detail_v43.hpp"
+#line 14659 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 102 )
 		goto tr911;
 	goto tr902;
@@ -14668,7 +14669,7 @@ st755:
 	if ( ++p == pe )
 		goto _test_eof755;
 case 755:
-#line 14672 "inc/vcf/validator_detail_v43.hpp"
+#line 14673 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14686,7 +14687,7 @@ st635:
 	if ( ++p == pe )
 		goto _test_eof635;
 case 635:
-#line 14690 "inc/vcf/validator_detail_v43.hpp"
+#line 14691 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 97 )
 		goto tr912;
 	goto tr902;
@@ -14700,7 +14701,7 @@ st636:
 	if ( ++p == pe )
 		goto _test_eof636;
 case 636:
-#line 14704 "inc/vcf/validator_detail_v43.hpp"
+#line 14705 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto tr911;
 	goto tr902;
@@ -14718,7 +14719,7 @@ st756:
 	if ( ++p == pe )
 		goto _test_eof756;
 case 756:
-#line 14722 "inc/vcf/validator_detail_v43.hpp"
+#line 14723 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14748,7 +14749,7 @@ st757:
 	if ( ++p == pe )
 		goto _test_eof757;
 case 757:
-#line 14752 "inc/vcf/validator_detail_v43.hpp"
+#line 14753 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14778,7 +14779,7 @@ st758:
 	if ( ++p == pe )
 		goto _test_eof758;
 case 758:
-#line 14782 "inc/vcf/validator_detail_v43.hpp"
+#line 14783 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14808,7 +14809,7 @@ st759:
 	if ( ++p == pe )
 		goto _test_eof759;
 case 759:
-#line 14812 "inc/vcf/validator_detail_v43.hpp"
+#line 14813 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14838,7 +14839,7 @@ st637:
 	if ( ++p == pe )
 		goto _test_eof637;
 case 637:
-#line 14842 "inc/vcf/validator_detail_v43.hpp"
+#line 14843 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr913;
@@ -14863,7 +14864,7 @@ st638:
 	if ( ++p == pe )
 		goto _test_eof638;
 case 638:
-#line 14867 "inc/vcf/validator_detail_v43.hpp"
+#line 14868 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr915;
 	goto tr914;
@@ -14877,7 +14878,7 @@ st639:
 	if ( ++p == pe )
 		goto _test_eof639;
 case 639:
-#line 14881 "inc/vcf/validator_detail_v43.hpp"
+#line 14882 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 68: goto tr916;
 		case 80: goto tr916;
@@ -14903,7 +14904,7 @@ st760:
 	if ( ++p == pe )
 		goto _test_eof760;
 case 760:
-#line 14907 "inc/vcf/validator_detail_v43.hpp"
+#line 14908 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14928,7 +14929,7 @@ st761:
 	if ( ++p == pe )
 		goto _test_eof761;
 case 761:
-#line 14932 "inc/vcf/validator_detail_v43.hpp"
+#line 14933 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14959,7 +14960,7 @@ st762:
 	if ( ++p == pe )
 		goto _test_eof762;
 case 762:
-#line 14963 "inc/vcf/validator_detail_v43.hpp"
+#line 14964 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -14988,7 +14989,7 @@ st640:
 	if ( ++p == pe )
 		goto _test_eof640;
 case 640:
-#line 14992 "inc/vcf/validator_detail_v43.hpp"
+#line 14993 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto tr918;
 	goto tr917;
@@ -15002,7 +15003,7 @@ st763:
 	if ( ++p == pe )
 		goto _test_eof763;
 case 763:
-#line 15006 "inc/vcf/validator_detail_v43.hpp"
+#line 15007 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15020,7 +15021,7 @@ st641:
 	if ( ++p == pe )
 		goto _test_eof641;
 case 641:
-#line 15024 "inc/vcf/validator_detail_v43.hpp"
+#line 15025 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr919;
@@ -15045,7 +15046,7 @@ st642:
 	if ( ++p == pe )
 		goto _test_eof642;
 case 642:
-#line 15049 "inc/vcf/validator_detail_v43.hpp"
+#line 15050 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr921;
 	goto tr920;
@@ -15059,7 +15060,7 @@ st764:
 	if ( ++p == pe )
 		goto _test_eof764;
 case 764:
-#line 15063 "inc/vcf/validator_detail_v43.hpp"
+#line 15064 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15083,7 +15084,7 @@ st765:
 	if ( ++p == pe )
 		goto _test_eof765;
 case 765:
-#line 15087 "inc/vcf/validator_detail_v43.hpp"
+#line 15088 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15113,7 +15114,7 @@ st766:
 	if ( ++p == pe )
 		goto _test_eof766;
 case 766:
-#line 15117 "inc/vcf/validator_detail_v43.hpp"
+#line 15118 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15143,7 +15144,7 @@ st643:
 	if ( ++p == pe )
 		goto _test_eof643;
 case 643:
-#line 15147 "inc/vcf/validator_detail_v43.hpp"
+#line 15148 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr922;
@@ -15168,7 +15169,7 @@ st644:
 	if ( ++p == pe )
 		goto _test_eof644;
 case 644:
-#line 15172 "inc/vcf/validator_detail_v43.hpp"
+#line 15173 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr924;
 	goto tr923;
@@ -15182,7 +15183,7 @@ st767:
 	if ( ++p == pe )
 		goto _test_eof767;
 case 767:
-#line 15186 "inc/vcf/validator_detail_v43.hpp"
+#line 15187 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15206,7 +15207,7 @@ st768:
 	if ( ++p == pe )
 		goto _test_eof768;
 case 768:
-#line 15210 "inc/vcf/validator_detail_v43.hpp"
+#line 15211 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15237,7 +15238,7 @@ st769:
 	if ( ++p == pe )
 		goto _test_eof769;
 case 769:
-#line 15241 "inc/vcf/validator_detail_v43.hpp"
+#line 15242 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15266,7 +15267,7 @@ st645:
 	if ( ++p == pe )
 		goto _test_eof645;
 case 645:
-#line 15270 "inc/vcf/validator_detail_v43.hpp"
+#line 15271 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto tr926;
 	goto tr925;
@@ -15280,7 +15281,7 @@ st770:
 	if ( ++p == pe )
 		goto _test_eof770;
 case 770:
-#line 15284 "inc/vcf/validator_detail_v43.hpp"
+#line 15285 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15298,7 +15299,7 @@ st771:
 	if ( ++p == pe )
 		goto _test_eof771;
 case 771:
-#line 15302 "inc/vcf/validator_detail_v43.hpp"
+#line 15303 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15327,7 +15328,7 @@ st646:
 	if ( ++p == pe )
 		goto _test_eof646;
 case 646:
-#line 15331 "inc/vcf/validator_detail_v43.hpp"
+#line 15332 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto tr928;
 	goto tr927;
@@ -15341,7 +15342,7 @@ st772:
 	if ( ++p == pe )
 		goto _test_eof772;
 case 772:
-#line 15345 "inc/vcf/validator_detail_v43.hpp"
+#line 15346 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15363,7 +15364,7 @@ st773:
 	if ( ++p == pe )
 		goto _test_eof773;
 case 773:
-#line 15367 "inc/vcf/validator_detail_v43.hpp"
+#line 15368 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15393,7 +15394,7 @@ st647:
 	if ( ++p == pe )
 		goto _test_eof647;
 case 647:
-#line 15397 "inc/vcf/validator_detail_v43.hpp"
+#line 15398 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 48: goto tr929;
@@ -15419,7 +15420,7 @@ st648:
 	if ( ++p == pe )
 		goto _test_eof648;
 case 648:
-#line 15423 "inc/vcf/validator_detail_v43.hpp"
+#line 15424 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr931;
@@ -15444,7 +15445,7 @@ st649:
 	if ( ++p == pe )
 		goto _test_eof649;
 case 649:
-#line 15448 "inc/vcf/validator_detail_v43.hpp"
+#line 15449 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr933;
 	goto tr932;
@@ -15458,7 +15459,7 @@ st774:
 	if ( ++p == pe )
 		goto _test_eof774;
 case 774:
-#line 15462 "inc/vcf/validator_detail_v43.hpp"
+#line 15463 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15478,7 +15479,7 @@ st650:
 	if ( ++p == pe )
 		goto _test_eof650;
 case 650:
-#line 15482 "inc/vcf/validator_detail_v43.hpp"
+#line 15483 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr935;
 		case 45: goto tr935;
@@ -15498,7 +15499,7 @@ st651:
 	if ( ++p == pe )
 		goto _test_eof651;
 case 651:
-#line 15502 "inc/vcf/validator_detail_v43.hpp"
+#line 15503 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 73 )
 		goto tr937;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -15514,7 +15515,7 @@ st775:
 	if ( ++p == pe )
 		goto _test_eof775;
 case 775:
-#line 15518 "inc/vcf/validator_detail_v43.hpp"
+#line 15519 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15537,7 +15538,7 @@ st652:
 	if ( ++p == pe )
 		goto _test_eof652;
 case 652:
-#line 15541 "inc/vcf/validator_detail_v43.hpp"
+#line 15542 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr939;
 	goto tr934;
@@ -15551,7 +15552,7 @@ st776:
 	if ( ++p == pe )
 		goto _test_eof776;
 case 776:
-#line 15555 "inc/vcf/validator_detail_v43.hpp"
+#line 15556 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15573,7 +15574,7 @@ st653:
 	if ( ++p == pe )
 		goto _test_eof653;
 case 653:
-#line 15577 "inc/vcf/validator_detail_v43.hpp"
+#line 15578 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr940;
 		case 45: goto tr940;
@@ -15591,7 +15592,7 @@ st654:
 	if ( ++p == pe )
 		goto _test_eof654;
 case 654:
-#line 15595 "inc/vcf/validator_detail_v43.hpp"
+#line 15596 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr941;
 	goto tr934;
@@ -15605,7 +15606,7 @@ st777:
 	if ( ++p == pe )
 		goto _test_eof777;
 case 777:
-#line 15609 "inc/vcf/validator_detail_v43.hpp"
+#line 15610 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15625,7 +15626,7 @@ st655:
 	if ( ++p == pe )
 		goto _test_eof655;
 case 655:
-#line 15629 "inc/vcf/validator_detail_v43.hpp"
+#line 15630 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 110 )
 		goto tr942;
 	goto tr934;
@@ -15639,7 +15640,7 @@ st656:
 	if ( ++p == pe )
 		goto _test_eof656;
 case 656:
-#line 15643 "inc/vcf/validator_detail_v43.hpp"
+#line 15644 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 102 )
 		goto tr943;
 	goto tr934;
@@ -15653,7 +15654,7 @@ st778:
 	if ( ++p == pe )
 		goto _test_eof778;
 case 778:
-#line 15657 "inc/vcf/validator_detail_v43.hpp"
+#line 15658 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15671,7 +15672,7 @@ st657:
 	if ( ++p == pe )
 		goto _test_eof657;
 case 657:
-#line 15675 "inc/vcf/validator_detail_v43.hpp"
+#line 15676 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 97 )
 		goto tr944;
 	goto tr934;
@@ -15685,7 +15686,7 @@ st658:
 	if ( ++p == pe )
 		goto _test_eof658;
 case 658:
-#line 15689 "inc/vcf/validator_detail_v43.hpp"
+#line 15690 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto tr943;
 	goto tr934;
@@ -15703,7 +15704,7 @@ st779:
 	if ( ++p == pe )
 		goto _test_eof779;
 case 779:
-#line 15707 "inc/vcf/validator_detail_v43.hpp"
+#line 15708 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15733,7 +15734,7 @@ st659:
 	if ( ++p == pe )
 		goto _test_eof659;
 case 659:
-#line 15737 "inc/vcf/validator_detail_v43.hpp"
+#line 15738 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr945;
@@ -15758,7 +15759,7 @@ st660:
 	if ( ++p == pe )
 		goto _test_eof660;
 case 660:
-#line 15762 "inc/vcf/validator_detail_v43.hpp"
+#line 15763 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr947;
 	goto tr946;
@@ -15772,7 +15773,7 @@ st780:
 	if ( ++p == pe )
 		goto _test_eof780;
 case 780:
-#line 15776 "inc/vcf/validator_detail_v43.hpp"
+#line 15777 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15796,7 +15797,7 @@ st781:
 	if ( ++p == pe )
 		goto _test_eof781;
 case 781:
-#line 15800 "inc/vcf/validator_detail_v43.hpp"
+#line 15801 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15827,7 +15828,7 @@ st661:
 	if ( ++p == pe )
 		goto _test_eof661;
 case 661:
-#line 15831 "inc/vcf/validator_detail_v43.hpp"
+#line 15832 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr868;
 		case 61: goto tr948;
@@ -15852,7 +15853,7 @@ st662:
 	if ( ++p == pe )
 		goto _test_eof662;
 case 662:
-#line 15856 "inc/vcf/validator_detail_v43.hpp"
+#line 15857 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr950;
 		case 45: goto tr950;
@@ -15872,7 +15873,7 @@ st663:
 	if ( ++p == pe )
 		goto _test_eof663;
 case 663:
-#line 15876 "inc/vcf/validator_detail_v43.hpp"
+#line 15877 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 73 )
 		goto tr952;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -15888,7 +15889,7 @@ st782:
 	if ( ++p == pe )
 		goto _test_eof782;
 case 782:
-#line 15892 "inc/vcf/validator_detail_v43.hpp"
+#line 15893 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15911,7 +15912,7 @@ st664:
 	if ( ++p == pe )
 		goto _test_eof664;
 case 664:
-#line 15915 "inc/vcf/validator_detail_v43.hpp"
+#line 15916 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr954;
 	goto tr949;
@@ -15925,7 +15926,7 @@ st783:
 	if ( ++p == pe )
 		goto _test_eof783;
 case 783:
-#line 15929 "inc/vcf/validator_detail_v43.hpp"
+#line 15930 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15947,7 +15948,7 @@ st665:
 	if ( ++p == pe )
 		goto _test_eof665;
 case 665:
-#line 15951 "inc/vcf/validator_detail_v43.hpp"
+#line 15952 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr955;
 		case 45: goto tr955;
@@ -15965,7 +15966,7 @@ st666:
 	if ( ++p == pe )
 		goto _test_eof666;
 case 666:
-#line 15969 "inc/vcf/validator_detail_v43.hpp"
+#line 15970 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr956;
 	goto tr949;
@@ -15979,7 +15980,7 @@ st784:
 	if ( ++p == pe )
 		goto _test_eof784;
 case 784:
-#line 15983 "inc/vcf/validator_detail_v43.hpp"
+#line 15984 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -15999,7 +16000,7 @@ st667:
 	if ( ++p == pe )
 		goto _test_eof667;
 case 667:
-#line 16003 "inc/vcf/validator_detail_v43.hpp"
+#line 16004 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 110 )
 		goto tr957;
 	goto tr949;
@@ -16013,7 +16014,7 @@ st668:
 	if ( ++p == pe )
 		goto _test_eof668;
 case 668:
-#line 16017 "inc/vcf/validator_detail_v43.hpp"
+#line 16018 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 102 )
 		goto tr958;
 	goto tr949;
@@ -16027,7 +16028,7 @@ st785:
 	if ( ++p == pe )
 		goto _test_eof785;
 case 785:
-#line 16031 "inc/vcf/validator_detail_v43.hpp"
+#line 16032 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16045,7 +16046,7 @@ st669:
 	if ( ++p == pe )
 		goto _test_eof669;
 case 669:
-#line 16049 "inc/vcf/validator_detail_v43.hpp"
+#line 16050 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 97 )
 		goto tr959;
 	goto tr949;
@@ -16059,7 +16060,7 @@ st670:
 	if ( ++p == pe )
 		goto _test_eof670;
 case 670:
-#line 16063 "inc/vcf/validator_detail_v43.hpp"
+#line 16064 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto tr958;
 	goto tr949;
@@ -16073,7 +16074,7 @@ st786:
 	if ( ++p == pe )
 		goto _test_eof786;
 case 786:
-#line 16077 "inc/vcf/validator_detail_v43.hpp"
+#line 16078 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16103,7 +16104,7 @@ st787:
 	if ( ++p == pe )
 		goto _test_eof787;
 case 787:
-#line 16107 "inc/vcf/validator_detail_v43.hpp"
+#line 16108 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16133,7 +16134,7 @@ st788:
 	if ( ++p == pe )
 		goto _test_eof788;
 case 788:
-#line 16137 "inc/vcf/validator_detail_v43.hpp"
+#line 16138 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16163,7 +16164,7 @@ st789:
 	if ( ++p == pe )
 		goto _test_eof789;
 case 789:
-#line 16167 "inc/vcf/validator_detail_v43.hpp"
+#line 16168 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16193,7 +16194,7 @@ st790:
 	if ( ++p == pe )
 		goto _test_eof790;
 case 790:
-#line 16197 "inc/vcf/validator_detail_v43.hpp"
+#line 16198 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16223,7 +16224,7 @@ st791:
 	if ( ++p == pe )
 		goto _test_eof791;
 case 791:
-#line 16227 "inc/vcf/validator_detail_v43.hpp"
+#line 16228 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16252,7 +16253,7 @@ st671:
 	if ( ++p == pe )
 		goto _test_eof671;
 case 671:
-#line 16256 "inc/vcf/validator_detail_v43.hpp"
+#line 16257 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto tr961;
 	goto tr960;
@@ -16266,7 +16267,7 @@ st792:
 	if ( ++p == pe )
 		goto _test_eof792;
 case 792:
-#line 16270 "inc/vcf/validator_detail_v43.hpp"
+#line 16271 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16288,7 +16289,7 @@ st793:
 	if ( ++p == pe )
 		goto _test_eof793;
 case 793:
-#line 16292 "inc/vcf/validator_detail_v43.hpp"
+#line 16293 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16318,7 +16319,7 @@ st794:
 	if ( ++p == pe )
 		goto _test_eof794;
 case 794:
-#line 16322 "inc/vcf/validator_detail_v43.hpp"
+#line 16323 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16348,7 +16349,7 @@ st795:
 	if ( ++p == pe )
 		goto _test_eof795;
 case 795:
-#line 16352 "inc/vcf/validator_detail_v43.hpp"
+#line 16353 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16378,7 +16379,7 @@ st796:
 	if ( ++p == pe )
 		goto _test_eof796;
 case 796:
-#line 16382 "inc/vcf/validator_detail_v43.hpp"
+#line 16383 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16408,7 +16409,7 @@ st797:
 	if ( ++p == pe )
 		goto _test_eof797;
 case 797:
-#line 16412 "inc/vcf/validator_detail_v43.hpp"
+#line 16413 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16438,7 +16439,7 @@ st798:
 	if ( ++p == pe )
 		goto _test_eof798;
 case 798:
-#line 16442 "inc/vcf/validator_detail_v43.hpp"
+#line 16443 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16468,7 +16469,7 @@ st799:
 	if ( ++p == pe )
 		goto _test_eof799;
 case 799:
-#line 16472 "inc/vcf/validator_detail_v43.hpp"
+#line 16473 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16498,7 +16499,7 @@ st800:
 	if ( ++p == pe )
 		goto _test_eof800;
 case 800:
-#line 16502 "inc/vcf/validator_detail_v43.hpp"
+#line 16503 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16528,7 +16529,7 @@ st801:
 	if ( ++p == pe )
 		goto _test_eof801;
 case 801:
-#line 16532 "inc/vcf/validator_detail_v43.hpp"
+#line 16533 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16557,7 +16558,7 @@ st672:
 	if ( ++p == pe )
 		goto _test_eof672;
 case 672:
-#line 16561 "inc/vcf/validator_detail_v43.hpp"
+#line 16562 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 49 )
 		goto tr963;
 	goto tr962;
@@ -16571,7 +16572,7 @@ st802:
 	if ( ++p == pe )
 		goto _test_eof802;
 case 802:
-#line 16575 "inc/vcf/validator_detail_v43.hpp"
+#line 16576 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr1019;
 		case 10: goto tr1020;
@@ -16589,7 +16590,7 @@ st673:
 	if ( ++p == pe )
 		goto _test_eof673;
 case 673:
-#line 16593 "inc/vcf/validator_detail_v43.hpp"
+#line 16594 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 58 )
 		goto tr826;
 	if ( (*p) < 65 ) {
@@ -16627,7 +16628,7 @@ st674:
 	if ( ++p == pe )
 		goto _test_eof674;
 case 674:
-#line 16631 "inc/vcf/validator_detail_v43.hpp"
+#line 16632 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr831;
 		case 58: goto st591;
@@ -16663,7 +16664,7 @@ st675:
 	if ( ++p == pe )
 		goto _test_eof675;
 case 675:
-#line 16667 "inc/vcf/validator_detail_v43.hpp"
+#line 16668 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr964;
 	goto tr814;
@@ -16677,7 +16678,7 @@ st676:
 	if ( ++p == pe )
 		goto _test_eof676;
 case 676:
-#line 16681 "inc/vcf/validator_detail_v43.hpp"
+#line 16682 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr822;
 		case 69: goto tr824;
@@ -16696,7 +16697,7 @@ st677:
 	if ( ++p == pe )
 		goto _test_eof677;
 case 677:
-#line 16700 "inc/vcf/validator_detail_v43.hpp"
+#line 16701 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr965;
 		case 45: goto tr965;
@@ -16714,7 +16715,7 @@ st678:
 	if ( ++p == pe )
 		goto _test_eof678;
 case 678:
-#line 16718 "inc/vcf/validator_detail_v43.hpp"
+#line 16719 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr966;
 	goto tr814;
@@ -16728,7 +16729,7 @@ st679:
 	if ( ++p == pe )
 		goto _test_eof679;
 case 679:
-#line 16732 "inc/vcf/validator_detail_v43.hpp"
+#line 16733 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 9 )
 		goto tr822;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -16754,7 +16755,7 @@ st680:
 	if ( ++p == pe )
 		goto _test_eof680;
 case 680:
-#line 16758 "inc/vcf/validator_detail_v43.hpp"
+#line 16759 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 110 )
 		goto tr967;
 	goto tr814;
@@ -16768,7 +16769,7 @@ st681:
 	if ( ++p == pe )
 		goto _test_eof681;
 case 681:
-#line 16772 "inc/vcf/validator_detail_v43.hpp"
+#line 16773 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 102 )
 		goto tr968;
 	goto tr814;
@@ -16792,7 +16793,7 @@ st682:
 	if ( ++p == pe )
 		goto _test_eof682;
 case 682:
-#line 16796 "inc/vcf/validator_detail_v43.hpp"
+#line 16797 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 9 )
 		goto tr822;
 	goto tr814;
@@ -16810,7 +16811,7 @@ st683:
 	if ( ++p == pe )
 		goto _test_eof683;
 case 683:
-#line 16814 "inc/vcf/validator_detail_v43.hpp"
+#line 16815 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 97 )
 		goto tr969;
 	goto tr814;
@@ -16824,7 +16825,7 @@ st684:
 	if ( ++p == pe )
 		goto _test_eof684;
 case 684:
-#line 16828 "inc/vcf/validator_detail_v43.hpp"
+#line 16829 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto tr968;
 	goto tr814;
@@ -16838,7 +16839,7 @@ st685:
 	if ( ++p == pe )
 		goto _test_eof685;
 case 685:
-#line 16842 "inc/vcf/validator_detail_v43.hpp"
+#line 16843 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 42: goto tr806;
 		case 46: goto tr970;
@@ -16877,7 +16878,7 @@ st686:
 	if ( ++p == pe )
 		goto _test_eof686;
 case 686:
-#line 16881 "inc/vcf/validator_detail_v43.hpp"
+#line 16882 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 65: goto tr971;
 		case 67: goto tr971;
@@ -16901,7 +16902,7 @@ st687:
 	if ( ++p == pe )
 		goto _test_eof687;
 case 687:
-#line 16905 "inc/vcf/validator_detail_v43.hpp"
+#line 16906 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr812;
 		case 44: goto tr813;
@@ -16937,7 +16938,7 @@ st688:
 	if ( ++p == pe )
 		goto _test_eof688;
 case 688:
-#line 16941 "inc/vcf/validator_detail_v43.hpp"
+#line 16942 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 61 )
 		goto tr972;
 	if ( (*p) < 63 ) {
@@ -16977,7 +16978,7 @@ st689:
 	if ( ++p == pe )
 		goto _test_eof689;
 case 689:
-#line 16981 "inc/vcf/validator_detail_v43.hpp"
+#line 16982 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 62 )
 		goto tr974;
 	if ( (*p) < 45 ) {
@@ -17009,7 +17010,7 @@ st690:
 	if ( ++p == pe )
 		goto _test_eof690;
 case 690:
-#line 17013 "inc/vcf/validator_detail_v43.hpp"
+#line 17014 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr812;
 		case 44: goto tr813;
@@ -17038,7 +17039,7 @@ st691:
 	if ( ++p == pe )
 		goto _test_eof691;
 case 691:
-#line 17042 "inc/vcf/validator_detail_v43.hpp"
+#line 17043 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr978;
 		case 59: goto tr978;
@@ -17070,7 +17071,7 @@ st692:
 	if ( ++p == pe )
 		goto _test_eof692;
 case 692:
-#line 17074 "inc/vcf/validator_detail_v43.hpp"
+#line 17075 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr978;
 		case 58: goto tr980;
@@ -17098,7 +17099,7 @@ st693:
 	if ( ++p == pe )
 		goto _test_eof693;
 case 693:
-#line 17102 "inc/vcf/validator_detail_v43.hpp"
+#line 17103 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr981;
 	goto tr805;
@@ -17112,7 +17113,7 @@ st694:
 	if ( ++p == pe )
 		goto _test_eof694;
 case 694:
-#line 17116 "inc/vcf/validator_detail_v43.hpp"
+#line 17117 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 91 )
 		goto tr974;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -17128,7 +17129,7 @@ st695:
 	if ( ++p == pe )
 		goto _test_eof695;
 case 695:
-#line 17132 "inc/vcf/validator_detail_v43.hpp"
+#line 17133 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr982;
 		case 59: goto tr982;
@@ -17159,7 +17160,7 @@ st696:
 	if ( ++p == pe )
 		goto _test_eof696;
 case 696:
-#line 17163 "inc/vcf/validator_detail_v43.hpp"
+#line 17164 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr982;
 		case 59: goto tr982;
@@ -17188,7 +17189,7 @@ st697:
 	if ( ++p == pe )
 		goto _test_eof697;
 case 697:
-#line 17192 "inc/vcf/validator_detail_v43.hpp"
+#line 17193 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 58 )
 		goto tr980;
 	goto tr805;
@@ -17202,7 +17203,7 @@ st698:
 	if ( ++p == pe )
 		goto _test_eof698;
 case 698:
-#line 17206 "inc/vcf/validator_detail_v43.hpp"
+#line 17207 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr984;
 		case 59: goto tr984;
@@ -17234,7 +17235,7 @@ st699:
 	if ( ++p == pe )
 		goto _test_eof699;
 case 699:
-#line 17238 "inc/vcf/validator_detail_v43.hpp"
+#line 17239 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr984;
 		case 58: goto tr986;
@@ -17262,7 +17263,7 @@ st700:
 	if ( ++p == pe )
 		goto _test_eof700;
 case 700:
-#line 17266 "inc/vcf/validator_detail_v43.hpp"
+#line 17267 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr987;
 	goto tr805;
@@ -17276,7 +17277,7 @@ st701:
 	if ( ++p == pe )
 		goto _test_eof701;
 case 701:
-#line 17280 "inc/vcf/validator_detail_v43.hpp"
+#line 17281 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 93 )
 		goto tr974;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -17292,7 +17293,7 @@ st702:
 	if ( ++p == pe )
 		goto _test_eof702;
 case 702:
-#line 17296 "inc/vcf/validator_detail_v43.hpp"
+#line 17297 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr988;
 		case 59: goto tr988;
@@ -17323,7 +17324,7 @@ st703:
 	if ( ++p == pe )
 		goto _test_eof703;
 case 703:
-#line 17327 "inc/vcf/validator_detail_v43.hpp"
+#line 17328 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr988;
 		case 59: goto tr988;
@@ -17352,7 +17353,7 @@ st704:
 	if ( ++p == pe )
 		goto _test_eof704;
 case 704:
-#line 17356 "inc/vcf/validator_detail_v43.hpp"
+#line 17357 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 58 )
 		goto tr986;
 	goto tr805;
@@ -17370,7 +17371,7 @@ st705:
 	if ( ++p == pe )
 		goto _test_eof705;
 case 705:
-#line 17374 "inc/vcf/validator_detail_v43.hpp"
+#line 17375 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr990;
 		case 59: goto tr990;
@@ -17402,7 +17403,7 @@ st706:
 	if ( ++p == pe )
 		goto _test_eof706;
 case 706:
-#line 17406 "inc/vcf/validator_detail_v43.hpp"
+#line 17407 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr990;
 		case 58: goto tr992;
@@ -17430,7 +17431,7 @@ st707:
 	if ( ++p == pe )
 		goto _test_eof707;
 case 707:
-#line 17434 "inc/vcf/validator_detail_v43.hpp"
+#line 17435 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr993;
 	goto tr805;
@@ -17444,7 +17445,7 @@ st708:
 	if ( ++p == pe )
 		goto _test_eof708;
 case 708:
-#line 17448 "inc/vcf/validator_detail_v43.hpp"
+#line 17449 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 91 )
 		goto tr994;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -17460,7 +17461,7 @@ st709:
 	if ( ++p == pe )
 		goto _test_eof709;
 case 709:
-#line 17464 "inc/vcf/validator_detail_v43.hpp"
+#line 17465 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr995;
 		case 59: goto tr995;
@@ -17491,7 +17492,7 @@ st710:
 	if ( ++p == pe )
 		goto _test_eof710;
 case 710:
-#line 17495 "inc/vcf/validator_detail_v43.hpp"
+#line 17496 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr995;
 		case 59: goto tr995;
@@ -17520,7 +17521,7 @@ st711:
 	if ( ++p == pe )
 		goto _test_eof711;
 case 711:
-#line 17524 "inc/vcf/validator_detail_v43.hpp"
+#line 17525 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 58 )
 		goto tr992;
 	goto tr805;
@@ -17538,7 +17539,7 @@ st712:
 	if ( ++p == pe )
 		goto _test_eof712;
 case 712:
-#line 17542 "inc/vcf/validator_detail_v43.hpp"
+#line 17543 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr997;
 		case 59: goto tr997;
@@ -17570,7 +17571,7 @@ st713:
 	if ( ++p == pe )
 		goto _test_eof713;
 case 713:
-#line 17574 "inc/vcf/validator_detail_v43.hpp"
+#line 17575 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr997;
 		case 58: goto tr999;
@@ -17598,7 +17599,7 @@ st714:
 	if ( ++p == pe )
 		goto _test_eof714;
 case 714:
-#line 17602 "inc/vcf/validator_detail_v43.hpp"
+#line 17603 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr1000;
 	goto tr805;
@@ -17612,7 +17613,7 @@ st715:
 	if ( ++p == pe )
 		goto _test_eof715;
 case 715:
-#line 17616 "inc/vcf/validator_detail_v43.hpp"
+#line 17617 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 93 )
 		goto tr994;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -17628,7 +17629,7 @@ st716:
 	if ( ++p == pe )
 		goto _test_eof716;
 case 716:
-#line 17632 "inc/vcf/validator_detail_v43.hpp"
+#line 17633 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr1001;
 		case 59: goto tr1001;
@@ -17659,7 +17660,7 @@ st717:
 	if ( ++p == pe )
 		goto _test_eof717;
 case 717:
-#line 17663 "inc/vcf/validator_detail_v43.hpp"
+#line 17664 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr1001;
 		case 59: goto tr1001;
@@ -17688,7 +17689,7 @@ st718:
 	if ( ++p == pe )
 		goto _test_eof718;
 case 718:
-#line 17692 "inc/vcf/validator_detail_v43.hpp"
+#line 17693 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 58 )
 		goto tr999;
 	goto tr805;
@@ -17706,7 +17707,7 @@ st719:
 	if ( ++p == pe )
 		goto _test_eof719;
 case 719:
-#line 17710 "inc/vcf/validator_detail_v43.hpp"
+#line 17711 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr812;
 		case 65: goto tr971;
@@ -17761,7 +17762,7 @@ st720:
 	if ( ++p == pe )
 		goto _test_eof720;
 case 720:
-#line 17765 "inc/vcf/validator_detail_v43.hpp"
+#line 17766 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 10 )
 		goto st724;
 	goto tr774;
@@ -17790,7 +17791,7 @@ st721:
 	if ( ++p == pe )
 		goto _test_eof721;
 case 721:
-#line 17794 "inc/vcf/validator_detail_v43.hpp"
+#line 17795 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 10 )
 		goto st22;
 	goto tr0;
@@ -17810,7 +17811,7 @@ st722:
 	if ( ++p == pe )
 		goto _test_eof722;
 case 722:
-#line 17814 "inc/vcf/validator_detail_v43.hpp"
+#line 17815 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr1006;
 		case 13: goto tr1007;
@@ -17827,14 +17828,14 @@ tr1006:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 916 "src/vcf/vcf_v43.ragel"
+#line 917 "src/vcf/vcf_v43.ragel"
 	{ {goto st28;} }
 	goto st803;
 st803:
 	if ( ++p == pe )
 		goto _test_eof803;
 case 803:
-#line 17838 "inc/vcf/validator_detail_v43.hpp"
+#line 17839 "inc/vcf/validator_detail_v43.hpp"
 	goto st0;
 tr1010:
 #line 43 "src/vcf/vcf_v43.ragel"
@@ -17852,7 +17853,7 @@ st723:
 	if ( ++p == pe )
 		goto _test_eof723;
 case 723:
-#line 17856 "inc/vcf/validator_detail_v43.hpp"
+#line 17857 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr1009;
 		case 13: goto tr1010;
@@ -17869,14 +17870,14 @@ tr1009:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 917 "src/vcf/vcf_v43.ragel"
+#line 918 "src/vcf/vcf_v43.ragel"
 	{ {goto st728;} }
 	goto st804;
 st804:
 	if ( ++p == pe )
 		goto _test_eof804;
 case 804:
-#line 17880 "inc/vcf/validator_detail_v43.hpp"
+#line 17881 "inc/vcf/validator_detail_v43.hpp"
 	goto st0;
 	}
 	_test_eof2: cs = 2; goto _test_eof; 
@@ -18804,7 +18805,8 @@ case 804:
 #line 238 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this,
-            new FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.3'"});
+            new FileformatError{n_lines,
+                "The fileformat declaration is not valid (value must be one of 'VCFv4.1', 'VCFv4.2' or 'VCFv4.3')"});
         p--; {goto st722;}
     }
 #line 60 "src/vcf/vcf_v43.ragel"
@@ -18835,7 +18837,7 @@ case 804:
 	case 96: 
 	case 103: 
 	case 114: 
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
@@ -18854,7 +18856,7 @@ case 804:
 	case 446: 
 	case 447: 
 	case 448: 
-#line 257 "src/vcf/vcf_v43.ragel"
+#line 258 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
         p--; {goto st722;}
@@ -18894,7 +18896,7 @@ case 804:
 	case 496: 
 	case 497: 
 	case 498: 
-#line 263 "src/vcf/vcf_v43.ragel"
+#line 264 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
         p--; {goto st722;}
@@ -18929,7 +18931,7 @@ case 804:
 	case 147: 
 	case 154: 
 	case 165: 
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
@@ -18976,7 +18978,7 @@ case 804:
 	case 213: 
 	case 220: 
 	case 231: 
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -19022,7 +19024,7 @@ case 804:
 	case 279: 
 	case 286: 
 	case 297: 
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -19067,7 +19069,7 @@ case 804:
 	case 403: 
 	case 404: 
 	case 405: 
-#line 307 "src/vcf/vcf_v43.ragel"
+#line 308 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st722;}
@@ -19089,7 +19091,7 @@ case 804:
 	case 507: 
 	case 508: 
 	case 509: 
-#line 328 "src/vcf/vcf_v43.ragel"
+#line 329 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         p--; {goto st722;}
@@ -19132,7 +19134,7 @@ case 804:
 	case 348: 
 	case 349: 
 	case 351: 
-#line 334 "src/vcf/vcf_v43.ragel"
+#line 335 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
         p--; {goto st722;}
@@ -19172,7 +19174,7 @@ case 804:
 	case 438: 
 	case 439: 
 	case 440: 
-#line 355 "src/vcf/vcf_v43.ragel"
+#line 356 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st722;}
@@ -19187,7 +19189,7 @@ case 804:
 	case 597: 
 	case 598: 
 	case 599: 
-#line 394 "src/vcf/vcf_v43.ragel"
+#line 395 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new ChromosomeBodyError{n_lines});
         p--; {goto st723;}
@@ -19200,7 +19202,7 @@ case 804:
 	break;
 	case 579: 
 	case 580: 
-#line 400 "src/vcf/vcf_v43.ragel"
+#line 401 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new PositionBodyError{n_lines});
         p--; {goto st723;}
@@ -19213,7 +19215,7 @@ case 804:
 	break;
 	case 581: 
 	case 582: 
-#line 406 "src/vcf/vcf_v43.ragel"
+#line 407 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new IdBodyError{n_lines});
         p--; {goto st723;}
@@ -19226,7 +19228,7 @@ case 804:
 	break;
 	case 583: 
 	case 584: 
-#line 412 "src/vcf/vcf_v43.ragel"
+#line 413 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new ReferenceAlleleBodyError{n_lines});
         p--; {goto st723;}
@@ -19274,7 +19276,7 @@ case 804:
 	case 717: 
 	case 718: 
 	case 719: 
-#line 418 "src/vcf/vcf_v43.ragel"
+#line 419 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new AlternateAllelesBodyError{n_lines});
         p--; {goto st723;}
@@ -19298,7 +19300,7 @@ case 804:
 	case 682: 
 	case 683: 
 	case 684: 
-#line 424 "src/vcf/vcf_v43.ragel"
+#line 425 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new QualityBodyError{n_lines});
         p--; {goto st723;}
@@ -19314,7 +19316,7 @@ case 804:
 	case 592: 
 	case 673: 
 	case 674: 
-#line 430 "src/vcf/vcf_v43.ragel"
+#line 431 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FilterBodyError{n_lines});
         p--; {goto st723;}
@@ -19327,7 +19329,7 @@ case 804:
 	break;
 	case 594: 
 	case 595: 
-#line 620 "src/vcf/vcf_v43.ragel"
+#line 621 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FormatBodyError{n_lines, "Format does not start with a letter/underscore followed by alphanumeric/underscore/dot characters"});
         p--; {goto st723;}
@@ -19347,7 +19349,7 @@ case 804:
 	case 574: 
 	case 575: 
 	case 576: 
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
@@ -19369,13 +19371,13 @@ case 804:
 	case 81: 
 	case 82: 
 	case 83: 
-#line 250 "src/vcf/vcf_v43.ragel"
+#line 251 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines,
             "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"});
         p--; {goto st722;}
     }
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
@@ -19387,12 +19389,12 @@ case 804:
     }
 	break;
 	case 122: 
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -19406,12 +19408,12 @@ case 804:
 	case 192: 
 	case 193: 
 	case 239: 
-#line 280 "src/vcf/vcf_v43.ragel"
+#line 281 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G or dot"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -19425,12 +19427,12 @@ case 804:
 	case 258: 
 	case 259: 
 	case 305: 
-#line 296 "src/vcf/vcf_v43.ragel"
+#line 297 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Number is not a number, A, R, G or dot"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -19443,12 +19445,12 @@ case 804:
 	break;
 	case 199: 
 	case 200: 
-#line 301 "src/vcf/vcf_v43.ragel"
+#line 302 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not Integer, Float, Flag, Character or String"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -19461,12 +19463,12 @@ case 804:
 	break;
 	case 265: 
 	case 266: 
-#line 301 "src/vcf/vcf_v43.ragel"
+#line 302 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not Integer, Float, Flag, Character or String"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -19480,12 +19482,12 @@ case 804:
 	case 406: 
 	case 407: 
 	case 408: 
-#line 312 "src/vcf/vcf_v43.ragel"
+#line 313 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Original is not valid"});
         p--; {goto st722;}
     }
-#line 307 "src/vcf/vcf_v43.ragel"
+#line 308 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st722;}
@@ -19502,12 +19504,12 @@ case 804:
 	case 384: 
 	case 385: 
 	case 386: 
-#line 317 "src/vcf/vcf_v43.ragel"
+#line 318 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Father or Mother is not valid"});
         p--; {goto st722;}
     }
-#line 307 "src/vcf/vcf_v43.ragel"
+#line 308 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st722;}
@@ -19529,12 +19531,12 @@ case 804:
 	case 395: 
 	case 396: 
 	case 397: 
-#line 322 "src/vcf/vcf_v43.ragel"
+#line 323 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata sequence of Name_N is not valid"});
         p--; {goto st722;}
     }
-#line 307 "src/vcf/vcf_v43.ragel"
+#line 308 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st722;}
@@ -19547,12 +19549,12 @@ case 804:
 	break;
 	case 324: 
 	case 325: 
-#line 339 "src/vcf/vcf_v43.ragel"
+#line 340 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Number is not a dot"});
         p--; {goto st722;}
     }
-#line 334 "src/vcf/vcf_v43.ragel"
+#line 335 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
         p--; {goto st722;}
@@ -19570,12 +19572,12 @@ case 804:
 	case 335: 
 	case 336: 
 	case 337: 
-#line 344 "src/vcf/vcf_v43.ragel"
+#line 345 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Type is not String"});
         p--; {goto st722;}
     }
-#line 334 "src/vcf/vcf_v43.ragel"
+#line 335 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
         p--; {goto st722;}
@@ -19588,12 +19590,12 @@ case 804:
 	break;
 	case 347: 
 	case 350: 
-#line 349 "src/vcf/vcf_v43.ragel"
+#line 350 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Values is not a square-bracket delimited list of values"});
         p--; {goto st722;}
     }
-#line 334 "src/vcf/vcf_v43.ragel"
+#line 335 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
         p--; {goto st722;}
@@ -19607,12 +19609,12 @@ case 804:
 	case 100: 
 	case 101: 
 	case 102: 
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
@@ -19625,12 +19627,12 @@ case 804:
 	break;
 	case 478: 
 	case 479: 
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 263 "src/vcf/vcf_v43.ragel"
+#line 264 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
         p--; {goto st722;}
@@ -19647,12 +19649,12 @@ case 804:
 	case 151: 
 	case 152: 
 	case 153: 
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
@@ -19669,12 +19671,12 @@ case 804:
 	case 217: 
 	case 218: 
 	case 219: 
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -19691,12 +19693,12 @@ case 804:
 	case 283: 
 	case 284: 
 	case 285: 
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -19710,12 +19712,12 @@ case 804:
 	case 364: 
 	case 365: 
 	case 366: 
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 307 "src/vcf/vcf_v43.ragel"
+#line 308 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st722;}
@@ -19729,12 +19731,12 @@ case 804:
 	case 314: 
 	case 315: 
 	case 316: 
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 334 "src/vcf/vcf_v43.ragel"
+#line 335 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
         p--; {goto st722;}
@@ -19748,12 +19750,12 @@ case 804:
 	case 419: 
 	case 420: 
 	case 421: 
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 355 "src/vcf/vcf_v43.ragel"
+#line 356 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st722;}
@@ -19778,12 +19780,12 @@ case 804:
 	case 116: 
 	case 120: 
 	case 121: 
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
@@ -19808,12 +19810,12 @@ case 804:
 	case 167: 
 	case 171: 
 	case 172: 
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
@@ -19838,12 +19840,12 @@ case 804:
 	case 233: 
 	case 237: 
 	case 238: 
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -19868,12 +19870,12 @@ case 804:
 	case 299: 
 	case 303: 
 	case 304: 
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -19903,12 +19905,12 @@ case 804:
 	case 465: 
 	case 466: 
 	case 467: 
-#line 371 "src/vcf/vcf_v43.ragel"
+#line 372 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
         p--; {goto st722;}
     }
-#line 257 "src/vcf/vcf_v43.ragel"
+#line 258 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
         p--; {goto st722;}
@@ -19940,12 +19942,12 @@ case 804:
 	case 528: 
 	case 529: 
 	case 530: 
-#line 371 "src/vcf/vcf_v43.ragel"
+#line 372 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
         p--; {goto st722;}
     }
-#line 328 "src/vcf/vcf_v43.ragel"
+#line 329 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         p--; {goto st722;}
@@ -19993,12 +19995,12 @@ case 804:
 	case 565: 
 	case 566: 
 	case 567: 
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 377 "src/vcf/vcf_v43.ragel"
+#line 378 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
             "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
@@ -20027,12 +20029,12 @@ case 804:
     }
 	break;
 	case 601: 
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 626 "src/vcf/vcf_v43.ragel"
+#line 627 "src/vcf/vcf_v43.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
@@ -20126,7 +20128,7 @@ case 804:
 	{
         ParsePolicy::handle_column_end(*this, n_columns);
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
@@ -20164,12 +20166,12 @@ case 804:
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st722;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 377 "src/vcf/vcf_v43.ragel"
+#line 378 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
             "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
@@ -20200,17 +20202,17 @@ case 804:
 	case 108: 
 	case 109: 
 	case 110: 
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
@@ -20224,17 +20226,17 @@ case 804:
 	case 159: 
 	case 160: 
 	case 161: 
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
@@ -20248,17 +20250,17 @@ case 804:
 	case 225: 
 	case 226: 
 	case 227: 
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -20272,17 +20274,17 @@ case 804:
 	case 291: 
 	case 292: 
 	case 293: 
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -20296,17 +20298,17 @@ case 804:
 	case 117: 
 	case 118: 
 	case 119: 
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
@@ -20320,17 +20322,17 @@ case 804:
 	case 168: 
 	case 169: 
 	case 170: 
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
@@ -20344,17 +20346,17 @@ case 804:
 	case 234: 
 	case 235: 
 	case 236: 
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
@@ -20368,17 +20370,17 @@ case 804:
 	case 300: 
 	case 301: 
 	case 302: 
-#line 366 "src/vcf/vcf_v43.ragel"
+#line 367 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
         p--; {goto st722;}
     }
-#line 361 "src/vcf/vcf_v43.ragel"
+#line 362 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
@@ -20406,17 +20408,17 @@ case 804:
 	case 648: 
 	case 659: 
 	case 661: 
-#line 441 "src/vcf/vcf_v43.ragel"
+#line 442 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20428,17 +20430,17 @@ case 804:
     }
 	break;
 	case 603: 
-#line 446 "src/vcf/vcf_v43.ragel"
+#line 447 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20450,7 +20452,7 @@ case 804:
     }
 	break;
 	case 606: 
-#line 451 "src/vcf/vcf_v43.ragel"
+#line 452 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20458,12 +20460,12 @@ case 804:
                 "AA"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20475,7 +20477,7 @@ case 804:
     }
 	break;
 	case 608: 
-#line 459 "src/vcf/vcf_v43.ragel"
+#line 460 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20483,12 +20485,12 @@ case 804:
                 "AC"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20500,7 +20502,7 @@ case 804:
     }
 	break;
 	case 610: 
-#line 467 "src/vcf/vcf_v43.ragel"
+#line 468 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20508,12 +20510,12 @@ case 804:
                 "AD"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20525,7 +20527,7 @@ case 804:
     }
 	break;
 	case 612: 
-#line 475 "src/vcf/vcf_v43.ragel"
+#line 476 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20533,12 +20535,12 @@ case 804:
                 "ADF"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20550,7 +20552,7 @@ case 804:
     }
 	break;
 	case 614: 
-#line 483 "src/vcf/vcf_v43.ragel"
+#line 484 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20558,12 +20560,12 @@ case 804:
                 "ADR"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20583,7 +20585,7 @@ case 804:
 	case 622: 
 	case 623: 
 	case 624: 
-#line 491 "src/vcf/vcf_v43.ragel"
+#line 492 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20591,12 +20593,12 @@ case 804:
                 "AF"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20608,7 +20610,7 @@ case 804:
     }
 	break;
 	case 626: 
-#line 499 "src/vcf/vcf_v43.ragel"
+#line 500 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20616,12 +20618,12 @@ case 804:
                 "AN"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20641,7 +20643,7 @@ case 804:
 	case 634: 
 	case 635: 
 	case 636: 
-#line 507 "src/vcf/vcf_v43.ragel"
+#line 508 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20649,12 +20651,12 @@ case 804:
                 "BQ"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20667,7 +20669,7 @@ case 804:
 	break;
 	case 638: 
 	case 639: 
-#line 515 "src/vcf/vcf_v43.ragel"
+#line 516 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20675,12 +20677,12 @@ case 804:
                 "CIGAR"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20692,7 +20694,7 @@ case 804:
     }
 	break;
 	case 640: 
-#line 523 "src/vcf/vcf_v43.ragel"
+#line 524 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20700,12 +20702,12 @@ case 804:
                 "DB"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20717,7 +20719,7 @@ case 804:
     }
 	break;
 	case 642: 
-#line 531 "src/vcf/vcf_v43.ragel"
+#line 532 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20725,12 +20727,12 @@ case 804:
                 "DP"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20742,7 +20744,7 @@ case 804:
     }
 	break;
 	case 644: 
-#line 539 "src/vcf/vcf_v43.ragel"
+#line 540 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20750,12 +20752,12 @@ case 804:
                 "END"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20767,7 +20769,7 @@ case 804:
     }
 	break;
 	case 645: 
-#line 547 "src/vcf/vcf_v43.ragel"
+#line 548 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20775,12 +20777,12 @@ case 804:
                 "H2"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20792,7 +20794,7 @@ case 804:
     }
 	break;
 	case 646: 
-#line 555 "src/vcf/vcf_v43.ragel"
+#line 556 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20800,12 +20802,12 @@ case 804:
                 "H3"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20825,7 +20827,7 @@ case 804:
 	case 656: 
 	case 657: 
 	case 658: 
-#line 563 "src/vcf/vcf_v43.ragel"
+#line 564 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20833,12 +20835,12 @@ case 804:
                 "MQ"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20850,7 +20852,7 @@ case 804:
     }
 	break;
 	case 649: 
-#line 571 "src/vcf/vcf_v43.ragel"
+#line 572 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20858,12 +20860,12 @@ case 804:
                 "MQ0"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20875,7 +20877,7 @@ case 804:
     }
 	break;
 	case 660: 
-#line 579 "src/vcf/vcf_v43.ragel"
+#line 580 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20883,12 +20885,12 @@ case 804:
                 "NS"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20908,7 +20910,7 @@ case 804:
 	case 668: 
 	case 669: 
 	case 670: 
-#line 587 "src/vcf/vcf_v43.ragel"
+#line 588 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20916,12 +20918,12 @@ case 804:
                 "SB"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20933,7 +20935,7 @@ case 804:
     }
 	break;
 	case 671: 
-#line 595 "src/vcf/vcf_v43.ragel"
+#line 596 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20941,12 +20943,12 @@ case 804:
                 "SOMATIC"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20958,7 +20960,7 @@ case 804:
     }
 	break;
 	case 672: 
-#line 603 "src/vcf/vcf_v43.ragel"
+#line 604 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20966,12 +20968,12 @@ case 804:
                 "VALIDATED"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -20983,7 +20985,7 @@ case 804:
     }
 	break;
 	case 604: 
-#line 611 "src/vcf/vcf_v43.ragel"
+#line 612 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{
                 n_lines,
@@ -20991,12 +20993,12 @@ case 804:
                 "1000G"});
         p--; {goto st723;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 436 "src/vcf/vcf_v43.ragel"
+#line 437 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
         p--; {goto st723;}
@@ -21010,7 +21012,7 @@ case 804:
 	case 729: 
 	case 730: 
 	case 731: 
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
@@ -21050,19 +21052,19 @@ case 804:
     }
 	break;
 	case 596: 
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 633 "src/vcf/vcf_v43.ragel"
+#line 634 "src/vcf/vcf_v43.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
         ErrorPolicy::handle_error(*this, new SamplesFieldBodyError{n_lines, message_stream.str(), "GT"});
         p--; {goto st723;}
     }
-#line 626 "src/vcf/vcf_v43.ragel"
+#line 627 "src/vcf/vcf_v43.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
@@ -21086,12 +21088,12 @@ case 804:
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
         p--; {goto st722;}
     }
-#line 640 "src/vcf/vcf_v43.ragel"
+#line 641 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
         p--; {goto st723;}
     }
-#line 377 "src/vcf/vcf_v43.ragel"
+#line 378 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
             "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
@@ -21120,52 +21122,52 @@ case 804:
     }
 	break;
 	case 24: 
-#line 245 "src/vcf/vcf_v43.ragel"
+#line 246 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
         p--; {goto st722;}
     }
-#line 269 "src/vcf/vcf_v43.ragel"
+#line 270 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
         p--; {goto st722;}
     }
-#line 275 "src/vcf/vcf_v43.ragel"
+#line 276 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
         p--; {goto st722;}
     }
-#line 291 "src/vcf/vcf_v43.ragel"
+#line 292 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
         p--; {goto st722;}
     }
-#line 257 "src/vcf/vcf_v43.ragel"
+#line 258 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
         p--; {goto st722;}
     }
-#line 263 "src/vcf/vcf_v43.ragel"
+#line 264 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
         p--; {goto st722;}
     }
-#line 334 "src/vcf/vcf_v43.ragel"
+#line 335 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
         p--; {goto st722;}
     }
-#line 355 "src/vcf/vcf_v43.ragel"
+#line 356 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
         p--; {goto st722;}
     }
-#line 307 "src/vcf/vcf_v43.ragel"
+#line 308 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         p--; {goto st722;}
     }
-#line 328 "src/vcf/vcf_v43.ragel"
+#line 329 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         p--; {goto st722;}
@@ -21176,14 +21178,14 @@ case 804:
         p--; {goto st722;}
     }
 	break;
-#line 21180 "inc/vcf/validator_detail_v43.hpp"
+#line 21182 "inc/vcf/validator_detail_v43.hpp"
 	}
 	}
 
 	_out: {}
 	}
 
-#line 946 "src/vcf/vcf_v43.ragel"
+#line 947 "src/vcf/vcf_v43.ragel"
 
     }
     

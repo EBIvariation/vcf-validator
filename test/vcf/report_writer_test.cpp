@@ -38,11 +38,10 @@ namespace ebi
       if (!input) {
           throw std::runtime_error("file not found: " + path);
       }
-      auto validator = ebi::vcf::build_parser(path, ebi::vcf::ValidationLevel::warning, ebi::vcf::Version::v41, 2);
       std::vector<std::unique_ptr<vcf::ReportWriter>> outputs;
       outputs.push_back(std::move(output));
 
-      return ebi::vcf::is_valid_vcf_file(input, *validator, outputs);
+      return ebi::vcf::is_valid_vcf_file(input, path, ebi::vcf::ValidationLevel::warning, 2, outputs);
   }
 
   TEST_CASE("Unit test: odb", "[output]")
@@ -171,7 +170,8 @@ namespace ebi
 
           errorsDAO.for_each_error([&errors_read](std::shared_ptr<ebi::vcf::Error> error) {
               CHECK(error->line == 1);
-              CHECK(error->message == "The fileformat declaration is not 'fileformat=VCFv4.1'");
+              CHECK(error->message == "The fileformat declaration is not valid "
+                      "(value must be one of 'VCFv4.1', 'VCFv4.2' or 'VCFv4.3')");
               errors_read++;
           });
 

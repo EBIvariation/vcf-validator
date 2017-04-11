@@ -74,10 +74,8 @@ namespace ebi
                                                    ebi::vcf::Version version,
                                                    ebi::vcf::Ploidy ploidy)
     {
-
-        auto source_ptr = new ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, version, ploidy};
-        std::shared_ptr<Source> source{source_ptr};
-        auto records = std::vector<ebi::vcf::Record>{};
+        std::shared_ptr<Source> source = std::make_shared<Source>(path, InputFormat::VCF_FILE_VCF, version, ploidy);
+        auto records = std::vector<Record>{};
 
         switch (level) {
         case ValidationLevel::error:
@@ -122,12 +120,51 @@ namespace ebi
     }
 
     bool is_valid_vcf_file(std::istream &input,
+                           const std::string &sourceName,
+                           ValidationLevel validationLevel,
+                           Ploidy ploidy,
+                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
+    {
+        std::vector<char> line;
+        ebi::util::readline(input, line);
+        ebi::vcf::Version version = extract_version(line);
+        std::unique_ptr<Parser> validator = build_parser(sourceName, validationLevel, version, ploidy);
+        return is_valid_vcf_file(line, input, *validator, outputs);
+    }
+
+    Version extract_version(std::vector<char> line)
+    {
+        std::string common_substring{"##fileformat=VCFv4."};
+        std::vector<char>::iterator lineIt;
+        std::string::const_iterator commonIt;
+        std::tie(commonIt, lineIt) = std::mismatch(common_substring.begin(), common_substring.end(), line.begin());
+        if (commonIt != common_substring.end()) {
+            // the fileformat is wrong, so take any version and let the parser report the error
+            return Version::v41;
+        }
+
+        if (*lineIt == '1') {
+            return Version::v41;
+        } else if (*lineIt == '2') {
+            return Version::v42;
+        } else if (*lineIt == '3') {
+            return Version::v43;
+        } else {
+            // version not supported, so take any version and let the parser report the error
+            return Version::v41;
+        }
+    }
+
+    bool is_valid_vcf_file(const std::vector<char> &firstLine,
+                           std::istream &input,
                            ebi::vcf::Parser &validator,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
     {
-
         std::vector<char> line;
         line.reserve(default_line_buffer_size);
+
+        validator.parse(firstLine);
+        write_errors(validator, outputs);
 
         while (ebi::util::readline(input, line).size() != 0) {
             validator.parse(line);
@@ -139,7 +176,6 @@ namespace ebi
 
         return validator.is_valid();
     }
-
     void write_errors(const Parser &validator, const std::vector<std::unique_ptr<ReportWriter>> &outputs)
     {
         for (auto &error : validator.errors()) {
