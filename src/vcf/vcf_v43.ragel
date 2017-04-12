@@ -237,8 +237,7 @@
     # Fileformat line
     action fileformat_error {
         ErrorPolicy::handle_error(*this,
-            new FileformatError{n_lines,
-                "The fileformat declaration is not valid (value must be one of 'VCFv4.1', 'VCFv4.2' or 'VCFv4.3')"});
+                new FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.3'"});
         fhold; fgoto meta_section_skip;
     } 
 

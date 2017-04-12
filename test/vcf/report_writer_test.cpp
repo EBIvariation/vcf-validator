@@ -139,7 +139,7 @@ namespace ebi
 
   TEST_CASE("Integration test: validator and odb", "[output]")
   {
-      auto path = boost::filesystem::path("test/input_files/v4.1/failed/failed_fileformat_000.vcf");
+      auto path = boost::filesystem::path("test/input_files/v4.1/failed/failed_body_sample_000.vcf");
 
       std::string db_name = path.string() + ".errors.db";
 
@@ -160,7 +160,7 @@ namespace ebi
           }
 
           CHECK(count_errors == 1);
-          CHECK(count_warnings == 2);
+          CHECK(count_warnings == 1);
       }
 
       SECTION(path.string() + " error details")
@@ -169,9 +169,8 @@ namespace ebi
           ebi::vcf::OdbReportRW errorsDAO{db_name};
 
           errorsDAO.for_each_error([&errors_read](std::shared_ptr<ebi::vcf::Error> error) {
-              CHECK(error->line == 1);
-              CHECK(error->message == "The fileformat declaration is not valid "
-                      "(value must be one of 'VCFv4.1', 'VCFv4.2' or 'VCFv4.3')");
+              CHECK(error->line == 4);
+              CHECK(error->message == "Allele index C is not an integer number");
               errors_read++;
           });
 

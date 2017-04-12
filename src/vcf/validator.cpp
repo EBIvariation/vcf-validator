@@ -20,6 +20,12 @@ namespace ebi
 {
   namespace vcf
   {
+    bool validate(const std::vector<char> &firstLine,
+                           std::istream &input,
+                           ebi::vcf::Parser &validator,
+                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
+
+    void write_errors(const Parser &validator, const std::vector<std::unique_ptr<ReportWriter>> &outputs);
 
     ParserImpl::ParserImpl(std::shared_ptr<Source> source)
             : ParsingState{source}
@@ -127,35 +133,46 @@ namespace ebi
     {
         std::vector<char> line;
         ebi::util::readline(input, line);
-        ebi::vcf::Version version = extract_version(line);
+        ebi::vcf::Version version;
+        try {
+            version = detect_version(line);
+        } catch (FileformatError * error) {
+            for (auto &output : outputs) {
+                output->write_error(*error);
+            }
+            return false;
+        }
         std::unique_ptr<Parser> validator = build_parser(sourceName, validationLevel, version, ploidy);
-        return is_valid_vcf_file(line, input, *validator, outputs);
+        return validate(line, input, *validator, outputs);
     }
 
-    Version extract_version(std::vector<char> line)
+    Version detect_version(const std::vector<char> &line)
     {
-        std::string common_substring{"##fileformat=VCFv4."};
-        std::vector<char>::iterator lineIt;
+        std::string common_substring{"##fileformat="};
+        std::vector<char>::const_iterator lineIt;
         std::string::const_iterator commonIt;
         std::tie(commonIt, lineIt) = std::mismatch(common_substring.begin(), common_substring.end(), line.begin());
         if (commonIt != common_substring.end()) {
-            // the fileformat is wrong, so take any version and let the parser report the error
-            return Version::v41;
+            throw new FileformatError{1, "The fileformat declaration is not valid (the line must start with "
+                    + common_substring + " and the value must be one of 'VCFv4.1', 'VCFv4.2' or 'VCFv4.3')"};
         }
 
-        if (*lineIt == '1') {
+        std::string provided{lineIt, line.end()};
+        util::remove_end_of_line(provided);
+
+        if (std::string{"VCFv4.1"}.compare(provided) == 0) {
             return Version::v41;
-        } else if (*lineIt == '2') {
+        } else if (std::string{"VCFv4.2"}.compare(provided) == 0) {
             return Version::v42;
-        } else if (*lineIt == '3') {
+        } else if (std::string{"VCFv4.3"}.compare(provided) == 0) {
             return Version::v43;
         } else {
-            // version not supported, so take any version and let the parser report the error
-            return Version::v41;
+            throw new FileformatError{1, "The fileformat declaration is not valid "
+                    "(the value must be one of 'VCFv4.1', 'VCFv4.2' or 'VCFv4.3')"};
         }
     }
 
-    bool is_valid_vcf_file(const std::vector<char> &firstLine,
+    bool validate(const std::vector<char> &firstLine,
                            std::istream &input,
                            ebi::vcf::Parser &validator,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
@@ -176,6 +193,7 @@ namespace ebi
 
         return validator.is_valid();
     }
+
     void write_errors(const Parser &validator, const std::vector<std::unique_ptr<ReportWriter>> &outputs)
     {
         for (auto &error : validator.errors()) {

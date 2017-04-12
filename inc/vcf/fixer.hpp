@@ -442,16 +442,9 @@ namespace ebi
 
             std::vector<std::string> columns;
             util::string_split(line, separator.c_str(), columns);
-            std::string eol;
-            if (columns.back().back() == '\n') {
-                //remove (and add it later) the newline so that the `fix_function` doesn't have to deal with it.
-                columns.back().pop_back();
-                if (columns.back().back() == '\r') {
-                    columns.back().pop_back();
-                    eol += "\r";
-                }
-                eol += "\n";
-            }
+
+            //remove (and add it later) the newline so that the `fix_function` doesn't have to deal with it.
+            std::string eol = util::remove_end_of_line(columns.back());
 
             // check ranges. don't allow an empty range, the fix_function should be called at least once
             size_t column_index_last_unsigned;

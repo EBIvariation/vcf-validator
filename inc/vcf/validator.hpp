@@ -178,25 +178,19 @@ namespace ebi
     using FullValidator_v43 = ParserImpl_v43<FullValidatorCfg>;
     using Reader_v43 = ParserImpl_v43<ReaderCfg>;
 
-    Version extract_version(std::vector<char> vector);
-
-    std::unique_ptr<Parser> build_parser(std::string const &path,
-                                         ValidationLevel level,
-                                         Version version,
-                                         Ploidy ploidy);
-
     bool is_valid_vcf_file(std::istream &input,
                            const std::string &sourceName,
                            ValidationLevel validationLevel,
                            Ploidy ploidy,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
 
-    bool is_valid_vcf_file(const std::vector<char> &firstLine,
-                           std::istream &input,
-                           ebi::vcf::Parser &validator,
-                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
+    Version detect_version(const std::vector<char> &line);
 
-    void write_errors(const Parser &validator, const std::vector<std::unique_ptr<ReportWriter>> &outputs);
+    std::unique_ptr<Parser> build_parser(std::string const &path,
+                                         ValidationLevel level,
+                                         Version version,
+                                         Ploidy ploidy);
+
   }
 }
 
