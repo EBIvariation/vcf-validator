@@ -172,6 +172,9 @@ namespace ebi
          */
         void check_chromosome() const;
         
+        void check_chromosome_colons() const;
+        void check_chromosome_whitespaces() const;
+
         /**
          * Checks that IDs are alphanumeric
          * 
@@ -179,6 +182,8 @@ namespace ebi
          */
         void check_ids() const;
         
+        void check_ids_semicolons_whitespaces() const;
+        void check_ids_duplicates() const;
         /**
          * Checks the structure of an alternate allele and its accordance to the meta section
          * 
@@ -196,6 +201,8 @@ namespace ebi
          */
         void check_alternate_allele_structure(std::string const & alternate, RecordType type) const;
         
+        void check_alternate_allele_beginning(std::string const & alternate) const;
+
         /**
          * Checks that alternates of the form <SOME_ALT_ID> are described in the meta section
          * 
@@ -233,6 +240,10 @@ namespace ebi
          */
         void check_format() const;
         
+        void check_format_GT() const;
+
+        void check_format_duplicates() const;
+
         /**
          * Checks that the samples in the record:
          * - Are the same number as specified in the Source object
@@ -250,6 +261,10 @@ namespace ebi
          */
         void check_samples_alleles(std::vector<std::string> const & alleles) const;
         
+        void check_samples_alleles_int(std::string const & allele, long ploidy) const;
+
+        void check_samples_alleles_range(std::string const & allele, long ploidy) const;
+
         /**
          * Checks that every field in a sample matches the Number specification in the FORMAT meta
          * 

@@ -181,24 +181,6 @@ namespace ebi
                             vcf::IdBodyError*);
         }
 
-        SECTION("Duplicate IDs") 
-        {
-            CHECK_THROWS_AS( (vcf::Record{
-                                1,
-                                "chr1", 
-                                123456, 
-                                { "id123", "id123" }, 
-                                "A", 
-                                { "AC", "AT" }, 
-                                1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
-                                { "GT", "DP" }, 
-                                { "0|1" },
-                                std::make_shared<vcf::Source>(source)}),
-                            vcf::IdBodyError*);
-        }
-
         SECTION("Different length alleles")
         {
             CHECK_NOTHROW( (vcf::Record{
@@ -283,7 +265,7 @@ namespace ebi
                             vcf::QualityBodyError*);
         }
 
-        SECTION("Emtpy INFO") 
+        SECTION("Empty INFO") 
         {
             CHECK_NOTHROW( (vcf::Record{
                                 1,
@@ -483,7 +465,7 @@ namespace ebi
                 }
             });
 
-        SECTION("Multi-field format") 
+        SECTION("Duplicate FORMATs") 
         {
             CHECK_THROWS_AS( (vcf::Record{
                                 1,
@@ -499,6 +481,24 @@ namespace ebi
                                 { "12:13" },
                                 std::make_shared<vcf::Source>(source)}),
                             vcf::FormatBodyError*);
+        }
+
+        SECTION("Duplicate IDs") 
+        {
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
+                                "chr1", 
+                                123456, 
+                                { "id123", "id123" }, 
+                                "A", 
+                                { "AC", "AT" }, 
+                                1.0, 
+                                { "PASS" }, 
+                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { "GT", "DP" }, 
+                                { "0|1" },
+                                std::make_shared<vcf::Source>(source)}),
+                            vcf::IdBodyError*);
         }
     }
 }

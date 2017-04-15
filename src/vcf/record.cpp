@@ -100,9 +100,19 @@ namespace ebi
     
     void Record::check_chromosome() const
     {
+        check_chromosome_colons();
+        check_chromosome_whitespaces();
+    }
+
+    void Record::check_chromosome_colons() const
+    {
         if (chromosome.find(':') != std::string::npos) {
             throw new ChromosomeBodyError{line, "Chromosome must not contain colons"};
         }
+    }
+
+    void Record::check_chromosome_whitespaces() const
+    {
         if (chromosome.find(' ') != std::string::npos) {
             throw new ChromosomeBodyError{line, "Chromosome must not contain white-spaces"};
         }
@@ -114,13 +124,20 @@ namespace ebi
             return; // No need to check if no IDs are provided
         }
         
+        check_ids_semicolons_whitespaces();
+        check_ids_duplicates();
+    }
+
+    void Record::check_ids_semicolons_whitespaces() const {
         for (auto & id : ids) {
             if (std::find_if(id.begin(), id.end(), [](char c) { return c == ' ' || c == ';'; }) != id.end()) {
                 throw new IdBodyError{line, "ID must not contain semicolons or whitespaces"};
             }
         }
+    }
 
-        if (ids.size() > 1) {
+    void Record::check_ids_duplicates() const {
+        if (ids.size() > 1 && source->version == Version::v43) {
             std::map<std::string, int> counter;
             for (auto & id : ids) {
                 counter[id]++;
@@ -132,10 +149,7 @@ namespace ebi
     }
 
     void Record::check_alternate_alleles() const
-    {
-        static boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
-        boost::cmatch pieces_match;
-        
+    {        
         for (size_t i = 0 ; i < alternate_alleles.size(); ++i) {
             auto & alternate = alternate_alleles[i];
             auto & type = types[i];
@@ -144,17 +158,7 @@ namespace ebi
             check_alternate_allele_structure(alternate, type);
             
             // Check that an alternate of the form <SOME_ALT> begins with DEL, INS, DUP, INV or CNV
-            if (alternate[0] == '<' && boost::regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
-                std::string alt_id = pieces_match[1];
-                if (!boost::starts_with(alt_id, "DEL") && 
-                    !boost::starts_with(alt_id, "INS") && 
-                    !boost::starts_with(alt_id, "DUP") && 
-                    !boost::starts_with(alt_id, "INV") && 
-                    !boost::starts_with(alt_id, "CNV")) {
-                    throw new AlternateAllelesBodyError{line,
-                            "Alternate ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"};
-                }
-            }
+            check_alternate_allele_beginning(alternate);
         }
         
     }
@@ -184,6 +188,23 @@ namespace ebi
         
     }
     
+    void Record::check_alternate_allele_beginning(std::string const & alternate) const
+    {
+        static boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
+        boost::cmatch pieces_match;
+
+        if (alternate[0] == '<' && boost::regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
+            std::string alt_id = pieces_match[1];
+            if (!boost::starts_with(alt_id, "DEL") && 
+                !boost::starts_with(alt_id, "INS") && 
+                !boost::starts_with(alt_id, "DUP") && 
+                !boost::starts_with(alt_id, "INV") && 
+                !boost::starts_with(alt_id, "CNV")) {
+                throw new AlternateAllelesBodyError{line,
+                        "Alternate ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"};
+            }
+        }
+    }
     void Record::check_quality() const
     {
         if (quality < 0) {
@@ -194,7 +215,7 @@ namespace ebi
     void Record::check_filter() const
     {
     }
-    
+
     void Record::check_info() const
     {
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
@@ -224,7 +245,6 @@ namespace ebi
                 }
             }
         }
-        
     }
     
     void Record::check_format() const
@@ -233,10 +253,19 @@ namespace ebi
             return; // Nothing to check
         }
         
+        check_format_GT();
+        check_format_duplicates();
+    }
+
+    void Record::check_format_GT() const
+    {
         if (std::find(format.begin(), format.end(), "GT") != format.end() && format[0] != "GT") {
             throw new FormatBodyError{line, "GT must be the first field in the FORMAT column"};
         }
+    }
 
+    void Record::check_format_duplicates() const
+    {
         if (format.size() > 1 && source->version == Version::v43) {
             std::map<std::string, int> counter;
             for (auto & form : format) {
@@ -340,20 +369,30 @@ namespace ebi
             if (allele == ".") { continue; } // No need to check missing alleles
 
             // Discard non-integer numbers
-            if (std::find_if_not(allele.begin(), allele.end(), isdigit) != allele.end()) {
-                throw new SamplesFieldBodyError{line, "Allele index " + allele + " is not an integer number",
-                                                "GT", ploidy};
-            }
+            check_samples_alleles_int(allele, ploidy);
 
             // After guaranteeing the number is an integer, check it is in range
-            size_t num_allele = std::stoi(allele);
-            if (num_allele > alternate_alleles.size()) {
-                throw new SamplesFieldBodyError{line,
-                                                "Allele index " + std::to_string(num_allele)
-                                                        + " is greater than the maximum allowed "
-                                                        + std::to_string(alternate_alleles.size()),
-                                                "GT", ploidy};
-            }
+            check_samples_alleles_range(allele, ploidy);
+        }
+    }
+
+    void Record::check_samples_alleles_int(std::string const & allele, long ploidy) const
+    {
+        if (std::find_if_not(allele.begin(), allele.end(), isdigit) != allele.end()) {
+            throw new SamplesFieldBodyError{line, "Allele index " + allele + " is not an integer number",
+                                            "GT", ploidy};
+        }        
+    }
+
+    void Record::check_samples_alleles_range(std::string const & allele, long ploidy) const
+    {
+        size_t num_allele = std::stoi(allele);
+        if (num_allele > alternate_alleles.size()) {
+            throw new SamplesFieldBodyError{line,
+                                            "Allele index " + std::to_string(num_allele)
+                                                    + " is greater than the maximum allowed "
+                                                    + std::to_string(alternate_alleles.size()),
+                                            "GT", ploidy};
         }
     }
 
