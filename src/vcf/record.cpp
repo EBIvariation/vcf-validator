@@ -100,18 +100,18 @@ namespace ebi
     
     void Record::check_chromosome() const
     {
-        check_chromosome_colons();
-        check_chromosome_whitespaces();
+        check_chromosome_no_colons();
+        check_chromosome_no_whitespaces();
     }
 
-    void Record::check_chromosome_colons() const
+    void Record::check_chromosome_no_colons() const
     {
         if (chromosome.find(':') != std::string::npos) {
             throw new ChromosomeBodyError{line, "Chromosome must not contain colons"};
         }
     }
 
-    void Record::check_chromosome_whitespaces() const
+    void Record::check_chromosome_no_whitespaces() const
     {
         if (chromosome.find(' ') != std::string::npos) {
             throw new ChromosomeBodyError{line, "Chromosome must not contain white-spaces"};
@@ -124,11 +124,11 @@ namespace ebi
             return; // No need to check if no IDs are provided
         }
         
-        check_ids_semicolons_whitespaces();
-        check_ids_duplicates();
+        check_ids_no_semicolons_whitespaces();
+        check_ids_no_duplicates();
     }
 
-    void Record::check_ids_semicolons_whitespaces() const {
+    void Record::check_ids_no_semicolons_whitespaces() const {
         for (auto & id : ids) {
             if (std::find_if(id.begin(), id.end(), [](char c) { return c == ' ' || c == ';'; }) != id.end()) {
                 throw new IdBodyError{line, "ID must not contain semicolons or whitespaces"};
@@ -136,7 +136,7 @@ namespace ebi
         }
     }
 
-    void Record::check_ids_duplicates() const {
+    void Record::check_ids_no_duplicates() const {
         if (ids.size() > 1 && source->version == Version::v43) {
             std::map<std::string, int> counter;
             for (auto & id : ids) {
@@ -158,7 +158,7 @@ namespace ebi
             check_alternate_allele_structure(alternate, type);
             
             // Check that an alternate of the form <SOME_ALT> begins with DEL, INS, DUP, INV or CNV
-            check_alternate_allele_beginning(alternate);
+            check_alternate_allele_symbolic_prefix(alternate);
         }
         
     }
@@ -188,7 +188,7 @@ namespace ebi
         
     }
     
-    void Record::check_alternate_allele_beginning(std::string const & alternate) const
+    void Record::check_alternate_allele_symbolic_prefix(std::string const & alternate) const
     {
         static boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
         boost::cmatch pieces_match;
@@ -254,7 +254,7 @@ namespace ebi
         }
         
         check_format_GT();
-        check_format_duplicates();
+        check_format_no_duplicates();
     }
 
     void Record::check_format_GT() const
@@ -264,7 +264,7 @@ namespace ebi
         }
     }
 
-    void Record::check_format_duplicates() const
+    void Record::check_format_no_duplicates() const
     {
         if (format.size() > 1 && source->version == Version::v43) {
             std::map<std::string, int> counter;

@@ -171,19 +171,42 @@ namespace ebi
          * @throw std::invalid_argument
          */
         void check_chromosome() const;
-        
-        void check_chromosome_colons() const;
-        void check_chromosome_whitespaces() const;
 
         /**
-         * Checks that IDs are alphanumeric
+         * Checks that chromosome does not contain any colons
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_chromosome_no_colons() const;
+
+        /**
+         * Checks that chromosome does not contain any white-spaces
+         * 
+         * @throw std::invalid_argument        
+         */
+        void check_chromosome_no_whitespaces() const;
+
+        /**
+         * Checks that IDs are alphanumeric and do not contain duplicate values
          * 
          * @throw std::invalid_argument
          */
         void check_ids() const;
         
-        void check_ids_semicolons_whitespaces() const;
-        void check_ids_duplicates() const;
+        /**
+         * Checks that ID contains no semicolons or white-spaces
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_ids_no_semicolons_whitespaces() const;
+
+        /**
+         * Checks that ID contains no duplicate values in the same line
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_ids_no_duplicates() const;
+
         /**
          * Checks the structure of an alternate allele and its accordance to the meta section
          * 
@@ -201,7 +224,12 @@ namespace ebi
          */
         void check_alternate_allele_structure(std::string const & alternate, RecordType type) const;
         
-        void check_alternate_allele_beginning(std::string const & alternate) const;
+        /**
+         * Check that alternates of the form <SOME_ALT> begin with DEL, INS, DUP, INV or CNV
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_alternate_allele_symbolic_prefix(std::string const & alternate) const;
 
         /**
          * Checks that alternates of the form <SOME_ALT_ID> are described in the meta section
@@ -234,15 +262,25 @@ namespace ebi
         void check_info() const;
         
         /**
-         * Checks that format starts with GT
+         * Checks that format starts with GT and has no duplicate fields
          * 
          * @throw std::invalid_argument
          */
         void check_format() const;
-        
+
+        /**
+         * Checks that GT is the fisrt field in the FORMAT column
+         * 
+         * @throw std::invalid_argument
+         */
         void check_format_GT() const;
 
-        void check_format_duplicates() const;
+        /**
+         * Checks that format has no duplicate fields
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_format_no_duplicates() const;
 
         /**
          * Checks that the samples in the record:
@@ -260,9 +298,19 @@ namespace ebi
          * @throw std::invalid_argument
          */
         void check_samples_alleles(std::vector<std::string> const & alleles) const;
-        
+
+        /**
+         * Checks that the allele index in a sample is an integer number
+         * 
+         * @throw std::invalid_argument
+         */        
         void check_samples_alleles_int(std::string const & allele, long ploidy) const;
 
+        /**
+         * Checks that the allele index is in range
+         * 
+         * @throw std::invalid_argument
+         */
         void check_samples_alleles_range(std::string const & allele, long ploidy) const;
 
         /**
