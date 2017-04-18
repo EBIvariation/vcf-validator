@@ -44,8 +44,12 @@ namespace ebi
   {
 
 //      std::shared_ptr<vcf::Source> source{std::make_shared<Source>(
-      std::shared_ptr<vcf::Source> source{new vcf::Source{
-              "filename.vcf", vcf::VCF_FILE_VCF, vcf::Version::v41, 2, {}, {"NA001", "NA002", "NA003", "NA004"}}};
+      std::shared_ptr<vcf::Source> source{new vcf::Source{"filename.vcf",
+                                                          vcf::VCF_FILE_VCF,
+                                                          vcf::Version::v41,
+                                                          vcf::Ploidy{2},
+                                                          {},
+                                                          {"NA001", "NA002", "NA003", "NA004"}}};
 
       source->meta_entries.emplace("FORMAT",
                                    vcf::MetaEntry{

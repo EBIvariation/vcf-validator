@@ -183,14 +183,6 @@ namespace ebi
                            ValidationLevel validationLevel,
                            Ploidy ploidy,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
-
-    Version detect_version(const std::vector<char> &line);
-
-    std::unique_ptr<Parser> build_parser(std::string const &path,
-                                         ValidationLevel level,
-                                         Version version,
-                                         Ploidy ploidy);
-
   }
 }
 

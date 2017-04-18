@@ -36,7 +36,7 @@ namespace ebi
         std::ifstream input{path};
         std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
 
-        return vcf::is_valid_vcf_file(input, path, vcf::ValidationLevel::warning, 2, outputs);
+        return vcf::is_valid_vcf_file(input, path, vcf::ValidationLevel::warning, vcf::Ploidy{2}, outputs);
     }
 }
 

@@ -43,7 +43,7 @@ namespace ebi
     class Ploidy
     {
       public:
-        Ploidy(size_t default_ploidy, const std::map<std::string, size_t> &contig_ploidies = {})
+        explicit Ploidy(size_t default_ploidy, const std::map<std::string, size_t> &contig_ploidies = {})
                 : default_ploidy(default_ploidy), contig_ploidies(contig_ploidies) {}
 
         size_t get_ploidy()

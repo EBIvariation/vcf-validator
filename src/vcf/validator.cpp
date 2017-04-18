@@ -20,10 +20,17 @@ namespace ebi
 {
   namespace vcf
   {
+    Version detect_version(const std::vector<char> &line);
+
+    std::unique_ptr<Parser> build_parser(std::string const &path,
+                                         ValidationLevel level,
+                                         Version version,
+                                         Ploidy ploidy);
+
     bool validate(const std::vector<char> &firstLine,
-                           std::istream &input,
-                           ebi::vcf::Parser &validator,
-                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
+                  std::istream &input,
+                  ebi::vcf::Parser &validator,
+                  std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
 
     void write_errors(const Parser &validator, const std::vector<std::unique_ptr<ReportWriter>> &outputs);
 
@@ -146,36 +153,31 @@ namespace ebi
         return validate(line, input, *validator, outputs);
     }
 
-    Version detect_version(const std::vector<char> &line)
+    Version detect_version(const std::vector<char> &vector_line)
     {
         std::string common_substring{"##fileformat="};
-        std::vector<char>::const_iterator lineIt;
-        std::string::const_iterator commonIt;
-        std::tie(commonIt, lineIt) = std::mismatch(common_substring.begin(), common_substring.end(), line.begin());
-        if (commonIt != common_substring.end()) {
-            throw new FileformatError{1, "The fileformat declaration is not valid (the line must start with "
+        std::string line{vector_line.begin(), vector_line.end()};
+
+        if (line.substr(0, common_substring.size()) == common_substring) {
+            std::string provided_version{line.substr(common_substring.size())};
+            util::remove_end_of_line(provided_version);
+
+            if (provided_version == "VCFv4.1") {
+                return Version::v41;
+            } else if (provided_version == "VCFv4.2") {
+                return Version::v42;
+            } else if (provided_version == "VCFv4.3") {
+                return Version::v43;
+            }
+        }
+        throw new FileformatError{1, "The fileformat declaration is not valid (the line must start with "
                     + common_substring + " and the value must be one of 'VCFv4.1', 'VCFv4.2' or 'VCFv4.3')"};
-        }
-
-        std::string provided{lineIt, line.end()};
-        util::remove_end_of_line(provided);
-
-        if (std::string{"VCFv4.1"}.compare(provided) == 0) {
-            return Version::v41;
-        } else if (std::string{"VCFv4.2"}.compare(provided) == 0) {
-            return Version::v42;
-        } else if (std::string{"VCFv4.3"}.compare(provided) == 0) {
-            return Version::v43;
-        } else {
-            throw new FileformatError{1, "The fileformat declaration is not valid "
-                    "(the value must be one of 'VCFv4.1', 'VCFv4.2' or 'VCFv4.3')"};
-        }
     }
 
     bool validate(const std::vector<char> &firstLine,
-                           std::istream &input,
-                           ebi::vcf::Parser &validator,
-                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
+                  std::istream &input,
+                  ebi::vcf::Parser &validator,
+                  std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
     {
         std::vector<char> line;
         line.reserve(default_line_buffer_size);
