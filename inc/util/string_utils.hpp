@@ -71,6 +71,28 @@ namespace ebi
         }
         return std::make_pair(first1, first2);
     }
+
+    inline std::string remove_end_of_line(std::string &line)
+    {
+        bool has_r = false, has_n = false;
+        if (line.back() == '\n') {
+            has_n = true;
+            line.pop_back();
+        }
+        if (line.back() == '\r') {
+            has_r = true;
+            line.pop_back();
+        }
+
+        std::string eol;
+        if (has_r) {
+            eol.push_back('\r');
+        }
+        if (has_n) {
+            eol.push_back('\n');
+        }
+        return eol;
+    }
   }
 }
 

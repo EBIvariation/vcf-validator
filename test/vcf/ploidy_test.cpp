@@ -31,10 +31,9 @@ namespace ebi
           std::string path = "test/input_files/v4.1/ploidy/passed_ploidy_000.vcf";
           std::ifstream input{path};
           vcf::Ploidy ploidy{3};
-          auto validator = vcf::build_parser(path, vcf::ValidationLevel::warning, vcf::Version::v41, ploidy);
           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
 
-          CHECK(vcf::is_valid_vcf_file(input, *validator, outputs));
+          CHECK(vcf::is_valid_vcf_file(input, path, vcf::ValidationLevel::warning, ploidy, outputs));
       }
 
       SECTION("File with 2 different ploidies")
@@ -42,10 +41,9 @@ namespace ebi
           std::string path = "test/input_files/v4.1/ploidy/passed_ploidy_001.vcf";
           std::ifstream input{path};
           vcf::Ploidy ploidy{2, {{"Y", 1}}};
-          auto validator = vcf::build_parser(path, vcf::ValidationLevel::warning, vcf::Version::v41, ploidy);
           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
 
-          CHECK(vcf::is_valid_vcf_file(input, *validator, outputs));
+          CHECK(vcf::is_valid_vcf_file(input, path, vcf::ValidationLevel::warning, ploidy, outputs));
       }
 
       SECTION("File with several ploidies")
@@ -53,10 +51,9 @@ namespace ebi
           std::string path = "test/input_files/v4.1/ploidy/passed_ploidy_002.vcf";
           std::ifstream input{path};
           vcf::Ploidy ploidy{2, {{"Y", 1}, {"Triploid", 3}, {"Tetraploid", 4}}};
-          auto validator = vcf::build_parser(path, vcf::ValidationLevel::warning, vcf::Version::v41, ploidy);
           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
 
-          CHECK(vcf::is_valid_vcf_file(input, *validator, outputs));
+          CHECK(vcf::is_valid_vcf_file(input, path, vcf::ValidationLevel::warning, ploidy, outputs));
       }
   }
 

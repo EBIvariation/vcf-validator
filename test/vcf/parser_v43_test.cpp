@@ -29,7 +29,7 @@ namespace ebi
       {
           SECTION(path.string())
           {
-              CHECK_FALSE(is_valid(path.string(), vcf::Version::v43));
+              CHECK_FALSE(is_valid(path.string()));
           }
       }
   }
@@ -44,7 +44,7 @@ namespace ebi
       {
           SECTION(path.string())
           {
-              CHECK(is_valid(path.string(), vcf::Version::v43));
+              CHECK(is_valid(path.string()));
           }
       }
   }

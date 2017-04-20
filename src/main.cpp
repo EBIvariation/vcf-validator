@@ -45,7 +45,6 @@ namespace
             ("help,h", "Display this help")
             ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
             ("level,l", po::value<std::string>()->default_value("warning"), "Validation level (error, warning, stop)")
-            ("version,v", po::value<std::string>(), "VCF fileformat version to validate the file against (v4.1, v4.2, v4.3)")
             ("report,r", po::value<std::string>()->default_value("stdout"), "Comma separated values for types of reports (database, stdout)")
             ("outdir,o", po::value<std::string>()->default_value(""), "Directory for the output")
             ("ploidy,p", po::value<long>()->default_value(2), "Genome ploidy to expect through most or the whole VCF file (can be overwritten with --special-ploidy)")
@@ -69,19 +68,6 @@ namespace
             return 1;
         }
 
-        if (!vm.count("version")) {
-            std::cout << desc << std::endl;
-            std::cout << "Please choose one of the accepted VCF fileformat versions" << std::endl;
-            return 1;
-        }
-
-        std::string version = vm["version"].as<std::string>();
-        if (version != "v4.1" && version != "v4.2" && version != "v4.3") {
-            std::cout << desc << std::endl;
-            std::cout << "Please choose one of the accepted VCF fileformat versions" << std::endl;
-            return 1;
-        }
-
         long ploidy = vm["ploidy"].as<long>();
         if (ploidy <= 0) {
             std::cout << "Ploidy must be greater that 0" << std::endl;
@@ -102,19 +88,6 @@ namespace
         }
 
         throw std::invalid_argument{"Please choose one of the accepted validation levels"};
-    }
-
-    ebi::vcf::Version get_version(std::string const & version_str)
-    {
-        if (version_str == "v4.1") {
-            return ebi::vcf::Version::v41;
-        } else if (version_str == "v4.2") {
-            return ebi::vcf::Version::v42;
-        } else if (version_str == "v4.3") {
-            return ebi::vcf::Version::v43;
-        }
-
-        throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
     }
 
     std::string get_output_path(const std::string &outdir, const std::string &file_path)
@@ -223,26 +196,25 @@ int main(int argc, char** argv)
     try {
         auto path = vm["input"].as<std::string>();
         auto level = vm["level"].as<std::string>();
-        auto version = vm["version"].as<std::string>();
         ebi::vcf::Ploidy ploidy = get_ploidy(vm["ploidy"].as<long>(), vm);
-        auto validator = build_parser(path, get_validation_level(level), get_version(version), ploidy);
+        ebi::vcf::ValidationLevel validationLevel = get_validation_level(level);
         auto outdir = get_output_path(vm["outdir"].as<std::string>(), path);
         auto outputs = get_outputs(vm["report"].as<std::string>(), outdir);
 
         if (path == "stdin") {
             std::cout << "Reading from standard input..." << std::endl;
-            is_valid = is_valid_vcf_file(std::cin, *validator, outputs);
+            is_valid = ebi::vcf::is_valid_vcf_file(std::cin, path, validationLevel, ploidy, outputs);
         } else {
             std::cout << "Reading from input file..." << std::endl;
             std::ifstream input{path};
             if (!input) {
                 throw std::runtime_error{"Couldn't open file " + path};
             } else {
-                is_valid = is_valid_vcf_file(input, *validator, outputs);
+                is_valid = ebi::vcf::is_valid_vcf_file(input, path, validationLevel, ploidy, outputs);
             }
         }
 
-        std::cout << "According to the VCF " << version << " specification, the input file is "
+        std::cout << "According to the VCF specification, the input file is "
                   << (is_valid ? "valid" : "not valid") << std::endl;
         return !is_valid; // A valid file returns an exit code 0
         

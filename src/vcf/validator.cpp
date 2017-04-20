@@ -20,6 +20,19 @@ namespace ebi
 {
   namespace vcf
   {
+    Version detect_version(const std::vector<char> &line);
+
+    std::unique_ptr<Parser> build_parser(std::string const &path,
+                                         ValidationLevel level,
+                                         Version version,
+                                         Ploidy ploidy);
+
+    bool validate(const std::vector<char> &firstLine,
+                  std::istream &input,
+                  ebi::vcf::Parser &validator,
+                  std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
+
+    void write_errors(const Parser &validator, const std::vector<std::unique_ptr<ReportWriter>> &outputs);
 
     ParserImpl::ParserImpl(std::shared_ptr<Source> source)
             : ParsingState{source}
@@ -74,10 +87,8 @@ namespace ebi
                                                    ebi::vcf::Version version,
                                                    ebi::vcf::Ploidy ploidy)
     {
-
-        auto source_ptr = new ebi::vcf::Source{path, ebi::vcf::InputFormat::VCF_FILE_VCF, version, ploidy};
-        std::shared_ptr<Source> source{source_ptr};
-        auto records = std::vector<ebi::vcf::Record>{};
+        std::shared_ptr<Source> source = std::make_shared<Source>(path, InputFormat::VCF_FILE_VCF, version, ploidy);
+        auto records = std::vector<Record>{};
 
         switch (level) {
         case ValidationLevel::error:
@@ -122,12 +133,57 @@ namespace ebi
     }
 
     bool is_valid_vcf_file(std::istream &input,
-                           ebi::vcf::Parser &validator,
+                           const std::string &sourceName,
+                           ValidationLevel validationLevel,
+                           Ploidy ploidy,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
     {
+        std::vector<char> line;
+        ebi::util::readline(input, line);
+        ebi::vcf::Version version;
+        try {
+            version = detect_version(line);
+        } catch (FileformatError * error) {
+            for (auto &output : outputs) {
+                output->write_error(*error);
+            }
+            return false;
+        }
+        std::unique_ptr<Parser> validator = build_parser(sourceName, validationLevel, version, ploidy);
+        return validate(line, input, *validator, outputs);
+    }
 
+    Version detect_version(const std::vector<char> &vector_line)
+    {
+        std::string common_substring{"##fileformat="};
+        std::string line{vector_line.begin(), vector_line.end()};
+
+        if (line.substr(0, common_substring.size()) == common_substring) {
+            std::string provided_version{line.substr(common_substring.size())};
+            util::remove_end_of_line(provided_version);
+
+            if (provided_version == "VCFv4.1") {
+                return Version::v41;
+            } else if (provided_version == "VCFv4.2") {
+                return Version::v42;
+            } else if (provided_version == "VCFv4.3") {
+                return Version::v43;
+            }
+        }
+        throw new FileformatError{1, "The fileformat declaration is not valid (the line must start with "
+                    + common_substring + " and the value must be one of 'VCFv4.1', 'VCFv4.2' or 'VCFv4.3')"};
+    }
+
+    bool validate(const std::vector<char> &firstLine,
+                  std::istream &input,
+                  ebi::vcf::Parser &validator,
+                  std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
+    {
         std::vector<char> line;
         line.reserve(default_line_buffer_size);
+
+        validator.parse(firstLine);
+        write_errors(validator, outputs);
 
         while (ebi::util::readline(input, line).size() != 0) {
             validator.parse(line);

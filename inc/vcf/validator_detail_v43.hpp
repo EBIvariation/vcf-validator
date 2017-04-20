@@ -87,7 +87,7 @@ tr14:
 #line 238 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this,
-            new FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.3'"});
+                new FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.3'"});
         p--; {goto st722;}
     }
 #line 60 "src/vcf/vcf_v43.ragel"
@@ -18804,7 +18804,7 @@ case 804:
 #line 238 "src/vcf/vcf_v43.ragel"
 	{
         ErrorPolicy::handle_error(*this,
-            new FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.3'"});
+                new FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.3'"});
         p--; {goto st722;}
     }
 #line 60 "src/vcf/vcf_v43.ragel"

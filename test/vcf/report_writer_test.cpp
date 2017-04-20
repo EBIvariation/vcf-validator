@@ -38,11 +38,10 @@ namespace ebi
       if (!input) {
           throw std::runtime_error("file not found: " + path);
       }
-      auto validator = ebi::vcf::build_parser(path, ebi::vcf::ValidationLevel::warning, ebi::vcf::Version::v41, 2);
       std::vector<std::unique_ptr<vcf::ReportWriter>> outputs;
       outputs.push_back(std::move(output));
 
-      return ebi::vcf::is_valid_vcf_file(input, *validator, outputs);
+      return ebi::vcf::is_valid_vcf_file(input, path, vcf::ValidationLevel::warning, vcf::Ploidy{2}, outputs);
   }
 
   TEST_CASE("Unit test: odb", "[output]")
@@ -140,7 +139,7 @@ namespace ebi
 
   TEST_CASE("Integration test: validator and odb", "[output]")
   {
-      auto path = boost::filesystem::path("test/input_files/v4.1/failed/failed_fileformat_000.vcf");
+      auto path = boost::filesystem::path("test/input_files/v4.1/failed/failed_body_sample_000.vcf");
 
       std::string db_name = path.string() + ".errors.db";
 
@@ -161,7 +160,7 @@ namespace ebi
           }
 
           CHECK(count_errors == 1);
-          CHECK(count_warnings == 2);
+          CHECK(count_warnings == 1);
       }
 
       SECTION(path.string() + " error details")
@@ -170,8 +169,8 @@ namespace ebi
           ebi::vcf::OdbReportRW errorsDAO{db_name};
 
           errorsDAO.for_each_error([&errors_read](std::shared_ptr<ebi::vcf::Error> error) {
-              CHECK(error->line == 1);
-              CHECK(error->message == "The fileformat declaration is not 'fileformat=VCFv4.1'");
+              CHECK(error->line == 4);
+              CHECK(error->message == "Allele index C is not an integer number");
               errors_read++;
           });
 

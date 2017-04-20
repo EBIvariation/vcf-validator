@@ -31,13 +31,12 @@
 
 namespace ebi
 {
-    inline bool is_valid(std::string path, vcf::Version version)
+    inline bool is_valid(std::string path)
     {
         std::ifstream input{path};
-        auto validator = vcf::build_parser(path, vcf::ValidationLevel::warning, version, 2);
         std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
 
-        return vcf::is_valid_vcf_file(input, *validator, outputs);
+        return vcf::is_valid_vcf_file(input, path, vcf::ValidationLevel::warning, vcf::Ploidy{2}, outputs);
     }
 }
 

@@ -20,11 +20,9 @@ We recommend using the [latest release](https://github.com/EBIvariation/vcf-vali
 
 vcf-validator only needs a non-compressed input VCF file to run, although pipes can be used for compressed files (see below). It accepts input in the following ways:
 
-* File path as argument: `vcf_validator -v v4.1 -i /path/to/file.vcf`
-* Standard input: `vcf_validator -v v4.1 < /path/to/file.vcf`
-* Standard input from pipe: `zcat /path/to/file.vcf.gz | vcf_validator -v v4.1`
-
-The VCF version must be always specified, using the `-v` / `--version`. 
+* File path as argument: `vcf_validator -i /path/to/file.vcf`
+* Standard input: `vcf_validator < /path/to/file.vcf`
+* Standard input from pipe: `zcat /path/to/file.vcf.gz | vcf_validator`
 
 The validation level can be configured using `-l` / `--level`. This parameter is optional and accepts 3 values:
 
@@ -49,12 +47,13 @@ The logs about what the debugulator is doing will be written into the error outp
 
 ### Examples
 
-Simple example: `vcf_validator -i /path/to/file.vcf -v v4.1`  
-Full example: `vcf_validator -i /path/to/file.vcf -v v4.1 -l stop -r database,stdout -o /path/to/output/folder/`
+Simple example: `vcf_validator -i /path/to/file.vcf`
+
+Full example: `vcf_validator -i /path/to/file.vcf -l stop -r database,stdout -o /path/to/output/folder/`
 
 Debugulator example:
 ```
-vcf_validator -i /path/to/file.vcf -v v4.1 -r database -o /path/to/write/report/
+vcf_validator -i /path/to/file.vcf -r database -o /path/to/write/report/
 vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timestamp.db -o /path/to/fixed.vcf 2>debugulator_log.txt
 ```
 

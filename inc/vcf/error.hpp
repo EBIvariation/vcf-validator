@@ -99,8 +99,6 @@ namespace ebi
      * - predeclare class before ErrorVisitor
      * - add a class at the end of this file
      * - change its name, its parent, its message and its error code
-     * - add a new error code to the enum above
-     * - add the new class in the get_error_instance function
      * - add a new method visit in ErrorVisitor
      */
     #pragma db object polymorphic
