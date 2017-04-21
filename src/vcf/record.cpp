@@ -154,10 +154,7 @@ namespace ebi
             auto & alternate = alternate_alleles[i];
             auto & type = types[i];
             
-            // Check alternate allele structure against the reference
             check_alternate_allele_structure(alternate, type);
-            
-            // Check that an alternate of the form <SOME_ALT> begins with DEL, INS, DUP, INV or CNV
             check_alternate_allele_symbolic_prefix(alternate);
         }
         
@@ -279,19 +276,32 @@ namespace ebi
 
     void Record::check_samples() const
     {
-        if (samples.size() != source->samples_names.size()) {
-            throw new SamplesBodyError{line, "The number of samples must match those listed in the header line"};
-        }
-     
+        check_samples_count();        
+        
         if (samples.size() == 0) {
             return; // Nothing to check if no samples are listed in the file
         }
         
-        // Get the MetaEntry objects in the same order as they are displayed in the samples
+        std::vector<MetaEntry> format_meta = get_meta_entry_objects();
+
+        for (size_t i = 0; i < samples.size(); ++i) {
+            check_sample(i, format_meta);
+        }
+    }
+    
+    void Record::check_samples_count() const
+    {
+        if (samples.size() != source->samples_names.size()) {
+            throw new SamplesBodyError{line, "The number of samples must match those listed in the header line"};
+        }
+    }
+
+    std::vector<MetaEntry> Record::get_meta_entry_objects() const
+    {
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
         std::pair<iter, iter> range = source->meta_entries.equal_range("FORMAT");
         std::vector<MetaEntry> format_meta;
-        
+
         for (auto & fm : format) {
             bool found_in_header = false;
             
@@ -310,73 +320,81 @@ namespace ebi
                 format_meta.push_back(MetaEntry{line, ""});
             }
         }
+
+        return format_meta;
+    }
+
+    void Record::check_sample(size_t i, std::vector<MetaEntry> format_meta) const
+    {
+        std::vector<std::string> subfields;
+        util::string_split(samples[i], ":", subfields);
         
-        // Check the samples contents and accordance to the meta section
-        for (size_t i = 0; i < samples.size(); ++i) {
-            std::vector<std::string> subfields;
-            util::string_split(samples[i], ":", subfields);
+        check_sample_subfields_count(i, subfields);
+        
+        std::vector<std::string> alleles;
+        // If the first format field is not a GT, then no alleles need to be checked
+        if (format[0] == "GT") {
+            util::string_split(subfields[0], "|/", alleles);
+                
+            // The allele indexes must not be greater than the total number of alleles
+            check_samples_alleles(alleles);
+        }
+        
+        check_sample_subfields_cardinality_type(i, subfields, format_meta);
+    }
+
+    void Record::check_sample_subfields_count(size_t i, std::vector<std::string> subfields) const
+    {
+        if (subfields.size() > format.size()) {
+            throw new SamplesBodyError{line, "Sample #" + std::to_string(i+1) +
+                    " has more fields than specified in the FORMAT column"};
+        }
+    }
+
+    void Record::check_sample_subfields_cardinality_type(size_t i, std::vector<std::string> subfields, std::vector<MetaEntry> format_meta) const
+    {
+        for (size_t j = 0; j < subfields.size(); ++j) {
+            MetaEntry meta = format_meta[j];
+            auto & subfield = subfields[j];
             
-            // The number of subfields can't be greater than the number in the FORMAT column
-            if (subfields.size() > format.size()) {
-                throw new SamplesBodyError{line, "Sample #" + std::to_string(i+1) +
-                        " has more fields than specified in the FORMAT column"};
+            if (meta.id == "") {
+                // FORMAT fields not described in the meta section can't be checked
+                continue;
             }
             
-            std::vector<std::string> alleles;
-            // If the first format field is not a GT, then no alleles need to be checked
-            if (format[0] == "GT") {
-                util::string_split(subfields[0], "|/", alleles);
-            
-                // The allele indexes must not be greater than the total number of alleles
-                check_samples_alleles(alleles);
-            }
-            
-            // The cardinality and type of the fields match the FORMAT meta information
-            for (size_t j = 0; j < subfields.size(); ++j) {
-                MetaEntry meta = format_meta[j];
-                auto & subfield = subfields[j];
-                
-                if (meta.id == "") {
-                    // FORMAT fields not described in the meta section can't be checked
-                    continue;
-                }
-                
-                auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
+            auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
 
-                size_t ploidy = source->ploidy.get_ploidy(chromosome);
-                try {
-                    std::vector<std::string> values;
-                    util::string_split(subfield, ",", values);
+            size_t ploidy = source->ploidy.get_ploidy(chromosome);
+            try {
+                std::vector<std::string> values;
+                util::string_split(subfield, ",", values);
 
-                    check_field_cardinality(subfield, values, key_values["Number"], ploidy);
-                    check_field_type(subfield, values, key_values["Type"]);
-                } catch (std::shared_ptr<Error> ex) {
-                    long cardinality;
-                    bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), ploidy, cardinality);
-                    long number = valid ? cardinality : -1;
-                    std::string message = "Sample #" + std::to_string(i + 1) + ", "
-                            + key_values["ID"] + "=" + ex->message;
-                    throw new SamplesFieldBodyError{line, message, key_values["ID"], number};
-                }
+                check_field_cardinality(subfield, values, key_values["Number"], ploidy);
+                check_field_type(subfield, values, key_values["Type"]);
+            } catch (std::shared_ptr<Error> ex) {
+                long cardinality;
+                bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), ploidy, cardinality);
+                long number = valid ? cardinality : -1;
+                std::string message = "Sample #" + std::to_string(i + 1) + ", "
+                        + key_values["ID"] + "=" + ex->message;
+                throw new SamplesFieldBodyError{line, message, key_values["ID"], number};
             }
         }
     }
-    
+
     void Record::check_samples_alleles(std::vector<std::string> const & alleles) const
     {
         long ploidy = static_cast<long>(source->ploidy.get_ploidy(chromosome));
         for (auto & allele : alleles) {
             if (allele == ".") { continue; } // No need to check missing alleles
 
-            // Discard non-integer numbers
-            check_samples_alleles_int(allele, ploidy);
+            check_samples_alleles_is_integer(allele, ploidy);
 
-            // After guaranteeing the number is an integer, check it is in range
             check_samples_alleles_range(allele, ploidy);
         }
     }
 
-    void Record::check_samples_alleles_int(std::string const & allele, long ploidy) const
+    void Record::check_samples_alleles_is_integer(std::string const & allele, long ploidy) const
     {
         if (std::find_if_not(allele.begin(), allele.end(), isdigit) != allele.end()) {
             throw new SamplesFieldBodyError{line, "Allele index " + allele + " is not an integer number",

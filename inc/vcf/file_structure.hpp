@@ -168,73 +168,73 @@ namespace ebi
         /**
          * Checks that chromosome does not contain colons or white-spaces
          * 
-         * @throw std::invalid_argument
+         * @throw ChromosomeBodyError
          */
         void check_chromosome() const;
 
         /**
          * Checks that chromosome does not contain any colons
          * 
-         * @throw std::invalid_argument
+         * @throw ChromosomeBodyError
          */
         void check_chromosome_no_colons() const;
 
         /**
          * Checks that chromosome does not contain any white-spaces
          * 
-         * @throw std::invalid_argument        
+         * @throw ChromosomeBodyError
          */
         void check_chromosome_no_whitespaces() const;
 
         /**
          * Checks that IDs are alphanumeric and do not contain duplicate values
          * 
-         * @throw std::invalid_argument
+         * @throw IdBodyError
          */
         void check_ids() const;
         
         /**
          * Checks that ID contains no semicolons or white-spaces
          * 
-         * @throw std::invalid_argument
+         * @throw IdBodyError
          */
         void check_ids_no_semicolons_whitespaces() const;
 
         /**
          * Checks that ID contains no duplicate values in the same line
          * 
-         * @throw std::invalid_argument
+         * @throw IdBodyError
          */
         void check_ids_no_duplicates() const;
 
         /**
          * Checks the structure of an alternate allele and its accordance to the meta section
          * 
-         * @throw std::invalid_argument
+         * @throw AlternateAllelesBodyError
          */
         void check_alternate_alleles() const;
         
         /**
-         * Checks the structure of an alternate allele:
+         * Checks the structure of an alternate allele against the reference:
          * - The dot is not combined with others
          * - Is not the same as the reference
          * - Shares the first nucleotide with the reference (does not apply to SV, break-ends and custom ALTs)
          * 
-         * @throw std::invalid_argument
-         */
+         * @throw AlternateAllelesBodyError
+	 */
         void check_alternate_allele_structure(std::string const & alternate, RecordType type) const;
         
         /**
          * Check that alternates of the form <SOME_ALT> begin with DEL, INS, DUP, INV or CNV
          * 
-         * @throw std::invalid_argument
+         * @throw AlternateAllelesBodyError
          */
         void check_alternate_allele_symbolic_prefix(std::string const & alternate) const;
 
         /**
          * Checks that alternates of the form <SOME_ALT_ID> are described in the meta section
          * 
-         * @throw std::invalid_argument
+         * @throw AlternateAllelesBodyError
          */
         void check_alternate_allele_meta(std::string const & alt_id,
                                          std::pair<meta_iterator, meta_iterator> range) const;
@@ -242,14 +242,14 @@ namespace ebi
         /**
          * Checks that quality is zero or greater
          * 
-         * @throw std::invalid_argument
+         * @throw QualityBodyError
          */
         void check_quality() const;
         
         /**
          * Checks that all the filters are listed in the meta section
          * 
-         * @throw std::invalid_argument
+         * @throw FilterBodyError
          */
         void check_filter() const;
         
@@ -257,28 +257,28 @@ namespace ebi
          * Checks that all the INFO fields are listed in the meta section, and their number and 
          * type match those specifications
          * 
-         * @throw std::invalid_argument
+         * @throw InfoBodyError
          */
         void check_info() const;
         
         /**
          * Checks that format starts with GT and has no duplicate fields
          * 
-         * @throw std::invalid_argument
+         * @throw FormatBodyError
          */
         void check_format() const;
 
         /**
-         * Checks that GT is the fisrt field in the FORMAT column
+         * Checks that GT is the first field in the FORMAT column
          * 
-         * @throw std::invalid_argument
+         * @throw FormatBodyError
          */
         void check_format_GT() const;
 
         /**
          * Checks that format has no duplicate fields
          * 
-         * @throw std::invalid_argument
+         * @throw FormatBodyError
          */
         void check_format_no_duplicates() const;
 
@@ -288,28 +288,62 @@ namespace ebi
          * - Their allele indexes are not greater than the total number of alleles
          * - The number and type of the fields match the FORMAT meta information
          * 
-         * @throw std::invalid_argument
+         * @throw SamplesBodyError
          */
         void check_samples() const;
+
+        /**
+         * Checks that the number of samples matches those listed in the header line
+         * 
+         * @throw SamplesBodyError
+         */
+        void check_samples_count() const;
+
+        /**
+         * Returns a vector of MetaEntry objects in the same order as they are displayed in the samples
+         */
+        std::vector<MetaEntry> get_meta_entry_objects() const;
+
+        /**
+         * Checks the sample contents and accordance to the meta section
+         * 
+         * @throw SamplesBodyError
+         * @throw SamplesFieldBodyError
+         */
+        void check_sample(size_t i, std::vector<MetaEntry> format_meta) const;
+
+        /**
+         * Checks that the number of subfields in the sample is not greater than the number in the FORMAT column
+         * 
+         * @throw SamplesBodyError
+         */
+        void check_sample_subfields_count(size_t i, std::vector<std::string> subfields) const;
+
+        /**
+         * Checks that the cardinality and type of the fields in the sample match the FORMAT meta information
+         * 
+         * @throw SamplesFieldBodyError
+         */
+        void check_sample_subfields_cardinality_type(size_t i, std::vector<std::string> subfields, std::vector<MetaEntry> format_meta) const;
         
         /**
          * Check that the allele indexes in a sample are not greater than the total number of alleles
          * 
-         * @throw std::invalid_argument
+         * @throw SamplesFieldBodyError
          */
         void check_samples_alleles(std::vector<std::string> const & alleles) const;
 
         /**
          * Checks that the allele index in a sample is an integer number
          * 
-         * @throw std::invalid_argument
+         * @throw SamplesFieldBodyError
          */        
-        void check_samples_alleles_int(std::string const & allele, long ploidy) const;
+        void check_samples_alleles_is_integer(std::string const & allele, long ploidy) const;
 
         /**
          * Checks that the allele index is in range
          * 
-         * @throw std::invalid_argument
+         * @throw SamplesFieldBodyError
          */
         void check_samples_alleles_range(std::string const & allele, long ploidy) const;
 
