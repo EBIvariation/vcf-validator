@@ -221,7 +221,7 @@ namespace ebi
          * - Shares the first nucleotide with the reference (does not apply to SV, break-ends and custom ALTs)
          * 
          * @throw AlternateAllelesBodyError
-	 */
+         */
         void check_alternate_allele_structure(std::string const & alternate, RecordType type) const;
         
         /**
@@ -230,14 +230,6 @@ namespace ebi
          * @throw AlternateAllelesBodyError
          */
         void check_alternate_allele_symbolic_prefix(std::string const & alternate) const;
-
-        /**
-         * Checks that alternates of the form <SOME_ALT_ID> are described in the meta section
-         * 
-         * @throw AlternateAllelesBodyError
-         */
-        void check_alternate_allele_meta(std::string const & alt_id,
-                                         std::pair<meta_iterator, meta_iterator> range) const;
         
         /**
          * Checks that quality is zero or greater
@@ -331,21 +323,21 @@ namespace ebi
          * 
          * @throw SamplesFieldBodyError
          */
-        void check_samples_alleles(std::vector<std::string> const & alleles) const;
+        void check_sample_alleles(std::vector<std::string> subfields) const;
 
         /**
          * Checks that the allele index in a sample is an integer number
          * 
          * @throw SamplesFieldBodyError
          */        
-        void check_samples_alleles_is_integer(std::string const & allele, long ploidy) const;
+        void check_sample_alleles_is_integer(std::string const & allele, long ploidy) const;
 
         /**
          * Checks that the allele index is in range
          * 
          * @throw SamplesFieldBodyError
          */
-        void check_samples_alleles_range(std::string const & allele, long ploidy) const;
+        void check_sample_alleles_range(std::string const & allele, long ploidy) const;
 
         /**
          * Checks that every field in a sample matches the Number specification in the FORMAT meta

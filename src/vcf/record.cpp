@@ -331,14 +331,10 @@ namespace ebi
         
         check_sample_subfields_count(i, subfields);
         
-        std::vector<std::string> alleles;
         // If the first format field is not a GT, then no alleles need to be checked
         if (format[0] == "GT") {
-            util::string_split(subfields[0], "|/", alleles);
-                
-            // The allele indexes must not be greater than the total number of alleles
-            check_samples_alleles(alleles);
-        }
+            check_sample_alleles(subfields);
+        }        
         
         check_sample_subfields_cardinality_type(i, subfields, format_meta);
     }
@@ -382,19 +378,21 @@ namespace ebi
         }
     }
 
-    void Record::check_samples_alleles(std::vector<std::string> const & alleles) const
+    void Record::check_sample_alleles(std::vector<std::string> subfields) const
     {
+        std::vector<std::string> alleles;
+        util::string_split(subfields[0], "|/", alleles);
         long ploidy = static_cast<long>(source->ploidy.get_ploidy(chromosome));
         for (auto & allele : alleles) {
             if (allele == ".") { continue; } // No need to check missing alleles
 
-            check_samples_alleles_is_integer(allele, ploidy);
+            check_sample_alleles_is_integer(allele, ploidy);
 
-            check_samples_alleles_range(allele, ploidy);
+            check_sample_alleles_range(allele, ploidy);
         }
     }
 
-    void Record::check_samples_alleles_is_integer(std::string const & allele, long ploidy) const
+    void Record::check_sample_alleles_is_integer(std::string const & allele, long ploidy) const
     {
         if (std::find_if_not(allele.begin(), allele.end(), isdigit) != allele.end()) {
             throw new SamplesFieldBodyError{line, "Allele index " + allele + " is not an integer number",
@@ -402,7 +400,7 @@ namespace ebi
         }        
     }
 
-    void Record::check_samples_alleles_range(std::string const & allele, long ploidy) const
+    void Record::check_sample_alleles_range(std::string const & allele, long ploidy) const
     {
         size_t num_allele = std::stoi(allele);
         if (num_allele > alternate_alleles.size()) {
