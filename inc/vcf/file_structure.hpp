@@ -302,28 +302,28 @@ namespace ebi
          * @throw SamplesBodyError
          * @throw SamplesFieldBodyError
          */
-        void check_sample(size_t i, std::vector<MetaEntry> format_meta) const;
+        void check_sample(size_t i, std::vector<MetaEntry> const & format_meta) const;
 
         /**
          * Checks that the number of subfields in the sample is not greater than the number in the FORMAT column
          * 
          * @throw SamplesBodyError
          */
-        void check_sample_subfields_count(size_t i, std::vector<std::string> subfields) const;
+        void check_sample_subfields_count(size_t i, std::vector<std::string> const & subfields) const;
 
         /**
          * Checks that the cardinality and type of the fields in the sample match the FORMAT meta information
          * 
          * @throw SamplesFieldBodyError
          */
-        void check_sample_subfields_cardinality_type(size_t i, std::vector<std::string> subfields, std::vector<MetaEntry> format_meta) const;
+        void check_sample_subfields_cardinality_type(size_t i, std::vector<std::string> const & subfields, std::vector<MetaEntry> const & format_meta) const;
         
         /**
          * Check that the allele indexes in a sample are not greater than the total number of alleles
          * 
          * @throw SamplesFieldBodyError
          */
-        void check_sample_alleles(std::vector<std::string> subfields) const;
+        void check_sample_alleles(std::vector<std::string> const & subfields) const;
 
         /**
          * Checks that the allele index in a sample is an integer number

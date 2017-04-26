@@ -324,7 +324,7 @@ namespace ebi
         return format_meta;
     }
 
-    void Record::check_sample(size_t i, std::vector<MetaEntry> format_meta) const
+    void Record::check_sample(size_t i, std::vector<MetaEntry> const & format_meta) const
     {
         std::vector<std::string> subfields;
         util::string_split(samples[i], ":", subfields);
@@ -339,7 +339,7 @@ namespace ebi
         check_sample_subfields_cardinality_type(i, subfields, format_meta);
     }
 
-    void Record::check_sample_subfields_count(size_t i, std::vector<std::string> subfields) const
+    void Record::check_sample_subfields_count(size_t i, std::vector<std::string> const & subfields) const
     {
         if (subfields.size() > format.size()) {
             throw new SamplesBodyError{line, "Sample #" + std::to_string(i+1) +
@@ -347,7 +347,7 @@ namespace ebi
         }
     }
 
-    void Record::check_sample_subfields_cardinality_type(size_t i, std::vector<std::string> subfields, std::vector<MetaEntry> format_meta) const
+    void Record::check_sample_subfields_cardinality_type(size_t i, std::vector<std::string> const & subfields, std::vector<MetaEntry> const & format_meta) const
     {
         for (size_t j = 0; j < subfields.size(); ++j) {
             MetaEntry meta = format_meta[j];
@@ -378,7 +378,7 @@ namespace ebi
         }
     }
 
-    void Record::check_sample_alleles(std::vector<std::string> subfields) const
+    void Record::check_sample_alleles(std::vector<std::string> const & subfields) const
     {
         std::vector<std::string> alleles;
         util::string_split(subfields[0], "|/", alleles);
