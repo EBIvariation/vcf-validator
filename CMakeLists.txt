@@ -167,7 +167,7 @@ add_test (NAME ValidatorTests COMMAND test_validator)
 
 
 # Build binary
-add_executable (vcf_validator src/main.cpp)
+add_executable (vcf_validator src/validator_main.cpp)
 target_link_libraries (vcf_validator ${LIBRARIES_TO_LINK})
 
 add_executable (vcf_debugulator src/debugulator_main.cpp)
