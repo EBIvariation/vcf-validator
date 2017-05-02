@@ -66,6 +66,7 @@ set (MOD_VCF_SOURCES
         
         src/vcf/abort_error_policy.cpp
         src/vcf/debugulator.cpp
+        src/vcf/fixer.cpp
         src/vcf/meta_entry.cpp
         src/vcf/normalizer.cpp
         src/vcf/odb_report.cpp
