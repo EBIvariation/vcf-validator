@@ -33,6 +33,8 @@ namespace ebi
       public:
         Fixer(std::ostream &output)
                 : line_number{0}, line{nullptr}, output(output), ignored_errors{0} { }
+        
+        virtual ~Fixer() { }
 
         void fix(size_t line_number, std::vector<char> &line, Error &error);
 
