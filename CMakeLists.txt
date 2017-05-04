@@ -2,8 +2,8 @@ cmake_minimum_required (VERSION 2.8)
 project (vcf-validator CXX C)
 
 set (vcf-validator_VERSION_MAJOR 0)
-set (vcf-validator_VERSION_MINOR 4)
-set (vcf-validator_VERSION_PATCH 3)
+set (vcf-validator_VERSION_MINOR 5)
+set (vcf-validator_VERSION_PATCH 0)
 
 # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
