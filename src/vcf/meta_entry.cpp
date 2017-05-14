@@ -214,6 +214,13 @@ namespace ebi
             value["Type"] != "String") {
             throw new MetaSectionError{entry.line, "INFO metadata Type is not a Integer, Float, Flag, Character or String"};
         }
+
+        // Check for predefined tag AA
+        if (value["ID"] == "AA") {
+            if (value["Type"] != "String") {
+                throw new MetaSectionError{entry.line, "INFO with ID AA metadata Type is not a String"};
+            }
+        }
     }
     
     void MetaEntryVisitor::check_sample(std::map<std::string, std::string> & value) const

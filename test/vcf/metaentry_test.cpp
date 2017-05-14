@@ -570,6 +570,15 @@ namespace ebi
                             }),
                             vcf::MetaSectionError* );
         }
+
+        SECTION("INFO predefined tags") {
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AA"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Genotype"} }
+                            }),
+                            vcf::MetaSectionError* );
+        }
     }
     
     TEST_CASE("SAMPLE MetaEntry checks", "[checks][keyvalue]") 
