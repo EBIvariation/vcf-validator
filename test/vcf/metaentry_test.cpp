@@ -572,10 +572,16 @@ namespace ebi
         }
 
         SECTION("INFO predefined tags") {
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AA"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Ancestral Allele"} }
+                            } ) );
+
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AA"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Genotype"} }
+                                { {"ID", "AA"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Ancestral Allele"} }
                             }),
                             vcf::MetaSectionError* );
         }

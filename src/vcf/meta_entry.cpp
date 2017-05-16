@@ -19,10 +19,16 @@
 #include "vcf/file_structure.hpp"
 #include "vcf/meta_entry_visitor.hpp"
 
+
 namespace ebi
 {
   namespace vcf
   {
+    
+    const static std::map<std::string, std::pair<std::string, std::string>> info_type = {
+                                                                                            { "AA", { "String", "INFO AA metadata Type is not String" } },
+                                                                                        };
+    const static std::map<std::string, std::pair<std::string, std::string>> info_number;
   
     MetaEntry::MetaEntry(size_t line,
                          std::string const & id)
@@ -215,10 +221,19 @@ namespace ebi
             throw new MetaSectionError{entry.line, "INFO metadata Type is not a Integer, Float, Flag, Character or String"};
         }
 
-        // Check for predefined tag AA
-        if (value["ID"] == "AA") {
-            if (value["Type"] != "String") {
-                throw new MetaSectionError{entry.line, "INFO with ID AA metadata Type is not a String"};
+        for (const auto & t : info_type) {
+            if (value["ID"] == t.first) {
+                if (value["Type"] != t.second.first) {
+                    throw new MetaSectionError{entry.line, t.second.second};
+                }
+            }
+        }
+
+        for (const auto & n : info_number) {
+            if (value["ID"] == n.first) {
+                if (value["Number"] != n.second.first) {
+                    throw new MetaSectionError{entry.line, n.second.second};
+                }
             }
         }
     }
