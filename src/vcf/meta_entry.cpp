@@ -27,8 +27,13 @@ namespace ebi
     
     const static std::map<std::string, std::pair<std::string, std::string>> info_type = {
                                                                                             { "AA", { "String", "INFO AA metadata Type is not String" } },
+                                                                                            { "AC", { "Integer", "INFO AC metadata Type is not Integer" } },
                                                                                         };
-    const static std::map<std::string, std::pair<std::string, std::string>> info_number;
+
+    const static std::map<std::string, std::pair<std::string, std::string>> info_number = {
+                                                                                              { "AA", { "1", "INFO AA metadata Number is not 1" } },
+                                                                                              { "AC", { "A", "INFO AC metadata Number is not A" } },
+                                                                                          };
   
     MetaEntry::MetaEntry(size_t line,
                          std::string const & id)
@@ -213,17 +218,18 @@ namespace ebi
         }
 
         // Check INFO Type
-        if (value["Type"] != "Integer" &&
-            value["Type"] != "Float" &&
-            value["Type"] != "Flag" &&
-            value["Type"] != "Character" &&
-            value["Type"] != "String") {
+        auto & type_field = value["Type"];
+        if (type_field != "Integer" &&
+            type_field != "Float" &&
+            type_field != "Flag" &&
+            type_field != "Character" &&
+            type_field != "String") {
             throw new MetaSectionError{entry.line, "INFO metadata Type is not a Integer, Float, Flag, Character or String"};
         }
 
         for (const auto & t : info_type) {
             if (value["ID"] == t.first) {
-                if (value["Type"] != t.second.first) {
+                if (type_field != t.second.first) {
                     throw new MetaSectionError{entry.line, t.second.second};
                 }
             }
@@ -231,7 +237,7 @@ namespace ebi
 
         for (const auto & n : info_number) {
             if (value["ID"] == n.first) {
-                if (value["Number"] != n.second.first) {
+                if (number_field != n.second.first) {
                     throw new MetaSectionError{entry.line, n.second.second};
                 }
             }

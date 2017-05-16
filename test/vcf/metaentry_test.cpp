@@ -584,7 +584,34 @@ namespace ebi
                                 { {"ID", "AA"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Ancestral Allele"} }
                             }),
                             vcf::MetaSectionError* );
-        }
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AA"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Ancestral Allele"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AC"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Allele count in genotypes, for each ALT allele, in the same order as listed"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AC"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Allele count in genotypes, for each ALT allele, in the same order as listed"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AC"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Allele count in genotypes, for each ALT allele, in the same order as listed"} }
+                            }),
+                            vcf::MetaSectionError* );
+       }
     }
     
     TEST_CASE("SAMPLE MetaEntry checks", "[checks][keyvalue]") 
