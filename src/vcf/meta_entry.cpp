@@ -28,11 +28,13 @@ namespace ebi
     const static std::map<std::string, std::pair<std::string, std::string>> info_type = {
                                                                                             { "AA", { "String", "INFO AA metadata Type is not String" } },
                                                                                             { "AC", { "Integer", "INFO AC metadata Type is not Integer" } },
+                                                                                            { "AD", { "Integer", "INFO AD metadate Type is not Integer" } },
                                                                                         };
 
     const static std::map<std::string, std::pair<std::string, std::string>> info_number = {
                                                                                               { "AA", { "1", "INFO AA metadata Number is not 1" } },
                                                                                               { "AC", { "A", "INFO AC metadata Number is not A" } },
+                                                                                              { "AD", { "R", "INFO AD metadate Number is not R" } },
                                                                                           };
   
     MetaEntry::MetaEntry(size_t line,
@@ -210,10 +212,10 @@ namespace ebi
         // Check INFO Number
         auto & number_field = value["Number"];
         if (find_if(number_field.begin(), number_field.end(), [](char c) { return !isdigit(c); }) != number_field.end() &&
-            value["Number"] != "A" &&
-            value["Number"] != "R" &&
-            value["Number"] != "G" &&
-            value["Number"] != ".") {
+            number_field != "A" &&
+            number_field != "R" &&
+            number_field != "G" &&
+            number_field != ".") {
             throw new MetaSectionError{entry.line, "INFO metadata Number is not a number, A, R, G or dot"};
         }
 

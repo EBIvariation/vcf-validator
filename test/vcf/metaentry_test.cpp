@@ -611,7 +611,27 @@ namespace ebi
                                 { {"ID", "AC"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Allele count in genotypes, for each ALT allele, in the same order as listed"} }
                             }),
                             vcf::MetaSectionError* );
-       }
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AD"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Total read depth for each allele"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AD"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Total read depth for each allele"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AD"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Total read depth for each allele"} }
+                            }),
+                            vcf::MetaSectionError* );
+        }
     }
     
     TEST_CASE("SAMPLE MetaEntry checks", "[checks][keyvalue]") 
