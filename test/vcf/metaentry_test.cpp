@@ -628,7 +628,27 @@ namespace ebi
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AD"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Total read depth for each allele"} }
+                                { {"ID", "AD"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Total read depth for each allele"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "ADF"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the forward strand"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "ADF"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Read depth for each allele on the forward strand"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "ADF"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the forward strand"} }
                             }),
                             vcf::MetaSectionError* );
         }

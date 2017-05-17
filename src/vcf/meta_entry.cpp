@@ -28,13 +28,15 @@ namespace ebi
     const static std::map<std::string, std::pair<std::string, std::string>> info_type = {
                                                                                             { "AA", { "String", "INFO AA metadata Type is not String" } },
                                                                                             { "AC", { "Integer", "INFO AC metadata Type is not Integer" } },
-                                                                                            { "AD", { "Integer", "INFO AD metadate Type is not Integer" } },
+                                                                                            { "AD", { "Integer", "INFO AD metadata Type is not Integer" } },
+                                                                                            { "ADF", { "Integer", "INFO ADF metadata Type is not Integer" } },
                                                                                         };
 
     const static std::map<std::string, std::pair<std::string, std::string>> info_number = {
                                                                                               { "AA", { "1", "INFO AA metadata Number is not 1" } },
                                                                                               { "AC", { "A", "INFO AC metadata Number is not A" } },
-                                                                                              { "AD", { "R", "INFO AD metadate Number is not R" } },
+                                                                                              { "AD", { "R", "INFO AD metadata Number is not R" } },
+                                                                                              { "ADF", { "R", "INFO ADF metadata Number is not R" } },
                                                                                           };
   
     MetaEntry::MetaEntry(size_t line,
