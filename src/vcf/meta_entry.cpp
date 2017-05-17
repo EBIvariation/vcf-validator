@@ -31,6 +31,7 @@ namespace ebi
                                                                                             { "AD", { "Integer", "INFO AD metadata Type is not Integer" } },
                                                                                             { "ADF", { "Integer", "INFO ADF metadata Type is not Integer" } },
                                                                                             { "ADR", { "Integer", "INFO ADR metadata Type is not Integer" } },
+                                                                                            { "AF", { "Float", "INFO AF metadata Type is not Float" } },
                                                                                         };
 
     const static std::map<std::string, std::pair<std::string, std::string>> info_number = {
@@ -39,6 +40,7 @@ namespace ebi
                                                                                               { "AD", { "R", "INFO AD metadata Number is not R" } },
                                                                                               { "ADF", { "R", "INFO ADF metadata Number is not R" } },
                                                                                               { "ADR", { "R", "INFO ADR metadata Number is not R" } },
+                                                                                              { "AF", { "A", "INFO AF metadata Number is not A" } },
                                                                                           };
   
     MetaEntry::MetaEntry(size_t line,

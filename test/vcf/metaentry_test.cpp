@@ -671,7 +671,27 @@ namespace ebi
                                 { {"ID", "ADR"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the reverse strand"} }
                             }),
                             vcf::MetaSectionError* );
-        }
+ 
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AF"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AF"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AF"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} }
+                            }),
+                            vcf::MetaSectionError* );
+       }
     }
     
     TEST_CASE("SAMPLE MetaEntry checks", "[checks][keyvalue]") 
