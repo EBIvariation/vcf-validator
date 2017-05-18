@@ -64,7 +64,7 @@ namespace ebi
                 "INFO",
                 {
                     { "ID", "AN" },
-                    { "Number", "A" },
+                    { "Number", "1" },
                     { "Type", "Integer" },
                     { "Description", "Allele number" }
                 }
@@ -94,7 +94,7 @@ namespace ebi
                                 { "AC", "AT" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)} ) );
@@ -108,7 +108,7 @@ namespace ebi
                                 { "AC", "AT" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}) );
@@ -121,7 +121,7 @@ namespace ebi
                                 { "AC", "AT" },
                                 1.0,
                                 { "PASS" },
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} },
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} },
                                 { "DP" },
                                 { "1" },
                                 std::make_shared<vcf::Source>(source)}) );
@@ -138,7 +138,7 @@ namespace ebi
                                 { "AC", "AT" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
@@ -156,7 +156,7 @@ namespace ebi
                                 { "AC", "AT" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
@@ -174,7 +174,7 @@ namespace ebi
                                 { "AC", "AT" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
@@ -223,7 +223,7 @@ namespace ebi
                                 { "T", "C" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}) );
@@ -258,7 +258,7 @@ namespace ebi
                                 { "C" }, 
                                 -1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),
@@ -293,7 +293,7 @@ namespace ebi
                                 { "T", "C" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}) );
@@ -307,7 +307,7 @@ namespace ebi
                                 { "T", "C" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "DP" },
                                 { "13" },
                                 std::make_shared<vcf::Source>(source)}) );
@@ -324,7 +324,7 @@ namespace ebi
                                 { "T", "C" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}) );
@@ -338,7 +338,7 @@ namespace ebi
                                 { "T", "C" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "DP", "GL" }, 
                                 { "12:0.5" },
                                 std::make_shared<vcf::Source>(source)}) );
@@ -352,7 +352,7 @@ namespace ebi
                                 { "T", "C" },
                                 1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "DP", "GT" }, 
                                 { "12:0|1" },
                                 std::make_shared<vcf::Source>(source)}),
@@ -370,7 +370,7 @@ namespace ebi
                                 { "T", "C" },
                                 1.0,
                                 { "PASS" },
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} },
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} },
                                 { "GT", "DP" },
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}) );
@@ -384,7 +384,7 @@ namespace ebi
                                 { "T", "C" },
                                 1.0,
                                 { "PASS" },
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} },
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} },
                                 { "GT", "DP" },
                                 { "0" },
                                 std::make_shared<vcf::Source>(source)}) );
@@ -399,7 +399,7 @@ namespace ebi
 //                                { "T", "C" },
 //                                1.0,
 //                                { "PASS" },
-//                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} },
+//                                { {"AN", "12"}, {"AF", "0.5,0.3"} },
 //                                { "GT" },
 //                                { "0|1|1" },
 //                                std::make_shared<vcf::Source>(source)}),
@@ -447,7 +447,7 @@ namespace ebi
                 "INFO",
                 {
                     { "ID", "AN" },
-                    { "Number", "A" },
+                    { "Number", "1" },
                     { "Type", "Integer" },
                     { "Description", "Allele number" }
                 }
@@ -476,7 +476,7 @@ namespace ebi
                                 { "T", "C" },
                                 1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "DP", "DP" }, 
                                 { "12:13" },
                                 std::make_shared<vcf::Source>(source)}),
@@ -494,7 +494,7 @@ namespace ebi
                                 { "AC", "AT" }, 
                                 1.0, 
                                 { "PASS" }, 
-                                { {"AN", "12,7"}, {"AF", "0.5,0.3"} }, 
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
                                 std::make_shared<vcf::Source>(source)}),

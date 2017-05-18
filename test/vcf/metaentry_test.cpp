@@ -691,7 +691,167 @@ namespace ebi
                                 { {"ID", "AF"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} }
                             }),
                             vcf::MetaSectionError* );
-       }
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AN"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Total number of alleles in called genotypes"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AN"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Total number of alleles in called genotypes"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "AN"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Total number of alleles in called genotypes"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "BQ"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "RMS base quality"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "BQ"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "RMS base quality"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "BQ"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "RMS base quality"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CIGAR"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Cigar string describing how to align an alternate allele to the reference allele"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CIGAR"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Cigar string describing how to align an alternate allele to the reference allele"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CIGAR"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Cigar string describing how to align an alternate allele to the reference allele"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DB"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "dbSNP membership"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DB"}, {"Number", "0"}, {"Type", "Float"}, {"Description", "dbSNP membership"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DB"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "dbSNP membership"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DP"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Combined depth across samples"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DP"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Combined depth across samples"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DP"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Combined depth across samples"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "END"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "End position (for use with symbolic alleles)"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "END"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "End position (for use with symbolic alleles)"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "END"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "End position (for use with symbolic alleles)"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "H2"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "HapMap2 membership"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "H2"}, {"Number", "0"}, {"Type", "String"}, {"Description", "HapMap2 membership"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "H2"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "HapMap2 membership"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "H3"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "HapMap3 membership"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "H3"}, {"Number", "0"}, {"Type", "String"}, {"Description", "HapMap3 membership"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "H3"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "HapMap3 membership"} }
+                            }),
+                            vcf::MetaSectionError* );
+        }
     }
     
     TEST_CASE("SAMPLE MetaEntry checks", "[checks][keyvalue]") 

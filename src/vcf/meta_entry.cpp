@@ -32,6 +32,14 @@ namespace ebi
                                                                                             { "ADF", { "Integer", "INFO ADF metadata Type is not Integer" } },
                                                                                             { "ADR", { "Integer", "INFO ADR metadata Type is not Integer" } },
                                                                                             { "AF", { "Float", "INFO AF metadata Type is not Float" } },
+                                                                                            { "AN", { "Integer", "INFO AN metadata Type is not Integer" } },
+                                                                                            { "BQ", { "Float", "INFO BQ metadata Type is not Float" } },
+                                                                                            { "CIGAR", { "String", "INFO CIGAR metadata Type is not String" } },
+                                                                                            { "DB", { "Flag", "INFO DB metadata Type is not Flag" } },
+                                                                                            { "DP", { "Integer", "INFO DP metadata Type is not Integer" } },
+                                                                                            { "END", { "Integer", "INFO END metadata Type is not Integer" } },
+                                                                                            { "H2", { "Flag", "INFO H2 metadata Type is not Flag" } },
+                                                                                            { "H3", { "Flag", "INFO H3 metadata Type is not Flag" } },
                                                                                         };
 
     const static std::map<std::string, std::pair<std::string, std::string>> info_number = {
@@ -41,6 +49,14 @@ namespace ebi
                                                                                               { "ADF", { "R", "INFO ADF metadata Number is not R" } },
                                                                                               { "ADR", { "R", "INFO ADR metadata Number is not R" } },
                                                                                               { "AF", { "A", "INFO AF metadata Number is not A" } },
+                                                                                              { "AN", { "1", "INFO AN metadata Number is not 1" } },
+                                                                                              { "BQ", { "1", "INFO BQ metadata Number is not 1" } },
+                                                                                              { "CIGAR", { "A", "INFO CIGAR metadata Number is not A" } },
+                                                                                              { "DB", { "0", "INFO DB metadata Number is not 0" } },
+                                                                                              { "DP", { "1", "INFO DP metadata Number is not 1" } },
+                                                                                              { "END", { "1", "INFO END metadata Number is not 1" } },
+                                                                                              { "H2", { "0", "INFO H2 metadata Number is not 0" } },
+                                                                                              { "H3", { "0", "INFO H3 metadata Number is not 0" } },
                                                                                           };
   
     MetaEntry::MetaEntry(size_t line,
