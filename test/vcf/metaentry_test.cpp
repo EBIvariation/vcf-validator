@@ -851,6 +851,106 @@ namespace ebi
                                 { {"ID", "H3"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "HapMap3 membership"} }
                             }),
                             vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "MQ0"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Number of MAPQ == 0 reads"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "MQ0"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Number of MAPQ == 0 reads"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "MQ0"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Number of MAPQ == 0 reads"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "NS"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Number of samples with data"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "NS"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Number of samples with data"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "NS"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Number of samples with data"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "SOMATIC"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Somatic mutation (for cancer genomics)"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "SOMATIC"}, {"Number", "0"}, {"Type", "String"}, {"Description", "Somatic mutation (for cancer genomics)"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "SOMATIC"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Somatic mutation (for cancer genomics)"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "VALIDATED"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Validated by follow-up experiment"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "VALIDATED"}, {"Number", "0"}, {"Type", "String"}, {"Description", "Validated by follow-up experiment"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "VALIDATED"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Validated by follow-up experiment"} }
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "1000G"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "1000 Genomes membership"} }
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "1000G"}, {"Number", "0"}, {"Type", "String"}, {"Description", "1000 Genomes membership"} }
+                            }),
+                            vcf::MetaSectionError* );
+ 
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "1000G"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "1000 Genomes membership"} }
+                            }),
+                            vcf::MetaSectionError* );
         }
     }
     
