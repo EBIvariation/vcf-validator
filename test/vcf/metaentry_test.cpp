@@ -38,12 +38,12 @@ namespace ebi
             
             SECTION ("It should work with any ID and source")
             {
-                CHECK_NOTHROW( (vcf::MetaEntry { 1, "reference" }) );
+                CHECK_NOTHROW( (vcf::MetaEntry { 1, "reference", std::make_shared<vcf::Source>(source) }) );
             }
             
             SECTION ("No value should be assigned")
             {
-                auto meta = vcf::MetaEntry { 1, "reference" } ;
+                auto meta = vcf::MetaEntry { 1, "reference", std::make_shared<vcf::Source>(source) } ;
                 
                 CHECK( meta.id == "reference" );
                 CHECK( meta.structure == vcf::MetaEntry::Structure::NoValue );
@@ -66,12 +66,12 @@ namespace ebi
             
             SECTION("Correct arguments")
             {
-                CHECK_NOTHROW( (vcf::MetaEntry { 1, "assembly", "GRCh37" }) );
+                CHECK_NOTHROW( (vcf::MetaEntry { 1, "assembly", "GRCh37", std::make_shared<vcf::Source>(source) }) );
             }
             
             SECTION("A one-line string value should be assigned")
             {
-                auto meta = vcf::MetaEntry { 1, "assembly", "GRCh37" } ;
+                auto meta = vcf::MetaEntry { 1, "assembly", "GRCh37", std::make_shared<vcf::Source>(source) } ;
                         
                 CHECK( meta.structure == vcf::MetaEntry::Structure::PlainValue );
                 CHECK( meta.id == "assembly" );
@@ -82,7 +82,7 @@ namespace ebi
                 
             SECTION("A multi-line string value should throw an error")
             {
-                CHECK_THROWS_AS( (vcf::MetaEntry { 1, "assembly", "GRCh37\nGRCh37" } ),
+                CHECK_THROWS_AS( (vcf::MetaEntry { 1, "assembly", "GRCh37\nGRCh37", std::make_shared<vcf::Source>(source) } ),
                                 vcf::MetaSectionError* );
             }
     }
@@ -102,7 +102,8 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                             1,
                             "contig",
-                            { {"ID", "contig_1"} }} ) );
+                            { {"ID", "contig_1"} },
+                            std::make_shared<vcf::Source>(source) } ) );
         }
             
         
@@ -111,7 +112,8 @@ namespace ebi
             auto meta = vcf::MetaEntry {
                             1,
                             "contig",
-                            { {"ID", "contig_1"} }} ;
+                            { {"ID", "contig_1"} },
+                            std::make_shared<vcf::Source>(source) } ;
 
             CHECK( meta.id == "contig" );
             CHECK( meta.structure == vcf::MetaEntry::Structure::KeyValue );
@@ -138,20 +140,23 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"ID", "INS"}, {"Description", "tag_description"} }
+                                { {"ID", "INS"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"Description", "tag_description"} }
+                                { {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"ID", "TAG_ID"} }
+                                { {"ID", "TAG_ID"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
         }
@@ -161,67 +166,78 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"ID", "DEL"}, {"Description", "tag_description"} }
+                                { {"ID", "DEL"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                               
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"ID", "INS"}, {"Description", "tag_description"} }
+                                { {"ID", "INS"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                              
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"ID", "DUP"}, {"Description", "tag_description"} }
+                                { {"ID", "DUP"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                              
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"ID", "INV"}, {"Description", "tag_description"} }
+                                { {"ID", "INV"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                              
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"ID", "CNV"}, {"Description", "tag_description"} }
+                                { {"ID", "CNV"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"ID", "DEL:FOO"}, {"Description", "tag_description"} }
+                                { {"ID", "DEL:FOO"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"ID", "INS:FOO"}, {"Description", "tag_description"} }
+                                { {"ID", "INS:FOO"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"ID", "DUP:FOO"}, {"Description", "tag_description"} }
+                                { {"ID", "DUP:FOO"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"ID", "INV:FOO"}, {"Description", "tag_description"} }
+                                { {"ID", "INV:FOO"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"ID", "CNV:FOO"}, {"Description", "tag_description"} }
+                                { {"ID", "CNV:FOO"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "ALT",
-                                { {"ID", "CNV:FOO:BAR"}, {"Description", "tag_description"} }
+                                { {"ID", "CNV:FOO:BAR"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
         }
@@ -242,19 +258,22 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "contig",
-                                { {"ID", "contig_1"} }
+                                { {"ID", "contig_1"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 1,
                                 "contig",
-                                { {"ID", "contig_2"}, {"Description", "tag_description"} }
+                                { {"ID", "contig_2"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "contig",
-                                { {"Description", "tag_description"} }
+                                { {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
         }
@@ -275,20 +294,23 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FILTER",
-                                { {"ID", "Filter1"}, {"Description", "tag_description"} }
+                                { {"ID", "Filter1"}, {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FILTER",
-                                { {"Description", "tag_description"} }
+                                { {"Description", "tag_description"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FILTER",
-                                { {"ID", "TAG_ID"} }
+                                { {"ID", "TAG_ID"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
         }
@@ -309,34 +331,39 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} }
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
         }
@@ -346,44 +373,51 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                             
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
         }
@@ -393,38 +427,44 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "Character"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "Character"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
         }
@@ -435,7 +475,7 @@ namespace ebi
         auto source = vcf::Source {
             "Example VCF source",
             vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-            vcf::Version::v42,
+            vcf::Version::v43,
             vcf::Ploidy{2},
             {},
             { "Sample1", "Sample2", "Sample3" }};
@@ -445,34 +485,39 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} }
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
         }
@@ -482,44 +527,51 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                             
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
         }
@@ -529,44 +581,51 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                      
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "Character"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "Character"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} }
+                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
         }
@@ -575,380 +634,437 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AA"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Ancestral Allele"} }
+                                { {"ID", "AA"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Ancestral Allele"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AA"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Ancestral Allele"} }
+                                { {"ID", "AA"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Ancestral Allele"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AA"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Ancestral Allele"} }
+                                { {"ID", "AA"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Ancestral Allele"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AC"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Allele count in genotypes, for each ALT allele, in the same order as listed"} }
+                                { {"ID", "AC"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Allele count in genotypes, for each ALT allele, in the same order as listed"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AC"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Allele count in genotypes, for each ALT allele, in the same order as listed"} }
+                                { {"ID", "AC"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Allele count in genotypes, for each ALT allele, in the same order as listed"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AC"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Allele count in genotypes, for each ALT allele, in the same order as listed"} }
+                                { {"ID", "AC"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Allele count in genotypes, for each ALT allele, in the same order as listed"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AD"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Total read depth for each allele"} }
+                                { {"ID", "AD"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Total read depth for each allele"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AD"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Total read depth for each allele"} }
+                                { {"ID", "AD"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Total read depth for each allele"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AD"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Total read depth for each allele"} }
+                                { {"ID", "AD"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Total read depth for each allele"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "ADF"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the forward strand"} }
+                                { {"ID", "ADF"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the forward strand"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "ADF"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Read depth for each allele on the forward strand"} }
+                                { {"ID", "ADF"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Read depth for each allele on the forward strand"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "ADF"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the forward strand"} }
+                                { {"ID", "ADF"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the forward strand"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "ADR"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the reverse strand"} }
+                                { {"ID", "ADR"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the reverse strand"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "ADR"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Read depth for each allele on the reverse strand"} }
+                                { {"ID", "ADR"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Read depth for each allele on the reverse strand"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "ADR"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the reverse strand"} }
+                                { {"ID", "ADR"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the reverse strand"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AF"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} }
+                                { {"ID", "AF"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AF"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} }
+                                { {"ID", "AF"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AF"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} }
+                                { {"ID", "AF"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AN"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Total number of alleles in called genotypes"} }
+                                { {"ID", "AN"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Total number of alleles in called genotypes"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AN"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Total number of alleles in called genotypes"} }
+                                { {"ID", "AN"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Total number of alleles in called genotypes"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "AN"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Total number of alleles in called genotypes"} }
+                                { {"ID", "AN"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Total number of alleles in called genotypes"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "BQ"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "RMS base quality"} }
+                                { {"ID", "BQ"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "RMS base quality"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "BQ"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "RMS base quality"} }
+                                { {"ID", "BQ"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "RMS base quality"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "BQ"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "RMS base quality"} }
+                                { {"ID", "BQ"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "RMS base quality"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "CIGAR"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Cigar string describing how to align an alternate allele to the reference allele"} }
+                                { {"ID", "CIGAR"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Cigar string describing how to align an alternate allele to the reference allele"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "CIGAR"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Cigar string describing how to align an alternate allele to the reference allele"} }
+                                { {"ID", "CIGAR"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Cigar string describing how to align an alternate allele to the reference allele"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "CIGAR"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Cigar string describing how to align an alternate allele to the reference allele"} }
+                                { {"ID", "CIGAR"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Cigar string describing how to align an alternate allele to the reference allele"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "DB"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "dbSNP membership"} }
+                                { {"ID", "DB"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "dbSNP membership"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "DB"}, {"Number", "0"}, {"Type", "Float"}, {"Description", "dbSNP membership"} }
+                                { {"ID", "DB"}, {"Number", "0"}, {"Type", "Float"}, {"Description", "dbSNP membership"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "DB"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "dbSNP membership"} }
+                                { {"ID", "DB"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "dbSNP membership"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "DP"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Combined depth across samples"} }
+                                { {"ID", "DP"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Combined depth across samples"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "DP"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Combined depth across samples"} }
+                                { {"ID", "DP"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Combined depth across samples"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "DP"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Combined depth across samples"} }
+                                { {"ID", "DP"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Combined depth across samples"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "END"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "End position (for use with symbolic alleles)"} }
+                                { {"ID", "END"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "End position (for use with symbolic alleles)"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "END"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "End position (for use with symbolic alleles)"} }
+                                { {"ID", "END"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "End position (for use with symbolic alleles)"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "END"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "End position (for use with symbolic alleles)"} }
+                                { {"ID", "END"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "End position (for use with symbolic alleles)"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "H2"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "HapMap2 membership"} }
+                                { {"ID", "H2"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "HapMap2 membership"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "H2"}, {"Number", "0"}, {"Type", "String"}, {"Description", "HapMap2 membership"} }
+                                { {"ID", "H2"}, {"Number", "0"}, {"Type", "String"}, {"Description", "HapMap2 membership"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "H2"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "HapMap2 membership"} }
+                                { {"ID", "H2"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "HapMap2 membership"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "H3"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "HapMap3 membership"} }
+                                { {"ID", "H3"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "HapMap3 membership"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "H3"}, {"Number", "0"}, {"Type", "String"}, {"Description", "HapMap3 membership"} }
+                                { {"ID", "H3"}, {"Number", "0"}, {"Type", "String"}, {"Description", "HapMap3 membership"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "H3"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "HapMap3 membership"} }
+                                { {"ID", "H3"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "HapMap3 membership"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "MQ0"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Number of MAPQ == 0 reads"} }
+                                { {"ID", "MQ0"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Number of MAPQ == 0 reads"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "MQ0"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Number of MAPQ == 0 reads"} }
+                                { {"ID", "MQ0"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Number of MAPQ == 0 reads"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "MQ0"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Number of MAPQ == 0 reads"} }
+                                { {"ID", "MQ0"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Number of MAPQ == 0 reads"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "NS"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Number of samples with data"} }
+                                { {"ID", "NS"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Number of samples with data"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "NS"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Number of samples with data"} }
+                                { {"ID", "NS"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Number of samples with data"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "NS"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Number of samples with data"} }
+                                { {"ID", "NS"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Number of samples with data"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "SOMATIC"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Somatic mutation (for cancer genomics)"} }
+                                { {"ID", "SOMATIC"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Somatic mutation (for cancer genomics)"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "SOMATIC"}, {"Number", "0"}, {"Type", "String"}, {"Description", "Somatic mutation (for cancer genomics)"} }
+                                { {"ID", "SOMATIC"}, {"Number", "0"}, {"Type", "String"}, {"Description", "Somatic mutation (for cancer genomics)"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "SOMATIC"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Somatic mutation (for cancer genomics)"} }
+                                { {"ID", "SOMATIC"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Somatic mutation (for cancer genomics)"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "VALIDATED"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Validated by follow-up experiment"} }
+                                { {"ID", "VALIDATED"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Validated by follow-up experiment"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "VALIDATED"}, {"Number", "0"}, {"Type", "String"}, {"Description", "Validated by follow-up experiment"} }
+                                { {"ID", "VALIDATED"}, {"Number", "0"}, {"Type", "String"}, {"Description", "Validated by follow-up experiment"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "VALIDATED"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Validated by follow-up experiment"} }
+                                { {"ID", "VALIDATED"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Validated by follow-up experiment"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "1000G"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "1000 Genomes membership"} }
+                                { {"ID", "1000G"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "1000 Genomes membership"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "1000G"}, {"Number", "0"}, {"Type", "String"}, {"Description", "1000 Genomes membership"} }
+                                { {"ID", "1000G"}, {"Number", "0"}, {"Type", "String"}, {"Description", "1000 Genomes membership"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "INFO",
-                                { {"ID", "1000G"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "1000 Genomes membership"} }
+                                { {"ID", "1000G"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "1000 Genomes membership"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
         }
@@ -969,19 +1085,22 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "SAMPLE",
-                                { {"ID", "Sample_1"} }
+                                { {"ID", "Sample_1"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "SAMPLE",
-                                { {"ID", "Sample_2"}, {"Genomes", "genome_1,genome_2"}, {"Mixtures", "mixture_1"} }
+                                { {"ID", "Sample_2"}, {"Genomes", "genome_1,genome_2"}, {"Mixtures", "mixture_1"} },
+                                std::make_shared<vcf::Source>(source)
                             } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "SAMPLE",
-                                { {"Genomes", "genome_1,genome_2"} }
+                                { {"Genomes", "genome_1,genome_2"} },
+                                std::make_shared<vcf::Source>(source)
                             }),
                             vcf::MetaSectionError* );
         }

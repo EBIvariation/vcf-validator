@@ -43,7 +43,8 @@ namespace ebi
                     { "Number", "1" },
                     { "Type", "String" },
                     { "Description", "Genotype" }
-                }
+                },
+                std::make_shared<vcf::Source>(source)
         });
            
         source.meta_entries.emplace("FORMAT",
@@ -55,7 +56,8 @@ namespace ebi
                     { "Number", "1" },
                     { "Type", "Integer" },
                     { "Description", "Read depth" }
-                }
+                },
+                std::make_shared<vcf::Source>(source)
             });
 
         source.meta_entries.emplace("INFO",
@@ -67,7 +69,8 @@ namespace ebi
                     { "Number", "1" },
                     { "Type", "Integer" },
                     { "Description", "Allele number" }
-                }
+                },
+                std::make_shared<vcf::Source>(source)
         });
            
         source.meta_entries.emplace("INFO",
@@ -79,7 +82,8 @@ namespace ebi
                     { "Number", "A" },
                     { "Type", "Float" },
                     { "Description", "Allele frequency" }
-                }
+                },
+                std::make_shared<vcf::Source>(source)
             });
 
          
@@ -426,7 +430,8 @@ namespace ebi
                     { "Number", "1" },
                     { "Type", "String" },
                     { "Description", "Genotype" }
-                }
+                },
+                std::make_shared<vcf::Source>(source)
         });
            
         source.meta_entries.emplace("FORMAT",
@@ -438,7 +443,8 @@ namespace ebi
                     { "Number", "1" },
                     { "Type", "Integer" },
                     { "Description", "Read depth" }
-                }
+                },
+                std::make_shared<vcf::Source>(source)
             });
 
         source.meta_entries.emplace("INFO",
@@ -450,7 +456,8 @@ namespace ebi
                     { "Number", "1" },
                     { "Type", "Integer" },
                     { "Description", "Allele number" }
-                }
+                },
+                std::make_shared<vcf::Source>(source)
         });
            
         source.meta_entries.emplace("INFO",
@@ -462,7 +469,8 @@ namespace ebi
                     { "Number", "A" },
                     { "Type", "Float" },
                     { "Description", "Allele frequency" }
-                }
+                },
+                std::make_shared<vcf::Source>(source)
             });
 
         SECTION("Duplicate FORMATs") 

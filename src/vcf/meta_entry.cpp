@@ -19,30 +19,32 @@
 #include "vcf/file_structure.hpp"
 #include "vcf/meta_entry_visitor.hpp"
 
-
 namespace ebi
 {
   namespace vcf
   {
   
     MetaEntry::MetaEntry(size_t line,
-                         std::string const & id)
-    : line{line}, id{id}, structure{Structure::NoValue}
+                         std::string const & id,
+                         std::shared_ptr<Source> source)
+    : line{line}, id{id}, structure{Structure::NoValue}, source{source}
     {
     }
         
     MetaEntry::MetaEntry(size_t line,
                          std::string const & id,
-                         std::string const & plain_value)
-    : line{line}, id{id}, structure{Structure::PlainValue}, value{plain_value}
+                         std::string const & plain_value,
+                         std::shared_ptr<Source> source)
+    : line{line}, id{id}, structure{Structure::PlainValue}, value{plain_value}, source{source}
     {
         check_value();
     }
 
     MetaEntry::MetaEntry(size_t line,
                          std::string const & id,
-                         std::map<std::string, std::string> const & key_values)
-    : line{line}, id{id}, structure{Structure::KeyValue}, value{key_values}
+                         std::map<std::string, std::string> const & key_values,
+                         std::shared_ptr<Source> source)
+    : line{line}, id{id}, structure{Structure::KeyValue}, value{key_values}, source{source}
     {
         check_value();
     }
@@ -81,7 +83,7 @@ namespace ebi
     void MetaEntryVisitor::operator()(std::map<std::string, std::string> & value) const
     {
         auto & id = entry.id;
-        if (id == "ALT") { 
+        if (id == "ALT") {
             check_alt(value);
         } else if (id == "assembly") {
             // TODO May check URL correctness (regexp?)
@@ -165,18 +167,19 @@ namespace ebi
         // Check FORMAT Number
         auto & number_field = value["Number"];
         if (find_if(number_field.begin(), number_field.end(), [](char c) { return !isdigit(c); }) != number_field.end() &&
-            value["Number"] != "A" &&
-            value["Number"] != "R" &&
-            value["Number"] != "G" &&
-            value["Number"] != ".") {
+            number_field != "A" &&
+            number_field != "R" &&
+            number_field != "G" &&
+            number_field != ".") {
             throw new MetaSectionError{entry.line, "FORMAT metadata Number is not a number, A, R, G or dot"};
         }
 
         // Check FORMAT Type
-        if (value["Type"] != "Integer" &&
-            value["Type"] != "Float" &&
-            value["Type"] != "Character" &&
-            value["Type"] != "String") {
+        auto & type_field = value["Type"];
+        if (type_field != "Integer" &&
+            type_field != "Float" &&
+            type_field != "Character" &&
+            type_field != "String") {
             throw new MetaSectionError{entry.line, "FORMAT metadata Type is not a Integer, Float, Character or String"};
         }
     }
@@ -216,16 +219,28 @@ namespace ebi
             type_field != "String") {
             throw new MetaSectionError{entry.line, "INFO metadata Type is not a Integer, Float, Flag, Character or String"};
         }
+        
+        std::map<std::string, std::pair<std::string, std::string>> version_info_type_map;
+        std::map<std::string, std::pair<std::string, std::string>> version_info_number_map;
 
-        for (const auto & t : info_type) {
+        if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
+            version_info_type_map = info_type_v41_v42;
+            version_info_number_map = info_number_v41_v42;
+        }
+        else if (entry.source->version == Version::v43) {
+            version_info_type_map = info_type_v43;
+            version_info_number_map = info_number_v43;
+        }
+        
+        for (const auto & t : version_info_type_map) {
             if (value["ID"] == t.first) {
                 if (type_field != t.second.first) {
-                    throw new MetaSectionError{entry.line, t.second.second};
+                        throw new MetaSectionError{entry.line, t.second.second};
                 }
             }
         }
 
-        for (const auto & n : info_number) {
+        for (const auto & n : version_info_number_map) {
             if (value["ID"] == n.first) {
                 if (number_field != n.second.first) {
                     throw new MetaSectionError{entry.line, n.second.second};

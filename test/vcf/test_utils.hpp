@@ -60,7 +60,8 @@ namespace ebi
                                                    { "Number", "1" },
                                                    { "Type", "String" },
                                                    { "Description", "Genotype" }
-                                           }
+                                           },
+                                           source
                                    });
 
       return vcf::Record{1, "1", summary.normalized_pos, {"."}, summary.normalized_reference, summary.normalized_alternate,
