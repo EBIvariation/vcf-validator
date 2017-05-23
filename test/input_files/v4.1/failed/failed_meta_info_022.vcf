@@ -1,5 +1,5 @@
 ##fileformat=VCFv4.1
-##CauseOfFailure=INFO CIGAR Number is not A
-##INFO=<ID=CIGAR,Number=1,Type=String,Description="Cigar string describing how to align an alternate allele to the reference allele">
+##CauseOfFailure=INFO END Number is not 1
+##INFO=<ID=END,Number=A,Type=Integer,Description="End position (for use with symbolic alleles)">
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
-1	123	.	TC	T	.	.	CIGAR=D
+1	123	.	TC	T	.	.	END=2

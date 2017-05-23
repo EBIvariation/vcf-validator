@@ -1,5 +1,5 @@
 ##fileformat=VCFv4.2
-##CauseOfFailure=INFO AN Type is not Integer
-##INFO=<ID=AN,Number=1,Type=Float,Description="Total number of alleles in called genotypes">
+##CauseOfFailure=INFO DB Type is not Flag
+##INFO=<ID=DB,Number=0,Type=String,Description="dbSNP membership">
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
-1	123	.	TC	T	.	.	AN=0.2
+1	123	.	TC	T	.	.	.

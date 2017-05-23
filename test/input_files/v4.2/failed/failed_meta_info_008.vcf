@@ -1,5 +1,5 @@
 ##fileformat=VCFv4.2
-##CauseOfFailure=INFO AD Type is not Integer
-##INFO=<ID=AD,Number=R,Type=String,Description="Total read depth for each allele">
+##CauseOfFailure=INFO AF Type is not Float
+##INFO=<ID=AF,Number=A,Type=Integer,Description="Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)">
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
-1	123	.	TC	T	.	.	AD=E
+1	123	.	TC	T	.	.	AF=2

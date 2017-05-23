@@ -1,5 +1,5 @@
 ##fileformat=VCFv4.1
-##CauseOfFailure=INFO BQ Number is not 1
-##INFO=<ID=BQ,Number=R,Type=Float,Description="RMS base quality">
+##CauseOfFailure=INFO DP Number is not 1
+##INFO=<ID=DP,Number=0,Type=Integer,Description="Combined depth across samples">
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
-1	123	.	TC	T	.	.	BQ=0.2
+1	123	.	TC	T	.	.	DP=2

@@ -1,5 +1,5 @@
 ##fileformat=VCFv4.1
-##CauseOfFailure=INFO NS Type is not Integer
-##INFO=<ID=NS,Number=1,Type=Float,Description="Number of samples with data">
+##CauseOfFailure=INFO 1000G Type is not Flag
+##INFO=<ID=1000G,Number=0,Type=String,Description="1000 Genomes membership">
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
-1	123	.	TC	T	.	.	NS=0.2
+1	123	.	TC	T	.	.	.

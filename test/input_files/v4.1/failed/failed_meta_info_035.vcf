@@ -1,5 +1,5 @@
 ##fileformat=VCFv4.1
-##CauseOfFailure=INFO MQ0 Number is not 1
-##INFO=<ID=MQ0,Number=A,Type=Integer,Description="Number of MAPQ == 0 reads">
+##CauseOfFailure=INFO VALIDATED Number is not 0
+##INFO=<ID=VALIDATED,Number=1,Type=Flag,Description="Validated by follow-up experiment">
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
-1	123	.	TC	T	.	.	MQ0=2
+1	123	.	TC	T	.	.	VALIDATED=0

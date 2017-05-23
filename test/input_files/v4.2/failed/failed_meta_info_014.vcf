@@ -1,5 +1,5 @@
 ##fileformat=VCFv4.2
-##CauseOfFailure=INFO AF Type is not Float
-##INFO=<ID=AF,Number=A,Type=Integer,Description="Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)">
+##CauseOfFailure=INFO CIGAR Type is not String
+##INFO=<ID=CIGAR,Number=A,Type=Float,Description="Cigar string describing how to align an alternate allele to the reference allele">
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
-1	123	.	TC	T	.	.	AF=2
+1	123	.	TC	T	.	.	CIGAR=0.2
