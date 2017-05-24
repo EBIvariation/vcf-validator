@@ -220,35 +220,36 @@ namespace ebi
             throw new MetaSectionError{entry.line, "INFO metadata Type is not a Integer, Float, Flag, Character or String"};
         }
         
-        std::map<std::string, std::pair<std::string, std::string>> version_info_type_map;
-        std::map<std::string, std::pair<std::string, std::string>> version_info_number_map;
-
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
-            version_info_type_map = info_type_v41_v42;
-            version_info_number_map = info_number_v41_v42;
+            check_predefined_type_and_number(value, info_type_v41_v42, info_number_v41_v42);
+        } else {
+            check_predefined_type_and_number(value, info_type_v43, info_number_v43);
         }
-        else if (entry.source->version == Version::v43) {
-            version_info_type_map = info_type_v43;
-            version_info_number_map = info_number_v43;
-        }
-        
-        for (const auto & t : version_info_type_map) {
-            if (value["ID"] == t.first) {
-                if (type_field != t.second.first) {
-                        throw new MetaSectionError{entry.line, t.second.second};
+    }
+    
+    void MetaEntryVisitor::check_predefined_type_and_number(std::map<std::string, std::string> & value,
+                                                            std::map<std::string, std::pair<std::string, std::string>> const & info_types,
+                                                            std::map<std::string, std::pair<std::string, std::string>> const & info_numbers) const
+    {
+        auto & type_field = value["Type"];
+        for (const auto & type : info_types) {
+            if (value["ID"] == type.first) {
+                if (type_field != type.second.first) {
+                    throw new MetaSectionError{entry.line, type.second.second};
                 }
             }
         }
 
-        for (const auto & n : version_info_number_map) {
-            if (value["ID"] == n.first) {
-                if (number_field != n.second.first) {
-                    throw new MetaSectionError{entry.line, n.second.second};
+        auto & number_field = value["Number"];
+        for (const auto & number : info_numbers) {
+            if (value["ID"] == number.first) {
+                if (number_field != number.second.first) {
+                    throw new MetaSectionError{entry.line, number.second.second};
                 }
             }
         }
     }
-    
+
     void MetaEntryVisitor::check_sample(std::map<std::string, std::string> & value) const
     {
         // It must contain an ID

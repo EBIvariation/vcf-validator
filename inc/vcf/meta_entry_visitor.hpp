@@ -45,6 +45,9 @@ namespace ebi
             void check_filter(std::map<std::string, std::string> & value) const;
             void check_format(std::map<std::string, std::string> & value) const;
             void check_info(std::map<std::string, std::string> & value) const;
+            void check_predefined_type_and_number(std::map<std::string, std::string> & value,
+                                                  std::map<std::string, std::pair<std::string, std::string>> const & info_types,
+                                                  std::map<std::string, std::pair<std::string, std::string>> const & info_numbers) const;
             void check_sample(std::map<std::string, std::string> & value) const;
         };
        

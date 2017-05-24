@@ -26,15 +26,16 @@ namespace ebi
     
     TEST_CASE("Record constructor v41", "[constructor]")
     {
-        auto source = vcf::Source {
-            "Example VCF source",
-            vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-            vcf::Version::v41,
-            vcf::Ploidy{2, {{"Y", 1}}},
-            {},
-            { "Sample1" }};
+        std::shared_ptr<vcf::Source> source{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v41,
+                vcf::Ploidy{2, {{"Y", 1}}},
+                {},
+                { "Sample1" }}};
             
-        source.meta_entries.emplace("FORMAT",
+        source->meta_entries.emplace("FORMAT",
             vcf::MetaEntry{
                 1,
                 "FORMAT",
@@ -44,10 +45,10 @@ namespace ebi
                     { "Type", "String" },
                     { "Description", "Genotype" }
                 },
-                std::make_shared<vcf::Source>(source)
+                source
         });
            
-        source.meta_entries.emplace("FORMAT",
+        source->meta_entries.emplace("FORMAT",
             vcf::MetaEntry{
                 1,
                 "FORMAT",
@@ -57,10 +58,10 @@ namespace ebi
                     { "Type", "Integer" },
                     { "Description", "Read depth" }
                 },
-                std::make_shared<vcf::Source>(source)
+                source
             });
 
-        source.meta_entries.emplace("INFO",
+        source->meta_entries.emplace("INFO",
             vcf::MetaEntry{
                 1,
                 "INFO",
@@ -70,10 +71,10 @@ namespace ebi
                     { "Type", "Integer" },
                     { "Description", "Allele number" }
                 },
-                std::make_shared<vcf::Source>(source)
+                source
         });
            
-        source.meta_entries.emplace("INFO",
+        source->meta_entries.emplace("INFO",
             vcf::MetaEntry{
                 1,
                 "INFO",
@@ -83,7 +84,7 @@ namespace ebi
                     { "Type", "Float" },
                     { "Description", "Allele frequency" }
                 },
-                std::make_shared<vcf::Source>(source)
+                source
             });
 
          
@@ -101,7 +102,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)} ) );
+                                source} ) );
                 
             CHECK_NOTHROW( (vcf::Record{
                                 1,
@@ -115,7 +116,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}) );
+                                source}) );
             CHECK_NOTHROW( (vcf::Record{
                                 1,
                                 "chr1",
@@ -128,7 +129,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} },
                                 { "DP" },
                                 { "1" },
-                                std::make_shared<vcf::Source>(source)}) );
+                                source}) );
         }
 
         SECTION("Chromosome with whitespaces") 
@@ -145,7 +146,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}),
+                                source}),
                             vcf::ChromosomeBodyError*);
         }
 
@@ -163,7 +164,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}),
+                                source}),
                             vcf::ChromosomeBodyError*);
         }
 
@@ -181,7 +182,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}),
+                                source}),
                             vcf::IdBodyError*);
         }
 
@@ -199,7 +200,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}) );
+                                source}) );
                                 
             CHECK_NOTHROW( (vcf::Record{
                                 1,
@@ -213,7 +214,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}) );
+                                source}) );
         }
         
         SECTION("Same length alleles") 
@@ -230,7 +231,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}) );
+                                source}) );
         }
 
         SECTION("Same alleles") 
@@ -247,7 +248,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}),
+                                source}),
                             vcf::AlternateAllelesBodyError*);
         }
 
@@ -265,7 +266,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}),
+                                source}),
                             vcf::QualityBodyError*);
         }
 
@@ -283,7 +284,7 @@ namespace ebi
                                 { { ".", "." } }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}) );
+                                source}) );
         }
 
         SECTION("Single-field format") 
@@ -300,7 +301,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}) );
+                                source}) );
                                 
             CHECK_NOTHROW( (vcf::Record{
                                 1,
@@ -314,7 +315,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "DP" },
                                 { "13" },
-                                std::make_shared<vcf::Source>(source)}) );
+                                source}) );
         }
         
         SECTION("Multi-field format") 
@@ -331,7 +332,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}) );
+                                source}) );
             
             CHECK_NOTHROW( (vcf::Record{
                                 1,
@@ -345,7 +346,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "DP", "GL" }, 
                                 { "12:0.5" },
-                                std::make_shared<vcf::Source>(source)}) );
+                                source}) );
                                 
             CHECK_THROWS_AS( (vcf::Record{
                                 1,
@@ -359,7 +360,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "DP", "GT" }, 
                                 { "12:0|1" },
-                                std::make_shared<vcf::Source>(source)}),
+                                source}),
                             vcf::FormatBodyError*);
         }
 
@@ -377,7 +378,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} },
                                 { "GT", "DP" },
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}) );
+                                source}) );
 
             CHECK_NOTHROW( (vcf::Record{
                                 1,
@@ -391,7 +392,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} },
                                 { "GT", "DP" },
                                 { "0" },
-                                std::make_shared<vcf::Source>(source)}) );
+                                source}) );
 
 // The next check is commented because a mismatch is currently only a warning, but we will process it as an error in the future
 //            CHECK_THROWS_AS( (vcf::Record{
@@ -406,22 +407,23 @@ namespace ebi
 //                                { {"AN", "12"}, {"AF", "0.5,0.3"} },
 //                                { "GT" },
 //                                { "0|1|1" },
-//                                std::make_shared<vcf::Source>(source)}),
+//                                source}),
 //                            vcf::SamplesFieldBodyError*);
         }
     }
 
     TEST_CASE("Record constructor v43", "[constructor]")
-    {
-        auto source = vcf::Source {
-            "Example VCF source",
-            vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-            vcf::Version::v43,
-            vcf::Ploidy{2, {{"Y", 1}}},
-            {},
-            { "Sample1" }};
-            
-        source.meta_entries.emplace("FORMAT",
+    {            
+        std::shared_ptr<vcf::Source> source{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v43,
+                vcf::Ploidy{2, {{"Y", 1}}},
+                {},
+                { "Sample1" }}};
+
+        source->meta_entries.emplace("FORMAT",
             vcf::MetaEntry{
                 1,
                 "FORMAT",
@@ -431,10 +433,10 @@ namespace ebi
                     { "Type", "String" },
                     { "Description", "Genotype" }
                 },
-                std::make_shared<vcf::Source>(source)
+                source
         });
            
-        source.meta_entries.emplace("FORMAT",
+        source->meta_entries.emplace("FORMAT",
             vcf::MetaEntry{
                 1,
                 "FORMAT",
@@ -444,10 +446,10 @@ namespace ebi
                     { "Type", "Integer" },
                     { "Description", "Read depth" }
                 },
-                std::make_shared<vcf::Source>(source)
+                source
             });
 
-        source.meta_entries.emplace("INFO",
+        source->meta_entries.emplace("INFO",
             vcf::MetaEntry{
                 1,
                 "INFO",
@@ -457,10 +459,10 @@ namespace ebi
                     { "Type", "Integer" },
                     { "Description", "Allele number" }
                 },
-                std::make_shared<vcf::Source>(source)
+                source
         });
            
-        source.meta_entries.emplace("INFO",
+        source->meta_entries.emplace("INFO",
             vcf::MetaEntry{
                 1,
                 "INFO",
@@ -470,7 +472,7 @@ namespace ebi
                     { "Type", "Float" },
                     { "Description", "Allele frequency" }
                 },
-                std::make_shared<vcf::Source>(source)
+                source
             });
 
         SECTION("Duplicate FORMATs") 
@@ -487,7 +489,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "DP", "DP" }, 
                                 { "12:13" },
-                                std::make_shared<vcf::Source>(source)}),
+                                source}),
                             vcf::FormatBodyError*);
         }
 
@@ -505,7 +507,7 @@ namespace ebi
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "GT", "DP" }, 
                                 { "0|1" },
-                                std::make_shared<vcf::Source>(source)}),
+                                source}),
                             vcf::IdBodyError*);
         }
     }
