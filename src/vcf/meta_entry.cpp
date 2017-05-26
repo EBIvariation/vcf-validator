@@ -221,15 +221,16 @@ namespace ebi
         }
         
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
-            check_predefined_type_and_number(value, info_type_v41_v42, info_number_v41_v42);
+            check_predefined_type(value, info_type_v41_v42);
+            check_predefined_number(value, info_number_v41_v42);
         } else {
-            check_predefined_type_and_number(value, info_type_v43, info_number_v43);
+            check_predefined_type(value, info_type_v43);
+            check_predefined_number(value, info_number_v43);
         }
     }
     
-    void MetaEntryVisitor::check_predefined_type_and_number(std::map<std::string, std::string> & value,
-                                                            std::map<std::string, std::pair<std::string, std::string>> const & info_types,
-                                                            std::map<std::string, std::pair<std::string, std::string>> const & info_numbers) const
+    void MetaEntryVisitor::check_predefined_type(std::map<std::string, std::string> & value,
+                                                 std::map<std::string, std::pair<std::string, std::string>> const & info_types) const
     {
         auto & type_field = value["Type"];
         for (const auto & type : info_types) {
@@ -239,7 +240,11 @@ namespace ebi
                 }
             }
         }
+    }
 
+    void MetaEntryVisitor::check_predefined_number(std::map<std::string, std::string> & value,
+                                                   std::map<std::string, std::pair<std::string, std::string>> const & info_numbers) const
+    {
         auto & number_field = value["Number"];
         for (const auto & number : info_numbers) {
             if (value["ID"] == number.first) {
