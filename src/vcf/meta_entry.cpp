@@ -25,23 +25,26 @@ namespace ebi
   {
   
     MetaEntry::MetaEntry(size_t line,
-                         std::string const & id)
-    : line{line}, id{id}, structure{Structure::NoValue}
+                         std::string const & id,
+                         std::shared_ptr<Source> source)
+    : line{line}, id{id}, structure{Structure::NoValue}, source{source}
     {
     }
         
     MetaEntry::MetaEntry(size_t line,
                          std::string const & id,
-                         std::string const & plain_value)
-    : line{line}, id{id}, structure{Structure::PlainValue}, value{plain_value}
+                         std::string const & plain_value,
+                         std::shared_ptr<Source> source)
+    : line{line}, id{id}, structure{Structure::PlainValue}, value{plain_value}, source{source}
     {
         check_value();
     }
 
     MetaEntry::MetaEntry(size_t line,
                          std::string const & id,
-                         std::map<std::string, std::string> const & key_values)
-    : line{line}, id{id}, structure{Structure::KeyValue}, value{key_values}
+                         std::map<std::string, std::string> const & key_values,
+                         std::shared_ptr<Source> source)
+    : line{line}, id{id}, structure{Structure::KeyValue}, value{key_values}, source{source}
     {
         check_value();
     }
@@ -80,7 +83,7 @@ namespace ebi
     void MetaEntryVisitor::operator()(std::map<std::string, std::string> & value) const
     {
         auto & id = entry.id;
-        if (id == "ALT") { 
+        if (id == "ALT") {
             check_alt(value);
         } else if (id == "assembly") {
             // TODO May check URL correctness (regexp?)
@@ -164,18 +167,19 @@ namespace ebi
         // Check FORMAT Number
         auto & number_field = value["Number"];
         if (find_if(number_field.begin(), number_field.end(), [](char c) { return !isdigit(c); }) != number_field.end() &&
-            value["Number"] != "A" &&
-            value["Number"] != "R" &&
-            value["Number"] != "G" &&
-            value["Number"] != ".") {
+            number_field != "A" &&
+            number_field != "R" &&
+            number_field != "G" &&
+            number_field != ".") {
             throw new MetaSectionError{entry.line, "FORMAT metadata Number is not a number, A, R, G or dot"};
         }
 
         // Check FORMAT Type
-        if (value["Type"] != "Integer" &&
-            value["Type"] != "Float" &&
-            value["Type"] != "Character" &&
-            value["Type"] != "String") {
+        auto & type_field = value["Type"];
+        if (type_field != "Integer" &&
+            type_field != "Float" &&
+            type_field != "Character" &&
+            type_field != "String") {
             throw new MetaSectionError{entry.line, "FORMAT metadata Type is not a Integer, Float, Character or String"};
         }
     }
@@ -199,23 +203,58 @@ namespace ebi
         // Check INFO Number
         auto & number_field = value["Number"];
         if (find_if(number_field.begin(), number_field.end(), [](char c) { return !isdigit(c); }) != number_field.end() &&
-            value["Number"] != "A" &&
-            value["Number"] != "R" &&
-            value["Number"] != "G" &&
-            value["Number"] != ".") {
+            number_field != "A" &&
+            number_field != "R" &&
+            number_field != "G" &&
+            number_field != ".") {
             throw new MetaSectionError{entry.line, "INFO metadata Number is not a number, A, R, G or dot"};
         }
 
         // Check INFO Type
-        if (value["Type"] != "Integer" &&
-            value["Type"] != "Float" &&
-            value["Type"] != "Flag" &&
-            value["Type"] != "Character" &&
-            value["Type"] != "String") {
+        auto & type_field = value["Type"];
+        if (type_field != "Integer" &&
+            type_field != "Float" &&
+            type_field != "Flag" &&
+            type_field != "Character" &&
+            type_field != "String") {
             throw new MetaSectionError{entry.line, "INFO metadata Type is not a Integer, Float, Flag, Character or String"};
+        }
+        
+        if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
+            check_predefined_type(value, info_type_v41_v42);
+            check_predefined_number(value, info_number_v41_v42);
+        } else {
+            check_predefined_type(value, info_type_v43);
+            check_predefined_number(value, info_number_v43);
         }
     }
     
+    void MetaEntryVisitor::check_predefined_type(std::map<std::string, std::string> & value,
+                                                 std::map<std::string, std::pair<std::string, std::string>> const & info_types) const
+    {
+        auto & type_field = value["Type"];
+        for (const auto & type : info_types) {
+            if (value["ID"] == type.first) {
+                if (type_field != type.second.first) {
+                    throw new MetaSectionError{entry.line, type.second.second};
+                }
+            }
+        }
+    }
+
+    void MetaEntryVisitor::check_predefined_number(std::map<std::string, std::string> & value,
+                                                   std::map<std::string, std::pair<std::string, std::string>> const & info_numbers) const
+    {
+        auto & number_field = value["Number"];
+        for (const auto & number : info_numbers) {
+            if (value["ID"] == number.first) {
+                if (number_field != number.second.first) {
+                    throw new MetaSectionError{entry.line, number.second.second};
+                }
+            }
+        }
+    }
+
     void MetaEntryVisitor::check_sample(std::map<std::string, std::string> & value) const
     {
         // It must contain an ID

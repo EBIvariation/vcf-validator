@@ -66,8 +66,97 @@ namespace ebi
         STRUCTURAL_BREAKEND,
         NO_VARIATION
     };
-    
-    
+
+    const std::map<std::string, std::pair<std::string, std::string>> info_type_v41_v42 = {
+            { "AA", { "String", "INFO AA metadata Type is not String" } },
+            { "AC", { "Integer", "INFO AC metadata Type is not Integer" } },
+            { "AF", { "Float", "INFO AF metadata Type is not Float" } },
+            { "AN", { "Integer", "INFO AN metadata Type is not Integer" } },
+            { "BQ", { "Float", "INFO BQ metadata Type is not Float" } },
+            { "CIGAR", { "String", "INFO CIGAR metadata Type is not String" } },
+            { "DB", { "Flag", "INFO DB metadata Type is not Flag" } },
+            { "DP", { "Integer", "INFO DP metadata Type is not Integer" } },
+            { "END", { "Integer", "INFO END metadata Type is not Integer" } },
+            { "H2", { "Flag", "INFO H2 metadata Type is not Flag" } },
+            { "H3", { "Flag", "INFO H3 metadata Type is not Flag" } },
+            // TODO : MQ metadata Type is .
+            { "MQ0", { "Integer", "INFO MQ0 metadata Type is not Integer" } },
+            { "NS", { "Integer", "INFO NS metadata Type is not Integer" } },
+            // TODO : SB metadata Type is .
+            { "SOMATIC", { "Flag", "INFO SOMATIC metadata Type is not Flag" } },
+            { "VALIDATED", { "Flag", "INFO VALIDATED metadata Type is not Flag" } },
+            { "1000G", { "Flag", "INFO 1000G metadata Type is not Flag" } }
+    };
+
+    const std::map<std::string, std::pair<std::string, std::string>> info_number_v41_v42 = {
+            { "AA", { "1", "INFO AA metadata Number is not 1" } },
+            { "AC", { "A", "INFO AC metadata Number is not A" } },
+            { "AF", { "A", "INFO AF metadata Number is not A" } },
+            { "AN", { "1", "INFO AN metadata Number is not 1" } },
+            { "BQ", { "1", "INFO BQ metadata Number is not 1" } },
+            { "CIGAR", { "A", "INFO CIGAR metadata Number is not A" } },
+            { "DB", { "0", "INFO DB metadata Number is not 0" } },
+            { "DP", { "1", "INFO DP metadata Number is not 1" } },
+            { "END", { "1", "INFO END metadata Number is not 1" } },
+            { "H2", { "0", "INFO H2 metadata Number is not 0" } },
+            { "H3", { "0", "INFO H3 metadata Number is not 0" } },
+            { "MQ", { "1", "INFO MQ metadata Number is not 1" } },
+            { "MQ0", { "1", "INFO MQ0 metadata Number is not 1" } },
+            { "NS", { "1", "INFO NS metadata Number is not 1" } },
+            // TODO : SB metadata Number is .
+            { "SOMATIC", { "0", "INFO SOMATIC metadata Number is not 0" } },
+            { "VALIDATED", { "0", "INFO VALIDATED metadata Number is not 0" } },
+            { "1000G", { "0", "INFO 1000G metadata Number is not 0" } }
+    };
+
+    const std::map<std::string, std::pair<std::string, std::string>> info_type_v43 = {
+            { "AA", { "String", "INFO AA metadata Type is not String" } },
+            { "AC", { "Integer", "INFO AC metadata Type is not Integer" } },
+            { "AD", { "Integer", "INFO AD metadata Type is not Integer" } },
+            { "ADF", { "Integer", "INFO ADF metadata Type is not Integer" } },
+            { "ADR", { "Integer", "INFO ADR metadata Type is not Integer" } },
+            { "AF", { "Float", "INFO AF metadata Type is not Float" } },
+            { "AN", { "Integer", "INFO AN metadata Type is not Integer" } },
+            { "BQ", { "Float", "INFO BQ metadata Type is not Float" } },
+            { "CIGAR", { "String", "INFO CIGAR metadata Type is not String" } },
+            { "DB", { "Flag", "INFO DB metadata Type is not Flag" } },
+            { "DP", { "Integer", "INFO DP metadata Type is not Integer" } },
+            { "END", { "Integer", "INFO END metadata Type is not Integer" } },
+            { "H2", { "Flag", "INFO H2 metadata Type is not Flag" } },
+            { "H3", { "Flag", "INFO H3 metadata Type is not Flag" } },
+            // TODO : MQ metadata Type is .
+            { "MQ0", { "Integer", "INFO MQ0 metadata Type is not Integer" } },
+            { "NS", { "Integer", "INFO NS metadata Type is not Integer" } },
+            // TODO : SB metadata Type is .
+            { "SOMATIC", { "Flag", "INFO SOMATIC metadata Type is not Flag" } },
+            { "VALIDATED", { "Flag", "INFO VALIDATED metadata Type is not Flag" } },
+            { "1000G", { "Flag", "INFO 1000G metadata Type is not Flag" } }
+    };
+
+    const std::map<std::string, std::pair<std::string, std::string>> info_number_v43 = {
+            { "AA", { "1", "INFO AA metadata Number is not 1" } },
+            { "AC", { "A", "INFO AC metadata Number is not A" } },
+            { "AD", { "R", "INFO AD metadata Number is not R" } },
+            { "ADF", { "R", "INFO ADF metadata Number is not R" } },
+            { "ADR", { "R", "INFO ADR metadata Number is not R" } },
+            { "AF", { "A", "INFO AF metadata Number is not A" } },
+            { "AN", { "1", "INFO AN metadata Number is not 1" } },
+            { "BQ", { "1", "INFO BQ metadata Number is not 1" } },
+            { "CIGAR", { "A", "INFO CIGAR metadata Number is not A" } },
+            { "DB", { "0", "INFO DB metadata Number is not 0" } },
+            { "DP", { "1", "INFO DP metadata Number is not 1" } },
+            { "END", { "1", "INFO END metadata Number is not 1" } },
+            { "H2", { "0", "INFO H2 metadata Number is not 0" } },
+            { "H3", { "0", "INFO H3 metadata Number is not 0" } },
+            { "MQ", { "1", "INFO MQ metadata Number is not 1" } },
+            { "MQ0", { "1", "INFO MQ0 metadata Number is not 1" } },
+            { "NS", { "1", "INFO NS metadata Number is not 1" } },
+            // TODO : SB metadata Number is .
+            { "SOMATIC", { "0", "INFO SOMATIC metadata Number is not 0" } },
+            { "VALIDATED", { "0", "INFO VALIDATED metadata Number is not 0" } },
+            { "1000G", { "0", "INFO 1000G metadata Number is not 0" } }
+    };
+
     struct MetaEntry
     {
         enum class Structure { NoValue, PlainValue, KeyValue };
@@ -76,20 +165,25 @@ namespace ebi
         
         std::string id;
         Structure structure; // Union discriminant
-        
+
         boost::variant< std::string, 
                         std::map<std::string, std::string> > value;
-        
-        MetaEntry(size_t line,
-                  std::string const & id);
-        
-        MetaEntry(size_t line,
-                  std::string const & id,
-                  std::string const & plain_value);
+
+        std::shared_ptr<Source> source;
         
         MetaEntry(size_t line,
                   std::string const & id,
-                  std::map<std::string, std::string> const & key_values);
+                  std::shared_ptr<Source> source);
+        
+        MetaEntry(size_t line,
+                  std::string const & id,
+                  std::string const & plain_value,
+                  std::shared_ptr<Source> source);
+        
+        MetaEntry(size_t line,
+                  std::string const & id,
+                  std::map<std::string, std::string> const & key_values,
+                  std::shared_ptr<Source> source);
         
         bool operator==(MetaEntry const &) const;
 
