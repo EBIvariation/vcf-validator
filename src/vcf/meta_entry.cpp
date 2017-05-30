@@ -183,38 +183,13 @@ namespace ebi
             throw new MetaSectionError{entry.line, "FORMAT metadata Type is not a Integer, Float, Character or String"};
         }
 
+        auto & id_field = value["ID"];
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
-            check_format_predefined_type(value, format_type_v41_v42);
-            check_format_predefined_number(value, format_number_v41_v42);
+            check_predefined_tag(id_field, type_field, format_type_v41_v42);
+            check_predefined_tag(id_field, number_field, format_number_v41_v42);
         } else {
-            check_format_predefined_type(value, format_type_v43);
-            check_format_predefined_number(value, format_number_v43);
-        }
-    }
-
-    void MetaEntryVisitor::check_format_predefined_type(std::map<std::string, std::string> & value,
-                                                        std::map<std::string, std::pair<std::string, std::string>> const & format_types) const
-    {
-        auto & type_field = value["Type"];
-        for (const auto & type : format_types) {
-            if (value["ID"] == type.first) {
-                if (type_field != type.second.first) {
-                    throw new MetaSectionError{entry.line, type.second.second};
-                }
-            }
-        }
-    }
-
-    void MetaEntryVisitor::check_format_predefined_number(std::map<std::string, std::string> & value,
-                                                          std::map<std::string, std::pair<std::string, std::string>> const & format_numbers) const
-    {
-        auto & number_field = value["Number"];
-        for (const auto & number : format_numbers) {
-            if (value["ID"] == number.first) {
-                if (number_field != number.second.first) {
-                    throw new MetaSectionError{entry.line, number.second.second};
-                }
-            }
+            check_predefined_tag(id_field, type_field, format_type_v43);
+            check_predefined_tag(id_field, number_field, format_number_v43);
         }
     }
 
@@ -254,37 +229,23 @@ namespace ebi
             throw new MetaSectionError{entry.line, "INFO metadata Type is not a Integer, Float, Flag, Character or String"};
         }
         
+        auto & id_field = value["ID"];
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
-            check_info_predefined_type(value, info_type_v41_v42);
-            check_info_predefined_number(value, info_number_v41_v42);
+            check_predefined_tag(id_field, type_field, info_type_v41_v42);
+            check_predefined_tag(id_field, number_field, info_number_v41_v42);
         } else {
-            check_info_predefined_type(value, info_type_v43);
-            check_info_predefined_number(value, info_number_v43);
+            check_predefined_tag(id_field, type_field, info_type_v43);
+            check_predefined_tag(id_field, number_field, info_number_v43);
         }
     }
     
-    void MetaEntryVisitor::check_info_predefined_type(std::map<std::string, std::string> & value,
-                                                      std::map<std::string, std::pair<std::string, std::string>> const & info_types) const
+    void MetaEntryVisitor::check_predefined_tag(std::string & id_field, std::string & tag_value,
+                                                std::map<std::string, std::pair<std::string, std::string>> const & tags) const
     {
-        auto & type_field = value["Type"];
-        for (const auto & type : info_types) {
-            if (value["ID"] == type.first) {
-                if (type_field != type.second.first) {
-                    throw new MetaSectionError{entry.line, type.second.second};
-                }
-            }
-        }
-    }
-
-    void MetaEntryVisitor::check_info_predefined_number(std::map<std::string, std::string> & value,
-                                                        std::map<std::string, std::pair<std::string, std::string>> const & info_numbers) const
-    {
-        auto & number_field = value["Number"];
-        for (const auto & number : info_numbers) {
-            if (value["ID"] == number.first) {
-                if (number_field != number.second.first) {
-                    throw new MetaSectionError{entry.line, number.second.second};
-                }
+        auto iterator = tags.find(id_field);
+        if (iterator != tags.end()) {
+            if (tag_value != iterator->second.first) {
+                throw new MetaSectionError{entry.line, iterator->second.second};
             }
         }
     }

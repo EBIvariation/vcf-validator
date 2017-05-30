@@ -379,42 +379,42 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GH"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GH"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                { {"ID", "customTag"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GH"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                { {"ID", "customTag"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GH"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                { {"ID", "customTag"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
                                 source
                             } ) );
                             
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GH"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} },
+                                { {"ID", "customTag"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} },
                                 source
                             } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GH"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                { {"ID", "customTag"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -422,7 +422,7 @@ namespace ebi
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GH"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                { {"ID", "customTag"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -433,35 +433,35 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GH"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} },
+                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GH"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Genotype"} },
+                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "Float"}, {"Description", "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GH"}, {"Number", "R"}, {"Type", "Character"}, {"Description", "Genotype"} },
+                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "Character"}, {"Description", "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GH"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} },
                                 source
                             } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GH"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} },
+                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "."}, {"Description", "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -469,7 +469,7 @@ namespace ebi
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 "FORMAT",
-                                { {"ID", "GH"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} },
+                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "int"}, {"Description", "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
