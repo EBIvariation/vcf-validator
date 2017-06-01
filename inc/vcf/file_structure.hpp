@@ -157,6 +157,72 @@ namespace ebi
             { "1000G", { "0", "INFO 1000G metadata Number is not 0" } }
     };
 
+    const std::map<std::string, std::pair<std::string, std::string>> format_type_v41_v42 = {
+            { "DP", { "Integer", "FORMAT DP metadata Type is not Integer" } },
+            { "EC", { "Integer", "FORMAT EC metadata Type is not Integer" } },
+            { "FT", { "String", "FORMAT FT metadata Type is not String" } },
+            { "GL", { "Float", "FORMAT GL metadata Type is not Float" } },
+            { "GP", { "Float", "FORMAT GP metadata Type is not Float" } },
+            { "GQ", { "Integer", "FORMAT GQ metadata Type is not Integer" } },
+            { "GT", { "String", "FORMAT GT metadata Type is not String" } },
+            { "HQ", { "Integer", "FORMAT HQ metadata Type is not Integer" } },
+            { "MQ", { "Integer", "FORMAT MQ metadata Type is not Integer" } },
+            { "PL", { "Integer", "FORMAT PL metadata Type is not Integer" } },
+            { "PQ", { "Integer", "FORMAT PQ metadata Type is not Integer" } },
+            { "PS", { "Integer", "FORMAT PS metadata Type is not Integer" } }
+    };
+
+    const std::map<std::string, std::pair<std::string, std::string>> format_number_v41_v42 = {
+            { "DP", { "1", "FORMAT DP metadata Number is not 1" } },
+            { "EC", { "A", "FORMAT EC metadata Number is not A" } },
+            { "FT", { "1", "FORMAT FT metadata Number is not 1" } },
+            { "GL", { "G", "FORMAT GL metadata Number is not G" } },
+            { "GP", { "G", "FORMAT GP metadata Number is not G" } },
+            { "GQ", { "1", "FORMAT GQ metadata Number is not 1" } },
+            { "GT", { "1", "FORMAT GT metadata Number is not 1" } },
+            { "HQ", { "2", "FORMAT HQ metadata Number is not 2" } },
+            { "MQ", { "1", "FORMAT MQ metadata Number is not 1" } },
+            { "PL", { "G", "FORMAT PL metadata Number is not G" } },
+            { "PQ", { "1", "FORMAT PQ metadata Number is not 1" } },
+            { "PS", { "1", "FORMAT PS metadata Number is not 1" } }
+    };
+
+    const std::map<std::string, std::pair<std::string, std::string>> format_type_v43 = {
+            { "AD", { "Integer", "FORMAT AD metadata Type is not Integer" } },
+            { "ADF", { "Integer", "FORMAT ADF metadata Type is not Integer" } },
+            { "ADR", { "Integer", "FORMAT ADR metadata Type is not Integer" } },
+            { "DP", { "Integer", "FORMAT DP metadata Type is not Integer" } },
+            { "EC", { "Integer", "FORMAT EC metadata Type is not Integer" } },
+            { "FT", { "String", "FORMAT FT metadata Type is not String" } },
+            { "GL", { "Float", "FORMAT GL metadata Type is not Float" } },
+            { "GP", { "Float", "FORMAT GP metadata Type is not Float" } },
+            { "GQ", { "Integer", "FORMAT GQ metadata Type is not Integer" } },
+            { "GT", { "String", "FORMAT GT metadata Type is not String" } },
+            { "HQ", { "Integer", "FORMAT HQ metadata Type is not Integer" } },
+            { "MQ", { "Integer", "FORMAT MQ metadata Type is not Integer" } },
+            { "PL", { "Integer", "FORMAT PL metadata Type is not Integer" } },
+            { "PQ", { "Integer", "FORMAT PQ metadata Type is not Integer" } },
+            { "PS", { "Integer", "FORMAT PS metadata Type is not Integer" } }
+    };
+
+    const std::map<std::string, std::pair<std::string, std::string>> format_number_v43 = {
+            { "AD", { "R", "FORMAT AD metadata Number is not R" } },
+            { "ADF", { "R", "FORMAT ADF metadata Number is not R" } },
+            { "ADR", { "R", "FORMAT ADR metadata Number is not R" } },
+            { "DP", { "1", "FORMAT DP metadata Number is not 1" } },
+            { "EC", { "A", "FORMAT EC metadata Number is not A" } },
+            { "FT", { "1", "FORMAT FT metadata Number is not 1" } },
+            { "GL", { "G", "FORMAT GL metadata Number is not G" } },
+            { "GP", { "G", "FORMAT GP metadata Number is not G" } },
+            { "GQ", { "1", "FORMAT GQ metadata Number is not 1" } },
+            { "GT", { "1", "FORMAT GT metadata Number is not 1" } },
+            { "HQ", { "2", "FORMAT HQ metadata Number is not 2" } },
+            { "MQ", { "1", "FORMAT MQ metadata Number is not 1" } },
+            { "PL", { "G", "FORMAT PL metadata Number is not G" } },
+            { "PQ", { "1", "FORMAT PQ metadata Number is not 1" } },
+            { "PS", { "1", "FORMAT PS metadata Number is not 1" } }
+    };
+
     struct MetaEntry
     {
         enum class Structure { NoValue, PlainValue, KeyValue };
