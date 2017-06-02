@@ -535,4 +535,33 @@
         fhold; fgoto body_section_skip;
     }
 
+    #################################################
+    #               Machine definition              #
+    #################################################
+
+    
+    NL = ("\n" | "\r\n") >line_break;
+    CS = "\t" >tab_break;
+
+    # Integer and floating-point numbers
+    any_number      = ("-" | "+")? (digit)+ ("." (digit)+)? (("e"|"E") ("+"|"-")? (digit)+)? |
+                      ("-" | "+")? "Inf" |
+                      "NaN" ;
+    int_number      = ("-" | "+")? (digit)+ ;
+    nat_number      = (digit)+ ;
+    # Bases are case-insensitive
+    bases           = ("A" | "C" | "G" | "T" | "N" | "a" | "c" | "t" | "g" | "n" )+ ;
+    # Identifiers may contain some symbols, but not only those 
+    # TODO Could it accept more symbols? Comma won't be, for sure
+    identifier      = ( (alnum | "." | "_" | "-" )+ - (punct)+ ) >token_begin @token_middle %token_end;
+    # ALT ID (can be used from meta entries or in the ALT column)
+    alt_id          = ( alnum | (punct - ("," | "<" | ">")) )+ - (punct)+ ;
+
+    # URL inspired in http://stackoverflow.com/questions/8784903/failed-to-convert-url-parser-regular-expression-to-ragel
+    scheme    = (alpha (any - [:/?#] - NL)+ ) ;
+    authority = (alpha (any - [/?#] - NL)* ) | ( (digit{1,3}) ("." digit{1,3}){3} ) ;
+    path      = (any - [?#] - NL)* ;
+    query     = (any - [#] - NL)* ;
+    fragment  = (any - NL)* ; 
+    url       = (scheme "://" authority path ("?" query)? ("#" fragment)?) >token_begin @token_middle %token_end ;
 }%%
