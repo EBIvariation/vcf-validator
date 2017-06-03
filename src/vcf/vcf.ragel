@@ -528,7 +528,7 @@
         fhold; fgoto body_section_skip;
     }
     
-    action sample_gt_error {
+    action genotype_error {
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
         ErrorPolicy::handle_error(*this, new SamplesFieldBodyError{n_lines, message_stream.str(), "GT"});
@@ -565,8 +565,9 @@
     fragment  = (any - NL)* ; 
     url       = (scheme "://" authority path ("?" query)? ("#" fragment)?) >token_begin @token_middle %token_end ;
 
+    record_id_fil_empty = "." >token_begin @token_middle %token_end ;
+
     record_id_value = (print - (space | ";"))+ >token_begin @token_middle %token_end ;
-    record_id_empty = "." >token_begin @token_middle %token_end ;
 
     ## A basic ALT can be something like AGT (biallelic) or A,AT (multiallelic)
     record_alt_snv  = bases ;
@@ -580,13 +581,12 @@
     record_alt_empty= "." ;
 
     record_fil_value= ((alnum | punct - ";")+ - (punct)+) >token_begin @token_middle %token_end ;
-    record_fil_empty= "." >token_begin @token_middle %token_end ;
 
-    cigar_value     = ([0-9]+[MIDNSHPX])+ ;
-    info_cigar      = cigar_value ("," cigar_value)* ;
+    cigar_string     = ([0-9]+[MIDNSHPX])+ ;
+    info_cigar      = cigar_string ("," cigar_string)* ;
 
     sample_allele   = (digit)+ | "." ;
-    sample_gt       = (sample_allele (("/" | "|") sample_allele)*) ;
+    genotype       = (sample_allele (("/" | "|") sample_allele)*) ;
     sample_value    = (alnum | (punct - ":"))+ | "." ;
     sample_values   = sample_value (":" sample_value)* ;
 }%%

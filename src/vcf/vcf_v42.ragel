@@ -176,7 +176,7 @@
     record_position = position >token_begin @token_middle %token_end ;
 
     ## ID must be a (list of) string with no white-spaces or semi-colons
-    record_id       = record_id_value (";" record_id_value)* | record_id_empty ;
+    record_id       = record_id_value (";" record_id_value)* | record_id_fil_empty ;
 
     record_ref      = bases >token_begin @token_middle %token_end ;
 
@@ -202,7 +202,7 @@
                       
     record_qual     = (any_number | ".") >token_begin $token_middle %token_end ;
 
-    record_filter   = (record_fil_value (";" record_fil_value)*) | record_fil_empty ;
+    record_filter   = (record_fil_value (";" record_fil_value)*) | record_id_fil_empty ;
 
     info_key        = ( alnum | (punct - (";" | "=")) )+ - 
                         ( "AA" | "AC" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G" | (punct)+ ) ;
@@ -241,7 +241,7 @@
     
     ## In a sample, if a genotype is present it must be the first field
     record_sample   = (
-                        sample_gt $err(sample_gt_error) (":" sample_values)? |
+                        genotype $err(genotype_error) (":" sample_values)? |
                         sample_values
                       ) >token_begin $token_middle %token_end ;
     
