@@ -17,7 +17,7 @@
  */
 
 
-#line 393 "src/vcf/vcf_v43.ragel"
+#line 371 "src/vcf/vcf_v43.ragel"
 
 
 namespace
@@ -35,7 +35,7 @@ static const int vcf_v43_en_meta_section_skip = 722;
 static const int vcf_v43_en_body_section_skip = 723;
 
 
-#line 399 "src/vcf/vcf_v43.ragel"
+#line 377 "src/vcf/vcf_v43.ragel"
 
 }
 
@@ -54,7 +54,7 @@ namespace ebi
 	cs = vcf_v43_start;
 	}
 
-#line 413 "src/vcf/vcf_v43.ragel"
+#line 391 "src/vcf/vcf_v43.ragel"
 
     }
 
@@ -17823,7 +17823,7 @@ tr1006:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 391 "src/vcf/vcf_v43.ragel"
+#line 369 "src/vcf/vcf_v43.ragel"
 	{ {goto st28;} }
 	goto st803;
 st803:
@@ -17865,7 +17865,7 @@ tr1009:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 392 "src/vcf/vcf_v43.ragel"
+#line 370 "src/vcf/vcf_v43.ragel"
 	{ {goto st728;} }
 	goto st804;
 st804:
@@ -21179,7 +21179,7 @@ case 804:
 	_out: {}
 	}
 
-#line 421 "src/vcf/vcf_v43.ragel"
+#line 399 "src/vcf/vcf_v43.ragel"
 
     }
     

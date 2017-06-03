@@ -564,4 +564,29 @@
     query     = (any - [#] - NL)* ;
     fragment  = (any - NL)* ; 
     url       = (scheme "://" authority path ("?" query)? ("#" fragment)?) >token_begin @token_middle %token_end ;
+
+    record_id_value = (print - (space | ";"))+ >token_begin @token_middle %token_end ;
+    record_id_empty = "." >token_begin @token_middle %token_end ;
+
+    ## A basic ALT can be something like AGT (biallelic) or A,AT (multiallelic)
+    record_alt_snv  = bases ;
+    
+    ## Indel alternates can be represented by standardized prefixes or an asterisk
+    record_alt_indel= "<DEL>" | "<INS>" | "<DUP>" | "<INV>" | "<CNV>" | "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">" | "*";
+
+    ## Other alternates can be any identifier surrounded by < > symbols
+    record_alt_other= ("<" alt_id ">") - ("<DEL>" | "<INS>" | "<DUP>" | "<INV>" | "<CNV>" | "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">");
+    ## No variant, must be the only ALT allele
+    record_alt_empty= "." ;
+
+    record_fil_value= ((alnum | punct - ";")+ - (punct)+) >token_begin @token_middle %token_end ;
+    record_fil_empty= "." >token_begin @token_middle %token_end ;
+
+    cigar_value     = ([0-9]+[MIDNSHPX])+ ;
+    info_cigar      = cigar_value ("," cigar_value)* ;
+
+    sample_allele   = (digit)+ | "." ;
+    sample_gt       = (sample_allele (("/" | "|") sample_allele)*) ;
+    sample_value    = (alnum | (punct - ":"))+ | "." ;
+    sample_values   = sample_value (":" sample_value)* ;
 }%%
