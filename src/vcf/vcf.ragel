@@ -157,6 +157,34 @@
         ParsePolicy::handle_token_end(*this, "Description");
     }
     
+    action meta_genomes {
+        ParsePolicy::handle_token_end(*this, "Genomes");
+    }
+    
+    action meta_mixture {
+        ParsePolicy::handle_token_end(*this, "Mixture");
+    }
+
+    action meta_typeid_meta {
+        ParsePolicy::handle_meta_typeid(*this, "META");
+    }
+
+    action meta_values {
+        ParsePolicy::handle_token_end(*this, "Values");
+    }
+    
+    action meta_original {
+        ParsePolicy::handle_token_end(*this, "Original");
+    }
+    
+    action meta_father {
+        ParsePolicy::handle_token_end(*this, "Father");
+    }
+    
+    action meta_mother {
+        ParsePolicy::handle_token_end(*this, "Mother");
+    }
+
     action meta_typeid_generic {
         ParsePolicy::handle_meta_typeid(*this);
     }
@@ -272,16 +300,62 @@
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
         fhold; fgoto meta_section_skip;
     }
+
+    action meta_pedigree_original_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Original is not valid"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_pedigree_parents_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Father or Mother is not valid"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_pedigree_names_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata sequence of Name_N is not valid"});
+        fhold; fgoto meta_section_skip;
+    }
     
     # pedigreeDB metadata
     action meta_pedigreedb_err {
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
         fhold; fgoto meta_section_skip;
     }
+
+    # META metadata
+    action meta_meta_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_meta_number_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Number is not a dot"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_meta_type_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Type is not String"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_meta_values_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Values is not a square-bracket delimited list of values"});
+        fhold; fgoto meta_section_skip;
+    }
     
     # SAMPLE metadata
     action meta_sample_err {
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_sample_genomes_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_sample_mixture_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
         fhold; fgoto meta_section_skip;
     }
 
@@ -569,7 +643,7 @@
 
     record_id_value = (print - (space | ";"))+ >token_begin @token_middle %token_end ;
 
-    ## A basic ALT can be something like AGT (biallelic) or A,AT (multiallelic)
+    ## A basic ALT can be something like AGT (biallelic)
     record_alt_snv  = bases ;
     
     ## Indel alternates can be represented by standardized prefixes or an asterisk

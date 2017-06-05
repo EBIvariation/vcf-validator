@@ -23,17 +23,6 @@
     #############################################
 
     
-    ########### Correct meta actions ##########
-    
-    action meta_genomes {
-        ParsePolicy::handle_token_end(*this, "Genomes");
-    }
-    
-    action meta_mixture {
-        ParsePolicy::handle_token_end(*this, "Mixture");
-    }
-
-
     ########## Incorrect metadata and header actions ##########
 
     # Fileformat line
@@ -52,17 +41,6 @@
     # INFO metadata
     action meta_info_number_err {
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Number is not a number, A, G or dot"});
-        fhold; fgoto meta_section_skip;
-    }
-    
-    # SAMPLE metadata
-    action meta_sample_genomes_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
-        fhold; fgoto meta_section_skip;
-    }
-    
-    action meta_sample_mixture_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
         fhold; fgoto meta_section_skip;
     }
     

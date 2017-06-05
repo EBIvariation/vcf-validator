@@ -22,29 +22,6 @@
     #             Actions definition            #
     #############################################
 
-    
-    ########### Correct meta actions ##########
-
-    action meta_typeid_meta {
-        ParsePolicy::handle_meta_typeid(*this, "META");
-    }
-
-    action meta_values {
-        ParsePolicy::handle_token_end(*this, "Values");
-    }
-    
-    action meta_original {
-        ParsePolicy::handle_token_end(*this, "Original");
-    }
-    
-    action meta_father {
-        ParsePolicy::handle_token_end(*this, "Father");
-    }
-    
-    action meta_mother {
-        ParsePolicy::handle_token_end(*this, "Mother");
-    }
-
 
     ########## Incorrect metadata and header actions ##########
 
@@ -64,43 +41,6 @@
     # INFO metadata
     action meta_info_number_err {
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Number is not a number, A, R, G or dot"});
-        fhold; fgoto meta_section_skip;
-    }
-
-    # PEDIGREE metadata
-    action meta_pedigree_original_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Original is not valid"});
-        fhold; fgoto meta_section_skip;
-    }
-    
-    action meta_pedigree_parents_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Father or Mother is not valid"});
-        fhold; fgoto meta_section_skip;
-    }
-    
-    action meta_pedigree_names_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata sequence of Name_N is not valid"});
-        fhold; fgoto meta_section_skip;
-    }
-    
-    # META metadata
-    action meta_meta_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
-        fhold; fgoto meta_section_skip;
-    }
-    
-    action meta_meta_number_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Number is not a dot"});
-        fhold; fgoto meta_section_skip;
-    }
-    
-    action meta_meta_type_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Type is not String"});
-        fhold; fgoto meta_section_skip;
-    }
-
-    action meta_meta_values_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Values is not a square-bracket delimited list of values"});
         fhold; fgoto meta_section_skip;
     }
     
