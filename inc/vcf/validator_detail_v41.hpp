@@ -17,7 +17,7 @@
  */
 
 
-#line 253 "src/vcf/vcf_v41.ragel"
+#line 250 "src/vcf/vcf_v41.ragel"
 
 
 namespace
@@ -35,7 +35,7 @@ static const int vcf_v41_en_meta_section_skip = 579;
 static const int vcf_v41_en_body_section_skip = 580;
 
 
-#line 259 "src/vcf/vcf_v41.ragel"
+#line 256 "src/vcf/vcf_v41.ragel"
 
 }
 
@@ -54,7 +54,7 @@ namespace ebi
 	cs = vcf_v41_start;
 	}
 
-#line 273 "src/vcf/vcf_v41.ragel"
+#line 270 "src/vcf/vcf_v41.ragel"
 
     }
 
@@ -13392,7 +13392,7 @@ tr789:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 251 "src/vcf/vcf_v41.ragel"
+#line 248 "src/vcf/vcf_v41.ragel"
 	{ {goto st28;} }
 	goto st657;
 st657:
@@ -13434,7 +13434,7 @@ tr792:
             std::cout << "Lines read: " << n_lines << std::endl;
         }
     }
-#line 252 "src/vcf/vcf_v41.ragel"
+#line 249 "src/vcf/vcf_v41.ragel"
 	{ {goto st585;} }
 	goto st658;
 st658:
@@ -15995,7 +15995,7 @@ case 658:
 	_out: {}
 	}
 
-#line 281 "src/vcf/vcf_v41.ragel"
+#line 278 "src/vcf/vcf_v41.ragel"
 
     }
    

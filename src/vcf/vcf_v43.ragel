@@ -205,7 +205,7 @@
     record_position = position >token_begin @token_middle %token_end ;
 
     ## ID must be a (list of) string with no white-spaces or semi-colons
-    record_id       = record_id_value (";" record_id_value)* | record_id_fil_empty ;
+    record_id       = (record_id_value (";" record_id_value)*) | record_empty_field ;
 
     record_ref      = bases >token_begin @token_middle %token_end ;
     
@@ -224,14 +224,11 @@
                         record_alt_indel |
                         record_alt_sv |
                         record_alt_other ) >token_begin $token_middle %token_end ;
-    record_alt      = (
-                       (record_alt_data ("," record_alt_data)*) |
-                       (record_alt_empty >token_begin $token_middle %token_end)
-                      ) ;
+    record_alt      = (record_alt_data ("," record_alt_data)*) | record_empty_field ;
                       
     record_qual     = (any_number | ".") >token_begin $token_middle %token_end ;
 
-    record_filter   = (record_fil_value (";" record_fil_value)*) | record_id_fil_empty ;
+    record_filter   = (record_fil_value (";" record_fil_value)*) | record_empty_field ;
 
     info_key        = ( (alnum | "_") (alnum | digit | "_" | ".")* ) -
                         ( "AA" | "AC" | "AD" | "ADF" | "ADR" | "AF" | "AN" | "BQ" | "CIGAR" | "DB" | "DP" | "END" | "H2" | "H3" | "MQ" | "MQ0" | "NS" | "SB" | "SOMATIC" | "VALIDATED" | "1000G" ) ;
