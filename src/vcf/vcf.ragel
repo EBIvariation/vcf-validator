@@ -1,0 +1,664 @@
+/**
+ * Copyright 2014-2017 EMBL - European Bioinformatics Institute
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include <cstdio>
+
+#include "vcf/validator.hpp"
+
+%%{
+    machine vcf;
+
+    #############################################
+    #             Actions definition            #
+    #############################################
+
+
+    ############## General actions ##############
+    
+    action token_begin {
+        ParsePolicy::handle_token_begin(*this);
+    }
+
+    action token_middle {
+        ParsePolicy::handle_token_char(*this, *p);
+    }
+    
+    action token_end {
+        ParsePolicy::handle_token_end(*this);
+    }
+
+    action line_break {
+        ParsePolicy::handle_newline(*this);
+        ++n_lines;
+        n_columns = 1;
+
+        if (n_lines % 10000 == 0) {
+            std::cout << "Lines read: " << n_lines << std::endl;
+        }
+    }
+
+    action tab_break {
+        ++n_columns;
+    }
+
+    
+    ######### Global section actions #########
+
+    action fileformat_section_error {
+        ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_section_error {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_section_end {
+        try {
+          OptionalPolicy::optional_check_meta_section(*this);
+        } catch (Error *warn) {
+          ErrorPolicy::handle_warning(*this, warn);
+        }
+    }
+
+    action header_section_error {
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines});
+        
+        // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
+        try {
+          OptionalPolicy::optional_check_meta_section(*this);
+        } catch (Error *warn) {
+          ErrorPolicy::handle_warning(*this, warn);
+        }
+        
+        fhold; fgoto body_section_skip;
+    }
+
+    action body_section_error {
+        ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
+        fhold; fgoto body_section_skip;
+    }
+
+    
+    ########### Correct meta actions ##########
+
+    action fileformat_end {
+        try {
+          ParsePolicy::handle_fileformat(*this);
+        } catch (Error *error) {
+          ErrorPolicy::handle_error(*this, error);
+          fhold; fgoto meta_section_skip;
+        }
+    }
+
+    action meta_typeid_alt {
+        ParsePolicy::handle_meta_typeid(*this, "ALT");
+    }
+
+    action meta_typeid_assembly {
+        ParsePolicy::handle_meta_typeid(*this, "assembly");
+    }
+
+    action meta_typeid_contig {
+        ParsePolicy::handle_meta_typeid(*this, "contig");
+    }
+
+    action meta_typeid_filter {
+        ParsePolicy::handle_meta_typeid(*this, "FILTER");
+    }
+
+    action meta_typeid_format {
+        ParsePolicy::handle_meta_typeid(*this, "FORMAT");
+    }
+
+    action meta_typeid_info {
+        ParsePolicy::handle_meta_typeid(*this, "INFO");
+    }
+
+    action meta_typeid_pedigree {
+        ParsePolicy::handle_meta_typeid(*this, "PEDIGREE");
+    }
+
+    action meta_typeid_pedigreedb {
+        ParsePolicy::handle_meta_typeid(*this, "pedigreeDB");
+    }
+
+    action meta_typeid_sample {
+        ParsePolicy::handle_meta_typeid(*this, "SAMPLE");
+    }
+
+    action meta_id {
+        ParsePolicy::handle_token_end(*this, "ID");
+    }
+    
+    action meta_number {
+        ParsePolicy::handle_token_end(*this, "Number");
+    }
+    
+    action meta_type {
+        ParsePolicy::handle_token_end(*this, "Type");
+    }
+    
+    action meta_description {
+        ParsePolicy::handle_token_end(*this, "Description");
+    }
+    
+    action meta_genomes {
+        ParsePolicy::handle_token_end(*this, "Genomes");
+    }
+    
+    action meta_mixture {
+        ParsePolicy::handle_token_end(*this, "Mixture");
+    }
+
+    action meta_typeid_meta {
+        ParsePolicy::handle_meta_typeid(*this, "META");
+    }
+
+    action meta_values {
+        ParsePolicy::handle_token_end(*this, "Values");
+    }
+    
+    action meta_original {
+        ParsePolicy::handle_token_end(*this, "Original");
+    }
+    
+    action meta_father {
+        ParsePolicy::handle_token_end(*this, "Father");
+    }
+    
+    action meta_mother {
+        ParsePolicy::handle_token_end(*this, "Mother");
+    }
+
+    action meta_typeid_generic {
+        ParsePolicy::handle_meta_typeid(*this);
+    }
+    
+    action meta_key_generic {
+        ParsePolicy::handle_token_end(*this);
+    }
+    
+    action meta_entry_end {
+        try {
+          ParsePolicy::handle_meta_line(*this);
+        } catch (Error *error) {
+          ErrorPolicy::handle_error(*this, error);
+        }
+    }
+
+    action sample_name_end {
+        ParsePolicy::handle_sample_name(*this);
+    }
+    
+    action header_end {
+        ParsePolicy::handle_header_line(*this);
+    }
+
+    ########### Correct body actions ##########
+
+    action record_field_end {
+        ParsePolicy::handle_column_end(*this, n_columns);
+    }
+    
+    action record_end {
+        try {
+            // Handle all columns and build record
+            ParsePolicy::handle_body_line(*this);
+
+            if (record != nullptr) {
+                auto duplicated_errors = previous_records.check_duplicates(*record);
+                for(auto &error_ptr : duplicated_errors) {
+                    ErrorPolicy::handle_error(*this, error_ptr.release());
+                }
+            }
+
+            try {
+                // Check warnings (non-blocking errors but potential mistakes anyway, only makes sense if the last record parsed was correct)
+                if (record != nullptr) {
+                    OptionalPolicy::optional_check_body_entry(*this, *record);
+                }
+            } catch (Error *warn) {
+                ErrorPolicy::handle_warning(*this, warn);
+            }
+        } catch (Error *error) {
+            ErrorPolicy::handle_error(*this, error);
+        }
+    }
+
+
+    ########## Incorrect metadata and header actions ##########
+
+    # ALT metadata
+    action meta_alt_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_alt_id_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines,
+            "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    # assembly metadata
+    action meta_assembly_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    # contig metadata
+    action meta_contig_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    # FILTER metadata
+    action meta_filter_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    # FORMAT metadata
+    action meta_format_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_format_type_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Type is not a Integer, Float, Character or String"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    # INFO metadata
+    action meta_info_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_info_type_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not Integer, Float, Flag, Character or String"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    # PEDIGREE metadata
+    action meta_pedigree_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_pedigree_original_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Original is not valid"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_pedigree_parents_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Father or Mother is not valid"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_pedigree_names_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata sequence of Name_N is not valid"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    # pedigreeDB metadata
+    action meta_pedigreedb_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    # META metadata
+    action meta_meta_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_meta_number_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Number is not a dot"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_meta_type_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Type is not String"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_meta_values_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Values is not a square-bracket delimited list of values"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    # SAMPLE metadata
+    action meta_sample_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_sample_genomes_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_sample_mixture_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    # Metadata generic errors (do not apply to a specific type)
+    action meta_id_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    action meta_desc_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
+        fhold; fgoto meta_section_skip;
+    }
+
+    action meta_url_err {
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
+        fhold; fgoto meta_section_skip;
+    }
+    
+    # Header errors
+    action header_prefix_err {
+        ErrorPolicy::handle_error(*this, new HeaderSectionError{n_lines,
+            "The header line does not start with the mandatory columns: CHROM, POS, ID, REF, ALT, QUAL, FILTER and INFO"});
+        
+        // If an error occurs in the header, meta_section_end won't be triggered and the meta and header optional validations must be run here
+        try {
+          OptionalPolicy::optional_check_meta_section(*this);
+        } catch (Error *warn) {
+          ErrorPolicy::handle_warning(*this, warn);
+        }
+        
+        fhold; fgoto body_section_skip;
+    }
+    
+    ########## Incorrect records actions ##########
+
+    # Chromosome
+    action chrom_error {
+        ErrorPolicy::handle_error(*this, new ChromosomeBodyError{n_lines});
+        fhold; fgoto body_section_skip;
+    }
+
+    # Position
+    action pos_error {
+        ErrorPolicy::handle_error(*this, new PositionBodyError{n_lines});
+        fhold; fgoto body_section_skip;
+    }
+
+    # ID
+    action id_error {
+        ErrorPolicy::handle_error(*this, new IdBodyError{n_lines});
+        fhold; fgoto body_section_skip;
+    }
+
+    # Reference allele
+    action ref_error {
+        ErrorPolicy::handle_error(*this, new ReferenceAlleleBodyError{n_lines});
+        fhold; fgoto body_section_skip;
+    }
+
+    # Alternate alleles
+    action alt_error {
+        ErrorPolicy::handle_error(*this, new AlternateAllelesBodyError{n_lines});
+        fhold; fgoto body_section_skip;
+    }
+
+    # Quality
+    action qual_error {
+        ErrorPolicy::handle_error(*this, new QualityBodyError{n_lines});
+        fhold; fgoto body_section_skip;
+    }
+
+    # Filter
+    action filter_error {
+        ErrorPolicy::handle_error(*this, new FilterBodyError{n_lines});
+        fhold; fgoto body_section_skip;
+    }
+
+    # Info
+    action info_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
+        fhold; fgoto body_section_skip;
+    }
+
+    action info_key_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_value_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_AA_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AA value is not a single dot or a string of bases",
+                "AA"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_AC_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AC value is not a comma-separated list of numbers",
+                "AC"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_AF_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AF value is not a comma-separated list of numbers",
+                "AF"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_AN_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info AN value is not an integer number",
+                "AN"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_BQ_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info BQ value is not a number",
+                "BQ"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_CIGAR_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info CIGAR value is not an alphanumeric string compliant with the SAM specification",
+                "CIGAR"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_DB_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info DB is not a flag (with 1/0/no value)",
+                "DB"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_DP_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info DP value is not an integer number",
+                "DP"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_END_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info END value is not an integer number",
+                "END"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_H2_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info H2 is not a flag (with 1/0/no value)",
+                "H2"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_H3_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info H3 is not a flag (with 1/0/no value)",
+                "H3"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_MQ_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info MQ value is not a number",
+                "MQ"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_MQ0_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info MQ0 value is not an integer number",
+                "MQ0"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_NS_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info NS value is not an integer number",
+                "NS"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_SB_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info SB value is not a number",
+                "SB"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_SOMATIC_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info SOMATIC is not a flag (with 1/0/no value)",
+                "SOMATIC"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_VALIDATED_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info VALIDATED is not a flag (with 1/0/no value)",
+                "VALIDATED"});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action info_1000G_error {
+        ErrorPolicy::handle_error(*this, new InfoBodyError{
+                n_lines,
+                "Info 1000G is not a flag (with 1/0/no value)",
+                "1000G"});
+        fhold; fgoto body_section_skip;
+    }
+
+    # Samples
+    action sample_error {
+        std::ostringstream message_stream;
+        message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
+        ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
+        fhold; fgoto body_section_skip;
+    }
+    
+    action genotype_error {
+        std::ostringstream message_stream;
+        message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
+        ErrorPolicy::handle_error(*this, new SamplesFieldBodyError{n_lines, message_stream.str(), "GT"});
+        fhold; fgoto body_section_skip;
+    }
+
+    #################################################
+    #               Machine definition              #
+    #################################################
+
+    
+    NL = ("\n" | "\r\n") >line_break;
+    CS = "\t" >tab_break;
+
+    # Integer and floating-point numbers
+    any_number      = ("-" | "+")? (digit)+ ("." (digit)+)? (("e"|"E") ("+"|"-")? (digit)+)? |
+                      ("-" | "+")? "Inf" |
+                      "NaN" ;
+    int_number      = ("-" | "+")? (digit)+ ;
+    nat_number      = (digit)+ ;
+    # Bases are case-insensitive
+    bases           = ("A" | "C" | "G" | "T" | "N" | "a" | "c" | "t" | "g" | "n" )+ ;
+    # Identifiers may contain some symbols, but not only those 
+    # TODO Could it accept more symbols? Comma won't be, for sure
+    identifier      = ( (alnum | "." | "_" | "-" )+ - (punct)+ ) >token_begin @token_middle %token_end;
+    # ALT ID (can be used from meta entries or in the ALT column)
+    alt_id          = ( alnum | (punct - ("," | "<" | ">")) )+ - (punct)+ ;
+
+    # URL inspired in http://stackoverflow.com/questions/8784903/failed-to-convert-url-parser-regular-expression-to-ragel
+    scheme    = (alpha (any - [:/?#] - NL)+ ) ;
+    authority = (alpha (any - [/?#] - NL)* ) | ( (digit{1,3}) ("." digit{1,3}){3} ) ;
+    path      = (any - [?#] - NL)* ;
+    query     = (any - [#] - NL)* ;
+    fragment  = (any - NL)* ; 
+    url       = (scheme "://" authority path ("?" query)? ("#" fragment)?) >token_begin @token_middle %token_end ;
+
+    record_empty_field = "." >token_begin @token_middle %token_end ;
+
+    record_id_value = (print - (space | ";"))+ >token_begin @token_middle %token_end ;
+
+    ## A basic ALT can be something like AGT (biallelic)
+    record_alt_snv  = bases ;
+    
+    ## Indel alternates can be represented by standardized prefixes or an asterisk
+    record_alt_indel= "<DEL>" | "<INS>" | "<DUP>" | "<INV>" | "<CNV>" | "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">" | "*";
+
+    ## Other alternates can be any identifier surrounded by < > symbols
+    record_alt_other= ("<" alt_id ">") - ("<DEL>" | "<INS>" | "<DUP>" | "<INV>" | "<CNV>" | "<DUP:TANDEM>" | "<DEL:ME:" (alnum)+ ">" | "<INS:ME:" (alnum)+ ">");
+
+    record_fil_value= ((alnum | punct - ";")+ - (punct)+) >token_begin @token_middle %token_end ;
+
+    cigar_string     = ([0-9]+[MIDNSHPX])+ ;
+    info_cigar      = cigar_string ("," cigar_string)* ;
+
+    sample_allele   = (digit)+ | "." ;
+    genotype       = (sample_allele (("/" | "|") sample_allele)*) ;
+    sample_value    = (alnum | (punct - ":"))+ | "." ;
+    sample_values   = sample_value (":" sample_value)* ;
+}%%
