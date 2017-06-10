@@ -225,7 +225,7 @@ namespace ebi
             
             bool found = false;
             for (iter current = range.first; current != range.second; ++current) {
-                auto key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
+                auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
                 if (key_values["ID"] == field.first) {
                     found = true;
                     try {
@@ -243,7 +243,7 @@ namespace ebi
                     break;
                 }
             }
-
+            
             if (!found) {
                 std::vector<std::string> values;
                 util::string_split(field.second, ",", values);
@@ -255,6 +255,31 @@ namespace ebi
                     for (auto & value : values)
                         check_predefined_type("INFO", field.first, value, info_v43);
                     check_predefined_number("INFO", field.first, values.size(), info_v43);
+                }
+            }
+
+            // strict validation for tags
+            if (field.first == "AA") {
+                static boost::regex aa_regex("((?![,;=])[[:print:]])+");
+                if (!boost::regex_match(field.second, aa_regex)) {
+                    throw new InfoBodyError{line, "INFO AA value is not a single dot or a string of bases", field.first};
+                }
+            } else if (field.first == "AF") {
+                std::vector<std::string> values;
+                util::string_split(field.second, ",", values);
+                for (auto & value : values) {
+                    if (std::stold(value) < 0 || std::stold(value) > 1) {
+                        throw new InfoBodyError{line, "INFO AF value does not lie in the interval [0,1]", field.first};
+                    }
+                }
+            } else if (field.first == "CIGAR") {
+                std::vector<std::string> values;
+                util::string_split(field.second, ",", values);
+                static boost::regex cigar_string("([0-9]+[MIDNSHPX])+");
+                for (auto & value : values) {
+                    if (!boost::regex_match(value, cigar_string)) {
+                        throw new InfoBodyError{line, "INFO CIGAR value is not an alphanumeric string compliant with the SAM specification", field.first};
+                    }
                 }
             }
         }
@@ -296,23 +321,24 @@ namespace ebi
         if (value == ".")
             return;
         auto iterator = tags.find(id_field);
-        if (iterator != tags.end() && iterator->second.first != ".") {
+        if (iterator != tags.end()) {
             std::string key_type;
+            std::string message;
             try {
                 if (iterator->second.first == "Integer") {
                     std::stoi(value);
-                    if (std::fmod(std::stof(value), 1) != 0) {
+                    if (std::fmod(std::stof(value), 1) != 0 || std::stoi(value) < 0) {
                         key_type = "Incorrect_type";
                     } else {
                         key_type = "Integer";
                     }
-                } else if (iterator->second.first == "Float") {
+                } else if (iterator->second.first == "Float" || iterator->second.first == ".") {
                     try {
                         std::stof(value);
                     } catch (std::out_of_range) {
                         std::stold(value);
                     }
-                    key_type = "Float";
+                    key_type = iterator->second.first;
                 } else if (iterator->second.first == "Flag") {
                     if (value.size() > 1) {
                         key_type = "Incorrect_type";
@@ -324,6 +350,7 @@ namespace ebi
                         else {
                             key_type = "Flag";
                         }
+                        message = " (with 1/0/no value)";
                     }
                 } else if (iterator->second.first == "String") {
                     key_type = "String";
@@ -332,9 +359,10 @@ namespace ebi
                 key_type = "Incorrect_type";
             }
             if (key_type != iterator->second.first) {
-                std::string message = tag_field + " " + id_field + " value is not " + iterator->second.first;
+                key_type = (iterator->second.first == "." ? "a number" : iterator->second.first);
+                message = tag_field + " " + id_field + " value is not " + key_type + message;
                 if (tag_field == "INFO") {
-                    throw new InfoBodyError{line, message};
+                    throw new InfoBodyError{line, message, id_field};
                 } else {
                     throw new FormatBodyError{line, message};
                 }
@@ -362,7 +390,7 @@ namespace ebi
             if (expected != value) {
                 std::string message = tag_field + " " + id_field + " contains " + std::to_string(value) + " values, expected " + std::to_string(expected);
                 if (tag_field == "INFO") {
-                    throw new InfoBodyError{line, message};
+                    throw new InfoBodyError{line, message, id_field};
                 } else {
                     throw new FormatBodyError{line, message};
                 }
