@@ -218,14 +218,16 @@ namespace ebi
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
         std::pair<iter, iter> range = source->meta_entries.equal_range("INFO");
         
-        // Check that all INFO fields are listed in the meta section, 
-        // and they match the Number and Type specified in there
+        // Check that INFO fields listed in the meta section
+        // match the Number and Type specified in there
         for (auto & field : info) {
             if (field.first == ".") { continue; } // No need to check missing data
             
+            bool found = false;
             for (iter current = range.first; current != range.second; ++current) {
-                auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
+                auto key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
                 if (key_values["ID"] == field.first) {
+                    found = true;
                     try {
                         std::vector<std::string> values;
                         util::string_split(field.second, ",", values);
@@ -239,6 +241,20 @@ namespace ebi
                     }
                     
                     break;
+                }
+            }
+
+            if (!found) {
+                std::vector<std::string> values;
+                util::string_split(field.second, ",", values);
+                if (source->version == Version::v41 || source->version == Version::v42) {
+                    for (auto & value : values)
+                        check_predefined_type("INFO", field.first, value, info_v41_v42);
+                    check_predefined_number("INFO", field.first, values.size(), info_v41_v42);
+                } else {
+                    for (auto & value : values)
+                        check_predefined_type("INFO", field.first, value, info_v43);
+                    check_predefined_number("INFO", field.first, values.size(), info_v43);
                 }
             }
         }
@@ -269,6 +285,86 @@ namespace ebi
                 counter[form]++;
                 if (counter[form] >= 2) {
                     throw new FormatBodyError{line, "FORMAT must not have duplicate fields"};
+                }
+            }
+        }
+    }
+
+    void Record::check_predefined_type(std::string tag_field, std::string const & id_field, std::string value,
+                                       std::map<std::string, std::pair<std::string, std::string>> const & tags) const
+    {
+        if (value == ".")
+            return;
+        auto iterator = tags.find(id_field);
+        if (iterator != tags.end() && iterator->second.first != ".") {
+            std::string key_type;
+            try {
+                if (iterator->second.first == "Integer") {
+                    std::stoi(value);
+                    if (std::fmod(std::stof(value), 1) != 0) {
+                        key_type = "Incorrect_type";
+                    } else {
+                        key_type = "Integer";
+                    }
+                } else if (iterator->second.first == "Float") {
+                    try {
+                        std::stof(value);
+                    } catch (std::out_of_range) {
+                        std::stold(value);
+                    }
+                    key_type = "Float";
+                } else if (iterator->second.first == "Flag") {
+                    if (value.size() > 1) {
+                        key_type = "Incorrect_type";
+                    } else if (value.size() == 1) {
+                        int numeric_value = std::stoi(value);
+                        if (numeric_value != 0 && numeric_value != 1) {
+                            key_type = "Incorrect_type";
+                        }
+                        else {
+                            key_type = "Flag";
+                        }
+                    }
+                } else if (iterator->second.first == "String") {
+                    key_type = "String";
+                }
+            } catch (...) {
+                key_type = "Incorrect_type";
+            }
+            if (key_type != iterator->second.first) {
+                std::string message = tag_field + " " + id_field + " value is not " + iterator->second.first;
+                if (tag_field == "INFO") {
+                    throw new InfoBodyError{line, message};
+                } else {
+                    throw new FormatBodyError{line, message};
+                }
+            }
+        }
+    }
+
+    void Record::check_predefined_number(std::string tag_field, std::string const & id_field, long value,
+                                         std::map<std::string, std::pair<std::string, std::string>> const & tags) const
+    {
+        auto iterator = tags.find(id_field);
+        if (iterator != tags.end() && iterator->second.second != "." && iterator->second.second != "0") {
+            long expected;
+            if (iterator->second.second == "A") {
+                expected = alternate_alleles.size();
+            } else if (iterator->second.second == "R") {
+                expected = alternate_alleles.size() + 1;
+            } else if (iterator->second.second == "G") {
+                size_t ploidy = source->ploidy.get_ploidy(chromosome);
+                expected = boost::math::binomial_coefficient<float>(alternate_alleles.size() + ploidy, ploidy);
+            }
+            else {
+                expected = std::stoi(iterator->second.second);
+            }
+            if (expected != value) {
+                std::string message = tag_field + " " + id_field + " contains " + std::to_string(value) + " values, expected " + std::to_string(expected);
+                if (tag_field == "INFO") {
+                    throw new InfoBodyError{line, message};
+                } else {
+                    throw new FormatBodyError{line, message};
                 }
             }
         }
