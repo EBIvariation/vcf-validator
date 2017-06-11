@@ -357,22 +357,20 @@ namespace ebi
         void check_format_no_duplicates() const;
 
         /**
-         * Checks that predefined tag data type is consistent with the specification
+         * Checks that predefined tags are consistent with the specification
          *
          * @throw InfoBodyError
          * @throw FormatBodyError
          */
-        void check_predefined_type(std::string tag_field, std::string const & id_field, std::string value,
-                                   std::map<std::string, std::pair<std::string, std::string>> const & tags) const;
- 
+        void check_predefined_tag(std::string tag_field, std::string const & field, std::vector<std::string> const & values,
+                                  std::map<std::string, std::pair<std::string, std::string>> const & tags) const;
+
         /**
-         * Checks that predefined tag data cardinality is consistent with the specification
+         * Strict validation of predefined INFO tags
          *
          * @throw InfoBodyError
-         * @throw FormatBodyError
          */
-        void check_predefined_number(std::string tag_field, std::string const & id_field, long value,
-                                     std::map<std::string, std::pair<std::string, std::string>> const & tags) const;
+        void strict_validation_info_predefined_tags(std::pair<std::string, std::string> const & field) const;
 
        /**
          * Checks that the samples in the record:
@@ -440,23 +438,32 @@ namespace ebi
         void check_sample_alleles_range(std::string const & allele, long ploidy) const;
 
         /**
-         * Checks that every field in a sample matches the Number specification in the FORMAT meta
+         * Checks that every field in a sample matches the Number specification in the meta
+         * Or if it is not present in the meta and is a predefined tag, check that it matches the SAM specification
          * 
          * @throw std::invalid_argument
+         * @throw InfoBodyError
+         * @throw FormatBodyError
          */
         void check_field_cardinality(std::string const & field,
                                      std::vector<std::string> const & values,
                                      std::string const & number, 
-                                     size_t ploidy) const;
+                                     std::string const & tag_field,
+                                     bool status) const;
         
         /**
          * Checks that every field in a column matches the Type specification in the meta
-         * 
+         * Or if it is not present in the meta and is a predefined tag, check that it matches the SAM specification
+         *
          * @throw std::invalid_argument
+         * @throw InfoBodyError
+         * @throw FormatBodyError
          */
         void check_field_type(std::string const & field,
                               std::vector<std::string> const & values,
-                              std::string const & type) const;
+                              std::string const & type,
+                              std::string const & tag_field,
+                              bool status) const;
     };
 
     /**

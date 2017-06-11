@@ -242,7 +242,10 @@ namespace ebi
     {
         auto iterator = tags.find(value["ID"]);
         if (iterator != tags.end()) {
+            // Determine the required value of the key based on whether we are checking for Type or Number
             std::string key_value = (key_field == "Type" ? iterator->second.first : iterator->second.second);
+            // If the required value is a "." (dot), do nothing
+            // Or if the required value does not match the value provided in the vcf file, throw an error
             if (key_value != "." && key_value != value[key_field]) {
                 std::string message = tag_field + " " + value["ID"] + " metadata " + key_field + " is not " + key_value;
                 throw new MetaSectionError{entry.line, message};
