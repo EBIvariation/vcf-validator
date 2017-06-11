@@ -595,13 +595,6 @@ namespace ebi
                     }
                 } else if (type == "String") {
                     // ...do nothing, it is guaranteed it will be a string
-                } else if (!status && type == ".") {
-                    try {
-                        std::stold(value);
-                    } catch (...) {
-                        message = "INFO " + field + " value is not a number";
-                        throw new Error;
-                    }
                 }
             } catch (...) {
                 if (status) {

@@ -82,7 +82,7 @@ namespace ebi
             { "MQ", { ".", "1" } },
             { "MQ0", { "Integer", "1" } },
             { "NS", { "Integer", "1" } },
-            { "SB", { ".", "." } },
+            // TODO : SB metadata Type and Number is .
             { "SOMATIC", { "Flag", "0" } },
             { "VALIDATED", { "Flag", "0" } },
             { "1000G", { "Flag", "0" } }
@@ -106,7 +106,7 @@ namespace ebi
             { "MQ", { ".", "1" } },
             { "MQ0", { "Integer", "1" } },
             { "NS", { "Integer", "1" } },
-            { "SB", { ".", "." } },
+            // TODO : SB metadata Type and Number is .
             { "SOMATIC", { "Flag", "0"} },
             { "VALIDATED", { "Flag", "0" } },
             { "1000G", { "Flag", "0" } }
