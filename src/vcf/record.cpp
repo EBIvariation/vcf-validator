@@ -253,7 +253,7 @@ namespace ebi
                 }
             }
 
-            strict_validation_info_predefined_tags(field);
+            strict_validation_info_predefined_tags(field.first, field.second);
        }
     }
     
@@ -297,28 +297,28 @@ namespace ebi
         }
     }
 
-    void Record::strict_validation_info_predefined_tags(std::pair<std::string, std::string> const & field) const
+    void Record::strict_validation_info_predefined_tags(std::string const & field_key, std::string const & field_value) const
     {
-        if (field.first == "AA") {
+        if (field_key == "AA") {
             static boost::regex aa_regex("((?![,;=])[[:print:]])+");
-            if (!boost::regex_match(field.second, aa_regex)) {
-                throw new InfoBodyError{line, "INFO AA value is not a single dot or a string of bases", field.first};
+            if (!boost::regex_match(field_value, aa_regex)) {
+                throw new InfoBodyError{line, "INFO AA value is not a single dot or a string of bases", field_key};
             }
-        } else if (field.first == "AF") {
+        } else if (field_key == "AF") {
             std::vector<std::string> values;
-            util::string_split(field.second, ",", values);
+            util::string_split(field_value, ",", values);
             for (auto & value : values) {
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
-                    throw new InfoBodyError{line, "INFO AF value does not lie in the interval [0,1]", field.first};
+                    throw new InfoBodyError{line, "INFO AF value does not lie in the interval [0,1]", field_key};
                 }
             }
-        } else if (field.first == "CIGAR") {
+        } else if (field_key == "CIGAR") {
             std::vector<std::string> values;
-            util::string_split(field.second, ",", values);
+            util::string_split(field_value, ",", values);
             static boost::regex cigar_string("([0-9]+[MIDNSHPX])+");
             for (auto & value : values) {
                 if (!boost::regex_match(value, cigar_string)) {
-                    throw new InfoBodyError{line, "INFO CIGAR value is not an alphanumeric string compliant with the SAM specification", field.first};
+                    throw new InfoBodyError{line, "INFO CIGAR value is not an alphanumeric string compliant with the SAM specification", field_key};
                 }
             }
         }

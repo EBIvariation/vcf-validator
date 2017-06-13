@@ -370,7 +370,7 @@ namespace ebi
          *
          * @throw InfoBodyError
          */
-        void strict_validation_info_predefined_tags(std::pair<std::string, std::string> const & field) const;
+        void strict_validation_info_predefined_tags(std::string const & field_key, std::string const & field_value) const;
 
        /**
          * Checks that the samples in the record:
@@ -439,7 +439,7 @@ namespace ebi
 
         /**
          * Checks that every field in a sample matches the Number specification in the meta
-         * Or if it is not present in the meta and is a predefined tag, check that it matches the SAM specification
+         * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
          * 
          * @throw std::invalid_argument
          * @throw InfoBodyError
@@ -453,7 +453,7 @@ namespace ebi
         
         /**
          * Checks that every field in a column matches the Type specification in the meta
-         * Or if it is not present in the meta and is a predefined tag, check that it matches the SAM specification
+         * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
          *
          * @throw std::invalid_argument
          * @throw InfoBodyError
