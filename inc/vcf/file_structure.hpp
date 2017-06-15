@@ -359,10 +359,9 @@ namespace ebi
         /**
          * Checks that predefined tags are consistent with the specification
          *
-         * @throw InfoBodyError
-         * @throw FormatBodyError
+         * @throw std::invalid_argument
          */
-        void check_predefined_tag(std::string tag_field, std::string const & field, std::vector<std::string> const & values,
+        void check_predefined_tag(std::string const & field, std::vector<std::string> const & values,
                                   std::map<std::string, std::pair<std::string, std::string>> const & tags) const;
 
         /**
@@ -442,28 +441,29 @@ namespace ebi
          * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
          * 
          * @throw std::invalid_argument
-         * @throw InfoBodyError
-         * @throw FormatBodyError
          */
         void check_field_cardinality(std::string const & field,
                                      std::vector<std::string> const & values,
-                                     std::string const & number, 
-                                     std::string const & tag_field,
-                                     bool status) const;
+                                     std::string const & number,
+                                     long & expected) const;
         
         /**
          * Checks that every field in a column matches the Type specification in the meta
          * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
          *
          * @throw std::invalid_argument
-         * @throw InfoBodyError
-         * @throw FormatBodyError
          */
         void check_field_type(std::string const & field,
                               std::vector<std::string> const & values,
                               std::string const & type,
-                              std::string const & tag_field,
-                              bool status) const;
+                              std::string & message) const;
+
+        /**
+         * Checks that predefined tags with Type Integer have non-negative values
+         *
+         * @throw std::invalid_argument
+         */
+        void check_field_integer_range(std::string const & field, std::vector<std::string> const & value) const;
     };
 
     /**
@@ -480,6 +480,11 @@ namespace ebi
      * @return bool: whether the number was valid or not
      */
     bool is_valid_cardinality(const std::string &number, size_t alternate_allele_number, size_t ploidy, long &cardinality);
+
+    /**
+     * Checks that the values match either their type specified in the meta or the VCF specification for predefined tags not in meta
+     */
+    void check_value_type(const std::string &type, const std::string &value, std::string &message);
 
     std::ostream &operator<<(std::ostream &os, const Record &record);
 

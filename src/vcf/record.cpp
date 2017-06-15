@@ -232,8 +232,10 @@ namespace ebi
                         std::vector<std::string> values;
                         util::string_split(field.second, ",", values);
 
-                        check_field_cardinality(field.second, values, key_values["Number"], "INFO", true);
-                        check_field_type(field.second, values, key_values["Type"], "INFO", true);
+                        long expected;
+                        check_field_cardinality(field.second, values, key_values["Number"], expected);
+                        std::string message;
+                        check_field_type(field.second, values, key_values["Type"], message);
                     } catch (std::shared_ptr<Error> ex) {
                         std::string message = "Info " + key_values["ID"] + "=" + ex->message;
                         throw new InfoBodyError{line, message, key_values["ID"]};
@@ -246,10 +248,14 @@ namespace ebi
             if (!found_in_meta) {
                 std::vector<std::string> values;
                 util::string_split(field.second, ",", values);
-                if (source->version == Version::v41 || source->version == Version::v42) {
-                    check_predefined_tag("INFO", field.first, values, info_v41_v42);
-                } else {
-                    check_predefined_tag("INFO", field.first, values, info_v43);
+                try {
+                    if (source->version == Version::v41 || source->version == Version::v42) {
+                        check_predefined_tag(field.first, values, info_v41_v42);
+                    } else {
+                        check_predefined_tag(field.first, values, info_v43);
+                    }
+                } catch (std::shared_ptr<Error> ex) {
+                    throw new InfoBodyError{line, "INFO " + ex->message, field.first};
                 }
             }
 
@@ -287,13 +293,26 @@ namespace ebi
         }
     }
 
-    void Record::check_predefined_tag(std::string tag_field, std::string const & field, std::vector<std::string> const & values,
+    void Record::check_predefined_tag(std::string const & field, std::vector<std::string> const & values,
                                       std::map<std::string, std::pair<std::string, std::string>> const & tags) const
     {
         auto iterator = tags.find(field);
         if (iterator != tags.end()) {
-            check_field_type(field, values, iterator->second.first, tag_field, false);
-            check_field_cardinality(field, values, iterator->second.second, tag_field, false);
+            std::string message;
+            long expected;
+            try {
+                check_field_type(field, values, iterator->second.first, message);
+            } catch (std::shared_ptr<Error> ex) {
+                raise(std::make_shared<Error>(line, field + " value is not " + iterator->second.first + ". " + message));
+            }
+            if (iterator->second.first == "Integer") {
+                check_field_integer_range(field, values);
+            }
+            try {
+                check_field_cardinality(field, values, iterator->second.second, expected);
+            } catch (std::shared_ptr<Error> ex) {
+                raise(std::make_shared<Error>(line, field + " contains " + std::to_string(values.size()) + " values, expected " + std::to_string(expected)));
+            }
         }
     }
 
@@ -326,7 +345,7 @@ namespace ebi
 
     void Record::check_samples() const
     {
-        check_samples_count();        
+        check_samples_count();
         
         if (samples.size() == 0) {
             return; // Nothing to check if no samples are listed in the file
@@ -415,8 +434,10 @@ namespace ebi
                 std::vector<std::string> values;
                 util::string_split(subfield, ",", values);
 
-                check_field_cardinality(subfield, values, key_values["Number"], "SAMPLE", true);
-                check_field_type(subfield, values, key_values["Type"], "SAMPLE", true);
+                long expected;
+                check_field_cardinality(subfield, values, key_values["Number"], expected);
+                std::string message;
+                check_field_type(subfield, values, key_values["Type"], message);
             } catch (std::shared_ptr<Error> ex) {
                 long cardinality;
                 bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), ploidy, cardinality);
@@ -496,10 +517,8 @@ namespace ebi
     void Record::check_field_cardinality(std::string const & field,
                                          std::vector<std::string> const & values,
                                          std::string const & number,
-                                         std::string const & tag_field,
-                                         bool status) const
+                                         long & expected) const
     {
-        long expected;
         size_t ploidy = source->ploidy.get_ploidy(chromosome);
         if(not is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected)) {
             raise(std::make_shared<Error>(line, field + " meta specification Number=" + number + " is not one of [A, R, G, ., <non-negative number>]"));
@@ -518,97 +537,70 @@ namespace ebi
         }
 
         if (!number_matches) {
-            if (status) {
-                raise(std::make_shared<Error>(line, field + " does not match the meta specification Number=" + number +
-                        ", expected " + std::to_string(expected) + " values"));
-            } else {
-                std::string message = tag_field + " " + field + " contains " + std::to_string(values.size()) + " values, expected " + std::to_string(expected);
-                if (tag_field == "INFO") {
-                    throw new InfoBodyError{line, message, field};
-                } else {
-                    throw new FormatBodyError{line, message};
-                }
+            raise(std::make_shared<Error>(line, field + " does not match the meta specification Number=" + number +
+                    ", contains " + std::to_string(values.size()) + ", expected " + std::to_string(expected) + " values"));
+        }
+    }
+
+    void check_value_type(const std::string &type, const std::string &value, std::string &message) {
+        message = "";
+        if (type == "Integer") {
+            // ...try to cast to int
+            std::stoi(value);
+            // ...and also check it's not a float
+            if (std::fmod(std::stof(value), 1) != 0) {
+                message = "Float provided instead of Integer";
+                throw std::invalid_argument(message);
             }
+        } else if (type == "Float") {
+            // ...try to cast to float
+            try {
+                std::stof(value);
+            } catch (std::out_of_range) {
+                // It maybe a subnormal number
+                std::stold(value);
+            }
+        } else if (type == "Flag") {
+            int numeric_value = std::stoi(value);
+            if (numeric_value != 0 && numeric_value != 1) {
+                message = "A flag value must be 0 and 1";
+                throw std::invalid_argument(message);
+            }
+            // If no flag is provided then there is nothing to check
+        } else if (type == "Character") {
+            // ...check the length is 1
+            if (value.size() > 1) {
+                message = "There can be only one character";
+                throw std::invalid_argument(message);
+            }
+        } else if (type == "String") {
+            // ...do nothing, it is guaranteed it will be a string
         }
     }
 
     void Record::check_field_type(std::string const & field,
                                   std::vector<std::string> const & values,
                                   std::string const & type,
-                                  std::string const & tag_field,
-                                  bool status) const
+                                  std::string & message) const
     {
         // To check the field type...
         for (auto & value : values) {
             if (value == ".") { continue; }
             
-            std::string message;
             try {
-                if (type == "Integer") {
-                    // ...try to cast to int
-                    std::stoi(value);
-                    // ...and also check it's not a float
-                    if (std::fmod(std::stof(value), 1) != 0) {
-                        if (status) {
-                            raise(std::make_shared<Error>(line, "Float provided instead of Integer"));
-                        } else {
-                            message = tag_field + " " + field + " value is not Integer, Float provided";
-                            throw new Error;
-                        }
-                    }
-                    else if (!status && std::stoi(value) < 0) {
-                        message = tag_field + " " + field + " value is not a natural number, negatives not allowed"; 
-                        throw new Error;
-                    }
-                } else if (type == "Float") {
-                    // ...try to cast to float
-                    try {
-                        std::stof(value);
-                    } catch (std::out_of_range) {
-                        // It maybe a subnormal number
-                        std::stold(value);
-                    }
-                } else if (type == "Flag") {
-                    if (value.size() > 1) {
-                        if (status) {
-                            raise(std::make_shared<Error>(line, "There can be only 0 or 1 value"));
-                        } else {
-                            message = tag_field + " " + field + " value is not Flag, it can only have 0 or 1 value";
-                            throw new Error;
-                        }
-                    } else if (value.size() == 1) {
-                        int numeric_value = std::stoi(value);
-                        if (numeric_value != 0 && numeric_value != 1) {
-                            if (status) {
-                                raise(std::make_shared<Error>(line, "A flag must be 0 or 1"));
-                            } else {
-                                message = tag_field + " " + field + " value is not Flag, it must be (1/0/no value)";
-                                throw new Error;
-                            }
-                        }
-                    }
-                    // If no flag is provided then there is nothing to check
-                } else if (type == "Character") {
-                    // ...check the length is 1
-                    if (value.size() > 1) {
-                        raise(std::make_shared<Error>(line, "There can be only one character"));
-                    }
-                } else if (type == "String") {
-                    // ...do nothing, it is guaranteed it will be a string
-                }
-            } catch (...) {
-                if (status) {
-                    raise(std::make_shared<Error>(line, field + " does not match the meta specification Type=" + type));
-                } else {
-                    if (message.size() == 0) {
-                        message = tag_field + " " + field + " value is not " + type;
-                    }
-                    if (tag_field == "INFO") {
-                        throw new InfoBodyError{line, message, field};
-                    } else {
-                        throw new FormatBodyError{line, message};
-                    }
-                }
+                check_value_type(type, value, message);
+            } catch (std::exception &typeError) {
+                raise(std::make_shared<Error>(line, field + " does not match the meta specification Type=" + type + ". " + message));
+            }
+        }
+    }
+
+    void Record::check_field_integer_range(std::string const & field, std::vector<std::string> const & values) const {
+        for (auto & value : values) {
+            if (value == ".") { continue; }
+
+            if (std::stoi(value) < 0) {
+                raise(std::make_shared<Error>(line, field + " value is negative. It must be a non-negative integer"));
             }
         }
     }
