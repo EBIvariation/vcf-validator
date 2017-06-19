@@ -231,12 +231,11 @@ namespace ebi
                 if (key_values["ID"] == field.first) {
                     found_in_meta = true;
                     try {
-                        long expected;
-                        check_field_cardinality(field.second, values, key_values["Number"], expected);
-                        std::string message;
-                        check_field_type(field.second, values, key_values["Type"], message);
+                        check_field_cardinality(field.second, values, key_values["Number"]);
+                        check_field_type(values, key_values["Type"]);
                     } catch (std::shared_ptr<Error> ex) {
-                        std::string message = "Info " + key_values["ID"] + "=" + ex->message;
+                        std::string message = "INFO " + key_values["ID"] + "=" + field.second
+                                + " does not match the meta specification" + ex->message;
                         throw new InfoBodyError{line, message, key_values["ID"]};
                     }
                     
@@ -247,9 +246,9 @@ namespace ebi
             if (!found_in_meta) {
                 try {
                     if (source->version == Version::v41 || source->version == Version::v42) {
-                        check_predefined_tag(field.first, values, info_v41_v42);
+                        check_predefined_tag(field.first, field.second, values, info_v41_v42);
                     } else {
-                        check_predefined_tag(field.first, values, info_v43);
+                        check_predefined_tag(field.first, field.second, values, info_v43);
                     }
                 } catch (std::shared_ptr<Error> ex) {
                     throw new InfoBodyError{line, "INFO " + ex->message, field.first};
@@ -290,25 +289,20 @@ namespace ebi
         }
     }
 
-    void Record::check_predefined_tag(std::string const & field, std::vector<std::string> const & values,
+    void Record::check_predefined_tag(std::string const & field_key, std::string const & field_value, std::vector<std::string> const & values,
                                       std::map<std::string, std::pair<std::string, std::string>> const & tags) const
     {
-        auto iterator = tags.find(field);
+        auto iterator = tags.find(field_key);
         if (iterator != tags.end()) {
-            std::string message;
-            long expected;
             try {
-                check_field_type(field, values, iterator->second.first, message);
+                check_field_cardinality(field_key, values, iterator->second.second);
+                check_field_type(values, iterator->second.first);
             } catch (std::shared_ptr<Error> ex) {
-                raise(std::make_shared<Error>(line, field + " value is not " + iterator->second.first + ". " + message));
+                raise(std::make_shared<Error>(line, field_key + "=" + field_value
+                                + " is not compliant with the VCF specification" + ex->message));
             }
             if (iterator->second.first == "Integer") {
-                check_field_integer_range(field, values);
-            }
-            try {
-                check_field_cardinality(field, values, iterator->second.second, expected);
-            } catch (std::shared_ptr<Error> ex) {
-                raise(std::make_shared<Error>(line, field + " contains " + std::to_string(values.size()) + " values, expected " + std::to_string(expected)));
+                check_field_integer_range(field_key, values);
             }
         }
     }
@@ -426,21 +420,19 @@ namespace ebi
             
             auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
 
-            size_t ploidy = source->ploidy.get_ploidy(chromosome);
-            try {
-                std::vector<std::string> values;
-                util::string_split(subfield, ",", values);
+            std::vector<std::string> values;
+            util::string_split(subfield, ",", values);
 
-                long expected;
-                check_field_cardinality(subfield, values, key_values["Number"], expected);
-                std::string message;
-                check_field_type(subfield, values, key_values["Type"], message);
+            try {
+                check_field_cardinality(subfield, values, key_values["Number"]);
+                check_field_type(values, key_values["Type"]);
             } catch (std::shared_ptr<Error> ex) {
                 long cardinality;
-                bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), ploidy, cardinality);
+                bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), cardinality);
                 long number = valid ? cardinality : -1;
-                std::string message = "Sample #" + std::to_string(i + 1) + ", "
-                        + key_values["ID"] + "=" + ex->message;
+ 
+                std::string message = "Sample #" + std::to_string(i + 1) + ", " + key_values["ID"] + "=" + subfield
+                        + " does not match the meta specification" + ex->message;
                 throw new SamplesFieldBodyError{line, message, key_values["ID"], number};
             }
         }
@@ -480,9 +472,10 @@ namespace ebi
         }
     }
 
-    bool Record::is_valid_cardinality(std::string const & number, size_t alternate_allele_number, size_t ploidy, long & cardinality) const
+    bool Record::is_valid_cardinality(std::string const & number, size_t alternate_allele_number, long & cardinality) const
     {
         bool valid = true;
+        size_t ploidy = source->ploidy.get_ploidy(chromosome);
 
         if (number == "A") {
             // ...the number of alternate alleles
@@ -513,11 +506,10 @@ namespace ebi
 
     void Record::check_field_cardinality(std::string const & field,
                                          std::vector<std::string> const & values,
-                                         std::string const & number,
-                                         long & expected) const
+                                         std::string const & number) const
     {
-        size_t ploidy = source->ploidy.get_ploidy(chromosome);
-        if(not is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected)) {
+        long expected;
+        if(not is_valid_cardinality(number, alternate_alleles.size(), expected)) {
             raise(std::make_shared<Error>(line, field + " meta specification Number=" + number + " is not one of [A, R, G, ., <non-negative number>]"));
         }
 
@@ -527,26 +519,23 @@ namespace ebi
             number_matches = (values.size() == static_cast<size_t>(expected));
         } else if (expected == 0) {
             // There will be one empty value that needs to be specifically checked
-            number_matches = values.size() == 0 ||
-                    (values.size() == 1 && (values[0] == "0" || values[0] == "1"));
+            number_matches = values.size() == 0 || values.size() == 1;
         } else {
             // if number=".", then `expected` was set to -1, and it should always match, letting `number_matches` as true
         }
 
         if (!number_matches) {
-            raise(std::make_shared<Error>(line, field + " does not match the meta specification Number=" + number +
-                    ", contains " + std::to_string(values.size()) + ", expected " + std::to_string(expected) + " values"));
+            raise(std::make_shared<Error>(line, " Number=" + number + ". Contains " + std::to_string(values.size()) + " values, expected " + std::to_string(expected)));
         }
     }
 
     void Record::check_value_type(std::string const & type, std::string const & value, std::string & message) const {
-        message = "";
         if (type == "Integer") {
             // ...try to cast to int
             std::stoi(value);
             // ...and also check it's not a float
             if (std::fmod(std::stof(value), 1) != 0) {
-                message = "Float provided instead of Integer";
+                message = value + " (float) provided instead of Integer";
                 throw std::invalid_argument(message);
             }
         } else if (type == "Float") {
@@ -575,19 +564,18 @@ namespace ebi
         }
     }
 
-    void Record::check_field_type(std::string const & field,
-                                  std::vector<std::string> const & values,
-                                  std::string const & type,
-                                  std::string & message) const
+    void Record::check_field_type(std::vector<std::string> const & values,
+                                  std::string const & type) const
     {
         // To check the field type...
         for (auto & value : values) {
             if (value == ".") { continue; }
-            
+
+            std::string message;
             try {
                 check_value_type(type, value, message);
             } catch (std::exception &typeError) {
-                raise(std::make_shared<Error>(line, field + " does not match the meta specification Type=" + type + ". " + message));
+                raise(std::make_shared<Error>(line, " Type=" + type + ". " + message));
             }
         }
     }

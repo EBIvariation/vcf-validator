@@ -361,7 +361,7 @@ namespace ebi
          *
          * @throw std::invalid_argument
          */
-        void check_predefined_tag(std::string const & field, std::vector<std::string> const & values,
+        void check_predefined_tag(std::string const & field_key, std::string const & field_value, std::vector<std::string> const & values,
                                   std::map<std::string, std::pair<std::string, std::string>> const & tags) const;
 
         /**
@@ -449,7 +449,7 @@ namespace ebi
          * @param cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number. throws std::invalid_argument if it's not a number or std::out_of_range if it's out of range.
          * @return bool: whether the number was valid or not
          */
-        bool is_valid_cardinality(std::string const & number, size_t alternate_allele_number, size_t ploidy, long & cardinality) const;
+        bool is_valid_cardinality(std::string const & number, size_t alternate_allele_number, long & cardinality) const;
 
         /**
          * Checks that the values match either their type specified in the meta or the VCF specification for predefined tags not in meta
@@ -465,8 +465,7 @@ namespace ebi
          */
         void check_field_cardinality(std::string const & field,
                                      std::vector<std::string> const & values,
-                                     std::string const & number,
-                                     long & expected) const;
+                                     std::string const & number) const;
         
         /**
          * Checks that every field in a column matches the Type specification in the meta
@@ -474,10 +473,8 @@ namespace ebi
          *
          * @throw std::invalid_argument
          */
-        void check_field_type(std::string const & field,
-                              std::vector<std::string> const & values,
-                              std::string const & type,
-                              std::string & message) const;
+        void check_field_type(std::vector<std::string> const & values,
+                              std::string const & type) const;
 
         /**
          * Checks that predefined tags with Type Integer have non-negative values
