@@ -217,21 +217,20 @@ namespace ebi
     {
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
         std::pair<iter, iter> range = source->meta_entries.equal_range("INFO");
-        
+        std::vector<std::string> values;
+
         // Check that INFO fields listed in the meta section
         // match the Number and Type specified in there
         for (auto & field : info) {
             if (field.first == ".") { continue; } // No need to check missing data
-            
+
+            util::string_split(field.second, ",", values);
             bool found_in_meta = false;
             for (iter current = range.first; current != range.second; ++current) {
                 auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
                 if (key_values["ID"] == field.first) {
                     found_in_meta = true;
                     try {
-                        std::vector<std::string> values;
-                        util::string_split(field.second, ",", values);
-
                         long expected;
                         check_field_cardinality(field.second, values, key_values["Number"], expected);
                         std::string message;
@@ -246,8 +245,6 @@ namespace ebi
             }
             
             if (!found_in_meta) {
-                std::vector<std::string> values;
-                util::string_split(field.second, ",", values);
                 try {
                     if (source->version == Version::v41 || source->version == Version::v42) {
                         check_predefined_tag(field.first, values, info_v41_v42);
@@ -483,7 +480,7 @@ namespace ebi
         }
     }
 
-    bool is_valid_cardinality(const std::string &number, size_t alternate_allele_number, size_t ploidy, long &cardinality)
+    bool Record::is_valid_cardinality(std::string const & number, size_t alternate_allele_number, size_t ploidy, long & cardinality) const
     {
         bool valid = true;
 
@@ -542,7 +539,7 @@ namespace ebi
         }
     }
 
-    void check_value_type(const std::string &type, const std::string &value, std::string &message) {
+    void Record::check_value_type(std::string const & type, std::string const & value, std::string & message) const {
         message = "";
         if (type == "Integer") {
             // ...try to cast to int

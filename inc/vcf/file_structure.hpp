@@ -437,6 +437,27 @@ namespace ebi
         void check_sample_alleles_range(std::string const & allele, long ploidy) const;
 
         /**
+         * returns the expected number of elements, given a string code
+         * @param number one of ["A", "R", "G", ".", number], where
+         *  - "A" is the amount of alleles,
+         *  - "R" the amount of reference (1) plus alleles (A)
+         *  - "G" is `ploidy`-combination with repetition: ((R + ploidy -1) choose ploidy)
+         *  (e.g. with 1 reference, 2 alternate alleles (3 total alleles) and ploidy 2, it's 3 + 2 -1 choose 2, which is 6: 00, 01, 11, 02, 12, 22)
+         *  - "." means unknown number of elements
+         *  - number is a positive number [0, +inf)
+         * @param ploidy is the number of sets of chromosomes, so a given position in a chromosome needs `ploidy` bases to be completely specified
+         * @param cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number. throws std::invalid_argument if it's not a number or std::out_of_range if it's out of range.
+         * @return bool: whether the number was valid or not
+         */
+        bool is_valid_cardinality(std::string const & number, size_t alternate_allele_number, size_t ploidy, long & cardinality) const;
+
+        /**
+         * Checks that the values match either their type specified in the meta or the VCF specification for predefined tags not in meta
+         */
+        void check_value_type(std::string const & type, std::string const & value, std::string & message) const;
+
+
+        /**
          * Checks that every field in a sample matches the Number specification in the meta
          * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
          * 
@@ -465,26 +486,6 @@ namespace ebi
          */
         void check_field_integer_range(std::string const & field, std::vector<std::string> const & value) const;
     };
-
-    /**
-     * returns the expected number of elements, given a string code
-     * @param number one of ["A", "R", "G", ".", number], where
-     *  - "A" is the amount of alleles,
-     *  - "R" the amount of reference (1) plus alleles (A)
-     *  - "G" is `ploidy`-combination with repetition: ((R + ploidy -1) choose ploidy)
-     *  (e.g. with 1 reference, 2 alternate alleles (3 total alleles) and ploidy 2, it's 3 + 2 -1 choose 2, which is 6: 00, 01, 11, 02, 12, 22)
-     *  - "." means unknown number of elements
-     *  - number is a positive number [0, +inf)
-     * @param ploidy is the number of sets of chromosomes, so a given position in a chromosome needs `ploidy` bases to be completely specified
-     * @param cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number. throws std::invalid_argument if it's not a number or std::out_of_range if it's out of range.
-     * @return bool: whether the number was valid or not
-     */
-    bool is_valid_cardinality(const std::string &number, size_t alternate_allele_number, size_t ploidy, long &cardinality);
-
-    /**
-     * Checks that the values match either their type specified in the meta or the VCF specification for predefined tags not in meta
-     */
-    void check_value_type(const std::string &type, const std::string &value, std::string &message);
 
     std::ostream &operator<<(std::ostream &os, const Record &record);
 
