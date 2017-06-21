@@ -235,7 +235,7 @@ namespace ebi
                         check_field_type(values, key_values["Type"]);
                     } catch (std::shared_ptr<Error> ex) {
                         std::string message = "INFO " + key_values["ID"] + "=" + field.second
-                                + " does not match the meta specification" + ex->message;
+                                + " does not match the meta" + ex->message;
                         throw new InfoBodyError{line, message, key_values["ID"]};
                     }
                     
@@ -299,7 +299,7 @@ namespace ebi
                 check_field_type(values, iterator->second.first);
             } catch (std::shared_ptr<Error> ex) {
                 raise(std::make_shared<Error>(line, field_key + "=" + field_value
-                                + " is not compliant with the VCF specification" + ex->message));
+                                + " does not match the" + ex->message));
             }
             if (iterator->second.first == "Integer") {
                 check_field_integer_range(field_key, values);
@@ -312,14 +312,14 @@ namespace ebi
         if (field_key == "AA") {
             static boost::regex aa_regex("((?![,;=])[[:print:]])+");
             if (!boost::regex_match(field_value, aa_regex)) {
-                throw new InfoBodyError{line, "INFO AA value is not a single dot or a string of bases", field_key};
+                throw new InfoBodyError{line, "INFO AA=" + field_value + " value is not a single dot or a string of bases", field_key};
             }
         } else if (field_key == "AF") {
             std::vector<std::string> values;
             util::string_split(field_value, ",", values);
             for (auto & value : values) {
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
-                    throw new InfoBodyError{line, "INFO AF value does not lie in the interval [0,1]", field_key};
+                    throw new InfoBodyError{line, "INFO AF=" + field_value + " value does not lie in the interval [0,1]", field_key};
                 }
             }
         } else if (field_key == "CIGAR") {
@@ -328,7 +328,7 @@ namespace ebi
             static boost::regex cigar_string("([0-9]+[MIDNSHPX])+");
             for (auto & value : values) {
                 if (!boost::regex_match(value, cigar_string)) {
-                    throw new InfoBodyError{line, "INFO CIGAR value is not an alphanumeric string compliant with the SAM specification", field_key};
+                    throw new InfoBodyError{line, "INFO CIGAR=" + field_value + " value is not an alphanumeric string compliant with the SAM specification", field_key};
                 }
             }
         }
@@ -432,7 +432,7 @@ namespace ebi
                 long number = valid ? cardinality : -1;
  
                 std::string message = "Sample #" + std::to_string(i + 1) + ", " + key_values["ID"] + "=" + subfield
-                        + " does not match the meta specification" + ex->message;
+                        + " does not match the meta" + ex->message;
                 throw new SamplesFieldBodyError{line, message, key_values["ID"], number};
             }
         }
@@ -525,7 +525,7 @@ namespace ebi
         }
 
         if (!number_matches) {
-            raise(std::make_shared<Error>(line, " Number=" + number + ". Contains " + std::to_string(values.size()) + " values, expected " + std::to_string(expected)));
+            raise(std::make_shared<Error>(line, " specification Number=" + number + ". Contains " + std::to_string(values.size()) + " values, expected " + std::to_string(expected)));
         }
     }
 
@@ -575,7 +575,7 @@ namespace ebi
             try {
                 check_value_type(type, value, message);
             } catch (std::exception &typeError) {
-                raise(std::make_shared<Error>(line, " Type=" + type + ". " + message));
+                raise(std::make_shared<Error>(line, " specification Type=" + type + ". " + message));
             }
         }
     }
