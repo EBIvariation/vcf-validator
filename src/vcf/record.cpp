@@ -217,31 +217,46 @@ namespace ebi
     {
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
         std::pair<iter, iter> range = source->meta_entries.equal_range("INFO");
-        
-        // Check that all INFO fields are listed in the meta section, 
-        // and they match the Number and Type specified in there
+        std::vector<std::string> values;
+
+        // Check that INFO fields listed in the meta section
+        // match the Number and Type specified in there
         for (auto & field : info) {
             if (field.first == ".") { continue; } // No need to check missing data
-            
+
+            util::string_split(field.second, ",", values);
+            bool found_in_meta = false;
             for (iter current = range.first; current != range.second; ++current) {
                 auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
                 if (key_values["ID"] == field.first) {
+                    found_in_meta = true;
                     try {
-                        std::vector<std::string> values;
-                        util::string_split(field.second, ",", values);
-
-                        size_t ploidy = source->ploidy.get_ploidy(chromosome);
-                        check_field_cardinality(field.second, values, key_values["Number"], ploidy);
-                        check_field_type(field.second, values, key_values["Type"]);
+                        check_field_cardinality(field.second, values, key_values["Number"]);
+                        check_field_type(values, key_values["Type"]);
                     } catch (std::shared_ptr<Error> ex) {
-                        std::string message = "Info " + key_values["ID"] + "=" + ex->message;
+                        std::string message = "INFO " + key_values["ID"] + "=" + field.second
+                                + " does not match the meta" + ex->message;
                         throw new InfoBodyError{line, message, key_values["ID"]};
                     }
                     
                     break;
                 }
             }
-        }
+            
+            if (!found_in_meta) {
+                try {
+                    if (source->version == Version::v41 || source->version == Version::v42) {
+                        check_predefined_tag(field.first, field.second, values, info_v41_v42);
+                    } else {
+                        check_predefined_tag(field.first, field.second, values, info_v43);
+                    }
+                } catch (std::shared_ptr<Error> ex) {
+                    throw new InfoBodyError{line, "INFO " + ex->message, field.first};
+                }
+            }
+
+            strict_validation_info_predefined_tags(field.first, field.second);
+       }
     }
     
     void Record::check_format() const
@@ -274,9 +289,54 @@ namespace ebi
         }
     }
 
+    void Record::check_predefined_tag(std::string const & field_key, std::string const & field_value, std::vector<std::string> const & values,
+                                      std::map<std::string, std::pair<std::string, std::string>> const & tags) const
+    {
+        auto iterator = tags.find(field_key);
+        if (iterator != tags.end()) {
+            try {
+                check_field_cardinality(field_key, values, iterator->second.second);
+                check_field_type(values, iterator->second.first);
+            } catch (std::shared_ptr<Error> ex) {
+                raise(std::make_shared<Error>(line, field_key + "=" + field_value
+                                + " does not match the" + ex->message));
+            }
+            if (iterator->second.first == "Integer") {
+                check_field_integer_range(field_key, values);
+            }
+        }
+    }
+
+    void Record::strict_validation_info_predefined_tags(std::string const & field_key, std::string const & field_value) const
+    {
+        if (field_key == "AA") {
+            static boost::regex aa_regex("((?![,;=])[[:print:]])+");
+            if (!boost::regex_match(field_value, aa_regex)) {
+                throw new InfoBodyError{line, "INFO AA=" + field_value + " value is not a single dot or a string of bases", field_key};
+            }
+        } else if (field_key == "AF") {
+            std::vector<std::string> values;
+            util::string_split(field_value, ",", values);
+            for (auto & value : values) {
+                if (std::stold(value) < 0 || std::stold(value) > 1) {
+                    throw new InfoBodyError{line, "INFO AF=" + field_value + " value does not lie in the interval [0,1]", field_key};
+                }
+            }
+        } else if (field_key == "CIGAR") {
+            std::vector<std::string> values;
+            util::string_split(field_value, ",", values);
+            static boost::regex cigar_string("([0-9]+[MIDNSHPX])+");
+            for (auto & value : values) {
+                if (!boost::regex_match(value, cigar_string)) {
+                    throw new InfoBodyError{line, "INFO CIGAR=" + field_value + " value is not an alphanumeric string compliant with the SAM specification", field_key};
+                }
+            }
+        }
+    }
+
     void Record::check_samples() const
     {
-        check_samples_count();        
+        check_samples_count();
         
         if (samples.size() == 0) {
             return; // Nothing to check if no samples are listed in the file
@@ -360,19 +420,19 @@ namespace ebi
             
             auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
 
-            size_t ploidy = source->ploidy.get_ploidy(chromosome);
-            try {
-                std::vector<std::string> values;
-                util::string_split(subfield, ",", values);
+            std::vector<std::string> values;
+            util::string_split(subfield, ",", values);
 
-                check_field_cardinality(subfield, values, key_values["Number"], ploidy);
-                check_field_type(subfield, values, key_values["Type"]);
+            try {
+                check_field_cardinality(subfield, values, key_values["Number"]);
+                check_field_type(values, key_values["Type"]);
             } catch (std::shared_ptr<Error> ex) {
                 long cardinality;
-                bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), ploidy, cardinality);
+                bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), cardinality);
                 long number = valid ? cardinality : -1;
-                std::string message = "Sample #" + std::to_string(i + 1) + ", "
-                        + key_values["ID"] + "=" + ex->message;
+ 
+                std::string message = "Sample #" + std::to_string(i + 1) + ", " + key_values["ID"] + "=" + subfield
+                        + " does not match the meta" + ex->message;
                 throw new SamplesFieldBodyError{line, message, key_values["ID"], number};
             }
         }
@@ -412,9 +472,10 @@ namespace ebi
         }
     }
 
-    bool is_valid_cardinality(const std::string &number, size_t alternate_allele_number, size_t ploidy, long &cardinality)
+    bool Record::is_valid_cardinality(std::string const & number, size_t alternate_allele_number, long & cardinality) const
     {
         bool valid = true;
+        size_t ploidy = source->ploidy.get_ploidy(chromosome);
 
         if (number == "A") {
             // ...the number of alternate alleles
@@ -445,11 +506,10 @@ namespace ebi
 
     void Record::check_field_cardinality(std::string const & field,
                                          std::vector<std::string> const & values,
-                                         std::string const & number, 
-                                         size_t ploidy) const
+                                         std::string const & number) const
     {
         long expected;
-        if(not is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected)) {
+        if(not is_valid_cardinality(number, alternate_alleles.size(), expected)) {
             raise(std::make_shared<Error>(line, field + " meta specification Number=" + number + " is not one of [A, R, G, ., <non-negative number>]"));
         }
 
@@ -459,62 +519,73 @@ namespace ebi
             number_matches = (values.size() == static_cast<size_t>(expected));
         } else if (expected == 0) {
             // There will be one empty value that needs to be specifically checked
-            number_matches = values.size() == 0 ||
-                    (values.size() == 1 && (values[0] == "0" || values[0] == "1"));
+            number_matches = values.size() == 0 || values.size() == 1;
         } else {
             // if number=".", then `expected` was set to -1, and it should always match, letting `number_matches` as true
         }
 
         if (!number_matches) {
-            raise(std::make_shared<Error>(line, field + " does not match the meta specification Number=" + number +
-                    ", expected " + std::to_string(expected) + " values"));
+            raise(std::make_shared<Error>(line, " specification Number=" + number + " (contains " + std::to_string(values.size()) + " values, expected " + std::to_string(expected) + ")"));
         }
     }
 
-    void Record::check_field_type(std::string const & field,
-                                  std::vector<std::string> const & values,
+    void Record::check_value_type(std::string const & type, std::string const & value, std::string & message) const {
+        if (type == "Integer") {
+            // ...try to cast to int
+            std::stoi(value);
+            // ...and also check it's not a float
+            if (std::fmod(std::stof(value), 1) != 0) {
+                message = " (an integer must not contain decimal digits)";
+                throw std::invalid_argument(message);
+            }
+        } else if (type == "Float") {
+            // ...try to cast to float
+            try {
+                std::stof(value);
+            } catch (std::out_of_range) {
+                // It maybe a subnormal number
+                std::stold(value);
+            }
+        } else if (type == "Flag") {
+            int numeric_value = std::stoi(value);
+            if (numeric_value != 0 && numeric_value != 1) {
+                message = " (a flag value must be \"0, 1 or none\")";
+                throw std::invalid_argument(message);
+            }
+            // If no flag is provided then there is nothing to check
+        } else if (type == "Character") {
+            // ...check the length is 1
+            if (value.size() > 1) {
+                message = " (there can be only one character)";
+                throw std::invalid_argument(message);
+            }
+        } else if (type == "String") {
+            // ...do nothing, it is guaranteed it will be a string
+        }
+    }
+
+    void Record::check_field_type(std::vector<std::string> const & values,
                                   std::string const & type) const
     {
         // To check the field type...
         for (auto & value : values) {
             if (value == ".") { continue; }
-            
+
+            std::string message;
             try {
-                if (type == "Integer") {
-                    // ...try to cast to int
-                    std::stoi(value);
-                    // ...and also check it's not a float
-                    if (std::fmod(std::stof(value), 1) != 0) {
-                        raise(std::make_shared<Error>(line, "Float provided instead of Integer"));
-                    }
-                } else if (type == "Float") {
-                    // ...try to cast to float
-                    try {
-                        std::stof(value);
-                    } catch (std::out_of_range) {
-                        // It maybe a subnormal number
-                        std::stold(value);
-                    }
-                } else if (type == "Flag") {
-                    if (value.size() > 1) {
-                        raise(std::make_shared<Error>(line, "There can be only 0 or 1 value"));
-                    } else if (value.size() == 1) {
-                        int numeric_value = std::stoi(value);
-                        if (numeric_value != 0 && numeric_value != 1) {
-                            raise(std::make_shared<Error>(line, "A flag must be 0 or 1"));
-                        }
-                    }
-                    // If no flag is provided then there is nothing to check
-                } else if (type == "Character") {
-                    // ...check the length is 1
-                    if (value.size() > 1) {
-                        raise(std::make_shared<Error>(line, "There can be only one character"));
-                    }
-                } else if (type == "String") {
-                    // ...do nothing, it is guaranteed it will be a string
-                } 
-            } catch (...) {
-                raise(std::make_shared<Error>(line, field + " does not match the meta specification Type=" + type));
+                check_value_type(type, value, message);
+            } catch (std::exception &typeError) {
+                raise(std::make_shared<Error>(line, " specification Type=" + type + message));
+            }
+        }
+    }
+
+    void Record::check_field_integer_range(std::string const & field, std::vector<std::string> const & values) const {
+        for (auto & value : values) {
+            if (value == ".") { continue; }
+
+            if (std::stoi(value) < 0) {
+                raise(std::make_shared<Error>(line, field + " value must be a non-negative integer number"));
             }
         }
     }

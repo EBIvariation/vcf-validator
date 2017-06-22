@@ -183,13 +183,12 @@ namespace ebi
             throw new MetaSectionError{entry.line, "FORMAT metadata Type is not a Integer, Float, Character or String"};
         }
 
-        auto & id_field = value["ID"];
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
-            check_predefined_tag(id_field, type_field, format_type_v41_v42);
-            check_predefined_tag(id_field, number_field, format_number_v41_v42);
+            check_predefined_tag("FORMAT", "Type", value, format_v41_v42);
+            check_predefined_tag("FORMAT", "Number", value, format_v41_v42);
         } else {
-            check_predefined_tag(id_field, type_field, format_type_v43);
-            check_predefined_tag(id_field, number_field, format_number_v43);
+            check_predefined_tag("FORMAT", "Type", value, format_v43);
+            check_predefined_tag("FORMAT", "Number", value, format_v43);
         }
     }
 
@@ -229,23 +228,28 @@ namespace ebi
             throw new MetaSectionError{entry.line, "INFO metadata Type is not a Integer, Float, Flag, Character or String"};
         }
         
-        auto & id_field = value["ID"];
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
-            check_predefined_tag(id_field, type_field, info_type_v41_v42);
-            check_predefined_tag(id_field, number_field, info_number_v41_v42);
+            check_predefined_tag("INFO", "Type", value, info_v41_v42);
+            check_predefined_tag("INFO", "Number", value, info_v41_v42);
         } else {
-            check_predefined_tag(id_field, type_field, info_type_v43);
-            check_predefined_tag(id_field, number_field, info_number_v43);
+            check_predefined_tag("INFO", "Type", value, info_v43);
+            check_predefined_tag("INFO", "Number", value, info_v43);
         }
     }
     
-    void MetaEntryVisitor::check_predefined_tag(std::string & id_field, std::string & tag_value,
+    void MetaEntryVisitor::check_predefined_tag(std::string const & tag_field, std::string const & key_field,
+                                                std::map<std::string, std::string> & value,
                                                 std::map<std::string, std::pair<std::string, std::string>> const & tags) const
     {
-        auto iterator = tags.find(id_field);
+        auto iterator = tags.find(value["ID"]);
         if (iterator != tags.end()) {
-            if (tag_value != iterator->second.first) {
-                throw new MetaSectionError{entry.line, iterator->second.second};
+            // Determine the required value of the key based on whether we are checking for Type or Number
+            std::string key_value = (key_field == "Type" ? iterator->second.first : iterator->second.second);
+            // If the required value is a "." (dot), do nothing
+            // Or if the required value does not match the value provided in the vcf file, throw an error
+            if (key_value != "." && key_value != value[key_field]) {
+                std::string message = tag_field + " " + value["ID"] + " metadata " + key_field + " is not " + key_value;
+                throw new MetaSectionError{entry.line, message};
             }
         }
     }

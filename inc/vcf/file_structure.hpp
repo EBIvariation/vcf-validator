@@ -67,160 +67,82 @@ namespace ebi
         NO_VARIATION
     };
 
-    const std::map<std::string, std::pair<std::string, std::string>> info_type_v41_v42 = {
-            { "AA", { "String", "INFO AA metadata Type is not String" } },
-            { "AC", { "Integer", "INFO AC metadata Type is not Integer" } },
-            { "AF", { "Float", "INFO AF metadata Type is not Float" } },
-            { "AN", { "Integer", "INFO AN metadata Type is not Integer" } },
-            { "BQ", { "Float", "INFO BQ metadata Type is not Float" } },
-            { "CIGAR", { "String", "INFO CIGAR metadata Type is not String" } },
-            { "DB", { "Flag", "INFO DB metadata Type is not Flag" } },
-            { "DP", { "Integer", "INFO DP metadata Type is not Integer" } },
-            { "END", { "Integer", "INFO END metadata Type is not Integer" } },
-            { "H2", { "Flag", "INFO H2 metadata Type is not Flag" } },
-            { "H3", { "Flag", "INFO H3 metadata Type is not Flag" } },
-            // TODO : MQ metadata Type is .
-            { "MQ0", { "Integer", "INFO MQ0 metadata Type is not Integer" } },
-            { "NS", { "Integer", "INFO NS metadata Type is not Integer" } },
-            // TODO : SB metadata Type is .
-            { "SOMATIC", { "Flag", "INFO SOMATIC metadata Type is not Flag" } },
-            { "VALIDATED", { "Flag", "INFO VALIDATED metadata Type is not Flag" } },
-            { "1000G", { "Flag", "INFO 1000G metadata Type is not Flag" } }
+    const std::map<std::string, std::pair<std::string, std::string>> info_v41_v42 = {
+            { "AA", { "String", "1" } },
+            { "AC", { "Integer", "A" } },
+            { "AF", { "Float", "A" } },
+            { "AN", { "Integer", "1" } },
+            { "BQ", { "Float", "1" } },
+            { "CIGAR", { "String", "A" } },
+            { "DB", { "Flag", "0" } },
+            { "DP", { "Integer", "1" } },
+            { "END", { "Integer", "1" } },
+            { "H2", { "Flag", "0" } },
+            { "H3", { "Flag", "0" } },
+            { "MQ", { ".", "1" } },
+            { "MQ0", { "Integer", "1" } },
+            { "NS", { "Integer", "1" } },
+            // TODO : SB metadata Type and Number is .
+            { "SOMATIC", { "Flag", "0" } },
+            { "VALIDATED", { "Flag", "0" } },
+            { "1000G", { "Flag", "0" } }
     };
 
-    const std::map<std::string, std::pair<std::string, std::string>> info_number_v41_v42 = {
-            { "AA", { "1", "INFO AA metadata Number is not 1" } },
-            { "AC", { "A", "INFO AC metadata Number is not A" } },
-            { "AF", { "A", "INFO AF metadata Number is not A" } },
-            { "AN", { "1", "INFO AN metadata Number is not 1" } },
-            { "BQ", { "1", "INFO BQ metadata Number is not 1" } },
-            { "CIGAR", { "A", "INFO CIGAR metadata Number is not A" } },
-            { "DB", { "0", "INFO DB metadata Number is not 0" } },
-            { "DP", { "1", "INFO DP metadata Number is not 1" } },
-            { "END", { "1", "INFO END metadata Number is not 1" } },
-            { "H2", { "0", "INFO H2 metadata Number is not 0" } },
-            { "H3", { "0", "INFO H3 metadata Number is not 0" } },
-            { "MQ", { "1", "INFO MQ metadata Number is not 1" } },
-            { "MQ0", { "1", "INFO MQ0 metadata Number is not 1" } },
-            { "NS", { "1", "INFO NS metadata Number is not 1" } },
-            // TODO : SB metadata Number is .
-            { "SOMATIC", { "0", "INFO SOMATIC metadata Number is not 0" } },
-            { "VALIDATED", { "0", "INFO VALIDATED metadata Number is not 0" } },
-            { "1000G", { "0", "INFO 1000G metadata Number is not 0" } }
+    const std::map<std::string, std::pair<std::string, std::string>> info_v43 = {
+            { "AA", { "String", "1" } },
+            { "AC", { "Integer", "A" } },
+            { "AD", { "Integer", "R" } },
+            { "ADF", { "Integer", "R" } },
+            { "ADR", { "Integer", "R" } },
+            { "AF", { "Float", "A" } },
+            { "AN", { "Integer", "1" } },
+            { "BQ", { "Float", "1" } },
+            { "CIGAR", { "String", "A" } },
+            { "DB", { "Flag", "0" } },
+            { "DP", { "Integer", "1" } },
+            { "END", { "Integer", "1" } },
+            { "H2", { "Flag", "0" } },
+            { "H3", { "Flag", "0" } },
+            { "MQ", { ".", "1" } },
+            { "MQ0", { "Integer", "1" } },
+            { "NS", { "Integer", "1" } },
+            // TODO : SB metadata Type and Number is .
+            { "SOMATIC", { "Flag", "0"} },
+            { "VALIDATED", { "Flag", "0" } },
+            { "1000G", { "Flag", "0" } }
     };
 
-    const std::map<std::string, std::pair<std::string, std::string>> info_type_v43 = {
-            { "AA", { "String", "INFO AA metadata Type is not String" } },
-            { "AC", { "Integer", "INFO AC metadata Type is not Integer" } },
-            { "AD", { "Integer", "INFO AD metadata Type is not Integer" } },
-            { "ADF", { "Integer", "INFO ADF metadata Type is not Integer" } },
-            { "ADR", { "Integer", "INFO ADR metadata Type is not Integer" } },
-            { "AF", { "Float", "INFO AF metadata Type is not Float" } },
-            { "AN", { "Integer", "INFO AN metadata Type is not Integer" } },
-            { "BQ", { "Float", "INFO BQ metadata Type is not Float" } },
-            { "CIGAR", { "String", "INFO CIGAR metadata Type is not String" } },
-            { "DB", { "Flag", "INFO DB metadata Type is not Flag" } },
-            { "DP", { "Integer", "INFO DP metadata Type is not Integer" } },
-            { "END", { "Integer", "INFO END metadata Type is not Integer" } },
-            { "H2", { "Flag", "INFO H2 metadata Type is not Flag" } },
-            { "H3", { "Flag", "INFO H3 metadata Type is not Flag" } },
-            // TODO : MQ metadata Type is .
-            { "MQ0", { "Integer", "INFO MQ0 metadata Type is not Integer" } },
-            { "NS", { "Integer", "INFO NS metadata Type is not Integer" } },
-            // TODO : SB metadata Type is .
-            { "SOMATIC", { "Flag", "INFO SOMATIC metadata Type is not Flag" } },
-            { "VALIDATED", { "Flag", "INFO VALIDATED metadata Type is not Flag" } },
-            { "1000G", { "Flag", "INFO 1000G metadata Type is not Flag" } }
+    const std::map<std::string, std::pair<std::string, std::string>> format_v41_v42 = {
+            { "DP", { "Integer", "1" } },
+            { "EC", { "Integer", "A" } },
+            { "FT", { "String", "1" } },
+            { "GL", { "Float", "G" } },
+            { "GP", { "Float", "G" } },
+            { "GQ", { "Integer", "1" } },
+            { "GT", { "String", "1" } },
+            { "HQ", { "Integer", "2" } },
+            { "MQ", { "Integer", "1"} },
+            { "PL", { "Integer", "G"} },
+            { "PQ", { "Integer", "1" } },
+            { "PS", { "Integer", "1" } }
     };
 
-    const std::map<std::string, std::pair<std::string, std::string>> info_number_v43 = {
-            { "AA", { "1", "INFO AA metadata Number is not 1" } },
-            { "AC", { "A", "INFO AC metadata Number is not A" } },
-            { "AD", { "R", "INFO AD metadata Number is not R" } },
-            { "ADF", { "R", "INFO ADF metadata Number is not R" } },
-            { "ADR", { "R", "INFO ADR metadata Number is not R" } },
-            { "AF", { "A", "INFO AF metadata Number is not A" } },
-            { "AN", { "1", "INFO AN metadata Number is not 1" } },
-            { "BQ", { "1", "INFO BQ metadata Number is not 1" } },
-            { "CIGAR", { "A", "INFO CIGAR metadata Number is not A" } },
-            { "DB", { "0", "INFO DB metadata Number is not 0" } },
-            { "DP", { "1", "INFO DP metadata Number is not 1" } },
-            { "END", { "1", "INFO END metadata Number is not 1" } },
-            { "H2", { "0", "INFO H2 metadata Number is not 0" } },
-            { "H3", { "0", "INFO H3 metadata Number is not 0" } },
-            { "MQ", { "1", "INFO MQ metadata Number is not 1" } },
-            { "MQ0", { "1", "INFO MQ0 metadata Number is not 1" } },
-            { "NS", { "1", "INFO NS metadata Number is not 1" } },
-            // TODO : SB metadata Number is .
-            { "SOMATIC", { "0", "INFO SOMATIC metadata Number is not 0" } },
-            { "VALIDATED", { "0", "INFO VALIDATED metadata Number is not 0" } },
-            { "1000G", { "0", "INFO 1000G metadata Number is not 0" } }
-    };
-
-    const std::map<std::string, std::pair<std::string, std::string>> format_type_v41_v42 = {
-            { "DP", { "Integer", "FORMAT DP metadata Type is not Integer" } },
-            { "EC", { "Integer", "FORMAT EC metadata Type is not Integer" } },
-            { "FT", { "String", "FORMAT FT metadata Type is not String" } },
-            { "GL", { "Float", "FORMAT GL metadata Type is not Float" } },
-            { "GP", { "Float", "FORMAT GP metadata Type is not Float" } },
-            { "GQ", { "Integer", "FORMAT GQ metadata Type is not Integer" } },
-            { "GT", { "String", "FORMAT GT metadata Type is not String" } },
-            { "HQ", { "Integer", "FORMAT HQ metadata Type is not Integer" } },
-            { "MQ", { "Integer", "FORMAT MQ metadata Type is not Integer" } },
-            { "PL", { "Integer", "FORMAT PL metadata Type is not Integer" } },
-            { "PQ", { "Integer", "FORMAT PQ metadata Type is not Integer" } },
-            { "PS", { "Integer", "FORMAT PS metadata Type is not Integer" } }
-    };
-
-    const std::map<std::string, std::pair<std::string, std::string>> format_number_v41_v42 = {
-            { "DP", { "1", "FORMAT DP metadata Number is not 1" } },
-            { "EC", { "A", "FORMAT EC metadata Number is not A" } },
-            { "FT", { "1", "FORMAT FT metadata Number is not 1" } },
-            { "GL", { "G", "FORMAT GL metadata Number is not G" } },
-            { "GP", { "G", "FORMAT GP metadata Number is not G" } },
-            { "GQ", { "1", "FORMAT GQ metadata Number is not 1" } },
-            { "GT", { "1", "FORMAT GT metadata Number is not 1" } },
-            { "HQ", { "2", "FORMAT HQ metadata Number is not 2" } },
-            { "MQ", { "1", "FORMAT MQ metadata Number is not 1" } },
-            { "PL", { "G", "FORMAT PL metadata Number is not G" } },
-            { "PQ", { "1", "FORMAT PQ metadata Number is not 1" } },
-            { "PS", { "1", "FORMAT PS metadata Number is not 1" } }
-    };
-
-    const std::map<std::string, std::pair<std::string, std::string>> format_type_v43 = {
-            { "AD", { "Integer", "FORMAT AD metadata Type is not Integer" } },
-            { "ADF", { "Integer", "FORMAT ADF metadata Type is not Integer" } },
-            { "ADR", { "Integer", "FORMAT ADR metadata Type is not Integer" } },
-            { "DP", { "Integer", "FORMAT DP metadata Type is not Integer" } },
-            { "EC", { "Integer", "FORMAT EC metadata Type is not Integer" } },
-            { "FT", { "String", "FORMAT FT metadata Type is not String" } },
-            { "GL", { "Float", "FORMAT GL metadata Type is not Float" } },
-            { "GP", { "Float", "FORMAT GP metadata Type is not Float" } },
-            { "GQ", { "Integer", "FORMAT GQ metadata Type is not Integer" } },
-            { "GT", { "String", "FORMAT GT metadata Type is not String" } },
-            { "HQ", { "Integer", "FORMAT HQ metadata Type is not Integer" } },
-            { "MQ", { "Integer", "FORMAT MQ metadata Type is not Integer" } },
-            { "PL", { "Integer", "FORMAT PL metadata Type is not Integer" } },
-            { "PQ", { "Integer", "FORMAT PQ metadata Type is not Integer" } },
-            { "PS", { "Integer", "FORMAT PS metadata Type is not Integer" } }
-    };
-
-    const std::map<std::string, std::pair<std::string, std::string>> format_number_v43 = {
-            { "AD", { "R", "FORMAT AD metadata Number is not R" } },
-            { "ADF", { "R", "FORMAT ADF metadata Number is not R" } },
-            { "ADR", { "R", "FORMAT ADR metadata Number is not R" } },
-            { "DP", { "1", "FORMAT DP metadata Number is not 1" } },
-            { "EC", { "A", "FORMAT EC metadata Number is not A" } },
-            { "FT", { "1", "FORMAT FT metadata Number is not 1" } },
-            { "GL", { "G", "FORMAT GL metadata Number is not G" } },
-            { "GP", { "G", "FORMAT GP metadata Number is not G" } },
-            { "GQ", { "1", "FORMAT GQ metadata Number is not 1" } },
-            { "GT", { "1", "FORMAT GT metadata Number is not 1" } },
-            { "HQ", { "2", "FORMAT HQ metadata Number is not 2" } },
-            { "MQ", { "1", "FORMAT MQ metadata Number is not 1" } },
-            { "PL", { "G", "FORMAT PL metadata Number is not G" } },
-            { "PQ", { "1", "FORMAT PQ metadata Number is not 1" } },
-            { "PS", { "1", "FORMAT PS metadata Number is not 1" } }
+    const std::map<std::string, std::pair<std::string, std::string>> format_v43 = {
+            { "AD", { "Integer", "R" } },
+            { "ADF", { "Integer", "R" } },
+            { "ADR", { "Integer", "R" } },
+            { "DP", { "Integer", "1" } },
+            { "EC", { "Integer", "A" } },
+            { "FT", { "String", "1" } },
+            { "GL", { "Float", "G" } },
+            { "GP", { "Float", "G" } },
+            { "GQ", { "Integer", "1" } },
+            { "GT", { "String", "1" } },
+            { "HQ", { "Integer", "2" } },
+            { "MQ", { "Integer", "1" } },
+            { "PL", { "Integer", "G" } },
+            { "PQ", { "Integer", "1" } },
+            { "PS", { "Integer", "1" } }
     };
 
     struct MetaEntry
@@ -435,6 +357,21 @@ namespace ebi
         void check_format_no_duplicates() const;
 
         /**
+         * Checks that predefined tags are consistent with the specification
+         *
+         * @throw std::invalid_argument
+         */
+        void check_predefined_tag(std::string const & field_key, std::string const & field_value, std::vector<std::string> const & values,
+                                  std::map<std::string, std::pair<std::string, std::string>> const & tags) const;
+
+        /**
+         * Strict validation of predefined INFO tags
+         *
+         * @throw InfoBodyError
+         */
+        void strict_validation_info_predefined_tags(std::string const & field_key, std::string const & field_value) const;
+
+       /**
          * Checks that the samples in the record:
          * - Are the same number as specified in the Source object
          * - Their allele indexes are not greater than the total number of alleles
@@ -500,39 +437,54 @@ namespace ebi
         void check_sample_alleles_range(std::string const & allele, long ploidy) const;
 
         /**
-         * Checks that every field in a sample matches the Number specification in the FORMAT meta
+         * returns the expected number of elements, given a string code
+         * @param number one of ["A", "R", "G", ".", number], where
+         *  - "A" is the amount of alleles,
+         *  - "R" the amount of reference (1) plus alleles (A)
+         *  - "G" is `ploidy`-combination with repetition: ((R + ploidy -1) choose ploidy)
+         *  (e.g. with 1 reference, 2 alternate alleles (3 total alleles) and ploidy 2, it's 3 + 2 -1 choose 2, which is 6: 00, 01, 11, 02, 12, 22)
+         *  - "." means unknown number of elements
+         *  - number is a positive number [0, +inf)
+         * @param ploidy is the number of sets of chromosomes, so a given position in a chromosome needs `ploidy` bases to be completely specified
+         * @param cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number. 
+         * @throw std::invalid_argument if it's not a number
+         * @throw std::out_of_range if it's out of range.
+         * @return bool: whether the number was valid or not
+         */
+        bool is_valid_cardinality(std::string const & number, size_t alternate_allele_number, long & cardinality) const;
+
+        /**
+         * Checks that the values match either their type specified in the meta or the VCF specification for predefined tags not in meta
+         */
+        void check_value_type(std::string const & type, std::string const & value, std::string & message) const;
+
+
+        /**
+         * Checks that every field in a sample matches the Number specification in the meta
+         * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
          * 
          * @throw std::invalid_argument
          */
         void check_field_cardinality(std::string const & field,
                                      std::vector<std::string> const & values,
-                                     std::string const & number, 
-                                     size_t ploidy) const;
+                                     std::string const & number) const;
         
         /**
          * Checks that every field in a column matches the Type specification in the meta
-         * 
+         * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
+         *
          * @throw std::invalid_argument
          */
-        void check_field_type(std::string const & field,
-                              std::vector<std::string> const & values,
+        void check_field_type(std::vector<std::string> const & values,
                               std::string const & type) const;
-    };
 
-    /**
-     * returns the expected number of elements, given a string code
-     * @param number one of ["A", "R", "G", ".", number], where
-     *  - "A" is the amount of alleles,
-     *  - "R" the amount of reference (1) plus alleles (A)
-     *  - "G" is `ploidy`-combination with repetition: ((R + ploidy -1) choose ploidy)
-     *  (e.g. with 1 reference, 2 alternate alleles (3 total alleles) and ploidy 2, it's 3 + 2 -1 choose 2, which is 6: 00, 01, 11, 02, 12, 22)
-     *  - "." means unknown number of elements
-     *  - number is a positive number [0, +inf)
-     * @param ploidy is the number of sets of chromosomes, so a given position in a chromosome needs `ploidy` bases to be completely specified
-     * @param cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number. throws std::invalid_argument if it's not a number or std::out_of_range if it's out of range.
-     * @return bool: whether the number was valid or not
-     */
-    bool is_valid_cardinality(const std::string &number, size_t alternate_allele_number, size_t ploidy, long &cardinality);
+        /**
+         * Checks that predefined tags with Type Integer have non-negative values
+         *
+         * @throw std::invalid_argument
+         */
+        void check_field_integer_range(std::string const & field, std::vector<std::string> const & value) const;
+    };
 
     std::ostream &operator<<(std::ostream &os, const Record &record);
 

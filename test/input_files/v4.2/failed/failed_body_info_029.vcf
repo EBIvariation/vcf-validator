@@ -1,4 +1,5 @@
 ##fileformat=VCFv4.2
-##CauseOfFailure=INFO 1000G value is not a flag
-#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00096	HG00097
-1	100	rs180734498	C	T	100	q10	1000G=2	GT:DS:GL	0|0:0.050:-0.13,-0.58,-3.62	0|1:1.000:-2.45,-0.00,-5.00
+##CauseOfFailure=INFO field does not match Number definition in meta section
+##INFO=<ID=MY,Number=0,Type=Flag,Description="INFO field to test Number=0">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00096
+1	61462	rs56992750	T	A,G	100	PASS	MY=9	GT:DS:AL	0|0:0.050:-0.06,-0.90,-5.00
