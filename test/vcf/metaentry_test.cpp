@@ -1483,6 +1483,174 @@ namespace ebi
                                 source
                             }),
                             vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "IMPRECISE"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Imprecise structural variation"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "NOVEL"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Indicates a novel structural variation"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "SVTYPE"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Type of structural variant"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "SVLEN"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Difference in length between REF and ALT alleles"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CIPOS"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Confidence interval around POS for imprecise variants"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CIEND"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Confidence interval around END for imprecise variants"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "HOMLEN"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Length of base pair identical micro-homology at event breakpoints"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "HOMSEQ"}, {"Number", "."}, {"Type", "String"}, {"Description", "Sequence of base pair identical micro-homology at event breakpoints"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "BKPTID"}, {"Number", "."}, {"Type", "String"}, {"Description", "ID of the assembled alternate allele in the assembly file"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "MEINFO"}, {"Number", "4"}, {"Type", "String"}, {"Description", "Mobile element info of the form NAME,START,END,POLARITY"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "METRANS"}, {"Number", "4"}, {"Type", "String"}, {"Description", "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DGVID"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of this element in Database of Genomic Variation"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DBVARID"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of this element in DBVAR"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DBRIPID"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of this element in DBRIP"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "MATEID"}, {"Number", "."}, {"Type", "String"}, {"Description", "ID of mate breakends"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "PARID"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of partner breakend"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "EVENT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of event associated to breakend"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CILEN"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Confidence interval around the inserted material between breakends"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DP"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Read Depth of segment containing breakend"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DPADJ"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Read Depth of adjacency"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CN"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Copy number of segment containing breakend"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CNADJ"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Copy number of adjacency"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CICN"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Confidence interval around copy number for the segment"} },
+                                source
+                            } ) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CICNADJ"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Confidence interval around copy number for the adjacency"} },
+                                source
+                            } ) );
         }
     }
     
