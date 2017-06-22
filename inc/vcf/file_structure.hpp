@@ -446,7 +446,9 @@ namespace ebi
          *  - "." means unknown number of elements
          *  - number is a positive number [0, +inf)
          * @param ploidy is the number of sets of chromosomes, so a given position in a chromosome needs `ploidy` bases to be completely specified
-         * @param cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number. throws std::invalid_argument if it's not a number or std::out_of_range if it's out of range.
+         * @param cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number. 
+         * @throw std::invalid_argument if it's not a number
+         * @throw std::out_of_range if it's out of range.
          * @return bool: whether the number was valid or not
          */
         bool is_valid_cardinality(std::string const & number, size_t alternate_allele_number, long & cardinality) const;

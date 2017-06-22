@@ -525,7 +525,7 @@ namespace ebi
         }
 
         if (!number_matches) {
-            raise(std::make_shared<Error>(line, " specification Number=" + number + ". Contains " + std::to_string(values.size()) + " values, expected " + std::to_string(expected)));
+            raise(std::make_shared<Error>(line, " specification Number=" + number + " (contains " + std::to_string(values.size()) + " values, expected " + std::to_string(expected) + ")"));
         }
     }
 
@@ -535,7 +535,7 @@ namespace ebi
             std::stoi(value);
             // ...and also check it's not a float
             if (std::fmod(std::stof(value), 1) != 0) {
-                message = value + " (float) provided instead of Integer";
+                message = " (an integer must not contain decimal digits)";
                 throw std::invalid_argument(message);
             }
         } else if (type == "Float") {
@@ -549,14 +549,14 @@ namespace ebi
         } else if (type == "Flag") {
             int numeric_value = std::stoi(value);
             if (numeric_value != 0 && numeric_value != 1) {
-                message = "A flag value must be 0 and 1";
+                message = " (a flag value must be \"0, 1 or none\")";
                 throw std::invalid_argument(message);
             }
             // If no flag is provided then there is nothing to check
         } else if (type == "Character") {
             // ...check the length is 1
             if (value.size() > 1) {
-                message = "There can be only one character";
+                message = " (there can be only one character)";
                 throw std::invalid_argument(message);
             }
         } else if (type == "String") {
@@ -575,7 +575,7 @@ namespace ebi
             try {
                 check_value_type(type, value, message);
             } catch (std::exception &typeError) {
-                raise(std::make_shared<Error>(line, " specification Type=" + type + ". " + message));
+                raise(std::make_shared<Error>(line, " specification Type=" + type + message));
             }
         }
     }
@@ -585,7 +585,7 @@ namespace ebi
             if (value == ".") { continue; }
 
             if (std::stoi(value) < 0) {
-                raise(std::make_shared<Error>(line, field + " value is negative. It must be a non-negative integer"));
+                raise(std::make_shared<Error>(line, field + " value must be a non-negative integer number"));
             }
         }
     }

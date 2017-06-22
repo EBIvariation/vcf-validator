@@ -237,7 +237,8 @@ namespace ebi
         }
     }
     
-    void MetaEntryVisitor::check_predefined_tag(std::string tag_field, std::string key_field, std::map<std::string, std::string> & value,
+    void MetaEntryVisitor::check_predefined_tag(std::string const & tag_field, std::string const & key_field,
+                                                std::map<std::string, std::string> & value,
                                                 std::map<std::string, std::pair<std::string, std::string>> const & tags) const
     {
         auto iterator = tags.find(value["ID"]);

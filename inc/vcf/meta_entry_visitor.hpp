@@ -45,7 +45,8 @@ namespace ebi
             void check_filter(std::map<std::string, std::string> & value) const;
             void check_format(std::map<std::string, std::string> & value) const;
             void check_info(std::map<std::string, std::string> & value) const;
-            void check_predefined_tag(std::string tag_field, std::string key_field, std::map<std::string, std::string> & value,
+            void check_predefined_tag(std::string const & tag_field, std::string const & key_field,
+                                      std::map<std::string, std::string> & value,
                                       std::map<std::string, std::pair<std::string, std::string>> const & tags) const;
             void check_sample(std::map<std::string, std::string> & value) const;
         };
