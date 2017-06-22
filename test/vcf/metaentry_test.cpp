@@ -752,6 +752,136 @@ namespace ebi
                                 source
                             }),
                             vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CN"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Copy number genotype for imprecise events"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CN"}, {"Number", "5"}, {"Type", "Integer"}, {"Description", "Copy number genotype for imprecise events"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CN"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Copy number genotype for imprecise events"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNQ"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Copy number genotype quality for imprecise events"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNQ"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Copy number genotype quality for imprecise events"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNQ"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Copy number genotype quality for imprecise events"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNL"}, {"Number", "."}, {"Type", "Float"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                source
+                            } ) );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNL"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "NQ"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Phred style probability score that the variant is novel"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "NQ"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Phred style probability score that the variant is novel"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "NQ"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Phred style probability score that the variant is novel"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "HAP"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Unique haplotype identifier"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "HAP"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Unique haplotype identifier"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "HAP"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Unique haplotype identifier"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "AHAP"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Unique identifier of ancestral haplotype"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "AHAP"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Unique identifier of ancestral haplotype"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "AHAP"}, {"Number", "1"}, {"Type", "Character"}, {"Description", "Unique identifier of ancestral haplotype"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
         }
     }
     
