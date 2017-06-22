@@ -85,7 +85,31 @@ namespace ebi
             // TODO : SB metadata Type and Number is .
             { "SOMATIC", { "Flag", "0" } },
             { "VALIDATED", { "Flag", "0" } },
-            { "1000G", { "Flag", "0" } }
+            { "1000G", { "Flag", "0" } },
+            // tags specific to SVs are listed below
+            { "IMPRECISE", { "Flag", "0" } },
+            { "NOVEL", { "Flag", "0" } },
+            { "SVTYPE", { "String", "1" } },
+            { "SVLEN", { "Integer", "." } },
+            { "CIPOS", { "Integer", "2" } },
+            { "CIEND", { "Integer", "2" } },
+            { "HOMLEN", { "Integer", "." } },
+            { "HOMSEQ", { "String", "." } },
+            { "BKPTID", { "String", "." } },
+            { "MEINFO", { "String", "4" } },
+            { "METRANS", { "String", "4" } },
+            { "DGVID", { "String", "1" } },
+            { "DBVARID", { "String", "1" } },
+            { "DBRIPID", { "String", "1" } },
+            { "MATEID", { "String", "." } },
+            { "PARID", { "String", "1" } },
+            { "EVENT", { "String", "1" } },
+            { "CILEN", { "Integer", "2" } },
+            { "DPADJ", { "Integer", "." } },
+            { "CN", { "Integer", "1" } },
+            { "CNADJ", { "Integer", "." } },
+            { "CICN", { "Integer", "2" } },
+            { "CICNADJ", { "Integer", "." } }
     };
 
     const std::map<std::string, std::pair<std::string, std::string>> info_v43 = {
@@ -109,7 +133,31 @@ namespace ebi
             // TODO : SB metadata Type and Number is .
             { "SOMATIC", { "Flag", "0"} },
             { "VALIDATED", { "Flag", "0" } },
-            { "1000G", { "Flag", "0" } }
+            { "1000G", { "Flag", "0" } },
+            // tags specific to SVs are listed below
+            { "IMPRECISE", { "Flag", "0" } },
+            { "NOVEL", { "Flag", "0" } },
+            { "SVTYPE", { "String", "1" } },
+            { "SVLEN", { "Integer", "." } },
+            { "CIPOS", { "Integer", "2" } },
+            { "CIEND", { "Integer", "2" } },
+            { "HOMLEN", { "Integer", "." } },
+            { "HOMSEQ", { "String", "." } },
+            { "BKPTID", { "String", "." } },
+            { "MEINFO", { "String", "4" } },
+            { "METRANS", { "String", "4" } },
+            { "DGVID", { "String", "1" } },
+            { "DBVARID", { "String", "1" } },
+            { "DBRIPID", { "String", "1" } },
+            { "MATEID", { "String", "." } },
+            { "PARID", { "String", "1" } },
+            { "EVENT", { "String", "1" } },
+            { "CILEN", { "Integer", "2" } },
+            { "DPADJ", { "Integer", "." } },
+            { "CN", { "Integer", "1" } },
+            { "CNADJ", { "Integer", "." } },
+            { "CICN", { "Integer", "2" } },
+            { "CICNADJ", { "Integer", "." } }
     };
 
     const std::map<std::string, std::pair<std::string, std::string>> format_v41_v42 = {
@@ -124,8 +172,15 @@ namespace ebi
             { "MQ", { "Integer", "1"} },
             { "PL", { "Integer", "G"} },
             { "PQ", { "Integer", "1" } },
-            { "PS", { "Integer", "1" } }
-    };
+            { "PS", { "Integer", "1" } },
+            // tags specific to SVs are listed below
+            { "CN", { "Integer", "1" } },
+            { "CNQ", { "Float", "1" } },
+            { "CNL", { "Float", "." } },
+            { "NQ", { "Integer", "1" } },
+            { "HAP", { "Integer", "1" } },
+            { "AHAP", { "Integer", "1" } }
+   };
 
     const std::map<std::string, std::pair<std::string, std::string>> format_v43 = {
             { "AD", { "Integer", "R" } },
@@ -142,7 +197,15 @@ namespace ebi
             { "MQ", { "Integer", "1" } },
             { "PL", { "Integer", "G" } },
             { "PQ", { "Integer", "1" } },
-            { "PS", { "Integer", "1" } }
+            { "PS", { "Integer", "1" } },
+            // tags specific to SVs are listed below
+            { "CN", { "Integer", "1" } },
+            { "CNQ", { "Float", "1" } },
+            { "CNL", { "Float", "G" } },
+            { "CNP", { "Float", "G" } },
+            { "NQ", { "Integer", "1" } },
+            { "HAP", { "Integer", "1" } },
+            { "AHAP", { "Integer", "1" } }
     };
 
     struct MetaEntry
