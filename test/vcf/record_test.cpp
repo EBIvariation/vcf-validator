@@ -345,7 +345,7 @@ namespace ebi
                                 { "PASS" }, 
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "DP", "GL" }, 
-                                { "12:0.5" },
+                                { "12:0.5,0.7,0.9,0.11,0.15,0.17" },
                                 source}) );
                                 
             CHECK_THROWS_AS( (vcf::Record{
