@@ -435,26 +435,37 @@ namespace ebi
     void Record::check_sample_subfields_count(size_t i, std::vector<std::string> const & subfields) const
     {
         if (subfields.size() > format.size()) {
-            throw new SamplesBodyError{line, "Sample #" + std::to_string(i+1) +
+            throw new SamplesBodyError{line, "Sample #" + std::to_string(i + 1) +
                     " has more fields than specified in the FORMAT column"};
         }
     }
 
     void Record::check_sample_subfields_cardinality_type(size_t i, std::vector<std::string> const & subfields, std::vector<MetaEntry> const & format_meta) const
     {
+        std::vector<std::string> values;
+
         for (size_t j = 0; j < subfields.size(); ++j) {
             MetaEntry meta = format_meta[j];
             auto & subfield = subfields[j];
             
+            util::string_split(subfield, ",", values);
+
             if (meta.id == "") {
+                try {
+                    if (source->version == Version::v41 || source->version == Version::v42) {
+                        check_predefined_tag(format[j], subfield, values, format_v41_v42);
+                    } else {
+                        check_predefined_tag(format[j], subfield, values, format_v43);
+                    }
+                } catch (std::shared_ptr<Error> ex) {
+                    throw new SamplesFieldBodyError{line, "Sample #" + std::to_string(i + 1) + ", " + ex->message, format[j]};
+                }
+
                 // FORMAT fields not described in the meta section can't be checked
                 continue;
             }
-            
-            auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
 
-            std::vector<std::string> values;
-            util::string_split(subfield, ",", values);
+            auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
 
             try {
                 check_field_cardinality(subfield, values, key_values["Number"]);
