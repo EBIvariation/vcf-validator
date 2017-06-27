@@ -605,7 +605,7 @@ namespace ebi
             }
         } else if (type == "Flag") {
             int numeric_value = std::stoi(value);
-            if (numeric_value != 0 && numeric_value != 1) {
+            if (value.size() > 1 || (numeric_value != 0 && numeric_value != 1)) {
                 message = " (a flag value must be \"0, 1 or none\")";
                 throw std::invalid_argument(message);
             }
