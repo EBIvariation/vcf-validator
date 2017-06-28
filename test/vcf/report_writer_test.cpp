@@ -170,7 +170,7 @@ namespace ebi
 
           errorsDAO.for_each_error([&errors_read](std::shared_ptr<ebi::vcf::Error> error) {
               CHECK(error->line == 4);
-              CHECK(error->message == "Allele index C is not an integer number");
+              CHECK(error->message == "Allele index C must be a non-negative integer number");
               errors_read++;
           });
 

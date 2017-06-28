@@ -500,6 +500,10 @@ namespace ebi
         util::string_split(subfields[0], "|/", alleles);
         long ploidy = static_cast<long>(source->ploidy.get_ploidy(chromosome));
         for (auto & allele : alleles) {
+            if (allele == "") {
+                throw new SamplesFieldBodyError{line, "Allele index must not be empty", "GT", ploidy};
+            }
+
             if (allele == ".") { continue; } // No need to check missing alleles
 
             check_sample_alleles_is_integer(allele, ploidy);
@@ -511,7 +515,7 @@ namespace ebi
     void Record::check_sample_alleles_is_integer(std::string const & allele, long ploidy) const
     {
         if (std::find_if_not(allele.begin(), allele.end(), isdigit) != allele.end()) {
-            throw new SamplesFieldBodyError{line, "Allele index " + allele + " is not an integer number",
+            throw new SamplesFieldBodyError{line, "Allele index " + allele + " must be a non-negative integer number",
                                             "GT", ploidy};
         }        
     }
