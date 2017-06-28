@@ -1117,11 +1117,26 @@ namespace ebi
                             { "PASS" },
                             { {"AA", "243"} },
                             { "GP" },
-                            { "0.98,1.87,6.57,0.2" },
+                            { "0.98,0.87,0.57,1.0" },
                             source}),
                         vcf::SamplesFieldBodyError*);
 
             CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "GP" },
+                            { "1.98" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+           CHECK_THROWS_AS( (vcf::Record{
                             1,
                             "chr1",
                             123456,

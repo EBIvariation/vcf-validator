@@ -279,7 +279,7 @@ namespace ebi
                 }
             }
 
-            strict_validation_info_predefined_tags(field.first, field.second);
+            strict_validation_info_predefined_tags(field.first, field.second, values);
        }
     }
     
@@ -340,7 +340,8 @@ namespace ebi
         }
     }
 
-    void Record::strict_validation_info_predefined_tags(std::string const & field_key, std::string const & field_value) const
+    void Record::strict_validation_info_predefined_tags(std::string const & field_key, std::string const & field_value,
+                                                        std::vector<std::string> const & values) const
     {
         if (field_key == "AA") {
             static boost::regex aa_regex("((?![,;=])[[:print:]])+");
@@ -348,16 +349,12 @@ namespace ebi
                 throw new InfoBodyError{line, "INFO AA=" + field_value + " value is not a single dot or a string of bases", field_key};
             }
         } else if (field_key == "AF") {
-            std::vector<std::string> values;
-            util::string_split(field_value, ",", values);
             for (auto & value : values) {
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
                     throw new InfoBodyError{line, "INFO AF=" + field_value + " value does not lie in the interval [0,1]", field_key};
                 }
             }
         } else if (field_key == "CIGAR") {
-            std::vector<std::string> values;
-            util::string_split(field_value, ",", values);
             static boost::regex cigar_string("([0-9]+[MIDNSHPX])+");
             for (auto & value : values) {
                 if (!boost::regex_match(value, cigar_string)) {
@@ -462,22 +459,37 @@ namespace ebi
                 }
 
                 // FORMAT fields not described in the meta section can't be checked
-                continue;
+
+            } else {
+                auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
+
+                try {
+                    check_field_cardinality(subfield, values, key_values["Number"]);
+                    check_field_type(values, key_values["Type"]);
+                } catch (std::shared_ptr<Error> ex) {
+                    long cardinality;
+                    bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), cardinality);
+                    long number = valid ? cardinality : -1;
+ 
+                    std::string message = "Sample #" + std::to_string(i + 1) + ", " + key_values["ID"] + "=" + subfield
+                            + " does not match the meta" + ex->message;
+                    throw new SamplesFieldBodyError{line, message, key_values["ID"], number};
+                }
             }
 
-            auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
+            strict_validation_format_predefined_tags(i, format[j], subfield, values);
+        }
+    }
 
-            try {
-                check_field_cardinality(subfield, values, key_values["Number"]);
-                check_field_type(values, key_values["Type"]);
-            } catch (std::shared_ptr<Error> ex) {
-                long cardinality;
-                bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), cardinality);
-                long number = valid ? cardinality : -1;
- 
-                std::string message = "Sample #" + std::to_string(i + 1) + ", " + key_values["ID"] + "=" + subfield
-                        + " does not match the meta" + ex->message;
-                throw new SamplesFieldBodyError{line, message, key_values["ID"], number};
+    void Record::strict_validation_format_predefined_tags(size_t i, std::string const & field_key, std::string const & field_value,
+                                                          std::vector<std::string> const & values) const
+    {
+        std::string message = "Sample #" + std::to_string(i + 1) + ", " + field_key + "=" + field_value + " value";
+        if (field_key == "GP") {
+            for (auto & value : values) {
+                if (std::stold(value) < 0 || std::stold(value) > 1) {
+                    throw new SamplesFieldBodyError{line, message + " does not lie in the interval [0,1]", field_key};
+                }
             }
         }
     }
