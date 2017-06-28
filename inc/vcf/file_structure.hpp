@@ -167,6 +167,7 @@ namespace ebi
             { "EC", { "Integer", "A" } },
             { "FT", { "String", "1" } },
             { "GL", { "Float", "G" } },
+            { "GLE", { "String", "G" } },
             { "GP", { "Float", "G" } },
             { "GQ", { "Integer", "1" } },
             { "GT", { "String", "1" } },
