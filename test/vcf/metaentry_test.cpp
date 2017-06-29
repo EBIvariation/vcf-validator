@@ -331,7 +331,16 @@ namespace ebi
                 vcf::Ploidy{2},
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
-            
+
+        std::shared_ptr<vcf::Source> source_v43{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v43,
+                vcf::Ploidy{2},
+                {},
+                { "Sample1", "Sample2", "Sample3" }}};
+
         SECTION("ID, Number, Type and Description presence")
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
@@ -880,6 +889,55 @@ namespace ebi
                                 "FORMAT",
                                 { {"ID", "AHAP"}, {"Number", "1"}, {"Type", "Character"}, {"Description", "Unique identifier of ancestral haplotype"} },
                                 source
+                            }),
+                            vcf::MetaSectionError* );
+        }
+
+        SECTION("FORMAT 4.3 predefined tags")
+        {
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNL"}, {"Number", "G"}, {"Type", "Float"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                source_v43
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNL"}, {"Number", "G"}, {"Type", "Integer"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                source_v43
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNL"}, {"Number", "2"}, {"Type", "Float"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                source_v43
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNP"}, {"Number", "G"}, {"Type", "Float"}, {"Description", "Copy number posterior probabilities"} },
+                                source_v43
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNP"}, {"Number", "G"}, {"Type", "Integer"}, {"Description", "Copy number posterior probabilities"} },
+                                source_v43
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNP"}, {"Number", "2"}, {"Type", "Float"}, {"Description", "Copy number posterior probabilities"} },
+                                source_v43
                             }),
                             vcf::MetaSectionError* );
         }
@@ -1857,13 +1915,6 @@ namespace ebi
                                 source
                             }),
                             vcf::MetaSectionError* );
-  
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                                1,
-                                "INFO",
-                                { {"ID", "DP"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Read Depth of segment containing breakend"} },
-                                source
-                            } ) );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
