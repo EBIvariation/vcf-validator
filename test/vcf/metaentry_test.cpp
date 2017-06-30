@@ -331,7 +331,16 @@ namespace ebi
                 vcf::Ploidy{2},
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
-            
+
+        std::shared_ptr<vcf::Source> source_v43{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v43,
+                vcf::Ploidy{2},
+                {},
+                { "Sample1", "Sample2", "Sample3" }}};
+
         SECTION("ID, Number, Type and Description presence")
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
@@ -750,6 +759,185 @@ namespace ebi
                                 "FORMAT",
                                 { {"ID", "PS"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Phase set"} },
                                 source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CN"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Copy number genotype for imprecise events"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CN"}, {"Number", "5"}, {"Type", "Integer"}, {"Description", "Copy number genotype for imprecise events"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CN"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Copy number genotype for imprecise events"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNQ"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Copy number genotype quality for imprecise events"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNQ"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Copy number genotype quality for imprecise events"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNQ"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Copy number genotype quality for imprecise events"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNL"}, {"Number", "."}, {"Type", "Float"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                source
+                            } ) );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNL"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "NQ"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Phred style probability score that the variant is novel"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "NQ"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Phred style probability score that the variant is novel"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "NQ"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Phred style probability score that the variant is novel"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "HAP"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Unique haplotype identifier"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "HAP"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Unique haplotype identifier"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "HAP"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Unique haplotype identifier"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "AHAP"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Unique identifier of ancestral haplotype"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "AHAP"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Unique identifier of ancestral haplotype"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+                                
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "AHAP"}, {"Number", "1"}, {"Type", "Character"}, {"Description", "Unique identifier of ancestral haplotype"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+        }
+
+        SECTION("FORMAT 4.3 predefined tags")
+        {
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNL"}, {"Number", "G"}, {"Type", "Float"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                source_v43
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNL"}, {"Number", "G"}, {"Type", "Integer"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                source_v43
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNL"}, {"Number", "2"}, {"Type", "Float"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                source_v43
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNP"}, {"Number", "G"}, {"Type", "Float"}, {"Description", "Copy number posterior probabilities"} },
+                                source_v43
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNP"}, {"Number", "G"}, {"Type", "Integer"}, {"Description", "Copy number posterior probabilities"} },
+                                source_v43
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "FORMAT",
+                                { {"ID", "CNP"}, {"Number", "2"}, {"Type", "Float"}, {"Description", "Copy number posterior probabilities"} },
+                                source_v43
                             }),
                             vcf::MetaSectionError* );
         }
@@ -1350,6 +1538,471 @@ namespace ebi
                                 1,
                                 "INFO",
                                 { {"ID", "1000G"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "1000 Genomes membership"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "IMPRECISE"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Imprecise structural variation"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "IMPRECISE"}, {"Number", "R"}, {"Type", "Flag"}, {"Description", "Imprecise structural variation"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "IMPRECISE"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Imprecise structural variation"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+  
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "NOVEL"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Indicates a novel structural variation"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "NOVEL"}, {"Number", "R"}, {"Type", "Flag"}, {"Description", "Indicates a novel structural variation"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "NOVEL"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Indicates a novel structural variation"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+  
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "SVTYPE"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Type of structural variant"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "SVTYPE"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Type of structural variant"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "SVTYPE"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Type of structural variant"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+  
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "SVLEN"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Difference in length between REF and ALT alleles"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "SVLEN"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Difference in length between REF and ALT alleles"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CIPOS"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Confidence interval around POS for imprecise variants"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CIPOS"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Confidence interval around POS for imprecise variants"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CIPOS"}, {"Number", "2"}, {"Type", "Float"}, {"Description", "Confidence interval around POS for imprecise variants"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+  
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CIEND"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Confidence interval around END for imprecise variants"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CIEND"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Confidence interval around END for imprecise variants"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CIEND"}, {"Number", "2"}, {"Type", "Character"}, {"Description", "Confidence interval around END for imprecise variants"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+  
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "HOMLEN"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Length of base pair identical micro-homology at event breakpoints"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "HOMLEN"}, {"Number", "2"}, {"Type", "String"}, {"Description", "Length of base pair identical micro-homology at event breakpoints"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "HOMSEQ"}, {"Number", "."}, {"Type", "String"}, {"Description", "Sequence of base pair identical micro-homology at event breakpoints"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "HOMSEQ"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Sequence of base pair identical micro-homology at event breakpoints"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "BKPTID"}, {"Number", "."}, {"Type", "String"}, {"Description", "ID of the assembled alternate allele in the assembly file"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "BKPTID"}, {"Number", "2"}, {"Type", "Character"}, {"Description", "ID of the assembled alternate allele in the assembly file"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "MEINFO"}, {"Number", "4"}, {"Type", "String"}, {"Description", "Mobile element info of the form NAME,START,END,POLARITY"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "MEINFO"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Mobile element info of the form NAME,START,END,POLARITY"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "MEINFO"}, {"Number", "4"}, {"Type", "Integer"}, {"Description", "Mobile element info of the form NAME,START,END,POLARITY"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+  
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "METRANS"}, {"Number", "4"}, {"Type", "String"}, {"Description", "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "METRANS"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "METRANS"}, {"Number", "4"}, {"Type", "Integer"}, {"Description", "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+  
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DGVID"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of this element in Database of Genomic Variation"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DGVID"}, {"Number", "R"}, {"Type", "String"}, {"Description", "ID of this element in Database of Genomic Variation"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DGVID"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "ID of this element in Database of Genomic Variation"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+  
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DBVARID"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of this element in DBVAR"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DBVARID"}, {"Number", "R"}, {"Type", "String"}, {"Description", "ID of this element in DBVAR"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DBVARID"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "ID of this element in DBVAR"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+  
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DBRIPID"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of this element in DBRIP"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DBRIPID"}, {"Number", "R"}, {"Type", "String"}, {"Description", "ID of this element in DBRIP"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DBRIPID"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "ID of this element in DBRIP"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "MATEID"}, {"Number", "."}, {"Type", "String"}, {"Description", "ID of mate breakends"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "MATEID"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "ID of mate breakends"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "PARID"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of partner breakend"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "PARID"}, {"Number", "R"}, {"Type", "String"}, {"Description", "ID of partner breakend"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "PARID"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "ID of partner breakend"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+  
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "EVENT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of event associated to breakend"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "EVENT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "ID of event associated to breakend"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "EVENT"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "ID of event associated to breakend"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+  
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CILEN"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Confidence interval around the inserted material between breakends"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CILEN"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Confidence interval around the inserted material between breakends"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CILEN"}, {"Number", "2"}, {"Type", "String"}, {"Description", "Confidence interval around the inserted material between breakends"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DPADJ"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Read Depth of adjacency"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "DPADJ"}, {"Number", "3"}, {"Type", "String"}, {"Description", "Read Depth of adjacency"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CN"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Copy number of segment containing breakend"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CN"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Copy number of segment containing breakend"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CN"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Copy number of segment containing breakend"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+  
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CNADJ"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Copy number of adjacency"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CNADJ"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Copy number of adjacency"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CICN"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Confidence interval around copy number for the segment"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CICN"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Confidence interval around copy number for the segment"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CICN"}, {"Number", "2"}, {"Type", "Flag"}, {"Description", "Confidence interval around copy number for the segment"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+  
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CICNADJ"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Confidence interval around copy number for the adjacency"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                "INFO",
+                                { {"ID", "CICNADJ"}, {"Number", "1"}, {"Type", "Character"}, {"Description", "Confidence interval around copy number for the adjacency"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
