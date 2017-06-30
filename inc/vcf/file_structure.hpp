@@ -496,6 +496,13 @@ namespace ebi
         void check_sample_alleles_range(std::string const & allele, long ploidy) const;
 
         /**
+         * Checks that fields have no duplicates
+         *
+         * @throw Error
+         */
+        void check_no_duplicates(std::vector<std::string> const & values) const;
+
+        /**
          * returns the expected number of elements, given a string code
          * @param number one of ["A", "R", "G", ".", number], where
          *  - "A" is the amount of alleles,

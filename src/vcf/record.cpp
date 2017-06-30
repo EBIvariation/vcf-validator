@@ -128,7 +128,8 @@ namespace ebi
         check_ids_no_duplicates();
     }
 
-    void Record::check_ids_no_semicolons_whitespaces() const {
+    void Record::check_ids_no_semicolons_whitespaces() const
+    {
         for (auto & id : ids) {
             if (std::find_if(id.begin(), id.end(), [](char c) { return c == ' ' || c == ';'; }) != id.end()) {
                 throw new IdBodyError{line, "ID must not contain semicolons or whitespaces"};
@@ -136,14 +137,13 @@ namespace ebi
         }
     }
 
-    void Record::check_ids_no_duplicates() const {
-        if (ids.size() > 1 && source->version == Version::v43) {
-            std::map<std::string, int> counter;
-            for (auto & id : ids) {
-                counter[id]++;
-                if (counter[id] >= 2) {
-                    throw new IdBodyError{line, "ID must not have duplicate values"};
-                }
+    void Record::check_ids_no_duplicates() const
+    {
+        if (source->version == Version::v43) {
+            try {
+                check_no_duplicates(ids);
+            } catch (std::shared_ptr<Error> ex) {
+                throw new IdBodyError{line, "ID" + ex->message + "values"};
             }
         }
     }
@@ -278,13 +278,11 @@ namespace ebi
 
     void Record::check_format_no_duplicates() const
     {
-        if (format.size() > 1 && source->version == Version::v43) {
-            std::map<std::string, int> counter;
-            for (auto & form : format) {
-                counter[form]++;
-                if (counter[form] >= 2) {
-                    throw new FormatBodyError{line, "FORMAT must not have duplicate fields"};
-                }
+        if (source->version == Version::v43) {
+            try {
+                check_no_duplicates(format);
+            } catch (std::shared_ptr<Error> ex) {
+                throw new FormatBodyError{line, "FORMAT" + ex->message + "fields"};
             }
         }
     }
@@ -469,6 +467,19 @@ namespace ebi
                                                     + " is greater than the maximum allowed "
                                                     + std::to_string(alternate_alleles.size()),
                                             "GT", ploidy};
+        }
+    }
+
+    void Record::check_no_duplicates(std::vector<std::string> const & values) const
+    {
+        if (values.size() > 1) {
+            std::map<std::string, int> counter;
+            for (auto & value : values) {
+                counter[value]++;
+                if (counter[value] >= 2) {
+                    raise(std::make_shared<Error>(line, " must not have duplicate "));
+                }
+            }
         }
     }
 
