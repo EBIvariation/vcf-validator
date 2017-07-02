@@ -510,5 +510,23 @@ namespace ebi
                                 source}),
                             vcf::IdBodyError*);
         }
+
+        SECTION("Duplicate FILTERs")
+        {
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { "q10", "q10" },
+                                { {"AN", "12"} },
+                                { "GT" },
+                                { "0|1" },
+                                source}),
+                            vcf::FilterBodyError*);
+        }
     }
 }

@@ -211,6 +211,18 @@ namespace ebi
     
     void Record::check_filter() const
     {
+        check_filter_no_duplicates();
+    }
+
+    void Record::check_filter_no_duplicates() const
+    {
+        if (source->version == Version::v43) {
+            try {
+                check_no_duplicates(filters);
+            } catch (const std::invalid_argument &ex) {
+                throw new FilterBodyError{line, "FILTER" + std::string(ex.what()) + "filters"};
+            }
+        }
     }
 
     void Record::check_info() const
