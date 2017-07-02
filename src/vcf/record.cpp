@@ -142,8 +142,8 @@ namespace ebi
         if (source->version == Version::v43) {
             try {
                 check_no_duplicates(ids);
-            } catch (std::shared_ptr<Error> ex) {
-                throw new IdBodyError{line, "ID" + ex->message + "values"};
+            } catch (const std::invalid_argument &ex) {
+                throw new IdBodyError{line, "ID" + std::string(ex.what()) + "values"};
             }
         }
     }
@@ -281,8 +281,8 @@ namespace ebi
         if (source->version == Version::v43) {
             try {
                 check_no_duplicates(format);
-            } catch (std::shared_ptr<Error> ex) {
-                throw new FormatBodyError{line, "FORMAT" + ex->message + "fields"};
+            } catch (const std::invalid_argument &ex) {
+                throw new FormatBodyError{line, "FORMAT" + std::string(ex.what()) + "fields"};
             }
         }
     }
@@ -477,7 +477,7 @@ namespace ebi
             for (auto & value : values) {
                 counter[value]++;
                 if (counter[value] >= 2) {
-                    raise(std::make_shared<Error>(line, " must not have duplicate "));
+                    throw std::invalid_argument(" must not have duplicate ");
                 }
             }
         }
@@ -585,7 +585,7 @@ namespace ebi
             std::string message;
             try {
                 check_value_type(type, value, message);
-            } catch (std::exception &typeError) {
+            } catch (const std::exception &typeError) {
                 raise(std::make_shared<Error>(line, " specification Type=" + type + message));
             }
         }
