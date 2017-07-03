@@ -31,7 +31,7 @@ namespace ebi
             std::vector<std::string> const & alternate_alleles,
             float const quality,
             std::vector<std::string> const & filters,
-            std::map<std::string, std::string> const & info,
+            std::multimap<std::string, std::string> const & info,
             std::vector<std::string> const & format,
             std::vector<std::string> const & samples,
             std::shared_ptr<Source> source)
@@ -227,6 +227,8 @@ namespace ebi
 
     void Record::check_info() const
     {
+        check_info_no_duplicates();
+
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
         std::pair<iter, iter> range = source->meta_entries.equal_range("INFO");
         std::vector<std::string> values;
@@ -271,6 +273,17 @@ namespace ebi
        }
     }
     
+    void Record::check_info_no_duplicates() const
+    {
+        if (source->version == Version::v43 && info.size() > 1) {
+            for (auto & in : info) {
+                if (info.count(in.first) > 1) {
+                    throw new InfoBodyError{line, "INFO must not have duplicate keys"};
+                }
+            }
+        }
+    }
+
     void Record::check_format() const
     {
         if (format.size() == 0) {

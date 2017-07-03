@@ -278,7 +278,7 @@ namespace ebi
         
         float quality;
         std::vector<std::string> filters;
-        std::map<std::string, std::string> info;
+        std::multimap<std::string, std::string> info;
         std::vector<std::string> format;
 
         std::vector<std::string> samples;
@@ -293,7 +293,7 @@ namespace ebi
                 std::vector<std::string> const & alternate_alleles,
                 float quality,
                 std::vector<std::string> const & filters,
-                std::map<std::string, std::string> const & info,
+                std::multimap<std::string, std::string> const & info,
                 std::vector<std::string> const & format,
                 std::vector<std::string> const & samples,
                 std::shared_ptr<Source> source);
@@ -387,21 +387,28 @@ namespace ebi
         void check_filter() const;
         
         /**
-         * Checks that FILTER contains no duplicate failed filters
+         * Checks that FILTER contains no duplicate failed filters in the same line
          * 
          * @throw FilterBodyError
          */
         void check_filter_no_duplicates() const;
 
        /**
-         * Checks that all the INFO fields are listed in the meta section, and their number and 
-         * type match those specifications
+         * Checks that all the INFO fields are listed in the meta section, their number and 
+         * type match those specifications, and conatin no duplicates
          * 
          * @throw InfoBodyError
          */
         void check_info() const;
-        
+
         /**
+         * Checks that INFO contains no duplicate keys in the same line
+         * 
+         * @throw InfoBodyError
+         */
+        void check_info_no_duplicates() const;
+
+       /**
          * Checks that format starts with GT and has no duplicate fields
          * 
          * @throw FormatBodyError
@@ -416,7 +423,7 @@ namespace ebi
         void check_format_GT() const;
 
         /**
-         * Checks that format has no duplicate fields
+         * Checks that format has no duplicate fields in the same line
          * 
          * @throw FormatBodyError
          */
