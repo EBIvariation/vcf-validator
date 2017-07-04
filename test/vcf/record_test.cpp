@@ -1255,6 +1255,22 @@ namespace ebi
                             { "set" },
                             source}),
                         vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "CNP" },
+                            { "1.34" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+        
         }
     }
 }
