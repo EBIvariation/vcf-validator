@@ -361,6 +361,14 @@ namespace ebi
                     throw new InfoBodyError{line, "INFO CIGAR=" + field_value + " value is not an alphanumeric string compliant with the SAM specification", field_key};
                 }
             }
+        } else if (field_key == "END") {
+            auto it = info.find("IMPRECISE");
+            if (it != info.end() && it->second == "0") {
+                auto expected = std::to_string(position + reference_allele.length() - 1);
+                if (field_value != expected) {
+                    throw new InfoBodyError{line, "INFO END=" + field_value + " value must be equal to \"POS + length of REF - 1\" for a precise variant (where IMPRECISE is set to 0), expected " + expected, field_key};
+                }
+            }
         }
     }
 

@@ -887,6 +887,50 @@ namespace ebi
                             { "AT" },
                             1.0,
                             { "PASS" },
+                            { {"END", "-3"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"END", "123455"}, {"IMPRECISE", "0"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"END", "123456"}, {"IMPRECISE", "0"} },
+                            { "GT" },
+                            { "0|1" },
+                            source} ) );
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
                             { {"H2", "5"} },
                             { "GT" },
                             { "0|1" },
