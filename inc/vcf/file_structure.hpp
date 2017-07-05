@@ -380,7 +380,7 @@ namespace ebi
         void check_quality() const;
         
         /**
-         * Checks that all the filters are listed in the meta section and do not contain duplicates
+         * Checks that all the filters are listed in the meta section, do not contain duplicates and are non-zero
          * 
          * @throw FilterBodyError
          */
@@ -393,7 +393,14 @@ namespace ebi
          */
         void check_filter_no_duplicates() const;
 
-       /**
+        /**
+         * Check that FILTER values are non-zero, as 0 is reserved and must not be used
+         *
+         * @throw FilterBodyError
+         */
+        void check_filter_not_zero() const;
+
+        /**
          * Checks that all the INFO fields are listed in the meta section, their number and 
          * type match those specifications, and conatin no duplicates
          * 

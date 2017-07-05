@@ -212,6 +212,7 @@ namespace ebi
     void Record::check_filter() const
     {
         check_filter_no_duplicates();
+        check_filter_not_zero();
     }
 
     void Record::check_filter_no_duplicates() const
@@ -221,6 +222,15 @@ namespace ebi
                 check_no_duplicates(filters);
             } catch (const std::invalid_argument &ex) {
                 throw new FilterBodyError{line, "FILTER" + std::string(ex.what()) + "filters"};
+            }
+        }
+    }
+
+    void Record::check_filter_not_zero() const
+    {
+        for (auto & filter : filters) {
+            if (filter == "0") {
+                throw new FilterBodyError{line, "FILTER string must not be 0 (reserved value)"};
             }
         }
     }
