@@ -737,6 +737,36 @@ namespace ebi
                             { "AT" },
                             1.0,
                             { "PASS" },
+                            { {"AC", "1,8,9"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AD", "1.43"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
                             { {"AD", "1,4,3"} },
                             { "GT" },
                             { "0|1" },
@@ -753,6 +783,36 @@ namespace ebi
                             1.0,
                             { "PASS" },
                             { {"ADF", "1.89"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"ADF", "1,8,9"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"ADR", "46.5"} },
                             { "GT" },
                             { "0|1" },
                             source}),
@@ -797,6 +857,36 @@ namespace ebi
                             { "AT" },
                             1.0,
                             { "PASS" },
+                            { {"AF", "2,3,5"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AN", "ing"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
                             { {"AN", "1,9"} },
                             { "GT" },
                             { "0|1" },
@@ -813,6 +903,21 @@ namespace ebi
                             1.0,
                             { "PASS" },
                             { {"BQ", "val"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"CIGAR", "M1F2D2"} },
                             { "GT" },
                             { "0|1" },
                             source}),
@@ -857,7 +962,37 @@ namespace ebi
                             { "AT" },
                             1.0,
                             { "PASS" },
+                            { {"DB", "0,1"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
                             { {"DP", "1.5"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"DP", "1,5"} },
                             { "GT" },
                             { "0|1" },
                             source}),
@@ -887,7 +1022,7 @@ namespace ebi
                             { "AT" },
                             1.0,
                             { "PASS" },
-                            { {"END", "-3"} },
+                            { {"END", "3.45"} },
                             { "GT" },
                             { "0|1" },
                             source}),
@@ -932,6 +1067,36 @@ namespace ebi
                             1.0,
                             { "PASS" },
                             { {"H2", "5"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"H2", "1,0,1"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"H3", "23"} },
                             { "GT" },
                             { "0|1" },
                             source}),
@@ -991,6 +1156,36 @@ namespace ebi
                             { "AT" },
                             1.0,
                             { "PASS" },
+                            { {"MQ0", "1,89"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"NS", "value"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
                             { {"NS", "5,6,7"} },
                             { "GT" },
                             { "0|1" },
@@ -1007,6 +1202,36 @@ namespace ebi
                             1.0,
                             { "PASS" },
                             { {"SOMATIC", "1.89"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"SOMATIC", "1,0"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"VALIDATED", "1.01"} },
                             { "GT" },
                             { "0|1" },
                             source}),
@@ -1041,6 +1266,21 @@ namespace ebi
                             { "0|1" },
                             source}),
                         vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"1000G", "0,1,0"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
         }
 
         SECTION("Predefined FORMAT tags not in meta header")
@@ -1057,6 +1297,36 @@ namespace ebi
                             { {"AA", "243"} },
                             { "AD" },
                             { "0.98" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "AD" },
+                            { "0,9,8" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "ADF" },
+                            { "val1" },
                             source}),
                         vcf::SamplesFieldBodyError*);
 
@@ -1100,6 +1370,36 @@ namespace ebi
                             1.0,
                             { "PASS" },
                             { {"AA", "243"} },
+                            { "ADR" },
+                            { "1,2,1" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "DP" },
+                            { "9.18" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
                             { "DP" },
                             { "9,8" },
                             source}),
@@ -1130,6 +1430,21 @@ namespace ebi
                             1.0,
                             { "PASS" },
                             { {"AA", "243"} },
+                            { "EC" },
+                            { "4,8" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
                             { "FT" },
                             { "8,9" },
                             source}),
@@ -1147,6 +1462,36 @@ namespace ebi
                             { {"AA", "243"} },
                             { "GL" },
                             { "val" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+           CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "GL" },
+                            { "1.3,2.4" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "GP" },
+                            { "val12s" },
                             source}),
                         vcf::SamplesFieldBodyError*);
 
@@ -1205,8 +1550,8 @@ namespace ebi
                             1.0,
                             { "PASS" },
                             { {"AA", "243"} },
-                            { "AD" },
-                            { "0.98" },
+                            { "GQ" },
+                            { "2,38" },
                             source}),
                         vcf::SamplesFieldBodyError*);
 
@@ -1236,7 +1581,37 @@ namespace ebi
                             { "PASS" },
                             { {"AA", "243"} },
                             { "HQ" },
-                            { "0,9.8" },
+                            { "9.08" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "HQ" },
+                            { "9,8,1" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "MQ" },
+                            { "0.76" },
                             source}),
                         vcf::SamplesFieldBodyError*);
 
@@ -1280,6 +1655,36 @@ namespace ebi
                             1.0,
                             { "PASS" },
                             { {"AA", "243"} },
+                            { "PL" },
+                            { "7,5" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "PQ" },
+                            { "tag" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
                             { "PQ" },
                             { "5,6,9" },
                             source}),
@@ -1297,6 +1702,21 @@ namespace ebi
                             { {"AA", "243"} },
                             { "PS" },
                             { "set" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "PS" },
+                            { "4,5,6" },
                             source}),
                         vcf::SamplesFieldBodyError*);
 
