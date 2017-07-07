@@ -143,7 +143,7 @@ namespace ebi
             try {
                 check_no_duplicates(ids);
             } catch (const std::invalid_argument &ex) {
-                throw new IdBodyError{line, "ID" + std::string(ex.what()) + "values"};
+                throw new IdBodyError{line, "ID must not have duplicate values"};
             }
         }
     }
@@ -221,7 +221,7 @@ namespace ebi
             try {
                 check_no_duplicates(filters);
             } catch (const std::invalid_argument &ex) {
-                throw new FilterBodyError{line, "FILTER" + std::string(ex.what()) + "filters"};
+                throw new FilterBodyError{line, "FILTER must not have duplicate filters"};
             }
         }
     }
@@ -317,7 +317,7 @@ namespace ebi
             try {
                 check_no_duplicates(format);
             } catch (const std::invalid_argument &ex) {
-                throw new FormatBodyError{line, "FORMAT" + std::string(ex.what()) + "fields"};
+                throw new FormatBodyError{line, "FORMAT must not have duplicate fields"};
             }
         }
     }
@@ -512,7 +512,7 @@ namespace ebi
             for (auto & value : values) {
                 counter[value]++;
                 if (counter[value] >= 2) {
-                    throw std::invalid_argument(" must not have duplicate ");
+                    throw std::invalid_argument("Duplicates not allowed");
                 }
             }
         }

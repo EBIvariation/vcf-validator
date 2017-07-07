@@ -402,7 +402,7 @@ namespace ebi
 
         /**
          * Checks that all the INFO fields are listed in the meta section, their number and 
-         * type match those specifications, and conatin no duplicates
+         * type match those specifications, and contain no duplicates
          * 
          * @throw InfoBodyError
          */
@@ -517,7 +517,7 @@ namespace ebi
         void check_sample_alleles_range(std::string const & allele, long ploidy) const;
 
         /**
-         * Checks that fields have no duplicates
+         * Checks that a list contains no duplicates
          *
          * @throw Error
          */

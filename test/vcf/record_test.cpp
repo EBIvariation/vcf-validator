@@ -475,24 +475,6 @@ namespace ebi
                 source
             });
 
-        SECTION("Duplicate FORMATs") 
-        {
-            CHECK_THROWS_AS( (vcf::Record{
-                                1,
-                                "chr1", 
-                                123456, 
-                                { "id123", "id456" }, 
-                                "A",
-                                { "T", "C" },
-                                1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "DP", "DP" }, 
-                                { "12:13" },
-                                source}),
-                            vcf::FormatBodyError*);
-        }
-
         SECTION("Duplicate IDs") 
         {
             CHECK_THROWS_AS( (vcf::Record{
@@ -546,6 +528,7 @@ namespace ebi
                                 source}),
                             vcf::FilterBodyError*);
         }
+
         SECTION("Duplicate INFOs") 
         {
             CHECK_THROWS_AS( (vcf::Record{
@@ -562,6 +545,24 @@ namespace ebi
                                 { "12" },
                                 source}),
                             vcf::InfoBodyError*);
+        }
+
+        SECTION("Duplicate FORMATs")
+        {
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id456" },
+                                "A",
+                                { "T", "C" },
+                                1.0,
+                                { "PASS" },
+                                { {"AN", "12"}, {"AF", "0.5,0.3"} },
+                                { "DP", "DP" },
+                                { "12:13" },
+                                source}),
+                            vcf::FormatBodyError*);
         }
     }
 }
