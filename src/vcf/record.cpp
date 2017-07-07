@@ -31,7 +31,7 @@ namespace ebi
             std::vector<std::string> const & alternate_alleles,
             float const quality,
             std::vector<std::string> const & filters,
-            std::map<std::string, std::string> const & info,
+            std::multimap<std::string, std::string> const & info,
             std::vector<std::string> const & format,
             std::vector<std::string> const & samples,
             std::shared_ptr<Source> source)
@@ -128,7 +128,8 @@ namespace ebi
         check_ids_no_duplicates();
     }
 
-    void Record::check_ids_no_semicolons_whitespaces() const {
+    void Record::check_ids_no_semicolons_whitespaces() const
+    {
         for (auto & id : ids) {
             if (std::find_if(id.begin(), id.end(), [](char c) { return c == ' ' || c == ';'; }) != id.end()) {
                 throw new IdBodyError{line, "ID must not contain semicolons or whitespaces"};
@@ -136,14 +137,13 @@ namespace ebi
         }
     }
 
-    void Record::check_ids_no_duplicates() const {
-        if (ids.size() > 1 && source->version == Version::v43) {
-            std::map<std::string, int> counter;
-            for (auto & id : ids) {
-                counter[id]++;
-                if (counter[id] >= 2) {
-                    throw new IdBodyError{line, "ID must not have duplicate values"};
-                }
+    void Record::check_ids_no_duplicates() const
+    {
+        if (source->version == Version::v43) {
+            try {
+                check_no_duplicates(ids);
+            } catch (const std::invalid_argument &ex) {
+                throw new IdBodyError{line, "ID must not have duplicate values"};
             }
         }
     }
@@ -211,10 +211,34 @@ namespace ebi
     
     void Record::check_filter() const
     {
+        check_filter_no_duplicates();
+        check_filter_not_zero();
+    }
+
+    void Record::check_filter_no_duplicates() const
+    {
+        if (source->version == Version::v43) {
+            try {
+                check_no_duplicates(filters);
+            } catch (const std::invalid_argument &ex) {
+                throw new FilterBodyError{line, "FILTER must not have duplicate filters"};
+            }
+        }
+    }
+
+    void Record::check_filter_not_zero() const
+    {
+        for (auto & filter : filters) {
+            if (filter == "0") {
+                throw new FilterBodyError{line, "FILTER string must not be 0 (reserved value)"};
+            }
+        }
     }
 
     void Record::check_info() const
     {
+        check_info_no_duplicates();
+
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
         std::pair<iter, iter> range = source->meta_entries.equal_range("INFO");
         std::vector<std::string> values;
@@ -259,6 +283,17 @@ namespace ebi
        }
     }
     
+    void Record::check_info_no_duplicates() const
+    {
+        if (source->version == Version::v43 && info.size() > 1) {
+            for (auto & in : info) {
+                if (info.count(in.first) > 1) {
+                    throw new InfoBodyError{line, "INFO must not have duplicate keys"};
+                }
+            }
+        }
+    }
+
     void Record::check_format() const
     {
         if (format.size() == 0) {
@@ -278,13 +313,11 @@ namespace ebi
 
     void Record::check_format_no_duplicates() const
     {
-        if (format.size() > 1 && source->version == Version::v43) {
-            std::map<std::string, int> counter;
-            for (auto & form : format) {
-                counter[form]++;
-                if (counter[form] >= 2) {
-                    throw new FormatBodyError{line, "FORMAT must not have duplicate fields"};
-                }
+        if (source->version == Version::v43) {
+            try {
+                check_no_duplicates(format);
+            } catch (const std::invalid_argument &ex) {
+                throw new FormatBodyError{line, "FORMAT must not have duplicate fields"};
             }
         }
     }
@@ -472,6 +505,19 @@ namespace ebi
         }
     }
 
+    void Record::check_no_duplicates(std::vector<std::string> const & values) const
+    {
+        if (values.size() > 1) {
+            std::map<std::string, int> counter;
+            for (auto & value : values) {
+                counter[value]++;
+                if (counter[value] >= 2) {
+                    throw std::invalid_argument("Duplicates not allowed");
+                }
+            }
+        }
+    }
+
     bool Record::is_valid_cardinality(std::string const & number, size_t alternate_allele_number, long & cardinality) const
     {
         bool valid = true;
@@ -574,7 +620,7 @@ namespace ebi
             std::string message;
             try {
                 check_value_type(type, value, message);
-            } catch (std::exception &typeError) {
+            } catch (const std::exception &typeError) {
                 raise(std::make_shared<Error>(line, " specification Type=" + type + message));
             }
         }

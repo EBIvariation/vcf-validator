@@ -127,6 +127,11 @@ namespace ebi
     {
         return print_container<std::map<K, V>>(os, container);
     }
+    template <typename K, typename V>
+    std::ostream &operator<<(std::ostream &os, const std::multimap<K, V> &container)
+    {
+        return print_container<std::multimap<K, V>>(os, container);
+    }
   }
 }
 

@@ -177,7 +177,7 @@ namespace ebi
         }
 
         // Split the info tokens by the equals (=) symbol
-        std::map<std::string, std::string> info;
+        std::multimap<std::string, std::string> info;
         for (auto &field : m_line_tokens["INFO"]) {
             std::vector<std::string> subfields;
             util::string_split(field, "=", subfields);

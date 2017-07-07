@@ -278,7 +278,7 @@ namespace ebi
         
         float quality;
         std::vector<std::string> filters;
-        std::map<std::string, std::string> info;
+        std::multimap<std::string, std::string> info;
         std::vector<std::string> format;
 
         std::vector<std::string> samples;
@@ -293,7 +293,7 @@ namespace ebi
                 std::vector<std::string> const & alternate_alleles,
                 float quality,
                 std::vector<std::string> const & filters,
-                std::map<std::string, std::string> const & info,
+                std::multimap<std::string, std::string> const & info,
                 std::vector<std::string> const & format,
                 std::vector<std::string> const & samples,
                 std::shared_ptr<Source> source);
@@ -380,21 +380,42 @@ namespace ebi
         void check_quality() const;
         
         /**
-         * Checks that all the filters are listed in the meta section
+         * Checks that all the filters are listed in the meta section, do not contain duplicates and are non-zero
          * 
          * @throw FilterBodyError
          */
         void check_filter() const;
         
         /**
-         * Checks that all the INFO fields are listed in the meta section, and their number and 
-         * type match those specifications
+         * Checks that FILTER contains no duplicate failed filters in the same line
+         * 
+         * @throw FilterBodyError
+         */
+        void check_filter_no_duplicates() const;
+
+        /**
+         * Check that FILTER values are non-zero, as 0 is reserved and must not be used
+         *
+         * @throw FilterBodyError
+         */
+        void check_filter_not_zero() const;
+
+        /**
+         * Checks that all the INFO fields are listed in the meta section, their number and 
+         * type match those specifications, and contain no duplicates
          * 
          * @throw InfoBodyError
          */
         void check_info() const;
-        
+
         /**
+         * Checks that INFO contains no duplicate keys in the same line
+         * 
+         * @throw InfoBodyError
+         */
+        void check_info_no_duplicates() const;
+
+       /**
          * Checks that format starts with GT and has no duplicate fields
          * 
          * @throw FormatBodyError
@@ -409,7 +430,7 @@ namespace ebi
         void check_format_GT() const;
 
         /**
-         * Checks that format has no duplicate fields
+         * Checks that format has no duplicate fields in the same line
          * 
          * @throw FormatBodyError
          */
@@ -494,6 +515,13 @@ namespace ebi
          * @throw SamplesFieldBodyError
          */
         void check_sample_alleles_range(std::string const & allele, long ploidy) const;
+
+        /**
+         * Checks that a list contains no duplicates
+         *
+         * @throw Error
+         */
+        void check_no_duplicates(std::vector<std::string> const & values) const;
 
         /**
          * returns the expected number of elements, given a string code
