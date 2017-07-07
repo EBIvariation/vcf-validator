@@ -15,6 +15,7 @@
  */
 
 #include <functional>
+#include <unordered_set>
 #include "vcf/file_structure.hpp"
 #include "vcf/record.hpp"
 
@@ -369,6 +370,49 @@ namespace ebi
                     throw new InfoBodyError{line, "INFO END=" + field_value + " value must be equal to \"POS + length of REF - 1\" for a precise variant (where IMPRECISE is set to 0), expected " + expected, field_key};
                 }
             }
+        } else if (field_key == "SVLEN" && values.size() == alternate_alleles.size()) {
+            bool is_ref_symbolic = true;
+            std::vector<bool> is_alt_symbolic(alternate_alleles.size(), false);
+            std::unordered_set<char> symbolic = { 'A', 'C', 'G', 'T', 'N', 'a', 'c', 'g', 't', 'n' };
+
+            for (auto & ref : reference_allele) {
+                if (symbolic.find(ref) == symbolic.end()) {
+                    is_ref_symbolic = false;
+                    break;
+                }
+            }
+
+            if (is_ref_symbolic) {
+                for (auto i = 0; i < alternate_alleles.size(); i++) {
+                    is_alt_symbolic[i] = true;
+                    for (auto & alt : alternate_alleles[i]) {
+                        if (symbolic.find(alt) == symbolic.end()) {
+                            is_alt_symbolic[i] = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            for (auto i = 0; i < values.size(); i++) {
+                if (is_ref_symbolic && is_alt_symbolic[i]) {
+                    std::string expected = std::to_string(alternate_alleles[i].size() - reference_allele.size());
+                    if (values[i] != expected) {
+                        throw new InfoBodyError{line, "INFO SVLEN=" + field_value + " must be equal to \"length of ALT - length of REF\" for symbolic alternate alleles (expected " + expected + ", found " + values[i] + ")"};
+                    }
+                } else {
+                    std::string first_field = alternate_alleles[i].substr(0, 4);
+                    if (first_field == "<INS" || first_field == "<DUP") {
+                        if (std::stoi(values[i]) < 0) {
+                            throw new InfoBodyError{line, "SVLEN=" + field_value + " must be a positive integer for longer ALT alleles like " + first_field.substr(1,3)};
+                        }
+                    } else if (first_field == "<DEL") {
+                        if (std::stoi(values[i]) > 0) {
+                            throw new InfoBodyError{line, "SVLEN=" + field_value + " must be a negative integer for shorter ALT alleles like " + first_field.substr(1,3)};
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -662,6 +706,10 @@ namespace ebi
     }
 
     void Record::check_field_integer_range(std::string const & field, std::vector<std::string> const & values) const {
+        if (field == "SVLEN" || field == "CIPOS" || field == "CIEND" || field == "CILEN" || field == "CICN" || field == "CICNADJ") {
+            // to ignore predefined tag fields which permit negative integral values
+            return;
+        }
         for (auto & value : values) {
             if (value == ".") { continue; }
 

@@ -1281,6 +1281,80 @@ namespace ebi
                             { "0|1" },
                             source}),
                         vcf::InfoBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "ACT",
+                            { "ATCTTGG" },
+                            1.0,
+                            { "PASS" },
+                            { {"SVLEN", "4"} },
+                            { "GT" },
+                            { "0|1" },
+                            source} ) );
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "ACT",
+                            { "ATCTTGG" },
+                            1.0,
+                            { "PASS" },
+                            { {"SVLEN", "3"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<INS>" },
+                            1.0,
+                            { "PASS" },
+                            { {"SVLEN", "-1"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<DUP:TANDEM>" },
+                            1.0,
+                            { "PASS" },
+                            { {"SVLEN", "-5"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<DEL>" },
+                            1.0,
+                            { "PASS" },
+                            { {"SVLEN", "10"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
         }
 
         SECTION("Predefined FORMAT tags not in meta header")

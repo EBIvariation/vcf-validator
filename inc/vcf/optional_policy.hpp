@@ -56,6 +56,7 @@ namespace ebi
         void check_body_entry_info_imprecise(ParsingState & state, Record & record) const;
         void check_body_entry_info_other_tag(ParsingState & state, std::map<std::string, std::string> const & info,
                                              std::string const & tag) const;
+        void check_body_entry_info_svlen(ParsingState & state, Record & record) const;
 
         void check_contig_meta(ParsingState & state, Record & record) const;
         void check_alternate_allele_meta(ParsingState & state, Record & record) const;
