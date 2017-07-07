@@ -1276,7 +1276,97 @@ namespace ebi
                             { "AT" },
                             1.0,
                             { "PASS" },
-                            { {"1000G", "0,1,0"} },
+                            { {"1000G", "9"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"IMPRECISE", "9"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"IMPRECISE", "1,0,1"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"NOVEL", "-3"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"NOVEL", "0,1"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"SVTYPE", "9,5"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"SVLEN", "9.89"} },
                             { "GT" },
                             { "0|1" },
                             source}),
@@ -1351,6 +1441,322 @@ namespace ebi
                             1.0,
                             { "PASS" },
                             { {"SVLEN", "10"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"CIPOS", "-1,1.45"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"CIPOS", "1,2,3"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"CIEND", "9,end"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"CIEND", "9"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"HOMLEN", "len"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"MEINFO", "9,8,7"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"METRANS", "9,8,7,6,5"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"DGVID", "2,5"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"DBVARID", "0,9"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"DBRIPID", "0,1,0"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"PARID", "l,en"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"EVENT", "9,8,7"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"CILEN", "-1.25,2.5"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"CILEN", "-2,1,5"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"DPADJ", "0.09"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"CN", "1.10"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"CN", "2,4,5"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"CNADJ", "9.87"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"CICN", "9.87,6.5"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"CICN", "1,3,5"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"CICNADJ", "9.99"} },
                             { "GT" },
                             { "0|1" },
                             source}),
@@ -1804,11 +2210,220 @@ namespace ebi
                             1.0,
                             { "PASS" },
                             { {"AA", "243"} },
+                            { "CN" },
+                            { "4.56" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "CN" },
+                            { "4,5,6" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "CNQ" },
+                            { "tag" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "CNQ" },
+                            { "4,5,6" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "CNL" },
+                            { "ta,g" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "CNL" },
+                            { "4.5" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "CNP" },
+                            { "val,ue" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "CNP" },
+                            { "4,5,6" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
                             { "CNP" },
                             { "1.34" },
                             source}),
                         vcf::SamplesFieldBodyError*);
-        
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "NQ" },
+                            { "45.6" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "NQ" },
+                            { "4,5,6" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "HAP" },
+                            { "val" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "HAP" },
+                            { "1,2" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "AHAP" },
+                            { "val" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AA", "243"} },
+                            { "AHAP" },
+                            { "3,4,5" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
         }
     }
 }
