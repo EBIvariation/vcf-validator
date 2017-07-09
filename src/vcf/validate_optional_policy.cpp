@@ -152,7 +152,7 @@ namespace ebi
         }
     }
 
-    void ValidateOptionalPolicy::check_body_entry_info_other_tag(ParsingState & state, std::map<std::string, std::string> const & info,
+    void ValidateOptionalPolicy::check_body_entry_info_other_tag(ParsingState & state, std::multimap<std::string, std::string> const & info,
                                                                  std::string const & tag) const
     {
         auto it = info.find(tag);
@@ -167,7 +167,7 @@ namespace ebi
         auto it = record.info.find("SVLEN");
         if (it != record.info.end()) {
             std::vector<std::string> values;
-            util::string_split(record.info["SVLEN"], ",", values);
+            util::string_split(it->second, ",", values);
             if (values.size() != record.alternate_alleles.size()) {
                 throw new InfoBodyError{state.n_lines,
                         "INFO SVLEN should have same number of values as ALT (expected " + std::to_string(record.alternate_alleles.size())
