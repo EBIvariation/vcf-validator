@@ -383,7 +383,7 @@ namespace ebi
             }
 
             if (is_ref_symbolic) {
-                for (auto i = 0; i < alternate_alleles.size(); i++) {
+                for (size_t i = 0; i < alternate_alleles.size(); i++) {
                     is_alt_symbolic[i] = true;
                     for (auto & alt : alternate_alleles[i]) {
                         if (symbolic.find(alt) == symbolic.end()) {
@@ -394,7 +394,7 @@ namespace ebi
                 }
             }
 
-            for (auto i = 0; i < values.size(); i++) {
+            for (size_t i = 0; i < values.size(); i++) {
                 if (is_ref_symbolic && is_alt_symbolic[i]) {
                     std::string expected = std::to_string(alternate_alleles[i].size() - reference_allele.size());
                     if (values[i] != expected) {
