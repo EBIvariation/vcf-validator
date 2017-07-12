@@ -20,6 +20,7 @@
 #include <boost/program_options.hpp>
 
 #include "vcf/odb_report.hpp"
+#include "vcf/string_constants.hpp"
 #include "vcf/debugulator.hpp"
 
 namespace
@@ -36,11 +37,11 @@ namespace
       po::options_description description("Usage: vcf-debugulator [OPTIONS] [< input_file]\nAllowed options");
 
       description.add_options()
-              ("help,h", "Display this help")
-              ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
-              ("errors,e", po::value<std::string>(), "Path to the errors report from the input VCF file")
-              ("level,l", po::value<std::string>()->default_value("warning"), "Validation level (error, warning, stop)")
-              ("output,o", po::value<std::string>()->default_value("stdout"), "Write to a file or stdout")
+              (ebi::vcf::HELP_OPTION, "Display this help")
+              (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
+              (ebi::vcf::ERRORS_OPTION, po::value<std::string>(), "Path to the errors report from the input VCF file")
+              (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING), "Validation level (error, warning, stop)")
+              (ebi::vcf::OUTPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDOUT), "Write to a file or stdout")
       ;
 
       return description;
@@ -48,19 +49,19 @@ namespace
 
   int check_command_line_options(po::variables_map const &vm, po::options_description const &desc)
   {
-      if (vm.count("help")) {
+      if (vm.count(ebi::vcf::HELP)) {
           std::cout << desc << std::endl;
           return -1;
       }
 
-      std::string level = vm["level"].as<std::string>();
-      if (level != "error" && level != "warning" && level != "stop") {
+      std::string level = vm[ebi::vcf::LEVEL].as<std::string>();
+      if (level != ebi::vcf::ERROR && level != ebi::vcf::WARNING && level != ebi::vcf::STOP) {
           std::cout << desc << std::endl;
           std::cout << "Please choose one of the accepted validation levels" << std::endl;
           return 1;
       }
 
-      if (!vm.count("errors")) {
+      if (!vm.count(ebi::vcf::ERRORS)) {
           std::cout << desc << std::endl;
           std::cout << "Please specify the path to the errors report (--errors)" << std::endl;
           return 1;
@@ -84,14 +85,14 @@ int main(int argc, char **argv)
     if (check_options > 0) { return check_options; }
 
     try {
-        auto input_path = vm["input"].as<std::string>();
-        auto level = vm["level"].as<std::string>();
-        auto errors = vm["errors"].as<std::string>();
-        auto output_path = vm["output"].as<std::string>();
+        auto input_path = vm[ebi::vcf::INPUT].as<std::string>();
+        auto level = vm[ebi::vcf::LEVEL].as<std::string>();
+        auto errors = vm[ebi::vcf::ERRORS].as<std::string>();
+        auto output_path = vm[ebi::vcf::OUTPUT].as<std::string>();
 
 
         std::ifstream input_file;
-        if (input_path != "stdin") {
+        if (input_path != ebi::vcf::STDIN) {
             input_file.open(input_path.c_str());
             if (!input_file) {
                 throw std::runtime_error{"Couldn't open file " + input_path};
@@ -101,7 +102,7 @@ int main(int argc, char **argv)
         }
 
         std::ofstream output_file;
-        if (output_path != "stdout") {
+        if (output_path != ebi::vcf::STDOUT) {
             output_file.open(output_path.c_str());
             if (!output_file) {
                 throw std::runtime_error{"Couldn't open file " + output_path};
@@ -112,8 +113,8 @@ int main(int argc, char **argv)
 
         ebi::vcf::OdbReportRW errorDAO{errors};
 
-        auto &input_stream = input_path == "stdin" ? std::cin : input_file;
-        auto &output_stream = output_path == "stdout" ? std::cout : output_file;
+        auto &input_stream = input_path == ebi::vcf::STDIN ? std::cin : input_file;
+        auto &output_stream = output_path == ebi::vcf::STDOUT ? std::cout : output_file;
 
         ebi::vcf::debugulator::fix_vcf_file(input_stream, errorDAO, output_stream);
 

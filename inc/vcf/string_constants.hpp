@@ -30,29 +30,30 @@ namespace ebi
     const std::string VCF_V43 = "VCFv4.3";
 
     // validator and debugulator strings
-    const std::string STDIN = "stdin";
-    const std::string STDOUT = "stdout";
-    const std::string WARNING = "warning";
-    const std::string ERROR = "error";
-    const std::string STOP = "stop";
-    const std::string HELP = "help";
-    const std::string LEVEL = "level";
-    const std::string PLOIDY = "ploidy";
-    const std::string SPECIAL_PLOIDY = "special-ploidy";
-    const std::string DATABASE = "database";
-    const std::string INPUT = "input";
-    const std::string OUTPUT = "output";
-    const std::string OUTDIR = "outdir";
-    const std::string REPORT = "report";
-    const std::string HELP_OPTION = "help,h";
-    const std::string INPUT_OPTION = "input,i";
-    const std::string ERRORS_OPTION = "errors,e";
-    const std::string LEVEL_OPTION = "level,l";
-    const std::string REPORT_OPTION = "report,r";
-    const std::string OUTDIR_OPTION = "outdir,o";
-    const std::string PLOIDY_OPTION = "ploidy,p";
-    const std::string SPECIAL_PLOIDY_OPTION = "special-ploidy,s";
-    const std::string OUTPUT_OPTION = "output,o";
+    const char STDIN[] = "stdin";
+    const char STDOUT[] = "stdout";
+    const char WARNING[] = "warning";
+    const char ERROR[] = "error";
+    const char ERRORS[] = "errors";
+    const char STOP[] = "stop";
+    const char HELP[] = "help";
+    const char LEVEL[] = "level";
+    const char PLOIDY[] = "ploidy";
+    const char SPECIAL_PLOIDY[] = "special-ploidy";
+    const char DATABASE[] = "database";
+    const char INPUT[] = "input";
+    const char OUTPUT[] = "output";
+    const char OUTDIR[] = "outdir";
+    const char REPORT[] = "report";
+    const char HELP_OPTION[] = "help,h";
+    const char INPUT_OPTION[] = "input,i";
+    const char ERRORS_OPTION[] = "errors,e";
+    const char LEVEL_OPTION[] = "level,l";
+    const char REPORT_OPTION[] = "report,r";
+    const char OUTDIR_OPTION[] = "outdir,o";
+    const char PLOIDY_OPTION[] = "ploidy,p";
+    const char SPECIAL_PLOIDY_OPTION[] = "special-ploidy,s";
+    const char OUTPUT_OPTION[] = "output,o";
 
     // fields
     const std::string ID = "ID";
