@@ -84,7 +84,7 @@ namespace ebi
     {
         for (std::vector<std::string>::iterator it = alternate_alleles.begin(); it != alternate_alleles.end(); ++it) {
             auto & alternate = *it;
-            if (alternate == ".") {
+            if (alternate == DOT) {
                 types.push_back(RecordType::NO_VARIATION);
             } else if (alternate[0] == '<') {
                 types.push_back(RecordType::STRUCTURAL);
@@ -121,7 +121,7 @@ namespace ebi
 
     void Record::check_ids() const
     {
-        if (ids.size() == 1 && ids[0] == ".") {
+        if (ids.size() == 1 && ids[0] == DOT) {
             return; // No need to check if no IDs are provided
         }
         
@@ -193,11 +193,11 @@ namespace ebi
 
         if (alternate[0] == '<' && boost::regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
             std::string alt_id = pieces_match[1];
-            if (!boost::starts_with(alt_id, "DEL") && 
-                !boost::starts_with(alt_id, "INS") && 
-                !boost::starts_with(alt_id, "DUP") && 
-                !boost::starts_with(alt_id, "INV") && 
-                !boost::starts_with(alt_id, "CNV")) {
+            if (!boost::starts_with(alt_id, DEL) && 
+                !boost::starts_with(alt_id, INS) && 
+                !boost::starts_with(alt_id, DUP) && 
+                !boost::starts_with(alt_id, INV) && 
+                !boost::starts_with(alt_id, CNV)) {
                 throw new AlternateAllelesBodyError{line,
                         "Alternate ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"};
             }
@@ -241,27 +241,27 @@ namespace ebi
         check_info_no_duplicates();
 
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
-        std::pair<iter, iter> range = source->meta_entries.equal_range("INFO");
+        std::pair<iter, iter> range = source->meta_entries.equal_range(INFO);
         std::vector<std::string> values;
 
         // Check that INFO fields listed in the meta section
         // match the Number and Type specified in there
         for (auto & field : info) {
-            if (field.first == ".") { continue; } // No need to check missing data
+            if (field.first == DOT) { continue; } // No need to check missing data
 
             util::string_split(field.second, ",", values);
             bool found_in_meta = false;
             for (iter current = range.first; current != range.second; ++current) {
                 auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
-                if (key_values["ID"] == field.first) {
+                if (key_values[ID] == field.first) {
                     found_in_meta = true;
                     try {
-                        check_field_cardinality(field.second, values, key_values["Number"]);
-                        check_field_type(values, key_values["Type"]);
+                        check_field_cardinality(field.second, values, key_values[NUMBER]);
+                        check_field_type(values, key_values[TYPE]);
                     } catch (std::shared_ptr<Error> ex) {
-                        std::string message = "INFO " + key_values["ID"] + "=" + field.second
+                        std::string message = "INFO " + key_values[ID] + "=" + field.second
                                 + " does not match the meta" + ex->message;
-                        throw new InfoBodyError{line, message, key_values["ID"]};
+                        throw new InfoBodyError{line, message, key_values[ID]};
                     }
                     
                     break;
@@ -307,7 +307,7 @@ namespace ebi
 
     void Record::check_format_GT() const
     {
-        if (std::find(format.begin(), format.end(), "GT") != format.end() && format[0] != "GT") {
+        if (std::find(format.begin(), format.end(), GT) != format.end() && format[0] != GT) {
             throw new FormatBodyError{line, "GT must be the first field in the FORMAT column"};
         }
     }
@@ -335,7 +335,7 @@ namespace ebi
                 raise(std::make_shared<Error>(line, field_key + "=" + field_value
                                 + " does not match the" + ex->message));
             }
-            if (iterator->second.first == "Integer") {
+            if (iterator->second.first == INTEGER) {
                 check_field_integer_range(field_key, values);
             }
         }
@@ -344,18 +344,22 @@ namespace ebi
     void Record::strict_validation_info_predefined_tags(std::string const & field_key, std::string const & field_value,
                                                         std::vector<std::string> const & values) const
     {
-        if (field_key == "AA") {
+        if (field_key == AA) {
             static boost::regex aa_regex("((?![,;=])[[:print:]])+");
             if (!boost::regex_match(field_value, aa_regex)) {
                 throw new InfoBodyError{line, "INFO AA=" + field_value + " value is not a single dot or a string of bases", field_key};
             }
-        } else if (field_key == "AF") {
+        } else if (field_key == AF) {
+            std::vector<std::string> values;
+            util::string_split(field_value, ",", values);
             for (auto & value : values) {
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
                     throw new InfoBodyError{line, "INFO AF=" + field_value + " value does not lie in the interval [0,1]", field_key};
                 }
             }
-        } else if (field_key == "CIGAR") {
+        } else if (field_key == CIGAR) {
+            std::vector<std::string> values;
+            util::string_split(field_value, ",", values);
             static boost::regex cigar_string("([0-9]+[MIDNSHPX])+");
             for (auto & value : values) {
                 if (!boost::regex_match(value, cigar_string)) {
@@ -441,7 +445,7 @@ namespace ebi
     std::vector<MetaEntry> Record::get_meta_entry_objects() const
     {
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
-        std::pair<iter, iter> range = source->meta_entries.equal_range("FORMAT");
+        std::pair<iter, iter> range = source->meta_entries.equal_range(FORMAT);
         std::vector<MetaEntry> format_meta;
 
         for (auto & fm : format) {
@@ -450,7 +454,7 @@ namespace ebi
             for (iter current = range.first; current != range.second; ++current) {
                 auto & key_values = boost::get<std::map < std::string, std::string>>((current->second).value);
 
-                if (key_values["ID"] == fm) {
+                if (key_values[ID] == fm) {
                     format_meta.push_back(current->second);
                     found_in_header = true;
                     break;
@@ -474,7 +478,7 @@ namespace ebi
         check_sample_subfields_count(i, subfields);
         
         // If the first format field is not a GT, then no alleles need to be checked
-        if (format[0] == "GT") {
+        if (format[0] == GT) {
             check_sample_alleles(subfields);
         }        
         
@@ -516,16 +520,16 @@ namespace ebi
                 auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
 
                 try {
-                    check_field_cardinality(subfield, values, key_values["Number"]);
-                    check_field_type(values, key_values["Type"]);
+                    check_field_cardinality(subfield, values, key_values[NUMBER]);
+                    check_field_type(values, key_values[TYPE]);
                 } catch (std::shared_ptr<Error> ex) {
                     long cardinality;
-                    bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), cardinality);
+                    bool valid = is_valid_cardinality(key_values[NUMBER], alternate_alleles.size(), cardinality);
                     long number = valid ? cardinality : -1;
  
-                    std::string message = "Sample #" + std::to_string(i + 1) + ", " + key_values["ID"] + "=" + subfield
+                    std::string message = "Sample #" + std::to_string(i + 1) + ", " + key_values[ID] + "=" + subfield
                             + " does not match the meta" + ex->message;
-                    throw new SamplesFieldBodyError{line, message, key_values["ID"], number};
+                    throw new SamplesFieldBodyError{line, message, key_values[ID], number};
                 }
             }
 
@@ -556,7 +560,7 @@ namespace ebi
                 throw new SamplesFieldBodyError{line, "Allele index must not be empty", "GT", ploidy};
             }
 
-            if (allele == ".") { continue; } // No need to check missing alleles
+            if (allele == DOT) { continue; } // No need to check missing alleles
 
             check_sample_alleles_is_integer(allele, ploidy);
 
@@ -568,7 +572,7 @@ namespace ebi
     {
         if (std::find_if_not(allele.begin(), allele.end(), isdigit) != allele.end()) {
             throw new SamplesFieldBodyError{line, "Allele index " + allele + " must be a non-negative integer number",
-                                            "GT", ploidy};
+                                            GT, ploidy};
         }        
     }
 
@@ -580,7 +584,7 @@ namespace ebi
                                             "Allele index " + std::to_string(num_allele)
                                                     + " is greater than the maximum allowed "
                                                     + std::to_string(alternate_alleles.size()),
-                                            "GT", ploidy};
+                                            GT, ploidy};
         }
     }
 
@@ -602,17 +606,17 @@ namespace ebi
         bool valid = true;
         size_t ploidy = source->ploidy.get_ploidy(chromosome);
 
-        if (number == "A") {
+        if (number == A) {
             // ...the number of alternate alleles
             cardinality = alternate_allele_number;
-        } else if (number == "R") {
+        } else if (number == R) {
             // ...the number of alternate alleles + reference
             cardinality = alternate_allele_number + 1;
-        } else if (number == "G") {
+        } else if (number == G) {
             // ...the number of possible genotypes
             // The binomial coefficient is calculated considering the ploidy of the sample
             cardinality = boost::math::binomial_coefficient<float>(alternate_allele_number + ploidy, ploidy);
-        } else if (number == ".") {
+        } else if (number == DOT) {
             // ...it is unspecified
             cardinality = -1;
         } else {
@@ -655,7 +659,7 @@ namespace ebi
     }
 
     void Record::check_value_type(std::string const & type, std::string const & value, std::string & message) const {
-        if (type == "Integer") {
+        if (type == INTEGER) {
             // ...try to cast to int
             std::stoi(value);
             // ...and also check it's not a float
@@ -663,7 +667,7 @@ namespace ebi
                 message = " (an integer must not contain decimal digits)";
                 throw std::invalid_argument(message);
             }
-        } else if (type == "Float") {
+        } else if (type == FLOAT) {
             // ...try to cast to float
             try {
                 std::stof(value);
@@ -671,20 +675,20 @@ namespace ebi
                 // It maybe a subnormal number
                 std::stold(value);
             }
-        } else if (type == "Flag") {
+        } else if (type == FLAG) {
             int numeric_value = std::stoi(value);
             if (value.size() > 1 || (numeric_value != 0 && numeric_value != 1)) {
                 message = " (a flag value must be \"0, 1 or none\")";
                 throw std::invalid_argument(message);
             }
             // If no flag is provided then there is nothing to check
-        } else if (type == "Character") {
+        } else if (type == CHARACTER) {
             // ...check the length is 1
             if (value.size() > 1) {
                 message = " (there can be only one character)";
                 throw std::invalid_argument(message);
             }
-        } else if (type == "String") {
+        } else if (type == STRING) {
             // ...do nothing, it is guaranteed it will be a string
         }
     }
@@ -694,7 +698,7 @@ namespace ebi
     {
         // To check the field type...
         for (auto & value : values) {
-            if (value == ".") { continue; }
+            if (value == DOT) { continue; }
 
             std::string message;
             try {
@@ -711,7 +715,7 @@ namespace ebi
             return;
         }
         for (auto & value : values) {
-            if (value == ".") { continue; }
+            if (value == DOT) { continue; }
 
             if (std::stoi(value) < 0) {
                 raise(std::make_shared<Error>(line, field + " value must be a non-negative integer number"));
@@ -726,7 +730,7 @@ namespace ebi
         for (std::multimap<std::string, MetaEntry>::iterator current = begin; current != end; ++current) {
             auto & key_values = boost::get<std::map < std::string, std::string >> ((current->second).value);
 
-            if (key_values["ID"] == field_value) {
+            if (key_values[ID] == field_value) {
                 return true;
             }
         }
