@@ -23,7 +23,7 @@ namespace ebi
     
     void ValidateOptionalPolicy::optional_check_meta_section(ParsingState const & state) const
     {
-        if (state.source->meta_entries.find("reference") == state.source->meta_entries.end()) {
+        if (state.source->meta_entries.find(REFERENCE) == state.source->meta_entries.end()) {
             throw new MetaSectionError{state.n_lines, "A valid 'reference' entry is not listed in the meta section"};
         }
     }
@@ -75,7 +75,7 @@ namespace ebi
     
     void ValidateOptionalPolicy::check_body_entry_ploidy(ParsingState & state, Record & record)
     {
-        bool format_column_contains_gt = record.format.size() >= 1 and record.format[0] == "GT";
+        bool format_column_contains_gt = record.format.size() >= 1 and record.format[0] == GT;
         if (format_column_contains_gt) {
             // All samples should have the same ploidy
             size_t ploidy = 0;
@@ -92,7 +92,7 @@ namespace ebi
                                 state.n_lines,
                                 "Sample #" + std::to_string(i) + " has " + std::to_string(alleles.size())
                                         + " allele(s), but " + std::to_string(ploidy) + " were found in others",
-                                "GT",
+                                GT,
                                 static_cast<long>(ploidy)};
                     }
                 } else {
@@ -107,7 +107,7 @@ namespace ebi
                 std::stringstream ss;
                 ss << "The specified ploidy for contig \"" << record.chromosome << "\" was " << provided_ploidy
                    << ", which doesn't match the genotypes, which show ploidy " << ploidy;
-                throw new SamplesFieldBodyError{state.n_lines, ss.str(), "GT", static_cast<long>(provided_ploidy)};
+                throw new SamplesFieldBodyError{state.n_lines, ss.str(), GT, static_cast<long>(provided_ploidy)};
             }
         }
     }
@@ -181,19 +181,19 @@ namespace ebi
         // The associated 'contig' meta entry should exist (notify only once)
         std::string current_chromosome = record.chromosome;
 
-        if (state.is_well_defined_meta("contig", current_chromosome)) {
+        if (state.is_well_defined_meta(CONTIG, current_chromosome)) {
             return; // Check only once
         }
         
-        std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range("contig");
+        std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range(CONTIG);
 
         if (is_record_subfield_in_header(current_chromosome, range.first, range.second)) {
-            state.add_well_defined_meta("contig", current_chromosome);
+            state.add_well_defined_meta(CONTIG, current_chromosome);
         } else {
             throw new NoMetaDefinitionError{
                     state.n_lines,
                     "Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description",
-                    "CHROM",
+                    CHROM,
                     current_chromosome
             };
         }
@@ -202,7 +202,7 @@ namespace ebi
     void ValidateOptionalPolicy::check_alternate_allele_meta(ParsingState & state, Record & record) const
     {
         static boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
-        std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range("ALT");
+        std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range(ALT);
         boost::cmatch pieces_match;
         
         for (auto & alternate : record.alternate_alleles) {
@@ -210,17 +210,17 @@ namespace ebi
             if (alternate[0] == '<' && boost::regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
                 std::string alt_id = pieces_match[1];
                 
-                if (state.is_well_defined_meta("ALT", alt_id)) {
+                if (state.is_well_defined_meta(ALT, alt_id)) {
                     continue; // Check only once
                 }
                 
                 if (is_record_subfield_in_header(alt_id, range.first, range.second)) {
-                    state.add_well_defined_meta("ALT", alt_id);
+                    state.add_well_defined_meta(ALT, alt_id);
                 } else {
                     throw new NoMetaDefinitionError{
                             state.n_lines,
                             "Alternate '<" + alt_id + ">' is not listed in a valid meta-data ALT entry",
-                            "ALT",
+                            ALT,
                             alt_id
                     };
                 }
@@ -230,22 +230,22 @@ namespace ebi
     
     void ValidateOptionalPolicy::check_filter_meta(ParsingState & state, Record & record) const
     {
-        std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range("FILTER");
+        std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range(FILTER);
         
         for (auto & filter : record.filters) {
-            if (filter == "PASS" || filter == ".") { continue; } // No need to check PASS or missing data
+            if (filter == PASS || filter == DOT) { continue; } // No need to check PASS or missing data
             
-            if (state.is_well_defined_meta("FILTER", filter)) {
+            if (state.is_well_defined_meta(FILTER, filter)) {
                 continue; // Check only once
             }
             
             if (is_record_subfield_in_header(filter, range.first, range.second)) {
-                state.add_well_defined_meta("FILTER", filter);
+                state.add_well_defined_meta(FILTER, filter);
             } else {
                 throw new NoMetaDefinitionError{
                         state.n_lines,
                         "Filter '" + filter + "' is not listed in a valid meta-data FILTER entry",
-                        "FILTER",
+                        FILTER,
                         filter
                 };
             }
@@ -254,23 +254,23 @@ namespace ebi
     
     void ValidateOptionalPolicy::check_info_meta(ParsingState & state, Record & record) const
     {
-        std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range("INFO");
+        std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range(INFO);
         
         for (auto & field : record.info) {
             auto & id = field.first;
-            if (field.first == ".") { continue; } // No need to check missing data
+            if (field.first == DOT) { continue; } // No need to check missing data
             
-            if (state.is_well_defined_meta("INFO", id)) {
+            if (state.is_well_defined_meta(INFO, id)) {
                 continue; // Check only once
             }
             
             if (is_record_subfield_in_header(id, range.first, range.second)) {
-                state.add_well_defined_meta("INFO", id);
+                state.add_well_defined_meta(INFO, id);
             } else {
                 throw new NoMetaDefinitionError{
                         state.n_lines,
                         "Info '" + id + "' is not listed in a valid meta-data INFO entry",
-                        "INFO",
+                        INFO,
                         id
                 };
             }
@@ -279,20 +279,20 @@ namespace ebi
     
     void ValidateOptionalPolicy::check_format_meta(ParsingState & state, Record & record) const
     {
-        std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range("FORMAT");
+        std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range(FORMAT);
         
         for (auto & fm : record.format) {
-            if (state.is_well_defined_meta("FORMAT", fm)) {
+            if (state.is_well_defined_meta(FORMAT, fm)) {
                 continue; // Check only once
             }
             
             if (is_record_subfield_in_header(fm, range.first, range.second)) {
-                state.add_well_defined_meta("FORMAT", fm);
+                state.add_well_defined_meta(FORMAT, fm);
             } else {
                 throw new NoMetaDefinitionError{
                         state.n_lines,
                         "Format '" + fm + "' is not listed in a valid meta-data FORMAT entry",
-                        "FORMAT",
+                        FORMAT,
                         fm
                 };
             }

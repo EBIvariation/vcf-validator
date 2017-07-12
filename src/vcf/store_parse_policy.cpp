@@ -52,11 +52,11 @@ namespace ebi
     {
         Version fileformat_version = Version::v41;
 
-        if (m_current_token == "VCFv4.1") {
+        if (m_current_token == VCF_V41) {
             fileformat_version = Version::v41;
-        } else if (m_current_token == "VCFv4.2") {
+        } else if (m_current_token == VCF_V42) {
             fileformat_version = Version::v42;
-        } else if (m_current_token == "VCFv4.3") {
+        } else if (m_current_token == VCF_V43) {
             fileformat_version = Version::v43;
         } else {
             throw new FileformatError{state.n_lines, "Not allowed VCF fileformat version"};
@@ -119,39 +119,39 @@ namespace ebi
     {
         switch(n_columns) {
             case 1:
-                m_line_tokens["CHROM"] = m_grouped_tokens;
+                m_line_tokens[CHROM] = m_grouped_tokens;
                 break;
             case 2:
-                m_line_tokens["POS"] = m_grouped_tokens;
+                m_line_tokens[POS] = m_grouped_tokens;
                 break;
             case 3:
-                m_line_tokens["ID"] = m_grouped_tokens;
+                m_line_tokens[ID] = m_grouped_tokens;
                 break;
             case 4:
-                m_line_tokens["REF"] = m_grouped_tokens;
+                m_line_tokens[REF] = m_grouped_tokens;
                 break;
             case 5:
-                m_line_tokens["ALT"] = m_grouped_tokens;
+                m_line_tokens[ALT] = m_grouped_tokens;
                 break;
             case 6:
-                m_line_tokens["QUAL"] = m_grouped_tokens;
+                m_line_tokens[QUAL] = m_grouped_tokens;
                 break;
             case 7:
-                m_line_tokens["FILTER"] = m_grouped_tokens;
+                m_line_tokens[FILTER] = m_grouped_tokens;
                 break;
             case 8:
-                m_line_tokens["INFO"] = m_grouped_tokens;
+                m_line_tokens[INFO] = m_grouped_tokens;
                 break;
             case 9:
-                m_line_tokens["FORMAT"] = m_grouped_tokens;
+                m_line_tokens[FORMAT] = m_grouped_tokens;
                 break;
             default:
                 // Collection of samples
-                if (m_line_tokens.find("SAMPLES") == m_line_tokens.end()) {
-                    m_line_tokens["SAMPLES"] = std::vector<std::string>{};
+                if (m_line_tokens.find(SAMPLES) == m_line_tokens.end()) {
+                    m_line_tokens[SAMPLES] = std::vector<std::string>{};
                 }
                 // Samples are stored as a single string
-                m_line_tokens["SAMPLES"].push_back(m_grouped_tokens[0]);
+                m_line_tokens[SAMPLES].push_back(m_grouped_tokens[0]);
         }
         m_grouped_tokens = std::vector<std::string>{};
     }
@@ -161,16 +161,16 @@ namespace ebi
         size_t position;
         try {
             // Transform the position token into a size_t
-            position = static_cast<size_t>(std::stoi(m_line_tokens["POS"][0]));
+            position = static_cast<size_t>(std::stoi(m_line_tokens[POS][0]));
         } catch (std::invalid_argument ex) {
             throw new PositionBodyError{state.n_lines};
         }
 
         // Transform all the quality tokens into floating point numbers
         float quality = 0;
-        if (m_line_tokens["QUAL"][0] != ".") {
+        if (m_line_tokens[QUAL][0] != DOT) {
             try {
-                quality = std::stof(m_line_tokens["QUAL"][0]);
+                quality = std::stof(m_line_tokens[QUAL][0]);
             } catch (std::invalid_argument ex) {
                 throw new QualityBodyError{state.n_lines};
             }
@@ -178,7 +178,7 @@ namespace ebi
 
         // Split the info tokens by the equals (=) symbol
         std::multimap<std::string, std::string> info;
-        for (auto &field : m_line_tokens["INFO"]) {
+        for (auto &field : m_line_tokens[INFO]) {
             std::vector<std::string> subfields;
             util::string_split(field, "=", subfields);
             if (subfields.size() > 1) {
@@ -189,20 +189,20 @@ namespace ebi
         }
 
         // Format and samples are optional
-        auto format = m_line_tokens.find("FORMAT") != m_line_tokens.end() ?
-                      m_line_tokens["FORMAT"] : std::vector<std::string>{};
-        auto samples = m_line_tokens.find("SAMPLES") != m_line_tokens.end() ?
-                       m_line_tokens["SAMPLES"] : std::vector<std::string>{};
+        auto format = m_line_tokens.find(FORMAT) != m_line_tokens.end() ?
+                      m_line_tokens[FORMAT] : std::vector<std::string>{};
+        auto samples = m_line_tokens.find(SAMPLES) != m_line_tokens.end() ?
+                       m_line_tokens[SAMPLES] : std::vector<std::string>{};
 
         state.set_record(std::unique_ptr<Record>{new Record{
                 state.n_lines,
-                m_line_tokens["CHROM"][0],
+                m_line_tokens[CHROM][0],
                 position,
-                m_line_tokens["ID"],
-                m_line_tokens["REF"][0],
-                m_line_tokens["ALT"],
+                m_line_tokens[ID],
+                m_line_tokens[REF][0],
+                m_line_tokens[ALT],
                 quality,
-                m_line_tokens["FILTER"],
+                m_line_tokens[FILTER],
                 info,
                 format,
                 samples,
@@ -229,7 +229,7 @@ namespace ebi
     void StoreParsePolicy::check_sorted(ParsingState &state, size_t position)
     {
         // check contigs are contiguous
-        auto iterator = finished_contigs.find(m_line_tokens["CHROM"][0]);
+        auto iterator = finished_contigs.find(m_line_tokens[CHROM][0]);
         bool contig_not_found = iterator == finished_contigs.end();
         bool contig_already_finished = iterator->second;
         if (contig_not_found) {
@@ -238,19 +238,19 @@ namespace ebi
                 // with the first contig there's no previous contig
                 finished_contigs[previous_contig] = true;
             }
-            finished_contigs[m_line_tokens["CHROM"][0]] = false;
-            previous_contig = m_line_tokens["CHROM"][0];
+            finished_contigs[m_line_tokens[CHROM][0]] = false;
+            previous_contig = m_line_tokens[CHROM][0];
             previous_position = 0;  // position sorting is reset
         } else if (contig_already_finished) {
             std::stringstream ss;
-            ss << "Variant " << m_line_tokens["CHROM"][0] << ":" << position << " is not contiguous to the rest of the contig";
+            ss << "Variant " << m_line_tokens[CHROM][0] << ":" << position << " is not contiguous to the rest of the contig";
             throw new BodySectionError{state.n_lines, ss.str()};
         }
 
         // check all positions are sorted within a contig
         if (position < previous_position) {
             std::stringstream ss;
-            ss << "Contig " << m_line_tokens["CHROM"][0] << " is not sorted by position: "
+            ss << "Contig " << m_line_tokens[CHROM][0] << " is not sorted by position: "
                << position << " found after " << previous_position;
             throw new PositionBodyError{state.n_lines, ss.str()};
         }
