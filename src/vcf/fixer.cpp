@@ -15,6 +15,7 @@
  */
 
 #include "vcf/fixer.hpp"
+#include "vcf/string_constants.hpp"
 
 namespace ebi
 {
@@ -163,7 +164,7 @@ namespace ebi
             try {
                 using iter = std::vector<std::string>::iterator;
                 fixed_samples = fix_columns(format_column_index, -1, string_line, "\t", [&](iter first, iter last) {
-                    if (error.field == "GT") {
+                    if (error.field == GT) {
                         fix_format_gt(first, last, error);
                     } else {
                         remove_format(first, last, error);
