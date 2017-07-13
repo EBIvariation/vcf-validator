@@ -168,7 +168,7 @@ namespace ebi
             { EC, { INTEGER, A } },
             { FT, { STRING, "1" } },
             { GL, { FLOAT, G } },
-            { GLE, { STRING, G } }
+            { GLE, { STRING, G } },
             { GP, { FLOAT, G } },
             { GQ, { INTEGER, "1" } },
             { GT, { STRING, "1" } },

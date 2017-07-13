@@ -350,16 +350,12 @@ namespace ebi
                 throw new InfoBodyError{line, "INFO AA=" + field_value + " value is not a single dot or a string of bases", field_key};
             }
         } else if (field_key == AF) {
-            std::vector<std::string> values;
-            util::string_split(field_value, ",", values);
             for (auto & value : values) {
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
                     throw new InfoBodyError{line, "INFO AF=" + field_value + " value does not lie in the interval [0,1]", field_key};
                 }
             }
         } else if (field_key == CIGAR) {
-            std::vector<std::string> values;
-            util::string_split(field_value, ",", values);
             static boost::regex cigar_string("([0-9]+[MIDNSHPX])+");
             for (auto & value : values) {
                 if (!boost::regex_match(value, cigar_string)) {
