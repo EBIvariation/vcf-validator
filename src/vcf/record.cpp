@@ -362,15 +362,15 @@ namespace ebi
                     throw new InfoBodyError{line, "INFO CIGAR=" + field_value + " value is not an alphanumeric string compliant with the SAM specification", field_key};
                 }
             }
-        } else if (field_key == "END") {
-            auto it = info.find("IMPRECISE");
+        } else if (field_key == END) {
+            auto it = info.find(IMPRECISE);
             if (it != info.end() && it->second == "0") {
                 auto expected = std::to_string(position + reference_allele.length() - 1);
                 if (field_value != expected) {
                     throw new InfoBodyError{line, "INFO END=" + field_value + " value must be equal to \"POS + length of REF - 1\" for a precise variant (where IMPRECISE is set to 0), expected " + expected, field_key};
                 }
             }
-        } else if (field_key == "SVLEN" && values.size() == alternate_alleles.size()) {
+        } else if (field_key == SVLEN && values.size() == alternate_alleles.size()) {
             bool is_ref_symbolic = true;
             std::vector<bool> is_alt_symbolic(alternate_alleles.size(), false);
             std::unordered_set<char> symbolic = { 'A', 'C', 'G', 'T', 'N', 'a', 'c', 'g', 't', 'n' };
@@ -402,11 +402,11 @@ namespace ebi
                     }
                 } else {
                     std::string first_field = alternate_alleles[i].substr(0, 4);
-                    if (first_field == "<INS" || first_field == "<DUP") {
+                    if (first_field == "<" + INS || first_field == "<" + DUP) {
                         if (std::stoi(values[i]) < 0) {
                             throw new InfoBodyError{line, "SVLEN=" + field_value + " must be a positive integer for longer ALT alleles like " + first_field.substr(1,3)};
                         }
-                    } else if (first_field == "<DEL") {
+                    } else if (first_field == "<" + DEL) {
                         if (std::stoi(values[i]) > 0) {
                             throw new InfoBodyError{line, "SVLEN=" + field_value + " must be a negative integer for shorter ALT alleles like " + first_field.substr(1,3)};
                         }
@@ -537,7 +537,7 @@ namespace ebi
                                                           std::vector<std::string> const & values) const
     {
         std::string message = "Sample #" + std::to_string(i + 1) + ", " + field_key + "=" + field_value + " value";
-        if (field_key == "GP" || (field_key == "CNP" && source->version == Version::v43)) {
+        if (field_key == GP || (field_key == CNP && source->version == Version::v43)) {
             for (auto & value : values) {
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
                     throw new SamplesFieldBodyError{line, message + " does not lie in the interval [0,1]", field_key};
@@ -553,7 +553,7 @@ namespace ebi
         long ploidy = static_cast<long>(source->ploidy.get_ploidy(chromosome));
         for (auto & allele : alleles) {
             if (allele == "") {
-                throw new SamplesFieldBodyError{line, "Allele index must not be empty", "GT", ploidy};
+                throw new SamplesFieldBodyError{line, "Allele index must not be empty", GT, ploidy};
             }
 
             if (allele == DOT) { continue; } // No need to check missing alleles
@@ -706,7 +706,7 @@ namespace ebi
     }
 
     void Record::check_field_integer_range(std::string const & field, std::vector<std::string> const & values) const {
-        if (field == "SVLEN" || field == "CIPOS" || field == "CIEND" || field == "CILEN" || field == "CICN" || field == "CICNADJ") {
+        if (field == SVLEN || field == CIPOS || field == CIEND || field == CILEN || field == CICN || field == CICNADJ) {
             // to ignore predefined tag fields which permit negative integral values
             return;
         }

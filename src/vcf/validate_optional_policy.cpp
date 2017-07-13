@@ -145,10 +145,10 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_info_imprecise(ParsingState & state, Record & record) const
     {
-        auto it = record.info.find("IMPRECISE");
+        auto it = record.info.find(IMPRECISE);
         if (it != record.info.end() && it->second == "0") {
-            check_body_entry_info_other_tag(state, record.info, "CIPOS");
-            check_body_entry_info_other_tag(state, record.info, "CIEND");
+            check_body_entry_info_other_tag(state, record.info, CIPOS);
+            check_body_entry_info_other_tag(state, record.info, CIEND);
         }
     }
 
@@ -164,7 +164,7 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_info_svlen(ParsingState & state, Record & record) const
     {
-        auto it = record.info.find("SVLEN");
+        auto it = record.info.find(SVLEN);
         if (it != record.info.end()) {
             std::vector<std::string> values;
             util::string_split(it->second, ",", values);
