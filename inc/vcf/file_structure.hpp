@@ -167,6 +167,7 @@ namespace ebi
             { "EC", { "Integer", "A" } },
             { "FT", { "String", "1" } },
             { "GL", { "Float", "G" } },
+            { "GLE", { "String", "G" } },
             { "GP", { "Float", "G" } },
             { "GQ", { "Integer", "1" } },
             { "GT", { "String", "1" } },
@@ -449,7 +450,8 @@ namespace ebi
          *
          * @throw InfoBodyError
          */
-        void strict_validation_info_predefined_tags(std::string const & field_key, std::string const & field_value) const;
+        void strict_validation_info_predefined_tags(std::string const & field_key, std::string const & field_value,
+                                                    std::vector<std::string> const & values) const;
 
        /**
          * Checks that the samples in the record:
@@ -494,7 +496,15 @@ namespace ebi
          * @throw SamplesFieldBodyError
          */
         void check_sample_subfields_cardinality_type(size_t i, std::vector<std::string> const & subfields, std::vector<MetaEntry> const & format_meta) const;
-        
+
+        /**
+         * Strict validation of predefined FORMAT tags
+         *
+         * @throw SamplesFieldBodyError
+         */
+        void strict_validation_format_predefined_tags(size_t i, std::string const & field_key, std::string const & field_value,
+                                                      std::vector<std::string> const & values) const;
+
         /**
          * Check that the allele indexes in a sample are not greater than the total number of alleles
          * 

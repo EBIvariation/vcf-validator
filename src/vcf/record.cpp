@@ -15,6 +15,7 @@
  */
 
 #include <functional>
+#include <unordered_set>
 #include "vcf/file_structure.hpp"
 #include "vcf/record.hpp"
 
@@ -279,7 +280,7 @@ namespace ebi
                 }
             }
 
-            strict_validation_info_predefined_tags(field.first, field.second);
+            strict_validation_info_predefined_tags(field.first, field.second, values);
        }
     }
     
@@ -340,7 +341,8 @@ namespace ebi
         }
     }
 
-    void Record::strict_validation_info_predefined_tags(std::string const & field_key, std::string const & field_value) const
+    void Record::strict_validation_info_predefined_tags(std::string const & field_key, std::string const & field_value,
+                                                        std::vector<std::string> const & values) const
     {
         if (field_key == "AA") {
             static boost::regex aa_regex("((?![,;=])[[:print:]])+");
@@ -348,20 +350,67 @@ namespace ebi
                 throw new InfoBodyError{line, "INFO AA=" + field_value + " value is not a single dot or a string of bases", field_key};
             }
         } else if (field_key == "AF") {
-            std::vector<std::string> values;
-            util::string_split(field_value, ",", values);
             for (auto & value : values) {
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
                     throw new InfoBodyError{line, "INFO AF=" + field_value + " value does not lie in the interval [0,1]", field_key};
                 }
             }
         } else if (field_key == "CIGAR") {
-            std::vector<std::string> values;
-            util::string_split(field_value, ",", values);
             static boost::regex cigar_string("([0-9]+[MIDNSHPX])+");
             for (auto & value : values) {
                 if (!boost::regex_match(value, cigar_string)) {
                     throw new InfoBodyError{line, "INFO CIGAR=" + field_value + " value is not an alphanumeric string compliant with the SAM specification", field_key};
+                }
+            }
+        } else if (field_key == "END") {
+            auto it = info.find("IMPRECISE");
+            if (it != info.end() && it->second == "0") {
+                auto expected = std::to_string(position + reference_allele.length() - 1);
+                if (field_value != expected) {
+                    throw new InfoBodyError{line, "INFO END=" + field_value + " value must be equal to \"POS + length of REF - 1\" for a precise variant (where IMPRECISE is set to 0), expected " + expected, field_key};
+                }
+            }
+        } else if (field_key == "SVLEN" && values.size() == alternate_alleles.size()) {
+            bool is_ref_symbolic = true;
+            std::vector<bool> is_alt_symbolic(alternate_alleles.size(), false);
+            std::unordered_set<char> symbolic = { 'A', 'C', 'G', 'T', 'N', 'a', 'c', 'g', 't', 'n' };
+
+            for (auto & ref : reference_allele) {
+                if (symbolic.find(ref) == symbolic.end()) {
+                    is_ref_symbolic = false;
+                    break;
+                }
+            }
+
+            if (is_ref_symbolic) {
+                for (size_t i = 0; i < alternate_alleles.size(); i++) {
+                    is_alt_symbolic[i] = true;
+                    for (auto & alt : alternate_alleles[i]) {
+                        if (symbolic.find(alt) == symbolic.end()) {
+                            is_alt_symbolic[i] = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            for (size_t i = 0; i < values.size(); i++) {
+                if (is_ref_symbolic && is_alt_symbolic[i]) {
+                    std::string expected = std::to_string(alternate_alleles[i].size() - reference_allele.size());
+                    if (values[i] != expected) {
+                        throw new InfoBodyError{line, "INFO SVLEN=" + field_value + " must be equal to \"length of ALT - length of REF\" for symbolic alternate alleles (expected " + expected + ", found " + values[i] + ")"};
+                    }
+                } else {
+                    std::string first_field = alternate_alleles[i].substr(0, 4);
+                    if (first_field == "<INS" || first_field == "<DUP") {
+                        if (std::stoi(values[i]) < 0) {
+                            throw new InfoBodyError{line, "SVLEN=" + field_value + " must be a positive integer for longer ALT alleles like " + first_field.substr(1,3)};
+                        }
+                    } else if (first_field == "<DEL") {
+                        if (std::stoi(values[i]) > 0) {
+                            throw new InfoBodyError{line, "SVLEN=" + field_value + " must be a negative integer for shorter ALT alleles like " + first_field.substr(1,3)};
+                        }
+                    }
                 }
             }
         }
@@ -435,38 +484,64 @@ namespace ebi
     void Record::check_sample_subfields_count(size_t i, std::vector<std::string> const & subfields) const
     {
         if (subfields.size() > format.size()) {
-            throw new SamplesBodyError{line, "Sample #" + std::to_string(i+1) +
+            throw new SamplesBodyError{line, "Sample #" + std::to_string(i + 1) +
                     " has more fields than specified in the FORMAT column"};
         }
     }
 
     void Record::check_sample_subfields_cardinality_type(size_t i, std::vector<std::string> const & subfields, std::vector<MetaEntry> const & format_meta) const
     {
+        std::vector<std::string> values;
+
         for (size_t j = 0; j < subfields.size(); ++j) {
             MetaEntry meta = format_meta[j];
             auto & subfield = subfields[j];
             
-            if (meta.id == "") {
-                // FORMAT fields not described in the meta section can't be checked
-                continue;
-            }
-            
-            auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
-
-            std::vector<std::string> values;
             util::string_split(subfield, ",", values);
 
-            try {
-                check_field_cardinality(subfield, values, key_values["Number"]);
-                check_field_type(values, key_values["Type"]);
-            } catch (std::shared_ptr<Error> ex) {
-                long cardinality;
-                bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), cardinality);
-                long number = valid ? cardinality : -1;
+            if (meta.id == "") {
+                try {
+                    if (source->version == Version::v41 || source->version == Version::v42) {
+                        check_predefined_tag(format[j], subfield, values, format_v41_v42);
+                    } else {
+                        check_predefined_tag(format[j], subfield, values, format_v43);
+                    }
+                } catch (std::shared_ptr<Error> ex) {
+                    throw new SamplesFieldBodyError{line, "Sample #" + std::to_string(i + 1) + ", " + ex->message, format[j]};
+                }
+
+                // FORMAT fields not described in the meta section can't be checked
+
+            } else {
+                auto & key_values = boost::get<std::map < std::string, std::string>>(meta.value);
+
+                try {
+                    check_field_cardinality(subfield, values, key_values["Number"]);
+                    check_field_type(values, key_values["Type"]);
+                } catch (std::shared_ptr<Error> ex) {
+                    long cardinality;
+                    bool valid = is_valid_cardinality(key_values["Number"], alternate_alleles.size(), cardinality);
+                    long number = valid ? cardinality : -1;
  
-                std::string message = "Sample #" + std::to_string(i + 1) + ", " + key_values["ID"] + "=" + subfield
-                        + " does not match the meta" + ex->message;
-                throw new SamplesFieldBodyError{line, message, key_values["ID"], number};
+                    std::string message = "Sample #" + std::to_string(i + 1) + ", " + key_values["ID"] + "=" + subfield
+                            + " does not match the meta" + ex->message;
+                    throw new SamplesFieldBodyError{line, message, key_values["ID"], number};
+                }
+            }
+
+            strict_validation_format_predefined_tags(i, format[j], subfield, values);
+        }
+    }
+
+    void Record::strict_validation_format_predefined_tags(size_t i, std::string const & field_key, std::string const & field_value,
+                                                          std::vector<std::string> const & values) const
+    {
+        std::string message = "Sample #" + std::to_string(i + 1) + ", " + field_key + "=" + field_value + " value";
+        if (field_key == "GP" || (field_key == "CNP" && source->version == Version::v43)) {
+            for (auto & value : values) {
+                if (std::stold(value) < 0 || std::stold(value) > 1) {
+                    throw new SamplesFieldBodyError{line, message + " does not lie in the interval [0,1]", field_key};
+                }
             }
         }
     }
@@ -477,6 +552,10 @@ namespace ebi
         util::string_split(subfields[0], "|/", alleles);
         long ploidy = static_cast<long>(source->ploidy.get_ploidy(chromosome));
         for (auto & allele : alleles) {
+            if (allele == "") {
+                throw new SamplesFieldBodyError{line, "Allele index must not be empty", "GT", ploidy};
+            }
+
             if (allele == ".") { continue; } // No need to check missing alleles
 
             check_sample_alleles_is_integer(allele, ploidy);
@@ -488,7 +567,7 @@ namespace ebi
     void Record::check_sample_alleles_is_integer(std::string const & allele, long ploidy) const
     {
         if (std::find_if_not(allele.begin(), allele.end(), isdigit) != allele.end()) {
-            throw new SamplesFieldBodyError{line, "Allele index " + allele + " is not an integer number",
+            throw new SamplesFieldBodyError{line, "Allele index " + allele + " must be a non-negative integer number",
                                             "GT", ploidy};
         }        
     }
@@ -594,7 +673,7 @@ namespace ebi
             }
         } else if (type == "Flag") {
             int numeric_value = std::stoi(value);
-            if (numeric_value != 0 && numeric_value != 1) {
+            if (value.size() > 1 || (numeric_value != 0 && numeric_value != 1)) {
                 message = " (a flag value must be \"0, 1 or none\")";
                 throw std::invalid_argument(message);
             }
@@ -627,6 +706,10 @@ namespace ebi
     }
 
     void Record::check_field_integer_range(std::string const & field, std::vector<std::string> const & values) const {
+        if (field == "SVLEN" || field == "CIPOS" || field == "CIEND" || field == "CILEN" || field == "CICN" || field == "CICNADJ") {
+            // to ignore predefined tag fields which permit negative integral values
+            return;
+        }
         for (auto & value : values) {
             if (value == ".") { continue; }
 

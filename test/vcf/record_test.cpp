@@ -59,7 +59,7 @@ namespace ebi
                     { "Description", "Read depth" }
                 },
                 source
-            });
+        });
 
         source->meta_entries.emplace("INFO",
             vcf::MetaEntry{
@@ -85,7 +85,7 @@ namespace ebi
                     { "Description", "Allele frequency" }
                 },
                 source
-            });
+        });
 
          
         SECTION("Correct arguments") 
@@ -345,7 +345,7 @@ namespace ebi
                                 { "PASS" }, 
                                 { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
                                 { "DP", "GL" }, 
-                                { "12:0.5" },
+                                { "12:0.5,0.7,0.9,0.11,0.15,0.17" },
                                 source}) );
                                 
             CHECK_THROWS_AS( (vcf::Record{
@@ -447,9 +447,22 @@ namespace ebi
                     { "Description", "Read depth" }
                 },
                 source
-            });
+        });
 
-        source->meta_entries.emplace("INFO",
+        source->meta_entries.emplace("FORMAT",
+            vcf::MetaEntry{
+                1,
+                "FORMAT",
+                {
+                    { "ID", "FormatTag" },
+                    { "Number", "2" },
+                    { "Type", "Float" },
+                    { "Description", "A custom format tag" }
+                },
+                source
+        });
+
+       source->meta_entries.emplace("INFO",
             vcf::MetaEntry{
                 1,
                 "INFO",
@@ -473,7 +486,20 @@ namespace ebi
                     { "Description", "Allele frequency" }
                 },
                 source
-            });
+        });
+
+        source->meta_entries.emplace("INFO",
+            vcf::MetaEntry{
+                1,
+                "INFO",
+                {
+                    { "ID", "InfoTag" },
+                    { "Number", "1" },
+                    { "Type", "Integer" },
+                    { "Description", "A custom info tag" }
+                },
+                source
+        });
 
         SECTION("Duplicate IDs") 
         {
@@ -563,6 +589,99 @@ namespace ebi
                                 { "12:13" },
                                 source}),
                             vcf::FormatBodyError*);
+        }
+
+        SECTION("Conflicting data line values and meta header definition")
+        {
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"InfoTag", "1.89"}, { "AF", "0.5,0.3"} },
+                            { "GT", "DP" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"InfoTag", "1,2,3"}, { "AF", "0.5,0.3"} },
+                            { "GT", "DP" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AN", "12"}, { "AF", "0.5,0.3"} },
+                            { "GT", "FormatTag" },
+                            { "0|1:ta,gs" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AN", "12"}, { "AF", "0.5,0.3"} },
+                            { "GT", "FormatTag" },
+                            { "0|1:1.5" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AN", "12"}, { "AF", "0.5,0.3"} },
+                            { "GT", "DP" },
+                            { "0|1:tags" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { "PASS" },
+                            { {"AN", "12"}, { "AF", "0.5"} },
+                            { "GT", "DP" },
+                            { "0|1:1" },
+                            source}),
+                        vcf::InfoBodyError*);
         }
     }
 }

@@ -42,6 +42,12 @@ namespace ebi
         // Reference and alternate alleles in indels should share the first nucleotide
         check_body_entry_reference_alternate_matching(state, record);
         
+        // If a variant is flagged as precise, then it should not contain imprecise variant fields like CIPOS or CIEND
+        check_body_entry_info_imprecise(state, record);
+
+        // The number of values in SVLEN should match the number of alternate alleles
+        check_body_entry_info_svlen(state, record);
+
         /*
          * Once some meta-data is marked as in/correct there is no need again, so all the following have been 
          * optimised using a map for correctly defined meta-data and another one for incorrectly defined.
@@ -133,6 +139,39 @@ namespace ebi
             if (type == RecordType::INDEL && alternate[0] != record.reference_allele[0]) {
                 throw new ReferenceAlleleBodyError{state.n_lines,
                         "Reference and alternate alleles do not share the first nucleotide"};
+            }
+        }
+    }
+
+    void ValidateOptionalPolicy::check_body_entry_info_imprecise(ParsingState & state, Record & record) const
+    {
+        auto it = record.info.find("IMPRECISE");
+        if (it != record.info.end() && it->second == "0") {
+            check_body_entry_info_other_tag(state, record.info, "CIPOS");
+            check_body_entry_info_other_tag(state, record.info, "CIEND");
+        }
+    }
+
+    void ValidateOptionalPolicy::check_body_entry_info_other_tag(ParsingState & state, std::multimap<std::string, std::string> const & info,
+                                                                 std::string const & tag) const
+    {
+        auto it = info.find(tag);
+        if (it != info.end()) {
+            throw new InfoBodyError{state.n_lines,
+                    "INFO " + tag + " tag should not be defined for a precise variant"};
+        }
+    }
+
+    void ValidateOptionalPolicy::check_body_entry_info_svlen(ParsingState & state, Record & record) const
+    {
+        auto it = record.info.find("SVLEN");
+        if (it != record.info.end()) {
+            std::vector<std::string> values;
+            util::string_split(it->second, ",", values);
+            if (values.size() != record.alternate_alleles.size()) {
+                throw new InfoBodyError{state.n_lines,
+                        "INFO SVLEN should have same number of values as ALT (expected " + std::to_string(record.alternate_alleles.size())
+                        + ", found " + std::to_string(values.size()) + ")"};
             }
         }
     }
