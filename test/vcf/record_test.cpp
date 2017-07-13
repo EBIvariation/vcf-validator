@@ -35,54 +35,54 @@ namespace ebi
                 {},
                 { "Sample1" }}};
             
-        source->meta_entries.emplace("FORMAT",
+        source->meta_entries.emplace(vcf::FORMAT,
             vcf::MetaEntry{
                 1,
-                "FORMAT",
+                vcf::FORMAT,
                 {
-                    { "ID", "GT" },
-                    { "Number", "1" },
-                    { "Type", "String" },
-                    { "Description", "Genotype" }
+                    { vcf::ID, vcf::GT },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::STRING },
+                    { vcf::DESCRIPTION, "Genotype" }
                 },
                 source
         });
            
-        source->meta_entries.emplace("FORMAT",
+        source->meta_entries.emplace(vcf::FORMAT,
             vcf::MetaEntry{
                 1,
-                "FORMAT",
+                vcf::FORMAT,
                 {
-                    { "ID", "DP" },
-                    { "Number", "1" },
-                    { "Type", "Integer" },
-                    { "Description", "Read depth" }
+                    { vcf::ID, vcf::DP },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::DESCRIPTION, "Read depth" }
                 },
                 source
         });
 
-        source->meta_entries.emplace("INFO",
+        source->meta_entries.emplace(vcf::INFO,
             vcf::MetaEntry{
                 1,
-                "INFO",
+                vcf::INFO,
                 {
-                    { "ID", "AN" },
-                    { "Number", "1" },
-                    { "Type", "Integer" },
-                    { "Description", "Allele number" }
+                    { vcf::ID, vcf::AN },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::DESCRIPTION, "Allele number" }
                 },
                 source
         });
            
-        source->meta_entries.emplace("INFO",
+        source->meta_entries.emplace(vcf::INFO,
             vcf::MetaEntry{
                 1,
-                "INFO",
+                vcf::INFO,
                 {
-                    { "ID", "AF" },
-                    { "Number", "A" },
-                    { "Type", "Float" },
-                    { "Description", "Allele frequency" }
+                    { vcf::ID, vcf::AF },
+                    { vcf::NUMBER, vcf::A },
+                    { vcf::TYPE, vcf::FLOAT },
+                    { vcf::DESCRIPTION, "Allele frequency" }
                 },
                 source
         });
@@ -95,12 +95,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A", 
-                                { "AC", "AT" }, 
+                                vcf::A, 
+                                { vcf::AC, "AT" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "GT", "DP" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
+                                { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source} ) );
                 
@@ -109,12 +109,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { }, 
-                                "A", 
-                                { "AC", "AT" }, 
+                                vcf::A, 
+                                { vcf::AC, "AT" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "GT", "DP" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
+                                { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}) );
             CHECK_NOTHROW( (vcf::Record{
@@ -122,12 +122,12 @@ namespace ebi
                                 "chr1",
                                 123456,
                                 { },
-                                "A",
-                                { "AC", "AT" },
+                                vcf::A,
+                                { vcf::AC, "AT" },
                                 1.0,
-                                { "PASS" },
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} },
-                                { "DP" },
+                                { vcf::PASS },
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} },
+                                { vcf::DP },
                                 { "1" },
                                 source}) );
         }
@@ -139,12 +139,12 @@ namespace ebi
                                 "chr 1", 
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A", 
-                                { "AC", "AT" }, 
+                                vcf::A, 
+                                { vcf::AC, "AT" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "GT", "DP" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
+                                { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}),
                             vcf::ChromosomeBodyError*);
@@ -157,12 +157,12 @@ namespace ebi
                                 "chr:1", 
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A", 
-                                { "AC", "AT" }, 
+                                vcf::A, 
+                                { vcf::AC, "AT" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "GT", "DP" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
+                                { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}),
                             vcf::ChromosomeBodyError*);
@@ -175,12 +175,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { "id 123", "id456" }, 
-                                "A", 
-                                { "AC", "AT" }, 
+                                vcf::A, 
+                                { vcf::AC, "AT" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "GT", "DP" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
+                                { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}),
                             vcf::IdBodyError*);
@@ -193,12 +193,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A", 
+                                vcf::A, 
                                 { "AT" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5"} }, 
-                                { "GT", "DP" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5"} }, 
+                                { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}) );
                                 
@@ -207,12 +207,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A", 
+                                vcf::A, 
                                 { "CT" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5"} }, 
-                                { "GT", "DP" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5"} }, 
+                                { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}) );
         }
@@ -224,12 +224,12 @@ namespace ebi
                                 "chr1",
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A", 
+                                vcf::A, 
                                 { "T", "C" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "GT", "DP" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
+                                { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}) );
         }
@@ -241,12 +241,12 @@ namespace ebi
                                 "chr1",
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A", 
-                                { "A" }, 
+                                vcf::A, 
+                                { vcf::A }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5"} }, 
-                                { "GT", "DP" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5"} }, 
+                                { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}),
                             vcf::AlternateAllelesBodyError*);
@@ -259,12 +259,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A", 
+                                vcf::A, 
                                 { "C" }, 
                                 -1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "GT", "DP" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
+                                { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}),
                             vcf::QualityBodyError*);
@@ -277,12 +277,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A", 
+                                vcf::A, 
                                 { "T", "C" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { { ".", "." } }, 
-                                { "GT", "DP" }, 
+                                { vcf::PASS }, 
+                                { { vcf::DOT, vcf::DOT } }, 
+                                { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}) );
         }
@@ -294,12 +294,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A", 
+                                vcf::A, 
                                 { "T", "C" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "GT" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
+                                { vcf::GT }, 
                                 { "0|1" },
                                 source}) );
                                 
@@ -308,12 +308,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A", 
+                                vcf::A, 
                                 { "T", "C" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "DP" },
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
+                                { vcf::DP },
                                 { "13" },
                                 source}) );
         }
@@ -325,12 +325,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A", 
+                                vcf::A, 
                                 { "T", "C" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "GT", "DP" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
+                                { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}) );
             
@@ -339,12 +339,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A", 
+                                vcf::A, 
                                 { "T", "C" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "DP", "GL" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
+                                { vcf::DP, vcf::GL }, 
                                 { "12:0.5,0.7,0.9,0.11,0.15,0.17" },
                                 source}) );
                                 
@@ -353,12 +353,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A",
+                                vcf::A,
                                 { "T", "C" },
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "DP", "GT" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
+                                { vcf::DP, vcf::GT }, 
                                 { "12:0|1" },
                                 source}),
                             vcf::FormatBodyError*);
@@ -371,12 +371,12 @@ namespace ebi
                                 "chr1",
                                 123456,
                                 { "id123", "id456" },
-                                "A",
+                                vcf::A,
                                 { "T", "C" },
                                 1.0,
-                                { "PASS" },
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} },
-                                { "GT", "DP" },
+                                { vcf::PASS },
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} },
+                                { vcf::GT, vcf::DP },
                                 { "0|1" },
                                 source}) );
 
@@ -385,12 +385,12 @@ namespace ebi
                                 "Y",
                                 123456,
                                 { "id123", "id456" },
-                                "A",
+                                vcf::A,
                                 { "T", "C" },
                                 1.0,
-                                { "PASS" },
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} },
-                                { "GT", "DP" },
+                                { vcf::PASS },
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} },
+                                { vcf::GT, vcf::DP },
                                 { "0" },
                                 source}) );
 
@@ -400,12 +400,12 @@ namespace ebi
 //                                "UnspecifiedTriploid",
 //                                123456,
 //                                { "id123", "id456" },
-//                                "A",
+//                                vcf::A,
 //                                { "T", "C" },
 //                                1.0,
-//                                { "PASS" },
-//                                { {"AN", "12"}, {"AF", "0.5,0.3"} },
-//                                { "GT" },
+//                                { vcf::PASS },
+//                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} },
+//                                { vcf::GT },
 //                                { "0|1|1" },
 //                                source}),
 //                            vcf::SamplesFieldBodyError*);
@@ -423,80 +423,80 @@ namespace ebi
                 {},
                 { "Sample1" }}};
 
-        source->meta_entries.emplace("FORMAT",
+        source->meta_entries.emplace(vcf::FORMAT,
             vcf::MetaEntry{
                 1,
-                "FORMAT",
+                vcf::FORMAT,
                 {
-                    { "ID", "GT" },
-                    { "Number", "1" },
-                    { "Type", "String" },
-                    { "Description", "Genotype" }
+                    { vcf::ID, vcf::GT },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::STRING },
+                    { vcf::DESCRIPTION, "Genotype" }
                 },
                 source
         });
            
-        source->meta_entries.emplace("FORMAT",
+        source->meta_entries.emplace(vcf::FORMAT,
             vcf::MetaEntry{
                 1,
-                "FORMAT",
+                vcf::FORMAT,
                 {
-                    { "ID", "DP" },
-                    { "Number", "1" },
-                    { "Type", "Integer" },
-                    { "Description", "Read depth" }
+                    { vcf::ID, vcf::DP },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::DESCRIPTION, "Read depth" }
                 },
                 source
         });
 
-        source->meta_entries.emplace("FORMAT",
+        source->meta_entries.emplace(vcf::FORMAT,
             vcf::MetaEntry{
                 1,
-                "FORMAT",
+                vcf::FORMAT,
                 {
-                    { "ID", "FormatTag" },
-                    { "Number", "2" },
-                    { "Type", "Float" },
-                    { "Description", "A custom format tag" }
+                    { vcf::ID, "FormatTag" },
+                    { vcf::NUMBER, "2" },
+                    { vcf::TYPE, vcf::FLOAT },
+                    { vcf::DESCRIPTION, "A custom format tag" }
                 },
                 source
         });
 
-       source->meta_entries.emplace("INFO",
+       source->meta_entries.emplace(vcf::INFO,
             vcf::MetaEntry{
                 1,
-                "INFO",
+                vcf::INFO,
                 {
-                    { "ID", "AN" },
-                    { "Number", "1" },
-                    { "Type", "Integer" },
-                    { "Description", "Allele number" }
+                    { vcf::ID, vcf::AN },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::DESCRIPTION, "Allele number" }
                 },
                 source
         });
            
-        source->meta_entries.emplace("INFO",
+        source->meta_entries.emplace(vcf::INFO,
             vcf::MetaEntry{
                 1,
-                "INFO",
+                vcf::INFO,
                 {
-                    { "ID", "AF" },
-                    { "Number", "A" },
-                    { "Type", "Float" },
-                    { "Description", "Allele frequency" }
+                    { vcf::ID, vcf::AF },
+                    { vcf::NUMBER, vcf::A },
+                    { vcf::TYPE, vcf::FLOAT },
+                    { vcf::DESCRIPTION, "Allele frequency" }
                 },
                 source
         });
 
-        source->meta_entries.emplace("INFO",
+        source->meta_entries.emplace(vcf::INFO,
             vcf::MetaEntry{
                 1,
-                "INFO",
+                vcf::INFO,
                 {
-                    { "ID", "InfoTag" },
-                    { "Number", "1" },
-                    { "Type", "Integer" },
-                    { "Description", "A custom info tag" }
+                    { vcf::ID, "InfoTag" },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::DESCRIPTION, "A custom info tag" }
                 },
                 source
         });
@@ -508,12 +508,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { "id123", "id123" }, 
-                                "A", 
-                                { "AC", "AT" }, 
+                                vcf::A, 
+                                { vcf::AC, "AT" }, 
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} }, 
-                                { "GT", "DP" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
+                                { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}),
                             vcf::IdBodyError*);
@@ -526,12 +526,12 @@ namespace ebi
                                 "chr1",
                                 123456,
                                 { "id123" },
-                                "A",
-                                { "AC" },
+                                vcf::A,
+                                { vcf::AC },
                                 1.0,
                                 { "q10", "q10" },
-                                { {"AN", "12"} },
-                                { "GT" },
+                                { {vcf::AN, "12"} },
+                                { vcf::GT },
                                 { "0|1" },
                                 source}),
                             vcf::FilterBodyError*);
@@ -544,12 +544,12 @@ namespace ebi
                                 "chr1",
                                 123456,
                                 { "id123" },
-                                "A",
-                                { "AC" },
+                                vcf::A,
+                                { vcf::AC },
                                 1.0,
                                 { "q1", "0" },
-                                { {"AN", "12"} },
-                                { "GT" },
+                                { {vcf::AN, "12"} },
+                                { vcf::GT },
                                 { "0|1" },
                                 source}),
                             vcf::FilterBodyError*);
@@ -562,12 +562,12 @@ namespace ebi
                                 "chr1", 
                                 123456, 
                                 { "id123", "id456" }, 
-                                "A",
+                                vcf::A,
                                 { "T", "C" },
                                 1.0, 
-                                { "PASS" }, 
-                                { {"AN", "12"}, {"AN", "15"} }, 
-                                { "DP" }, 
+                                { vcf::PASS }, 
+                                { {vcf::AN, "12"}, {vcf::AN, "15"} }, 
+                                { vcf::DP }, 
                                 { "12" },
                                 source}),
                             vcf::InfoBodyError*);
@@ -580,12 +580,12 @@ namespace ebi
                                 "chr1",
                                 123456,
                                 { "id123", "id456" },
-                                "A",
+                                vcf::A,
                                 { "T", "C" },
                                 1.0,
-                                { "PASS" },
-                                { {"AN", "12"}, {"AF", "0.5,0.3"} },
-                                { "DP", "DP" },
+                                { vcf::PASS },
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} },
+                                { vcf::DP, vcf::DP },
                                 { "12:13" },
                                 source}),
                             vcf::FormatBodyError*);
@@ -598,12 +598,12 @@ namespace ebi
                             "chr1",
                             123456,
                             { "id123", "id456" },
-                            "A",
-                            { "AC", "AT" },
+                            vcf::A,
+                            { vcf::AC, "AT" },
                             1.0,
-                            { "PASS" },
-                            { {"InfoTag", "1.89"}, { "AF", "0.5,0.3"} },
-                            { "GT", "DP" },
+                            { vcf::PASS },
+                            { {"InfoTag", "1.89"}, { vcf::AF, "0.5,0.3"} },
+                            { vcf::GT, vcf::DP },
                             { "0|1" },
                             source}),
                         vcf::InfoBodyError*);
@@ -613,12 +613,12 @@ namespace ebi
                             "chr1",
                             123456,
                             { "id123", "id456" },
-                            "A",
-                            { "AC", "AT" },
+                            vcf::A,
+                            { vcf::AC, "AT" },
                             1.0,
-                            { "PASS" },
-                            { {"InfoTag", "1,2,3"}, { "AF", "0.5,0.3"} },
-                            { "GT", "DP" },
+                            { vcf::PASS },
+                            { {"InfoTag", "1,2,3"}, { vcf::AF, "0.5,0.3"} },
+                            { vcf::GT, vcf::DP },
                             { "0|1" },
                             source}),
                         vcf::InfoBodyError*);
@@ -628,12 +628,12 @@ namespace ebi
                             "chr1",
                             123456,
                             { "id123", "id456" },
-                            "A",
-                            { "AC", "AT" },
+                            vcf::A,
+                            { vcf::AC, "AT" },
                             1.0,
-                            { "PASS" },
-                            { {"AN", "12"}, { "AF", "0.5,0.3"} },
-                            { "GT", "FormatTag" },
+                            { vcf::PASS },
+                            { {vcf::AN, "12"}, { vcf::AF, "0.5,0.3"} },
+                            { vcf::GT, "FormatTag" },
                             { "0|1:ta,gs" },
                             source}),
                         vcf::SamplesFieldBodyError*);
@@ -643,12 +643,12 @@ namespace ebi
                             "chr1",
                             123456,
                             { "id123", "id456" },
-                            "A",
-                            { "AC", "AT" },
+                            vcf::A,
+                            { vcf::AC, "AT" },
                             1.0,
-                            { "PASS" },
-                            { {"AN", "12"}, { "AF", "0.5,0.3"} },
-                            { "GT", "FormatTag" },
+                            { vcf::PASS },
+                            { {vcf::AN, "12"}, { vcf::AF, "0.5,0.3"} },
+                            { vcf::GT, "FormatTag" },
                             { "0|1:1.5" },
                             source}),
                         vcf::SamplesFieldBodyError*);
@@ -658,12 +658,12 @@ namespace ebi
                             "chr1",
                             123456,
                             { "id123", "id456" },
-                            "A",
-                            { "AC", "AT" },
+                            vcf::A,
+                            { vcf::AC, "AT" },
                             1.0,
-                            { "PASS" },
-                            { {"AN", "12"}, { "AF", "0.5,0.3"} },
-                            { "GT", "DP" },
+                            { vcf::PASS },
+                            { {vcf::AN, "12"}, { vcf::AF, "0.5,0.3"} },
+                            { vcf::GT, vcf::DP },
                             { "0|1:tags" },
                             source}),
                         vcf::SamplesFieldBodyError*);
@@ -673,12 +673,12 @@ namespace ebi
                             "chr1",
                             123456,
                             { "id123", "id456" },
-                            "A",
-                            { "AC", "AT" },
+                            vcf::A,
+                            { vcf::AC, "AT" },
                             1.0,
-                            { "PASS" },
-                            { {"AN", "12"}, { "AF", "0.5"} },
-                            { "GT", "DP" },
+                            { vcf::PASS },
+                            { {vcf::AN, "12"}, { vcf::AF, "0.5"} },
+                            { vcf::GT, vcf::DP },
                             { "0|1:1" },
                             source}),
                         vcf::InfoBodyError*);
