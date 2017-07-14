@@ -82,8 +82,7 @@ namespace ebi
 
     void Record::set_types()
     {
-        for (std::vector<std::string>::iterator it = alternate_alleles.begin(); it != alternate_alleles.end(); ++it) {
-            auto & alternate = *it;
+        for (auto & alternate : alternate_alleles) {
             if (alternate == MISSING_VALUE) {
                 types.push_back(RecordType::NO_VARIATION);
             } else if (alternate[0] == '<') {
@@ -371,31 +370,8 @@ namespace ebi
                 }
             }
         } else if (field_key == SVLEN && values.size() == alternate_alleles.size()) {
-            bool is_ref_symbolic = true;
-            std::vector<bool> is_alt_symbolic(alternate_alleles.size(), false);
-            std::unordered_set<char> symbolic = { 'A', 'C', 'G', 'T', 'N', 'a', 'c', 'g', 't', 'n' };
-
-            for (auto & ref : reference_allele) {
-                if (symbolic.find(ref) == symbolic.end()) {
-                    is_ref_symbolic = false;
-                    break;
-                }
-            }
-
-            if (is_ref_symbolic) {
-                for (size_t i = 0; i < alternate_alleles.size(); i++) {
-                    is_alt_symbolic[i] = true;
-                    for (auto & alt : alternate_alleles[i]) {
-                        if (symbolic.find(alt) == symbolic.end()) {
-                            is_alt_symbolic[i] = false;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            for (size_t i = 0; i < values.size(); i++) {
-                if (is_ref_symbolic && is_alt_symbolic[i]) {
+            for (size_t i = 0; i < alternate_alleles.size(); i++) {
+                if (check_alt_not_symbolic(i)) {
                     std::string expected = std::to_string(alternate_alleles[i].size() - reference_allele.size());
                     if (values[i] != expected) {
                         throw new InfoBodyError{line, "INFO SVLEN=" + field_value + " must be equal to \"length of ALT - length of REF\" for symbolic alternate alleles (expected " + expected + ", found " + values[i] + ")"};
@@ -414,6 +390,19 @@ namespace ebi
                 }
             }
         }
+    }
+
+    bool Record::check_alt_not_symbolic(size_t i) const
+    {
+        std::unordered_set<char> not_symbolic = { 'A', 'C', 'G', 'T', 'N', 'a', 'c', 'g', 't', 'n' };
+        bool is_alt_not_symbolic = true;
+        for (auto & alt : alternate_alleles[i]) {
+            if (not_symbolic.find(alt) == not_symbolic.end()) {
+                is_alt_not_symbolic = false;
+                break;
+            }
+        }
+        return is_alt_not_symbolic;
     }
 
     void Record::check_samples() const

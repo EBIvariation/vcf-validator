@@ -454,7 +454,12 @@ namespace ebi
         void strict_validation_info_predefined_tags(std::string const & field_key, std::string const & field_value,
                                                     std::vector<std::string> const & values) const;
 
-       /**
+        /**
+         * Returns true if an alternate allele is not symbolic
+         */
+        bool check_alt_not_symbolic(size_t i) const;
+
+        /**
          * Checks that the samples in the record:
          * - Are the same number as specified in the Source object
          * - Their allele indexes are not greater than the total number of alleles

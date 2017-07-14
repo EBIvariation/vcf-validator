@@ -237,18 +237,18 @@ namespace ebi
         }
     }
     
-    void MetaEntryVisitor::check_predefined_tag(std::string const & tag_field, std::string const & key_field,
-                                                std::map<std::string, std::string> & value,
-                                                std::map<std::string, std::pair<std::string, std::string>> const & tags) const
+    void MetaEntryVisitor::check_predefined_tag(std::string const & tag_field, std::string const & meta_entry_property,
+                                                std::map<std::string, std::string> & meta_entry,
+                                                std::map<std::string, std::pair<std::string, std::string>> const & predefined_meta_entries) const
     {
-        auto iterator = tags.find(value[ID]);
-        if (iterator != tags.end()) {
+        auto iterator = predefined_meta_entries.find(meta_entry[ID]);
+        if (iterator != predefined_meta_entries.end()) {
             // Determine the required value of the key based on whether we are checking for Type or Number
-            std::string key_value = (key_field == TYPE ? iterator->second.first : iterator->second.second);
+            std::string predefined_value = (meta_entry_property == TYPE ? iterator->second.first : iterator->second.second);
             // If the required value is a "." (dot), do nothing
             // Or if the required value does not match the value provided in the vcf file, throw an error
-            if (key_value != MISSING_VALUE && key_value != value[key_field]) {
-                std::string message = tag_field + " " + value[ID] + " metadata " + key_field + " is not " + key_value;
+            if (predefined_value != MISSING_VALUE && predefined_value != meta_entry[meta_entry_property]) {
+                std::string message = tag_field + " " + meta_entry[ID] + " metadata " + meta_entry_property + " is not " + predefined_value;
                 throw new MetaSectionError{entry.line, message};
             }
         }
