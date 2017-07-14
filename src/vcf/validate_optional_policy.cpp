@@ -233,7 +233,7 @@ namespace ebi
         std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range(FILTER);
         
         for (auto & filter : record.filters) {
-            if (filter == PASS || filter == DOT) { continue; } // No need to check PASS or missing data
+            if (filter == PASS || filter == MISSING_VALUE) { continue; } // No need to check PASS or missing data
             
             if (state.is_well_defined_meta(FILTER, filter)) {
                 continue; // Check only once
@@ -258,7 +258,7 @@ namespace ebi
         
         for (auto & field : record.info) {
             auto & id = field.first;
-            if (field.first == DOT) { continue; } // No need to check missing data
+            if (field.first == MISSING_VALUE) { continue; } // No need to check missing data
             
             if (state.is_well_defined_meta(INFO, id)) {
                 continue; // Check only once

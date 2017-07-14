@@ -168,7 +168,7 @@ namespace ebi
 
         // Transform all the quality tokens into floating point numbers
         float quality = 0;
-        if (m_line_tokens[QUAL][0] != DOT) {
+        if (m_line_tokens[QUAL][0] != MISSING_VALUE) {
             try {
                 quality = std::stof(m_line_tokens[QUAL][0]);
             } catch (std::invalid_argument ex) {

@@ -416,7 +416,7 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::FORMAT,
-                                { {vcf::ID, "customTag"}, {vcf::NUMBER, vcf::DOT}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                             
@@ -470,7 +470,7 @@ namespace ebi
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 vcf::FORMAT,
-                                { {vcf::ID, "customTag"}, {vcf::NUMBER, "10"}, {vcf::TYPE, vcf::DOT}, {vcf::DESCRIPTION, "Genotype"} },
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, "10"}, {vcf::TYPE, vcf::MISSING_VALUE}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -811,7 +811,7 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::FORMAT,
-                                { {vcf::ID, vcf::CNL}, {vcf::NUMBER, vcf::DOT}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number genotype likelihood for imprecise events"} },
+                                { {vcf::ID, vcf::CNL}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number genotype likelihood for imprecise events"} },
                                 source
                             } ) );
                                 
@@ -1029,7 +1029,7 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, vcf::DOT}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                             
@@ -1090,7 +1090,7 @@ namespace ebi
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::DOT}, {vcf::DESCRIPTION, "Genotype"} },
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::MISSING_VALUE}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -1614,7 +1614,7 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::SVLEN}, {vcf::NUMBER, vcf::DOT}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Difference in length between REF and ALT alleles"} },
+                                { {vcf::ID, vcf::SVLEN}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Difference in length between REF and ALT alleles"} },
                                 source
                             } ) );
 
@@ -1675,7 +1675,7 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::HOMLEN}, {vcf::NUMBER, vcf::DOT}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Length of base pair identical micro-homology at event breakpoints"} },
+                                { {vcf::ID, vcf::HOMLEN}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Length of base pair identical micro-homology at event breakpoints"} },
                                 source
                             } ) );
 
@@ -1690,7 +1690,7 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::HOMSEQ}, {vcf::NUMBER, vcf::DOT}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Sequence of base pair identical micro-homology at event breakpoints"} },
+                                { {vcf::ID, vcf::HOMSEQ}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Sequence of base pair identical micro-homology at event breakpoints"} },
                                 source
                             } ) );
 
@@ -1705,7 +1705,7 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::BKPTID}, {vcf::NUMBER, vcf::DOT}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of the assembled alternate allele in the assembly file"} },
+                                { {vcf::ID, vcf::BKPTID}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of the assembled alternate allele in the assembly file"} },
                                 source
                             } ) );
 
@@ -1835,7 +1835,7 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::MATEID}, {vcf::NUMBER, vcf::DOT}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of mate breakends"} },
+                                { {vcf::ID, vcf::MATEID}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of mate breakends"} },
                                 source
                             } ) );
 
@@ -1919,7 +1919,7 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::DPADJ}, {vcf::NUMBER, vcf::DOT}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Read Depth of adjacency"} },
+                                { {vcf::ID, vcf::DPADJ}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Read Depth of adjacency"} },
                                 source
                             } ) );
 
@@ -1957,7 +1957,7 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CNADJ}, {vcf::NUMBER, vcf::DOT}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number of adjacency"} },
+                                { {vcf::ID, vcf::CNADJ}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number of adjacency"} },
                                 source
                             } ) );
 
@@ -1995,7 +1995,7 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CICNADJ}, {vcf::NUMBER, vcf::DOT}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around copy number for the adjacency"} },
+                                { {vcf::ID, vcf::CICNADJ}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around copy number for the adjacency"} },
                                 source
                             } ) );
 

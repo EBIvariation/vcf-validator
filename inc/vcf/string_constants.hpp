@@ -84,12 +84,13 @@ namespace ebi
     const std::string FLOAT = "Float";
     const std::string INTEGER = "Integer";
     const std::string STRING = "String";
+    const std::string MISSING_VALUE = ".";
 
     // number
     const std::string A = "A";
     const std::string G = "G";
     const std::string R = "R";
-    const std::string DOT = ".";
+    const std::string UNKNOWN_CARDINALITY = ".";
     
     // Pass value for Filter
     const std::string PASS = "PASS";

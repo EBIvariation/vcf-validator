@@ -64,8 +64,8 @@ namespace ebi
                                            source
                                    });
 
-      return vcf::Record{1, "1", summary.normalized_pos, {vcf::DOT}, summary.normalized_reference, summary.normalized_alternate,
-                         0, {vcf::DOT}, {{vcf::DOT, ""}}, {vcf::GT}, {"0/0", "0/1", "0/1", "1/1"}, source};
+      return vcf::Record{1, "1", summary.normalized_pos, {vcf::MISSING_VALUE}, summary.normalized_reference, summary.normalized_alternate,
+                         0, {vcf::MISSING_VALUE}, {{vcf::MISSING_VALUE, ""}}, {vcf::GT}, {"0/0", "0/1", "0/1", "1/1"}, source};
   }
 
   /** simple count for small tests, no need to optimize further */

@@ -84,7 +84,7 @@ namespace ebi
     {
         for (std::vector<std::string>::iterator it = alternate_alleles.begin(); it != alternate_alleles.end(); ++it) {
             auto & alternate = *it;
-            if (alternate == DOT) {
+            if (alternate == MISSING_VALUE) {
                 types.push_back(RecordType::NO_VARIATION);
             } else if (alternate[0] == '<') {
                 types.push_back(RecordType::STRUCTURAL);
@@ -121,7 +121,7 @@ namespace ebi
 
     void Record::check_ids() const
     {
-        if (ids.size() == 1 && ids[0] == DOT) {
+        if (ids.size() == 1 && ids[0] == MISSING_VALUE) {
             return; // No need to check if no IDs are provided
         }
         
@@ -247,7 +247,7 @@ namespace ebi
         // Check that INFO fields listed in the meta section
         // match the Number and Type specified in there
         for (auto & field : info) {
-            if (field.first == DOT) { continue; } // No need to check missing data
+            if (field.first == MISSING_VALUE) { continue; } // No need to check missing data
 
             util::string_split(field.second, ",", values);
             bool found_in_meta = false;
@@ -556,7 +556,7 @@ namespace ebi
                 throw new SamplesFieldBodyError{line, "Allele index must not be empty", GT, ploidy};
             }
 
-            if (allele == DOT) { continue; } // No need to check missing alleles
+            if (allele == MISSING_VALUE) { continue; } // No need to check missing alleles
 
             check_sample_alleles_is_integer(allele, ploidy);
 
@@ -612,7 +612,7 @@ namespace ebi
             // ...the number of possible genotypes
             // The binomial coefficient is calculated considering the ploidy of the sample
             cardinality = boost::math::binomial_coefficient<float>(alternate_allele_number + ploidy, ploidy);
-        } else if (number == DOT) {
+        } else if (number == UNKNOWN_CARDINALITY) {
             // ...it is unspecified
             cardinality = -1;
         } else {
@@ -694,7 +694,7 @@ namespace ebi
     {
         // To check the field type...
         for (auto & value : values) {
-            if (value == DOT) { continue; }
+            if (value == MISSING_VALUE) { continue; }
 
             std::string message;
             try {
@@ -711,7 +711,7 @@ namespace ebi
             return;
         }
         for (auto & value : values) {
-            if (value == DOT) { continue; }
+            if (value == MISSING_VALUE) { continue; }
 
             if (std::stoi(value) < 0) {
                 raise(std::make_shared<Error>(line, field + " value must be a non-negative integer number"));

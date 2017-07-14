@@ -280,8 +280,8 @@ namespace ebi
                                 vcf::A, 
                                 { "T", "C" }, 
                                 1.0, 
-                                { vcf::PASS }, 
-                                { { vcf::DOT, vcf::DOT } }, 
+                                { vcf::PASS },
+                                { { vcf::MISSING_VALUE, vcf::MISSING_VALUE } }, 
                                 { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}) );

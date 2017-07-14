@@ -170,7 +170,7 @@ namespace ebi
             number_field != A &&
             number_field != R &&
             number_field != G &&
-            number_field != DOT) {
+            number_field != UNKNOWN_CARDINALITY) {
             throw new MetaSectionError{entry.line, "FORMAT metadata Number is not a number, A, R, G or dot"};
         }
 
@@ -214,7 +214,7 @@ namespace ebi
             number_field != A &&
             number_field != R &&
             number_field != G &&
-            number_field != DOT) {
+            number_field != UNKNOWN_CARDINALITY) {
             throw new MetaSectionError{entry.line, "INFO metadata Number is not a number, A, R, G or dot"};
         }
 
@@ -247,7 +247,7 @@ namespace ebi
             std::string key_value = (key_field == TYPE ? iterator->second.first : iterator->second.second);
             // If the required value is a "." (dot), do nothing
             // Or if the required value does not match the value provided in the vcf file, throw an error
-            if (key_value != DOT && key_value != value[key_field]) {
+            if (key_value != MISSING_VALUE && key_value != value[key_field]) {
                 std::string message = tag_field + " " + value[ID] + " metadata " + key_field + " is not " + key_value;
                 throw new MetaSectionError{entry.line, message};
             }
