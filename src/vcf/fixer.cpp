@@ -117,7 +117,7 @@ namespace ebi
             // TODO better log system, if any
             std::cerr << "DEBUG: line " << error.line << ": fixing invalid INFO field " << error.field << std::endl;
             const size_t info_column_index = 7;
-            const std::string empty_info_column = ".";
+            const std::string empty_info_column = MISSING_VALUE;
 
             size_t num_removed_fields = 0;
             std::string string_line = {line->begin(), line->end()};
