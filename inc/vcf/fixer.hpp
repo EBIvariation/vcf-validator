@@ -126,6 +126,7 @@ namespace ebi
         size_t remove_column(const std::string &line,
                              const std::string &separator,
                              const std::string &empty_column,
+                             std::string corrected_column,
                              std::function<bool(std::string &column, size_t index)> condition_to_remove);
 
         /**

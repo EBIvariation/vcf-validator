@@ -143,7 +143,7 @@ namespace ebi
             try {
                 check_no_duplicates(ids);
             } catch (const std::invalid_argument &ex) {
-                throw new IdBodyError{line, "ID must not have duplicate values"};
+                throw new IdBodyError{line, "ID must not have duplicate values", ex.what()};
             }
         }
     }
@@ -221,7 +221,7 @@ namespace ebi
             try {
                 check_no_duplicates(filters);
             } catch (const std::invalid_argument &ex) {
-                throw new FilterBodyError{line, "FILTER must not have duplicate filters"};
+                throw new FilterBodyError{line, "FILTER must not have duplicate filters", ex.what()};
             }
         }
     }
@@ -230,7 +230,7 @@ namespace ebi
     {
         for (auto & filter : filters) {
             if (filter == "0") {
-                throw new FilterBodyError{line, "FILTER string must not be 0 (reserved value)"};
+                throw new FilterBodyError{line, "FILTER string must not be 0 (reserved value)", filter};
             }
         }
     }
@@ -288,7 +288,7 @@ namespace ebi
         if (source->version == Version::v43 && info.size() > 1) {
             for (auto & in : info) {
                 if (info.count(in.first) > 1) {
-                    throw new InfoBodyError{line, "INFO must not have duplicate keys"};
+                    throw new InfoBodyError{line, "INFO must not have duplicate keys", in.first};
                 }
             }
         }
@@ -317,7 +317,7 @@ namespace ebi
             try {
                 check_no_duplicates(format);
             } catch (const std::invalid_argument &ex) {
-                throw new FormatBodyError{line, "FORMAT must not have duplicate fields"};
+                throw new FormatBodyError{line, "FORMAT must not have duplicate fields", ex.what()};
             }
         }
     }
@@ -366,7 +366,7 @@ namespace ebi
             if (it != info.end() && it->second == "0") {
                 auto expected = std::to_string(position + reference_allele.length() - 1);
                 if (field_value != expected) {
-                    throw new InfoBodyError{line, "INFO END=" + field_value + " value must be equal to \"POS + length of REF - 1\" for a precise variant (where IMPRECISE is set to 0), expected " + expected, field_key};
+                    throw new InfoBodyError{line, "INFO END=" + field_value + " value must be equal to \"POS + length of REF - 1\" for a precise variant (where IMPRECISE is set to 0), expected " + expected, field_key, expected};
                 }
             }
         } else if (field_key == SVLEN && values.size() == alternate_alleles.size()) {
@@ -374,17 +374,17 @@ namespace ebi
                 if (check_alt_not_symbolic(i)) {
                     std::string expected = std::to_string(alternate_alleles[i].size() - reference_allele.size());
                     if (values[i] != expected) {
-                        throw new InfoBodyError{line, "INFO SVLEN=" + field_value + " must be equal to \"length of ALT - length of REF\" for non-symbolic alternate alleles (expected " + expected + ", found " + values[i] + ")"};
+                        throw new InfoBodyError{line, "INFO SVLEN=" + field_value + " must be equal to \"length of ALT - length of REF\" for non-symbolic alternate alleles (expected " + expected + ", found " + values[i] + ")", field_key, expected};
                     }
                 } else {
                     std::string first_field = alternate_alleles[i].substr(0, 4);
                     if (first_field == "<" + INS || first_field == "<" + DUP) {
                         if (std::stoi(values[i]) < 0) {
-                            throw new InfoBodyError{line, "SVLEN=" + field_value + " must be a positive integer for longer ALT alleles like " + first_field.substr(1,3)};
+                            throw new InfoBodyError{line, "SVLEN=" + field_value + " must be a positive integer for longer ALT alleles like " + first_field.substr(1,3), field_key};
                         }
                     } else if (first_field == "<" + DEL) {
                         if (std::stoi(values[i]) > 0) {
-                            throw new InfoBodyError{line, "SVLEN=" + field_value + " must be a negative integer for shorter ALT alleles like " + first_field.substr(1,3)};
+                            throw new InfoBodyError{line, "SVLEN=" + field_value + " must be a negative integer for shorter ALT alleles like " + first_field.substr(1,3), field_key};
                         }
                     }
                 }
@@ -573,7 +573,7 @@ namespace ebi
             for (auto & value : values) {
                 counter[value]++;
                 if (counter[value] >= 2) {
-                    throw std::invalid_argument("Duplicates not allowed");
+                    throw std::invalid_argument(value);
                 }
             }
         }

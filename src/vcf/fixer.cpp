@@ -97,8 +97,18 @@ namespace ebi
 
         void Fixer::visit(IdBodyError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            std::cerr << "DEBUG: line " << error.line << ": fixing invalid ID field " << error.field << std::endl;
+            const size_t id_column_index = 2;
+            const std::string empty_id_column = ".";
+            std::string string_line = {line->begin(), line->end()};
+
+            auto condition_to_remove_id_field = [&](std::string &id_subfield, size_t index) -> bool {
+                return id_subfield == error.field;
+            };
+
+            fix_column(id_column_index, string_line, "\t", [&](std::string &id_column) {
+                remove_column(id_column, ";", empty_id_column, error.field, condition_to_remove_id_field);
+            });
         }
 
         void Fixer::visit(ReferenceAlleleBodyError &error)
@@ -121,8 +131,19 @@ namespace ebi
 
         void Fixer::visit(FilterBodyError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            std::cerr << "DEBUG: line " << error.line << ": fixing invalid FILTER field " << error.field << std::endl;
+            const size_t filter_column_index = 6;
+            const std::string empty_filter_column = ".";
+            std::string expected_filter_field = (error.field == "0" ? "" : error.field);
+            std::string string_line = {line->begin(), line->end()};
+
+            auto condition_to_remove_filter_field = [&](std::string &filter_subfield, size_t index) -> bool {
+                return filter_subfield == error.field;
+            };
+
+            fix_column(filter_column_index, string_line, "\t", [&](std::string &filter_column) {
+                remove_column(filter_column, ";", empty_filter_column, expected_filter_field, condition_to_remove_filter_field);
+            });
         }
 
         void Fixer::visit(InfoBodyError &error)
@@ -142,10 +163,10 @@ namespace ebi
             };
 
             fix_column(info_column_index, string_line, "\t", [&](std::string &info_column) {
-                num_removed_fields = remove_column(info_column, ";", empty_info_column, condition_to_remove_info_field);
+                num_removed_fields = remove_column(info_column, ";", empty_info_column, expected_info_column, condition_to_remove_info_field);
             });
 
-            if (num_removed_fields != 1) {
+            if (num_removed_fields != 1 && expected_info_column == "") {
                 std::cerr << "WARNING: line " << error.line << ": field " << error.field << " appeared "
                           << num_removed_fields << " times " << std::endl;
             }
@@ -210,7 +231,7 @@ namespace ebi
             std::cerr << "DEBUG: line " << line_number << ": fixing duplicate: removing variant: "
             << std::string{line->begin(), line->end()} << std::endl;
         }
-    
+
         void Fixer::fix_format_gt(std::vector<std::string>::iterator first,
                            std::vector<std::string>::iterator last,
                            SamplesFieldBodyError &error)
@@ -291,12 +312,13 @@ namespace ebi
                              const std::string &separator,
                              std::function<bool(std::string &column, size_t index)> condition_to_remove)
         {
-            return remove_column(line, separator, "", condition_to_remove);
+            return remove_column(line, separator, "", "", condition_to_remove);
         }
 
         size_t Fixer::remove_column(const std::string &line,
                              const std::string &separator,
                              const std::string &empty_column,
+                             std::string corrected_column,
                              std::function<bool(std::string &column, size_t index)> condition_to_remove)
         {
             std::vector<std::string> columns;
@@ -308,14 +330,23 @@ namespace ebi
                 if (not condition_to_remove(columns[j], j)) {
                     written++;
                     output << columns[j];
+                } else if (corrected_column != "") {
+                    written++;
+                    output << corrected_column;
+                    corrected_column = "";
                 }
                 for (j = 1; j < columns.size(); ++j) {
-                    if (not condition_to_remove(columns[j], j)) {
+                    if (not condition_to_remove(columns[j], j) || corrected_column != "") {
                         if (written > 0) {
                             output << separator;
                         }
                         written++;
-                        output << columns[j];
+                        if (not condition_to_remove(columns[j], j)) {
+                            output << columns[j];
+                        } else {
+                            output << corrected_column;
+                            corrected_column = "";
+                        }
                     }
                 }
             }
@@ -339,7 +370,7 @@ namespace ebi
                         std::function<void(std::string &column)> fix_function)
         {
             using iter = std::vector<std::string>::iterator;
-            return fix_columns(column_index, column_index +1, line, separator, [fix_function](iter first, iter last) {
+            return fix_columns(column_index, column_index + 1, line, separator, [fix_function](iter first, iter last) {
                 for (auto it = first; it != last; ++it) {
                     fix_function(*it);
                 }

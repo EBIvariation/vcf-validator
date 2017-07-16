@@ -6317,8 +6317,16 @@ namespace odb
     //
     if (--d != 0)
     {
-      if (base_traits::grow (*i.base, t + 0UL, d))
+      if (base_traits::grow (*i.base, t + 1UL, d))
         i.base->version++;
+    }
+
+    // field
+    //
+    if (t[0UL])
+    {
+      i.field_value.capacity (i.field_size);
+      grew = true;
     }
 
     return grew;
@@ -6345,6 +6353,17 @@ namespace odb
         std::memcpy (&b[n], id, id_size * sizeof (id[0]));
       n += id_size;
     }
+
+    // field
+    //
+    b[n].type = sqlite::image_traits<
+      ::std::string,
+      sqlite::id_text>::bind_value;
+    b[n].buffer = i.field_value.data ();
+    b[n].size = &i.field_size;
+    b[n].capacity = i.field_value.capacity ();
+    b[n].is_null = &i.field_null;
+    n++;
 
     // id_
     //
@@ -6374,6 +6393,25 @@ namespace odb
 
     bool grew (false);
 
+    // field
+    //
+    {
+      ::std::string const& v =
+        o.field;
+
+      bool is_null (false);
+      std::size_t cap (i.field_value.capacity ());
+      sqlite::value_traits<
+          ::std::string,
+          sqlite::id_text >::set_image (
+        i.field_value,
+        i.field_size,
+        is_null,
+        v);
+      i.field_null = is_null;
+      grew = grew || (cap != i.field_value.capacity ());
+    }
+
     return grew;
   }
 
@@ -6391,6 +6429,21 @@ namespace odb
     //
     if (--d != 0)
       base_traits::init (o, *i.base, db, d);
+
+    // field
+    //
+    {
+      ::std::string& v =
+        o.field;
+
+      sqlite::value_traits<
+          ::std::string,
+          sqlite::id_text >::set_value (
+        v,
+        i.field_value,
+        i.field_size,
+        i.field_null);
+    }
   }
 
   const access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::info_type
@@ -6408,13 +6461,15 @@ namespace odb
 
   const char access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::persist_statement[] =
   "INSERT INTO \"IdBodyError\" "
-  "(\"id\") "
+  "(\"id\", "
+  "\"field\") "
   "VALUES "
-  "(?)";
+  "(?, ?)";
 
   const char* const access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::find_statements[] =
   {
     "SELECT "
+    "\"IdBodyError\".\"field\", "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
     "\"Error\".\"severity\", "
@@ -6424,17 +6479,29 @@ namespace odb
     "LEFT JOIN \"Error\" ON \"Error\".\"id\"=\"IdBodyError\".\"id\" "
     "WHERE \"IdBodyError\".\"id\"=?",
 
-    "",
+    "SELECT "
+    "\"IdBodyError\".\"field\" "
+    "FROM \"IdBodyError\" "
+    "WHERE \"IdBodyError\".\"id\"=?",
 
-    ""
+    "SELECT "
+    "\"IdBodyError\".\"field\" "
+    "FROM \"IdBodyError\" "
+    "WHERE \"IdBodyError\".\"id\"=?"
   };
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::find_column_counts[] =
   {
-    5UL,
-    0UL,
-    0UL
+    6UL,
+    1UL,
+    1UL
   };
+
+  const char access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::update_statement[] =
+  "UPDATE \"IdBodyError\" "
+  "SET "
+  "\"field\"=? "
+  "WHERE \"id\"=?";
 
   const char access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::erase_statement[] =
   "DELETE FROM \"IdBodyError\" "
@@ -6442,6 +6509,7 @@ namespace odb
 
   const char access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::query_statement[] =
   "SELECT\n"
+  "\"IdBodyError\".\"field\",\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
   "\"Error\".\"severity\",\n"
@@ -6540,7 +6608,32 @@ namespace odb
     if (top)
       callback (db, obj, callback_event::pre_update);
 
+    sqlite::transaction& tr (sqlite::transaction::current ());
+    sqlite::connection& conn (tr.connection ());
+    statements_type& sts (
+      conn.statement_cache ().find_object<object_type> ());
+
     base_traits::update (db, obj, false, false);
+
+    image_type& im (sts.image ());
+    if (init (im, obj, statement_update))
+      im.version++;
+
+    const binding& idb (sts.id_image_binding ());
+    binding& imb (sts.update_image_binding ());
+    if (idb.version != sts.update_id_binding_version () ||
+        im.version != sts.update_image_version () ||
+        imb.version == 0)
+    {
+      bind (imb.bind, idb.bind, idb.count, im, statement_update);
+      sts.update_id_binding_version (idb.version);
+      sts.update_image_version (im.version);
+      imb.version++;
+    }
+
+    update_statement& st (sts.update_statement ());
+    if (st.execute () == 0)
+      throw object_not_persistent ();
 
     if (top)
     {
@@ -6873,17 +6966,13 @@ namespace odb
 
     d = depth - d;
 
-    if (d > 2UL)
-    {
-      if (!find_ (sts, 0, d))
-        throw object_not_persistent ();
+    if (!find_ (sts, 0, d))
+      throw object_not_persistent ();
 
-      select_statement& st (sts.find_statement (d));
-      ODB_POTENTIALLY_UNUSED (st);
+    select_statement& st (sts.find_statement (d));
+    ODB_POTENTIALLY_UNUSED (st);
 
-      init (obj, sts.image (), &db, d);
-    }
-
+    init (obj, sts.image (), &db, d);
     load_ (sts, obj, false, d);
   }
 
@@ -9017,8 +9106,16 @@ namespace odb
     //
     if (--d != 0)
     {
-      if (base_traits::grow (*i.base, t + 0UL, d))
+      if (base_traits::grow (*i.base, t + 1UL, d))
         i.base->version++;
+    }
+
+    // field
+    //
+    if (t[0UL])
+    {
+      i.field_value.capacity (i.field_size);
+      grew = true;
     }
 
     return grew;
@@ -9045,6 +9142,17 @@ namespace odb
         std::memcpy (&b[n], id, id_size * sizeof (id[0]));
       n += id_size;
     }
+
+    // field
+    //
+    b[n].type = sqlite::image_traits<
+      ::std::string,
+      sqlite::id_text>::bind_value;
+    b[n].buffer = i.field_value.data ();
+    b[n].size = &i.field_size;
+    b[n].capacity = i.field_value.capacity ();
+    b[n].is_null = &i.field_null;
+    n++;
 
     // id_
     //
@@ -9074,6 +9182,25 @@ namespace odb
 
     bool grew (false);
 
+    // field
+    //
+    {
+      ::std::string const& v =
+        o.field;
+
+      bool is_null (false);
+      std::size_t cap (i.field_value.capacity ());
+      sqlite::value_traits<
+          ::std::string,
+          sqlite::id_text >::set_image (
+        i.field_value,
+        i.field_size,
+        is_null,
+        v);
+      i.field_null = is_null;
+      grew = grew || (cap != i.field_value.capacity ());
+    }
+
     return grew;
   }
 
@@ -9091,6 +9218,21 @@ namespace odb
     //
     if (--d != 0)
       base_traits::init (o, *i.base, db, d);
+
+    // field
+    //
+    {
+      ::std::string& v =
+        o.field;
+
+      sqlite::value_traits<
+          ::std::string,
+          sqlite::id_text >::set_value (
+        v,
+        i.field_value,
+        i.field_size,
+        i.field_null);
+    }
   }
 
   const access::object_traits_impl< ::ebi::vcf::FilterBodyError, id_sqlite >::info_type
@@ -9108,13 +9250,15 @@ namespace odb
 
   const char access::object_traits_impl< ::ebi::vcf::FilterBodyError, id_sqlite >::persist_statement[] =
   "INSERT INTO \"FilterBodyError\" "
-  "(\"id\") "
+  "(\"id\", "
+  "\"field\") "
   "VALUES "
-  "(?)";
+  "(?, ?)";
 
   const char* const access::object_traits_impl< ::ebi::vcf::FilterBodyError, id_sqlite >::find_statements[] =
   {
     "SELECT "
+    "\"FilterBodyError\".\"field\", "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
     "\"Error\".\"severity\", "
@@ -9124,17 +9268,29 @@ namespace odb
     "LEFT JOIN \"Error\" ON \"Error\".\"id\"=\"FilterBodyError\".\"id\" "
     "WHERE \"FilterBodyError\".\"id\"=?",
 
-    "",
+    "SELECT "
+    "\"FilterBodyError\".\"field\" "
+    "FROM \"FilterBodyError\" "
+    "WHERE \"FilterBodyError\".\"id\"=?",
 
-    ""
+    "SELECT "
+    "\"FilterBodyError\".\"field\" "
+    "FROM \"FilterBodyError\" "
+    "WHERE \"FilterBodyError\".\"id\"=?"
   };
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::FilterBodyError, id_sqlite >::find_column_counts[] =
   {
-    5UL,
-    0UL,
-    0UL
+    6UL,
+    1UL,
+    1UL
   };
+
+  const char access::object_traits_impl< ::ebi::vcf::FilterBodyError, id_sqlite >::update_statement[] =
+  "UPDATE \"FilterBodyError\" "
+  "SET "
+  "\"field\"=? "
+  "WHERE \"id\"=?";
 
   const char access::object_traits_impl< ::ebi::vcf::FilterBodyError, id_sqlite >::erase_statement[] =
   "DELETE FROM \"FilterBodyError\" "
@@ -9142,6 +9298,7 @@ namespace odb
 
   const char access::object_traits_impl< ::ebi::vcf::FilterBodyError, id_sqlite >::query_statement[] =
   "SELECT\n"
+  "\"FilterBodyError\".\"field\",\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
   "\"Error\".\"severity\",\n"
@@ -9240,7 +9397,32 @@ namespace odb
     if (top)
       callback (db, obj, callback_event::pre_update);
 
+    sqlite::transaction& tr (sqlite::transaction::current ());
+    sqlite::connection& conn (tr.connection ());
+    statements_type& sts (
+      conn.statement_cache ().find_object<object_type> ());
+
     base_traits::update (db, obj, false, false);
+
+    image_type& im (sts.image ());
+    if (init (im, obj, statement_update))
+      im.version++;
+
+    const binding& idb (sts.id_image_binding ());
+    binding& imb (sts.update_image_binding ());
+    if (idb.version != sts.update_id_binding_version () ||
+        im.version != sts.update_image_version () ||
+        imb.version == 0)
+    {
+      bind (imb.bind, idb.bind, idb.count, im, statement_update);
+      sts.update_id_binding_version (idb.version);
+      sts.update_image_version (im.version);
+      imb.version++;
+    }
+
+    update_statement& st (sts.update_statement ());
+    if (st.execute () == 0)
+      throw object_not_persistent ();
 
     if (top)
     {
@@ -9573,17 +9755,13 @@ namespace odb
 
     d = depth - d;
 
-    if (d > 2UL)
-    {
-      if (!find_ (sts, 0, d))
-        throw object_not_persistent ();
+    if (!find_ (sts, 0, d))
+      throw object_not_persistent ();
 
-      select_statement& st (sts.find_statement (d));
-      ODB_POTENTIALLY_UNUSED (st);
+    select_statement& st (sts.find_statement (d));
+    ODB_POTENTIALLY_UNUSED (st);
 
-      init (obj, sts.image (), &db, d);
-    }
-
+    init (obj, sts.image (), &db, d);
     load_ (sts, obj, false, d);
   }
 
@@ -9692,7 +9870,7 @@ namespace odb
     //
     if (--d != 0)
     {
-      if (base_traits::grow (*i.base, t + 1UL, d))
+      if (base_traits::grow (*i.base, t + 2UL, d))
         i.base->version++;
     }
 
@@ -9701,6 +9879,14 @@ namespace odb
     if (t[0UL])
     {
       i.field_value.capacity (i.field_size);
+      grew = true;
+    }
+
+    // expected_value
+    //
+    if (t[1UL])
+    {
+      i.expected_value_value.capacity (i.expected_value_size);
       grew = true;
     }
 
@@ -9738,6 +9924,17 @@ namespace odb
     b[n].size = &i.field_size;
     b[n].capacity = i.field_value.capacity ();
     b[n].is_null = &i.field_null;
+    n++;
+
+    // expected_value
+    //
+    b[n].type = sqlite::image_traits<
+      ::std::string,
+      sqlite::id_text>::bind_value;
+    b[n].buffer = i.expected_value_value.data ();
+    b[n].size = &i.expected_value_size;
+    b[n].capacity = i.expected_value_value.capacity ();
+    b[n].is_null = &i.expected_value_null;
     n++;
 
     // id_
@@ -9787,6 +9984,25 @@ namespace odb
       grew = grew || (cap != i.field_value.capacity ());
     }
 
+    // expected_value
+    //
+    {
+      ::std::string const& v =
+        o.expected_value;
+
+      bool is_null (false);
+      std::size_t cap (i.expected_value_value.capacity ());
+      sqlite::value_traits<
+          ::std::string,
+          sqlite::id_text >::set_image (
+        i.expected_value_value,
+        i.expected_value_size,
+        is_null,
+        v);
+      i.expected_value_null = is_null;
+      grew = grew || (cap != i.expected_value_value.capacity ());
+    }
+
     return grew;
   }
 
@@ -9819,6 +10035,21 @@ namespace odb
         i.field_size,
         i.field_null);
     }
+
+    // expected_value
+    //
+    {
+      ::std::string& v =
+        o.expected_value;
+
+      sqlite::value_traits<
+          ::std::string,
+          sqlite::id_text >::set_value (
+        v,
+        i.expected_value_value,
+        i.expected_value_size,
+        i.expected_value_null);
+    }
   }
 
   const access::object_traits_impl< ::ebi::vcf::InfoBodyError, id_sqlite >::info_type
@@ -9837,14 +10068,16 @@ namespace odb
   const char access::object_traits_impl< ::ebi::vcf::InfoBodyError, id_sqlite >::persist_statement[] =
   "INSERT INTO \"InfoBodyError\" "
   "(\"id\", "
-  "\"field\") "
+  "\"field\", "
+  "\"expected_value\") "
   "VALUES "
-  "(?, ?)";
+  "(?, ?, ?)";
 
   const char* const access::object_traits_impl< ::ebi::vcf::InfoBodyError, id_sqlite >::find_statements[] =
   {
     "SELECT "
     "\"InfoBodyError\".\"field\", "
+    "\"InfoBodyError\".\"expected_value\", "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
     "\"Error\".\"severity\", "
@@ -9855,27 +10088,30 @@ namespace odb
     "WHERE \"InfoBodyError\".\"id\"=?",
 
     "SELECT "
-    "\"InfoBodyError\".\"field\" "
+    "\"InfoBodyError\".\"field\", "
+    "\"InfoBodyError\".\"expected_value\" "
     "FROM \"InfoBodyError\" "
     "WHERE \"InfoBodyError\".\"id\"=?",
 
     "SELECT "
-    "\"InfoBodyError\".\"field\" "
+    "\"InfoBodyError\".\"field\", "
+    "\"InfoBodyError\".\"expected_value\" "
     "FROM \"InfoBodyError\" "
     "WHERE \"InfoBodyError\".\"id\"=?"
   };
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::InfoBodyError, id_sqlite >::find_column_counts[] =
   {
-    6UL,
-    1UL,
-    1UL
+    7UL,
+    2UL,
+    2UL
   };
 
   const char access::object_traits_impl< ::ebi::vcf::InfoBodyError, id_sqlite >::update_statement[] =
   "UPDATE \"InfoBodyError\" "
   "SET "
-  "\"field\"=? "
+  "\"field\"=?, "
+  "\"expected_value\"=? "
   "WHERE \"id\"=?";
 
   const char access::object_traits_impl< ::ebi::vcf::InfoBodyError, id_sqlite >::erase_statement[] =
@@ -9885,6 +10121,7 @@ namespace odb
   const char access::object_traits_impl< ::ebi::vcf::InfoBodyError, id_sqlite >::query_statement[] =
   "SELECT\n"
   "\"InfoBodyError\".\"field\",\n"
+  "\"InfoBodyError\".\"expected_value\",\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
   "\"Error\".\"severity\",\n"
@@ -10456,8 +10693,16 @@ namespace odb
     //
     if (--d != 0)
     {
-      if (base_traits::grow (*i.base, t + 0UL, d))
+      if (base_traits::grow (*i.base, t + 1UL, d))
         i.base->version++;
+    }
+
+    // field
+    //
+    if (t[0UL])
+    {
+      i.field_value.capacity (i.field_size);
+      grew = true;
     }
 
     return grew;
@@ -10484,6 +10729,17 @@ namespace odb
         std::memcpy (&b[n], id, id_size * sizeof (id[0]));
       n += id_size;
     }
+
+    // field
+    //
+    b[n].type = sqlite::image_traits<
+      ::std::string,
+      sqlite::id_text>::bind_value;
+    b[n].buffer = i.field_value.data ();
+    b[n].size = &i.field_size;
+    b[n].capacity = i.field_value.capacity ();
+    b[n].is_null = &i.field_null;
+    n++;
 
     // id_
     //
@@ -10513,6 +10769,25 @@ namespace odb
 
     bool grew (false);
 
+    // field
+    //
+    {
+      ::std::string const& v =
+        o.field;
+
+      bool is_null (false);
+      std::size_t cap (i.field_value.capacity ());
+      sqlite::value_traits<
+          ::std::string,
+          sqlite::id_text >::set_image (
+        i.field_value,
+        i.field_size,
+        is_null,
+        v);
+      i.field_null = is_null;
+      grew = grew || (cap != i.field_value.capacity ());
+    }
+
     return grew;
   }
 
@@ -10530,6 +10805,21 @@ namespace odb
     //
     if (--d != 0)
       base_traits::init (o, *i.base, db, d);
+
+    // field
+    //
+    {
+      ::std::string& v =
+        o.field;
+
+      sqlite::value_traits<
+          ::std::string,
+          sqlite::id_text >::set_value (
+        v,
+        i.field_value,
+        i.field_size,
+        i.field_null);
+    }
   }
 
   const access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::info_type
@@ -10547,13 +10837,15 @@ namespace odb
 
   const char access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::persist_statement[] =
   "INSERT INTO \"FormatBodyError\" "
-  "(\"id\") "
+  "(\"id\", "
+  "\"field\") "
   "VALUES "
-  "(?)";
+  "(?, ?)";
 
   const char* const access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::find_statements[] =
   {
     "SELECT "
+    "\"FormatBodyError\".\"field\", "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
     "\"Error\".\"severity\", "
@@ -10563,17 +10855,29 @@ namespace odb
     "LEFT JOIN \"Error\" ON \"Error\".\"id\"=\"FormatBodyError\".\"id\" "
     "WHERE \"FormatBodyError\".\"id\"=?",
 
-    "",
+    "SELECT "
+    "\"FormatBodyError\".\"field\" "
+    "FROM \"FormatBodyError\" "
+    "WHERE \"FormatBodyError\".\"id\"=?",
 
-    ""
+    "SELECT "
+    "\"FormatBodyError\".\"field\" "
+    "FROM \"FormatBodyError\" "
+    "WHERE \"FormatBodyError\".\"id\"=?"
   };
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::find_column_counts[] =
   {
-    5UL,
-    0UL,
-    0UL
+    6UL,
+    1UL,
+    1UL
   };
+
+  const char access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::update_statement[] =
+  "UPDATE \"FormatBodyError\" "
+  "SET "
+  "\"field\"=? "
+  "WHERE \"id\"=?";
 
   const char access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::erase_statement[] =
   "DELETE FROM \"FormatBodyError\" "
@@ -10581,6 +10885,7 @@ namespace odb
 
   const char access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::query_statement[] =
   "SELECT\n"
+  "\"FormatBodyError\".\"field\",\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
   "\"Error\".\"severity\",\n"
@@ -10679,7 +10984,32 @@ namespace odb
     if (top)
       callback (db, obj, callback_event::pre_update);
 
+    sqlite::transaction& tr (sqlite::transaction::current ());
+    sqlite::connection& conn (tr.connection ());
+    statements_type& sts (
+      conn.statement_cache ().find_object<object_type> ());
+
     base_traits::update (db, obj, false, false);
+
+    image_type& im (sts.image ());
+    if (init (im, obj, statement_update))
+      im.version++;
+
+    const binding& idb (sts.id_image_binding ());
+    binding& imb (sts.update_image_binding ());
+    if (idb.version != sts.update_id_binding_version () ||
+        im.version != sts.update_image_version () ||
+        imb.version == 0)
+    {
+      bind (imb.bind, idb.bind, idb.count, im, statement_update);
+      sts.update_id_binding_version (idb.version);
+      sts.update_image_version (im.version);
+      imb.version++;
+    }
+
+    update_statement& st (sts.update_statement ());
+    if (st.execute () == 0)
+      throw object_not_persistent ();
 
     if (top)
     {
@@ -11012,17 +11342,13 @@ namespace odb
 
     d = depth - d;
 
-    if (d > 2UL)
-    {
-      if (!find_ (sts, 0, d))
-        throw object_not_persistent ();
+    if (!find_ (sts, 0, d))
+      throw object_not_persistent ();
 
-      select_statement& st (sts.find_statement (d));
-      ODB_POTENTIALLY_UNUSED (st);
+    select_statement& st (sts.find_statement (d));
+    ODB_POTENTIALLY_UNUSED (st);
 
-      init (obj, sts.image (), &db, d);
-    }
-
+    init (obj, sts.image (), &db, d);
     load_ (sts, obj, false, d);
   }
 
@@ -14042,6 +14368,7 @@ namespace odb
                       "    ON DELETE CASCADE)");
           db.execute ("CREATE TABLE \"IdBodyError\" (\n"
                       "  \"id\" INTEGER NOT NULL PRIMARY KEY,\n"
+                      "  \"field\" TEXT NOT NULL,\n"
                       "  CONSTRAINT \"id_fk\"\n"
                       "    FOREIGN KEY (\"id\")\n"
                       "    REFERENCES \"BodySectionError\" (\"id\")\n"
@@ -14066,6 +14393,7 @@ namespace odb
                       "    ON DELETE CASCADE)");
           db.execute ("CREATE TABLE \"FilterBodyError\" (\n"
                       "  \"id\" INTEGER NOT NULL PRIMARY KEY,\n"
+                      "  \"field\" TEXT NOT NULL,\n"
                       "  CONSTRAINT \"id_fk\"\n"
                       "    FOREIGN KEY (\"id\")\n"
                       "    REFERENCES \"BodySectionError\" (\"id\")\n"
@@ -14073,12 +14401,14 @@ namespace odb
           db.execute ("CREATE TABLE \"InfoBodyError\" (\n"
                       "  \"id\" INTEGER NOT NULL PRIMARY KEY,\n"
                       "  \"field\" TEXT NOT NULL,\n"
+                      "  \"expected_value\" TEXT NOT NULL,\n"
                       "  CONSTRAINT \"id_fk\"\n"
                       "    FOREIGN KEY (\"id\")\n"
                       "    REFERENCES \"BodySectionError\" (\"id\")\n"
                       "    ON DELETE CASCADE)");
           db.execute ("CREATE TABLE \"FormatBodyError\" (\n"
                       "  \"id\" INTEGER NOT NULL PRIMARY KEY,\n"
+                      "  \"field\" TEXT NOT NULL,\n"
                       "  CONSTRAINT \"id_fk\"\n"
                       "    FOREIGN KEY (\"id\")\n"
                       "    REFERENCES \"BodySectionError\" (\"id\")\n"
