@@ -740,6 +740,35 @@ namespace ebi
                             source}),
                         vcf::InfoBodyError*);
 
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "ACTGNGCN",
+                            { "ATC" },
+                            1.0,
+                            { "PASS" },
+                            { {"SVLEN", "-5"} },
+                            { "GT" },
+                            { "0|1" },
+                            source} ) );
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "ACTGNGCN",
+                            { "ATC" },
+                            1.0,
+                            { "PASS" },
+                            { {"SVLEN", "-4"} },
+                            { "GT" },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
             CHECK_THROWS_AS( (vcf::Record{
                             1,
                             "chr1",

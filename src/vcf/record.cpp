@@ -372,7 +372,7 @@ namespace ebi
         } else if (field_key == SVLEN && values.size() == alternate_alleles.size()) {
             for (size_t i = 0; i < alternate_alleles.size(); i++) {
                 if (check_alt_not_symbolic(i)) {
-                    std::string expected = std::to_string(alternate_alleles[i].size() - reference_allele.size());
+                    std::string expected = std::to_string(static_cast<long>(alternate_alleles[i].size()) - static_cast<long>(reference_allele.size()));
                     if (values[i] != expected) {
                         throw new InfoBodyError{line, "INFO SVLEN=" + field_value + " must be equal to \"length of ALT - length of REF\" for non-symbolic alternate alleles (expected " + expected + ", found " + values[i] + ")", field_key, expected};
                     }
