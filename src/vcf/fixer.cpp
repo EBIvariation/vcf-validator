@@ -97,6 +97,12 @@ namespace ebi
 
         void Fixer::visit(IdBodyError &error)
         {
+            if (error.field == "") {
+                util::writeline(output, *line);
+                ignored_errors++;
+                return;
+            }
+
             std::cerr << "DEBUG: line " << error.line << ": fixing invalid ID field " << error.field << std::endl;
             const size_t id_column_index = 2;
             const std::string empty_id_column = ".";
@@ -131,6 +137,12 @@ namespace ebi
 
         void Fixer::visit(FilterBodyError &error)
         {
+            if (error.field == "") {
+                util::writeline(output, *line);
+                ignored_errors++;
+                return;
+            }
+
             std::cerr << "DEBUG: line " << error.line << ": fixing invalid FILTER field " << error.field << std::endl;
             const size_t filter_column_index = 6;
             const std::string empty_filter_column = ".";
