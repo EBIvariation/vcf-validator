@@ -56,7 +56,7 @@ namespace ebi
           CHECK(output.str() == "##FORMAT=<ID=DP,Number=1,Type=Integer,Description=\"Read depth\">");
       }
 
-      SECTION("Fix duplicates")
+      SECTION("Fix duplicate variants")
       {
           size_t line_number = 8;
           std::string message{"error message mock: Duplication error"};
@@ -73,6 +73,76 @@ namespace ebi
 
           // the fix for duplicated variants is avoiding to write the duplicated line
           CHECK(output.str().size() == previous_size);
+      }
+
+      SECTION("Fix ID duplicates")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: Duplicate ID fields"};
+          ebi::vcf::IdBodyError test_error{line_number, message, "dupid"};
+
+          std::string string_line = "chr\tpos\tdupid;dupid\tref\talt\tqual\tfilter\tinfo=x\tformat\tsamples";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns, id_fields;
+          util::string_split(output.str(), "\t", columns);
+          util::string_split(columns[2], ";", id_fields);
+          CHECK(id_fields.size() == 1);
+      }
+
+      SECTION("Fix FILTER field")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: Invalid filter string 0"};
+          ebi::vcf::FilterBodyError test_error{line_number, message, "0"};
+
+          std::string string_line = "chr\tpos\tid\tref\talt\tqual\t0;filter\tinfo=x\tformat\tsamples";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns, filter_strings;
+          util::string_split(output.str(), "\t", columns);
+          util::string_split(columns[6], ";", filter_strings);
+          CHECK(filter_strings.size() == 1); 
+      }
+      SECTION("Fix unique FILTER field")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: Invalid solitary filter string 0"};
+          ebi::vcf::FilterBodyError test_error{line_number, message, "0"};
+
+          std::string string_line = "chr\tpos\tid\tref\talt\tqual\t0\tinfo=x\tformat\tsamples";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns;
+          util::string_split(output.str(), "\t", columns);
+          CHECK(columns[6] == ".");
+ 
+      }
+      SECTION("Fix FILTER duplicates")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: Duplicate filter strings"};
+          ebi::vcf::FilterBodyError test_error{line_number, message, "dupfil"};
+
+          std::string string_line = "chr\tpos\tid\tref\talt\tqual\tdupfil;filter;dupfil\tinfo=x\tformat\tsamples";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns, filter_strings;
+          util::string_split(output.str(), "\t", columns);
+          util::string_split(columns[6], ";", filter_strings);
+          CHECK(filter_strings.size() == 2);
       }
 
       SECTION("Fix INFO field")
@@ -122,9 +192,77 @@ namespace ebi
           std::stringstream output;
           vcf::Fixer{output}.fix(line_number, line, test_error);
 
+          std::vector<std::string> columns;
+          util::string_split(output.str(), "\t", columns);
+          CHECK(columns[7] == ".");
+      }
+      SECTION("Fix INFO duplicates")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: Duplicate info fields"};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "dupkey"};
+
+          std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\tdupkey=x;info=y;dupkey=z\tformat\tsamples";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
           std::vector<std::string> columns, info_fields;
           util::string_split(output.str(), "\t", columns);
-          CHECK(columns[7] == ebi::vcf::MISSING_VALUE);
+          util::string_split(columns[7], ";", info_fields);
+          CHECK(info_fields.size() == 1);
+          CHECK(columns[7] == "info=y");
+      }
+      SECTION("Fix INFO duplicate unique key")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: Duplicated info unique key"};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "dupkey"};
+
+          std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\tdupkey=x;dupkey=y\tformat\tsamples";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns;
+          util::string_split(output.str(), "\t", columns);
+          CHECK(columns[7] == ".");
+      }
+      SECTION("Fix INFO SVLEN for non-symbolic alternate alleles")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: Invalid value of predefined tag SVLEN"};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "SVLEN", "-3"};
+
+          std::string string_line = "chr\tpos\tid\tACTNG\tGT\tqual\tfilter\tSVLEN=12\tformat\tsamples";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns;
+          util::string_split(output.str(), "\t", columns);
+          CHECK(columns[7] == "SVLEN=-3");
+      }
+      SECTION("Fix INFO END for precise variants")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: Invalid value of predefined tag END"};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "END", "102"};
+
+          std::string string_line = "chr\t100\tid\tACT\t.\t.\tfilter\tEND=5;IMPRECISE=0\tformat\tsamples";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          std::vector<std::string> columns, info_fields;
+          util::string_split(output.str(), "\t", columns);
+          util::string_split(columns[7], ";", info_fields);
+          CHECK(info_fields.size() == 2);
+          CHECK(info_fields[0] == "END=102");
       }
 
       SECTION("Fix SAMPLE field GT")
