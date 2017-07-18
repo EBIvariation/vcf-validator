@@ -457,7 +457,7 @@ namespace ebi
         /**
          * Returns true if an alternate allele is not symbolic
          */
-        bool check_alt_not_symbolic(size_t i) const;
+        bool check_alt_not_symbolic(size_t allele_index) const;
 
         /**
          * Checks that the samples in the record:

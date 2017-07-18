@@ -392,11 +392,11 @@ namespace ebi
         }
     }
 
-    bool Record::check_alt_not_symbolic(size_t i) const
+    bool Record::check_alt_not_symbolic(size_t allele_index) const
     {
         std::unordered_set<char> not_symbolic = { 'A', 'C', 'G', 'T', 'N', 'a', 'c', 'g', 't', 'n' };
         bool is_alt_not_symbolic = true;
-        for (auto & alt : alternate_alleles[i]) {
+        for (auto & alt : alternate_alleles[allele_index]) {
             if (not_symbolic.find(alt) == not_symbolic.end()) {
                 is_alt_not_symbolic = false;
                 break;
