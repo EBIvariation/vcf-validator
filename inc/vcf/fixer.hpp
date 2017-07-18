@@ -112,9 +112,10 @@ namespace ebi
          * removes any duplicate fields in a column
          * @param the column string
          * @param the separator used for splitting the column
+         * @return the number of duplicate fields removed
          */
-        void remove_duplicate_strings(const std::string &column,
-                                      const std::string &separator);
+        size_t remove_duplicate_strings(const std::string &column,
+                                        const std::string &separator);
 
         /**
          * remove any duplicate key value pairs from a column
@@ -124,11 +125,12 @@ namespace ebi
          * @param the separator used for splitting the column
          * @param the separator used to split the key value pair
          * @param the empty value to be used if we end up removing all pairs
+         * @return the number of duplicate fields removed
          */
-        void remove_duplicate_key_value_pairs(const std::string &column,
-                                              const std::string &separator,
-                                              const std::string &key_value_separator,
-                                              const std::string &empty_value);
+        size_t remove_duplicate_key_value_pairs(const std::string &column,
+                                                const std::string &separator,
+                                                const std::string &key_value_separator,
+                                                const std::string &empty_value);
         /**
          * puts the genotype as missing. if the error.cardinality is know, it uses the proper ploidy
          * @param first iterator to the FORMAT column string

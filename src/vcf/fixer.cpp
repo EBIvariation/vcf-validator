@@ -177,7 +177,7 @@ namespace ebi
 
                 if (error.error_fix == ErrorFix::DUPLICATE_VALUES) {
                     std::cerr << "DEBUG: line " << error.field << ": fixing duplicate INFO fields" << std::endl;
-                    remove_duplicate_key_value_pairs(info_column, ";", "=", empty_info_column);
+                    num_modified_fields = remove_duplicate_key_value_pairs(info_column, ";", "=", empty_info_column);
                 } else if (error.error_fix == ErrorFix::RECOVERABLE_VALUE) {
                     std::cerr << "DEBUG: line " << error.field << ": fixing invalid INFO field " << error.field << std::endl;
                     num_modified_fields = replace_column(info_column, ";", error.field + "=" + error.expected_value, condition_to_modify_info_field);
@@ -187,7 +187,7 @@ namespace ebi
                 }
             });
 
-            if (num_modified_fields != 1 && error.error_fix != ErrorFix::DUPLICATE_VALUES) {       // this check is not required anymore as we throw an error already for duplicates before proceeding further with other checks, so can be removed
+            if (num_modified_fields != 1 && error.error_fix != ErrorFix::DUPLICATE_VALUES) {       // this block is not required anymore as we throw an error already for duplicates before proceeding further with other checks, so can be removed
                 std::cerr << "WARNING: line " << error.line << ": field " << error.field << " appeared "
                           << num_modified_fields << " times " << std::endl;
             }
@@ -253,21 +253,21 @@ namespace ebi
             << std::string{line->begin(), line->end()} << std::endl;
         }
 
-        void Fixer::remove_duplicate_strings(const std::string &column,
-                                             const std::string &separator)
+        size_t Fixer::remove_duplicate_strings(const std::string &column,
+                                               const std::string &separator)
         {
             std::set<std::string> already_present;
             auto is_value_duplicated = [&](const std::string &value, size_t index) -> bool {
                 bool first_appearance = already_present.insert(value).second;
                 return not first_appearance;
             };
-            remove_column(column, separator, is_value_duplicated);
+            return remove_column(column, separator, is_value_duplicated);
         }
 
-        void Fixer::remove_duplicate_key_value_pairs(const std::string &column,
-                                                     const std::string &separator,
-                                                     const std::string &key_value_separator,
-                                                     const std::string &empty_value)
+        size_t Fixer::remove_duplicate_key_value_pairs(const std::string &column,
+                                                       const std::string &separator,
+                                                       const std::string &key_value_separator,
+                                                       const std::string &empty_value)
         {
             std::map<std::string, std::string> values;
             std::set<std::string> fields_to_remove;
@@ -287,9 +287,12 @@ namespace ebi
             }
 
             std::string fixed_column;
+            size_t num_removed_duplicates = 0;
             for (auto & value : values) {
                 if (fields_to_remove.find(value.first) == fields_to_remove.end()) {
                     fixed_column += value.first + key_value_separator + value.second + separator;
+                } else {
+                    num_removed_duplicates++;
                 }
             }
             if (fixed_column.size() == 0) {       // all the fields were removed
@@ -299,6 +302,7 @@ namespace ebi
             }
 
             output << fixed_column;
+            return num_removed_duplicates;
         }
 
         void Fixer::fix_format_gt(std::vector<std::string>::iterator first,
