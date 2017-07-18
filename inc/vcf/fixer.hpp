@@ -54,13 +54,29 @@ namespace ebi
         virtual void visit(FileformatError &error) override;
         virtual void visit(ChromosomeBodyError &error) override;
         virtual void visit(PositionBodyError &error) override;
+
+        /**
+         * fix: remove duplicate ids - keep the first one and remove consequent ones
+         */
         virtual void visit(IdBodyError &error) override;
         virtual void visit(ReferenceAlleleBodyError &error) override;
         virtual void visit(AlternateAllelesBodyError &error) override;
         virtual void visit(QualityBodyError &error) override;
-        virtual void visit(FilterBodyError &error) override;
+
         /**
-         * fix: remove the info field that caused the error
+         * fix:
+         * - if any filter string is 0, remove it
+         * - remove duplicate filter strings - keep the first and remove consequent ones
+         */
+        virtual void visit(FilterBodyError &error) override;
+
+        /**
+         * fix:
+         * - fix duplicates in info field :
+         *     - if even one value differs, remove all the duplicate key fields
+         *     - else, keep one duplicate field and remove all the others
+         * - if the error is recoverable, i.e., it expected an exact value, then replace the error causing info field with the correct value
+         * - if the error is irrecoverable, remove the info field that caused the error
          */
         virtual void visit(InfoBodyError &error) override;
         virtual void visit(FormatBodyError &error) override;
@@ -93,6 +109,27 @@ namespace ebi
       protected:
 
         /**
+         * removes any duplicate fields in a column
+         * @param the column string
+         * @param the separator used for splitting the column
+         */
+        void remove_duplicate_strings(const std::string &column,
+                                      const std::string &separator);
+
+        /**
+         * remove any duplicate key value pairs from a column
+         * the fix is to remove all fields for a duplicate key if the corresponding values differ
+         * else if all the values are the same for that key, keep one pair & remove the rest
+         * @param the column string
+         * @param the separator used for splitting the column
+         * @param the separator used to split the key value pair
+         * @param the empty value to be used if we end up removing all pairs
+         */
+        void remove_duplicate_key_value_pairs(const std::string &column,
+                                              const std::string &separator,
+                                              const std::string &key_value_separator,
+                                              const std::string &empty_value);
+        /**
          * puts the genotype as missing. if the error.cardinality is know, it uses the proper ploidy
          * @param first iterator to the FORMAT column string
          * @param last iterator past the last sample column
@@ -112,22 +149,33 @@ namespace ebi
                            SamplesFieldBodyError &error);
 
         size_t remove_column(const std::string &line,
-                             const std::string &separator,
-                             std::function<bool(std::string &column, size_t index)> condition_to_remove);
+                             const std::string &separators,
+                             std::function<bool(const std::string &column, size_t index)> condition_to_remove);
 
         /**
          * don't write to output the columns in `line` that satisfy the `condition_to_remove`
          * @param line: some of its columns will not be written into output
-         * @param separator to be used to split `line`
+         * @param separators to be used to split `line`
          * @param empty_column in case all the columns were remove, write an especial empty column
          * @param condition_to_remove return true if the column has to be removed. can decide using the column and its index
          * @return amount of columns removed
          */
         size_t remove_column(const std::string &line,
-                             const std::string &separator,
+                             const std::string &separators,
                              const std::string &empty_column,
-                             std::string corrected_column,
-                             std::function<bool(std::string &column, size_t index)> condition_to_remove);
+                             std::function<bool(const std::string &column, size_t index)> condition_to_remove);
+
+        /**
+         * write to output the `expected_field` in place of the erroneous one
+         * @param line: its incorrect columns will be replaced by the correct one
+         * @param separators to be used to split `line`
+         * @param expected_field to replace the incorrect one
+         * @param condition_to_replace return true if the column is to be replaced with the `expected_field`
+         */
+        size_t replace_column(const std::string &line,
+                            const std::string &separators,
+                            const std::string &expected_field,
+                            std::function<bool(const std::string &column, size_t index)> condition_to_replace);
 
         /**
          * returns an index (NOT an iterator) to the column in `line` (split by `separator`) where `value` is found. Or `line.npos`

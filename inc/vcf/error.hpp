@@ -124,7 +124,6 @@ namespace ebi
         const std::string message;
         Severity severity;
 
-
       private:
         friend class odb::access;
 
@@ -235,12 +234,14 @@ namespace ebi
     {
         IdBodyError(size_t line = 0,
                     const std::string &message = "ID is not a single dot or a list of strings without semicolons or whitespaces",
+                    ErrorFix error_fix = ErrorFix::IRRECOVERABLE_VALUE,
                     const std::string &field = "")
-                : BodySectionError{line, message}, field{field} { }
+                : BodySectionError{line, message}, error_fix{error_fix}, field{field} { }
         virtual ~IdBodyError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
 
-        std::string field;
+        ErrorFix error_fix;
+        const std::string field;
     };
     #pragma db object
     struct ReferenceAlleleBodyError : public BodySectionError
@@ -274,38 +275,43 @@ namespace ebi
     {
         FilterBodyError(size_t line = 0,
                         const std::string &message = "Filter is not a single dot or a semicolon-separated list of strings",
+                        ErrorFix error_fix = ErrorFix::IRRECOVERABLE_VALUE,
                         const std::string &field = "")
-                : BodySectionError{line, message}, field{field} { }
+                : BodySectionError{line, message}, error_fix{error_fix}, field{field} { }
         virtual ~FilterBodyError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
 
-        std::string field;
+        ErrorFix error_fix;
+        const std::string field;
     };
     #pragma db object
     struct InfoBodyError : public BodySectionError
     {
         InfoBodyError(size_t line = 0,
                       const std::string &message = "Error in info column, in body section",
+                      ErrorFix error_fix = ErrorFix::IRRECOVERABLE_VALUE,
                       const std::string &field = "",
                       const std::string &expected_value = "")
-                : BodySectionError{line, message}, field{field}, expected_value{expected_value} { }
+                : BodySectionError{line, message}, error_fix{error_fix}, field{field}, expected_value{expected_value} {
+                    if (error_fix == ErrorFix::RECOVERABLE_VALUE && expected_value == "") {
+                        throw std::invalid_argument{"An error with recoverable value must provide a non-empty expected value"};
+                    }
+                }
         virtual ~InfoBodyError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
 
-        std::string field;
-        std::string expected_value;    // a few INFO fields expect exact values in a few cases, this would contain that value
+        ErrorFix error_fix;
+        const std::string field;
+        const std::string expected_value;    // a few INFO fields expect exact values in a few cases, this would contain that value
     };
     #pragma db object
     struct FormatBodyError : public BodySectionError
     {
-        FormatBodyError(size_t line = 0,
-                        const std::string &message = "Format is not a colon-separated list of alphanumeric strings",
-                        const std::string &field = "")
-                : BodySectionError{line, message}, field{field} { }
+        using BodySectionError::BodySectionError;
+        FormatBodyError() : FormatBodyError{0} {}
+        FormatBodyError(size_t line) : FormatBodyError{line, "Format is not a colon-separated list of alphanumeric strings"} { }
         virtual ~FormatBodyError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
-
-        std::string field;
     };
     #pragma db object
     struct SamplesBodyError : public BodySectionError
