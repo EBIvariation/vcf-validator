@@ -39,14 +39,14 @@ namespace ebi
 
         SECTION ("It should work with any ID and source")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 1, "reference", source }) );
+            CHECK_NOTHROW( (vcf::MetaEntry { 1, vcf::REFERENCE, source }) );
         }
         
         SECTION ("No value should be assigned")
         {
-            auto meta = vcf::MetaEntry { 1, "reference", source } ;
+            auto meta = vcf::MetaEntry { 1, vcf::REFERENCE, source } ;
             
-            CHECK( meta.id == "reference" );
+            CHECK( meta.id == vcf::REFERENCE );
             CHECK( meta.structure == vcf::MetaEntry::Structure::NoValue );
             CHECK( boost::get<std::string>(meta.value) == std::string {} );
             CHECK_THROWS_AS( (boost::get<std::map<std::string,std::string>>(meta.value)),
@@ -67,15 +67,15 @@ namespace ebi
         
         SECTION("Correct arguments")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry { 1, "assembly", "GRCh37", source }) );
+            CHECK_NOTHROW( (vcf::MetaEntry { 1, vcf::ASSEMBLY, "GRCh37", source }) );
         }
             
         SECTION("A one-line string value should be assigned")
         {
-            auto meta = vcf::MetaEntry { 1, "assembly", "GRCh37", source } ;
+            auto meta = vcf::MetaEntry { 1, vcf::ASSEMBLY, "GRCh37", source } ;
                     
             CHECK( meta.structure == vcf::MetaEntry::Structure::PlainValue );
-            CHECK( meta.id == "assembly" );
+            CHECK( meta.id == vcf::ASSEMBLY );
             CHECK( boost::get<std::string>(meta.value) == std::string{"GRCh37"} );
             CHECK_THROWS_AS( (boost::get<std::map<std::string,std::string>>(meta.value)),
                             boost::bad_get);
@@ -83,7 +83,7 @@ namespace ebi
                 
         SECTION("A multi-line string value should throw an error")
         {
-            CHECK_THROWS_AS( (vcf::MetaEntry { 1, "assembly", "GRCh37\nGRCh37", source } ),
+            CHECK_THROWS_AS( (vcf::MetaEntry { 1, vcf::ASSEMBLY, "GRCh37\nGRCh37", source } ),
                             vcf::MetaSectionError* );
         }
     }
@@ -103,8 +103,8 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                             1,
-                            "contig",
-                            { {"ID", "contig_1"} },
+                            vcf::CONTIG,
+                            { {vcf::ID, "contig_1"} },
                             source } ) );
         }
             
@@ -113,15 +113,15 @@ namespace ebi
         {
             auto meta = vcf::MetaEntry {
                             1,
-                            "contig",
-                            { {"ID", "contig_1"} },
+                            vcf::CONTIG,
+                            { {vcf::ID, "contig_1"} },
                             source } ;
 
-            CHECK( meta.id == "contig" );
+            CHECK( meta.id == vcf::CONTIG );
             CHECK( meta.structure == vcf::MetaEntry::Structure::KeyValue );
             CHECK_THROWS_AS( boost::get<std::string>(meta.value),
                             boost::bad_get);
-            CHECK( (boost::get<std::map<std::string,std::string>>(meta.value)) == (std::map<std::string,std::string>{ {"ID", "contig_1"} }) );
+            CHECK( (boost::get<std::map<std::string,std::string>>(meta.value)) == (std::map<std::string,std::string>{ {vcf::ID, "contig_1"} }) );
         }
         
     }
@@ -142,23 +142,23 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"ID", "INS"}, {"Description", "tag_description"} },
+                                vcf::ALT,
+                                { {vcf::ID, vcf::INS}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"Description", "tag_description"} },
+                                vcf::ALT,
+                                { {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"ID", "TAG_ID"} },
+                                vcf::ALT,
+                                { {vcf::ID, "TAG_ID"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -168,78 +168,78 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"ID", "DEL"}, {"Description", "tag_description"} },
+                                vcf::ALT,
+                                { {vcf::ID, vcf::DEL}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                               
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"ID", "INS"}, {"Description", "tag_description"} },
+                                vcf::ALT,
+                                { {vcf::ID, vcf::INS}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                              
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"ID", "DUP"}, {"Description", "tag_description"} },
+                                vcf::ALT,
+                                { {vcf::ID, vcf::DUP}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                              
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"ID", "INV"}, {"Description", "tag_description"} },
+                                vcf::ALT,
+                                { {vcf::ID, vcf::INV}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                              
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"ID", "CNV"}, {"Description", "tag_description"} },
+                                vcf::ALT,
+                                { {vcf::ID, vcf::CNV}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                                
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"ID", "DEL:FOO"}, {"Description", "tag_description"} },
+                                vcf::ALT,
+                                { {vcf::ID, "DEL:FOO"}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"ID", "INS:FOO"}, {"Description", "tag_description"} },
+                                vcf::ALT,
+                                { {vcf::ID, "INS:FOO"}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"ID", "DUP:FOO"}, {"Description", "tag_description"} },
+                                vcf::ALT,
+                                { {vcf::ID, "DUP:FOO"}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"ID", "INV:FOO"}, {"Description", "tag_description"} },
+                                vcf::ALT,
+                                { {vcf::ID, "INV:FOO"}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"ID", "CNV:FOO"}, {"Description", "tag_description"} },
+                                vcf::ALT,
+                                { {vcf::ID, "CNV:FOO"}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                                   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "ALT",
-                                { {"ID", "CNV:FOO:BAR"}, {"Description", "tag_description"} },
+                                vcf::ALT,
+                                { {vcf::ID, "CNV:FOO:BAR"}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                                 
@@ -261,22 +261,22 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "contig",
-                                { {"ID", "contig_1"} },
+                                vcf::CONTIG,
+                                { {vcf::ID, "contig_1"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry { 
                                 1,
-                                "contig",
-                                { {"ID", "contig_2"}, {"Description", "tag_description"} },
+                                vcf::CONTIG,
+                                { {vcf::ID, "contig_2"}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "contig",
-                                { {"Description", "tag_description"} },
+                                vcf::CONTIG,
+                                { {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -298,23 +298,23 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FILTER",
-                                { {"ID", "Filter1"}, {"Description", "tag_description"} },
+                                vcf::FILTER,
+                                { {vcf::ID, "Filter1"}, {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FILTER",
-                                { {"Description", "tag_description"} },
+                                vcf::FILTER,
+                                { {vcf::DESCRIPTION, "tag_description"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FILTER",
-                                { {"ID", "TAG_ID"} },
+                                vcf::FILTER,
+                                { {vcf::ID, "TAG_ID"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -345,39 +345,39 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GT}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "1"}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -387,51 +387,51 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, "10"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "customTag"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "customTag"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "customTag"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                             
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "customTag"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "customTag"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, "10a"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "customTag"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, "D"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -441,44 +441,44 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, "10"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "Float"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, "10"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "Character"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, "10"}, {vcf::TYPE, vcf::CHARACTER}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, "10"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "."}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, "10"}, {vcf::TYPE, vcf::MISSING_VALUE}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "customTag"}, {"Number", "10"}, {"Type", "int"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, "customTag"}, {vcf::NUMBER, "10"}, {vcf::TYPE, "int"}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -488,406 +488,406 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "DP"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Read depth"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::DP}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Read depth"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "DP"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Read depth"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::DP}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Read depth"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "DP"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Read depth"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::DP}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Read depth"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "EC"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Expected alternate allele counts"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::EC}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Expected alternate allele counts"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "EC"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Expected alternate allele counts"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::EC}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Expected alternate allele counts"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "EC"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Expected alternate allele counts"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::EC}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Expected alternate allele counts"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "FT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Filter indicating if this genotype was “called”"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::FT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Filter indicating if this genotype was “called”"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "FT"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Filter indicating if this genotype was “called”"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::FT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Filter indicating if this genotype was “called”"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "FT"}, {"Number", "2"}, {"Type", "String"}, {"Description", "Filter indicating if this genotype was “called”"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::FT}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Filter indicating if this genotype was “called”"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GL"}, {"Number", "G"}, {"Type", "Float"}, {"Description", "Genotype likelihoods"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GL}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Genotype likelihoods"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GL"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype likelihoods"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GL}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype likelihoods"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GL"}, {"Number", "2"}, {"Type", "Float"}, {"Description", "Genotype likelihoods"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GL}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Genotype likelihoods"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GP"}, {"Number", "G"}, {"Type", "Float"}, {"Description", "Genotype posterior probabilities"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GP}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Genotype posterior probabilities"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GP"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype posterior probabilities"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GP}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype posterior probabilities"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GP"}, {"Number", "2"}, {"Type", "Float"}, {"Description", "Genotype posterior probabilities"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GP}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Genotype posterior probabilities"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GQ"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Conditional genotype quality"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GQ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Conditional genotype quality"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GQ"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Conditional genotype quality"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GQ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Conditional genotype quality"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GQ"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Conditional genotype quality"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GQ}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Conditional genotype quality"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "HQ"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Haplotype quality"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::HQ}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Haplotype quality"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "HQ"}, {"Number", "2"}, {"Type", "String"}, {"Description", "Haplotype quality"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::HQ}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Haplotype quality"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "HQ"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Haplotype quality"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::HQ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Haplotype quality"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "MQ"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "RMS mapping quality"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::MQ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "RMS mapping quality"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "MQ"}, {"Number", "1"}, {"Type", "String"}, {"Description", "RMS mapping quality"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::MQ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "RMS mapping quality"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "MQ"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "RMS mapping quality"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::MQ}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "RMS mapping quality"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "PL"}, {"Number", "G"}, {"Type", "Integer"}, {"Description", "Phred-scaled genotype likelihoods rounded to the closest integer"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PL}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Phred-scaled genotype likelihoods rounded to the closest integer"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "PL"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Phred-scaled genotype likelihoods rounded to the closest integer"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PL}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Phred-scaled genotype likelihoods rounded to the closest integer"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "PL"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Phred-scaled genotype likelihoods rounded to the closest integer"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PL}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Phred-scaled genotype likelihoods rounded to the closest integer"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "PQ"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Phasing quality"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PQ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Phasing quality"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "PQ"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Phasing quality"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PQ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Phasing quality"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "PQ"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Phasing quality"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PQ}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Phasing quality"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "PS"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Phase set"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PS}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Phase set"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "PS"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Phase set"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PS}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Phase set"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "PS"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Phase set"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PS}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Phase set"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CN"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Copy number genotype for imprecise events"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number genotype for imprecise events"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CN"}, {"Number", "5"}, {"Type", "Integer"}, {"Description", "Copy number genotype for imprecise events"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "5"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number genotype for imprecise events"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CN"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Copy number genotype for imprecise events"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number genotype for imprecise events"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CNQ"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Copy number genotype quality for imprecise events"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CNQ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number genotype quality for imprecise events"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CNQ"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Copy number genotype quality for imprecise events"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CNQ}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number genotype quality for imprecise events"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CNQ"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Copy number genotype quality for imprecise events"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CNQ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number genotype quality for imprecise events"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CNL"}, {"Number", "."}, {"Type", "Float"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CNL}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number genotype likelihood for imprecise events"} },
                                 source
                             } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CNL"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CNL}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number genotype likelihood for imprecise events"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "NQ"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Phred style probability score that the variant is novel"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::NQ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Phred style probability score that the variant is novel"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "NQ"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Phred style probability score that the variant is novel"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::NQ}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Phred style probability score that the variant is novel"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "NQ"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Phred style probability score that the variant is novel"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::NQ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Phred style probability score that the variant is novel"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "HAP"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Unique haplotype identifier"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::HAP}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Unique haplotype identifier"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "HAP"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Unique haplotype identifier"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::HAP}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Unique haplotype identifier"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "HAP"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Unique haplotype identifier"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::HAP}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Unique haplotype identifier"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "AHAP"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Unique identifier of ancestral haplotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::AHAP}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Unique identifier of ancestral haplotype"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "AHAP"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Unique identifier of ancestral haplotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::AHAP}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Unique identifier of ancestral haplotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "AHAP"}, {"Number", "1"}, {"Type", "Character"}, {"Description", "Unique identifier of ancestral haplotype"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::AHAP}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::CHARACTER}, {vcf::DESCRIPTION, "Unique identifier of ancestral haplotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -897,46 +897,46 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CNL"}, {"Number", "G"}, {"Type", "Float"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CNL}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number genotype likelihood for imprecise events"} },
                                 source_v43
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CNL"}, {"Number", "G"}, {"Type", "Integer"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CNL}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number genotype likelihood for imprecise events"} },
                                 source_v43
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CNL"}, {"Number", "2"}, {"Type", "Float"}, {"Description", "Copy number genotype likelihood for imprecise events"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CNL}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number genotype likelihood for imprecise events"} },
                                 source_v43
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CNP"}, {"Number", "G"}, {"Type", "Float"}, {"Description", "Copy number posterior probabilities"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CNP}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number posterior probabilities"} },
                                 source_v43
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CNP"}, {"Number", "G"}, {"Type", "Integer"}, {"Description", "Copy number posterior probabilities"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CNP}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number posterior probabilities"} },
                                 source_v43
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "FORMAT",
-                                { {"ID", "CNP"}, {"Number", "2"}, {"Type", "Float"}, {"Description", "Copy number posterior probabilities"} },
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CNP}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number posterior probabilities"} },
                                 source_v43
                             }),
                             vcf::MetaSectionError* );
@@ -958,39 +958,39 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"Number", "1"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "1"}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "String"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -1000,51 +1000,51 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "10"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                             
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "."}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "10a"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "10a"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "D"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "D"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -1054,51 +1054,51 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "10"}, {"Type", "Integer"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "10"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                      
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "R"}, {"Type", "Character"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::CHARACTER}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "G"}, {"Type", "String"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, vcf::G}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             } ) );
                             
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "."}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::MISSING_VALUE}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "GT"}, {"Number", "1"}, {"Type", "int"}, {"Description", "Genotype"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::GT}, {vcf::NUMBER, "1"}, {vcf::TYPE, "int"}, {vcf::DESCRIPTION, "Genotype"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -1107,902 +1107,902 @@ namespace ebi
         SECTION("INFO predefined tags") {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AA"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Ancestral Allele"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AA}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Ancestral Allele"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AA"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Ancestral Allele"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AA}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Ancestral Allele"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AA"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Ancestral Allele"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AA}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Ancestral Allele"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AC"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Allele count in genotypes, for each ALT allele, in the same order as listed"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AC}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Allele count in genotypes, for each ALT allele, in the same order as listed"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AC"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Allele count in genotypes, for each ALT allele, in the same order as listed"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AC}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Allele count in genotypes, for each ALT allele, in the same order as listed"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AC"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Allele count in genotypes, for each ALT allele, in the same order as listed"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AC}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Allele count in genotypes, for each ALT allele, in the same order as listed"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AD"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Total read depth for each allele"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AD}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Total read depth for each allele"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AD"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Total read depth for each allele"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AD}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Total read depth for each allele"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AD"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Total read depth for each allele"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AD}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Total read depth for each allele"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "ADF"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the forward strand"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::ADF}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Read depth for each allele on the forward strand"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "ADF"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Read depth for each allele on the forward strand"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::ADF}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Read depth for each allele on the forward strand"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "ADF"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the forward strand"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::ADF}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Read depth for each allele on the forward strand"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "ADR"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the reverse strand"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::ADR}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Read depth for each allele on the reverse strand"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "ADR"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Read depth for each allele on the reverse strand"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::ADR}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Read depth for each allele on the reverse strand"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "ADR"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Read depth for each allele on the reverse strand"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::ADR}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Read depth for each allele on the reverse strand"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AF"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AF}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AF"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AF}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AF"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AF}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Allele frequency for each ALT allele in the same order as listed (estimated from primary data, not called genotypes)"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AN"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Total number of alleles in called genotypes"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Total number of alleles in called genotypes"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AN"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Total number of alleles in called genotypes"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Total number of alleles in called genotypes"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "AN"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Total number of alleles in called genotypes"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::AN}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Total number of alleles in called genotypes"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "BQ"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "RMS base quality"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::BQ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "RMS base quality"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "BQ"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "RMS base quality"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::BQ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "RMS base quality"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "BQ"}, {"Number", "A"}, {"Type", "Float"}, {"Description", "RMS base quality"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::BQ}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "RMS base quality"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CIGAR"}, {"Number", "A"}, {"Type", "String"}, {"Description", "Cigar string describing how to align an alternate allele to the reference allele"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CIGAR}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Cigar string describing how to align an alternate allele to the reference allele"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CIGAR"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "Cigar string describing how to align an alternate allele to the reference allele"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CIGAR}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Cigar string describing how to align an alternate allele to the reference allele"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CIGAR"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Cigar string describing how to align an alternate allele to the reference allele"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CIGAR}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Cigar string describing how to align an alternate allele to the reference allele"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DB"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "dbSNP membership"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DB}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "dbSNP membership"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DB"}, {"Number", "0"}, {"Type", "Float"}, {"Description", "dbSNP membership"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DB}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "dbSNP membership"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DB"}, {"Number", "A"}, {"Type", "Flag"}, {"Description", "dbSNP membership"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DB}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "dbSNP membership"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DP"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Combined depth across samples"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DP}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Combined depth across samples"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DP"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Combined depth across samples"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DP}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Combined depth across samples"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DP"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Combined depth across samples"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DP}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Combined depth across samples"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "END"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "End position (for use with symbolic alleles)"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::END}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "End position (for use with symbolic alleles)"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "END"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "End position (for use with symbolic alleles)"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::END}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "End position (for use with symbolic alleles)"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "END"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "End position (for use with symbolic alleles)"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::END}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "End position (for use with symbolic alleles)"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "H2"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "HapMap2 membership"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::H2}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "HapMap2 membership"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "H2"}, {"Number", "0"}, {"Type", "String"}, {"Description", "HapMap2 membership"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::H2}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "HapMap2 membership"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "H2"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "HapMap2 membership"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::H2}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "HapMap2 membership"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "H3"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "HapMap3 membership"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::H3}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "HapMap3 membership"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "H3"}, {"Number", "0"}, {"Type", "String"}, {"Description", "HapMap3 membership"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::H3}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "HapMap3 membership"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "H3"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "HapMap3 membership"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::H3}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "HapMap3 membership"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "MQ0"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Number of MAPQ == 0 reads"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::MQ0}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Number of MAPQ == 0 reads"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "MQ0"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Number of MAPQ == 0 reads"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::MQ0}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Number of MAPQ == 0 reads"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "MQ0"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Number of MAPQ == 0 reads"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::MQ0}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Number of MAPQ == 0 reads"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "NS"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Number of samples with data"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::NS}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Number of samples with data"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "NS"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Number of samples with data"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::NS}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Number of samples with data"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "NS"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Number of samples with data"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::NS}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Number of samples with data"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "SOMATIC"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Somatic mutation (for cancer genomics)"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::SOMATIC}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Somatic mutation (for cancer genomics)"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "SOMATIC"}, {"Number", "0"}, {"Type", "String"}, {"Description", "Somatic mutation (for cancer genomics)"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::SOMATIC}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Somatic mutation (for cancer genomics)"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "SOMATIC"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Somatic mutation (for cancer genomics)"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::SOMATIC}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Somatic mutation (for cancer genomics)"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "VALIDATED"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Validated by follow-up experiment"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::VALIDATED}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Validated by follow-up experiment"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "VALIDATED"}, {"Number", "0"}, {"Type", "String"}, {"Description", "Validated by follow-up experiment"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::VALIDATED}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Validated by follow-up experiment"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "VALIDATED"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "Validated by follow-up experiment"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::VALIDATED}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Validated by follow-up experiment"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "1000G"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "1000 Genomes membership"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::THOUSAND_G}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "1000 Genomes membership"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "1000G"}, {"Number", "0"}, {"Type", "String"}, {"Description", "1000 Genomes membership"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::THOUSAND_G}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "1000 Genomes membership"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
  
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "1000G"}, {"Number", "1"}, {"Type", "Flag"}, {"Description", "1000 Genomes membership"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::THOUSAND_G}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "1000 Genomes membership"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "IMPRECISE"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Imprecise structural variation"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::IMPRECISE}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Imprecise structural variation"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "IMPRECISE"}, {"Number", "R"}, {"Type", "Flag"}, {"Description", "Imprecise structural variation"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::IMPRECISE}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Imprecise structural variation"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "IMPRECISE"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Imprecise structural variation"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::IMPRECISE}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Imprecise structural variation"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "NOVEL"}, {"Number", "0"}, {"Type", "Flag"}, {"Description", "Indicates a novel structural variation"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::NOVEL}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Indicates a novel structural variation"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "NOVEL"}, {"Number", "R"}, {"Type", "Flag"}, {"Description", "Indicates a novel structural variation"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::NOVEL}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Indicates a novel structural variation"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "NOVEL"}, {"Number", "0"}, {"Type", "Integer"}, {"Description", "Indicates a novel structural variation"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::NOVEL}, {vcf::NUMBER, "0"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Indicates a novel structural variation"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "SVTYPE"}, {"Number", "1"}, {"Type", "String"}, {"Description", "Type of structural variant"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::SVTYPE}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Type of structural variant"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "SVTYPE"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Type of structural variant"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::SVTYPE}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Type of structural variant"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "SVTYPE"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Type of structural variant"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::SVTYPE}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Type of structural variant"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "SVLEN"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Difference in length between REF and ALT alleles"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::SVLEN}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Difference in length between REF and ALT alleles"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "SVLEN"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Difference in length between REF and ALT alleles"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::SVLEN}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Difference in length between REF and ALT alleles"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CIPOS"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Confidence interval around POS for imprecise variants"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CIPOS}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around POS for imprecise variants"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CIPOS"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Confidence interval around POS for imprecise variants"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CIPOS}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around POS for imprecise variants"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CIPOS"}, {"Number", "2"}, {"Type", "Float"}, {"Description", "Confidence interval around POS for imprecise variants"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CIPOS}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Confidence interval around POS for imprecise variants"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CIEND"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Confidence interval around END for imprecise variants"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CIEND}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around END for imprecise variants"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CIEND"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Confidence interval around END for imprecise variants"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CIEND}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around END for imprecise variants"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CIEND"}, {"Number", "2"}, {"Type", "Character"}, {"Description", "Confidence interval around END for imprecise variants"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CIEND}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::CHARACTER}, {vcf::DESCRIPTION, "Confidence interval around END for imprecise variants"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "HOMLEN"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Length of base pair identical micro-homology at event breakpoints"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::HOMLEN}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Length of base pair identical micro-homology at event breakpoints"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "HOMLEN"}, {"Number", "2"}, {"Type", "String"}, {"Description", "Length of base pair identical micro-homology at event breakpoints"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::HOMLEN}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Length of base pair identical micro-homology at event breakpoints"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "HOMSEQ"}, {"Number", "."}, {"Type", "String"}, {"Description", "Sequence of base pair identical micro-homology at event breakpoints"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::HOMSEQ}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Sequence of base pair identical micro-homology at event breakpoints"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "HOMSEQ"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Sequence of base pair identical micro-homology at event breakpoints"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::HOMSEQ}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Sequence of base pair identical micro-homology at event breakpoints"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "BKPTID"}, {"Number", "."}, {"Type", "String"}, {"Description", "ID of the assembled alternate allele in the assembly file"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::BKPTID}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of the assembled alternate allele in the assembly file"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "BKPTID"}, {"Number", "2"}, {"Type", "Character"}, {"Description", "ID of the assembled alternate allele in the assembly file"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::BKPTID}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::CHARACTER}, {vcf::DESCRIPTION, "ID of the assembled alternate allele in the assembly file"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "MEINFO"}, {"Number", "4"}, {"Type", "String"}, {"Description", "Mobile element info of the form NAME,START,END,POLARITY"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::MEINFO}, {vcf::NUMBER, "4"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Mobile element info of the form NAME,START,END,POLARITY"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "MEINFO"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Mobile element info of the form NAME,START,END,POLARITY"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::MEINFO}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Mobile element info of the form NAME,START,END,POLARITY"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "MEINFO"}, {"Number", "4"}, {"Type", "Integer"}, {"Description", "Mobile element info of the form NAME,START,END,POLARITY"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::MEINFO}, {vcf::NUMBER, "4"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Mobile element info of the form NAME,START,END,POLARITY"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "METRANS"}, {"Number", "4"}, {"Type", "String"}, {"Description", "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::METRANS}, {vcf::NUMBER, "4"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "METRANS"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::METRANS}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "METRANS"}, {"Number", "4"}, {"Type", "Integer"}, {"Description", "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::METRANS}, {vcf::NUMBER, "4"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DGVID"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of this element in Database of Genomic Variation"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DGVID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in Database of Genomic Variation"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DGVID"}, {"Number", "R"}, {"Type", "String"}, {"Description", "ID of this element in Database of Genomic Variation"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DGVID}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in Database of Genomic Variation"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DGVID"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "ID of this element in Database of Genomic Variation"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DGVID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of this element in Database of Genomic Variation"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DBVARID"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of this element in DBVAR"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DBVARID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in DBVAR"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DBVARID"}, {"Number", "R"}, {"Type", "String"}, {"Description", "ID of this element in DBVAR"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DBVARID}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in DBVAR"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DBVARID"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "ID of this element in DBVAR"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DBVARID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of this element in DBVAR"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DBRIPID"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of this element in DBRIP"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DBRIPID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in DBRIP"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DBRIPID"}, {"Number", "R"}, {"Type", "String"}, {"Description", "ID of this element in DBRIP"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DBRIPID}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in DBRIP"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DBRIPID"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "ID of this element in DBRIP"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DBRIPID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of this element in DBRIP"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "MATEID"}, {"Number", "."}, {"Type", "String"}, {"Description", "ID of mate breakends"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::MATEID}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of mate breakends"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "MATEID"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "ID of mate breakends"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::MATEID}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of mate breakends"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "PARID"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of partner breakend"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::PARID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of partner breakend"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "PARID"}, {"Number", "R"}, {"Type", "String"}, {"Description", "ID of partner breakend"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::PARID}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of partner breakend"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "PARID"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "ID of partner breakend"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::PARID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of partner breakend"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "EVENT"}, {"Number", "1"}, {"Type", "String"}, {"Description", "ID of event associated to breakend"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::EVENT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of event associated to breakend"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "EVENT"}, {"Number", "R"}, {"Type", "String"}, {"Description", "ID of event associated to breakend"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::EVENT}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of event associated to breakend"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "EVENT"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "ID of event associated to breakend"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::EVENT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of event associated to breakend"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CILEN"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Confidence interval around the inserted material between breakends"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CILEN}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around the inserted material between breakends"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CILEN"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Confidence interval around the inserted material between breakends"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CILEN}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around the inserted material between breakends"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CILEN"}, {"Number", "2"}, {"Type", "String"}, {"Description", "Confidence interval around the inserted material between breakends"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CILEN}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Confidence interval around the inserted material between breakends"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DPADJ"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Read Depth of adjacency"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DPADJ}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Read Depth of adjacency"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "DPADJ"}, {"Number", "3"}, {"Type", "String"}, {"Description", "Read Depth of adjacency"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::DPADJ}, {vcf::NUMBER, "3"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Read Depth of adjacency"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CN"}, {"Number", "1"}, {"Type", "Integer"}, {"Description", "Copy number of segment containing breakend"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number of segment containing breakend"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CN"}, {"Number", "R"}, {"Type", "Integer"}, {"Description", "Copy number of segment containing breakend"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number of segment containing breakend"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CN"}, {"Number", "1"}, {"Type", "Float"}, {"Description", "Copy number of segment containing breakend"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number of segment containing breakend"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CNADJ"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Copy number of adjacency"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CNADJ}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number of adjacency"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CNADJ"}, {"Number", "R"}, {"Type", "String"}, {"Description", "Copy number of adjacency"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CNADJ}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Copy number of adjacency"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CICN"}, {"Number", "2"}, {"Type", "Integer"}, {"Description", "Confidence interval around copy number for the segment"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CICN}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around copy number for the segment"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CICN"}, {"Number", "A"}, {"Type", "Integer"}, {"Description", "Confidence interval around copy number for the segment"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CICN}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around copy number for the segment"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CICN"}, {"Number", "2"}, {"Type", "Flag"}, {"Description", "Confidence interval around copy number for the segment"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CICN}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Confidence interval around copy number for the segment"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CICNADJ"}, {"Number", "."}, {"Type", "Integer"}, {"Description", "Confidence interval around copy number for the adjacency"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CICNADJ}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around copy number for the adjacency"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "INFO",
-                                { {"ID", "CICNADJ"}, {"Number", "1"}, {"Type", "Character"}, {"Description", "Confidence interval around copy number for the adjacency"} },
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CICNADJ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::CHARACTER}, {vcf::DESCRIPTION, "Confidence interval around copy number for the adjacency"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -2024,21 +2024,21 @@ namespace ebi
         {
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "SAMPLE",
-                                { {"ID", "Sample_1"} },
+                                vcf::SAMPLE,
+                                { {vcf::ID, "Sample_1"} },
                                 source
                             } ) );
                                 
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
-                                "SAMPLE",
-                                { {"ID", "Sample_2"}, {"Genomes", "genome_1,genome_2"}, {"Mixtures", "mixture_1"} },
+                                vcf::SAMPLE,
+                                { {vcf::ID, "Sample_2"}, {"Genomes", "genome_1,genome_2"}, {"Mixtures", "mixture_1"} },
                                 source
                             } ) );
                                 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
-                                "SAMPLE",
+                                vcf::SAMPLE,
                                 { {"Genomes", "genome_1,genome_2"} },
                                 source
                             }),

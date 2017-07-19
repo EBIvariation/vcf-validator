@@ -162,11 +162,11 @@ namespace ebi
             std::string provided_version{line.substr(common_substring.size())};
             util::remove_end_of_line(provided_version);
 
-            if (provided_version == "VCFv4.1") {
+            if (provided_version == VCF_V41) {
                 return Version::v41;
-            } else if (provided_version == "VCFv4.2") {
+            } else if (provided_version == VCF_V42) {
                 return Version::v42;
-            } else if (provided_version == "VCFv4.3") {
+            } else if (provided_version == VCF_V43) {
                 return Version::v43;
             }
         }

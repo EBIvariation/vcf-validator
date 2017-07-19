@@ -51,21 +51,21 @@ namespace ebi
                                                           {},
                                                           {"NA001", "NA002", "NA003", "NA004"}}};
 
-      source->meta_entries.emplace("FORMAT",
+      source->meta_entries.emplace(vcf::FORMAT,
                                    vcf::MetaEntry{
                                            1,
-                                           "FORMAT",
+                                           vcf::FORMAT,
                                            {
-                                                   { "ID", "GT" },
-                                                   { "Number", "1" },
-                                                   { "Type", "String" },
-                                                   { "Description", "Genotype" }
+                                                   { vcf::ID, vcf::GT },
+                                                   { vcf::NUMBER, "1" },
+                                                   { vcf::TYPE, vcf::STRING },
+                                                   { vcf::DESCRIPTION, "Genotype" }
                                            },
                                            source
                                    });
 
-      return vcf::Record{1, "1", summary.normalized_pos, {"."}, summary.normalized_reference, summary.normalized_alternate,
-                         0, {"."}, {{".", ""}}, {"GT"}, {"0/0", "0/1", "0/1", "1/1"}, source};
+      return vcf::Record{1, "1", summary.normalized_pos, {vcf::MISSING_VALUE}, summary.normalized_reference, summary.normalized_alternate,
+                         0, {vcf::MISSING_VALUE}, {{vcf::MISSING_VALUE, ""}}, {vcf::GT}, {"0/0", "0/1", "0/1", "1/1"}, source};
   }
 
   /** simple count for small tests, no need to optimize further */

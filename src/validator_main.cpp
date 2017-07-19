@@ -42,13 +42,13 @@ namespace
         po::options_description description("Usage: vcf-validator [OPTIONS] [< input_file]\nAllowed options");
 
         description.add_options()
-            ("help,h", "Display this help")
-            ("input,i", po::value<std::string>()->default_value("stdin"), "Path to the input VCF file, or stdin")
-            ("level,l", po::value<std::string>()->default_value("warning"), "Validation level (error, warning, stop)")
-            ("report,r", po::value<std::string>()->default_value("stdout"), "Comma separated values for types of reports (database, stdout)")
-            ("outdir,o", po::value<std::string>()->default_value(""), "Directory for the output")
-            ("ploidy,p", po::value<long>()->default_value(2), "Genome ploidy to expect through most or the whole VCF file (can be overwritten with --special-ploidy)")
-            ("special-ploidy,s", po::value<std::string>(), "Ploidy expected in specific chromosomes/contigs, e.g Y=1,MyTriploidContig=3")
+            (ebi::vcf::HELP_OPTION, "Display this help")
+            (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
+            (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING), "Validation level (error, warning, stop)")
+            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDOUT), "Comma separated values for types of reports (database, stdout)")
+            (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Directory for the output")
+            (ebi::vcf::PLOIDY_OPTION, po::value<long>()->default_value(2), "Genome ploidy to expect through most or the whole VCF file (can be overwritten with --special-ploidy)")
+            (ebi::vcf::SPECIAL_PLOIDY_OPTION, po::value<std::string>(), "Ploidy expected in specific chromosomes/contigs, e.g Y=1,MyTriploidContig=3")
         ;
 
         return description;
@@ -56,19 +56,19 @@ namespace
 
     int check_command_line_options(po::variables_map const & vm, po::options_description const & desc)
     {
-        if (vm.count("help")) {
+        if (vm.count(ebi::vcf::HELP)) {
             std::cout << desc << std::endl;
             return -1;
         }
 
-        std::string level = vm["level"].as<std::string>();
-        if (level != "error" && level != "warning" && level != "stop") {
+        std::string level = vm[ebi::vcf::LEVEL].as<std::string>();
+        if (level != ebi::vcf::ERROR && level != ebi::vcf::WARNING && level != ebi::vcf::STOP) {
             std::cout << desc << std::endl;
             std::cout << "Please choose one of the accepted validation levels" << std::endl;
             return 1;
         }
 
-        long ploidy = vm["ploidy"].as<long>();
+        long ploidy = vm[ebi::vcf::PLOIDY].as<long>();
         if (ploidy <= 0) {
             std::cout << "Ploidy must be greater that 0" << std::endl;
             return 1;
@@ -79,11 +79,11 @@ namespace
 
     ebi::vcf::ValidationLevel get_validation_level(std::string const & level_str)
     {
-        if (level_str == "error") {
+        if (level_str == ebi::vcf::ERROR) {
             return ebi::vcf::ValidationLevel::error;
-        } else if (level_str == "warning") {
+        } else if (level_str == ebi::vcf::WARNING) {
             return ebi::vcf::ValidationLevel::warning;
-        } else if (level_str == "stop") {
+        } else if (level_str == ebi::vcf::STOP) {
             return ebi::vcf::ValidationLevel::stop;
         }
 
@@ -121,8 +121,8 @@ namespace
         unsigned_ploidy = static_cast<size_t>(default_ploidy);
 
         std::map<std::string, size_t> special_ploidies;
-        if (vm.count("special-ploidy")) {
-            std::string parameter{vm["special-ploidy"].as<std::string>()};
+        if (vm.count(ebi::vcf::SPECIAL_PLOIDY)) {
+            std::string parameter{vm[ebi::vcf::SPECIAL_PLOIDY].as<std::string>()};
             std::vector<std::string> ploidies;
             ebi::util::string_split(parameter, ",", ploidies);
             for (std::string &ploidy_assignment : ploidies) {
@@ -159,7 +159,7 @@ namespace
         std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
 
         for (auto out : outs) {
-            if (out == "database") {
+            if (out == ebi::vcf::DATABASE) {
                 auto epoch = std::chrono::system_clock::now().time_since_epoch();
                 auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
                 std::string db_filename = input + ".errors." + std::to_string(timestamp) + ".db";
@@ -168,7 +168,7 @@ namespace
                     throw std::runtime_error{"Report file already exists on " + db_filename + ", please delete it or rename it"};
                 }
                 outputs.emplace_back(new ebi::vcf::OdbReportRW(db_filename));
-            } else if (out == "stdout") {
+            } else if (out == ebi::vcf::STDOUT) {
                 outputs.emplace_back(new ebi::vcf::SummaryReportWriter(std::cout));
             } else {
                 throw std::invalid_argument{"Please use only valid report types"};
@@ -194,14 +194,14 @@ int main(int argc, char** argv)
     bool is_valid;
 
     try {
-        auto path = vm["input"].as<std::string>();
-        auto level = vm["level"].as<std::string>();
-        ebi::vcf::Ploidy ploidy = get_ploidy(vm["ploidy"].as<long>(), vm);
+        auto path = vm[ebi::vcf::INPUT].as<std::string>();
+        auto level = vm[ebi::vcf::LEVEL].as<std::string>();
+        ebi::vcf::Ploidy ploidy = get_ploidy(vm[ebi::vcf::PLOIDY].as<long>(), vm);
         ebi::vcf::ValidationLevel validationLevel = get_validation_level(level);
-        auto outdir = get_output_path(vm["outdir"].as<std::string>(), path);
-        auto outputs = get_outputs(vm["report"].as<std::string>(), outdir);
+        auto outdir = get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), path);
+        auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
-        if (path == "stdin") {
+        if (path == ebi::vcf::STDIN) {
             std::cout << "Reading from standard input..." << std::endl;
             is_valid = ebi::vcf::is_valid_vcf_file(std::cin, path, validationLevel, ploidy, outputs);
         } else {

@@ -15,6 +15,7 @@
  */
 
 #include "vcf/fixer.hpp"
+#include "vcf/string_constants.hpp"
 
 namespace ebi
 {
@@ -116,7 +117,7 @@ namespace ebi
             // TODO better log system, if any
             std::cerr << "DEBUG: line " << error.line << ": fixing invalid INFO field " << error.field << std::endl;
             const size_t info_column_index = 7;
-            const std::string empty_info_column = ".";
+            const std::string empty_info_column = MISSING_VALUE;
 
             size_t num_removed_fields = 0;
             std::string string_line = {line->begin(), line->end()};
@@ -163,7 +164,7 @@ namespace ebi
             try {
                 using iter = std::vector<std::string>::iterator;
                 fixed_samples = fix_columns(format_column_index, -1, string_line, "\t", [&](iter first, iter last) {
-                    if (error.field == "GT") {
+                    if (error.field == GT) {
                         fix_format_gt(first, last, error);
                     } else {
                         remove_format(first, last, error);

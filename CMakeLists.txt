@@ -58,6 +58,7 @@ set (MOD_VCF_SOURCES
         inc/vcf/record_cache.hpp
         inc/vcf/report_reader.hpp
         inc/vcf/report_writer.hpp
+        inc/vcf/string_constants.hpp
         inc/vcf/summary_report_writer.hpp
         inc/vcf/validator_detail_v41.hpp
         inc/vcf/validator_detail_v42.hpp
