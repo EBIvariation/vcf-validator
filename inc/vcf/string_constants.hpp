@@ -29,7 +29,7 @@ namespace ebi
     const std::string VCF_V42 = "VCFv4.2";
     const std::string VCF_V43 = "VCFv4.3";
 
-    // validator and debugulator strings
+    // validator and debugulator command line arguments
     const char STDIN[] = "stdin";
     const char STDOUT[] = "stdout";
     const char WARNING[] = "warning";
@@ -61,7 +61,7 @@ namespace ebi
     const std::string TYPE = "Type";
     const std::string DESCRIPTION = "Description";
 
-    // header line columns
+    // header line columns and metadata keys
     const std::string ALT = "ALT";
     const std::string ASSEMBLY = "assembly";
     const std::string CHROM = "CHROM";
