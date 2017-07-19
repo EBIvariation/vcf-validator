@@ -150,7 +150,7 @@ namespace ebi
                            std::vector<std::string>::iterator last,
                            SamplesFieldBodyError &error);
 
-        size_t remove_column(const std::string &line,
+        size_t remove_fields(const std::string &line,
                              const std::string &separators,
                              std::function<bool(const std::string &column, size_t index)> condition_to_remove);
 
@@ -162,7 +162,7 @@ namespace ebi
          * @param condition_to_remove return true if the column has to be removed. can decide using the column and its index
          * @return amount of columns removed
          */
-        size_t remove_column(const std::string &line,
+        size_t remove_fields(const std::string &line,
                              const std::string &separators,
                              const std::string &empty_column,
                              std::function<bool(const std::string &column, size_t index)> condition_to_remove);
@@ -174,10 +174,10 @@ namespace ebi
          * @param expected_field to replace the incorrect one
          * @param condition_to_replace return true if the column is to be replaced with the `expected_field`
          */
-        size_t replace_column(const std::string &line,
-                            const std::string &separators,
-                            const std::string &expected_field,
-                            std::function<bool(const std::string &column, size_t index)> condition_to_replace);
+        size_t replace_fields(const std::string &line,
+                              const std::string &separators,
+                              const std::string &expected_field,
+                              std::function<bool(const std::string &column, size_t index)> condition_to_replace);
 
         /**
          * returns an index (NOT an iterator) to the column in `line` (split by `separator`) where `value` is found. Or `line.npos`

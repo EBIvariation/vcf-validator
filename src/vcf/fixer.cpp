@@ -163,7 +163,6 @@ namespace ebi
             // TODO better log system, if any
             const size_t info_column_index = 7;
 
-            size_t num_modified_fields = 0;
             std::string string_line = {line->begin(), line->end()};
 
             fix_column(info_column_index, string_line, "\t", [&](std::string &info_column) {
@@ -177,20 +176,15 @@ namespace ebi
 
                 if (error.error_fix == ErrorFix::DUPLICATE_VALUES) {
                     std::cerr << "DEBUG: line " << error.field << ": fixing duplicate INFO fields" << std::endl;
-                    num_modified_fields = remove_duplicate_key_value_pairs(info_column, ";", "=", empty_info_column);
+                    remove_duplicate_key_value_pairs(info_column, ";", "=", empty_info_column);
                 } else if (error.error_fix == ErrorFix::RECOVERABLE_VALUE) {
                     std::cerr << "DEBUG: line " << error.field << ": fixing invalid INFO field " << error.field << std::endl;
-                    num_modified_fields = replace_column(info_column, ";", error.field + "=" + error.expected_value, condition_to_modify_info_field);
+                    replace_fields(info_column, ";", error.field + "=" + error.expected_value, condition_to_modify_info_field);
                 } else if (error.error_fix == ErrorFix::IRRECOVERABLE_VALUE) {
                     std::cerr << "DEBUG: line " << error.field << ": removing invalid INFO field " << error.field << std::endl;
-                    num_modified_fields = remove_column(info_column, ";", empty_info_column, condition_to_modify_info_field);
+                    remove_fields(info_column, ";", empty_info_column, condition_to_modify_info_field);
                 }
             });
-
-            if (num_modified_fields != 1 && error.error_fix != ErrorFix::DUPLICATE_VALUES) {       // this block is not required anymore as we throw an error already for duplicates before proceeding further with other checks, so can be removed
-                std::cerr << "WARNING: line " << error.line << ": field " << error.field << " appeared "
-                          << num_modified_fields << " times " << std::endl;
-            }
         }
 
         void Fixer::visit(FormatBodyError &error)
@@ -381,14 +375,14 @@ namespace ebi
             }
         }
 
-        size_t Fixer::remove_column(const std::string &line,
+        size_t Fixer::remove_fields(const std::string &line,
                              const std::string &separators,
                              std::function<bool(const std::string &column, size_t index)> condition_to_remove)
         {
             return remove_column(line, separators, "", condition_to_remove);
         }
 
-        size_t Fixer::remove_column(const std::string &line,
+        size_t Fixer::remove_fields(const std::string &line,
                              const std::string &separators,
                              const std::string &empty_column,
                              std::function<bool(const std::string &column, size_t index)> condition_to_remove)
@@ -419,7 +413,7 @@ namespace ebi
             return columns.size() - written;
         }
 
-        size_t Fixer::replace_column(const std::string &line,
+        size_t Fixer::replace_fields(const std::string &line,
                                      const std::string &separators,
                                      const std::string &expected_field,
                                      std::function<bool(const std::string &column, size_t index)> condition_to_replace)
