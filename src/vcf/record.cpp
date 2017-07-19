@@ -394,15 +394,8 @@ namespace ebi
 
     bool Record::check_alt_not_symbolic(size_t allele_index) const
     {
-        std::unordered_set<char> not_symbolic = { 'A', 'C', 'G', 'T', 'N', 'a', 'c', 'g', 't', 'n' };
-        bool is_alt_not_symbolic = true;
-        for (auto & alt : alternate_alleles[allele_index]) {
-            if (not_symbolic.find(alt) == not_symbolic.end()) {
-                is_alt_not_symbolic = false;
-                break;
-            }
-        }
-        return is_alt_not_symbolic;
+        static boost::regex non_symbolic_alt_regex("[ACGTN]+", boost::regex::icase);
+        return boost::regex_match(alternate_alleles[allele_index], non_symbolic_alt_regex);
     }
 
     void Record::check_samples() const
