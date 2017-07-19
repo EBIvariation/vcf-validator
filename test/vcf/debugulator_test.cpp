@@ -124,7 +124,7 @@ namespace ebi
 
           std::vector<std::string> columns;
           util::string_split(output.str(), "\t", columns);
-          CHECK(columns[6] == ".");
+          CHECK(columns[6] == ebi::vcf::MISSING_VALUE);
       }
       SECTION("Fix FILTER duplicates")
       {
@@ -193,7 +193,7 @@ namespace ebi
 
           std::vector<std::string> columns;
           util::string_split(output.str(), "\t", columns);
-          CHECK(columns[7] == ".");
+          CHECK(columns[7] == ebi::vcf::MISSING_VALUE);
       }
       SECTION("Fix INFO duplicate key with varying values")
       {
@@ -245,7 +245,7 @@ namespace ebi
 
           std::vector<std::string> columns;
           util::string_split(output.str(), "\t", columns);
-          CHECK(columns[7] == ".");
+          CHECK(columns[7] == ebi::vcf::MISSING_VALUE);
       }
       SECTION("Fix INFO SVLEN for non-symbolic alternate alleles")
       {

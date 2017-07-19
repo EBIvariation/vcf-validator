@@ -145,12 +145,12 @@ namespace ebi
             fix_column(filter_column_index, string_line, "\t", [&](std::string &filter_column) {
                 if (error.error_fix == ErrorFix::IRRECOVERABLE_VALUE && error.field == "0") {
                     std::cerr << "DEBUG: line " << error.line << ": fixing invalid FILTER field " << error.field << std::endl;
-                    const std::string empty_filter_column = ".";
+                    const std::string empty_filter_column = MISSING_VALUE;
                     auto condition_to_remove_filter_field = [&](const std::string &filter_subfield, size_t index) -> bool {
                         return filter_subfield == error.field;
                     };
 
-                    remove_column(filter_column, ";", empty_filter_column, condition_to_remove_filter_field);
+                    remove_fields(filter_column, ";", empty_filter_column, condition_to_remove_filter_field);
                 } else if (error.error_fix == ErrorFix::DUPLICATE_VALUES) {
                     std::cerr << "DEBUG: line " << error.line << ": fixing duplicate FILTER fields" << std::endl;
                     remove_duplicate_strings(filter_column, ";");
@@ -255,7 +255,7 @@ namespace ebi
                 bool first_appearance = already_present.insert(value).second;
                 return not first_appearance;
             };
-            return remove_column(column, separator, is_value_duplicated);
+            return remove_fields(column, separator, is_value_duplicated);
         }
 
         size_t Fixer::remove_duplicate_key_value_pairs(const std::string &column,
@@ -342,7 +342,7 @@ namespace ebi
             // remove from FORMAT column
             const std::string field_separator = ":";
             size_t field_index;
-            size_t removed = remove_column(*first, field_separator, [&](const std::string &field, size_t index) {
+            size_t removed = remove_fields(*first, field_separator, [&](const std::string &field, size_t index) {
                 if (field == error.field) {
                     field_index = index;
                     return field == error.field;
@@ -361,7 +361,7 @@ namespace ebi
             // remove from the samples columns
             for (++first; first != last; ++first) {
                 output << "\t";
-                removed = remove_column(*first, field_separator, [&](const std::string &field, size_t index) {
+                removed = remove_fields(*first, field_separator, [&](const std::string &field, size_t index) {
                     return index == field_index;
                 });
                 if (removed == 0) {
@@ -379,7 +379,7 @@ namespace ebi
                              const std::string &separators,
                              std::function<bool(const std::string &column, size_t index)> condition_to_remove)
         {
-            return remove_column(line, separators, "", condition_to_remove);
+            return remove_fields(line, separators, "", condition_to_remove);
         }
 
         size_t Fixer::remove_fields(const std::string &line,

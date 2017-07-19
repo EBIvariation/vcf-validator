@@ -748,9 +748,9 @@ namespace ebi
                             "ACTGNGCN",
                             { "ATC" },
                             1.0,
-                            { "PASS" },
-                            { {"SVLEN", "-5"} },
-                            { "GT" },
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "-5"} },
+                            { vcf::GT },
                             { "0|1" },
                             source} ) );
 
@@ -762,9 +762,9 @@ namespace ebi
                             "ACTGNGCN",
                             { "ATC" },
                             1.0,
-                            { "PASS" },
-                            { {"SVLEN", "-4"} },
-                            { "GT" },
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "-4"} },
+                            { vcf::GT },
                             { "0|1" },
                             source}),
                         vcf::InfoBodyError*);
