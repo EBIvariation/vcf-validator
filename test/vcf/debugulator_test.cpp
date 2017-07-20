@@ -27,6 +27,35 @@ namespace ebi
 {
   TEST_CASE("Fixing errors", "[debugulator]")
   {
+      SECTION("Fix meta definition Type for predefined tags")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: Incorrect meta header definition for predefined tags"};
+          ebi::vcf::MetaSectionError test_error{line_number, message, ebi::vcf::ErrorFix::RECOVERABLE_VALUE, ebi::vcf::TYPE, ebi::vcf::STRING};
+
+          std::string string_line = "##INFO=<ID=AA,Number=1,Type=Integer,Description=\"Ancestral allele\">";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          CHECK(output.str() == "##INFO=<ID=AA,Number=1,Type=String,Description=\"Ancestral allele\">");
+      }
+      SECTION("Fix meta definition Number for predefined tags")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: Incorrect meta header definition for predefined tags"};
+          ebi::vcf::MetaSectionError test_error{line_number, message, ebi::vcf::ErrorFix::RECOVERABLE_VALUE, ebi::vcf::NUMBER, "1"};
+
+          std::string string_line = "##FORMAT=<ID=DP,Number=2,Type=Integer,Description=\"Read depth\">";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          vcf::Fixer{output}.fix(line_number, line, test_error);
+
+          CHECK(output.str() == "##FORMAT=<ID=DP,Number=1,Type=Integer,Description=\"Read depth\">");
+      }
+
       SECTION("Fix duplicates")
       {
           size_t line_number = 8;
@@ -95,7 +124,7 @@ namespace ebi
 
           std::vector<std::string> columns, info_fields;
           util::string_split(output.str(), "\t", columns);
-          CHECK(columns[7] == ".");
+          CHECK(columns[7] == ebi::vcf::MISSING_VALUE);
       }
 
       SECTION("Fix SAMPLE field GT")

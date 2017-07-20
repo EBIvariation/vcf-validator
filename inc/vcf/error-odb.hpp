@@ -1346,12 +1346,63 @@ namespace odb
     id_type_;
 
     static const id_type_ id;
+
+    // error_fix
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        ::ebi::vcf::ErrorFix,
+        sqlite::id_integer >::query_type,
+      sqlite::id_integer >
+    error_fix_type_;
+
+    static const error_fix_type_ error_fix;
+
+    // value
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        ::std::string,
+        sqlite::id_text >::query_type,
+      sqlite::id_text >
+    value_type_;
+
+    static const value_type_ value;
+
+    // expected_value
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        ::std::string,
+        sqlite::id_text >::query_type,
+      sqlite::id_text >
+    expected_value_type_;
+
+    static const expected_value_type_ expected_value;
   };
 
   template <typename A>
   const typename query_columns< ::ebi::vcf::MetaSectionError, id_sqlite, A >::id_type_
   query_columns< ::ebi::vcf::MetaSectionError, id_sqlite, A >::
   id (A::table_name, "\"id\"", 0);
+
+  template <typename A>
+  const typename query_columns< ::ebi::vcf::MetaSectionError, id_sqlite, A >::error_fix_type_
+  query_columns< ::ebi::vcf::MetaSectionError, id_sqlite, A >::
+  error_fix (A::table_name, "\"error_fix\"", 0);
+
+  template <typename A>
+  const typename query_columns< ::ebi::vcf::MetaSectionError, id_sqlite, A >::value_type_
+  query_columns< ::ebi::vcf::MetaSectionError, id_sqlite, A >::
+  value (A::table_name, "\"value\"", 0);
+
+  template <typename A>
+  const typename query_columns< ::ebi::vcf::MetaSectionError, id_sqlite, A >::expected_value_type_
+  query_columns< ::ebi::vcf::MetaSectionError, id_sqlite, A >::
+  expected_value (A::table_name, "\"expected_value\"", 0);
 
   template <typename A>
   struct pointer_query_columns< ::ebi::vcf::MetaSectionError, id_sqlite, A >:
@@ -1380,6 +1431,23 @@ namespace odb
       //
       long long id_value;
       bool id_null;
+
+      // error_fix
+      //
+      long long error_fix_value;
+      bool error_fix_null;
+
+      // value
+      //
+      details::buffer value_value;
+      std::size_t value_size;
+      bool value_null;
+
+      // expected_value
+      //
+      details::buffer expected_value_value;
+      std::size_t expected_value_size;
+      bool expected_value_null;
 
       std::size_t version;
     };
@@ -1433,10 +1501,10 @@ namespace odb
 
     typedef sqlite::query_base query_base_type;
 
-    static const std::size_t column_count = 1UL;
+    static const std::size_t column_count = 4UL;
     static const std::size_t id_column_count = 1UL;
     static const std::size_t inverse_column_count = 0UL;
-    static const std::size_t readonly_column_count = 0UL;
+    static const std::size_t readonly_column_count = 2UL;
     static const std::size_t managed_optimistic_column_count = 0UL;
 
     static const std::size_t separate_load_column_count = 0UL;
@@ -1447,6 +1515,7 @@ namespace odb
     static const char persist_statement[];
     static const char* const find_statements[depth];
     static const std::size_t find_column_counts[depth];
+    static const char update_statement[];
     static const char erase_statement[];
     static const char query_statement[];
     static const char erase_query_statement[];

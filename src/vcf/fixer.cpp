@@ -42,8 +42,21 @@ namespace ebi
 
         void Fixer::visit(MetaSectionError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            if (error.error_fix == ErrorFix::IRRECOVERABLE_VALUE) {
+                util::writeline(output, *line);
+                ignored_errors++;
+            } else if (error.error_fix == ErrorFix::RECOVERABLE_VALUE) {
+                std::string string_line = {line->begin(), line->end()};
+
+                // fixing meta header definition of INFO and FORMAT, the error.value is either Type or Number
+                size_t meta_error_field_start_index = string_line.find(error.value + "=");
+                size_t meta_error_field_end_index = string_line.find(",", meta_error_field_start_index);     // exclusive
+
+                std::cerr << "DEBUG: line " << error.line << ": fixing incorrect predefined tag meta definition " << error.value << std::endl;
+
+                std::string fixed_meta_header_line = string_line.substr(0, meta_error_field_start_index) + error.value + "=" + error.expected_value + string_line.substr(meta_error_field_end_index);
+                util::writeline(output, fixed_meta_header_line);
+            }
         }
 
         void Fixer::visit(HeaderSectionError &error)
