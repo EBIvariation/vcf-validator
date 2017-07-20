@@ -146,6 +146,9 @@ namespace ebi
         if (value.count(DESCRIPTION) == 0) {
             throw new MetaSectionError{entry.line, "FILTER metadata does not contain a field called 'Description'"};
         }
+        if (value[ID] == "0") {
+            throw new MetaSectionError{entry.line, "FILTER metadata ID must not be 0"};
+        }
     }
     
     void MetaEntryVisitor::check_format(std::map<std::string, std::string> & value) const
