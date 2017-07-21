@@ -319,6 +319,17 @@ namespace ebi
                             }),
                             vcf::MetaSectionError* );
         }
+
+        SECTION("Non zero ID")
+        {
+             CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                vcf::FILTER,
+                                { {vcf::ID, "0"}, {vcf::DESCRIPTION, "tag with id 0"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );           
+        }
     }
     
     TEST_CASE("FORMAT MetaEntry checks", "[checks][keyvalue]") 
