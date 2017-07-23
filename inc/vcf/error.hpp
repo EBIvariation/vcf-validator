@@ -293,7 +293,7 @@ namespace ebi
                       const std::string &field = "",
                       const std::string &expected_value = "")
                 : BodySectionError{line, message}, error_fix{error_fix}, field{field}, expected_value{expected_value} {
-                    if (error_fix == ErrorFix::RECOVERABLE_VALUE && expected_value == "") {
+                    if (error_fix == ErrorFix::RECOVERABLE_VALUE && expected_value.empty()) {
                         throw std::invalid_argument{"An error with recoverable value must provide a non-empty expected value"};
                     }
                 }
@@ -307,11 +307,16 @@ namespace ebi
     #pragma db object
     struct FormatBodyError : public BodySectionError
     {
-        using BodySectionError::BodySectionError;
-        FormatBodyError() : FormatBodyError{0} {}
-        FormatBodyError(size_t line) : FormatBodyError{line, "Format is not a colon-separated list of alphanumeric strings"} { }
+        FormatBodyError(size_t line = 0,
+                        const std::string &message = "Format is not a colon-separated list of alphanumeric strings",
+                        ErrorFix error_fix = ErrorFix::IRRECOVERABLE_VALUE,
+                        const std::string &field = "")
+                : BodySectionError{line, message}, error_fix{error_fix}, field{field} { }
         virtual ~FormatBodyError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
+
+        ErrorFix error_fix;
+        const std::string field;
     };
     #pragma db object
     struct SamplesBodyError : public BodySectionError

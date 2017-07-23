@@ -162,7 +162,6 @@ namespace ebi
     {
         // TODO better log system, if any
         const size_t info_column_index = 7;
-
         std::string string_line = {line->begin(), line->end()};
 
         fix_column(info_column_index, string_line, "\t", [&](std::string &info_column) {
@@ -175,13 +174,13 @@ namespace ebi
             };
 
             if (error.error_fix == ErrorFix::DUPLICATE_VALUES) {
-                std::cerr << "DEBUG: line " << error.field << ": fixing duplicate INFO fields" << std::endl;
+                std::cerr << "DEBUG: line " << error.line << ": fixing duplicate INFO fields" << std::endl;
                 remove_duplicate_key_value_pairs(info_column, ";", "=", empty_info_column);
             } else if (error.error_fix == ErrorFix::RECOVERABLE_VALUE) {
-                std::cerr << "DEBUG: line " << error.field << ": fixing invalid INFO field " << error.field << std::endl;
+                std::cerr << "DEBUG: line " << error.line << ": fixing invalid INFO field " << error.field << std::endl;
                 replace_fields(info_column, ";", error.field + "=" + error.expected_value, condition_to_modify_info_field);
             } else if (error.error_fix == ErrorFix::IRRECOVERABLE_VALUE) {
-                std::cerr << "DEBUG: line " << error.field << ": removing invalid INFO field " << error.field << std::endl;
+                std::cerr << "DEBUG: line " << error.line << ": removing invalid INFO field " << error.field << std::endl;
                 remove_fields(info_column, ";", empty_info_column, condition_to_modify_info_field);
             }
         });
@@ -189,8 +188,17 @@ namespace ebi
 
     void Fixer::visit(FormatBodyError &error)
     {
-        util::writeline(output, *line);
-        ignored_errors++;
+        if (error.error_fix != ErrorFix::DUPLICATE_VALUES) {
+            util::writeline(output, *line);
+            ignored_errors++;
+            return;
+        }
+        
+        std::cerr << "DEBUG: line " << error.line << ": fixing duplicate FORMAT fields" << std::endl;
+
+        std::string string_line = {line->begin(), line->end()};
+
+        remove_duplicate_format_sample_pairs(string_line);
     }
 
     void Fixer::visit(SamplesBodyError &error)
@@ -264,6 +272,7 @@ namespace ebi
                                                    const std::string &empty_value)
     {
         std::map<std::string, std::string> values;
+        std::vector<std::string> ordered_values;
         std::set<std::string> fields_to_remove;
 
         std::vector<std::string> fields;
@@ -274,6 +283,7 @@ namespace ebi
             util::string_split(field, key_value_separator.c_str(), subfields);
             auto iterator = values.find(subfields[0]);
             if (iterator == values.end()) {
+                ordered_values.push_back(subfields[0]);
                 values[subfields[0]] = subfields[1];
             } else if (values[subfields[0]] != subfields[1]) {
                 fields_to_remove.insert(subfields[0]);
@@ -282,9 +292,9 @@ namespace ebi
 
         std::string fixed_column;
         size_t num_removed_duplicates = 0;
-        for (auto & value : values) {
-            if (fields_to_remove.find(value.first) == fields_to_remove.end()) {
-                fixed_column += value.first + key_value_separator + value.second + separator;
+        for (auto & ordered_value : ordered_values) {
+            if (fields_to_remove.find(ordered_value) == fields_to_remove.end()) {
+                fixed_column += ordered_value + key_value_separator + values[ordered_value] + separator;
             } else {
                 num_removed_duplicates++;
             }
@@ -296,6 +306,81 @@ namespace ebi
         }
 
         output << fixed_column;
+        return num_removed_duplicates;
+    }
+
+    size_t Fixer::remove_duplicate_format_sample_pairs(const std::string &string_line) {
+        const size_t format_column_index = 8;
+        size_t num_removed_duplicates = 0;
+
+        using iter = std::vector<std::string>::iterator;
+        fix_columns(format_column_index, -1, string_line, "\t", [&](iter first, iter last) {
+            std::map<std::string, std::vector<size_t>> format_fields;
+            std::vector<std::string> ordered_fields;
+            std::vector<std::string> format_keys;
+            util::string_split(*first, ":", format_keys);
+
+            for (size_t i = 0; i < format_keys.size(); i++) {
+                format_fields[format_keys[i]].push_back(i);
+                if (format_fields[format_keys[i]].size() == 1) {
+                    ordered_fields.push_back(format_keys[i]);
+                }
+            }
+
+            std::set<std::string> fields_to_remove;
+
+            for (auto & format_field : format_fields) {
+                if (format_field.second.size() > 1) {
+                    for (auto it = first + 1; it != last; it++) {
+                        std::vector<std::string> sample_fields;
+                        util::string_split(*it, ":", sample_fields);
+                        for (auto & format_field_index : format_field.second) {
+                            if (sample_fields.size() > format_field_index && sample_fields[format_field_index] != sample_fields[format_field.second[0]]) {
+                                fields_to_remove.insert(format_field.first);
+                                it = last - 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            std::string fixed_format;
+            std::vector<std::string> fixed_samples(last - (first + 1));
+
+            for (auto & ordered_field : ordered_fields) {
+                if (fields_to_remove.find(ordered_field) == fields_to_remove.end()) {
+                    // keep first occurrence, discard the rest if present
+                    fixed_format += ordered_field + ":";
+                    for (auto it = first + 1; it != last; it++) {
+                        std::vector<std::string> sample_fields;
+                        util::string_split(*it, ":", sample_fields);
+                        if (sample_fields.size() > format_fields[ordered_field][0]) {
+                            fixed_samples[it - (first + 1)] += sample_fields[format_fields[ordered_field][0]] + ":";
+                        }
+                    }
+                } else {
+                    num_removed_duplicates++;
+                }
+            }
+
+            if (fixed_format.empty()) {
+                fixed_format = MISSING_VALUE;         // all format fields were removed, so use missing value
+            } else {
+                fixed_format.pop_back();              // remove trailing colon
+            }
+            output << fixed_format;
+
+            for (auto & fixed_sample : fixed_samples) {
+                if (fixed_sample.empty()) {
+                    fixed_sample = MISSING_VALUE;      // all sample fields were removed
+                } else {
+                    fixed_sample.pop_back();           // remove trailing colon
+                }
+                output << "\t" << fixed_sample;
+            }
+        });
+
         return num_removed_duplicates;
     }
 

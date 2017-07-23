@@ -131,6 +131,16 @@ namespace ebi
                                                 const std::string &separator,
                                                 const std::string &key_value_separator,
                                                 const std::string &empty_value);
+
+        /**
+         * removes duplicate format and samples
+         * the fix is to remove all format fields for which one or more of the samples contain duplicate values (within the sample field itself)
+         * else if all the values match in a sample, and this happens for all the samples, keep the first occurrence in each sample and discard the rest
+         * @param the complete error string
+         * @return the number of duplicate format fields (with corresponding samples if present) removed
+         */
+        size_t remove_duplicate_format_sample_pairs(const std::string &string_line);
+        
         /**
          * puts the genotype as missing. if the error.cardinality is know, it uses the proper ploidy
          * @param first iterator to the FORMAT column string

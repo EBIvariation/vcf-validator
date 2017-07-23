@@ -317,7 +317,7 @@ namespace ebi
             try {
                 check_no_duplicates(format);
             } catch (const std::invalid_argument &ex) {
-                throw new FormatBodyError{line, "FORMAT must not have duplicate fields"};
+                throw new FormatBodyError{line, "FORMAT must not have duplicate fields", ErrorFix::DUPLICATE_VALUES};
             }
         }
     }
