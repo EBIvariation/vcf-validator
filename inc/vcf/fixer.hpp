@@ -46,6 +46,8 @@ namespace ebi
         std::ostream &output;
         size_t ignored_errors;
 
+        void ignore_error();
+
         virtual void visit(Error &error) override;
         virtual void visit(MetaSectionError &error) override;
         virtual void visit(HeaderSectionError &error) override;

@@ -36,17 +36,21 @@ namespace ebi
         return ignored_errors;
     }
 
-    void Fixer::visit(Error &error)
+    void Fixer::ignore_error()
     {
         util::writeline(output, *line);
-        ignored_errors++;
+        ignored_errors++;        
+    }
+
+    void Fixer::visit(Error &error)
+    {
+        ignore_error();
     }
 
     void Fixer::visit(MetaSectionError &error)
     {
         if (error.error_fix == ErrorFix::IRRECOVERABLE_VALUE) {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
         } else if (error.error_fix == ErrorFix::RECOVERABLE_VALUE) {
             std::string string_line = {line->begin(), line->end()};
 
@@ -63,14 +67,12 @@ namespace ebi
 
     void Fixer::visit(HeaderSectionError &error)
     {
-        util::writeline(output, *line);
-        ignored_errors++;
+        ignore_error();
     }
 
     void Fixer::visit(BodySectionError &error)
     {
-        util::writeline(output, *line);
-        ignored_errors++;
+        ignore_error();
     }
 
     void Fixer::visit(NoMetaDefinitionError &error)
@@ -81,20 +83,17 @@ namespace ebi
 
     void Fixer::visit(FileformatError &error)
     {
-        util::writeline(output, *line);
-        ignored_errors++;
+        ignore_error();
     }
 
     void Fixer::visit(ChromosomeBodyError &error)
     {
-        util::writeline(output, *line);
-        ignored_errors++;
+        ignore_error();
     }
 
     void Fixer::visit(PositionBodyError &error)
     {
-        util::writeline(output, *line);
-        ignored_errors++;
+        ignore_error();
     }
 
     void Fixer::visit(IdBodyError &error)
@@ -108,34 +107,29 @@ namespace ebi
                 remove_duplicate_strings(id_column, ";");
             });
         } else {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
         }
     }
 
     void Fixer::visit(ReferenceAlleleBodyError &error)
     {
-        util::writeline(output, *line);
-        ignored_errors++;
+        ignore_error();
     }
 
     void Fixer::visit(AlternateAllelesBodyError &error)
     {
-        util::writeline(output, *line);
-        ignored_errors++;
+        ignore_error();
     }
 
     void Fixer::visit(QualityBodyError &error)
     {
-        util::writeline(output, *line);
-        ignored_errors++;
+        ignore_error();
     }
 
     void Fixer::visit(FilterBodyError &error)
     {
         if (error.field == "" && error.error_fix != ErrorFix::DUPLICATE_VALUES) {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
             return;
         }
 
@@ -189,8 +183,7 @@ namespace ebi
     void Fixer::visit(FormatBodyError &error)
     {
         if (error.error_fix != ErrorFix::DUPLICATE_VALUES) {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
             return;
         }
         
@@ -203,8 +196,7 @@ namespace ebi
 
     void Fixer::visit(SamplesBodyError &error)
     {
-        util::writeline(output, *line);
-        ignored_errors++;
+        ignore_error();
     }
 
     void Fixer::visit(SamplesFieldBodyError &error)
@@ -236,16 +228,14 @@ namespace ebi
         if (fixed_samples <= 1) {   // 1 because we started counting since the FORMAT column
             std::cerr << "WARNING: line " << error.line << ": tried to fix field " << error.field
                       << " in the samples column, but sample columns are not present. " << message << std::endl;
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
             return;
         }
     }
 
     void Fixer::visit(NormalizationError &error)
     {
-        util::writeline(output, *line);
-        ignored_errors++;
+        ignore_error();
     }
 
     void Fixer::visit(DuplicationError &error)
