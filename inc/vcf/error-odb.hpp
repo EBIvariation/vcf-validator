@@ -2713,18 +2713,6 @@ namespace odb
     error_fix_type_;
 
     static const error_fix_type_ error_fix;
-
-    // field
-    //
-    typedef
-    sqlite::query_column<
-      sqlite::value_traits<
-        ::std::string,
-        sqlite::id_text >::query_type,
-      sqlite::id_text >
-    field_type_;
-
-    static const field_type_ field;
   };
 
   template <typename A>
@@ -2736,11 +2724,6 @@ namespace odb
   const typename query_columns< ::ebi::vcf::IdBodyError, id_sqlite, A >::error_fix_type_
   query_columns< ::ebi::vcf::IdBodyError, id_sqlite, A >::
   error_fix (A::table_name, "\"error_fix\"", 0);
-
-  template <typename A>
-  const typename query_columns< ::ebi::vcf::IdBodyError, id_sqlite, A >::field_type_
-  query_columns< ::ebi::vcf::IdBodyError, id_sqlite, A >::
-  field (A::table_name, "\"field\"", 0);
 
   template <typename A>
   struct pointer_query_columns< ::ebi::vcf::IdBodyError, id_sqlite, A >:
@@ -2774,12 +2757,6 @@ namespace odb
       //
       long long error_fix_value;
       bool error_fix_null;
-
-      // field
-      //
-      details::buffer field_value;
-      std::size_t field_size;
-      bool field_null;
 
       std::size_t version;
     };
@@ -2833,10 +2810,10 @@ namespace odb
 
     typedef sqlite::query_base query_base_type;
 
-    static const std::size_t column_count = 3UL;
+    static const std::size_t column_count = 2UL;
     static const std::size_t id_column_count = 1UL;
     static const std::size_t inverse_column_count = 0UL;
-    static const std::size_t readonly_column_count = 1UL;
+    static const std::size_t readonly_column_count = 0UL;
     static const std::size_t managed_optimistic_column_count = 0UL;
 
     static const std::size_t separate_load_column_count = 0UL;
@@ -3936,18 +3913,6 @@ namespace odb
     error_fix_type_;
 
     static const error_fix_type_ error_fix;
-
-    // field
-    //
-    typedef
-    sqlite::query_column<
-      sqlite::value_traits<
-        ::std::string,
-        sqlite::id_text >::query_type,
-      sqlite::id_text >
-    field_type_;
-
-    static const field_type_ field;
   };
 
   template <typename A>
@@ -3959,11 +3924,6 @@ namespace odb
   const typename query_columns< ::ebi::vcf::FormatBodyError, id_sqlite, A >::error_fix_type_
   query_columns< ::ebi::vcf::FormatBodyError, id_sqlite, A >::
   error_fix (A::table_name, "\"error_fix\"", 0);
-
-  template <typename A>
-  const typename query_columns< ::ebi::vcf::FormatBodyError, id_sqlite, A >::field_type_
-  query_columns< ::ebi::vcf::FormatBodyError, id_sqlite, A >::
-  field (A::table_name, "\"field\"", 0);
 
   template <typename A>
   struct pointer_query_columns< ::ebi::vcf::FormatBodyError, id_sqlite, A >:
@@ -3997,12 +3957,6 @@ namespace odb
       //
       long long error_fix_value;
       bool error_fix_null;
-
-      // field
-      //
-      details::buffer field_value;
-      std::size_t field_size;
-      bool field_null;
 
       std::size_t version;
     };
@@ -4056,10 +4010,10 @@ namespace odb
 
     typedef sqlite::query_base query_base_type;
 
-    static const std::size_t column_count = 3UL;
+    static const std::size_t column_count = 2UL;
     static const std::size_t id_column_count = 1UL;
     static const std::size_t inverse_column_count = 0UL;
-    static const std::size_t readonly_column_count = 1UL;
+    static const std::size_t readonly_column_count = 0UL;
     static const std::size_t managed_optimistic_column_count = 0UL;
 
     static const std::size_t separate_load_column_count = 0UL;

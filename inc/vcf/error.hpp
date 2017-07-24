@@ -234,14 +234,12 @@ namespace ebi
     {
         IdBodyError(size_t line = 0,
                     const std::string &message = "ID is not a single dot or a list of strings without semicolons or whitespaces",
-                    ErrorFix error_fix = ErrorFix::IRRECOVERABLE_VALUE,
-                    const std::string &field = "")
-                : BodySectionError{line, message}, error_fix{error_fix}, field{field} { }
+                    ErrorFix error_fix = ErrorFix::IRRECOVERABLE_VALUE)
+                : BodySectionError{line, message}, error_fix{error_fix} { }
         virtual ~IdBodyError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
 
         ErrorFix error_fix;
-        const std::string field;
     };
     #pragma db object
     struct ReferenceAlleleBodyError : public BodySectionError
@@ -309,14 +307,12 @@ namespace ebi
     {
         FormatBodyError(size_t line = 0,
                         const std::string &message = "Format is not a colon-separated list of alphanumeric strings",
-                        ErrorFix error_fix = ErrorFix::IRRECOVERABLE_VALUE,
-                        const std::string &field = "")
-                : BodySectionError{line, message}, error_fix{error_fix}, field{field} { }
+                        ErrorFix error_fix = ErrorFix::IRRECOVERABLE_VALUE)
+                : BodySectionError{line, message}, error_fix{error_fix} { }
         virtual ~FormatBodyError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
 
         ErrorFix error_fix;
-        const std::string field;
     };
     #pragma db object
     struct SamplesBodyError : public BodySectionError

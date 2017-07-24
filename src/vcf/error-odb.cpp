@@ -6317,21 +6317,13 @@ namespace odb
     //
     if (--d != 0)
     {
-      if (base_traits::grow (*i.base, t + 2UL, d))
+      if (base_traits::grow (*i.base, t + 1UL, d))
         i.base->version++;
     }
 
     // error_fix
     //
     t[0UL] = false;
-
-    // field
-    //
-    if (t[1UL])
-    {
-      i.field_value.capacity (i.field_size);
-      grew = true;
-    }
 
     return grew;
   }
@@ -6364,20 +6356,6 @@ namespace odb
     b[n].buffer = &i.error_fix_value;
     b[n].is_null = &i.error_fix_null;
     n++;
-
-    // field
-    //
-    if (sk != statement_update)
-    {
-      b[n].type = sqlite::image_traits<
-        ::std::string,
-        sqlite::id_text>::bind_value;
-      b[n].buffer = i.field_value.data ();
-      b[n].size = &i.field_size;
-      b[n].capacity = i.field_value.capacity ();
-      b[n].is_null = &i.field_null;
-      n++;
-    }
 
     // id_
     //
@@ -6423,26 +6401,6 @@ namespace odb
       i.error_fix_null = is_null;
     }
 
-    // field
-    //
-    if (sk == statement_insert)
-    {
-      ::std::string const& v =
-        o.field;
-
-      bool is_null (false);
-      std::size_t cap (i.field_value.capacity ());
-      sqlite::value_traits<
-          ::std::string,
-          sqlite::id_text >::set_image (
-        i.field_value,
-        i.field_size,
-        is_null,
-        v);
-      i.field_null = is_null;
-      grew = grew || (cap != i.field_value.capacity ());
-    }
-
     return grew;
   }
 
@@ -6474,22 +6432,6 @@ namespace odb
         i.error_fix_value,
         i.error_fix_null);
     }
-
-    // field
-    //
-    {
-      ::std::string& v =
-        const_cast< ::std::string& > (
-        o.field);
-
-      sqlite::value_traits<
-          ::std::string,
-          sqlite::id_text >::set_value (
-        v,
-        i.field_value,
-        i.field_size,
-        i.field_null);
-    }
   }
 
   const access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::info_type
@@ -6508,16 +6450,14 @@ namespace odb
   const char access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::persist_statement[] =
   "INSERT INTO \"IdBodyError\" "
   "(\"id\", "
-  "\"error_fix\", "
-  "\"field\") "
+  "\"error_fix\") "
   "VALUES "
-  "(?, ?, ?)";
+  "(?, ?)";
 
   const char* const access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::find_statements[] =
   {
     "SELECT "
     "\"IdBodyError\".\"error_fix\", "
-    "\"IdBodyError\".\"field\", "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
     "\"Error\".\"severity\", "
@@ -6528,23 +6468,21 @@ namespace odb
     "WHERE \"IdBodyError\".\"id\"=?",
 
     "SELECT "
-    "\"IdBodyError\".\"error_fix\", "
-    "\"IdBodyError\".\"field\" "
+    "\"IdBodyError\".\"error_fix\" "
     "FROM \"IdBodyError\" "
     "WHERE \"IdBodyError\".\"id\"=?",
 
     "SELECT "
-    "\"IdBodyError\".\"error_fix\", "
-    "\"IdBodyError\".\"field\" "
+    "\"IdBodyError\".\"error_fix\" "
     "FROM \"IdBodyError\" "
     "WHERE \"IdBodyError\".\"id\"=?"
   };
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::find_column_counts[] =
   {
-    7UL,
-    2UL,
-    2UL
+    6UL,
+    1UL,
+    1UL
   };
 
   const char access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::update_statement[] =
@@ -6560,7 +6498,6 @@ namespace odb
   const char access::object_traits_impl< ::ebi::vcf::IdBodyError, id_sqlite >::query_statement[] =
   "SELECT\n"
   "\"IdBodyError\".\"error_fix\",\n"
-  "\"IdBodyError\".\"field\",\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
   "\"Error\".\"severity\",\n"
@@ -10850,21 +10787,13 @@ namespace odb
     //
     if (--d != 0)
     {
-      if (base_traits::grow (*i.base, t + 2UL, d))
+      if (base_traits::grow (*i.base, t + 1UL, d))
         i.base->version++;
     }
 
     // error_fix
     //
     t[0UL] = false;
-
-    // field
-    //
-    if (t[1UL])
-    {
-      i.field_value.capacity (i.field_size);
-      grew = true;
-    }
 
     return grew;
   }
@@ -10897,20 +10826,6 @@ namespace odb
     b[n].buffer = &i.error_fix_value;
     b[n].is_null = &i.error_fix_null;
     n++;
-
-    // field
-    //
-    if (sk != statement_update)
-    {
-      b[n].type = sqlite::image_traits<
-        ::std::string,
-        sqlite::id_text>::bind_value;
-      b[n].buffer = i.field_value.data ();
-      b[n].size = &i.field_size;
-      b[n].capacity = i.field_value.capacity ();
-      b[n].is_null = &i.field_null;
-      n++;
-    }
 
     // id_
     //
@@ -10956,26 +10871,6 @@ namespace odb
       i.error_fix_null = is_null;
     }
 
-    // field
-    //
-    if (sk == statement_insert)
-    {
-      ::std::string const& v =
-        o.field;
-
-      bool is_null (false);
-      std::size_t cap (i.field_value.capacity ());
-      sqlite::value_traits<
-          ::std::string,
-          sqlite::id_text >::set_image (
-        i.field_value,
-        i.field_size,
-        is_null,
-        v);
-      i.field_null = is_null;
-      grew = grew || (cap != i.field_value.capacity ());
-    }
-
     return grew;
   }
 
@@ -11007,22 +10902,6 @@ namespace odb
         i.error_fix_value,
         i.error_fix_null);
     }
-
-    // field
-    //
-    {
-      ::std::string& v =
-        const_cast< ::std::string& > (
-        o.field);
-
-      sqlite::value_traits<
-          ::std::string,
-          sqlite::id_text >::set_value (
-        v,
-        i.field_value,
-        i.field_size,
-        i.field_null);
-    }
   }
 
   const access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::info_type
@@ -11041,16 +10920,14 @@ namespace odb
   const char access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::persist_statement[] =
   "INSERT INTO \"FormatBodyError\" "
   "(\"id\", "
-  "\"error_fix\", "
-  "\"field\") "
+  "\"error_fix\") "
   "VALUES "
-  "(?, ?, ?)";
+  "(?, ?)";
 
   const char* const access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::find_statements[] =
   {
     "SELECT "
     "\"FormatBodyError\".\"error_fix\", "
-    "\"FormatBodyError\".\"field\", "
     "\"Error\".\"line\", "
     "\"Error\".\"message\", "
     "\"Error\".\"severity\", "
@@ -11061,23 +10938,21 @@ namespace odb
     "WHERE \"FormatBodyError\".\"id\"=?",
 
     "SELECT "
-    "\"FormatBodyError\".\"error_fix\", "
-    "\"FormatBodyError\".\"field\" "
+    "\"FormatBodyError\".\"error_fix\" "
     "FROM \"FormatBodyError\" "
     "WHERE \"FormatBodyError\".\"id\"=?",
 
     "SELECT "
-    "\"FormatBodyError\".\"error_fix\", "
-    "\"FormatBodyError\".\"field\" "
+    "\"FormatBodyError\".\"error_fix\" "
     "FROM \"FormatBodyError\" "
     "WHERE \"FormatBodyError\".\"id\"=?"
   };
 
   const std::size_t access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::find_column_counts[] =
   {
-    7UL,
-    2UL,
-    2UL
+    6UL,
+    1UL,
+    1UL
   };
 
   const char access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::update_statement[] =
@@ -11093,7 +10968,6 @@ namespace odb
   const char access::object_traits_impl< ::ebi::vcf::FormatBodyError, id_sqlite >::query_statement[] =
   "SELECT\n"
   "\"FormatBodyError\".\"error_fix\",\n"
-  "\"FormatBodyError\".\"field\",\n"
   "\"Error\".\"line\",\n"
   "\"Error\".\"message\",\n"
   "\"Error\".\"severity\",\n"
@@ -14577,7 +14451,6 @@ namespace odb
           db.execute ("CREATE TABLE \"IdBodyError\" (\n"
                       "  \"id\" INTEGER NOT NULL PRIMARY KEY,\n"
                       "  \"error_fix\" INTEGER NOT NULL,\n"
-                      "  \"field\" TEXT NOT NULL,\n"
                       "  CONSTRAINT \"id_fk\"\n"
                       "    FOREIGN KEY (\"id\")\n"
                       "    REFERENCES \"BodySectionError\" (\"id\")\n"
@@ -14620,7 +14493,6 @@ namespace odb
           db.execute ("CREATE TABLE \"FormatBodyError\" (\n"
                       "  \"id\" INTEGER NOT NULL PRIMARY KEY,\n"
                       "  \"error_fix\" INTEGER NOT NULL,\n"
-                      "  \"field\" TEXT NOT NULL,\n"
                       "  CONSTRAINT \"id_fk\"\n"
                       "    FOREIGN KEY (\"id\")\n"
                       "    REFERENCES \"BodySectionError\" (\"id\")\n"
