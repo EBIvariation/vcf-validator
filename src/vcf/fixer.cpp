@@ -365,7 +365,7 @@ namespace ebi
             }
 
             if (fixed_format.empty()) {
-                fixed_format = MISSING_VALUE;         // all format fields were removed, so use missing value
+                throw std::runtime_error("Could not fix FORMAT duplicate fields, all fields had to be removed, but missing value not permitted");
             } else {
                 fixed_format.pop_back();              // remove trailing colon
             }
@@ -373,7 +373,7 @@ namespace ebi
 
             for (auto & fixed_sample : fixed_samples) {
                 if (fixed_sample.empty()) {
-                    fixed_sample = MISSING_VALUE;      // all sample fields were removed
+                    fixed_sample = MISSING_VALUE;      // all sample fields were removed, so set to MISSING_VALUE
                 } else {
                     fixed_sample.pop_back();           // remove trailing colon
                 }

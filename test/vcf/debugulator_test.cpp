@@ -314,23 +314,6 @@ namespace ebi
           util::string_split(output.str(), "\t", columns);
           CHECK(columns[8] == "GT:GH");
       }
-      SECTION("Fix FORMAT duplicate field with 1 sample, different values for all")
-      {
-          size_t line_number = 8;
-          std::string message{"error message mock: Duplicate format fields"};
-          ebi::vcf::FormatBodyError test_error{line_number, message, ebi::vcf::ErrorFix::DUPLICATE_VALUES};
-
-          std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\tinfo\tGT:GH:GT:GH\t1:2:3:4";
-          std::vector<char> line{string_line.begin(), string_line.end()};
-
-          std::stringstream output;
-          vcf::Fixer{output}.fix(line_number, line, test_error);
-
-          std::vector<std::string> columns;
-          util::string_split(output.str(), "\t", columns);
-          CHECK(columns[8] == ebi::vcf::MISSING_VALUE);
-          CHECK(columns[9] == ebi::vcf::MISSING_VALUE);
-      }
       SECTION("Fix FORMAT duplicate fields with 1 sample, same values for some")
       {
           size_t line_number = 8;
@@ -405,7 +388,7 @@ namespace ebi
           std::string message{"error message mock: Duplicate format fields"};
           ebi::vcf::FormatBodyError test_error{line_number, message, ebi::vcf::ErrorFix::DUPLICATE_VALUES};
 
-          std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\tinfo\tGT:GT\t1:1\t3:4";
+          std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\tinfo\tGT:GT:GP\t1:1\t3:4";
           std::vector<char> line{string_line.begin(), string_line.end()};
 
           std::stringstream output;
@@ -413,7 +396,7 @@ namespace ebi
 
           std::vector<std::string> columns;
           util::string_split(output.str(), "\t", columns);
-          CHECK(columns[8] == ebi::vcf::MISSING_VALUE);
+          CHECK(columns[8] == "GP");
           CHECK(columns[9] == ebi::vcf::MISSING_VALUE);
           CHECK(columns[10] == ebi::vcf::MISSING_VALUE);
       }

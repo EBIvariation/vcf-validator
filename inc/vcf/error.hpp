@@ -292,7 +292,7 @@ namespace ebi
                       const std::string &expected_value = "")
                 : BodySectionError{line, message}, error_fix{error_fix}, field{field}, expected_value{expected_value} {
                     if (error_fix == ErrorFix::RECOVERABLE_VALUE && expected_value.empty()) {
-                        throw std::invalid_argument{"An error with recoverable value must provide a non-empty expected value"};
+                        throw std::invalid_argument{"The program had an internal error: An error with recoverable value must provide a non-empty expected value"};
                     }
                 }
         virtual ~InfoBodyError() override { }
