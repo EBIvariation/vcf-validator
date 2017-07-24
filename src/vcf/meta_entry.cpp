@@ -187,11 +187,11 @@ namespace ebi
         }
 
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
-            check_predefined_tag(FORMAT, TYPE, value, format_v41_v42);
             check_predefined_tag(FORMAT, NUMBER, value, format_v41_v42);
+            check_predefined_tag(FORMAT, TYPE, value, format_v41_v42);
         } else {
-            check_predefined_tag(FORMAT, TYPE, value, format_v43);
             check_predefined_tag(FORMAT, NUMBER, value, format_v43);
+            check_predefined_tag(FORMAT, TYPE, value, format_v43);
         }
     }
 
@@ -232,11 +232,11 @@ namespace ebi
         }
         
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
-            check_predefined_tag(INFO, TYPE, value, info_v41_v42);
             check_predefined_tag(INFO, NUMBER, value, info_v41_v42);
+            check_predefined_tag(INFO, TYPE, value, info_v41_v42);
         } else {
-            check_predefined_tag(INFO, TYPE, value, info_v43);
             check_predefined_tag(INFO, NUMBER, value, info_v43);
+            check_predefined_tag(INFO, TYPE, value, info_v43);
         }
     }
     
@@ -252,7 +252,7 @@ namespace ebi
             // Or if the required value does not match the value provided in the vcf file, throw an error
             if (predefined_value != MISSING_VALUE && predefined_value != meta_entry[meta_entry_property]) {
                 std::string message = tag_field + " " + meta_entry[ID] + " metadata " + meta_entry_property + " is not " + predefined_value;
-                throw new MetaSectionError{entry.line, message};
+                throw new MetaSectionError{entry.line, message, ErrorFix::RECOVERABLE_VALUE, meta_entry_property, predefined_value};
             }
         }
     }

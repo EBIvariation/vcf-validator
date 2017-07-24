@@ -30,6 +30,8 @@ namespace ebi
   {
     enum class Severity { WARNING, ERROR };
 
+    enum class ErrorFix { IRRECOVERABLE_VALUE, RECOVERABLE_VALUE, DUPLICATE_VALUES };
+
     struct Error;
     struct MetaSectionError;
     struct HeaderSectionError;
@@ -141,11 +143,22 @@ namespace ebi
     #pragma db object
     struct MetaSectionError : public Error
     {
-        using Error::Error;
-        MetaSectionError() : MetaSectionError{0} { }
-        MetaSectionError(size_t line) : MetaSectionError{line, "Error in meta-data section"} { }
+        MetaSectionError(size_t line = 0,
+                         const std::string &message = "Error in meta-data section",
+                         ErrorFix error_fix = ErrorFix::IRRECOVERABLE_VALUE,
+                         const std::string &value = "",
+                         const std::string &expected_value = "")
+                : Error{line, message}, error_fix{error_fix}, value{value}, expected_value{expected_value} {
+                    if (error_fix == ErrorFix::RECOVERABLE_VALUE && (value.empty() || expected_value.empty())) {
+                        throw std::invalid_argument("An error with recoverable meta defintion must provide non-empty field and expected values");
+                    }
+                }
         virtual ~MetaSectionError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
+
+        ErrorFix error_fix;
+        const std::string value;
+        const std::string expected_value;
     };
 
     #pragma db object
