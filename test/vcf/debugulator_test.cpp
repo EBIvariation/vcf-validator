@@ -314,6 +314,18 @@ namespace ebi
           util::string_split(output.str(), "\t", columns);
           CHECK(columns[8] == "GT:GH");
       }
+      SECTION("Fix FORMAT duplicate field, throw exception if format column gets empty (because of different values)")
+      {
+          size_t line_number = 8;
+          std::string message{"error message mock: Duplicate format fields"};
+          ebi::vcf::FormatBodyError test_error{line_number, message, ebi::vcf::ErrorFix::DUPLICATE_VALUES};
+
+          std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\tinfo\tGT:GH:GT:GH\t1:2:3:4";
+          std::vector<char> line{string_line.begin(), string_line.end()};
+
+          std::stringstream output;
+          CHECK_THROWS_AS(vcf::Fixer{output}.fix(line_number, line, test_error), std::runtime_error);
+      }
       SECTION("Fix FORMAT duplicate fields with 1 sample, same values for some")
       {
           size_t line_number = 8;
