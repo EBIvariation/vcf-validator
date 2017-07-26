@@ -77,8 +77,7 @@ namespace ebi
 
     void Fixer::visit(NoMetaDefinitionError &error)
     {
-        util::writeline(output, *line);
-        ignored_errors++;
+        ignore_error();
     }
 
     void Fixer::visit(FileformatError &error)

@@ -58,7 +58,8 @@ namespace ebi
         virtual void visit(PositionBodyError &error) override;
 
         /**
-         * fix: remove duplicate ids - keep the first one and remove consequent ones
+         * fix: 
+         * - remove duplicate IDs, keep the first one and remove consequent ones
          */
         virtual void visit(IdBodyError &error) override;
         virtual void visit(ReferenceAlleleBodyError &error) override;
@@ -67,18 +68,18 @@ namespace ebi
 
         /**
          * fix:
-         * - if any filter string is 0, remove it
-         * - remove duplicate filter strings - keep the first and remove consequent ones
+         * - if any FILTER string is 0, remove it
+         * - remove duplicate FILTER strings - keep the first and remove consequent ones
          */
         virtual void visit(FilterBodyError &error) override;
 
         /**
          * fix:
-         * - fix duplicates in info field :
-         *     - if even one value differs, remove all the duplicate key fields
-         *     - else, keep one duplicate field and remove all the others
-         * - if the error is recoverable, i.e., it expected an exact value, then replace the error causing info field with the correct value
-         * - if the error is irrecoverable, remove the info field that caused the error
+         * - fix duplicates in INFO field :
+         *     - if even a single value differs, remove all the duplicate key fields
+         *     - else if the duplicate key has the same value, keep the first one and remove all the others
+         * - if the error is recoverable, i.e., it expected an exact value, then replace the error causing INFO field with the correct value
+         * - if the error is irrecoverable, remove the INFO field that caused the error
          */
         virtual void visit(InfoBodyError &error) override;
         virtual void visit(FormatBodyError &error) override;
@@ -120,9 +121,10 @@ namespace ebi
                                         const std::string &separator);
 
         /**
-         * remove any duplicate key value pairs from a column
-         * the fix is to remove all fields for a duplicate key if the corresponding values differ
-         * else if all the values are the same for that key, keep one pair & remove the rest
+         * removes any duplicate key value pairs from a column
+         * explanation of the fix:
+         * - remove all fields for a duplicate key if the corresponding values differ
+         * - else if all the values are the same for that key, keep one pair & remove the rest
          * @param the column string
          * @param the separator used for splitting the column
          * @param the separator used to split the key value pair
@@ -135,16 +137,17 @@ namespace ebi
                                                 const std::string &empty_value);
 
         /**
-         * removes duplicate format and samples
-         * the fix is to remove all format fields for which one or more of the samples contain duplicate values (within the sample field itself)
-         * else if all the values match in a sample, and this happens for all the samples, keep the first occurrence in each sample and discard the rest
+         * removes duplicate FORMAT and samples
+         * explanation of the fix:
+         * - remove all FORMAT fields for which one or more of the samples contain duplicate values (within the sample field itself)
+         * - else if all the values match in a sample, and this happens for all the samples, keep the first occurrence in each sample and discard the rest
          * @param the complete error string
          * @return the number of duplicate format fields (with corresponding samples if present) removed
          */
         size_t remove_duplicate_format_sample_pairs(const std::string &string_line);
         
         /**
-         * puts the genotype as missing. if the error.cardinality is know, it uses the proper ploidy
+         * puts the genotype as missing. if the error.cardinality is known, it uses the proper ploidy
          * @param first iterator to the FORMAT column string
          * @param last iterator past the last sample column
          * @param error needed for the field (that must be "GT") the cardinality, and the line number
@@ -181,7 +184,7 @@ namespace ebi
 
         /**
          * write to output the `expected_field` in place of the erroneous one
-         * @param line: its incorrect columns will be replaced by the correct one
+         * @param line: its incorrect column will be replaced by the correct one
          * @param separators to be used to split `line`
          * @param expected_field to replace the incorrect one
          * @param condition_to_replace return true if the column is to be replaced with the `expected_field`
