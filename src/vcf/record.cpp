@@ -569,12 +569,9 @@ namespace ebi
     void Record::check_no_duplicates(std::vector<std::string> const & values) const
     {
         if (values.size() > 1) {
-            std::map<std::string, int> counter;
-            for (auto & value : values) {
-                counter[value]++;
-                if (counter[value] >= 2) {
-                    throw std::invalid_argument(value);
-                }
+            std::set<std::string> counter(values.begin(), values.end());
+            if (values.size() > counter.size()) {
+                throw std::invalid_argument("Duplicate fields");
             }
         }
     }
