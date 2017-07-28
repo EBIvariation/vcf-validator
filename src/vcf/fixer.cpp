@@ -261,7 +261,7 @@ namespace ebi
                                                        const std::string &empty_value)
         {
             std::map<std::string, std::string> values;
-            std::vector<std::string> ordered_values;
+            std::vector<std::string> ordered_keys;
             std::set<std::string> fields_to_remove;
 
             std::vector<std::string> fields;
@@ -272,7 +272,7 @@ namespace ebi
                 util::string_split(field, key_value_separator.c_str(), subfields);
                 auto iterator = values.find(subfields[0]);
                 if (iterator == values.end()) {
-                    ordered_values.push_back(subfields[0]);
+                    ordered_keys.push_back(subfields[0]);
                     values[subfields[0]] = subfields[1];
                 } else if (values[subfields[0]] != subfields[1]) {
                     fields_to_remove.insert(subfields[0]);
@@ -281,9 +281,9 @@ namespace ebi
 
             std::string fixed_column;
             size_t num_removed_duplicates = 0;
-            for (auto & ordered_value : ordered_values) {
-                if (fields_to_remove.find(ordered_value) == fields_to_remove.end()) {
-                    fixed_column += ordered_value + key_value_separator + values[ordered_value] + separator;
+            for (auto & ordered_key : ordered_keys) {
+                if (fields_to_remove.find(ordered_key) == fields_to_remove.end()) {
+                    fixed_column += ordered_key + key_value_separator + values[ordered_key] + separator;
                 } else {
                     num_removed_duplicates++;
                 }
@@ -354,7 +354,7 @@ namespace ebi
                 }
     
                 if (fixed_format.empty()) {
-                    throw std::runtime_error("Could not fix FORMAT duplicate fields, all fields had to be removed, but missing value not permitted");
+                    throw std::runtime_error("Could not fix FORMAT duplicate fields: All fields had to be removed, but missing value is not permitted");
                 } else {
                     fixed_format.pop_back();              // remove trailing colon
                 }
@@ -497,11 +497,11 @@ namespace ebi
             size_t num_replaced_columns = 0;
 
             for (size_t j = 0; j < columns.size(); ++j) {
-                if (not condition_to_replace(columns[j], j)) {
-                    output << columns[j];
-                } else {
+                if (condition_to_replace(columns[j], j)) {
                     num_replaced_columns++;
                     output << expected_field;
+                } else {
+                    output << columns[j];
                 }
                 if (j < columns.size() - 1) {
                     output << separators;
