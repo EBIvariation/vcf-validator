@@ -314,11 +314,11 @@ namespace ebi
 
                 std::set<std::string> fields_to_remove;
 
-                for (auto & format_field : format_fields) {
-                    if (format_field.second.size() > 1) {
-                        for (auto it = first + 1; it != last; it++) {
-                            std::vector<std::string> sample_fields;
-                            util::string_split(*it, ":", sample_fields);
+                for (auto it = first + 1; it != last; it++) {
+                    std::vector<std::string> sample_fields;
+                    util::string_split(*it, ":", sample_fields);
+                    for (auto & format_field : format_fields) {
+                        if (format_field.second.size() > 1) {
                             for (auto & format_field_index : format_field.second) {
                                 if (sample_fields.size() > format_field_index && sample_fields[format_field_index] != sample_fields[format_field.second[0]]) {
                                     fields_to_remove.insert(format_field.first);
