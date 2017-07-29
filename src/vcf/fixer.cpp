@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#include <set>
-
 #include "vcf/fixer.hpp"
 #include "vcf/string_constants.hpp"
 
@@ -313,22 +311,7 @@ namespace ebi
                 }
 
                 std::set<std::string> fields_to_remove;
-
-                for (auto it = first + 1; it != last; it++) {
-                    std::vector<std::string> sample_fields;
-                    util::string_split(*it, ":", sample_fields);
-                    for (auto & format_field : format_fields) {
-                        if (format_field.second.size() > 1) {
-                            for (auto & format_field_index : format_field.second) {
-                                if (sample_fields.size() > format_field_index && sample_fields[format_field_index] != sample_fields[format_field.second[0]]) {
-                                    fields_to_remove.insert(format_field.first);
-                                    it = last - 1;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
+                get_fields_to_remove(format_fields, first, last, fields_to_remove);
 
                 std::vector<std::string> fixed_format;
                 for (auto & ordered_field : ordered_fields) {
@@ -367,6 +350,28 @@ namespace ebi
             });
 
             return num_removed_duplicates;
+        }
+
+        void Fixer::get_fields_to_remove(std::map<std::string, std::vector<size_t>> &format_fields,
+                                         std::vector<std::string>::iterator first, 
+                                         std::vector<std::string>::iterator last,
+                                         std::set<std::string> &fields_to_remove)
+        {
+            for (auto it = first + 1; it != last; it++) {
+                std::vector<std::string> sample_fields;
+                util::string_split(*it, ":", sample_fields);
+                for (auto & format_field : format_fields) {
+                    if (format_field.second.size() > 1) {
+                        for (auto & format_field_index : format_field.second) {
+                            if (sample_fields.size() > format_field_index && sample_fields[format_field_index] != sample_fields[format_field.second[0]]) {
+                                fields_to_remove.insert(format_field.first);
+                                it = last - 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         void Fixer::fix_format_gt(std::vector<std::string>::iterator first,

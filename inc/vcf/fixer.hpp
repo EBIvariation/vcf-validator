@@ -18,6 +18,7 @@
 #define VCF_FIXER_HPP
 
 #include <vector>
+#include <set>
 #include <iostream>
 #include <algorithm>
 
@@ -145,7 +146,19 @@ namespace ebi
          * @return the number of duplicate format fields (with corresponding samples if present) removed
          */
         size_t remove_duplicate_format_sample_pairs(const std::string &string_line);
-        
+
+        /*
+         * returns all the fields to remove from the FORMAT column and corresponding ones in sample columns, for duplicate values error
+         * @param map containing unique FORMAT fields with their indices in the FORMAT column
+         * @param iterator to the first sample column
+         * @param iterator past the last sample column
+         * @param a set of fields to remove
+         */
+        void get_fields_to_remove(std::map<std::string, std::vector<size_t>> &format_fields,
+                                  std::vector<std::string>::iterator first,
+                                  std::vector<std::string>::iterator last,
+                                  std::set<std::string> &fields_to_remove);
+
         /**
          * puts the genotype as missing. if the error.cardinality is known, it uses the proper ploidy
          * @param first iterator to the FORMAT column string
