@@ -181,16 +181,13 @@ namespace ebi
 
         void Fixer::visit(FormatBodyError &error)
         {
-            if (error.error_fix != ErrorFix::DUPLICATE_VALUES) {
+            if (error.error_fix == ErrorFix::DUPLICATE_VALUES) {
+                std::cerr << "DEBUG: line " << error.line << ": fixing duplicate FORMAT fields" << std::endl;
+                std::string string_line = {line->begin(), line->end()};
+                remove_duplicate_format_sample_pairs(string_line);
+            } else {
                 ignore_error();
-                return;
             }
-        
-            std::cerr << "DEBUG: line " << error.line << ": fixing duplicate FORMAT fields" << std::endl;
-
-            std::string string_line = {line->begin(), line->end()};
-
-            remove_duplicate_format_sample_pairs(string_line);
         }
 
         void Fixer::visit(SamplesBodyError &error)
@@ -260,7 +257,7 @@ namespace ebi
                                                        const std::string &key_value_separator,
                                                        const std::string &empty_value)
         {
-            std::map<std::string, std::string> values;
+            std::map<std::string, std::string> first_key_occurrence;
             std::vector<std::string> ordered_keys;
             std::set<std::string> fields_to_remove;
 
@@ -270,31 +267,30 @@ namespace ebi
             for (auto & field : fields) {
                 std::vector<std::string> subfields;
                 util::string_split(field, key_value_separator.c_str(), subfields);
-                auto iterator = values.find(subfields[0]);
-                if (iterator == values.end()) {
+                auto first_key_iterator = first_key_occurrence.find(subfields[0]);
+                if (first_key_iterator == first_key_occurrence.end()) {
                     ordered_keys.push_back(subfields[0]);
-                    values[subfields[0]] = subfields[1];
-                } else if (values[subfields[0]] != subfields[1]) {
+                    first_key_occurrence[subfields[0]] = subfields[1];
+                } else if (first_key_occurrence[subfields[0]] != subfields[1]) {
                     fields_to_remove.insert(subfields[0]);
                 }
             }
 
-            std::string fixed_column;
+            std::vector<std::string> fixed_column;
             size_t num_removed_duplicates = 0;
             for (auto & ordered_key : ordered_keys) {
                 if (fields_to_remove.find(ordered_key) == fields_to_remove.end()) {
-                    fixed_column += ordered_key + key_value_separator + values[ordered_key] + separator;
+                    fixed_column.push_back(ordered_key + key_value_separator + first_key_occurrence[ordered_key]);
                 } else {
                     num_removed_duplicates++;
                 }
             }
             if (fixed_column.size() == 0) {       // all the fields were removed
-                fixed_column = empty_value;
+                output << empty_value;
             } else {
-                fixed_column.pop_back();          // remove trailing separator (its length is always 1)
+                util::print_container(output, fixed_column, "", separator, "");
             }
 
-            output << fixed_column;
             return num_removed_duplicates;
         }
 
@@ -334,39 +330,39 @@ namespace ebi
                     }
                 }
 
-                std::string fixed_format;
-                std::vector<std::string> fixed_samples(last - (first + 1));
-
+                std::vector<std::string> fixed_format;
                 for (auto & ordered_field : ordered_fields) {
                     if (fields_to_remove.find(ordered_field) == fields_to_remove.end()) {
                         // keep first occurrence, discard the rest if present
-                        fixed_format += ordered_field + ":";
-                        for (auto it = first + 1; it != last; it++) {
-                            std::vector<std::string> sample_fields;
-                            util::string_split(*it, ":", sample_fields);
-                            if (sample_fields.size() > format_fields[ordered_field][0]) {
-                                fixed_samples[it - (first + 1)] += sample_fields[format_fields[ordered_field][0]] + ":";
-                            }
-                        }
+                        fixed_format.push_back(ordered_field);
                     } else {
                         num_removed_duplicates++;
                     }
                 }
-    
+
                 if (fixed_format.empty()) {
                     throw std::runtime_error("Could not fix FORMAT duplicate fields: All fields had to be removed, but missing value is not permitted");
-                } else {
-                    fixed_format.pop_back();              // remove trailing colon
                 }
-                output << fixed_format;
+                util::print_container(output, fixed_format, "", ":","");
 
-                for (auto & fixed_sample : fixed_samples) {
-                    if (fixed_sample.empty()) {
-                        fixed_sample = MISSING_VALUE;      // all sample fields were removed, so set to MISSING_VALUE
-                    } else {
-                        fixed_sample.pop_back();           // remove trailing colon
+                for (auto it = first + 1; it != last; it++) {
+                    std::vector<std::string> sample_fields;
+                    util::string_split(*it, ":", sample_fields);
+                    std::vector<std::string> fixed_sample;
+                    for (auto & ordered_field : ordered_fields) {
+                        if (fields_to_remove.find(ordered_field) == fields_to_remove.end()) {
+                            // keep first occurrence, discard the rest if present
+                            if (sample_fields.size() > format_fields[ordered_field][0]) {
+                                fixed_sample.push_back(sample_fields[format_fields[ordered_field][0]]);
+                            }
+                        }
                     }
-                    output << "\t" << fixed_sample;
+                    output << "\t";
+                    if (fixed_sample.empty()) {
+                        output << MISSING_VALUE;         // all the sample fields were removed, so write missing value to output
+                    } else {
+                        util::print_container(output, fixed_sample, "", ":", "");
+                    }
                 }
             });
 
