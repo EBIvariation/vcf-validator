@@ -230,6 +230,7 @@ namespace ebi
           util::string_split(columns[7], ";", info_fields);
           CHECK(info_fields.size() == 2);
           CHECK(info_fields[0] == "dupkey=x");
+          CHECK(info_fields[1] == "info=y");
       }
       SECTION("Fix INFO with duplicates of unique key")
       {

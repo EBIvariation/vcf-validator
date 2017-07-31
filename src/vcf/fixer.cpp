@@ -298,20 +298,20 @@ namespace ebi
 
             using iter = std::vector<std::string>::iterator;
             fix_columns(format_column_index, -1, string_line, "\t", [&](iter first, iter last) {
-                std::map<std::string, std::vector<size_t>> format_fields;
+                std::map<std::string, std::vector<size_t>> format_fields_indexes;
                 std::vector<std::string> ordered_fields;
                 std::vector<std::string> format_keys;
                 util::string_split(*first, ":", format_keys);
 
                 for (size_t i = 0; i < format_keys.size(); i++) {
-                    format_fields[format_keys[i]].push_back(i);
-                    if (format_fields[format_keys[i]].size() == 1) {
+                    format_fields_indexes[format_keys[i]].push_back(i);
+                    if (format_fields_indexes[format_keys[i]].size() == 1) {
                         ordered_fields.push_back(format_keys[i]);
                     }
                 }
 
                 std::set<std::string> fields_to_remove;
-                get_fields_to_remove(format_fields, first, last, fields_to_remove);
+                get_fields_to_remove(format_fields_indexes, first, last, fields_to_remove);
 
                 std::vector<std::string> fixed_format;
                 for (auto & ordered_field : ordered_fields) {
@@ -335,8 +335,8 @@ namespace ebi
                     for (auto & ordered_field : ordered_fields) {
                         if (fields_to_remove.find(ordered_field) == fields_to_remove.end()) {
                             // keep first occurrence, discard the rest if present
-                            if (sample_fields.size() > format_fields[ordered_field][0]) {
-                                fixed_sample.push_back(sample_fields[format_fields[ordered_field][0]]);
+                            if (sample_fields.size() > format_fields_indexes[ordered_field][0]) {
+                                fixed_sample.push_back(sample_fields[format_fields_indexes[ordered_field][0]]);
                             }
                         }
                     }
@@ -352,7 +352,7 @@ namespace ebi
             return num_removed_duplicates;
         }
 
-        void Fixer::get_fields_to_remove(std::map<std::string, std::vector<size_t>> &format_fields,
+        void Fixer::get_fields_to_remove(std::map<std::string, std::vector<size_t>> &format_fields_indexes,
                                          std::vector<std::string>::iterator first, 
                                          std::vector<std::string>::iterator last,
                                          std::set<std::string> &fields_to_remove)
@@ -360,7 +360,7 @@ namespace ebi
             for (auto it = first + 1; it != last; it++) {
                 std::vector<std::string> sample_fields;
                 util::string_split(*it, ":", sample_fields);
-                for (auto & format_field : format_fields) {
+                for (auto & format_field : format_fields_indexes) {
                     if (format_field.second.size() > 1) {
                         for (auto & format_field_index : format_field.second) {
                             if (sample_fields.size() > format_field_index && sample_fields[format_field_index] != sample_fields[format_field.second[0]]) {

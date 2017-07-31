@@ -154,7 +154,7 @@ namespace ebi
          * @param iterator past the last sample column
          * @param a set of fields to remove
          */
-        void get_fields_to_remove(std::map<std::string, std::vector<size_t>> &format_fields,
+        void get_fields_to_remove(std::map<std::string, std::vector<size_t>> &format_fields_indexes,
                                   std::vector<std::string>::iterator first,
                                   std::vector<std::string>::iterator last,
                                   std::set<std::string> &fields_to_remove);
