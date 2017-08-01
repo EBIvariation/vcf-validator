@@ -75,12 +75,13 @@ namespace ebi
         virtual void visit(FilterBodyError &error) override;
 
         /**
-         * fix:
-         * - fix duplicates in INFO field :
-         *     - if even a single value differs, remove all the duplicate key fields
-         *     - else if the duplicate key has the same value, keep the first one and remove all the others
-         * - if the error is recoverable, i.e., it expected an exact value, then replace the error causing INFO field with the correct value
-         * - if the error is irrecoverable, remove the INFO field that caused the error
+         * Fixes duplicates in INFO field.
+         *     - If even a single value differs, remove all the duplicate key fields
+         *     - Else if all the duplicate keys have the same value, keep only the first occurrence
+         *
+         * If the error is recoverable, i.e. it expected an exact value, then replace the error causing
+         * INFO field with the correct value. If the error is irrecoverable, remove the INFO field that
+         * caused the error
          */
         virtual void visit(InfoBodyError &error) override;
         virtual void visit(FormatBodyError &error) override;
@@ -152,12 +153,11 @@ namespace ebi
          * @param map containing unique FORMAT fields with their indices in the FORMAT column
          * @param iterator to the first sample column
          * @param iterator past the last sample column
-         * @param a set of fields to remove
+         * @return a set of fields to remove
          */
-        void get_fields_to_remove(std::map<std::string, std::vector<size_t>> &format_fields_indexes,
-                                  std::vector<std::string>::iterator first,
-                                  std::vector<std::string>::iterator last,
-                                  std::set<std::string> &fields_to_remove);
+        std::set<std::string> get_format_fields_to_remove(std::map<std::string, std::vector<size_t>> &format_fields_indexes,
+                                                          std::vector<std::string>::iterator first,
+                                                          std::vector<std::string>::iterator last);
 
         /**
          * puts the genotype as missing. if the error.cardinality is known, it uses the proper ploidy
