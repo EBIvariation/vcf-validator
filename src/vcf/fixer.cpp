@@ -312,7 +312,7 @@ namespace ebi
                     }
                 }
 
-                std::set<std::string> fields_to_remove = get_format_fields_to_remove(format_fields_indexes, first, last);
+                std::set<std::string> fields_to_remove = get_format_fields_to_remove(format_fields_indexes, first + 1, last);
 
                 std::vector<std::string> fixed_format;
                 for (auto & ordered_field : ordered_fields) {
@@ -359,7 +359,7 @@ namespace ebi
         {
             std::set<std::string> fields_to_remove;
 
-            for (auto it = first + 1; it != last; it++) {
+            for (auto it = first; it != last; it++) {
                 std::vector<std::string> sample_fields;
                 util::string_split(*it, ":", sample_fields);
                 for (auto & format_field : format_fields_indexes) {
