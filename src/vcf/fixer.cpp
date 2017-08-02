@@ -312,7 +312,14 @@ namespace ebi
                     }
                 }
 
-                std::set<std::string> fields_to_remove = get_format_fields_to_remove(format_fields_indexes, first + 1, last);
+                std::vector<std::vector<std::string>> samples;
+                for (auto it = first + 1; it != last; it++) {
+                    std::vector<std::string> sample_fields;
+                    util::string_split(*it, ":", sample_fields);
+                    samples.push_back(sample_fields);
+                }
+
+                std::set<std::string> fields_to_remove = get_format_fields_to_remove(format_fields_indexes, first + 1, last, samples);
 
                 std::vector<std::string> fixed_format;
                 for (auto & ordered_field : ordered_fields) {
@@ -329,15 +336,13 @@ namespace ebi
                 }
                 util::print_container(output, fixed_format, "", ":","");
 
-                for (auto it = first + 1; it != last; it++) {
-                    std::vector<std::string> sample_fields;
-                    util::string_split(*it, ":", sample_fields);
+                for (auto sample : samples) {
                     std::vector<std::string> fixed_sample;
                     for (auto & ordered_field : ordered_fields) {
                         if (fields_to_remove.find(ordered_field) == fields_to_remove.end()) {
                             // keep first occurrence, discard the rest if present
-                            if (sample_fields.size() > format_fields_indexes[ordered_field][0]) {
-                                fixed_sample.push_back(sample_fields[format_fields_indexes[ordered_field][0]]);
+                            if (sample.size() > format_fields_indexes[ordered_field][0]) {
+                                fixed_sample.push_back(sample[format_fields_indexes[ordered_field][0]]);
                             }
                         }
                     }
@@ -355,19 +360,18 @@ namespace ebi
 
         std::set<std::string> Fixer::get_format_fields_to_remove(std::map<std::string, std::vector<size_t>> &format_fields_indexes,
                                                                  std::vector<std::string>::iterator first,
-                                                                 std::vector<std::string>::iterator last)
+                                                                 std::vector<std::string>::iterator last,
+                                                                 std::vector<std::vector<std::string>> &samples)
         {
             std::set<std::string> fields_to_remove;
 
-            for (auto it = first; it != last; it++) {
-                std::vector<std::string> sample_fields;
-                util::string_split(*it, ":", sample_fields);
+            for (auto sample_it = samples.begin(); sample_it != samples.end(); sample_it++) {
                 for (auto & format_field : format_fields_indexes) {
                     if (format_field.second.size() > 1) {
                         for (auto & format_field_index : format_field.second) {
-                            if (sample_fields.size() > format_field_index && sample_fields[format_field_index] != sample_fields[format_field.second[0]]) {
+                            if ((*sample_it).size() > format_field_index && (*sample_it)[format_field_index] != (*sample_it)[format_field.second[0]]) {
                                 fields_to_remove.insert(format_field.first);
-                                it = last - 1;
+                                sample_it = samples.end() - 1;
                                 break;
                             }
                         }

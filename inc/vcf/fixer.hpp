@@ -153,11 +153,13 @@ namespace ebi
          * @param map containing unique FORMAT fields with their indices in the FORMAT column
          * @param iterator to the first sample column
          * @param iterator past the last sample column
+         * @param a vector of sample columns, where each column is stored as a vector of split sample subfields
          * @return a set of fields to remove
          */
         std::set<std::string> get_format_fields_to_remove(std::map<std::string, std::vector<size_t>> &format_fields_indexes,
                                                           std::vector<std::string>::iterator first,
-                                                          std::vector<std::string>::iterator last);
+                                                          std::vector<std::string>::iterator last,
+                                                          std::vector<std::vector<std::string>> &samples);
 
         /**
          * puts the genotype as missing. if the error.cardinality is known, it uses the proper ploidy
