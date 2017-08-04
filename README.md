@@ -154,4 +154,4 @@ docker run -v ${PWD}:/tmp -t ebivariation/vcf-validator vcf_debugulator -i /tmp/
 ```
 
 Test suite example:
-`docker run -w /home/vcf-validator -t ebivariation/vcf-validator test_validator`
+`docker run -t ebivariation/vcf-validator test_validator`
