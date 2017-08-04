@@ -61,6 +61,8 @@ vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timesta
 
 The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create an executable that can be run in any Linux machine.
 
+**Note:** If you are a Windows/OS-X user, you may follow a different set of steps for building a static docker based binary. Head over to section [Alternative way to build (for Windows and Mac OS-X)](https://github.com/Anishka0107/vcf-validator/tree/docker_extend#alternative-way-to-build-for-windows-and-mac-os-x).
+
 1. Install and configure Docker following [their tutorial](https://docs.docker.com/engine/getstarted/).
 2. Create the Docker image:
     1. Clone this Git repository: `git clone https://github.com/EBIvariation/vcf-validator.git`
@@ -135,3 +137,21 @@ And the full ODB-based code from the classes definitions using:
 odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp --output-dir inc/vcf/ inc/vcf/error.hpp
 mv inc/vcf/error-odb.cpp src/vcf/error-odb.cpp
 ```
+
+## Alternative way to build (for Windows and Mac OS-X)
+
+Build the image: `docker build -t ebivariation/vcf-validator -f docker/Dockerfile.prod .`
+
+For every file you provide (vcf or database or any other external file), you have to prepend to it `\tmp\`, so that docker may mount it properly.
+
+Validator example:
+`docker run -v ${PWD}:/tmp -t ebivariation/vcf-validator vcf_validator -i /tmp/path/to/file.vcf`
+
+Debugulator example:
+```
+docker run -v ${PWD}:/tmp -t ebivariation/vcf-validator vcf_validator -i /tmp/path/to/file.vcf -r database -o /tmp/path/to/write/report
+docker run -v ${PWD}:/tmp -t ebivariation/vcf-validator vcf_debugulator -i /tmp/path/to/file.vcf -e /tmp/path/to/write/report/vcf.errors.timestamp.db -o /tmp/path/to/fixed.vcf
+```
+
+Test suite example:
+`docker run -w /home/vcf-validator -t ebivariation/vcf-validator test_validator`
