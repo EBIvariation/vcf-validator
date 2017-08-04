@@ -34,17 +34,21 @@ namespace ebi
             return ignored_errors;
         }
 
-        void Fixer::visit(Error &error)
+        void Fixer::ignore_error()
         {
             util::writeline(output, *line);
-            ignored_errors++;
+            ignored_errors++;        
+        }
+
+        void Fixer::visit(Error &error)
+        {
+            ignore_error();
         }
 
         void Fixer::visit(MetaSectionError &error)
         {
             if (error.error_fix == ErrorFix::IRRECOVERABLE_VALUE) {
-                util::writeline(output, *line);
-                ignored_errors++;
+                ignore_error();
             } else if (error.error_fix == ErrorFix::RECOVERABLE_VALUE) {
                 std::string string_line = {line->begin(), line->end()};
 
@@ -61,106 +65,132 @@ namespace ebi
 
         void Fixer::visit(HeaderSectionError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
         }
 
         void Fixer::visit(BodySectionError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
         }
 
         void Fixer::visit(NoMetaDefinitionError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
         }
 
         void Fixer::visit(FileformatError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
         }
 
         void Fixer::visit(ChromosomeBodyError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
         }
 
         void Fixer::visit(PositionBodyError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
         }
 
         void Fixer::visit(IdBodyError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            if (error.error_fix == ErrorFix::DUPLICATE_VALUES) {
+                std::cerr << "DEBUG: line " << error.line << ": fixing duplicate ID fields" << std::endl;
+                const size_t id_column_index = 2;
+                std::string string_line = {line->begin(), line->end()};
+
+                fix_column(id_column_index, string_line, "\t", [&](std::string &id_column) {
+                    remove_duplicate_strings(id_column, ";");
+                });
+            } else {
+                ignore_error();
+            }
         }
 
         void Fixer::visit(ReferenceAlleleBodyError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
         }
 
         void Fixer::visit(AlternateAllelesBodyError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
         }
 
         void Fixer::visit(QualityBodyError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
         }
 
         void Fixer::visit(FilterBodyError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            if (error.field == "" && error.error_fix != ErrorFix::DUPLICATE_VALUES) {
+                ignore_error();
+                return;
+            }
+
+            const size_t filter_column_index = 6;
+            std::string string_line = {line->begin(), line->end()};
+
+            fix_column(filter_column_index, string_line, "\t", [&](std::string &filter_column) {
+                if (error.error_fix == ErrorFix::IRRECOVERABLE_VALUE && error.field == "0") {
+                    std::cerr << "DEBUG: line " << error.line << ": fixing invalid FILTER field " << error.field << std::endl;
+                    const std::string empty_filter_column = MISSING_VALUE;
+                    auto condition_to_remove_filter_field = [&](const std::string &filter_subfield, size_t index) -> bool {
+                        return filter_subfield == error.field;
+                    };
+
+                    remove_fields(filter_column, ";", empty_filter_column, condition_to_remove_filter_field);
+                } else if (error.error_fix == ErrorFix::DUPLICATE_VALUES) {
+                    std::cerr << "DEBUG: line " << error.line << ": fixing duplicate FILTER fields" << std::endl;
+                    remove_duplicate_strings(filter_column, ";");
+                }
+            });
         }
 
         void Fixer::visit(InfoBodyError &error)
         {
             // TODO better log system, if any
-            std::cerr << "DEBUG: line " << error.line << ": fixing invalid INFO field " << error.field << std::endl;
             const size_t info_column_index = 7;
-            const std::string empty_info_column = MISSING_VALUE;
-
-            size_t num_removed_fields = 0;
             std::string string_line = {line->begin(), line->end()};
 
-            auto condition_to_remove_info_field = [&](std::string &info_subfield, size_t index) -> bool {
-                std::vector<std::string> key_value;
-                util::string_split(info_subfield, "=", key_value);
-                return key_value[0] == error.field;
-            };
-
             fix_column(info_column_index, string_line, "\t", [&](std::string &info_column) {
-                num_removed_fields = remove_column(info_column, ";", empty_info_column, condition_to_remove_info_field);
-            });
+                const std::string empty_info_column = MISSING_VALUE;
 
-            if (num_removed_fields != 1) {
-                std::cerr << "WARNING: line " << error.line << ": field " << error.field << " appeared "
-                          << num_removed_fields << " times " << std::endl;
-            }
+                auto condition_to_modify_info_field = [&](const std::string &info_subfield, size_t index) -> bool {
+                    std::vector<std::string> key_value;
+                    util::string_split(info_subfield, "=", key_value);
+                    return key_value[0] == error.field;
+                };
+
+                if (error.error_fix == ErrorFix::DUPLICATE_VALUES) {
+                    std::cerr << "DEBUG: line " << error.line << ": fixing duplicate INFO fields" << std::endl;
+                    remove_duplicate_key_value_pairs(info_column, ";", "=", empty_info_column);
+                } else if (error.error_fix == ErrorFix::RECOVERABLE_VALUE) {
+                    std::cerr << "DEBUG: line " << error.line << ": fixing invalid INFO field " << error.field << std::endl;
+                    replace_fields(info_column, ";", error.field + "=" + error.expected_value, condition_to_modify_info_field);
+                } else if (error.error_fix == ErrorFix::IRRECOVERABLE_VALUE) {
+                    std::cerr << "DEBUG: line " << error.line << ": removing invalid INFO field " << error.field << std::endl;
+                    remove_fields(info_column, ";", empty_info_column, condition_to_modify_info_field);
+                }
+            });
         }
 
         void Fixer::visit(FormatBodyError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            if (error.error_fix == ErrorFix::DUPLICATE_VALUES) {
+                std::cerr << "DEBUG: line " << error.line << ": fixing duplicate FORMAT fields" << std::endl;
+                std::string string_line = {line->begin(), line->end()};
+                remove_duplicate_format_sample_pairs(string_line);
+            } else {
+                ignore_error();
+            }
         }
 
         void Fixer::visit(SamplesBodyError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
         }
 
         void Fixer::visit(SamplesFieldBodyError &error)
@@ -192,16 +222,14 @@ namespace ebi
             if (fixed_samples <= 1) {   // 1 because we started counting since the FORMAT column
                 std::cerr << "WARNING: line " << error.line << ": tried to fix field " << error.field
                           << " in the samples column, but sample columns are not present. " << message << std::endl;
-                util::writeline(output, *line);
-                ignored_errors++;
+                ignore_error();
                 return;
             }
         }
 
         void Fixer::visit(NormalizationError &error)
         {
-            util::writeline(output, *line);
-            ignored_errors++;
+            ignore_error();
         }
 
         void Fixer::visit(DuplicationError &error)
@@ -210,10 +238,151 @@ namespace ebi
             std::cerr << "DEBUG: line " << line_number << ": fixing duplicate: removing variant: "
             << std::string{line->begin(), line->end()} << std::endl;
         }
-    
+
+        size_t Fixer::remove_duplicate_strings(const std::string &column,
+                                               const std::string &separator)
+        {
+            std::set<std::string> already_present;
+            auto is_value_duplicated = [&](const std::string &value, size_t index) -> bool {
+                bool first_appearance = already_present.insert(value).second;
+                return not first_appearance;
+            };
+            return remove_fields(column, separator, is_value_duplicated);
+        }
+
+        size_t Fixer::remove_duplicate_key_value_pairs(const std::string &column,
+                                                       const std::string &separator,
+                                                       const std::string &key_value_separator,
+                                                       const std::string &empty_value)
+        {
+            std::map<std::string, std::string> first_key_occurrence;
+            std::vector<std::string> ordered_keys;
+            std::set<std::string> fields_to_remove;
+
+            std::vector<std::string> fields;
+            util::string_split(column, separator.c_str(), fields);
+
+            for (auto & field : fields) {
+                std::vector<std::string> subfields;
+                util::string_split(field, key_value_separator.c_str(), subfields);
+                auto first_key_iterator = first_key_occurrence.find(subfields[0]);
+                if (first_key_iterator == first_key_occurrence.end()) {
+                    ordered_keys.push_back(subfields[0]);
+                    first_key_occurrence[subfields[0]] = subfields[1];
+                } else if (first_key_occurrence[subfields[0]] != subfields[1]) {
+                    fields_to_remove.insert(subfields[0]);
+                }
+            }
+
+            std::vector<std::string> fixed_column;
+            size_t num_removed_duplicates = 0;
+
+            for (auto & ordered_key : ordered_keys) {
+                if (fields_to_remove.find(ordered_key) == fields_to_remove.end()) {
+                    fixed_column.push_back(ordered_key + key_value_separator + first_key_occurrence[ordered_key]);
+                } else {
+                    num_removed_duplicates++;
+                }
+            }
+
+            if (fixed_column.size() == 0) {       // all the fields were removed
+                output << empty_value;
+            } else {
+                util::print_container(output, fixed_column, "", separator, "");
+            }
+
+            return num_removed_duplicates;
+        }
+
+        size_t Fixer::remove_duplicate_format_sample_pairs(const std::string &string_line) {
+            const size_t format_column_index = 8;
+            size_t num_removed_duplicates = 0;
+
+            using iter = std::vector<std::string>::iterator;
+            fix_columns(format_column_index, -1, string_line, "\t", [&](iter first, iter last) {
+                std::map<std::string, std::vector<size_t>> format_fields_indexes;
+                std::vector<std::string> ordered_fields;
+                std::vector<std::string> format_keys;
+                util::string_split(*first, ":", format_keys);
+
+                for (size_t i = 0; i < format_keys.size(); i++) {
+                    format_fields_indexes[format_keys[i]].push_back(i);
+                    if (format_fields_indexes[format_keys[i]].size() == 1) {
+                        ordered_fields.push_back(format_keys[i]);
+                    }
+                }
+
+                std::vector<std::vector<std::string>> samples;
+                for (auto it = first + 1; it != last; it++) {
+                    std::vector<std::string> sample_fields;
+                    util::string_split(*it, ":", sample_fields);
+                    samples.push_back(sample_fields);
+                }
+
+                std::set<std::string> fields_to_remove = get_format_fields_to_remove(format_fields_indexes, samples);
+
+                std::vector<std::string> fixed_format;
+                for (auto & ordered_field : ordered_fields) {
+                    if (fields_to_remove.find(ordered_field) == fields_to_remove.end()) {
+                        // keep first occurrence, discard the rest if present
+                        fixed_format.push_back(ordered_field);
+                    } else {
+                        num_removed_duplicates++;
+                    }
+                }
+
+                if (fixed_format.empty()) {
+                    throw std::runtime_error("Could not fix FORMAT duplicate fields: All fields had to be removed, but missing value is not permitted");
+                }
+                util::print_container(output, fixed_format, "", ":","");
+
+                for (auto sample : samples) {
+                    std::vector<std::string> fixed_sample;
+                    for (auto & ordered_field : ordered_fields) {
+                        if (fields_to_remove.find(ordered_field) == fields_to_remove.end()) {
+                            // keep first occurrence, discard the rest if present
+                            if (sample.size() > format_fields_indexes[ordered_field][0]) {
+                                fixed_sample.push_back(sample[format_fields_indexes[ordered_field][0]]);
+                            }
+                        }
+                    }
+                    output << "\t";
+                    if (fixed_sample.empty()) {
+                        output << MISSING_VALUE;         // all the sample fields were removed, so write missing value to output
+                    } else {
+                        util::print_container(output, fixed_sample, "", ":", "");
+                    }
+                }
+            });
+
+            return num_removed_duplicates;
+        }
+
+        std::set<std::string> Fixer::get_format_fields_to_remove(std::map<std::string, std::vector<size_t>> &format_fields_indexes,
+                                                                 std::vector<std::vector<std::string>> &samples)
+        {
+            std::set<std::string> fields_to_remove;
+
+            for (auto sample_it = samples.begin(); sample_it != samples.end(); sample_it++) {
+                for (auto & format_field : format_fields_indexes) {
+                    if (format_field.second.size() > 1) {
+                        for (auto & format_field_index : format_field.second) {
+                            if ((*sample_it).size() > format_field_index && (*sample_it)[format_field_index] != (*sample_it)[format_field.second[0]]) {
+                                fields_to_remove.insert(format_field.first);
+                                sample_it = samples.end() - 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return fields_to_remove;
+        }
+
         void Fixer::fix_format_gt(std::vector<std::string>::iterator first,
-                           std::vector<std::string>::iterator last,
-                           SamplesFieldBodyError &error)
+                                  std::vector<std::string>::iterator last,
+                                  SamplesFieldBodyError &error)
         {
             const std::string field_separator = ":";
             size_t gt_column_index = 0;
@@ -248,13 +417,13 @@ namespace ebi
         }
 
         void Fixer::remove_format(std::vector<std::string>::iterator first,
-                           std::vector<std::string>::iterator last,
-                           SamplesFieldBodyError &error)
+                                  std::vector<std::string>::iterator last,
+                                  SamplesFieldBodyError &error)
         {
             // remove from FORMAT column
             const std::string field_separator = ":";
             size_t field_index;
-            size_t removed = remove_column(*first, field_separator, [&](std::string &field, size_t index) {
+            size_t removed = remove_fields(*first, field_separator, [&](const std::string &field, size_t index) {
                 if (field == error.field) {
                     field_index = index;
                     return field == error.field;
@@ -273,7 +442,7 @@ namespace ebi
             // remove from the samples columns
             for (++first; first != last; ++first) {
                 output << "\t";
-                removed = remove_column(*first, field_separator, [&](std::string &field, size_t index) {
+                removed = remove_fields(*first, field_separator, [&](const std::string &field, size_t index) {
                     return index == field_index;
                 });
                 if (removed == 0) {
@@ -287,20 +456,20 @@ namespace ebi
             }
         }
 
-        size_t Fixer::remove_column(const std::string &line,
-                             const std::string &separator,
-                             std::function<bool(std::string &column, size_t index)> condition_to_remove)
+        size_t Fixer::remove_fields(const std::string &line,
+                                    const std::string &separators,
+                                    std::function<bool(const std::string &column, size_t index)> condition_to_remove)
         {
-            return remove_column(line, separator, "", condition_to_remove);
+            return remove_fields(line, separators, "", condition_to_remove);
         }
 
-        size_t Fixer::remove_column(const std::string &line,
-                             const std::string &separator,
-                             const std::string &empty_column,
-                             std::function<bool(std::string &column, size_t index)> condition_to_remove)
+        size_t Fixer::remove_fields(const std::string &line,
+                                    const std::string &separators,
+                                    const std::string &empty_column,
+                                    std::function<bool(const std::string &column, size_t index)> condition_to_remove)
         {
             std::vector<std::string> columns;
-            util::string_split(line, separator.c_str(), columns);
+            util::string_split(line, separators.c_str(), columns);
             size_t written = 0;
 
             if (columns.size() > 0) {
@@ -312,7 +481,7 @@ namespace ebi
                 for (j = 1; j < columns.size(); ++j) {
                     if (not condition_to_remove(columns[j], j)) {
                         if (written > 0) {
-                            output << separator;
+                            output << separators;
                         }
                         written++;
                         output << columns[j];
@@ -325,6 +494,30 @@ namespace ebi
             return columns.size() - written;
         }
 
+        size_t Fixer::replace_fields(const std::string &line,
+                                     const std::string &separators,
+                                     const std::string &expected_field,
+                                     std::function<bool(const std::string &column, size_t index)> condition_to_replace)
+        {
+            std::vector<std::string> columns;
+            util::string_split(line, separators.c_str(), columns);
+            size_t num_replaced_columns = 0;
+
+            for (size_t j = 0; j < columns.size(); ++j) {
+                if (condition_to_replace(columns[j], j)) {
+                    num_replaced_columns++;
+                    output << expected_field;
+                } else {
+                    output << columns[j];
+                }
+                if (j < columns.size() - 1) {
+                    output << separators;
+                }
+            }
+
+            return num_replaced_columns;
+        }
+
         size_t Fixer::split_and_find(const std::string &line, const std::string &separator, const std::string &value)
         {
             std::vector<std::string> columns;
@@ -334,12 +527,12 @@ namespace ebi
         }
 
         size_t Fixer::fix_column(size_t column_index,
-                        const std::string &line,
-                        const std::string &separator,
-                        std::function<void(std::string &column)> fix_function)
+                                 const std::string &line,
+                                 const std::string &separator,
+                                 std::function<void(std::string &column)> fix_function)
         {
             using iter = std::vector<std::string>::iterator;
-            return fix_columns(column_index, column_index +1, line, separator, [fix_function](iter first, iter last) {
+            return fix_columns(column_index, column_index + 1, line, separator, [fix_function](iter first, iter last) {
                 for (auto it = first; it != last; ++it) {
                     fix_function(*it);
                 }
@@ -347,10 +540,10 @@ namespace ebi
         }
 
         size_t Fixer::fix_foreach_column(size_t column_index,
-                        long column_index_last,
-                        const std::string &line,
-                        const std::string &separator,
-                        std::function<void(std::string &column)> fix_function)
+                                         long column_index_last,
+                                         const std::string &line,
+                                         const std::string &separator,
+                                         std::function<void(std::string &column)> fix_function)
         {
             using iter = std::vector<std::string>::iterator;
             return fix_columns(column_index, column_index_last, line, separator, [fix_function](iter first, iter last) {
@@ -359,11 +552,11 @@ namespace ebi
         }
 
         size_t Fixer::fix_columns(size_t column_index,
-                        long column_index_last,
-                        const std::string &line,
-                        const std::string &separator,
-                        std::function<void(std::vector<std::string>::iterator begin,
-                                           std::vector<std::string>::iterator end)> fix_function)
+                                  long column_index_last,
+                                  const std::string &line,
+                                  const std::string &separator,
+                                  std::function<void(std::vector<std::string>::iterator begin,
+                                                     std::vector<std::string>::iterator end)> fix_function)
         {
             std::vector<std::string> columns;
             util::string_split(line, separator.c_str(), columns);

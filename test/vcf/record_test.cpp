@@ -410,6 +410,154 @@ namespace ebi
 //                                source}),
 //                            vcf::SamplesFieldBodyError*);
         }
+
+        SECTION("Duplicate IDs")
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id123" },
+                                "A",
+                                { "AC", "AT" },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} },
+                                { vcf::GT, vcf::DP },
+                                { "0|1" },
+                                source}) );
+        }
+
+        SECTION("Duplicate FILTERs")
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { "q10", "q10" },
+                                { {vcf::AN, "12"} },
+                                { vcf::GT },
+                                { "0|1" },
+                                source}) );
+        }
+
+        SECTION("Duplicate INFOs")
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id456" },
+                                "A",
+                                { "T", "C" },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::AN, "12"}, {vcf::AN, "15"} },
+                                { vcf::DP },
+                                { "12" },
+                                source}) );
+        }
+
+        SECTION("Duplicate FORMATs")
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id456" },
+                                "A",
+                                { "T", "C" },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} },
+                                { vcf::DP, vcf::DP },
+                                { "12:13" },
+                                source}) );
+        }
+    }
+
+    TEST_CASE("Record constructor v42", "[constructor]")
+    {
+        std::shared_ptr<vcf::Source> source{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v42,
+                vcf::Ploidy{2, {{"Y", 1}}},
+                {},
+                { "Sample1" }}};
+
+        SECTION("Duplicate IDs")
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id123" },
+                                "A",
+                                { "AC", "AT" },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} },
+                                { vcf::GT, vcf::DP },
+                                { "0|1" },
+                                source}) );
+        }
+
+        SECTION("Duplicate FILTERs")
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { "q10", "q10" },
+                                { {vcf::AN, "12"} },
+                                { vcf::GT },
+                                { "0|1" },
+                                source}) );
+        }
+
+        SECTION("Duplicate INFOs")
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id456" },
+                                "A",
+                                { "T", "C" },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::AN, "12"}, {vcf::AN, "15"} },
+                                { vcf::DP },
+                                { "12" },
+                                source}) );
+        }
+
+        SECTION("Duplicate FORMATs")
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id456" },
+                                "A",
+                                { "T", "C" },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} },
+                                { vcf::DP, vcf::DP },
+                                { "12:13" },
+                                source}) );
+        }
     }
 
     TEST_CASE("Record constructor v43", "[constructor]")

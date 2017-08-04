@@ -18,6 +18,7 @@
 #define VCF_FIXER_HPP
 
 #include <vector>
+#include <set>
 #include <iostream>
 #include <algorithm>
 
@@ -46,6 +47,8 @@ namespace ebi
         std::ostream &output;
         size_t ignored_errors;
 
+        void ignore_error();
+
         virtual void visit(Error &error) override;
         virtual void visit(MetaSectionError &error) override;
         virtual void visit(HeaderSectionError &error) override;
@@ -54,13 +57,31 @@ namespace ebi
         virtual void visit(FileformatError &error) override;
         virtual void visit(ChromosomeBodyError &error) override;
         virtual void visit(PositionBodyError &error) override;
+
+        /**
+         * fix: 
+         * - remove duplicate IDs, keep the first one and remove consequent ones
+         */
         virtual void visit(IdBodyError &error) override;
         virtual void visit(ReferenceAlleleBodyError &error) override;
         virtual void visit(AlternateAllelesBodyError &error) override;
         virtual void visit(QualityBodyError &error) override;
-        virtual void visit(FilterBodyError &error) override;
+
         /**
-         * fix: remove the info field that caused the error
+         * fix:
+         * - if any FILTER string is 0, remove it
+         * - remove duplicate FILTER strings - keep the first and remove consequent ones
+         */
+        virtual void visit(FilterBodyError &error) override;
+
+        /**
+         * Fixes duplicates in INFO field.
+         *     - If even a single value differs, remove all the duplicate key fields
+         *     - Else if all the duplicate keys have the same value, keep only the first occurrence
+         *
+         * If the error is recoverable, i.e. it expected an exact value, then replace the error causing
+         * INFO field with the correct value. If the error is irrecoverable, remove the INFO field that
+         * caused the error
          */
         virtual void visit(InfoBodyError &error) override;
         virtual void visit(FormatBodyError &error) override;
@@ -93,7 +114,51 @@ namespace ebi
       protected:
 
         /**
-         * puts the genotype as missing. if the error.cardinality is know, it uses the proper ploidy
+         * removes any duplicate fields in a column
+         * @param the column string
+         * @param the separator used for splitting the column
+         * @return the number of duplicate fields removed
+         */
+        size_t remove_duplicate_strings(const std::string &column,
+                                        const std::string &separator);
+
+        /**
+         * removes any duplicate key value pairs from a column
+         * explanation of the fix:
+         * - remove all fields for a duplicate key if the corresponding values differ
+         * - else if all the values are the same for that key, keep one pair & remove the rest
+         * @param the column string
+         * @param the separator used for splitting the column
+         * @param the separator used to split the key value pair
+         * @param the empty value to be used if we end up removing all pairs
+         * @return the number of duplicate fields removed
+         */
+        size_t remove_duplicate_key_value_pairs(const std::string &column,
+                                                const std::string &separator,
+                                                const std::string &key_value_separator,
+                                                const std::string &empty_value);
+
+        /**
+         * removes duplicate FORMAT and samples
+         * explanation of the fix:
+         * - remove all FORMAT fields for which one or more of the samples contain duplicate values (within the sample field itself)
+         * - else if all the values match in a sample, and this happens for all the samples, keep the first occurrence in each sample and discard the rest
+         * @param the complete error string
+         * @return the number of duplicate format fields (with corresponding samples if present) removed
+         */
+        size_t remove_duplicate_format_sample_pairs(const std::string &string_line);
+
+        /*
+         * returns all the fields to remove from the FORMAT column and corresponding ones in sample columns, for duplicate values error
+         * @param map containing unique FORMAT fields with their indices in the FORMAT column
+         * @param a vector of sample columns, where each column is stored as a vector of split sample subfields
+         * @return a set of fields to remove
+         */
+        std::set<std::string> get_format_fields_to_remove(std::map<std::string, std::vector<size_t>> &format_fields_indexes,
+                                                          std::vector<std::vector<std::string>> &samples);
+
+        /**
+         * puts the genotype as missing. if the error.cardinality is known, it uses the proper ploidy
          * @param first iterator to the FORMAT column string
          * @param last iterator past the last sample column
          * @param error needed for the field (that must be "GT") the cardinality, and the line number
@@ -111,22 +176,34 @@ namespace ebi
                            std::vector<std::string>::iterator last,
                            SamplesFieldBodyError &error);
 
-        size_t remove_column(const std::string &line,
-                             const std::string &separator,
-                             std::function<bool(std::string &column, size_t index)> condition_to_remove);
+        size_t remove_fields(const std::string &line,
+                             const std::string &separators,
+                             std::function<bool(const std::string &column, size_t index)> condition_to_remove);
 
         /**
          * don't write to output the columns in `line` that satisfy the `condition_to_remove`
          * @param line: some of its columns will not be written into output
-         * @param separator to be used to split `line`
+         * @param separators to be used to split `line`
          * @param empty_column in case all the columns were remove, write an especial empty column
          * @param condition_to_remove return true if the column has to be removed. can decide using the column and its index
          * @return amount of columns removed
          */
-        size_t remove_column(const std::string &line,
-                             const std::string &separator,
+        size_t remove_fields(const std::string &line,
+                             const std::string &separators,
                              const std::string &empty_column,
-                             std::function<bool(std::string &column, size_t index)> condition_to_remove);
+                             std::function<bool(const std::string &column, size_t index)> condition_to_remove);
+
+        /**
+         * write to output the `expected_field` in place of the erroneous one
+         * @param line: its incorrect column will be replaced by the correct one
+         * @param separators to be used to split `line`
+         * @param expected_field to replace the incorrect one
+         * @param condition_to_replace return true if the column is to be replaced with the `expected_field`
+         */
+        size_t replace_fields(const std::string &line,
+                              const std::string &separators,
+                              const std::string &expected_field,
+                              std::function<bool(const std::string &column, size_t index)> condition_to_replace);
 
         /**
          * returns an index (NOT an iterator) to the column in `line` (split by `separator`) where `value` is found. Or `line.npos`
