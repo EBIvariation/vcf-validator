@@ -24,21 +24,20 @@ RUN cd /opt/libodb-sqlite-2.4.0 && ./configure --with-libodb=../libodb-2.4.0 && 
 RUN NPROCS=`grep processor </proc/cpuinfo | wc -l`
 
 # Copy present working directory to home directory of docker image
-COPY ${PWD} /home/vcf-validator/
+COPY ${PWD} /home/vcf-validator
 
 # Generate last version of parser sources from Ragel descriptors
 RUN cd /home/vcf-validator && for i in 1 2 3 ; do ragel -G2 -o inc/vcf/validator_detail_v4${i}.hpp src/vcf/vcf_v4${i}.ragel ; done
 
 # Create build directory
-RUN mkdir -p /tmp/build
+RUN mkdir -p /home/vcf-validator/build
 
 # Build a static binary
-RUN cd /tmp/build && cmake -DBUILD_STATIC=1 /home/vcf-validator
-RUN cd /tmp/build && make -j${NPROCS}
+RUN cd /home/vcf-validator/build && cmake -DBUILD_STATIC=1 /home/vcf-validator
+RUN cd /home/vcf-validator/build && make -j${NPROCS}
 
-# Copy the binaries to project folder
-RUN cp -r /tmp/build /home/vcf-validator/build
-RUN rm -r /tmp/build
+# Set environment variable PATH to include executables
+ENV PATH $PATH:/home/vcf-validator/build/bin
 
 # COPY ./docker/entrypoint_prod.sh /
 # CMD ["entrypoint_prod.sh"]
