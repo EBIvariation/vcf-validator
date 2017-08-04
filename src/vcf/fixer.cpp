@@ -319,7 +319,7 @@ namespace ebi
                     samples.push_back(sample_fields);
                 }
 
-                std::set<std::string> fields_to_remove = get_format_fields_to_remove(format_fields_indexes, first + 1, last, samples);
+                std::set<std::string> fields_to_remove = get_format_fields_to_remove(format_fields_indexes, samples);
 
                 std::vector<std::string> fixed_format;
                 for (auto & ordered_field : ordered_fields) {
@@ -359,8 +359,6 @@ namespace ebi
         }
 
         std::set<std::string> Fixer::get_format_fields_to_remove(std::map<std::string, std::vector<size_t>> &format_fields_indexes,
-                                                                 std::vector<std::string>::iterator first,
-                                                                 std::vector<std::string>::iterator last,
                                                                  std::vector<std::vector<std::string>> &samples)
         {
             std::set<std::string> fields_to_remove;
