@@ -26,7 +26,7 @@ RUN NPROCS=`grep processor </proc/cpuinfo | wc -l`
 # Set working directory for docker
 WORKDIR /home/vcf-validator
 
-# Copy present working directory to home directory of docker image
+# Copy project directory to container
 COPY ${PWD} .
 
 # Generate last version of parser sources from Ragel descriptors
@@ -42,5 +42,7 @@ RUN cd build && make -j${NPROCS}
 # Set environment variable PATH to include executables
 ENV PATH $PATH:/home/vcf-validator/build/bin
 
-# COPY ./docker/entrypoint_prod.sh /
-# CMD ["entrypoint_prod.sh"]
+# Set working directory to /tmp, for files outside the container
+WORKDIR /tmp
+
+# CMD ["/home/vcf_validator/docker/entrypoint_prod.sh"]
