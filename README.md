@@ -142,20 +142,17 @@ mv inc/vcf/error-odb.cpp src/vcf/error-odb.cpp
 
 Build the image: `docker build -t ebivariation/vcf-validator -f docker/Dockerfile.prod .`
 
-To run the validator inside the image, append the validator command to `docker run -v ${PWD}:/tmp -t ebivariation/vcf-validator`
-
+To run the validator inside the image, append the validator command to `docker run -v ${PWD}:/tmp ebivariation/vcf-validator`.  
 Validator example:
-`docker run -v ${PWD}:/tmp -t ebivariation/vcf-validator vcf_validator -i path/to/file.vcf`
+`docker run -v ${PWD}:/tmp ebivariation/vcf-validator vcf_validator -i path/to/file.vcf`
 
-For the debugulator, append the debugulator command to `docker run -v ${PWD}:/tmp -t ebivaraition/vcf-validator`. If you wish to generate the debugulator log file, use `1>` or `&>` for redirecting stdout (instead of redirecting stderr to the log file using `2>`).
-
+For the debugulator, append the debugulator command to `docker run -v ${PWD}:/tmp ebivaraition/vcf-validator`. If you wish to generate the debugulator log file, use `1>` or `&>` for redirecting stdout (instead of redirecting stderr to the log file using `2>`).  
 Debugulator example:
 ```
-docker run -v ${PWD}:/tmp -t ebivariation/vcf-validator vcf_validator -i path/to/file.vcf -r database -o path/to/write/report
-docker run -v ${PWD}:/tmp -t ebivariation/vcf-validator vcf_debugulator -i path/to/file.vcf -e path/to/write/report/vcf.errors.timestamp.db -o path/to/fixed.vcf 1>debugulator_log.txt
+docker run -v ${PWD}:/tmp ebivariation/vcf-validator vcf_validator -i path/to/file.vcf -r database -o path/to/write/report
+docker run -v ${PWD}:/tmp ebivariation/vcf-validator vcf_debugulator -i path/to/file.vcf -e path/to/write/report/vcf.errors.timestamp.db -o path/to/fixed.vcf 1>debugulator_log.txt
 ```
 
-For running tests on the validator and debugulator, append the command to `docker run -w /home/vcf-validator -t ebivariation/vcf-validator`
-
+For running tests on the validator and debugulator, append the command to `docker run -w /home/vcf-validator ebivariation/vcf-validator`.  
 Test suite example:
-`docker run -w /home/vcf-validator -t ebivariation/vcf-validator test_validator`
+`docker run -w /home/vcf-validator ebivariation/vcf-validator test_validator`
