@@ -59,8 +59,7 @@ namespace ebi
         virtual void visit(PositionBodyError &error) override;
 
         /**
-         * fix: 
-         * - remove duplicate IDs, keep the first one and remove consequent ones
+         * Fixes duplicates in ID field. The fix is to keep the first ID and remove consequent ones.
          */
         virtual void visit(IdBodyError &error) override;
         virtual void visit(ReferenceAlleleBodyError &error) override;
@@ -68,9 +67,8 @@ namespace ebi
         virtual void visit(QualityBodyError &error) override;
 
         /**
-         * fix:
-         * - if any FILTER string is 0, remove it
-         * - remove duplicate FILTER strings - keep the first and remove consequent ones
+         * Fixes duplicates in FILTER field and removes invalid field 0.
+         * The fix for duplicates is to keep the first FILTER and remove consequent ones.
          */
         virtual void visit(FilterBodyError &error) override;
 
@@ -88,21 +86,21 @@ namespace ebi
         virtual void visit(SamplesBodyError &error) override;
 
         /**
-         * explanation of the fix:
-         * - in error.get_field there will be the field name as it appears in the FORMAT column, e.g. "GT".
-         * - if error.field is empty, skip fix (copy the line as-is)
-         * - get the index in the FORMAT column of error.field, e.g. in GT:AC:AN, the index of AC is 1.
-         *      if the field is not found, skip fix (copy as-is)
-         * - for each sample column
-         *      - if the field is GT
-         *          - put a "missing value" instead of the value in the index-th position after splitting by ":".
-         *          - the "missing value" is a `.` repeated `n` times, where `n` is the cardinality of the field,
+         * Explanation of the fix:
+         * - In error.get_field there will be the field name as it appears in the FORMAT column, e.g. "GT".
+         * - If error.field is empty, skip fix (copy the line as-is)
+         * - Get the index in the FORMAT column of error.field, e.g. in GT:AC:AN, the index of AC is 1.
+         *      - If the field is not found, skip fix (copy as-is)
+         * - For each sample column
+         *      - If the field is GT
+         *          - Put a "missing value" instead of the value in the index-th position after splitting by ":".
+         *          - The "missing value" is a `.` repeated `n` times, where `n` is the cardinality of the field,
          *              with "/" as separators
-         *      - if the field is not GT
-         *          - remove it from the FORMAT and samples columns
-         * - if there were no sample columns, skip fix (copy as-is)
+         *      - If the field is not GT
+         *          - Remove it from the FORMAT and samples columns
+         * - If there were no sample columns, skip fix (copy as-is)
          *
-         * complete example:
+         * Complete example:
          * field "GT", FORMAT: "GT:AC:AN", sample: "0/0:3,5:4"; becomes "./.:3,5:4". (index = 0, cardinality = 2)
          * field "AC", FORMAT: "GT:AC:AN", sample: "0/0:3,5:4"; becomes "GT:AN   0/0:4". (index = 1)
          * @param error
@@ -114,7 +112,7 @@ namespace ebi
       protected:
 
         /**
-         * removes any duplicate fields in a column
+         * Removes any duplicate fields in a column.
          * @param the column string
          * @param the separator used for splitting the column
          * @return the number of duplicate fields removed
@@ -123,10 +121,10 @@ namespace ebi
                                         const std::string &separator);
 
         /**
-         * removes any duplicate key value pairs from a column
-         * explanation of the fix:
-         * - remove all fields for a duplicate key if the corresponding values differ
-         * - else if all the values are the same for that key, keep one pair & remove the rest
+         * Removes any duplicate key value pairs from a column.
+         * Explanation of the fix:
+         * - Remove all fields for a duplicate key if the corresponding values differ
+         * - Else if all the values are the same for that key, keep one pair & remove the rest
          * @param the column string
          * @param the separator used for splitting the column
          * @param the separator used to split the key value pair
@@ -139,17 +137,17 @@ namespace ebi
                                                 const std::string &empty_value);
 
         /**
-         * removes duplicate FORMAT and samples
-         * explanation of the fix:
-         * - remove all FORMAT fields for which one or more of the samples contain duplicate values (within the sample field itself)
-         * - else if all the values match in a sample, and this happens for all the samples, keep the first occurrence in each sample and discard the rest
+         * Removes duplicate FORMAT and samples.
+         * Explanation of the fix:
+         * - Remove all FORMAT fields for which one or more of the samples contain duplicate values (within the sample field itself)
+         * - Else if all the values match in a sample, and this happens for all the samples, keep the first occurrence in each sample and discard the rest
          * @param the complete error string
          * @return the number of duplicate format fields (with corresponding samples if present) removed
          */
         size_t remove_duplicate_format_sample_pairs(const std::string &string_line);
 
         /*
-         * returns all the fields to remove from the FORMAT column and corresponding ones in sample columns, for duplicate values error
+         * Returns all the fields to remove from the FORMAT column and corresponding ones in sample columns, for duplicate values error.
          * @param map containing unique FORMAT fields with their indices in the FORMAT column
          * @param a vector of sample columns, where each column is stored as a vector of split sample subfields
          * @return a set of fields to remove
@@ -158,7 +156,7 @@ namespace ebi
                                                           std::vector<std::vector<std::string>> &samples);
 
         /**
-         * puts the genotype as missing. if the error.cardinality is known, it uses the proper ploidy
+         * Puts the genotype as missing. If the error.cardinality is known, it uses the proper ploidy.
          * @param first iterator to the FORMAT column string
          * @param last iterator past the last sample column
          * @param error needed for the field (that must be "GT") the cardinality, and the line number
@@ -167,7 +165,7 @@ namespace ebi
                            std::vector<std::string>::iterator last,
                            SamplesFieldBodyError &error);
         /**
-         * remove a field from the FORMAT column and the samples columns
+         * Remove a field from the FORMAT column and the samples columns.
          * @param first iterator to the FORMAT column string
          * @param last iterator past the last sample column
          * @param error needed for the field the cardinality, and the line number
@@ -181,7 +179,7 @@ namespace ebi
                              std::function<bool(const std::string &column, size_t index)> condition_to_remove);
 
         /**
-         * don't write to output the columns in `line` that satisfy the `condition_to_remove`
+         * Don't write to output the columns in `line` that satisfy the `condition_to_remove`.
          * @param line: some of its columns will not be written into output
          * @param separators to be used to split `line`
          * @param empty_column in case all the columns were remove, write an especial empty column
@@ -194,7 +192,7 @@ namespace ebi
                              std::function<bool(const std::string &column, size_t index)> condition_to_remove);
 
         /**
-         * write to output the `expected_field` in place of the erroneous one
+         * Write to output the `expected_field` in place of the erroneous one.
          * @param line: its incorrect column will be replaced by the correct one
          * @param separators to be used to split `line`
          * @param expected_field to replace the incorrect one
@@ -206,7 +204,7 @@ namespace ebi
                               std::function<bool(const std::string &column, size_t index)> condition_to_replace);
 
         /**
-         * returns an index (NOT an iterator) to the column in `line` (split by `separator`) where `value` is found. Or `line.npos`
+         * Returns an index (NOT an iterator) to the column in `line` (split by `separator`) where `value` is found. Or `line.npos`
          * if value is not found.
          * @param line to be split
          * @param separator to use when splitting the line
@@ -216,7 +214,7 @@ namespace ebi
         size_t split_and_find(const std::string &line, const std::string &separator, const std::string &value);
 
         /**
-         * splits a line and allows to rewrite one of the columns, copying the other columns into "output"
+         * Splits a line and allows to rewrite one of the columns, copying the other columns into "output".
          * @param column_index: index to the column to modify
          * @param line: whole line that will be split
          * @param separator: will be used to split the line
@@ -230,10 +228,10 @@ namespace ebi
                         std::function<void(std::string &column)> fix_function);
 
         /**
-         * splits a line and allows to rewrite one of the columns, copying the other columns into "output"
+         * Splits a line and allows to rewrite one of the columns, copying the other columns into "output".
          * @param column_index: index to the column to modify
          * @param column_index_last: NON-INCLUSIVE index. points to the column after the last column to modify.
-         * to write all the remaining columns, pass -1
+         * To write all the remaining columns, pass -1.
          * @param line: whole line that will be split
          * @param separator: will be used to split the line
          * @param fix_function: takes a string, which is the column to fix. `fix_function` must write to the member
@@ -249,7 +247,7 @@ namespace ebi
                         std::function<void(std::string &column)> fix_function);
 
         /**
-         * splits a line and allows to rewrite one of the columns, copying the other columns into "output".
+         * Splits a line and allows to rewrite one of the columns, copying the other columns into "output".
          * If column_index* specify an empty range or a past-the-end range, a std::out_of_range is thrown without
          * writing anything.
          * @param column_index: index to the column to modify
