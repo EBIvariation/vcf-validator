@@ -103,19 +103,26 @@ namespace ebi
             check_sample(value);
         }
     }
+
+    inline void MetaEntryVisitor::check_key_is_present(std::string const & field, std::string const & key, int key_count) const
+    {
+        if (key_count == 0) {
+            throw new MetaSectionError{entry.line, field + " metadata does not contain a field called '" + key + "'"};
+        }
+    }
     
     void MetaEntryVisitor::check_alt(std::map<std::string, std::string> & value) const
     {
         // It must contain an ID and Description
-        if (value.count(ID) == 0) {
-            throw new MetaSectionError{entry.line, "ALT metadata does not contain a field called 'ID'"};
-        }
-        if (value.count(DESCRIPTION) == 0) {
-            throw new MetaSectionError{entry.line, "ALT metadata does not contain a field called 'Description'"};
-        }
-        
+        check_key_is_present(ALT, ID, value.count(ID));
+        check_key_is_present(ALT, DESCRIPTION, value.count(DESCRIPTION));
+
+        check_alt_id(value[ID]);
+    }
+
+    void MetaEntryVisitor::check_alt_id(std::string const & id_field) const
+    {
         // Check ID prefix is "DEL" | "INS" | "DUP" | "INV" | "CNV"
-        auto & id_field = value[ID];
         size_t pos = id_field.find(':');
         // If a colon was not found, check whole string
         // Otherwise, check substring before colon
@@ -128,63 +135,39 @@ namespace ebi
             throw new MetaSectionError{entry.line, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV"};
         }
     }
-    
+
     void MetaEntryVisitor::check_contig(std::map<std::string, std::string> & value) const
     {
-        // It must contain an ID and Description
-        if (value.count(ID) == 0) {
-            throw new MetaSectionError{entry.line, "contig metadata does not contain a field called 'ID'"};
-        }
+        // It must contain an ID
+        check_key_is_present(CONTIG, ID, value.count(ID));
     }
     
     void MetaEntryVisitor::check_filter(std::map<std::string, std::string> & value) const
     {
         // It must contain an ID and Description
-        if (value.count(ID) == 0) {
-            throw new MetaSectionError{entry.line, "FILTER metadata does not contain a field called 'ID'"};
-        }
-        if (value.count(DESCRIPTION) == 0) {
-            throw new MetaSectionError{entry.line, "FILTER metadata does not contain a field called 'Description'"};
-        }
-        if (value[ID] == "0") {
+        check_key_is_present(FILTER, ID, value.count(ID));
+        check_key_is_present(FILTER, DESCRIPTION, value.count(DESCRIPTION));
+
+        check_filter_id(value[ID]);
+    }
+
+    void MetaEntryVisitor::check_filter_id(std::string const & id_field) const
+    {
+        if (id_field == "0") {
             throw new MetaSectionError{entry.line, "FILTER metadata ID must not be 0"};
         }
     }
-    
+
     void MetaEntryVisitor::check_format(std::map<std::string, std::string> & value) const
     {
         // It must contain an ID, Number, Type and Description
-        if (value.count(ID) == 0) {
-            throw new MetaSectionError{entry.line, "FORMAT metadata does not contain a field called 'ID'"};
-        }
-        if (value.count(NUMBER) == 0) {
-            throw new MetaSectionError{entry.line, "FORMAT metadata does not contain a field called 'Number'"};
-        }
-        if (value.count(TYPE) == 0) {
-            throw new MetaSectionError{entry.line, "FORMAT metadata does not contain a field called 'Type'"};
-        }
-        if (value.count(DESCRIPTION) == 0) {
-            throw new MetaSectionError{entry.line, "FORMAT metadata does not contain a field called 'Description'"};
-        }
+        check_key_is_present(FORMAT, ID, value.count(ID));
+        check_key_is_present(FORMAT, NUMBER, value.count(NUMBER));
+        check_key_is_present(FORMAT, TYPE, value.count(TYPE));
+        check_key_is_present(FORMAT, DESCRIPTION, value.count(DESCRIPTION));
         
-        // Check FORMAT Number
-        auto & number_field = value[NUMBER];
-        if (find_if(number_field.begin(), number_field.end(), [](char c) { return !isdigit(c); }) != number_field.end() &&
-            number_field != A &&
-            number_field != R &&
-            number_field != G &&
-            number_field != UNKNOWN_CARDINALITY) {
-            throw new MetaSectionError{entry.line, "FORMAT metadata Number is not a number, A, R, G or dot"};
-        }
-
-        // Check FORMAT Type
-        auto & type_field = value[TYPE];
-        if (type_field != INTEGER &&
-            type_field != FLOAT &&
-            type_field != CHARACTER &&
-            type_field != STRING) {
-            throw new MetaSectionError{entry.line, "FORMAT metadata Type is not a Integer, Float, Character or String"};
-        }
+        check_format_info_number(value[NUMBER], FORMAT);
+        check_format_type(value[TYPE]);
 
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
             check_predefined_tag(FORMAT, NUMBER, value, format_v41_v42);
@@ -195,42 +178,38 @@ namespace ebi
         }
     }
 
-    void MetaEntryVisitor::check_info(std::map<std::string, std::string> & value) const
+    void MetaEntryVisitor::check_format_info_number(std::string const & number_field, std::string const & field) const
     {
-        // It must contain an ID, Number, Type and Description
-        if (value.count(ID) == 0) {
-            throw new MetaSectionError{entry.line, "INFO metadata does not contain a field called 'ID'"};
-        }
-        if (value.count(NUMBER) == 0) {
-            throw new MetaSectionError{entry.line, "INFO metadata does not contain a field called 'Number'"};
-        }
-        if (value.count(TYPE) == 0) {
-            throw new MetaSectionError{entry.line, "INFO metadata does not contain a field called 'Type'"};
-        }
-        if (value.count(DESCRIPTION) == 0) {
-            throw new MetaSectionError{entry.line, "INFO metadata does not contain a field called 'Description'"};
-        }
-        
-        // Check INFO Number
-        auto & number_field = value[NUMBER];
         if (find_if(number_field.begin(), number_field.end(), [](char c) { return !isdigit(c); }) != number_field.end() &&
             number_field != A &&
             number_field != R &&
             number_field != G &&
             number_field != UNKNOWN_CARDINALITY) {
-            throw new MetaSectionError{entry.line, "INFO metadata Number is not a number, A, R, G or dot"};
+            throw new MetaSectionError{entry.line, field + " metadata Number is not a number, A, R, G or dot"};
         }
+    }
 
-        // Check INFO Type
-        auto & type_field = value[TYPE];
+    void MetaEntryVisitor::check_format_type(std::string const & type_field) const
+    {
         if (type_field != INTEGER &&
             type_field != FLOAT &&
-            type_field != FLAG &&
             type_field != CHARACTER &&
             type_field != STRING) {
-            throw new MetaSectionError{entry.line, "INFO metadata Type is not a Integer, Float, Flag, Character or String"};
+            throw new MetaSectionError{entry.line, "FORMAT metadata Type is not a Integer, Float, Character or String"};
         }
-        
+    }
+
+    void MetaEntryVisitor::check_info(std::map<std::string, std::string> & value) const
+    {
+        // It must contain an ID, Number, Type and Description
+        check_key_is_present(INFO, ID, value.count(ID));
+        check_key_is_present(INFO, NUMBER, value.count(NUMBER));
+        check_key_is_present(INFO, TYPE, value.count(TYPE));
+        check_key_is_present(INFO, DESCRIPTION, value.count(DESCRIPTION));
+
+        check_format_info_number(value[NUMBER], INFO);
+        check_info_type(value[TYPE]);
+
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
             check_predefined_tag(INFO, NUMBER, value, info_v41_v42);
             check_predefined_tag(INFO, TYPE, value, info_v41_v42);
@@ -239,7 +218,18 @@ namespace ebi
             check_predefined_tag(INFO, TYPE, value, info_v43);
         }
     }
-    
+
+    void MetaEntryVisitor::check_info_type(std::string const & type_field) const
+    {
+        if (type_field != INTEGER &&
+            type_field != FLOAT &&
+            type_field != FLAG &&
+            type_field != CHARACTER &&
+            type_field != STRING) {
+            throw new MetaSectionError{entry.line, "INFO metadata Type is not a Integer, Float, Flag, Character or String"};
+        }
+    }
+
     void MetaEntryVisitor::check_predefined_tag(std::string const & tag_field, std::string const & meta_entry_property,
                                                 std::map<std::string, std::string> & meta_entry,
                                                 std::map<std::string, std::pair<std::string, std::string>> const & predefined_meta_entries) const
@@ -260,9 +250,7 @@ namespace ebi
     void MetaEntryVisitor::check_sample(std::map<std::string, std::string> & value) const
     {
         // It must contain an ID
-        if (value.count(ID) == 0) {
-            throw new MetaSectionError{entry.line, "SAMPLE metadata does not contain a field called 'ID'"};
-        }
+        check_key_is_present(SAMPLE, ID, value.count(ID));
     }
     
   }

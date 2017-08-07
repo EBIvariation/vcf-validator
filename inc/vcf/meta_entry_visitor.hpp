@@ -31,26 +31,32 @@ namespace ebi
     class MetaEntryVisitor : public boost::static_visitor<>
     {
         MetaEntry entry;
-        
+
     public:
         MetaEntryVisitor(MetaEntry const & entry);
-       
+
         void operator()(std::string & value) const;
         void operator()(std::map<std::string, std::string> & value) const;
 
     private:
-        
+
+        void check_key_is_present(std::string const & field, std::string const & key, int key_count) const;
         void check_alt(std::map<std::string, std::string> & value) const;
+        void check_alt_id(std::string const & id_field) const;
         void check_contig(std::map<std::string, std::string> & value) const;
         void check_filter(std::map<std::string, std::string> & value) const;
+        void check_filter_id(std::string const & id_field) const;
         void check_format(std::map<std::string, std::string> & value) const;
+        void check_format_info_number(std::string const & number_field, std::string const & field) const;
+        void check_format_type(std::string const & type_field) const;
         void check_info(std::map<std::string, std::string> & value) const;
+        void check_info_type(std::string const & type_field) const;
         void check_predefined_tag(std::string const & tag_field, std::string const & meta_entry_property,
                                   std::map<std::string, std::string> & meta_entry,
                                   std::map<std::string, std::pair<std::string, std::string>> const & predefined_meta_entries) const;
         void check_sample(std::map<std::string, std::string> & value) const;
     };
-   
+
   }
 }
 
