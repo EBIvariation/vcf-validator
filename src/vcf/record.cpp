@@ -629,7 +629,7 @@ namespace ebi
         }
 
         if (!number_matches) {
-            raise(std::make_shared<Error>(line, " specification Number=" + number + " (contains " + std::to_string(values.size()) + " values, expected " + std::to_string(expected) + ")"));
+            raise(std::make_shared<Error>(line, " specification Number=" + number + " (contains " + std::to_string(values.size()) + " value(s), expected " + std::to_string(expected) + ")"));
         }
     }
 
