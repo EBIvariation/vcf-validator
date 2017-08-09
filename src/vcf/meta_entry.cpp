@@ -107,7 +107,7 @@ namespace ebi
     inline void MetaEntryVisitor::check_key_is_present(std::string const & field, std::string const & key, int key_count) const
     {
         if (key_count == 0) {
-            throw new MetaSectionError{entry.line, field + " metadata does not contain a field called '" + key + "'"};
+            throw new MetaSectionError{entry.line, field + " metadata does not contain a key called '" + key + "'"};
         }
     }
     
@@ -166,7 +166,7 @@ namespace ebi
         check_key_is_present(FORMAT, TYPE, value.count(TYPE));
         check_key_is_present(FORMAT, DESCRIPTION, value.count(DESCRIPTION));
         
-        check_format_info_number(value[NUMBER], FORMAT);
+        check_format_or_info_number(value[NUMBER], FORMAT);
         check_format_type(value[TYPE]);
 
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
@@ -178,7 +178,7 @@ namespace ebi
         }
     }
 
-    void MetaEntryVisitor::check_format_info_number(std::string const & number_field, std::string const & field) const
+    void MetaEntryVisitor::check_format_or_info_number(std::string const & number_field, std::string const & field) const
     {
         if (find_if(number_field.begin(), number_field.end(), [](char c) { return !isdigit(c); }) != number_field.end() &&
             number_field != A &&
@@ -207,7 +207,7 @@ namespace ebi
         check_key_is_present(INFO, TYPE, value.count(TYPE));
         check_key_is_present(INFO, DESCRIPTION, value.count(DESCRIPTION));
 
-        check_format_info_number(value[NUMBER], INFO);
+        check_format_or_info_number(value[NUMBER], INFO);
         check_info_type(value[TYPE]);
 
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {

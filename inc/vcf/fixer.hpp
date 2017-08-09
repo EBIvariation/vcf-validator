@@ -59,7 +59,7 @@ namespace ebi
         virtual void visit(PositionBodyError &error) override;
 
         /**
-         * Fixes duplicates in ID field. The fix is to keep the first ID and remove consequent ones.
+         * Fixes duplicates in ID field. The fix is to keep the first ID and remove subsequent ones.
          */
         virtual void visit(IdBodyError &error) override;
         virtual void visit(ReferenceAlleleBodyError &error) override;
@@ -68,7 +68,7 @@ namespace ebi
 
         /**
          * Fixes duplicates in FILTER field and removes invalid field 0.
-         * The fix for duplicates is to keep the first FILTER and remove consequent ones.
+         * The fix for duplicates is to keep the first FILTER and remove subsequent ones.
          */
         virtual void visit(FilterBodyError &error) override;
 
