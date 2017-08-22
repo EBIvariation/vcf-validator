@@ -183,8 +183,8 @@
     info_value      = (print - (space | ";"))+ ;
     info_value_list = info_value ("," info_value)* ;
     info_entry      = (
-                        info_key $err(info_key_error) | 
-                        info_key $err(info_key_error) "=" info_value_list $err(info_value_error)
+                        info_key $err(info_key_error) "=" info_value_list $err(info_value_error) |
+                        info_key $err(info_key_error)
                       ) >token_begin $token_middle %token_end ;
     record_info     = ( info_entry (";" info_entry)* ) | 
                       ( "." >token_begin @token_middle %token_end ) ;
