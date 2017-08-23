@@ -64,102 +64,102 @@
 
     ## A contig must be a sequence name allowed by the SAM format ( regex [!-)+-<>-~][!-~]* ) excluding the characters <>[]:*
     ## A chromosome must be a string with no white-spaces or colons, and may be surronded by < > symbols (for contigs)
-    meta_contig_char= alnum | ( punct - (":" | "<" | ">" | "[" | "]" | "*" | "=" | "," ) ) ;
-    chrom_basic     = (meta_contig_char - "#") (meta_contig_char)* ;
-    chrom_contig    = "<" chrom_basic ">" ;
+    meta_contig_char= alnum | ( punct - (':' | '<' | '>' | '[' | ']' | '*' | '=' | ',' ) ) ;
+    chrom_basic     = (meta_contig_char - '#') (meta_contig_char)* ;
+    chrom_contig    = '<' chrom_basic '>' ;
     chromosome      = chrom_basic | chrom_contig ;
 
     # File format line
-    fileformat_name = "VCFv4.3" >token_begin $token_middle %fileformat_end $err(fileformat_error) ;
-    fileformat      = "##fileformat=" fileformat_name ;
+    fileformat_name = 'VCFv4.3' >token_begin $token_middle %fileformat_end $err(fileformat_error) ;
+    fileformat      = '##fileformat=' fileformat_name ;
 
     # Meta-data
-    meta_typeid     = ( ( print - "=" )+ - ("ALT" | "FILTER" | "FORMAT" | "INFO" | "assembly" | "contig" | "META" | "SAMPLE" | "PEDIGREE" | "pedigreeDB") ) >token_begin @token_middle %meta_typeid_generic ;
-    meta_key        = ( (alnum | "." | "_" | "-" )+ - (punct)+ ) >token_begin @token_middle %meta_key_generic;
+    meta_typeid     = ( ( print - '=' )+ - ('ALT' | 'FILTER' | 'FORMAT' | 'INFO' | 'assembly' | 'contig' | 'META' | 'SAMPLE' | 'PEDIGREE' | 'pedigreeDB') ) >token_begin @token_middle %meta_typeid_generic ;
+    meta_key        = ( (alnum | '.' | '_' | '-' )+ - (punct)+ ) >token_begin @token_middle %meta_key_generic;
     
     ## A value can be expressed in multiple ways:
     ## - The line is a single key-value pair (meta_value): the value cannot start with an angle bracket, quote or linebreak, but it is free text thereafter
     ## - One of multiple key-value pairs, non-quoted (meta_field_value): the value cannot contain a comma -end of field-, or a closing angle bracket -end of entry-, or quote
     ## - One of multiple key-value pairs, quoted (meta_field_desc): the value can contain any character except for non-escaped quotes
-    meta_value      = ((print - ("<" | "\"" | NL)) (print)*)	>token_begin $token_middle %token_end ;
-    meta_field_value= (print - ("," | ">" | "\""))+		>token_begin $token_middle %token_end ;
-    meta_field_desc = (("\\" print) | (print - "\""))*		>token_begin $token_middle %token_end ;
+    meta_value      = ((print - ('<' | '"' | NL)) (print)*)	>token_begin $token_middle %token_end ;
+    meta_field_value= (print - (',' | '>' | '"'))+		>token_begin $token_middle %token_end ;
+    meta_field_desc = (('\\' print) | (print - '"'))*		>token_begin $token_middle %token_end ;
     
-    meta_values     = ("\"" meta_field_desc "\"") | meta_field_value ;
-    meta_field      = meta_key "=" meta_values ;
+    meta_values     = ('"' meta_field_desc '"') | meta_field_value ;
+    meta_field      = meta_key '=' meta_values ;
     
-    meta_field_num  = ( (digit)+ | "A" | "R" | "G" | "." ) >token_begin @token_middle %token_end ;
+    meta_field_num  = ( (digit)+ | 'A' | 'R' | 'G' | '.' ) >token_begin @token_middle %token_end ;
     meta_field_type = (alpha)+ >token_begin @token_middle %token_end ;
     
-    meta_alt        = "ID=" %meta_id alt_id >token_begin @token_middle %token_end $err(meta_alt_id_err)
-                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
-                        ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
+    meta_alt        = 'ID=' %meta_id alt_id >token_begin @token_middle %token_end $err(meta_alt_id_err)
+                        ',Description=' %meta_description '"' meta_field_desc '"' $err(meta_desc_err)
+                        (',' identifier $err(meta_id_err) '="' meta_field_desc '"' $err(meta_desc_err))* ;
 
     meta_assembly   = url $err(meta_url_err) ;
     
-    meta_contig     = "ID=" %meta_id chrom_basic >token_begin $token_middle %token_end $err(meta_id_err) 
-                        ("," identifier "=" meta_values)* ;
+    meta_contig     = 'ID=' %meta_id chrom_basic >token_begin $token_middle %token_end $err(meta_id_err)
+                        (',' identifier '=' meta_values)* ;
                         
-    meta_filter     = "ID=" %meta_id identifier $err(meta_id_err)
-                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
-                        ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
+    meta_filter     = 'ID=' %meta_id identifier $err(meta_id_err)
+                        ',Description=' %meta_description '"' meta_field_desc '"' $err(meta_desc_err)
+                        (',' identifier $err(meta_id_err) '="' meta_field_desc '"' $err(meta_desc_err))* ;
     
-    meta_format     = "ID=" %meta_id identifier $err(meta_id_err)
-                        ",Number=" %meta_number meta_field_num $err(meta_format_number_err) 
-                        ",Type=" %meta_type meta_field_type $err(meta_info_type_err)
-                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
-                        ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
+    meta_format     = 'ID=' %meta_id identifier $err(meta_id_err)
+                        ',Number=' %meta_number meta_field_num $err(meta_format_number_err)
+                        ',Type=' %meta_type meta_field_type $err(meta_info_type_err)
+                        ',Description=' %meta_description '"' meta_field_desc '"' $err(meta_desc_err)
+                        (',' identifier $err(meta_id_err) '="' meta_field_desc '"' $err(meta_desc_err))* ;
 
-    meta_info       = "ID=" %meta_id identifier $err(meta_id_err) 
-                        ",Number=" %meta_number meta_field_num $err(meta_info_number_err)  
-                        ",Type=" %meta_type meta_field_type $err(meta_info_type_err)
-                        ",Description=" %meta_description "\"" meta_field_desc "\"" $err(meta_desc_err)
-                        ("," identifier $err(meta_id_err) "=\"" meta_field_desc "\"" $err(meta_desc_err))* ;
+    meta_info       = 'ID=' %meta_id identifier $err(meta_id_err)
+                        ',Number=' %meta_number meta_field_num $err(meta_info_number_err)
+                        ',Type=' %meta_type meta_field_type $err(meta_info_type_err)
+                        ',Description=' %meta_description '"' meta_field_desc '"' $err(meta_desc_err)
+                        (',' identifier $err(meta_id_err) '="' meta_field_desc '"' $err(meta_desc_err))* ;
 
     ## 3 different ways to define a PEDIGREE tag now:
     ## ID=TumourSample,Original=GermlineID
     ## ID=ChildID,Father=FatherID,Mother=MotherID
     ## ID=SampleID,Name_1=Ancestor_1,...,Name_N=Ancestor_N
-    meta_pedigree_name = ("Name_" (digit)+) >token_begin $token_middle %token_end;
-    meta_pedigree   = "ID=" %meta_id identifier $err(meta_id_err)
+    meta_pedigree_name = ('Name_' (digit)+) >token_begin $token_middle %token_end;
+    meta_pedigree   = 'ID=' %meta_id identifier $err(meta_id_err)
                       (
-                        ( ",Original=" %meta_original identifier $err(meta_pedigree_original_err) )	|
-                        ( ",Father=" %meta_father identifier $err(meta_pedigree_parents_err) 
-                          ",Mother=" %meta_mother identifier $err(meta_pedigree_parents_err) )		|
-                        ("," meta_pedigree_name $err(meta_pedigree_names_err) "=" identifier $err(meta_pedigree_names_err))+ 
+                        ( ',Original=' %meta_original identifier $err(meta_pedigree_original_err) )	|
+                        ( ',Father=' %meta_father identifier $err(meta_pedigree_parents_err)
+                          ',Mother=' %meta_mother identifier $err(meta_pedigree_parents_err) )		|
+                        (',' meta_pedigree_name $err(meta_pedigree_names_err) '=' identifier $err(meta_pedigree_names_err))+
                       ) ;
                       
     
     meta_pedigreeDB = url $err(meta_url_err) ;
     
     ## META values don't seem to have any particular restrictions so just applying those critical for parsing
-    meta_meta_value   = (print - ("," | "<" | ">" | space))+ ;
-    meta_meta_values  = (meta_meta_value ("," (space)? meta_meta_value)*) >token_begin $token_middle %token_end ;
-    meta_meta       = "ID=" %meta_id identifier $err(meta_id_err)
-                        ",Number=" %meta_number "." $err(meta_meta_number_err) 
-                        ",Type=" %meta_type "String" $err(meta_meta_type_err)
-                        ",Values=" %meta_values "[" meta_meta_values "]" $err(meta_meta_values_err) ;
+    meta_meta_value   = (print - (',' | '<' | '>' | space))+ ;
+    meta_meta_values  = (meta_meta_value (',' (space)? meta_meta_value)*) >token_begin $token_middle %token_end ;
+    meta_meta       = 'ID=' %meta_id identifier $err(meta_id_err)
+                        ',Number=' %meta_number '.' $err(meta_meta_number_err)
+                        ',Type=' %meta_type 'String' $err(meta_meta_type_err)
+                        ',Values=' %meta_values '[' meta_meta_values ']' $err(meta_meta_values_err) ;
                         
     ## Multiple ways to describe a sample now
-    meta_sample     = "ID=" %meta_id identifier $err(meta_id_err)
-                        ("," identifier "=" meta_values)* ;
+    meta_sample     = 'ID=' %meta_id identifier $err(meta_id_err)
+                        (',' identifier '=' meta_values)* ;
 
-    meta_entry      = "##" ( 
-                       ("ALT"		%meta_typeid_alt 	"=<" meta_alt ">" )		$err(meta_alt_err) | 
-                       ("FILTER"	%meta_typeid_filter	"=<" meta_filter ">" )		$err(meta_filter_err) | 
-                       ("FORMAT"	%meta_typeid_format	"=<" meta_format ">" )		$err(meta_format_err) |
-                       ("INFO"		%meta_typeid_info	"=<" meta_info ">" )		$err(meta_info_err) | 
-                       ("assembly"	%meta_typeid_assembly	"=" meta_assembly )		$err(meta_assembly_err) |
-                       ("contig"	%meta_typeid_contig	"=<" meta_contig ">" )		$err(meta_contig_err) |
-                       ("META"  	%meta_typeid_meta	"=<" meta_meta ">" )		$err(meta_meta_err) |
-                       ("SAMPLE"	%meta_typeid_sample	"=<" meta_sample ">" )		$err(meta_sample_err) |
-                       ("PEDIGREE"	%meta_typeid_pedigree	"=<" meta_pedigree ">" )	$err(meta_pedigree_err) |
-                       ("pedigreeDB"	%meta_typeid_pedigreedb	"=<" meta_pedigreeDB ">" )	$err(meta_pedigreedb_err) |
-                       (meta_typeid "=" 
+    meta_entry      = '##' (
+                       ('ALT'		%meta_typeid_alt 	'=<' meta_alt '>' )		$err(meta_alt_err) |
+                       ('FILTER'	%meta_typeid_filter	'=<' meta_filter '>' )		$err(meta_filter_err) |
+                       ('FORMAT'	%meta_typeid_format	'=<' meta_format '>' )		$err(meta_format_err) |
+                       ('INFO'		%meta_typeid_info	'=<' meta_info '>' )		$err(meta_info_err) |
+                       ('assembly'	%meta_typeid_assembly	'=' meta_assembly )		$err(meta_assembly_err) |
+                       ('contig'	%meta_typeid_contig	'=<' meta_contig '>' )		$err(meta_contig_err) |
+                       ('META'  	%meta_typeid_meta	'=<' meta_meta '>' )		$err(meta_meta_err) |
+                       ('SAMPLE'	%meta_typeid_sample	'=<' meta_sample '>' )		$err(meta_sample_err) |
+                       ('PEDIGREE'	%meta_typeid_pedigree	'=<' meta_pedigree '>' )	$err(meta_pedigree_err) |
+                       ('pedigreeDB'	%meta_typeid_pedigreedb	'=<' meta_pedigreeDB '>' )	$err(meta_pedigreedb_err) |
+                       (meta_typeid '='
                          (
-                           ("<" meta_field ("," meta_field)* ">") | 
-                           ("\"" meta_field_desc "\"") |
-                           ("<\"" meta_field_desc "\">") |
+                           ('<' meta_field (',' meta_field)* '>') |
+                           ('"' meta_field_desc '"') |
+                           ('<"' meta_field_desc '">') |
                            meta_value
                          )
                        )
@@ -167,61 +167,61 @@
 
     # Header between meta and records
     sample_name     = (print - (NL | CS))+ >token_begin @token_middle %sample_name_end;
-    header          = ("#CHROM" CS "POS" CS "ID" CS "REF" CS "ALT" CS "QUAL" CS "FILTER" CS "INFO" )
+    header          = ('#CHROM' CS 'POS' CS 'ID' CS 'REF' CS 'ALT' CS 'QUAL' CS 'FILTER' CS 'INFO' )
                            $eof(no_newline_at_eof_error) $err(header_prefix_err)
-                      (CS "FORMAT" (CS sample_name)+ )? $eof(no_newline_at_eof_error) %header_end ;
+                      (CS 'FORMAT' (CS sample_name)+ )? $eof(no_newline_at_eof_error) %header_end ;
 
     # Records
     position        = nat_number ;
     
     record_chrom    = chrom_basic >token_begin $token_middle %token_end |
-                      "<" chrom_basic >token_begin $token_middle %token_end ">" ;
+                      '<' chrom_basic >token_begin $token_middle %token_end '>' ;
     
     record_position = position >token_begin @token_middle %token_end ;
 
     ## ID must be a (list of) string with no white-spaces or semi-colons
-    record_id       = (record_id_value (";" record_id_value)*) | record_empty_field ;
+    record_id       = (record_id_value (';' record_id_value)*) | record_empty_field ;
 
     record_ref      = bases >token_begin @token_middle %token_end ;
     
     ## Structural variants follow forms like:
     ## ]1:1234]ATG or ]<contig_1>:1234]ATG : paired breakends
     ## .AGT, AGT.: single breakends
-    record_alt_sv   = "]" chromosome ":" position "]" bases |
-                      "[" chromosome ":" position "[" bases |
-                      bases "]" chromosome ":" position "]" |
-                      bases "[" chromosome ":" position "[" | 
-                      "." bases | 
-                      bases "." ;
+    record_alt_sv   = ']' chromosome ':' position ']' bases |
+                      '[' chromosome ':' position '[' bases |
+                      bases ']' chromosome ':' position ']' |
+                      bases '[' chromosome ':' position '[' |
+                      '.' bases |
+                      bases '.' ;
     
     ## Main alternate allele rule
     record_alt_data = ( record_alt_snv |
                         record_alt_indel |
                         record_alt_sv |
                         record_alt_other ) >token_begin $token_middle %token_end ;
-    record_alt      = (record_alt_data ("," record_alt_data)*) | record_empty_field ;
+    record_alt      = (record_alt_data (',' record_alt_data)*) | record_empty_field ;
                       
-    record_qual     = (any_number | ".") >token_begin $token_middle %token_end ;
+    record_qual     = (any_number | '.') >token_begin $token_middle %token_end ;
 
-    record_filter   = (record_fil_value (";" record_fil_value)*) | record_empty_field ;
+    record_filter   = (record_fil_value (';' record_fil_value)*) | record_empty_field ;
 
-    info_key        = (( (alpha | "_") (alpha | digit | "_" | ".")*) | "1000G" ) ;
-    info_value      = (print - ";")+ ;
-    info_value_list = info_value ("," info_value)* ;
+    info_key        = (( (alpha | '_') (alpha | digit | '_' | '.')*) | '1000G' ) ;
+    info_value      = (print - ';')+ ;
+    info_value_list = info_value (',' info_value)* ;
     info_entry      = (
-                        info_key $err(info_key_error) | 
-                        info_key $err(info_key_error) "=" info_value_list $err(info_value_error)
+                        info_key $err(info_key_error) '=' info_value_list $err(info_value_error) |
+                        info_key $err(info_key_error)
                       ) >token_begin $token_middle %token_end ;
-    record_info     = ( info_entry (";" info_entry)* ) | 
-                      ( "." >token_begin @token_middle %token_end ) ;
+    record_info     = ( info_entry (';' info_entry)* ) |
+                      ( '.' >token_begin @token_middle %token_end ) ;
 
     ## Accepting non-alphanumeric characters is an addition in v4.3, but widely used in already existing files
-    format_value    = ( (alpha | "_") (alnum | "_" | "." | "%")* ) >token_begin $token_middle %token_end ;
-    record_format   = format_value (":" format_value)* ;
+    format_value    = ( (alpha | '_') (alnum | '_' | '.' | '%')* ) >token_begin $token_middle %token_end ;
+    record_format   = format_value (':' format_value)* ;
     
     ## In a sample, if a genotype is present it must be the first field
     record_sample   = (
-                        genotype $eof(no_newline_at_eof_error) $err(genotype_error) (":" sample_values)? |
+                        genotype $eof(no_newline_at_eof_error) $err(genotype_error) (':' sample_values)? |
                         sample_values
                       ) >token_begin $token_middle %token_end ;
     
