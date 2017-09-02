@@ -61,7 +61,7 @@ vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timesta
 
 The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create an executable that can be run in any Linux machine.
 
-**Note:** If you are a Windows/OS-X user, you may follow a different set of steps for building a static docker based binary. After completing steps 1, 2.1 and 2.2 given below, head over to section [Alternative way to build (for Windows and Mac OS-X)](https://github.com/Anishka0107/vcf-validator/tree/docker_extend#alternative-way-to-build-for-windows-and-mac-os-x).
+**Note:** If you are an OS-X user, you may follow a different set of steps for building a static docker based binary. After completing steps 1, 2.1 and 2.2 given below, head over to section [Alternative way to build (for Mac OS-X)](https://github.com/Anishka0107/vcf-validator/tree/docker_extend#alternative-way-to-build-for-mac-os-x).
 
 1. Install and configure Docker following [their tutorial](https://docs.docker.com/engine/getstarted/).
 2. Create the Docker image:
@@ -138,9 +138,9 @@ odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schem
 mv inc/vcf/error-odb.cpp src/vcf/error-odb.cpp
 ```
 
-## Alternative way to build (for Windows and Mac OS-X)
+## Alternative way to build (for Mac OS-X)
 
-Build the image: `docker build -t ebivariation/vcf-validator -f docker/Dockerfile.prod .`
+Build the image: `docker build -t ebivariation/vcf-validator docker_mac`
 
 To run the validator inside the image, append the validator command to `docker run -v ${PWD}:/tmp ebivariation/vcf-validator`.  
 Validator example:

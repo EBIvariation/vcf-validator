@@ -1,0 +1,9 @@
+.git
+.gitignore
+.dockerignore
+.travis.yml
+build
+docker*
+README.md
+LICENSE*
+install_dependencies.sh

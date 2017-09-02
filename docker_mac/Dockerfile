@@ -30,7 +30,7 @@ WORKDIR /home/vcf-validator
 COPY ${PWD} .
 
 # Generate last version of parser sources from Ragel descriptors
-RUN for i in 1 2 3 ; do ragel -G2 -o inc/vcf/validator_detail_v4${i}.hpp src/vcf/vcf_v4${i}.ragel ; done
+RUN for i in 1 2 3 ; do ragel -G2 -o /home/vcf-validator/inc/vcf/validator_detail_v4${i}.hpp /home/vcf-validator/src/vcf/vcf_v4${i}.ragel ; done
 
 # Create build directory
 RUN mkdir -p build
@@ -45,4 +45,4 @@ ENV PATH $PATH:/home/vcf-validator/build/bin
 # Set working directory to /tmp, for files outside the container
 WORKDIR /tmp
 
-# CMD ["/home/vcf_validator/docker/entrypoint_prod.sh"]
+# CMD ["/home/vcf_validator/docker_mac/entrypoint.sh"]
