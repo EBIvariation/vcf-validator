@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-
+#include "util/logger.hpp"
 #include "vcf/odb_report.hpp"
 
 namespace ebi
@@ -63,7 +63,7 @@ namespace ebi
         try {
             flush();
         } catch (std::exception &e) {
-            std::cerr << "An error occurred finalizing the error reporting: " << e.what() << std::endl;
+            util::logger_info("An error occurred finalizing the error reporting: " + std::string(e.what()));
         }
     }
 

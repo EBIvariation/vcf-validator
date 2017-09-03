@@ -19,6 +19,7 @@
 
 #include "catch/catch.hpp"
 
+#include "util/string_utils.hpp"
 #include "vcf/odb_report.hpp"
 #include "vcf/debugulator.hpp"
 #include "vcf/string_constants.hpp"

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include "util/logger.hpp"
 #include "vcf/debugulator.hpp"
 
 namespace ebi
@@ -23,8 +24,8 @@ namespace ebi
     namespace debugulator
     {
       size_t fix_vcf_file(std::istream &input,
-                        ebi::vcf::ReportReader &errorDAO,
-                        std::ostream &output)
+                          ebi::vcf::ReportReader &errorDAO,
+                          std::ostream &output)
       {
           std::vector<char> line;
           line.reserve(default_line_buffer_size);
@@ -34,7 +35,7 @@ namespace ebi
           size_t errors = errorDAO.count_errors();
           size_t errors_fixed = 0;
           if (errors == 0) {
-              std::cerr << "The errors report was empty, there are no errors to fix the input" << std::endl;
+              ebi::util::logger_info("The errors report was empty, there are no errors to fix the input");
               return 0;
           }
 
@@ -69,7 +70,8 @@ namespace ebi
 
           size_t ignored_errors = fixer.get_ignored_errors();
           if (ignored_errors != 0) {
-              std::cerr << "There were " << ignored_errors << " errors that couldn't be automatically fixed" << std::endl;
+              ebi::util::logger_info("There were " + std::to_string(ignored_errors)
+                                         + " errors that couldn't be automatically fixed");
           }
 
           return ignored_errors;

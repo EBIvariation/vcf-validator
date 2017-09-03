@@ -26,6 +26,7 @@
 #include <boost/program_options.hpp>
 #include <boost/filesystem/operations.hpp>
 
+#include "util/logger.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
 #include "vcf/ploidy.hpp"
@@ -64,13 +65,13 @@ namespace
         std::string level = vm[ebi::vcf::LEVEL].as<std::string>();
         if (level != ebi::vcf::ERROR && level != ebi::vcf::WARNING && level != ebi::vcf::STOP) {
             std::cout << desc << std::endl;
-            std::cout << "Please choose one of the accepted validation levels" << std::endl;
+            ebi::util::logger_error("Please choose one of the accepted validation levels");
             return 1;
         }
 
         long ploidy = vm[ebi::vcf::PLOIDY].as<long>();
         if (ploidy <= 0) {
-            std::cout << "Ploidy must be greater that 0" << std::endl;
+            ebi::util::logger_error("Ploidy must be greater that 0");
             return 1;
         }
 
@@ -153,7 +154,7 @@ namespace
         std::sort(outs.begin(), outs.end());
         std::unique(outs.begin(), outs.end());
         if (initial_size != outs.size()) {
-            std::cerr << "Warning, duplicated outputs! will write just once to each output specified by -r/--report" << std::endl;
+            ebi::util::logger_warning("Duplicated outputs! will write just once to each output specified by -r/--report");
         }
 
         std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
@@ -202,10 +203,10 @@ int main(int argc, char** argv)
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
         if (path == ebi::vcf::STDIN) {
-            std::cout << "Reading from standard input..." << std::endl;
+            ebi::util::logger_info("Reading from standard input...");
             is_valid = ebi::vcf::is_valid_vcf_file(std::cin, path, validationLevel, ploidy, outputs);
         } else {
-            std::cout << "Reading from input file..." << std::endl;
+            ebi::util::logger_info("Reading from input file...");
             std::ifstream input{path};
             if (!input) {
                 throw std::runtime_error{"Couldn't open file " + path};
@@ -214,18 +215,17 @@ int main(int argc, char** argv)
             }
         }
 
-        std::cout << "According to the VCF specification, the input file is "
-                  << (is_valid ? "valid" : "not valid") << std::endl;
+        ebi::util::logger_info("According to the VCF specification, the input file is " + std::string(is_valid ? "" : "not ") + "valid");
         return !is_valid; // A valid file returns an exit code 0
         
     } catch (std::invalid_argument const & ex) {
-        std::cerr << ex.what() << std::endl;
+        ebi::util::logger_error(ex.what());
         return 1;
     } catch (std::runtime_error const & ex) {
-        std::cout << "The input file is not valid: " << ex.what() << std::endl;
+        ebi::util::logger_error("The input file is not valid: " + std::string(ex.what()));
         return 1;
     } catch (std::exception const &ex) {
-        std::cerr << ex.what() << std::endl;
+        ebi::util::logger_error(ex.what());
         return 1;
     }
 }
