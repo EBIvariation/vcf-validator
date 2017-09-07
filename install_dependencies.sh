@@ -16,6 +16,10 @@ if [ ! -d "odb/odb-2.4.0-x86_64-linux-gnu" ]; then
   tar jxvf /tmp/libodb-sqlite.tar.bz2
   cd libodb-sqlite-2.4.0 && ./configure --with-libodb=../libodb-2.4.0 && make && cd ..
   cd ..
+
+  # make easier to find the static libraries
+  cp libodb-2.4.0/odb/.libs/libodb.a .
+  cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.a .
 else
   echo "skipping odb installation: odb directory found:"
   ls odb
