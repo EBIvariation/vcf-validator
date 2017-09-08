@@ -20,6 +20,8 @@ if [ ! -d "odb/odb-2.4.0-x86_64-linux-gnu" ]; then
   # make easier to find the static libraries
   cp libodb-2.4.0/odb/.libs/libodb.a .
   cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.a .
+  echo "downloaded odb:"
+  ls odb
 else
   echo "skipping odb installation: odb directory found:"
   ls odb
