@@ -62,7 +62,7 @@ namespace ebi
             size_t meta_error_field_start_index = string_line.find(error.value + "=");
             size_t meta_error_field_end_index = string_line.find(",", meta_error_field_start_index);     // exclusive
 
-            util::logger_debug("Fixing incorrect predefined tag meta definition " + error.value, error.line);
+            BOOST_LOG_TRIVIAL(debug) << "Line " << error.line << ": Fixing incorrect predefined tag meta definition " << error.value;
 
             std::string fixed_meta_header_line = string_line.substr(0, meta_error_field_start_index) + error.value + "=" + error.expected_value + string_line.substr(meta_error_field_end_index);
             util::writeline(output, fixed_meta_header_line);
@@ -102,7 +102,7 @@ namespace ebi
     void Fixer::visit(IdBodyError &error)
     {
         if (error.error_fix == ErrorFix::DUPLICATE_VALUES) {
-            util::logger_debug("Fixing duplicate ID fields", error.line);
+            BOOST_LOG_TRIVIAL(debug) << "Line " << error.line << ": Fixing duplicate ID fields";
             const size_t id_column_index = 2;
             std::string string_line = {line->begin(), line->end()};
 
@@ -141,7 +141,7 @@ namespace ebi
 
         fix_column(filter_column_index, string_line, "\t", [&](std::string &filter_column) {
             if (error.error_fix == ErrorFix::IRRECOVERABLE_VALUE && error.field == "0") {
-                util::logger_debug("Fixing invalid FILTER field " + error.field, error.line);
+                BOOST_LOG_TRIVIAL(debug) << "Line " << error.line << ": Fixing invalid FILTER field " << error.field;
                 const std::string empty_filter_column = MISSING_VALUE;
                 auto condition_to_remove_filter_field = [&](const std::string &filter_subfield, size_t index) -> bool {
                     return filter_subfield == error.field;
@@ -149,7 +149,7 @@ namespace ebi
 
                 remove_fields(filter_column, ";", empty_filter_column, condition_to_remove_filter_field);
             } else if (error.error_fix == ErrorFix::DUPLICATE_VALUES) {
-                util::logger_debug("Fixing duplicate FILTER fields", error.line);
+                BOOST_LOG_TRIVIAL(debug) << "Line " << error.line << ": Fixing duplicate FILTER fields";
                 remove_duplicate_strings(filter_column, ";");
             }
         });
@@ -170,13 +170,13 @@ namespace ebi
             };
 
             if (error.error_fix == ErrorFix::DUPLICATE_VALUES) {
-                util::logger_debug("Fixing duplicate INFO fields", error.line);
+                BOOST_LOG_TRIVIAL(debug) << "Line " << error.line << ": Fixing duplicate INFO fields";
                 remove_duplicate_key_value_pairs(info_column, ";", "=", empty_info_column);
             } else if (error.error_fix == ErrorFix::RECOVERABLE_VALUE) {
-                util::logger_debug("Fixing invalid INFO field " + error.field, error.line);
+                BOOST_LOG_TRIVIAL(debug) << "Line " << error.line << ": Fixing invalid INFO field " << error.field;
                 replace_fields(info_column, ";", error.field + "=" + error.expected_value, condition_to_modify_info_field);
             } else if (error.error_fix == ErrorFix::IRRECOVERABLE_VALUE) {
-                util::logger_debug("Removing invalid INFO field " + error.field, error.line);
+                BOOST_LOG_TRIVIAL(debug) << "Line " << error.line << ": Removing invalid INFO field " << error.field;
                 remove_fields(info_column, ";", empty_info_column, condition_to_modify_info_field);
             }
         });
@@ -185,7 +185,7 @@ namespace ebi
     void Fixer::visit(FormatBodyError &error)
     {
         if (error.error_fix == ErrorFix::DUPLICATE_VALUES) {
-            util::logger_debug("Fixing duplicate FORMAT fields", error.line);
+            BOOST_LOG_TRIVIAL(debug) << "Line " << error.line << ": Fixing duplicate FORMAT fields";
             std::string string_line = {line->begin(), line->end()};
             remove_duplicate_format_sample_pairs(string_line);
         } else {
@@ -200,7 +200,7 @@ namespace ebi
 
     void Fixer::visit(SamplesFieldBodyError &error)
     {
-        util::logger_debug("Fixing invalid sample field " + error.field, error.line);
+        BOOST_LOG_TRIVIAL(debug) << "Line " << error.line << ": Fixing invalid sample field " << error.field;
 
         const size_t format_column_index = 8;
         // size_t first_samples_column_index = 9;
@@ -224,8 +224,8 @@ namespace ebi
         }
 
         if (fixed_samples <= 1) {   // 1 because we started counting since the FORMAT column
-            util::logger_warning("Tried to fix field " + error.field
-                         + " in the samples column, but sample columns are not present. " + message, error.line);
+            BOOST_LOG_TRIVIAL(warning) << "Line " << error.line << ": Tried to fix field " << error.field
+                                       << " in the samples column, but sample columns are not present. " << message;
             ignore_error();
             return;
         }
@@ -238,8 +238,8 @@ namespace ebi
 
     void Fixer::visit(DuplicationError &error)
     {
-        util::logger_debug("Fixing duplicate: removing variant: "
-                     + std::string{line->begin(), line->end()}, line_number);
+        BOOST_LOG_TRIVIAL(debug) << "Line " << line_number << ": Fixing duplicate: removing variant: "
+                                 << std::string{line->begin(), line->end()};
     }
 
     size_t Fixer::remove_duplicate_strings(const std::string &column,
@@ -396,8 +396,8 @@ namespace ebi
         // check that GT is present and is the first field
         size_t subfield_index = split_and_find(*first, field_separator, error.field);
         if (subfield_index != gt_column_index) {
-            util::logger_warning("Tried to fix field \"" + error.field
-                         + "\" but it was not present in the FORMAT column \"" + *first + "\"", error.line);
+            BOOST_LOG_TRIVIAL(warning) << "Line " << error.line << ": Tried to fix field \"" << error.field
+                                       << "\" but it was not present in the FORMAT column \"" << *first << "\"";
             ignored_errors++;
             util::print_container(output, std::vector<std::string>{first, last}, "", "\t", "");
             return;
@@ -435,8 +435,8 @@ namespace ebi
             }
         });
         if (removed == 0) {
-            util::logger_warning("Tried to fix field \"" + error.field
-                         + "\" but it was not present in the FORMAT column \"" + *first + "\"", error.line);
+            BOOST_LOG_TRIVIAL(warning) << "Line " << error.line << ": Tried to fix field \"" << error.field
+                                       << "\" but it was not present in the FORMAT column \"" << *first << "\"";
             ignored_errors++;
             util::print_container(output, std::vector<std::string>{++first, last}, "\t", "\t", "");
             return;
@@ -449,8 +449,8 @@ namespace ebi
                 return index == field_index;
             });
             if (removed == 0) {
-                util::logger_warning("Tried to remove field with index " + std::to_string(field_index)
-                             + " in \"" + *first + "\" but couldn't do it, this is likely to happen in all samples");
+                BOOST_LOG_TRIVIAL(warning) << "Tried to remove field with index " << field_index << " in \"" << *first
+                                           << "\" but couldn't do it, this is likely to happen in all samples";
                 ignored_errors++;
                 // copy the rest of samples, as we already copied one and don't want to repeat the log for everyone
                 util::print_container(output, std::vector<std::string>{++first, last}, "\t", "\t", "");

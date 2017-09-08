@@ -63,7 +63,7 @@ namespace ebi
         try {
             flush();
         } catch (std::exception &e) {
-            util::logger_info("An error occurred finalizing the error reporting: " + std::string(e.what()));
+            BOOST_LOG_TRIVIAL(error) << "An error occurred finalizing the error reporting: " << e.what();
         }
     }
 

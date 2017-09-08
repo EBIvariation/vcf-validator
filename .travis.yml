@@ -23,6 +23,7 @@ matrix:
             - libboost-filesystem1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
+            - libboost-log1.55-dev
 
     # Clang 3.6
     - compiler: clang
@@ -39,6 +40,7 @@ matrix:
             - libboost-filesystem1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
+            - libboost-log1.55-dev
 
     # Clang 3.7
     - compiler: clang
@@ -55,6 +57,7 @@ matrix:
             - libboost-filesystem1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
+            - libboost-log1.55-dev
 
     # GCC 4.8
     - compiler: gcc
@@ -71,6 +74,7 @@ matrix:
             - libboost-filesystem1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
+            - libboost-log1.55-dev
 
     # GCC 4.9
     - compiler: gcc
@@ -87,6 +91,7 @@ matrix:
             - libboost-filesystem1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
+            - libboost-log1.55-dev
 
     # GCC 5
     - compiler: gcc
@@ -103,6 +108,7 @@ matrix:
             - libboost-filesystem1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
+            - libboost-log1.55-dev
 
 before_script:
   - ./install_dependencies.sh

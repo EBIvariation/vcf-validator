@@ -65,13 +65,13 @@ namespace
         std::string level = vm[ebi::vcf::LEVEL].as<std::string>();
         if (level != ebi::vcf::ERROR && level != ebi::vcf::WARNING && level != ebi::vcf::STOP) {
             std::cout << desc << std::endl;
-            ebi::util::logger_error("Please choose one of the accepted validation levels");
+            BOOST_LOG_TRIVIAL(error) << "Please choose one of the accepted validation levels";
             return 1;
         }
 
         long ploidy = vm[ebi::vcf::PLOIDY].as<long>();
         if (ploidy <= 0) {
-            ebi::util::logger_error("Ploidy must be greater that 0");
+            BOOST_LOG_TRIVIAL(error) << "Ploidy must be greater that 0";
             return 1;
         }
 
@@ -154,7 +154,7 @@ namespace
         std::sort(outs.begin(), outs.end());
         std::unique(outs.begin(), outs.end());
         if (initial_size != outs.size()) {
-            ebi::util::logger_warning("Duplicated outputs! will write just once to each output specified by -r/--report");
+            BOOST_LOG_TRIVIAL(warning) << "Duplicated outputs! will write just once to each output specified by -r/--report";
         }
 
         std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
@@ -183,6 +183,8 @@ namespace
 
 int main(int argc, char** argv)
 {
+    ebi::util::init_boost_loggers();
+
     po::options_description desc = build_command_line_options();
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -203,10 +205,10 @@ int main(int argc, char** argv)
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
         if (path == ebi::vcf::STDIN) {
-            ebi::util::logger_info("Reading from standard input...");
+            BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
             is_valid = ebi::vcf::is_valid_vcf_file(std::cin, path, validationLevel, ploidy, outputs);
         } else {
-            ebi::util::logger_info("Reading from input file...");
+            BOOST_LOG_TRIVIAL(info) << "Reading from input file...";
             std::ifstream input{path};
             if (!input) {
                 throw std::runtime_error{"Couldn't open file " + path};
@@ -215,17 +217,17 @@ int main(int argc, char** argv)
             }
         }
 
-        ebi::util::logger_info("According to the VCF specification, the input file is " + std::string(is_valid ? "" : "not ") + "valid");
+        BOOST_LOG_TRIVIAL(info) << "According to the VCF specification, the input file is " << (is_valid ? "" : "not ") << "valid";
         return !is_valid; // A valid file returns an exit code 0
         
     } catch (std::invalid_argument const & ex) {
-        ebi::util::logger_error(ex.what());
+        BOOST_LOG_TRIVIAL(error) << ex.what();
         return 1;
     } catch (std::runtime_error const & ex) {
-        ebi::util::logger_error("The input file is not valid: " + std::string(ex.what()));
+        BOOST_LOG_TRIVIAL(error) << "The input file is not valid: " << ex.what();
         return 1;
     } catch (std::exception const &ex) {
-        ebi::util::logger_error(ex.what());
+        BOOST_LOG_TRIVIAL(error) << ex.what();
         return 1;
     }
 }

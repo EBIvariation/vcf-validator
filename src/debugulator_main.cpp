@@ -58,13 +58,13 @@ namespace
       std::string level = vm[ebi::vcf::LEVEL].as<std::string>();
       if (level != ebi::vcf::ERROR && level != ebi::vcf::WARNING && level != ebi::vcf::STOP) {
           std::cout << desc << std::endl;
-          ebi::util::logger_error("Please choose one of the accepted validation levels");
+          BOOST_LOG_TRIVIAL(error) << "Please choose one of the accepted validation levels";
           return 1;
       }
 
       if (!vm.count(ebi::vcf::ERRORS)) {
           std::cout << desc << std::endl;
-          ebi::util::logger_error("Please specify the path to the errors report (--errors)");
+          BOOST_LOG_TRIVIAL(error) << "Please specify the path to the errors report (--errors)";
           return 1;
       }
 
@@ -74,6 +74,8 @@ namespace
 
 int main(int argc, char **argv)
 {
+    ebi::util::init_boost_loggers();
+
     namespace po = boost::program_options;
 
     po::options_description desc = build_command_line_options();
@@ -99,7 +101,7 @@ int main(int argc, char **argv)
                 throw std::runtime_error{"Couldn't open file " + input_path};
             }
         } else {
-            ebi::util::logger_info("Reading from standard input...");
+            BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
         }
 
         std::ofstream output_file;
@@ -109,7 +111,7 @@ int main(int argc, char **argv)
                 throw std::runtime_error{"Couldn't open file " + output_path};
             }
         } else {
-            ebi::util::logger_info("Writing to standard output...");
+            BOOST_LOG_TRIVIAL(info) << "Writing to standard output...";
         }
 
         ebi::vcf::OdbReportRW errorDAO{errors};
@@ -122,7 +124,7 @@ int main(int argc, char **argv)
         return 0;
 
     } catch (std::exception const &ex) {
-        ebi::util::logger_info("Aborting execution, error: " + std::string(ex.what()));
+        BOOST_LOG_TRIVIAL(error) << "Aborting execution, error: " << ex.what();
         return 1;
     }
 }

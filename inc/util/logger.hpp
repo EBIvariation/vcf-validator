@@ -36,42 +36,6 @@ namespace ebi
             )
         );
     }
-
-    inline void logger_debug(std::string const & message)
-    {
-        init_boost_loggers();
-        BOOST_LOG_TRIVIAL(debug) << message;
-    }
-
-    inline void logger_debug(std::string const & message, size_t line)
-    {
-        init_boost_loggers();
-        BOOST_LOG_TRIVIAL(debug) << "Line " << std::to_string(line) << ": " << message;
-    }
-
-    inline void logger_info(std::string const & message)
-    {
-        init_boost_loggers();
-        BOOST_LOG_TRIVIAL(info) << message;
-    }
-
-    inline void logger_warning(std::string const & message)
-    {
-        init_boost_loggers();
-        BOOST_LOG_TRIVIAL(warning) << message;
-    }
-
-    inline void logger_warning(std::string const & message, size_t line)
-    {
-        init_boost_loggers();
-        BOOST_LOG_TRIVIAL(warning) << "Line " << std::to_string(line) << ": " << message;
-    }
-
-    inline void logger_error(std::string const & message)
-    {
-        init_boost_loggers();
-        BOOST_LOG_TRIVIAL(error) << message;
-    }
   }
 }
 

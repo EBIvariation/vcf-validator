@@ -116,10 +116,12 @@ if (BUILD_STATIC)
   set (CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
   set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
   set(Boost_USE_STATIC_LIBS ON) # only find static libs
+else (BUILD_STATIC)
+  add_definitions (-DBOOST_ALL_DYN_LINK=1)
 endif (BUILD_STATIC)
 
 # Dependency libraries
-find_package (Boost COMPONENTS filesystem program_options regex log system REQUIRED )
+find_package (Boost COMPONENTS filesystem program_options regex log thread system REQUIRED )
 include_directories (${Boost_INCLUDE_DIR} )
 
 add_library(sqlite3 lib/sqlite/sqlite3.c)

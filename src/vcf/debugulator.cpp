@@ -35,7 +35,7 @@ namespace ebi
           size_t errors = errorDAO.count_errors();
           size_t errors_fixed = 0;
           if (errors == 0) {
-              ebi::util::logger_info("The errors report was empty, there are no errors to fix the input");
+              BOOST_LOG_TRIVIAL(info) << "The errors report was empty, there are no errors to fix the input";
               return 0;
           }
 
@@ -70,8 +70,7 @@ namespace ebi
 
           size_t ignored_errors = fixer.get_ignored_errors();
           if (ignored_errors != 0) {
-              ebi::util::logger_info("There were " + std::to_string(ignored_errors)
-                                         + " errors that couldn't be automatically fixed");
+              BOOST_LOG_TRIVIAL(info) << "There were " << ignored_errors << " errors that couldn't be automatically fixed";
           }
 
           return ignored_errors;
