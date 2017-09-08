@@ -32,7 +32,7 @@ namespace ebi
             std::clog,
             boost::log::keywords::format =
             (
-                boost::log::expressions::stream << "<" << boost::log::trivial::severity << "> " << boost::log::expressions::smessage
+                boost::log::expressions::stream << "[" << boost::log::trivial::severity << "] " << boost::log::expressions::smessage
             )
         );
     }
