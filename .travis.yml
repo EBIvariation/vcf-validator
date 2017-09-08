@@ -119,7 +119,7 @@ matrix:
 before_script:
   - ./install_dependencies.sh
   - export PATH=$PATH:$PWD/odb/odb-2.4.0-x86_64-linux-gnu/bin/
-  - cmake -DBUILD_STATIC=1 -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iodb/libodb-2.4.0 -Iodb/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,odb/libodb-2.4.0/odb/.libs/ -Lodb/libodb-2.4.0/odb/.libs/ -Wl,-rpath,odb/libodb-sqlite-2.4.0/odb/sqlite/.libs/ -Lodb/libodb-sqlite-2.4.0/odb/sqlite/.libs/"  -DODB_PATH=odb/ -G Ninja
+  - cmake -DBUILD_STATIC=1 -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iodb/libodb-2.4.0 -Iodb/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,odb/libodb-2.4.0/odb/.libs/ -Lodb/libodb-2.4.0/odb/.libs/ -Wl,-rpath,odb/libodb-sqlite-2.4.0/odb/sqlite/.libs/ -Lodb/libodb-sqlite-2.4.0/odb/sqlite/.libs/"  -DODB_PATH=$PWD/odb/ -G Ninja
 
 script:
   - ninja -j 1 -v

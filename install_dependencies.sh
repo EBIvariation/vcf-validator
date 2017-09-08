@@ -15,11 +15,12 @@ if [ ! -d "odb/odb-2.4.0-x86_64-linux-gnu" ]; then
   wget http://codesynthesis.com/download/odb/2.4/libodb-sqlite-2.4.0.tar.bz2 -O /tmp/libodb-sqlite.tar.bz2
   tar jxvf /tmp/libodb-sqlite.tar.bz2
   cd libodb-sqlite-2.4.0 && ./configure --with-libodb=../libodb-2.4.0 && make && cd ..
-  cd ..
 
   # make easier to find the static libraries
   cp libodb-2.4.0/odb/.libs/libodb.a .
   cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.a .
+
+  cd ..
   echo "downloaded odb:"
   ls odb
 else

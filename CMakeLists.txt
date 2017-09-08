@@ -128,7 +128,8 @@ add_library(sqlite3 lib/sqlite/sqlite3.c)
 find_package (Threads REQUIRED)
 
 if (BUILD_STATIC)
-  set (ODB_PATH "/usr/local/lib" CACHE STRING "Path to ODB libraries installation folder")
+  set (ODB_PATH "/usr/local/lib" CACHE STRING
+          "Path to ODB libraries installation folder. Use absolute paths. Relative paths will be treated as libraries to link dynamically.")
 
   set (LIBRARIES_TO_LINK
         mod_vcf
