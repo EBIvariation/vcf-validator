@@ -48,6 +48,9 @@ namespace ebi
         // The number of values in SVLEN should match the number of alternate alleles
         check_body_entry_info_svlen(state, record);
 
+        // Confidence interval tags should have first value <=0 and second value >= 0
+        check_body_entry_info_confidence_interval(state, record);
+
         /*
          * Once some meta-data is marked as in/correct there is no need again, so all the following have been 
          * optimised using a map for correctly defined meta-data and another one for incorrectly defined.
@@ -172,6 +175,22 @@ namespace ebi
                 throw new InfoBodyError{state.n_lines,
                         "INFO SVLEN should have same number of values as ALT (expected " + std::to_string(record.alternate_alleles.size())
                         + ", found " + std::to_string(values.size()) + ")"};
+            }
+        }
+    }
+
+    void ValidateOptionalPolicy::check_body_entry_info_confidence_interval(ParsingState & state, Record & record) const
+    {
+        std::set<std::string> confidence_interval_tags = { CIPOS, CIEND, CILEN, CICN, CICNADJ };
+        for (auto & confidence_interval_tag : confidence_interval_tags) {
+            auto it = record.info.find(confidence_interval_tag);
+            if (it != record.info.end()) {
+                std::vector<std::string> values;
+                util::string_split(it->second, ",", values);
+                if (std::stoi(values[0]) > 0 || std::stoi(values[1]) < 0) {
+                    throw new InfoBodyError{state.n_lines,
+                        "INFO " + confidence_interval_tag + " is a confidence interval tag, which should have first value <= 0 and second value >= 0"};
+                }
             }
         }
     }
