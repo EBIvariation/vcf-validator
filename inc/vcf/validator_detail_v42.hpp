@@ -13570,7 +13570,9 @@ case 605:
 #line 60 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 25: 
@@ -13624,7 +13626,9 @@ case 605:
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 593: 
@@ -13658,14 +13662,18 @@ case 605:
           ErrorPolicy::handle_warning(*this, warn);
         }
         
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 534: 
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 74: 
@@ -13693,12 +13701,16 @@ case 605:
 #line 247 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 375: 
@@ -13712,12 +13724,16 @@ case 605:
 #line 259 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 402: 
@@ -13752,12 +13768,16 @@ case 605:
 #line 265 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 123: 
@@ -13787,12 +13807,16 @@ case 605:
 #line 271 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 173: 
@@ -13834,12 +13858,16 @@ case 605:
 #line 277 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 240: 
@@ -13880,12 +13908,16 @@ case 605:
 #line 288 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 306: 
@@ -13901,12 +13933,16 @@ case 605:
 #line 299 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 433: 
@@ -13923,12 +13959,16 @@ case 605:
 #line 320 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 322: 
@@ -13945,12 +13985,16 @@ case 605:
 #line 347 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 465: 
@@ -14002,7 +14046,9 @@ case 605:
           ErrorPolicy::handle_warning(*this, warn);
         }
         
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 78 "src/vcf/vcf.ragel"
 	{
@@ -14015,7 +14061,9 @@ case 605:
           ErrorPolicy::handle_warning(*this, warn);
         }
         
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 512: 
@@ -14025,12 +14073,16 @@ case 605:
 #line 396 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new ChromosomeBodyError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 513: 
@@ -14038,12 +14090,16 @@ case 605:
 #line 402 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new PositionBodyError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 515: 
@@ -14051,12 +14107,16 @@ case 605:
 #line 408 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new IdBodyError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 517: 
@@ -14064,12 +14124,16 @@ case 605:
 #line 414 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new ReferenceAlleleBodyError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 519: 
@@ -14112,12 +14176,16 @@ case 605:
 #line 420 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new AlternateAllelesBodyError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 521: 
@@ -14136,12 +14204,16 @@ case 605:
 #line 426 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new QualityBodyError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 524: 
@@ -14152,12 +14224,16 @@ case 605:
 #line 432 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FilterBodyError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 535: 
@@ -14166,12 +14242,16 @@ case 605:
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
         ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 14: 
@@ -14186,12 +14266,16 @@ case 605:
 	{
         ErrorPolicy::handle_error(*this,
                 new FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.2'"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 60 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 528: 
@@ -14199,12 +14283,16 @@ case 605:
 #line 50 "src/vcf/vcf_v42.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FormatBodyError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 595: 
@@ -14254,7 +14342,9 @@ case 605:
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 379 "src/vcf/vcf.ragel"
 	{
@@ -14268,7 +14358,9 @@ case 605:
           ErrorPolicy::handle_warning(*this, warn);
         }
         
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 78 "src/vcf/vcf.ragel"
 	{
@@ -14281,7 +14373,9 @@ case 605:
           ErrorPolicy::handle_warning(*this, warn);
         }
         
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 81: 
@@ -14291,34 +14385,46 @@ case 605:
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines,
             "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 247 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 122: 
 #line 271 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 277 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 199: 
@@ -14326,17 +14432,23 @@ case 605:
 #line 293 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not Integer, Float, Flag, Character or String"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 277 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 265: 
@@ -14344,17 +14456,23 @@ case 605:
 #line 293 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not Integer, Float, Flag, Character or String"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 288 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 335: 
@@ -14369,17 +14487,23 @@ case 605:
 #line 352 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 347 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 345: 
@@ -14394,17 +14518,23 @@ case 605:
 #line 357 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 347 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 100: 
@@ -14413,17 +14543,23 @@ case 605:
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 247 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 412: 
@@ -14431,17 +14567,23 @@ case 605:
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 265 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 132: 
@@ -14453,17 +14595,23 @@ case 605:
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 271 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 182: 
@@ -14475,17 +14623,23 @@ case 605:
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 277 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 248: 
@@ -14497,17 +14651,23 @@ case 605:
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 288 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 315: 
@@ -14519,17 +14679,23 @@ case 605:
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 299 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 332: 
@@ -14537,17 +14703,23 @@ case 605:
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 347 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 97: 
@@ -14567,17 +14739,23 @@ case 605:
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 247 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 148: 
@@ -14597,17 +14775,23 @@ case 605:
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 271 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 214: 
@@ -14627,17 +14811,23 @@ case 605:
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 277 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 280: 
@@ -14657,17 +14847,23 @@ case 605:
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 288 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 355: 
@@ -14692,17 +14888,23 @@ case 605:
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 347 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 383: 
@@ -14727,17 +14929,23 @@ case 605:
 #line 373 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 259 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 444: 
@@ -14764,17 +14972,23 @@ case 605:
 #line 373 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 320 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 527: 
@@ -14786,34 +15000,46 @@ case 605:
 #line 443 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 438 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 541: 
 #line 448 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 438 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 530: 
@@ -14822,19 +15048,25 @@ case 605:
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
         ErrorPolicy::handle_error(*this, new SamplesFieldBodyError{n_lines, message_stream.str(), "GT"});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 454 "src/vcf/vcf.ragel"
 	{
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
         ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 192: 
@@ -14843,17 +15075,23 @@ case 605:
 #line 36 "src/vcf/vcf_v42.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G or dot"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 277 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 258: 
@@ -14862,29 +15100,39 @@ case 605:
 #line 42 "src/vcf/vcf_v42.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Number is not a number, A, R, G or dot"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 288 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 22: 
 #line 60 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 379 "src/vcf/vcf.ragel"
 	{
@@ -14898,7 +15146,9 @@ case 605:
           ErrorPolicy::handle_warning(*this, warn);
         }
         
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 #line 78 "src/vcf/vcf.ragel"
 	{
@@ -14911,73 +15161,99 @@ case 605:
           ErrorPolicy::handle_warning(*this, warn);
         }
         
-        p--; {goto st592;}
+        p--; {       if ( p == pe )
+               goto _test_eof592;
+goto st592;}
     }
 	break;
 	case 344: 
 #line 352 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 357 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 347 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 354: 
 #line 357 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Mixture is not a valid string (maybe it contains quotes?)"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 347 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 334: 
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 352 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "SAMPLE metadata Genomes is not a valid string (maybe it contains quotes?)"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 347 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 108: 
@@ -14986,22 +15262,30 @@ case 605:
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 247 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 159: 
@@ -15010,22 +15294,30 @@ case 605:
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 271 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 225: 
@@ -15034,22 +15326,30 @@ case 605:
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 277 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 291: 
@@ -15058,22 +15358,30 @@ case 605:
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 288 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 117: 
@@ -15082,22 +15390,30 @@ case 605:
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 247 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 168: 
@@ -15106,22 +15422,30 @@ case 605:
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 271 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 234: 
@@ -15130,22 +15454,30 @@ case 605:
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 277 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 300: 
@@ -15154,77 +15486,105 @@ case 605:
 #line 368 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 363 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 288 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
 	case 24: 
 #line 247 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 271 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 277 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 288 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 259 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 265 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 347 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 299 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 320 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {goto st591;}
+        p--; {       if ( p == pe )
+               goto _test_eof591;
+goto st591;}
     }
 	break;
-#line 15228 "inc/vcf/validator_detail_v42.hpp"
+#line 15588 "inc/vcf/validator_detail_v42.hpp"
 	}
 	}
 

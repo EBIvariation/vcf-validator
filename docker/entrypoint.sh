@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 NPROCS=`grep processor </proc/cpuinfo | wc -l`
 
