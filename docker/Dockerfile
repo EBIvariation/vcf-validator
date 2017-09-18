@@ -1,6 +1,6 @@
 FROM alpine:3.6
 
-RUN apk upgrade && apk update && apk add \
+RUN apk upgrade && apk add --no-cache \
 g++ \
 make \
 cmake \
