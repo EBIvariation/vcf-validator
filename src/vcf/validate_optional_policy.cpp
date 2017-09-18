@@ -189,7 +189,8 @@ namespace ebi
                 util::string_split(it->second, ",", values);
                 if (std::stoi(values[0]) > 0 || std::stoi(values[1]) < 0) {
                     throw new InfoBodyError{state.n_lines,
-                        "INFO " + confidence_interval_tag + " is a confidence interval tag, which should have first value <= 0 and second value >= 0"};
+                            "INFO " + confidence_interval_tag +
+                            " is a confidence interval tag, which should have first value <= 0 and second value >= 0"};
                 }
             }
         }
