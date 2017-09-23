@@ -90,15 +90,16 @@ set (ALL_TESTS
         test/vcf/debugulator_test.cpp
         test/vcf/metaentry_test.cpp
         test/vcf/normalize_test.cpp
+        test/vcf/optional_policy_test.cpp
         test/vcf/parser_test_aux.hpp
         test/vcf/parser_v41_test.cpp
         test/vcf/parser_v42_test.cpp
         test/vcf/parser_v43_test.cpp
         test/vcf/ploidy_test.cpp
-        test/vcf/record_cache_test.cpp
-        test/vcf/record_test.cpp
         test/vcf/predefined_info_tags_test.cpp
         test/vcf/predefined_format_tags_test.cpp
+        test/vcf/record_cache_test.cpp
+        test/vcf/record_test.cpp
         test/vcf/report_writer_test.cpp
         test/vcf/test_utils.hpp
         )

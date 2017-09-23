@@ -45,25 +45,25 @@ namespace ebi
     {
       public:
         void optional_check_meta_section(ParsingState const & state) const;
-        void optional_check_body_entry(ParsingState & state, Record & record) ;//const;
+        void optional_check_body_entry(ParsingState & state, Record const & record) ;//const;
         void optional_check_body_section(ParsingState const & state) const;
-        
+
       private:
-        void check_body_entry_ploidy(ParsingState & state, Record & record);
-        void check_body_entry_position_zero(ParsingState & state, Record & record) const;
-        void check_body_entry_id_commas(ParsingState & state, Record & record) const;
-        void check_body_entry_reference_alternate_matching(ParsingState & state, Record & record);
-        void check_body_entry_info_imprecise(ParsingState & state, Record & record) const;
+        void check_body_entry_ploidy(ParsingState & state, Record const & record);
+        void check_body_entry_position_zero(ParsingState & state, Record const & record) const;
+        void check_body_entry_id_commas(ParsingState & state, Record const & record) const;
+        void check_body_entry_reference_alternate_matching(ParsingState & state, Record const & record);
+        void check_body_entry_info_imprecise(ParsingState & state, Record const & record) const;
         void check_body_entry_info_other_tag(ParsingState & state, std::multimap<std::string, std::string> const & info,
                                              std::string const & tag) const;
-        void check_body_entry_info_svlen(ParsingState & state, Record & record) const;
-        void check_body_entry_info_confidence_interval(ParsingState & state, Record & record) const;
+        void check_body_entry_info_svlen(ParsingState & state, Record const & record) const;
+        void check_body_entry_info_confidence_interval(ParsingState & state, Record const & record) const;
 
-        void check_contig_meta(ParsingState & state, Record & record) const;
-        void check_alternate_allele_meta(ParsingState & state, Record & record) const;
-        void check_filter_meta(ParsingState & state, Record & record) const;
-        void check_info_meta(ParsingState & state, Record & record) const;
-        void check_format_meta(ParsingState & state, Record & record) const;
+        void check_contig_meta(ParsingState & state, Record const & record) const;
+        void check_alternate_allele_meta(ParsingState & state, Record const & record) const;
+        void check_filter_meta(ParsingState & state, Record const & record) const;
+        void check_info_meta(ParsingState & state, Record const & record) const;
+        void check_format_meta(ParsingState & state, Record const & record) const;
     };
     
   }

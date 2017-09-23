@@ -28,7 +28,7 @@ namespace ebi
         }
     }
     
-    void ValidateOptionalPolicy::optional_check_body_entry(ParsingState & state, Record & record) //const
+    void ValidateOptionalPolicy::optional_check_body_entry(ParsingState & state, Record const & record) //const
     {
         // All samples should have the same ploidy
         check_body_entry_ploidy(state, record);
@@ -76,7 +76,7 @@ namespace ebi
     {
     }
     
-    void ValidateOptionalPolicy::check_body_entry_ploidy(ParsingState & state, Record & record)
+    void ValidateOptionalPolicy::check_body_entry_ploidy(ParsingState & state, Record const & record)
     {
         bool format_column_contains_gt = record.format.size() >= 1 and record.format[0] == GT;
         if (format_column_contains_gt) {
@@ -115,7 +115,7 @@ namespace ebi
         }
     }
   
-    void ValidateOptionalPolicy::check_body_entry_position_zero(ParsingState & state, Record & record) const
+    void ValidateOptionalPolicy::check_body_entry_position_zero(ParsingState & state, Record const & record) const
     {
         if (record.position == 0) {
             throw new PositionBodyError{state.n_lines,
@@ -123,7 +123,7 @@ namespace ebi
         }
     }
     
-    void ValidateOptionalPolicy::check_body_entry_id_commas(ParsingState & state, Record & record) const
+    void ValidateOptionalPolicy::check_body_entry_id_commas(ParsingState & state, Record const & record) const
     {
         for (auto & id : record.ids) {
             if (std::find(id.begin(), id.end(), ',') != id.end()) {
@@ -133,7 +133,7 @@ namespace ebi
         }
     }
     
-    void ValidateOptionalPolicy::check_body_entry_reference_alternate_matching(ParsingState & state, Record & record)
+    void ValidateOptionalPolicy::check_body_entry_reference_alternate_matching(ParsingState & state, Record const & record)
     {
         for (size_t i = 0; i < record.alternate_alleles.size(); ++i) {
             auto & alternate = record.alternate_alleles[i];
@@ -146,7 +146,7 @@ namespace ebi
         }
     }
 
-    void ValidateOptionalPolicy::check_body_entry_info_imprecise(ParsingState & state, Record & record) const
+    void ValidateOptionalPolicy::check_body_entry_info_imprecise(ParsingState & state, Record const & record) const
     {
         auto it = record.info.find(IMPRECISE);
         if (it != record.info.end() && it->second == "0") {
@@ -165,7 +165,7 @@ namespace ebi
         }
     }
 
-    void ValidateOptionalPolicy::check_body_entry_info_svlen(ParsingState & state, Record & record) const
+    void ValidateOptionalPolicy::check_body_entry_info_svlen(ParsingState & state, Record const & record) const
     {
         auto it = record.info.find(SVLEN);
         if (it != record.info.end()) {
@@ -179,9 +179,9 @@ namespace ebi
         }
     }
 
-    void ValidateOptionalPolicy::check_body_entry_info_confidence_interval(ParsingState & state, Record & record) const
+    void ValidateOptionalPolicy::check_body_entry_info_confidence_interval(ParsingState & state, Record const & record) const
     {
-        std::set<std::string> confidence_interval_tags = { CIPOS, CIEND, CILEN, CICN, CICNADJ };
+        std::vector<std::string> confidence_interval_tags = { CICN, CICNADJ, CIEND, CILEN, CIPOS };
         for (auto & confidence_interval_tag : confidence_interval_tags) {
             auto it = record.info.find(confidence_interval_tag);
             if (it != record.info.end()) {
@@ -196,7 +196,7 @@ namespace ebi
         }
     }
     
-    void ValidateOptionalPolicy::check_contig_meta(ParsingState & state, Record & record) const
+    void ValidateOptionalPolicy::check_contig_meta(ParsingState & state, Record const & record) const
     {
         // The associated 'contig' meta entry should exist (notify only once)
         std::string current_chromosome = record.chromosome;
@@ -219,7 +219,7 @@ namespace ebi
         }
     }
     
-    void ValidateOptionalPolicy::check_alternate_allele_meta(ParsingState & state, Record & record) const
+    void ValidateOptionalPolicy::check_alternate_allele_meta(ParsingState & state, Record const & record) const
     {
         static boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
         std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range(ALT);
@@ -248,7 +248,7 @@ namespace ebi
         }
     }
     
-    void ValidateOptionalPolicy::check_filter_meta(ParsingState & state, Record & record) const
+    void ValidateOptionalPolicy::check_filter_meta(ParsingState & state, Record const & record) const
     {
         std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range(FILTER);
         
@@ -272,7 +272,7 @@ namespace ebi
         }
     }
     
-    void ValidateOptionalPolicy::check_info_meta(ParsingState & state, Record & record) const
+    void ValidateOptionalPolicy::check_info_meta(ParsingState & state, Record const & record) const
     {
         std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range(INFO);
         
@@ -297,7 +297,7 @@ namespace ebi
         }
     }
     
-    void ValidateOptionalPolicy::check_format_meta(ParsingState & state, Record & record) const
+    void ValidateOptionalPolicy::check_format_meta(ParsingState & state, Record const & record) const
     {
         std::pair<meta_iterator, meta_iterator> range = state.source->meta_entries.equal_range(FORMAT);
         
