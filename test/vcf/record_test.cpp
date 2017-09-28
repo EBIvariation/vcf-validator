@@ -90,7 +90,7 @@ namespace ebi
          
         SECTION("Correct arguments") 
         {
-            CHECK_NOTHROW( (vcf::Record {
+            CHECK_NOTHROW( (vcf::Record{
                                 1,
                                 "chr1", 
                                 123456, 
@@ -117,6 +117,7 @@ namespace ebi
                                 { vcf::GT, vcf::DP }, 
                                 { "0|1" },
                                 source}) );
+
             CHECK_NOTHROW( (vcf::Record{
                                 1,
                                 "chr1",
