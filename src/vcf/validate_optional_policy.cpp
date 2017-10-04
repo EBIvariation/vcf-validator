@@ -41,7 +41,13 @@ namespace ebi
         
         // Reference and alternate alleles in indels should share the first nucleotide
         check_body_entry_reference_alternate_matching(state, record);
-        
+
+        // gVCF fields should provide END, as <*> is supposed to represent a region
+        check_body_entry_alt_gvcf_end(state, record);
+
+        // 0/0 genotypes should be present when ALT is <*>, as it is supposed to be a reference region
+        check_body_entry_alt_gvcf_gt_value(state, record);
+
         // If a variant is flagged as precise, then it should not contain imprecise variant fields like CIPOS or CIEND
         check_body_entry_info_imprecise(state, record);
 
@@ -143,6 +149,36 @@ namespace ebi
                 throw new ReferenceAlleleBodyError{state.n_lines,
                         "Reference and alternate alleles do not share the first nucleotide"};
             }
+        }
+    }
+
+    void ValidateOptionalPolicy::check_body_entry_alt_gvcf_end(ParsingState & state, Record const & record) const
+    {
+        if (std::find(record.alternate_alleles.begin(), record.alternate_alleles.end(), GVCF) != record.alternate_alleles.end()
+            && record.info.find(END) == record.info.end()) {
+            throw new AlternateAllelesBodyError{state.n_lines,
+                    "INFO END should be provided, as " + GVCF + " (symbolic alternate allele) is supposed to represent a region"};
+        }
+    }
+
+    void ValidateOptionalPolicy::check_body_entry_alt_gvcf_gt_value(ParsingState & state, Record const & record) const
+    {
+        if (std::find(record.alternate_alleles.begin(), record.alternate_alleles.end(), GVCF) != record.alternate_alleles.end()
+            && record.format[0] == vcf::GT) {
+            size_t provided_ploidy = state.source->ploidy.get_ploidy(record.chromosome);
+            std::string required_gt_subfield = "0";
+            while (--provided_ploidy) {
+                required_gt_subfield += "/0";
+            }
+            for (auto & sample : record.samples) {
+                if (sample.substr(0, required_gt_subfield.size() + 1) == required_gt_subfield + ":"
+                    || sample == required_gt_subfield) {
+                    return;           // found `required_gt_subfield` in at least one sample, hence return
+                }
+            }
+            throw new AlternateAllelesBodyError{state.n_lines,
+                    "At least one sample should contain " + required_gt_subfield + " genotype, when ALT is " +
+                    GVCF + " as it is supposed to be a reference region"};
         }
     }
 
