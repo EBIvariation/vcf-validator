@@ -53,14 +53,13 @@ namespace ebi
         void check_body_entry_position_zero(ParsingState & state, Record const & record) const;
         void check_body_entry_id_commas(ParsingState & state, Record const & record) const;
         void check_body_entry_reference_alternate_matching(ParsingState & state, Record const & record);
+        void check_body_entry_alt_gvcf_gt_value(ParsingState & state, Record const & record) const;
+        void check_body_entry_info_gvcf_end(ParsingState & state, Record const & record) const;
         void check_body_entry_info_imprecise(ParsingState & state, Record const & record) const;
         void check_body_entry_info_other_tag(ParsingState & state, std::multimap<std::string, std::string> const & info,
                                              std::string const & tag) const;
         void check_body_entry_info_svlen(ParsingState & state, Record const & record) const;
         void check_body_entry_info_confidence_interval(ParsingState & state, Record const & record) const;
-        void check_body_entry_alt_gvcf_end(ParsingState & state, Record const & record) const;
-        void check_body_entry_alt_gvcf_gt_value(ParsingState & state, Record const & record) const;
-
         void check_contig_meta(ParsingState & state, Record const & record) const;
         void check_alternate_allele_meta(ParsingState & state, Record const & record) const;
         void check_filter_meta(ParsingState & state, Record const & record) const;

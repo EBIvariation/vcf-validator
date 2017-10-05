@@ -271,7 +271,7 @@ namespace ebi
                                 { "XYZ" },
                                 { "7" },
                                 sources[1]})),
-                            vcf::AlternateAllelesBodyError*);
+                            vcf::InfoBodyError*);
         }
 
         SECTION("gVCF fields should have 0/0 genotype")
@@ -301,7 +301,7 @@ namespace ebi
                                 { vcf::PASS },
                                 { { vcf::END, "0" } },
                                 { vcf::GT, "XYZ" },
-                                { "0/0/0:12", "1|0|1:5" },
+                                { "0|0/0:12", "1|0|1:5" },
                                 sources[2]})) );
 
             CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state2, vcf::Record{
