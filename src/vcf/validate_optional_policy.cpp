@@ -157,24 +157,27 @@ namespace ebi
         if (std::find(record.alternate_alleles.begin(), record.alternate_alleles.end(), GVCF)
             != record.alternate_alleles.end() && record.format[0] == vcf::GT) {
             for (auto & sample : record.samples) {
-                std::string gt_subfield = sample.substr(0, sample.find(':'));
-                std::vector<std::string> alleles;
-                util::string_split(gt_subfield, "/|", alleles);
-                bool found_in_sample = true;
-                for (auto & allele : alleles) {
-                    if (allele != "0") {
-                        found_in_sample = false;
-                        break;
-                    }
-                }
-                if (found_in_sample) {
-                    return;           // found at least one sample with all reference alleles, hence return
+                if (sample_has_reference_in_all_alleles(sample)) {
+                    return;
                 }
             }
             throw new AlternateAllelesBodyError{state.n_lines,
                     "At least one sample should contain genotype with all reference alleles, when ALT is " + GVCF
                     + " as it is supposed to be a reference region"};
         }
+    }
+
+    bool ValidateOptionalPolicy::sample_has_reference_in_all_alleles(std::string const & sample) const
+    {
+        std::string gt_subfield = sample.substr(0, sample.find(':'));
+        std::vector<std::string> alleles;
+        util::string_split(gt_subfield, "/|", alleles);
+        for (auto & allele : alleles) {
+            if (allele != "0") {
+                return false;
+            }
+        }
+        return true;
     }
 
     void ValidateOptionalPolicy::check_body_entry_info_gvcf_end(ParsingState & state, Record const & record) const
