@@ -154,7 +154,7 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_alt_gvcf_gt_value(ParsingState & state, Record const & record) const
     {
-        if (std::find(record.alternate_alleles.begin(), record.alternate_alleles.end(), GVCF)
+        if (std::find(record.alternate_alleles.begin(), record.alternate_alleles.end(), GVCF_NON_VARIANT_ALLELE)
             != record.alternate_alleles.end() && record.format[0] == vcf::GT) {
             for (auto & sample : record.samples) {
                 if (sample_has_reference_in_all_alleles(sample)) {
@@ -162,7 +162,7 @@ namespace ebi
                 }
             }
             throw new AlternateAllelesBodyError{state.n_lines,
-                    "At least one sample should contain genotype with all reference alleles, when ALT is " + GVCF
+                    "At least one sample should report a genotype with all reference alleles, when ALT is " + GVCF_NON_VARIANT_ALLELE
                     + " as it is supposed to be a reference region"};
         }
     }
@@ -182,11 +182,11 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_info_gvcf_end(ParsingState & state, Record const & record) const
     {
-        if (std::find(record.alternate_alleles.begin(), record.alternate_alleles.end(), GVCF)
+        if (std::find(record.alternate_alleles.begin(), record.alternate_alleles.end(), GVCF_NON_VARIANT_ALLELE)
             != record.alternate_alleles.end() && record.info.find(END) == record.info.end()) {
             throw new InfoBodyError{state.n_lines,
-                    "INFO END should be provided, as " + GVCF
-                    + " (symbolic alternate allele) is supposed to represent a region"};
+                    "INFO END should be provided when ALT is " + GVCF_NON_VARIANT_ALLELE
+                    + " as it is supposed to be a region"};
         }
     }
 

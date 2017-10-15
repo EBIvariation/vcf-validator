@@ -83,7 +83,7 @@ namespace ebi
     void Record::set_types()
     {
         for (auto & alternate : alternate_alleles) {
-            if (alternate == MISSING_VALUE || alternate == GVCF) {
+            if (alternate == MISSING_VALUE || alternate == GVCF_NON_VARIANT_ALLELE) {
                 types.push_back(RecordType::NO_VARIATION);
             } else if (alternate[0] == '<') {
                 types.push_back(RecordType::STRUCTURAL);

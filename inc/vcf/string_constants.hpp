@@ -103,7 +103,7 @@ namespace ebi
     const std::string INV = "INV";
 
     // ALT for gVCF
-    const std::string GVCF = "<*>";
+    const std::string GVCF_NON_VARIANT_ALLELE = "<*>";
 
     // INFO predefined tags
     const std::string AA = "AA";
