@@ -102,6 +102,9 @@ namespace ebi
     const std::string INS = "INS";
     const std::string INV = "INV";
 
+    // ALT for gVCF
+    const std::string GVCF_NON_VARIANT_ALLELE = "<*>";
+
     // INFO predefined tags
     const std::string AA = "AA";
     const std::string AC = "AC";

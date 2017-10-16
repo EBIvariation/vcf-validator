@@ -23,7 +23,7 @@ namespace ebi
 {
     
     TEST_CASE("Info predefined tags warnings", "[body info warnings]")
-    {            
+    {
         std::shared_ptr<vcf::Source> source{
             new vcf::Source{
                 "Example VCF source",
@@ -135,6 +135,217 @@ namespace ebi
                                     source})),
                                 vcf::InfoBodyError*);
             }
+        }
+    }
+
+    TEST_CASE("Alternate allele warnings", "[body alt warnings]")
+    {
+        std::vector<std::shared_ptr<vcf::Source>> sources = {
+            std::shared_ptr<vcf::Source>{new vcf::Source{
+                "Example VCF source with ploidy 1",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v43,
+                vcf::Ploidy{1},
+                {},
+                { "Sample1", "Sample2" }}},
+
+            std::shared_ptr<vcf::Source>{new vcf::Source{
+                "Example VCF source with ploidy 2",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v43,
+                vcf::Ploidy{2, {{"Y", 1}}},
+                {},
+                { "Sample1" }}},
+
+            std::shared_ptr<vcf::Source>{new vcf::Source{
+                "Example VCF source with ploidy 3",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v43,
+                vcf::Ploidy{3, {{"1", 4}, {"Y", 1}}},
+                {},
+                { "Sample1", "Sample2" }}}
+        };
+
+        for (auto & source : sources) {
+            source->meta_entries.emplace(vcf::REFERENCE,
+                vcf::MetaEntry{
+                    1,
+                    vcf::REFERENCE,
+                    "file",
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::CONTIG,
+                vcf::MetaEntry{
+                    1,
+                    vcf::CONTIG,
+                    { { vcf::ID, "chr1" } },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::END },
+                        { vcf::NUMBER, "1" },
+                        { vcf::TYPE, vcf::INTEGER },
+                        { vcf::DESCRIPTION, "End position" }
+                    },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, "ABC" },
+                        { vcf::NUMBER, "1" },
+                        { vcf::TYPE, vcf::INTEGER },
+                        { vcf::DESCRIPTION, "random info tag" }
+                    },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::FORMAT,
+                vcf::MetaEntry{
+                    1,
+                    vcf::FORMAT,
+                    {
+                        { vcf::ID, vcf::GT },
+                        { vcf::NUMBER, "1" },
+                        { vcf::TYPE, vcf::STRING },
+                        { vcf::DESCRIPTION, "Genotype" }
+                    },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::FORMAT,
+                vcf::MetaEntry{
+                    1,
+                    vcf::FORMAT,
+                    {
+                        { vcf::ID, "XYZ" },
+                        { vcf::NUMBER, "1" },
+                        { vcf::TYPE, vcf::INTEGER },
+                        { vcf::DESCRIPTION, "random format tag" }
+                    },
+                    source
+            });
+        }
+
+        vcf::ParsingState parsing_state1{sources[0]};
+        vcf::ParsingState parsing_state2{sources[1]};
+        vcf::ParsingState parsing_state3{sources[2]};
+
+        vcf::ValidateOptionalPolicy optional_policy;
+
+        SECTION("gVCF fields should have INFO END")
+        {
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state2, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { vcf::GVCF_NON_VARIANT_ALLELE },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::END, "2" } },
+                                { "XYZ" },
+                                { "11" },
+                                sources[1]})) );
+
+             CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state2, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { vcf::GVCF_NON_VARIANT_ALLELE },
+                                1.0,
+                                { vcf::PASS },
+                                { { "ABC", "7" } },
+                                { "XYZ" },
+                                { "7" },
+                                sources[1]})),
+                            vcf::InfoBodyError*);
+        }
+
+        SECTION("gVCF fields should have 0/0 genotype")
+        {
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state1, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC", vcf::GVCF_NON_VARIANT_ALLELE },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::END, "0" } },
+                                { vcf::GT, "XYZ" },
+                                { "0", "1:9" },
+                                sources[0]})) );
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state3, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { vcf::GVCF_NON_VARIANT_ALLELE },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::END, "0" } },
+                                { vcf::GT, "XYZ" },
+                                { "0|0/0:12", "1|0|1:5" },
+                                sources[2]})) );
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state2, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { vcf::GVCF_NON_VARIANT_ALLELE },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::END, "0" } },
+                                { vcf::GT },
+                                { "0/0" },
+                                sources[1]})) );
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state2, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC", vcf::GVCF_NON_VARIANT_ALLELE },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::END, "0" } },
+                                { "XYZ" },
+                                { "15" },
+                                sources[1]})) );
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state2, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { vcf::GVCF_NON_VARIANT_ALLELE },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::END, "0" } },
+                                { vcf::GT },
+                                { "0|1" },
+                                sources[1]})),
+                            vcf::AlternateAllelesBodyError*);
         }
     }
 }

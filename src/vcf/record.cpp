@@ -83,7 +83,7 @@ namespace ebi
     void Record::set_types()
     {
         for (auto & alternate : alternate_alleles) {
-            if (alternate == MISSING_VALUE) {
+            if (alternate == MISSING_VALUE || alternate == GVCF_NON_VARIANT_ALLELE) {
                 types.push_back(RecordType::NO_VARIATION);
             } else if (alternate[0] == '<') {
                 types.push_back(RecordType::STRUCTURAL);
@@ -164,7 +164,7 @@ namespace ebi
     {
         switch (type) {
             case RecordType::NO_VARIATION:
-                if (alternate_alleles.size() > 1) {
+                if (alternate == MISSING_VALUE && alternate_alleles.size() > 1) {
                     throw new AlternateAllelesBodyError{line,
                             "The no-alternate alleles symbol (dot) can not be combined with others"};
                 }
@@ -454,12 +454,12 @@ namespace ebi
         util::string_split(samples[i], ":", subfields);
         
         check_sample_subfields_count(i, subfields);
-        
+
         // If the first format field is not a GT, then no alleles need to be checked
         if (format[0] == GT) {
             check_sample_alleles(subfields);
-        }        
-        
+        }
+
         check_sample_subfields_cardinality_type(i, subfields, format_meta);
     }
 

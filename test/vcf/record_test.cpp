@@ -650,6 +650,37 @@ namespace ebi
                 source
         });
 
+        SECTION("gVCF allowed in v4.3") 
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id456" },
+                                "A",
+                                { vcf:: GVCF_NON_VARIANT_ALLELE },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::AN, "12"} },
+                                { "XY" },
+                                { "11" },
+                                source}) );
+ 
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id456" },
+                                "A",
+                                { vcf::GVCF_NON_VARIANT_ALLELE, "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::AN, "12"} },
+                                { "XY" },
+                                { "12" },
+                                source}) );
+       }
+
         SECTION("Duplicate IDs") 
         {
             CHECK_THROWS_AS( (vcf::Record{

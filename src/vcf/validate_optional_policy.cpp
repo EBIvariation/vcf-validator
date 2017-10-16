@@ -41,7 +41,13 @@ namespace ebi
         
         // Reference and alternate alleles in indels should share the first nucleotide
         check_body_entry_reference_alternate_matching(state, record);
-        
+
+        // 0/0 genotypes should be present when ALT is <*>, as it is supposed to be a reference region
+        check_body_entry_alt_gvcf_gt_value(state, record);
+
+        // gVCF fields should provide END, as <*> is supposed to represent a region
+        check_body_entry_info_gvcf_end(state, record);
+
         // If a variant is flagged as precise, then it should not contain imprecise variant fields like CIPOS or CIEND
         check_body_entry_info_imprecise(state, record);
 
@@ -143,6 +149,44 @@ namespace ebi
                 throw new ReferenceAlleleBodyError{state.n_lines,
                         "Reference and alternate alleles do not share the first nucleotide"};
             }
+        }
+    }
+
+    void ValidateOptionalPolicy::check_body_entry_alt_gvcf_gt_value(ParsingState & state, Record const & record) const
+    {
+        if (std::find(record.alternate_alleles.begin(), record.alternate_alleles.end(), GVCF_NON_VARIANT_ALLELE)
+            != record.alternate_alleles.end() && record.format[0] == vcf::GT) {
+            for (auto & sample : record.samples) {
+                if (sample_has_reference_in_all_alleles(sample)) {
+                    return;
+                }
+            }
+            throw new AlternateAllelesBodyError{state.n_lines,
+                    "At least one sample should report a genotype with all reference alleles, when ALT is " + GVCF_NON_VARIANT_ALLELE
+                    + " as it is supposed to be a reference region"};
+        }
+    }
+
+    bool ValidateOptionalPolicy::sample_has_reference_in_all_alleles(std::string const & sample) const
+    {
+        std::string gt_subfield = sample.substr(0, sample.find(':'));
+        std::vector<std::string> alleles;
+        util::string_split(gt_subfield, "/|", alleles);
+        for (auto & allele : alleles) {
+            if (allele != "0") {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void ValidateOptionalPolicy::check_body_entry_info_gvcf_end(ParsingState & state, Record const & record) const
+    {
+        if (std::find(record.alternate_alleles.begin(), record.alternate_alleles.end(), GVCF_NON_VARIANT_ALLELE)
+            != record.alternate_alleles.end() && record.info.find(END) == record.info.end()) {
+            throw new InfoBodyError{state.n_lines,
+                    "INFO END should be provided when ALT is " + GVCF_NON_VARIANT_ALLELE
+                    + " as it is supposed to be a region"};
         }
     }
 
