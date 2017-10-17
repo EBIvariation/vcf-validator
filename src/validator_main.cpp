@@ -46,7 +46,7 @@ namespace
             (ebi::vcf::HELP_OPTION, "Display this help")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
             (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING), "Validation level (error, warning, stop)")
-            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDOUT), "Comma separated values for types of reports (database, stdout)")
+            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::TEXT), "Comma separated values for types of reports (database, text)")
             (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Directory for the output")
             (ebi::vcf::PLOIDY_OPTION, po::value<long>()->default_value(2), "Genome ploidy to expect through most or the whole VCF file (can be overwritten with --special-ploidy)")
             (ebi::vcf::SPECIAL_PLOIDY_OPTION, po::value<std::string>(), "Ploidy expected in specific chromosomes/contigs, e.g Y=1,MyTriploidContig=3")
@@ -102,7 +102,7 @@ namespace
         if (not boost::filesystem::is_directory(outdir_boost_path)) {
             throw std::invalid_argument{"outdir should be a directory, not a file: " + outdir_boost_path.string()};
         }
-        
+
         outdir_boost_path /= file_boost_path.filename();
 
         return outdir_boost_path.string();
@@ -160,17 +160,20 @@ namespace
         std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
 
         for (auto out : outs) {
-            if (out == ebi::vcf::DATABASE) {
+            if (out == ebi::vcf::DATABASE || out == ebi::vcf::TEXT) {
                 auto epoch = std::chrono::system_clock::now().time_since_epoch();
                 auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
-                std::string db_filename = input + ".errors." + std::to_string(timestamp) + ".db";
-                boost::filesystem::path db_file{db_filename};
-                if (boost::filesystem::exists(db_file)) {
-                    throw std::runtime_error{"Report file already exists on " + db_filename + ", please delete it or rename it"};
+                std::string filetype = (out == ebi::vcf::DATABASE ? "db" : "txt");
+                std::string filename = input + ".errors." + std::to_string(timestamp) + "." + filetype;
+                boost::filesystem::path file{filename};
+                if (boost::filesystem::exists(file)) {
+                    throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
-                outputs.emplace_back(new ebi::vcf::OdbReportRW(db_filename));
-            } else if (out == ebi::vcf::STDOUT) {
-                outputs.emplace_back(new ebi::vcf::SummaryReportWriter(std::cout));
+                if (out == ebi::vcf::DATABASE) {
+                    outputs.emplace_back(new ebi::vcf::OdbReportRW(filename));
+                } else {
+                    outputs.emplace_back(new ebi::vcf::SummaryReportWriter(filename));
+                }
             } else {
                 throw std::invalid_argument{"Please use only valid report types"};
             }
@@ -189,11 +192,11 @@ int main(int argc, char** argv)
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
-    
+
     int check_options = check_command_line_options(vm, desc);
     if (check_options < 0) { return 0; }
     if (check_options > 0) { return check_options; }
-    
+
     bool is_valid;
 
     try {
@@ -219,7 +222,7 @@ int main(int argc, char** argv)
 
         BOOST_LOG_TRIVIAL(info) << "According to the VCF specification, the input file is " << (is_valid ? "" : "not ") << "valid";
         return !is_valid; // A valid file returns an exit code 0
-        
+
     } catch (std::invalid_argument const & ex) {
         BOOST_LOG_TRIVIAL(error) << ex.what();
         return 1;
