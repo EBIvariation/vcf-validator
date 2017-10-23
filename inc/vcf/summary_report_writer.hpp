@@ -112,7 +112,7 @@ namespace ebi
       public:
         SummaryReportWriter(std::string filename)
         {
-            fout.open(filename, std::ios::app);
+            fout.open(filename, std::ios::out);
         }
 
         ~SummaryReportWriter()

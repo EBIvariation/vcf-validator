@@ -159,10 +159,10 @@ namespace
 
         std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
 
+        auto epoch = std::chrono::system_clock::now().time_since_epoch();
+        auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
         for (auto out : outs) {
             if (out == ebi::vcf::DATABASE || out == ebi::vcf::TEXT) {
-                auto epoch = std::chrono::system_clock::now().time_since_epoch();
-                auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
                 std::string filetype = (out == ebi::vcf::DATABASE ? "db" : "txt");
                 std::string filename = input + ".errors." + std::to_string(timestamp) + "." + filetype;
                 boost::filesystem::path file{filename};
