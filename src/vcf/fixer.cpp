@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-#include <algorithm>
-
-#include "util/stream_utils.hpp"
-#include "util/string_utils.hpp"
 #include "util/logger.hpp"
 #include "vcf/fixer.hpp"
 #include "vcf/string_constants.hpp"

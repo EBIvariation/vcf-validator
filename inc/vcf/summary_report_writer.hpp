@@ -105,7 +105,7 @@ namespace ebi
 
 
     /**
-     * Implements a ReportWriter that writes to stdout, but small warnings are written only once.
+     * Implements a ReportWriter that writes to a file, but small warnings are written only once.
      */
     class SummaryReportWriter : public ReportWriter
     {

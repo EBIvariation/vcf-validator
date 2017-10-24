@@ -19,7 +19,11 @@
 
 #include <vector>
 #include <set>
+#include <iostream>
+#include <algorithm>
 
+#include "util/stream_utils.hpp"
+#include "util/string_utils.hpp"
 #include "error.hpp"
 
 namespace ebi

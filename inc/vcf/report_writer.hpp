@@ -17,7 +17,7 @@
 #ifndef VCF_REPORT_WRITER_HPP
 #define VCF_REPORT_WRITER_HPP
 
-#include <iostream>
+#include <fstream>
 #include <string>
 #include <stdexcept>
 
@@ -35,18 +35,32 @@ namespace ebi
             virtual void write_warning(Error &error) = 0;
     };
 
-    class StdoutReportWriter : public ReportWriter
+    class FileReportWriter : public ReportWriter
     {
         public:
+            FileReportWriter(std::string filename)
+            {
+                fout.open(filename, std::ios::out);
+            }
+
+            ~FileReportWriter()
+            {
+                fout.close();
+            }
+
             virtual void write_error(Error &error) override
             {
-                std::cout << error.what() << std::endl;
+                fout << error.what() << std::endl;
             }
+
             virtual void write_warning(Error &error) override
             {
-                std::cout << error.what() << " (warning)" << std::endl;
+                fout << error.what() << " (warning)" << std::endl;
             }
-      };
+
+        private:
+            std::ofstream fout;
+    };
   }
 }
 
