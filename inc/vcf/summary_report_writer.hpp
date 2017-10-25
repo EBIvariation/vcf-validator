@@ -112,29 +112,29 @@ namespace ebi
       public:
         SummaryReportWriter(std::string filename)
         {
-            fout.open(filename, std::ios::out);
+            file.open(filename, std::ios::out);
         }
 
         ~SummaryReportWriter()
         {
-            fout.close();
+            file.close();
         }
 
         virtual void write_error(Error &error)
         {
-            fout << error.what() << std::endl;
+            file << error.what() << std::endl;
         }
 
         virtual void write_warning(Error &error)
         {
             if (summary.should_write_report(error)) {
-                fout << error.what() << " (warning)" << std::endl;
+                file << error.what() << " (warning)" << std::endl;
             }
         }
 
       private:
         SummaryTracker summary;
-        std::ofstream fout;
+        std::ofstream file;
     };
   }
 }

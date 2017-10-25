@@ -40,26 +40,26 @@ namespace ebi
         public:
             FileReportWriter(std::string filename)
             {
-                fout.open(filename, std::ios::out);
+                file.open(filename, std::ios::out);
             }
 
             ~FileReportWriter()
             {
-                fout.close();
+                file.close();
             }
 
             virtual void write_error(Error &error) override
             {
-                fout << error.what() << std::endl;
+                file << error.what() << std::endl;
             }
 
             virtual void write_warning(Error &error) override
             {
-                fout << error.what() << " (warning)" << std::endl;
+                file << error.what() << " (warning)" << std::endl;
             }
 
         private:
-            std::ofstream fout;
+            std::ofstream file;
     };
   }
 }
