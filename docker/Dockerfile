@@ -8,6 +8,7 @@ libboost-dev \
 libboost-filesystem-dev \
 libboost-program-options-dev \
 libboost-regex-dev \
+libboost-log-dev \
 libsqlite3-dev \
 ragel \
 # Clean up to reduce layer size

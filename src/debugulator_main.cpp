@@ -19,6 +19,7 @@
 
 #include <boost/program_options.hpp>
 
+#include "util/logger.hpp"
 #include "vcf/odb_report.hpp"
 #include "vcf/string_constants.hpp"
 #include "vcf/debugulator.hpp"
@@ -57,13 +58,13 @@ namespace
       std::string level = vm[ebi::vcf::LEVEL].as<std::string>();
       if (level != ebi::vcf::ERROR && level != ebi::vcf::WARNING && level != ebi::vcf::STOP) {
           std::cout << desc << std::endl;
-          std::cout << "Please choose one of the accepted validation levels" << std::endl;
+          BOOST_LOG_TRIVIAL(error) << "Please choose one of the accepted validation levels";
           return 1;
       }
 
       if (!vm.count(ebi::vcf::ERRORS)) {
           std::cout << desc << std::endl;
-          std::cout << "Please specify the path to the errors report (--errors)" << std::endl;
+          BOOST_LOG_TRIVIAL(error) << "Please specify the path to the errors report (--errors)";
           return 1;
       }
 
@@ -73,6 +74,8 @@ namespace
 
 int main(int argc, char **argv)
 {
+    ebi::util::init_boost_loggers();
+
     namespace po = boost::program_options;
 
     po::options_description desc = build_command_line_options();
@@ -98,7 +101,7 @@ int main(int argc, char **argv)
                 throw std::runtime_error{"Couldn't open file " + input_path};
             }
         } else {
-            std::cerr << "Reading from standard input..." << std::endl;
+            BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
         }
 
         std::ofstream output_file;
@@ -108,7 +111,7 @@ int main(int argc, char **argv)
                 throw std::runtime_error{"Couldn't open file " + output_path};
             }
         } else {
-            std::cerr << "Writing to standard output..." << std::endl;
+            BOOST_LOG_TRIVIAL(info) << "Writing to standard output...";
         }
 
         ebi::vcf::OdbReportRW errorDAO{errors};
@@ -121,7 +124,7 @@ int main(int argc, char **argv)
         return 0;
 
     } catch (std::exception const &ex) {
-        std::cerr << "Aborting execution, error: " << ex.what() << std::endl;
+        BOOST_LOG_TRIVIAL(error) << "Aborting execution, error: " << ex.what();
         return 1;
     }
 }

@@ -105,28 +105,36 @@ namespace ebi
 
 
     /**
-     * Implements a ReportWriter that writes to stdout, but small warnings are written only once.
+     * Implements a ReportWriter that writes to a file, but small warnings are written only once.
      */
     class SummaryReportWriter : public ReportWriter
     {
       public:
-        SummaryReportWriter(std::ostream &out) : out(out) {}
+        SummaryReportWriter(std::string filename)
+        {
+            file.open(filename, std::ios::out);
+        }
+
+        ~SummaryReportWriter()
+        {
+            file.close();
+        }
 
         virtual void write_error(Error &error)
         {
-            out << error.what() << std::endl;
+            file << error.what() << std::endl;
         }
 
         virtual void write_warning(Error &error)
         {
             if (summary.should_write_report(error)) {
-                out << error.what() << " (warning)" << std::endl;
+                file << error.what() << " (warning)" << std::endl;
             }
         }
 
       private:
         SummaryTracker summary;
-        std::ostream &out;
+        std::ofstream file;
     };
   }
 }

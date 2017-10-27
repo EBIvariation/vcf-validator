@@ -84,8 +84,8 @@ The end-users build is perfectly valid during development to generate a static b
 
 #### Boost
 
-The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.program_options, Boost.regex and Boost.system.
-If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-program-options-dev` and `libboost-regex-dev`.
+The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.program_options, Boost.regex, Boost.log and Boost.system.
+If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-program-options-dev`, `libboost-regex-dev` and `libboost-log-dev`.
 
 #### ODB
 

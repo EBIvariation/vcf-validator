@@ -26,6 +26,7 @@
 #include <boost/program_options.hpp>
 #include <boost/filesystem/operations.hpp>
 
+#include "util/logger.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
 #include "vcf/ploidy.hpp"
@@ -45,7 +46,7 @@ namespace
             (ebi::vcf::HELP_OPTION, "Display this help")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
             (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING), "Validation level (error, warning, stop)")
-            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDOUT), "Comma separated values for types of reports (database, stdout)")
+            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::TEXT), "Comma separated values for types of reports (database, text)")
             (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Directory for the output")
             (ebi::vcf::PLOIDY_OPTION, po::value<long>()->default_value(2), "Genome ploidy to expect through most or the whole VCF file (can be overwritten with --special-ploidy)")
             (ebi::vcf::SPECIAL_PLOIDY_OPTION, po::value<std::string>(), "Ploidy expected in specific chromosomes/contigs, e.g Y=1,MyTriploidContig=3")
@@ -64,13 +65,13 @@ namespace
         std::string level = vm[ebi::vcf::LEVEL].as<std::string>();
         if (level != ebi::vcf::ERROR && level != ebi::vcf::WARNING && level != ebi::vcf::STOP) {
             std::cout << desc << std::endl;
-            std::cout << "Please choose one of the accepted validation levels" << std::endl;
+            BOOST_LOG_TRIVIAL(error) << "Please choose one of the accepted validation levels";
             return 1;
         }
 
         long ploidy = vm[ebi::vcf::PLOIDY].as<long>();
         if (ploidy <= 0) {
-            std::cout << "Ploidy must be greater that 0" << std::endl;
+            BOOST_LOG_TRIVIAL(error) << "Ploidy must be greater that 0";
             return 1;
         }
 
@@ -101,7 +102,7 @@ namespace
         if (not boost::filesystem::is_directory(outdir_boost_path)) {
             throw std::invalid_argument{"outdir should be a directory, not a file: " + outdir_boost_path.string()};
         }
-        
+
         outdir_boost_path /= file_boost_path.filename();
 
         return outdir_boost_path.string();
@@ -153,23 +154,26 @@ namespace
         std::sort(outs.begin(), outs.end());
         std::unique(outs.begin(), outs.end());
         if (initial_size != outs.size()) {
-            std::cerr << "Warning, duplicated outputs! will write just once to each output specified by -r/--report" << std::endl;
+            BOOST_LOG_TRIVIAL(warning) << "Duplicated outputs! will write just once to each output specified by -r/--report";
         }
 
         std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
 
+        auto epoch = std::chrono::system_clock::now().time_since_epoch();
+        auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
         for (auto out : outs) {
-            if (out == ebi::vcf::DATABASE) {
-                auto epoch = std::chrono::system_clock::now().time_since_epoch();
-                auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
-                std::string db_filename = input + ".errors." + std::to_string(timestamp) + ".db";
-                boost::filesystem::path db_file{db_filename};
-                if (boost::filesystem::exists(db_file)) {
-                    throw std::runtime_error{"Report file already exists on " + db_filename + ", please delete it or rename it"};
+            if (out == ebi::vcf::DATABASE || out == ebi::vcf::TEXT) {
+                std::string filetype = (out == ebi::vcf::DATABASE ? "db" : "txt");
+                std::string filename = input + ".errors." + std::to_string(timestamp) + "." + filetype;
+                boost::filesystem::path file{filename};
+                if (boost::filesystem::exists(file)) {
+                    throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
-                outputs.emplace_back(new ebi::vcf::OdbReportRW(db_filename));
-            } else if (out == ebi::vcf::STDOUT) {
-                outputs.emplace_back(new ebi::vcf::SummaryReportWriter(std::cout));
+                if (out == ebi::vcf::DATABASE) {
+                    outputs.emplace_back(new ebi::vcf::OdbReportRW(filename));
+                } else {
+                    outputs.emplace_back(new ebi::vcf::SummaryReportWriter(filename));
+                }
             } else {
                 throw std::invalid_argument{"Please use only valid report types"};
             }
@@ -182,15 +186,17 @@ namespace
 
 int main(int argc, char** argv)
 {
+    ebi::util::init_boost_loggers();
+
     po::options_description desc = build_command_line_options();
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
-    
+
     int check_options = check_command_line_options(vm, desc);
     if (check_options < 0) { return 0; }
     if (check_options > 0) { return check_options; }
-    
+
     bool is_valid;
 
     try {
@@ -202,10 +208,10 @@ int main(int argc, char** argv)
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
         if (path == ebi::vcf::STDIN) {
-            std::cout << "Reading from standard input..." << std::endl;
+            BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
             is_valid = ebi::vcf::is_valid_vcf_file(std::cin, path, validationLevel, ploidy, outputs);
         } else {
-            std::cout << "Reading from input file..." << std::endl;
+            BOOST_LOG_TRIVIAL(info) << "Reading from input file...";
             std::ifstream input{path};
             if (!input) {
                 throw std::runtime_error{"Couldn't open file " + path};
@@ -214,18 +220,17 @@ int main(int argc, char** argv)
             }
         }
 
-        std::cout << "According to the VCF specification, the input file is "
-                  << (is_valid ? "valid" : "not valid") << std::endl;
+        BOOST_LOG_TRIVIAL(info) << "According to the VCF specification, the input file is " << (is_valid ? "" : "not ") << "valid";
         return !is_valid; // A valid file returns an exit code 0
-        
+
     } catch (std::invalid_argument const & ex) {
-        std::cerr << ex.what() << std::endl;
+        BOOST_LOG_TRIVIAL(error) << ex.what();
         return 1;
     } catch (std::runtime_error const & ex) {
-        std::cout << "The input file is not valid: " << ex.what() << std::endl;
+        BOOST_LOG_TRIVIAL(error) << "The input file is not valid: " << ex.what();
         return 1;
     } catch (std::exception const &ex) {
-        std::cerr << ex.what() << std::endl;
+        BOOST_LOG_TRIVIAL(error) << ex.what();
         return 1;
     }
 }
