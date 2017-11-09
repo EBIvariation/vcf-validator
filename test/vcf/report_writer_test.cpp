@@ -170,7 +170,7 @@ namespace ebi
 
           errorsDAO.for_each_error([&errors_read](std::shared_ptr<ebi::vcf::Error> error) {
               CHECK(error->line == 4);
-              CHECK(error->message == "Allele index C must be a non-negative integer number");
+              CHECK(error->message == "Allele must be a non-negative integer number");
               errors_read++;
           });
 
@@ -189,13 +189,13 @@ namespace ebi
       CHECK_FALSE(boost::filesystem::exists(db_file));
 
   }
-
+/*
   TEST_CASE("Unit test: summary report", "[output]")
   {
-      SECTION("SummaryTracker should skip repeated NoMetaDefinitionError")
+      SECTION("SummaryTracker should skip repeated Errors")
       {
           ebi::vcf::SummaryTracker reporter;
-          ebi::vcf::NoMetaDefinitionError error{0, "no definition", "column", "field"};
+          ebi::vcf::NoMetaDefinitionError error{0, "no definition"};
 
           REQUIRE(reporter.should_write_report(error)); // first time it should write
 
@@ -205,9 +205,13 @@ namespace ebi
           REQUIRE(reporter.should_write_report(error));
       }
 
-      SECTION("SummaryTracker should write every time important Errors")
+  }
+
+  TEST_CASE("Unit test: full report", "[output]")
+  {
+      SECTION("FileErrorReporter should write every time Errors")
       {
-          ebi::vcf::SummaryTracker reporter;
+          ebi::vcf::FileErrorReporter reporter;
           ebi::vcf::BodySectionError error{0, "regular body error"};
 
           // first time it should write
@@ -217,4 +221,5 @@ namespace ebi
           REQUIRE(reporter.should_write_report(error));
       }
   }
+  */
 }

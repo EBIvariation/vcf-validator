@@ -40,69 +40,22 @@ namespace ebi
      * }
      * ~~~
      */
-    class SummaryTracker : public ErrorVisitor
+    class SummaryTracker
     {
       public:
-        SummaryTracker() : already_reported{}, skip{false} {}
+        std::map<std::string, std::pair<long, size_t>> error_summary_report;
+        std::vector<std::string> error_order;
 
-        bool should_write_report(Error &error)
+        void add_to_summary(std::string const & error_message, size_t error_line)
         {
-            error.apply_visitor(*this);
-            return not skip;
-        }
-
-
-        virtual void visit(Error &error) {}
-        virtual void visit(MetaSectionError &error) {}
-        virtual void visit(HeaderSectionError &error) {}
-        virtual void visit(BodySectionError &error) {}
-        virtual void visit(NoMetaDefinitionError &error)
-        {
-            if (is_already_reported(error.column, error.field)) {
-                skip = true;
+            if (error_summary_report.find(error_message) == error_summary_report.end()) {
+                error_order.push_back(error_message);
+                error_summary_report.emplace(std::make_pair(error_message, std::make_pair(1, error_line)));
             } else {
-                add_already_reported(error.column, error.field);
-                skip = false;
+                error_summary_report[error_message].first++;
             }
         }
-        virtual void visit(FileformatError &error) {}
-        virtual void visit(ChromosomeBodyError &error) {}
-        virtual void visit(PositionBodyError &error) {}
-        virtual void visit(IdBodyError &error) {}
-        virtual void visit(ReferenceAlleleBodyError &error) {}
-        virtual void visit(AlternateAllelesBodyError &error) {}
-        virtual void visit(QualityBodyError &error) {}
-        virtual void visit(FilterBodyError &error) {}
-        virtual void visit(InfoBodyError &error) {}
-        virtual void visit(FormatBodyError &error) {}
-        virtual void visit(SamplesBodyError &error) {}
-        virtual void visit(SamplesFieldBodyError &error) {}
-        virtual void visit(NormalizationError &error) {}
-        virtual void visit(DuplicationError &error) {}
-
-      private:
-        bool is_already_reported(std::string const &meta_type, std::string const &id) const
-        {
-            typedef std::multimap<std::string,std::string>::const_iterator iter;
-            std::pair<iter, iter> range = already_reported.equal_range(meta_type);
-            for (auto & current = range.first; current != range.second; ++current) {
-                if (current->second == id) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        void add_already_reported(std::string const &meta_type, std::string const &id)
-        {
-            already_reported.emplace(meta_type, id);
-        }
-
-        std::multimap<std::string, std::string> already_reported;
-        bool skip;
-    };
-
-
+   };
 
     /**
      * Implements a ReportWriter that writes to a file, but small warnings are written only once.
@@ -117,24 +70,31 @@ namespace ebi
 
         ~SummaryReportWriter()
         {
+            write_summary();
             file.close();
         }
 
         virtual void write_error(Error &error)
         {
-            file << error.what() << std::endl;
+            summary.add_to_summary(error.message, error.line);
         }
 
         virtual void write_warning(Error &error)
         {
-            if (summary.should_write_report(error)) {
-                file << error.what() << " (warning)" << std::endl;
-            }
+            summary.add_to_summary(error.message + " (warning)", error.line);
         }
 
       private:
         SummaryTracker summary;
         std::ofstream file;
+
+        void write_summary()
+        {
+            for (auto & error_message : summary.error_order) {
+                file << error_message << ". This occurs " << summary.error_summary_report[error_message].first
+                     << " time(s), first time in line " << summary.error_summary_report[error_message].second << std::endl;
+            }
+        }
     };
   }
 }

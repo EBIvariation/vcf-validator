@@ -99,8 +99,8 @@ namespace ebi
                     if (alleles.size() != ploidy) {
                         throw new SamplesFieldBodyError{
                                 state.n_lines,
-                                "Sample #" + std::to_string(i) + " has " + std::to_string(alleles.size())
-                                        + " allele(s), but " + std::to_string(ploidy) + " were found in others",
+                                "Sample #" + std::to_string(i) + " has " + std::to_string(alleles.size()) + " allele(s)",
+                                "But " + std::to_string(ploidy) + " were found in others",
                                 GT,
                                 static_cast<long>(ploidy)};
                     }
@@ -113,10 +113,11 @@ namespace ebi
 
             size_t provided_ploidy = state.source->ploidy.get_ploidy(record.chromosome);
             if (provided_ploidy != ploidy) {
-                std::stringstream ss;
+                std::stringstream ss, ss_detail;
                 ss << "The specified ploidy for contig \"" << record.chromosome << "\" was " << provided_ploidy
-                   << ", which doesn't match the genotypes, which show ploidy " << ploidy;
-                throw new SamplesFieldBodyError{state.n_lines, ss.str(), GT, static_cast<long>(provided_ploidy)};
+                   << ", which doesn't match the genotypes";
+                ss_detail << "Genotypes show ploidy " << ploidy;
+                throw new SamplesFieldBodyError{state.n_lines, ss.str(), ss_detail.str(), GT, static_cast<long>(provided_ploidy)};
             }
         }
     }
@@ -217,8 +218,8 @@ namespace ebi
             util::string_split(it->second, ",", values);
             if (values.size() != record.alternate_alleles.size()) {
                 throw new InfoBodyError{state.n_lines,
-                        "INFO SVLEN should have same number of values as ALT (expected " + std::to_string(record.alternate_alleles.size())
-                        + ", found " + std::to_string(values.size()) + ")"};
+                        "INFO SVLEN should have same number of values as ALT ", "Expected " + std::to_string(record.alternate_alleles.size())
+                        + ", found " + std::to_string(values.size())};
             }
         }
     }
@@ -256,9 +257,7 @@ namespace ebi
         } else {
             throw new NoMetaDefinitionError{
                     state.n_lines,
-                    "Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description",
-                    CHROM,
-                    current_chromosome
+                    "Chromosome/contig '" + current_chromosome + "' is not described in a 'contig' meta description"
             };
         }
     }
@@ -283,9 +282,7 @@ namespace ebi
                 } else {
                     throw new NoMetaDefinitionError{
                             state.n_lines,
-                            "Alternate '<" + alt_id + ">' is not listed in a valid meta-data ALT entry",
-                            ALT,
-                            alt_id
+                            "Alternate '<" + alt_id + ">' is not listed in a valid meta-data ALT entry"
                     };
                 }
             }
@@ -308,9 +305,7 @@ namespace ebi
             } else {
                 throw new NoMetaDefinitionError{
                         state.n_lines,
-                        "Filter '" + filter + "' is not listed in a valid meta-data FILTER entry",
-                        FILTER,
-                        filter
+                        "FILTER '" + filter + "' is not listed in a valid meta-data FILTER entry"
                 };
             }
         }
@@ -333,9 +328,7 @@ namespace ebi
             } else {
                 throw new NoMetaDefinitionError{
                         state.n_lines,
-                        "Info '" + id + "' is not listed in a valid meta-data INFO entry",
-                        INFO,
-                        id
+                        "INFO '" + id + "' is not listed in a valid meta-data INFO entry"
                 };
             }
         }
@@ -355,9 +348,7 @@ namespace ebi
             } else {
                 throw new NoMetaDefinitionError{
                         state.n_lines,
-                        "Format '" + fm + "' is not listed in a valid meta-data FORMAT entry",
-                        FORMAT,
-                        fm
+                        "FORMAT '" + fm + "' is not listed in a valid meta-data FORMAT entry"
                 };
             }
         }
