@@ -24,6 +24,13 @@ namespace ebi
 {
   namespace vcf
   {
+
+    struct ErrorSummary
+    {
+      size_t appearances;
+      size_t first_appearance_line;
+    };
+
     /**
      * Class that tells whether an error should be written or skipped.
      *
@@ -43,16 +50,16 @@ namespace ebi
     class SummaryTracker
     {
       public:
-        std::map<std::string, std::pair<long, size_t>> error_summary_report;
+        std::map<std::string, ErrorSummary> error_summary_report;
         std::vector<std::string> error_order;
 
         void add_to_summary(std::string const & error_message, size_t error_line)
         {
             if (error_summary_report.find(error_message) == error_summary_report.end()) {
                 error_order.push_back(error_message);
-                error_summary_report.emplace(std::make_pair(error_message, std::make_pair(1, error_line)));
+                error_summary_report[error_message] = ErrorSummary{1, error_line};
             } else {
-                error_summary_report[error_message].first++;
+                error_summary_report[error_message].appearances++;
             }
         }
    };
@@ -91,8 +98,8 @@ namespace ebi
         void write_summary()
         {
             for (auto & error_message : summary.error_order) {
-                file << error_message << ". This occurs " << summary.error_summary_report[error_message].first
-                     << " time(s), first time in line " << summary.error_summary_report[error_message].second << std::endl;
+                file << error_message << ". This occurs " << summary.error_summary_report[error_message].appearances
+                     << " time(s), first time in line " << summary.error_summary_report[error_message].first_appearance_line << std::endl;
             }
         }
     };
