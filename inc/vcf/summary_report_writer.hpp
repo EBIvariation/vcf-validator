@@ -25,6 +25,9 @@ namespace ebi
   namespace vcf
   {
 
+    /**
+     * Stores the count and first line of appearance of an error message
+     */
     struct ErrorSummary
     {
       size_t appearances;
@@ -32,19 +35,18 @@ namespace ebi
     };
 
     /**
-     * Class that tells whether an error should be written or skipped.
+     * Class that ensures similar kind of errors are reported only once.
      *
-     * The intended algorithm is that all errors will be printed the first time they appear, but some of them won't
+     * The intended algorithm is that errors and warnings will be printed only the first time they appear, and won't
      * be printed again.
      *
-     * To differentiate the Error dynamic type, this class implements ErrorVisitor. As the visitor interface returns
-     * `void`, we have to store the decision in the class' state, in the variable `skip`.
+     * The summary diplays the count(number of times it appears) of the error, and the line number of it's first
+     * occurrence. We distinguish between different types of errors based on their simple error message (which contains
+     * no details). The `error_order` basically maintains the order in which these errors appaer for the first time.
      *
      * Use this class like this:
      * ~~~
-     * if (summary.should_write_report(error)) {
-     *     std::cout << error.what() << " (warning)" << std::endl;
-     * }
+     * summary.add_to_summary(error.message, error.line);
      * ~~~
      */
     class SummaryTracker
@@ -65,7 +67,7 @@ namespace ebi
    };
 
     /**
-     * Implements a ReportWriter that writes to a file, but small warnings are written only once.
+     * Implements a ReportWriter that writes to a file, but only the summary is written
      */
     class SummaryReportWriter : public ReportWriter
     {
