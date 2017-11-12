@@ -262,11 +262,11 @@ namespace ebi
                         throw new InfoBodyError{line, message, key_values[ID] + "=" + field.second,
                                 ErrorFix::IRRECOVERABLE_VALUE, key_values[ID]};
                     }
-                    
+
                     break;
                 }
             }
-            
+
             if (!found_in_meta) {
                 try {
                     if (source->version == Version::v41 || source->version == Version::v42) {
@@ -368,7 +368,9 @@ namespace ebi
             if (it != info.end() && it->second == "0") {
                 auto expected = std::to_string(position + reference_allele.length() - 1);
                 if (field_value != expected) {
-                    throw new InfoBodyError{line, "INFO END value must be equal to \"POS + length of REF - 1\" for a precise variant (where IMPRECISE is set to 0), expected " + expected, "END=" + field_value,
+                    throw new InfoBodyError{line, "INFO END value must be equal to \"POS + length of REF - 1\" for a "
+                            "precise variant (where IMPRECISE is set to 0)",
+                            "END=" + field_value + ", expected value=" + expected,
                             ErrorFix::RECOVERABLE_VALUE, field_key, expected};
                 }
             }
@@ -377,19 +379,22 @@ namespace ebi
                 if (check_alt_not_symbolic(i)) {
                     std::string expected = std::to_string(static_cast<long>(alternate_alleles[i].size()) - static_cast<long>(reference_allele.size()));
                     if (values[i] != expected) {
-                        throw new InfoBodyError{line, "INFO SVLEN must be equal to \"length of ALT - length of REF\" for non-symbolic alternate alleles (expected " + expected + ", found " + values[i] + ")", "SVLEN=" + field_value,
+                        throw new InfoBodyError{line, "INFO SVLEN must be equal to \"length of ALT - length of REF\" for "
+                                "non-symbolic alternate alleles", "SVLEN=" + field_value + ", expected value=" + expected,
                                 ErrorFix::RECOVERABLE_VALUE, field_key, expected};
                     }
                 } else {
                     std::string first_field = alternate_alleles[i].substr(0, 4);
                     if (first_field == "<" + INS || first_field == "<" + DUP) {
                         if (std::stoi(values[i]) < 0) {
-                            throw new InfoBodyError{line, "INFO SVLEN must be a positive integer for longer ALT alleles like " + first_field.substr(1,3), "SVLEN=" + field_value,
+                            throw new InfoBodyError{line, "INFO SVLEN must be a positive integer for longer ALT alleles", "SVLEN="
+                                    + field_value + ", ALT allele=" + first_field.substr(1, 3),
                                     ErrorFix::IRRECOVERABLE_VALUE, field_key};
                         }
                     } else if (first_field == "<" + DEL) {
                         if (std::stoi(values[i]) > 0) {
-                            throw new InfoBodyError{line, "INFO SVLEN must be a negative integer for shorter ALT alleles like " + first_field.substr(1,3), "SVLEN=" + field_value,
+                            throw new InfoBodyError{line, "INFO SVLEN must be a negative integer for shorter ALT alleles"
+                                    + first_field.substr(1,3), "SVLEN=" + field_value + ", ALT allele=" + first_field.substr(1, 3),
                                     ErrorFix::IRRECOVERABLE_VALUE, field_key};
                         }
                     }
