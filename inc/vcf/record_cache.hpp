@@ -75,8 +75,7 @@ namespace ebi
                     // one or more matches found
                     std::stringstream ss;
                     ss << "Duplicated variant " << record_core.chromosome << ":" << record_core.position << ":"
-                    << record_core.reference_allele << ">" << record_core.alternate_allele << " found in lines "
-                    << range.first->line << " and " << record_core.line;
+                    << record_core.reference_allele << ">" << record_core.alternate_allele << " found";
                     size_t first_occurence_line{range.first->line};
 
                     if (++range.first == range.second) {
@@ -113,7 +112,7 @@ namespace ebi
 
       private:
         std::multiset<RecordCore> cache;
-        size_t capacity;    ///< max amount of RecorCores that the cache can hold
+        size_t capacity;    ///< max amount of RecordCores that the cache can hold
         bool unlimited; ///< if true, the set is not capped and will not erase any RecordCore
     };
   }

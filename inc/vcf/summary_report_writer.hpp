@@ -42,12 +42,7 @@ namespace ebi
      *
      * The summary diplays the count(number of times it appears) of the error, and the line number of it's first
      * occurrence. We distinguish between different types of errors based on their simple error message (which contains
-     * no details). The `error_order` basically maintains the order in which these errors appaer for the first time.
-     *
-     * Use this class like this:
-     * ~~~
-     * summary.add_to_summary(error.message, error.line);
-     * ~~~
+     * no details). The `error_order` basically maintains the order in which these errors appear for the first time.
      */
     class SummaryTracker
     {
