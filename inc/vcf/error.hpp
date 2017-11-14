@@ -112,7 +112,7 @@ namespace ebi
 
         Error(size_t line, const std::string &message, const std::string &detailed_message = "")
                 : runtime_error{std::string{"Line "} + std::to_string(line) + ": " + message
-                                    + (detailed_message != "" ? ". " + detailed_message + "." : "")},
+                                    + (detailed_message != "" ? (". " + detailed_message) : "") + "."},
                   line{line},
                   message{message} {}
 

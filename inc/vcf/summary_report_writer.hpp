@@ -96,7 +96,7 @@ namespace ebi
         {
             for (auto & error_message : summary.error_order) {
                 file << error_message << ". This occurs " << summary.error_summary_report[error_message].appearances
-                     << " time(s), first time in line " << summary.error_summary_report[error_message].first_appearance_line << std::endl;
+                     << " time(s), first time in line " << summary.error_summary_report[error_message].first_appearance_line << "." << std::endl;
             }
         }
     };
