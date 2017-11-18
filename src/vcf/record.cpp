@@ -571,7 +571,7 @@ namespace ebi
         if (num_allele > alternate_alleles.size()) {
             throw new SamplesFieldBodyError{line,
                                             "Allele is greater than the maximum allowed",
-                                            "Index=" + std::to_string(num_allele) + ", Maximum allowed=" + std::to_string(alternate_alleles.size()),
+                                            "Index=" + std::to_string(num_allele) + ", maximum allowed=" + std::to_string(alternate_alleles.size()),
                                             GT, ploidy};
         }
     }

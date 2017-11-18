@@ -198,12 +198,12 @@ namespace ebi
           ebi::vcf::FormatBodyError error{7, "format body error"};
 
           reporter.add_to_summary(error.message, error.line);
-          REQUIRE(reporter.error_summary_report[error.message].appearances == 1);
-          REQUIRE(reporter.error_summary_report[error.message].first_appearance_line == 7);
+          REQUIRE(reporter.error_summary_report[error.message].occurrences == 1);
+          REQUIRE(reporter.error_summary_report[error.message].first_occurrence_line == 7);
 
           reporter.add_to_summary(error.message, 11);
-          REQUIRE(reporter.error_summary_report[error.message].appearances == 2);
-          REQUIRE(reporter.error_summary_report[error.message].first_appearance_line == 7);
+          REQUIRE(reporter.error_summary_report[error.message].occurrences == 2);
+          REQUIRE(reporter.error_summary_report[error.message].first_occurrence_line == 7);
       }
   }
 

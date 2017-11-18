@@ -100,7 +100,7 @@ namespace ebi
                         throw new SamplesFieldBodyError{
                                 state.n_lines,
                                 "Sample #" + std::to_string(i) + " has " + std::to_string(alleles.size()) + " allele(s)",
-                                "But " + std::to_string(ploidy) + " were found in others",
+                                std::to_string(ploidy) + " alleles were found in other samples",
                                 GT,
                                 static_cast<long>(ploidy)};
                     }

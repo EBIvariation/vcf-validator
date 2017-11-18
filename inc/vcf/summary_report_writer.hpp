@@ -26,21 +26,21 @@ namespace ebi
   {
 
     /**
-     * Stores the count and first line of appearance of an error message
+     * Stores the count and first line of occurrence of an error message
      */
     struct ErrorSummary
     {
-      size_t appearances;
-      size_t first_appearance_line;
+      size_t occurrences;
+      size_t first_occurrence_line;
     };
 
     /**
      * Class that ensures similar kind of errors are reported only once.
      *
-     * The intended algorithm is that errors and warnings will be printed only the first time they appear, and won't
+     * The intended algorithm is that errors and warnings will be printed only the first time they occur, and won't
      * be printed again.
      *
-     * The summary diplays the count(number of times it appears) of the error, and the line number of it's first
+     * The summary displays the count(number of times it occurs) of the error, and the line number of its first
      * occurrence. We distinguish between different types of errors based on their simple error message (which contains
      * no details). The `error_order` basically maintains the order in which these errors appear for the first time.
      */
@@ -56,7 +56,7 @@ namespace ebi
                 error_order.push_back(error_message);
                 error_summary_report[error_message] = ErrorSummary{1, error_line};
             } else {
-                error_summary_report[error_message].appearances++;
+                error_summary_report[error_message].occurrences++;
             }
         }
    };
@@ -95,8 +95,8 @@ namespace ebi
         void write_summary()
         {
             for (auto & error_message : summary.error_order) {
-                file << error_message << ". This occurs " << summary.error_summary_report[error_message].appearances
-                     << " time(s), first time in line " << summary.error_summary_report[error_message].first_appearance_line << "." << std::endl;
+                file << error_message << ". This occurs " << summary.error_summary_report[error_message].occurrences
+                     << " time(s), first time in line " << summary.error_summary_report[error_message].first_occurrence_line << "." << std::endl;
             }
         }
     };

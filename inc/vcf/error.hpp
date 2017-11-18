@@ -114,7 +114,8 @@ namespace ebi
                 : runtime_error{std::string{"Line "} + std::to_string(line) + ": " + message
                                     + (detailed_message != "" ? (". " + detailed_message) : "") + "."},
                   line{line},
-                  message{message} {}
+                  message{message},
+                  detailed_message{detailed_message} {}
 
         virtual ~Error() override { }
 
