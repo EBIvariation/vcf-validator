@@ -80,12 +80,12 @@ namespace ebi
 
         virtual void write_error(Error &error) override
         {
-            summary.add_to_summary(error.message, error.line);
+            summary.add_to_summary("Error: " + error.message, error.line);
         }
 
         virtual void write_warning(Error &error) override
         {
-            summary.add_to_summary(error.message + " (warning)", error.line);
+            summary.add_to_summary("Warning: " + error.message, error.line);
         }
 
         virtual void write_message(const std::string &report_result) override
