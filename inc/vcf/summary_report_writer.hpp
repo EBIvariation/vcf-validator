@@ -78,18 +78,24 @@ namespace ebi
             file.close();
         }
 
-        virtual void write_error(Error &error)
+        virtual void write_error(Error &error) override
         {
             summary.add_to_summary(error.message, error.line);
         }
 
-        virtual void write_warning(Error &error)
+        virtual void write_warning(Error &error) override
         {
             summary.add_to_summary(error.message + " (warning)", error.line);
         }
 
+        virtual void write_message(const std::string &report_result) override
+        {
+            this->report_result = report_result;
+        }
+
       private:
         SummaryTracker summary;
+        std::string report_result;
         std::ofstream file;
 
         void write_summary()
@@ -98,6 +104,8 @@ namespace ebi
                 file << error_message << ". This occurs " << summary.error_summary_report[error_message].occurrences
                      << " time(s), first time in line " << summary.error_summary_report[error_message].first_occurrence_line << "." << std::endl;
             }
+
+            file << report_result << std::endl;
         }
     };
   }
