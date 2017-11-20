@@ -100,12 +100,12 @@ namespace ebi
 
         void write_summary()
         {
+            file << report_result << std::endl;
+
             for (auto & error_message : summary.error_order) {
                 file << error_message << ". This occurs " << summary.error_summary_report[error_message].occurrences
                      << " time(s), first time in line " << summary.error_summary_report[error_message].first_occurrence_line << "." << std::endl;
             }
-
-            file << report_result << std::endl;
         }
     };
   }

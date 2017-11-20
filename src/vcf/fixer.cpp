@@ -235,7 +235,7 @@ namespace ebi
     void Fixer::visit(DuplicationError &error)
     {
         BOOST_LOG_TRIVIAL(debug) << "Line " << line_number << ": Fixing duplicate: removing variant: "
-                                 << std::string{line->begin(), line->end()};
+                                 << std::string{line->begin(), line->end()-1};
     }
 
     size_t Fixer::remove_duplicate_strings(const std::string &column,
