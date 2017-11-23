@@ -39,6 +39,7 @@ namespace
 
       description.add_options()
               (ebi::vcf::HELP_OPTION, "Display this help")
+              (ebi::vcf::VERSION_OPTION, "Display version of the debugulator")
               (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
               (ebi::vcf::ERRORS_OPTION, po::value<std::string>(), "Path to the errors report from the input VCF file")
               (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING), "Validation level (error, warning, stop)")
@@ -52,6 +53,11 @@ namespace
   {
       if (vm.count(ebi::vcf::HELP)) {
           std::cout << desc << std::endl;
+          return -1;
+      }
+
+      if (vm.count(ebi::vcf::VERSION)) {
+          std::cout << "VCF-Debugulator " << ebi::vcf::CURRENT_VERSION << std::endl;
           return -1;
       }
 

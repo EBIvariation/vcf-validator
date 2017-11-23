@@ -44,6 +44,7 @@ namespace
 
         description.add_options()
             (ebi::vcf::HELP_OPTION, "Display this help")
+            (ebi::vcf::VERSION_OPTION, "Display version of the validator")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
             (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING), "Validation level (error, warning, stop)")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::TEXT), "Comma separated values for types of reports (database, text)")
@@ -59,6 +60,11 @@ namespace
     {
         if (vm.count(ebi::vcf::HELP)) {
             std::cout << desc << std::endl;
+            return -1;
+        }
+
+        if (vm.count(ebi::vcf::VERSION)) {
+            std::cout << "VCF-Validator " << ebi::vcf::CURRENT_VERSION << std::endl;
             return -1;
         }
 
