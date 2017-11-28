@@ -19,6 +19,7 @@
 
 #include <boost/program_options.hpp>
 
+#include "cmake_config.hpp"
 #include "util/logger.hpp"
 #include "vcf/odb_report.hpp"
 #include "vcf/string_constants.hpp"
@@ -57,7 +58,7 @@ namespace
       }
 
       if (vm.count(ebi::vcf::VERSION)) {
-          std::cout << "VCF-Debugulator " << ebi::vcf::CURRENT_VERSION << std::endl;
+          std::cout << "vcf-debugulator version " << VERSION_MAJOR << "." << VERSION_MINOR << std::endl;
           return -1;
       }
 

@@ -26,6 +26,7 @@
 #include <boost/program_options.hpp>
 #include <boost/filesystem/operations.hpp>
 
+#include "cmake_config.hpp"
 #include "util/logger.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
@@ -64,7 +65,7 @@ namespace
         }
 
         if (vm.count(ebi::vcf::VERSION)) {
-            std::cout << "VCF-Validator " << ebi::vcf::CURRENT_VERSION << std::endl;
+            std::cout << "vcf-validator version " << VERSION_MAJOR << "." << VERSION_MINOR << std::endl;
             return -1;
         }
 

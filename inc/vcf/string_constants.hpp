@@ -29,9 +29,6 @@ namespace ebi
     const std::string VCF_V42 = "VCFv4.2";
     const std::string VCF_V43 = "VCFv4.3";
 
-    // Current validator and debugulator version
-    const std::string CURRENT_VERSION = "version 0.6";
-
     // validator and debugulator command line arguments
     const char STDIN[] = "stdin";
     const char STDOUT[] = "stdout";
