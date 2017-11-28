@@ -7,10 +7,8 @@ set (vcf-validator_VERSION_PATCH 0)
 
 configure_file (
     "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp.in"
-    "${PROJECT_BINARY_DIR}/cmake_config.hpp"
+    "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp"
     )
-
-include_directories ("${PROJECT_BINARY_DIR}")
 
 # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
