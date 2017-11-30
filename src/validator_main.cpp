@@ -40,11 +40,11 @@ namespace
     namespace po = boost::program_options;
 
     const std::string version_info = "vcf_validator version " + std::to_string(VERSION_MAJOR) + "."
-                                     + std::to_string(VERSION_MINOR) + "\n";
+                                     + std::to_string(VERSION_MINOR);
 
     po::options_description build_command_line_options()
     {
-        po::options_description description(version_info + "\nUsage: vcf-validator [OPTIONS] [< input_file]\nAllowed options");
+        po::options_description description(version_info + "\n\nUsage: vcf-validator [OPTIONS] [< input_file]\nAllowed options");
 
         description.add_options()
             (ebi::vcf::HELP_OPTION, "Display this help")
@@ -68,7 +68,7 @@ namespace
         }
 
         if (vm.count(ebi::vcf::VERSION)) {
-            std::cout << version_info;
+            std::cout << version_info << std::endl;
             return -1;
         }
 
