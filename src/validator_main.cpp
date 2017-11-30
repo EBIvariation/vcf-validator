@@ -26,6 +26,7 @@
 #include <boost/program_options.hpp>
 #include <boost/filesystem/operations.hpp>
 
+#include "cmake_config.hpp"
 #include "util/logger.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
@@ -38,12 +39,16 @@ namespace
 {
     namespace po = boost::program_options;
 
+    const std::string version_info = "vcf_validator version " + std::to_string(VERSION_MAJOR) + "."
+                                     + std::to_string(VERSION_MINOR);
+
     po::options_description build_command_line_options()
     {
-        po::options_description description("Usage: vcf-validator [OPTIONS] [< input_file]\nAllowed options");
+        po::options_description description(version_info + "\n\nUsage: vcf-validator [OPTIONS] [< input_file]\nAllowed options");
 
         description.add_options()
             (ebi::vcf::HELP_OPTION, "Display this help")
+            (ebi::vcf::VERSION_OPTION, "Display version of the validator")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
             (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING), "Validation level (error, warning, stop)")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::TEXT), "Comma separated values for types of reports (database, text)")
@@ -59,6 +64,11 @@ namespace
     {
         if (vm.count(ebi::vcf::HELP)) {
             std::cout << desc << std::endl;
+            return -1;
+        }
+
+        if (vm.count(ebi::vcf::VERSION)) {
+            std::cout << version_info << std::endl;
             return -1;
         }
 

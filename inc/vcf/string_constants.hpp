@@ -37,6 +37,7 @@ namespace ebi
     const char ERRORS[] = "errors";
     const char STOP[] = "stop";
     const char HELP[] = "help";
+    const char VERSION[] = "version";
     const char LEVEL[] = "level";
     const char PLOIDY[] = "ploidy";
     const char SPECIAL_PLOIDY[] = "special-ploidy";
@@ -47,6 +48,7 @@ namespace ebi
     const char OUTDIR[] = "outdir";
     const char REPORT[] = "report";
     const char HELP_OPTION[] = "help,h";
+    const char VERSION_OPTION[] = "version,v";
     const char INPUT_OPTION[] = "input,i";
     const char ERRORS_OPTION[] = "errors,e";
     const char LEVEL_OPTION[] = "level,l";

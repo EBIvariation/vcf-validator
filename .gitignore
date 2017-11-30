@@ -37,7 +37,7 @@ Makefile
 *.cmake
 CMakeFiles
 CMakeCache.txt
+cmake_config.hpp
 
 # IDE
 .idea
-
