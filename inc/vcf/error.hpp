@@ -110,10 +110,12 @@ namespace ebi
 
         Error(size_t line) : Error{line, "Error, invalid file."} {}
 
-        Error(size_t line, const std::string &message)
-                : runtime_error{std::string{"Line "} + std::to_string(line) + ": " + message},
+        Error(size_t line, const std::string &message, const std::string &detailed_message = "")
+                : runtime_error{std::string{"Line "} + std::to_string(line) + ": " + message
+                                    + (detailed_message != "" ? (". " + detailed_message) : "") + "."},
                   line{line},
-                  message{message} {}
+                  message{message},
+                  detailed_message{detailed_message} {}
 
         virtual ~Error() override { }
 
@@ -122,6 +124,7 @@ namespace ebi
 
         const size_t line;
         const std::string message;
+        const std::string detailed_message;
         Severity severity;
 
       private:
@@ -185,14 +188,10 @@ namespace ebi
     {
       public:
         NoMetaDefinitionError(size_t line,
-                              const std::string &message,
-                              const std::string &column,
-                              const std::string &field)
-                : Error{line, message}, column{column}, field{field} {}
+                              const std::string &message)
+                : Error{line, message} {}
         virtual ~NoMetaDefinitionError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
-        std::string column;
-        std::string field;
       private:
         friend class odb::access;
         NoMetaDefinitionError() {}
@@ -287,6 +286,7 @@ namespace ebi
     {
         InfoBodyError(size_t line = 0,
                       const std::string &message = "Error in info column, in body section",
+                      const std::string &detailed_message = "",
                       ErrorFix error_fix = ErrorFix::IRRECOVERABLE_VALUE,
                       const std::string &field = "",
                       const std::string &expected_value = "")
@@ -329,9 +329,10 @@ namespace ebi
       public:
         SamplesFieldBodyError(size_t line,
                               const std::string &message,
+                              const std::string &detailed_message,
                               const std::string &field,
                               long field_cardinality = -1)
-                : BodySectionError{line, message}, field{field}, field_cardinality{field_cardinality} {
+                : BodySectionError{line, message, detailed_message}, field{field}, field_cardinality{field_cardinality} {
             if (field.empty()) {
                 throw std::invalid_argument{"SamplesFieldBodyError: field should not be an empty string. Use "
                                                     "SamplesBodyError for unknown errors in the samples columns"};

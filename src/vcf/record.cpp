@@ -258,24 +258,24 @@ namespace ebi
                         check_field_cardinality(field.second, values, key_values[NUMBER]);
                         check_field_type(values, key_values[TYPE]);
                     } catch (std::shared_ptr<Error> ex) {
-                        std::string message = "INFO " + key_values[ID] + "=" + field.second
-                                + " does not match the meta" + ex->message;
-                        throw new InfoBodyError{line, message, ErrorFix::IRRECOVERABLE_VALUE, key_values[ID]};
+                        std::string message = "INFO " + key_values[ID] + " does not match the meta" + ex->message;
+                        throw new InfoBodyError{line, message, key_values[ID] + "=" + field.second,
+                                ErrorFix::IRRECOVERABLE_VALUE, key_values[ID]};
                     }
-                    
+
                     break;
                 }
             }
-            
+
             if (!found_in_meta) {
                 try {
                     if (source->version == Version::v41 || source->version == Version::v42) {
-                        check_predefined_tag(field.first, field.second, values, info_v41_v42);
+                        check_predefined_tag(field.first, values, info_v41_v42);
                     } else {
-                        check_predefined_tag(field.first, field.second, values, info_v43);
+                        check_predefined_tag(field.first, values, info_v43);
                     }
                 } catch (std::shared_ptr<Error> ex) {
-                    throw new InfoBodyError{line, "INFO " + ex->message, ErrorFix::IRRECOVERABLE_VALUE, field.first};
+                    throw new InfoBodyError{line, "INFO " + ex->message, field.first + "=" + field.second, ErrorFix::IRRECOVERABLE_VALUE, field.first};
                 }
             }
 
@@ -288,7 +288,7 @@ namespace ebi
         if (source->version == Version::v43 && info.size() > 1) {
             for (auto & in : info) {
                 if (info.count(in.first) > 1) {
-                    throw new InfoBodyError{line, "INFO must not have duplicate keys", ErrorFix::DUPLICATE_VALUES};
+                    throw new InfoBodyError{line, "INFO must not have duplicate keys", "", ErrorFix::DUPLICATE_VALUES};
                 }
             }
         }
@@ -322,7 +322,7 @@ namespace ebi
         }
     }
 
-    void Record::check_predefined_tag(std::string const & field_key, std::string const & field_value, std::vector<std::string> const & values,
+    void Record::check_predefined_tag(std::string const & field_key, std::vector<std::string> const & values,
                                       std::map<std::string, std::pair<std::string, std::string>> const & tags) const
     {
         auto iterator = tags.find(field_key);
@@ -331,8 +331,7 @@ namespace ebi
                 check_field_cardinality(field_key, values, iterator->second.second);
                 check_field_type(values, iterator->second.first);
             } catch (std::shared_ptr<Error> ex) {
-                raise(std::make_shared<Error>(line, field_key + "=" + field_value
-                                + " does not match the" + ex->message));
+                raise(std::make_shared<Error>(line, field_key + " does not match the" + ex->message));
             }
             if (iterator->second.first == INTEGER) {
                 check_field_integer_range(field_key, values);
@@ -346,19 +345,22 @@ namespace ebi
         if (field_key == AA) {
             static boost::regex aa_regex("((?![,;=])[[:print:]])+");
             if (!boost::regex_match(field_value, aa_regex)) {
-                throw new InfoBodyError{line, "INFO AA=" + field_value + " value is not a single dot or a string of bases", ErrorFix::IRRECOVERABLE_VALUE, field_key};
+                throw new InfoBodyError{line, "INFO AA value is not a single dot or a string of bases", "AA=" + field_value,
+                        ErrorFix::IRRECOVERABLE_VALUE, field_key};
             }
         } else if (field_key == AF) {
             for (auto & value : values) {
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
-                    throw new InfoBodyError{line, "INFO AF=" + field_value + " value does not lie in the interval [0,1]", ErrorFix::IRRECOVERABLE_VALUE, field_key};
+                    throw new InfoBodyError{line, "INFO AF value does not lie in the interval [0,1]", "AA=" + field_value,
+                            ErrorFix::IRRECOVERABLE_VALUE, field_key};
                 }
             }
         } else if (field_key == CIGAR) {
             static boost::regex cigar_string("([0-9]+[MIDNSHPX])+");
             for (auto & value : values) {
                 if (!boost::regex_match(value, cigar_string)) {
-                    throw new InfoBodyError{line, "INFO CIGAR=" + field_value + " value is not an alphanumeric string compliant with the SAM specification", ErrorFix::IRRECOVERABLE_VALUE, field_key};
+                    throw new InfoBodyError{line, "INFO CIGAR value is not an alphanumeric string compliant with the SAM specification",
+                            "CIGAR=" + field_value, ErrorFix::IRRECOVERABLE_VALUE, field_key};
                 }
             }
         } else if (field_key == END) {
@@ -366,7 +368,10 @@ namespace ebi
             if (it != info.end() && it->second == "0") {
                 auto expected = std::to_string(position + reference_allele.length() - 1);
                 if (field_value != expected) {
-                    throw new InfoBodyError{line, "INFO END=" + field_value + " value must be equal to \"POS + length of REF - 1\" for a precise variant (where IMPRECISE is set to 0), expected " + expected, ErrorFix::RECOVERABLE_VALUE, field_key, expected};
+                    throw new InfoBodyError{line, "INFO END value must be equal to \"POS + length of REF - 1\" for a "
+                            "precise variant (where IMPRECISE is set to 0)",
+                            "END=" + field_value + ", expected value=" + expected,
+                            ErrorFix::RECOVERABLE_VALUE, field_key, expected};
                 }
             }
         } else if (field_key == SVLEN && values.size() == alternate_alleles.size()) {
@@ -374,17 +379,23 @@ namespace ebi
                 if (check_alt_not_symbolic(i)) {
                     std::string expected = std::to_string(static_cast<long>(alternate_alleles[i].size()) - static_cast<long>(reference_allele.size()));
                     if (values[i] != expected) {
-                        throw new InfoBodyError{line, "INFO SVLEN=" + field_value + " must be equal to \"length of ALT - length of REF\" for non-symbolic alternate alleles (expected " + expected + ", found " + values[i] + ")", ErrorFix::RECOVERABLE_VALUE, field_key, expected};
+                        throw new InfoBodyError{line, "INFO SVLEN must be equal to \"length of ALT - length of REF\" for "
+                                "non-symbolic alternate alleles", "SVLEN=" + field_value + ", expected value=" + expected,
+                                ErrorFix::RECOVERABLE_VALUE, field_key, expected};
                     }
                 } else {
                     std::string first_field = alternate_alleles[i].substr(0, 4);
                     if (first_field == "<" + INS || first_field == "<" + DUP) {
                         if (std::stoi(values[i]) < 0) {
-                            throw new InfoBodyError{line, "SVLEN=" + field_value + " must be a positive integer for longer ALT alleles like " + first_field.substr(1,3), ErrorFix::IRRECOVERABLE_VALUE, field_key};
+                            throw new InfoBodyError{line, "INFO SVLEN must be a positive integer for longer ALT alleles", "SVLEN="
+                                    + field_value + ", ALT allele=" + first_field.substr(1, 3),
+                                    ErrorFix::IRRECOVERABLE_VALUE, field_key};
                         }
                     } else if (first_field == "<" + DEL) {
                         if (std::stoi(values[i]) > 0) {
-                            throw new InfoBodyError{line, "SVLEN=" + field_value + " must be a negative integer for shorter ALT alleles like " + first_field.substr(1,3), ErrorFix::IRRECOVERABLE_VALUE, field_key};
+                            throw new InfoBodyError{line, "INFO SVLEN must be a negative integer for shorter ALT alleles"
+                                    + first_field.substr(1,3), "SVLEN=" + field_value + ", ALT allele=" + first_field.substr(1, 3),
+                                    ErrorFix::IRRECOVERABLE_VALUE, field_key};
                         }
                     }
                 }
@@ -484,12 +495,13 @@ namespace ebi
             if (meta.id == "") {
                 try {
                     if (source->version == Version::v41 || source->version == Version::v42) {
-                        check_predefined_tag(format[j], subfield, values, format_v41_v42);
+                        check_predefined_tag(format[j], values, format_v41_v42);
                     } else {
-                        check_predefined_tag(format[j], subfield, values, format_v43);
+                        check_predefined_tag(format[j], values, format_v43);
                     }
                 } catch (std::shared_ptr<Error> ex) {
-                    throw new SamplesFieldBodyError{line, "Sample #" + std::to_string(i + 1) + ", " + ex->message, format[j]};
+                    throw new SamplesFieldBodyError{line, "Sample #" + std::to_string(i + 1) + ", " + ex->message,
+                                                    format[j] + "=" + subfield, format[j]};
                 }
 
                 // FORMAT fields not described in the meta section can't be checked
@@ -505,9 +517,8 @@ namespace ebi
                     bool valid = is_valid_cardinality(key_values[NUMBER], alternate_alleles.size(), cardinality);
                     long number = valid ? cardinality : -1;
  
-                    std::string message = "Sample #" + std::to_string(i + 1) + ", " + key_values[ID] + "=" + subfield
-                            + " does not match the meta" + ex->message;
-                    throw new SamplesFieldBodyError{line, message, key_values[ID], number};
+                    std::string message = "Sample #" + std::to_string(i + 1) + " does not match the meta" + ex->message;
+                    throw new SamplesFieldBodyError{line, message, key_values[ID] + "=" + subfield, key_values[ID], number};
                 }
             }
 
@@ -522,7 +533,7 @@ namespace ebi
         if (field_key == GP || (field_key == CNP && source->version == Version::v43)) {
             for (auto & value : values) {
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
-                    throw new SamplesFieldBodyError{line, message + " does not lie in the interval [0,1]", field_key};
+                    throw new SamplesFieldBodyError{line, message + " does not lie in the interval [0,1]", "", field_key};
                 }
             }
         }
@@ -535,7 +546,7 @@ namespace ebi
         long ploidy = static_cast<long>(source->ploidy.get_ploidy(chromosome));
         for (auto & allele : alleles) {
             if (allele == "") {
-                throw new SamplesFieldBodyError{line, "Allele index must not be empty", GT, ploidy};
+                throw new SamplesFieldBodyError{line, "Allele index must not be empty", "", GT, ploidy};
             }
 
             if (allele == MISSING_VALUE) { continue; } // No need to check missing alleles
@@ -549,8 +560,8 @@ namespace ebi
     void Record::check_sample_alleles_is_integer(std::string const & allele, long ploidy) const
     {
         if (std::find_if_not(allele.begin(), allele.end(), isdigit) != allele.end()) {
-            throw new SamplesFieldBodyError{line, "Allele index " + allele + " must be a non-negative integer number",
-                                            GT, ploidy};
+            throw new SamplesFieldBodyError{line, "Allele must be a non-negative integer number",
+                                            "Index=" + allele, GT, ploidy};
         }        
     }
 
@@ -559,9 +570,8 @@ namespace ebi
         size_t num_allele = std::stoi(allele);
         if (num_allele > alternate_alleles.size()) {
             throw new SamplesFieldBodyError{line,
-                                            "Allele index " + std::to_string(num_allele)
-                                                    + " is greater than the maximum allowed "
-                                                    + std::to_string(alternate_alleles.size()),
+                                            "Allele is greater than the maximum allowed",
+                                            "Index=" + std::to_string(num_allele) + ", maximum allowed=" + std::to_string(alternate_alleles.size()),
                                             GT, ploidy};
         }
     }
@@ -629,7 +639,7 @@ namespace ebi
         }
 
         if (!number_matches) {
-            raise(std::make_shared<Error>(line, " specification Number=" + number + " (contains " + std::to_string(values.size()) + " value(s), expected " + std::to_string(expected) + ")"));
+            raise(std::make_shared<Error>(line, " specification Number=" + number + " (expected " + std::to_string(expected) + " value(s))"));
         }
     }
 

@@ -148,7 +148,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"error message mock: There's an invalid info field"};
-          ebi::vcf::InfoBodyError test_error{line_number, message, ebi::vcf::ErrorFix::IRRECOVERABLE_VALUE,"wrong_field"};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "", ebi::vcf::ErrorFix::IRRECOVERABLE_VALUE,"wrong_field"};
 
           std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\tAN=2;wrong_field=x;AC=1\tformat\tsamples";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -166,7 +166,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"error message mock: There's an invalid info field"};
-          ebi::vcf::InfoBodyError test_error{line_number, message, ebi::vcf::ErrorFix::IRRECOVERABLE_VALUE, "wrong_field"};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "", ebi::vcf::ErrorFix::IRRECOVERABLE_VALUE, "wrong_field"};
 
           std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\twrong_field=x;AC=1\tformat\tsamples";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -183,7 +183,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"error message mock: There's an invalid info field"};
-          ebi::vcf::InfoBodyError test_error{line_number, message, ebi::vcf::ErrorFix::IRRECOVERABLE_VALUE, "wrong_field"};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "", ebi::vcf::ErrorFix::IRRECOVERABLE_VALUE, "wrong_field"};
 
           std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\twrong_field=x\tformat\tsamples";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -199,7 +199,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"error message mock: Duplicate info fields"};
-          ebi::vcf::InfoBodyError test_error{line_number, message, ebi::vcf::ErrorFix::DUPLICATE_VALUES};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "", ebi::vcf::ErrorFix::DUPLICATE_VALUES};
 
           std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\tdupkey=x;info=y;dupkey=z\tformat\tsamples";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -217,7 +217,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"error message mock: Duplicate info fields"};
-          ebi::vcf::InfoBodyError test_error{line_number, message, ebi::vcf::ErrorFix::DUPLICATE_VALUES};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "", ebi::vcf::ErrorFix::DUPLICATE_VALUES};
 
           std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\tdupkey=x;info=y;dupkey=x\tformat\tsamples";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -236,7 +236,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"error message mock: Duplicated info fields"};
-          ebi::vcf::InfoBodyError test_error{line_number, message, ebi::vcf::ErrorFix::DUPLICATE_VALUES};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "", ebi::vcf::ErrorFix::DUPLICATE_VALUES};
 
           std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\tdupkey=x;dupkey=y\tformat\tsamples";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -252,7 +252,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"error message mock: Duplicated info fields"};
-          ebi::vcf::InfoBodyError test_error{line_number, message, ebi::vcf::ErrorFix::DUPLICATE_VALUES};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "", ebi::vcf::ErrorFix::DUPLICATE_VALUES};
 
           std::string string_line = "chr\tpos\tid\tref\talt\tqual\tfilter\tac=x;ab=y;ac=x\tformat\tsamples";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -268,7 +268,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"error message mock: Invalid value of predefined tag SVLEN"};
-          ebi::vcf::InfoBodyError test_error{line_number, message, ebi::vcf::ErrorFix::RECOVERABLE_VALUE, "SVLEN", "-3"};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "", ebi::vcf::ErrorFix::RECOVERABLE_VALUE, "SVLEN", "-3"};
 
           std::string string_line = "chr\tpos\tid\tACTNG\tGT\tqual\tfilter\tSVLEN=12\tformat\tsamples";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -284,7 +284,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"error message mock: Invalid value of predefined tag END"};
-          ebi::vcf::InfoBodyError test_error{line_number, message, ebi::vcf::ErrorFix::RECOVERABLE_VALUE, "END", "102"};
+          ebi::vcf::InfoBodyError test_error{line_number, message, "", ebi::vcf::ErrorFix::RECOVERABLE_VALUE, "END", "102"};
 
           std::string string_line = "chr\t100\tid\tACT\t.\t.\tfilter\tEND=5;IMPRECISE=0\tformat\tsamples";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -436,7 +436,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"the genotype in the sample column has an illegal value"};
-          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, vcf::GT, 2};
+          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, "", vcf::GT, 2};
 
           std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C\tGT:GS:GL\t1/C:0.000:-0.18,-0.48,-2.49";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -455,7 +455,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"the genotype in the sample column has an illegal value"};
-          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, vcf::AC};
+          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, "", vcf::AC};
 
           std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C\tGT:AC:GL\t1/1:0.000:-0.18,-0.48,-2.49";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -474,7 +474,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"requested to remove a wrong field"};
-          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, vcf::AC};
+          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, "", vcf::AC};
 
           std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C\tGT:GS:GL\t1/1:0.000:-0.18,-0.48,-2.49";
           std::vector<char> line{string_line.begin(), string_line.end()};
@@ -489,7 +489,7 @@ namespace ebi
       {
           size_t line_number = 8;
           std::string message{"requested to remove a wrong file"};
-          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, vcf::AC};
+          ebi::vcf::SamplesFieldBodyError test_error{line_number, message, "", vcf::AC};
 
           std::string string_line = "1\t55388\trs182711216\tC\tT\t100\tPASS\tTHETA=0.0102;AA=C";
 

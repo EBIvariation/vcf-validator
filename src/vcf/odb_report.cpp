@@ -91,6 +91,10 @@ namespace ebi
         error.severity = Severity::WARNING;
         write(error);
     }
+    void OdbReportRW::write_message(const std::string &report_result)
+    {
+        // do nothing
+    }
 
     void OdbReportRW::write(Error &error)
     {

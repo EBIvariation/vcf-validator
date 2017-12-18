@@ -43,6 +43,7 @@ namespace ebi
     const char SPECIAL_PLOIDY[] = "special-ploidy";
     const char DATABASE[] = "database";
     const char TEXT[] = "text";
+    const char SUMMARY[] = "summary";
     const char INPUT[] = "input";
     const char OUTPUT[] = "output";
     const char OUTDIR[] = "outdir";

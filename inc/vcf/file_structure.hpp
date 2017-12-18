@@ -443,7 +443,7 @@ namespace ebi
          *
          * @throw std::invalid_argument
          */
-        void check_predefined_tag(std::string const & field_key, std::string const & field_value, std::vector<std::string> const & values,
+        void check_predefined_tag(std::string const & field_key, std::vector<std::string> const & values,
                                   std::map<std::string, std::pair<std::string, std::string>> const & tags) const;
 
         /**

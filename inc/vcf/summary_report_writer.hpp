@@ -24,88 +24,45 @@ namespace ebi
 {
   namespace vcf
   {
+
     /**
-     * Class that tells whether an error should be written or skipped.
-     *
-     * The intended algorithm is that all errors will be printed the first time they appear, but some of them won't
-     * be printed again.
-     *
-     * To differentiate the Error dynamic type, this class implements ErrorVisitor. As the visitor interface returns
-     * `void`, we have to store the decision in the class' state, in the variable `skip`.
-     *
-     * Use this class like this:
-     * ~~~
-     * if (summary.should_write_report(error)) {
-     *     std::cout << error.what() << " (warning)" << std::endl;
-     * }
-     * ~~~
+     * Stores the count and first line of occurrence of an error message
      */
-    class SummaryTracker : public ErrorVisitor
+    struct ErrorSummary
     {
-      public:
-        SummaryTracker() : already_reported{}, skip{false} {}
-
-        bool should_write_report(Error &error)
-        {
-            error.apply_visitor(*this);
-            return not skip;
-        }
-
-
-        virtual void visit(Error &error) {}
-        virtual void visit(MetaSectionError &error) {}
-        virtual void visit(HeaderSectionError &error) {}
-        virtual void visit(BodySectionError &error) {}
-        virtual void visit(NoMetaDefinitionError &error)
-        {
-            if (is_already_reported(error.column, error.field)) {
-                skip = true;
-            } else {
-                add_already_reported(error.column, error.field);
-                skip = false;
-            }
-        }
-        virtual void visit(FileformatError &error) {}
-        virtual void visit(ChromosomeBodyError &error) {}
-        virtual void visit(PositionBodyError &error) {}
-        virtual void visit(IdBodyError &error) {}
-        virtual void visit(ReferenceAlleleBodyError &error) {}
-        virtual void visit(AlternateAllelesBodyError &error) {}
-        virtual void visit(QualityBodyError &error) {}
-        virtual void visit(FilterBodyError &error) {}
-        virtual void visit(InfoBodyError &error) {}
-        virtual void visit(FormatBodyError &error) {}
-        virtual void visit(SamplesBodyError &error) {}
-        virtual void visit(SamplesFieldBodyError &error) {}
-        virtual void visit(NormalizationError &error) {}
-        virtual void visit(DuplicationError &error) {}
-
-      private:
-        bool is_already_reported(std::string const &meta_type, std::string const &id) const
-        {
-            typedef std::multimap<std::string,std::string>::const_iterator iter;
-            std::pair<iter, iter> range = already_reported.equal_range(meta_type);
-            for (auto & current = range.first; current != range.second; ++current) {
-                if (current->second == id) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        void add_already_reported(std::string const &meta_type, std::string const &id)
-        {
-            already_reported.emplace(meta_type, id);
-        }
-
-        std::multimap<std::string, std::string> already_reported;
-        bool skip;
+      size_t occurrences;
+      size_t first_occurrence_line;
     };
 
+    /**
+     * Class that ensures similar kind of errors are reported only once.
+     *
+     * The intended algorithm is that errors and warnings will be printed only the first time they occur, and won't
+     * be printed again.
+     *
+     * The summary displays the count(number of times it occurs) of the error, and the line number of its first
+     * occurrence. We distinguish between different types of errors based on their simple error message (which contains
+     * no details). The `error_order` basically maintains the order in which these errors appear for the first time.
+     */
+    class SummaryTracker
+    {
+      public:
+        std::map<std::string, ErrorSummary> error_summary_report;
+        std::vector<std::string> error_order;
 
+        void add_to_summary(std::string const & error_message, size_t error_line)
+        {
+            if (error_summary_report.find(error_message) == error_summary_report.end()) {
+                error_order.push_back(error_message);
+                error_summary_report[error_message] = ErrorSummary{1, error_line};
+            } else {
+                error_summary_report[error_message].occurrences++;
+            }
+        }
+   };
 
     /**
-     * Implements a ReportWriter that writes to a file, but small warnings are written only once.
+     * Implements a ReportWriter that writes to a file, but only the summary is written
      */
     class SummaryReportWriter : public ReportWriter
     {
@@ -117,24 +74,39 @@ namespace ebi
 
         ~SummaryReportWriter()
         {
+            write_summary();
             file.close();
         }
 
-        virtual void write_error(Error &error)
+        virtual void write_error(Error &error) override
         {
-            file << error.what() << std::endl;
+            summary.add_to_summary("Error: " + error.message, error.line);
         }
 
-        virtual void write_warning(Error &error)
+        virtual void write_warning(Error &error) override
         {
-            if (summary.should_write_report(error)) {
-                file << error.what() << " (warning)" << std::endl;
-            }
+            summary.add_to_summary("Warning: " + error.message, error.line);
+        }
+
+        virtual void write_message(const std::string &report_result) override
+        {
+            this->report_result = report_result;
         }
 
       private:
         SummaryTracker summary;
+        std::string report_result;
         std::ofstream file;
+
+        void write_summary()
+        {
+            file << report_result << std::endl;
+
+            for (auto & error_message : summary.error_order) {
+                file << error_message << ". This occurs " << summary.error_summary_report[error_message].occurrences
+                     << " time(s), first time in line " << summary.error_summary_report[error_message].first_occurrence_line << "." << std::endl;
+            }
+        }
     };
   }
 }

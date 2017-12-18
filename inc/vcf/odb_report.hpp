@@ -44,6 +44,7 @@ namespace ebi
         // ReportWriter implementation
         virtual void write_error(Error &error) override;
         virtual void write_warning(Error &error) override;
+        virtual void write_message(const std::string &report_result) override;
 
         // ReportReader implementation
         virtual size_t count_warnings() override;

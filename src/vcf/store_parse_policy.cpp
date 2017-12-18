@@ -242,17 +242,18 @@ namespace ebi
             previous_contig = m_line_tokens[CHROM][0];
             previous_position = 0;  // position sorting is reset
         } else if (contig_already_finished) {
-            std::stringstream ss;
-            ss << "Variant " << m_line_tokens[CHROM][0] << ":" << position << " is not contiguous to the rest of the contig";
-            throw new BodySectionError{state.n_lines, ss.str()};
+            std::stringstream ss, ss_detail;
+            ss << "Variant is not contiguous to the rest of the contig";
+            ss_detail << "Position of variant " << m_line_tokens[CHROM][0] << " : " << position;
+            throw new BodySectionError{state.n_lines, ss.str(), ss_detail.str()};
         }
 
         // check all positions are sorted within a contig
         if (position < previous_position) {
-            std::stringstream ss;
-            ss << "Contig " << m_line_tokens[CHROM][0] << " is not sorted by position: "
-               << position << " found after " << previous_position;
-            throw new PositionBodyError{state.n_lines, ss.str()};
+            std::stringstream ss, ss_detail;
+            ss << "Contig is not sorted by position";
+            ss_detail << "Contig " << m_line_tokens[CHROM][0] << " position " << position << " found after " << previous_position;
+            throw new PositionBodyError{state.n_lines, ss.str(), ss_detail.str()};
         }
         previous_position = position;
     }

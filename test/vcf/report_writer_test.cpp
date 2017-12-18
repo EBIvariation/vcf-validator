@@ -28,7 +28,7 @@
 #include "vcf/error.hpp"
 #include "vcf/report_writer.hpp"
 #include "vcf/summary_report_writer.hpp"
-
+#include "test_utils.hpp"
 
 namespace ebi
 {
@@ -170,7 +170,7 @@ namespace ebi
 
           errorsDAO.for_each_error([&errors_read](std::shared_ptr<ebi::vcf::Error> error) {
               CHECK(error->line == 4);
-              CHECK(error->message == "Allele index C must be a non-negative integer number");
+              CHECK(error->message == "Allele must be a non-negative integer number");
               errors_read++;
           });
 
@@ -190,31 +190,46 @@ namespace ebi
 
   }
 
-  TEST_CASE("Unit test: summary report", "[output]")
+  TEST_CASE("Unit test: summary tracker", "[output]")
   {
-      SECTION("SummaryTracker should skip repeated NoMetaDefinitionError")
+      SECTION("SummaryTracker should skip repeated Errors")
       {
           ebi::vcf::SummaryTracker reporter;
-          ebi::vcf::NoMetaDefinitionError error{0, "no definition", "column", "field"};
+          ebi::vcf::FormatBodyError error{7, "format body error"};
 
-          REQUIRE(reporter.should_write_report(error)); // first time it should write
+          reporter.add_to_summary(error.message, error.line);
+          REQUIRE(reporter.error_summary_report[error.message].occurrences == 1);
+          REQUIRE(reporter.error_summary_report[error.message].first_occurrence_line == 7);
 
-          REQUIRE_FALSE(reporter.should_write_report(error)); // second time it should skip
-
-          error.column = "other column";    // now the error is a different one, so it should write
-          REQUIRE(reporter.should_write_report(error));
-      }
-
-      SECTION("SummaryTracker should write every time important Errors")
-      {
-          ebi::vcf::SummaryTracker reporter;
-          ebi::vcf::BodySectionError error{0, "regular body error"};
-
-          // first time it should write
-          REQUIRE(reporter.should_write_report(error));
-
-          // second time it should skip
-          REQUIRE(reporter.should_write_report(error));
+          reporter.add_to_summary(error.message, 11);
+          REQUIRE(reporter.error_summary_report[error.message].occurrences == 2);
+          REQUIRE(reporter.error_summary_report[error.message].first_occurrence_line == 7);
       }
   }
+
+  TEST_CASE("Integration test: summary report", "[output]")
+  {
+      auto path = boost::filesystem::path("test/input_files/v4.3/passed/passed_body_format.vcf"); 
+      auto summary_path = path;
+      summary_path += ".errors_summary.txt";
+
+      SECTION(path.string() + " summary error count")
+      {
+          {
+              auto output = new ebi::vcf::SummaryReportWriter{summary_path.string()};
+              std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
+              outputs.emplace_back(output);
+
+              std::ifstream input{path.string()};
+              vcf::is_valid_vcf_file(input, path.string(), vcf::ValidationLevel::warning, vcf::Ploidy{2}, outputs);
+              input.close();
+          }
+
+          CHECK(count_lines(summary_path.string()) == 3);
+      }
+
+      boost::filesystem::remove(summary_path);
+      CHECK_FALSE(boost::filesystem::exists(summary_path));
+  }
+
 }
