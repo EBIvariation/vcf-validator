@@ -18,6 +18,7 @@
 #include <unordered_set>
 
 #include "util/algo_utils.hpp"
+#include "util/logger.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/record.hpp"
 
@@ -443,7 +444,7 @@ namespace ebi
             bool found_in_header = false;
             
             for (iter current = range.first; current != range.second; ++current) {
-                auto & key_values = boost::get<std::map < std::string, std::string>>((current->second).value);
+                auto & key_values = boost::get<std::map<std::string, std::string>>((current->second).value);
 
                 if (key_values[ID] == fm) {
                     format_meta.push_back(current->second);
@@ -459,6 +460,21 @@ namespace ebi
         }
 
         return format_meta;
+    }
+
+    long Record::get_ploidy_from_GT(std::string const & sample) const
+    {
+        if (format[0] == GT) {
+            std::string::size_type pos = sample.find(':');
+            std::string GT_subfield = sample;
+            if (pos != std::string::npos) {
+                GT_subfield = sample.substr(0, pos);
+            }
+            return 1 + count_if(GT_subfield.begin(), GT_subfield.end(), [](char c) { return c == '/' || c == '|'; });
+        } else {
+            BOOST_LOG_TRIVIAL(error) << "Cannot fetch ploidy from GT as GT is not present in the FORMAT";
+            return -1;
+        }
     }
 
     void Record::check_sample(size_t i, std::vector<MetaEntry> const & format_meta) const
@@ -484,14 +500,15 @@ namespace ebi
         }
     }
 
-    void Record::check_sample_subfields_cardinality_type(size_t i, std::vector<std::string> const & subfields, std::vector<MetaEntry> const & format_meta) const
+    void Record::check_sample_subfields_cardinality_type(size_t i, std::vector<std::string> const & subfields,
+                                                         std::vector<MetaEntry> const & format_meta) const
     {
         std::vector<std::string> values;
 
         for (size_t j = 0; j < subfields.size(); ++j) {
             MetaEntry meta = format_meta[j];
             auto & subfield = subfields[j];
-            
+
             util::string_split(subfield, ",", values);
 
             if (meta.id == "") {
@@ -537,6 +554,19 @@ namespace ebi
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
                     throw new SamplesFieldBodyError{line, message + " does not lie in the interval [0,1]", "", field_key};
                 }
+            }
+        } else if (field_key == GL || field_key == PL) {
+            long expected_sample_ploidy = 2;  // diploidy is assumed
+            if (format[0] == GT) {
+                expected_sample_ploidy = get_ploidy_from_GT(samples[i]);
+            }
+            long cardinality = boost::math::binomial_coefficient<float>(alternate_alleles.size() + expected_sample_ploidy,
+                                                                        expected_sample_ploidy);
+            if (cardinality != static_cast<long>(values.size())) {
+                throw new SamplesFieldBodyError{line, message + " must derive its number of values from the ploidy of "
+                                "GT (if present), or assume a diploidy", "Contains " + std::to_string(values.size())
+                                + " value(s), expected " + std::to_string(cardinality) + " (derived from ploidy " +
+                                std::to_string(expected_sample_ploidy) + ")", field_key};
             }
         }
     }
