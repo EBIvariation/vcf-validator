@@ -167,7 +167,7 @@ namespace ebi
             { DP, { INTEGER, "1" } },
             { EC, { INTEGER, A } },
             { FT, { STRING, "1" } },
-            { GL, { FLOAT, G } },
+            { GL, { FLOAT, UNKNOWN_CARDINALITY } },
             { GLE, { STRING, G } },
             { GP, { FLOAT, G } },
             { GQ, { INTEGER, "1" } },
@@ -176,7 +176,7 @@ namespace ebi
             { HQ, { INTEGER, "2" } },
             { MQ, { INTEGER, "1" } },
             { NQ, { INTEGER, "1" } },
-            { PL, { INTEGER, G } },
+            { PL, { INTEGER, UNKNOWN_CARDINALITY } },
             { PQ, { INTEGER, "1" } },
             { PS, { INTEGER, "1" } }
     };
@@ -193,7 +193,7 @@ namespace ebi
             { DP, { INTEGER, "1" } },
             { EC, { INTEGER, A } },
             { FT, { STRING, "1" } },
-            { GL, { FLOAT, G } },
+            { GL, { FLOAT, UNKNOWN_CARDINALITY } },
             { GP, { FLOAT, G } },
             { GQ, { INTEGER, "1" } },
             { GT, { STRING, "1" } },
@@ -201,7 +201,7 @@ namespace ebi
             { HQ, { INTEGER, "2" } },
             { MQ, { INTEGER, "1" } },
             { NQ, { INTEGER, "1" } },
-            { PL, { INTEGER, G } },
+            { PL, { INTEGER, UNKNOWN_CARDINALITY } },
             { PQ, { INTEGER, "1" } },
             { PS, { INTEGER, "1" } }
     };
@@ -480,6 +480,11 @@ namespace ebi
          * Returns a vector of MetaEntry objects in the same order as they are displayed in the samples
          */
         std::vector<MetaEntry> get_meta_entry_objects() const;
+
+        /**
+         * Returns the ploidy of GT
+         */
+        long get_ploidy_from_GT(std::string const & sample) const;
 
         /**
          * Checks the sample contents and accordance to the meta section
