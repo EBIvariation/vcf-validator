@@ -217,7 +217,7 @@ namespace ebi
                             source}),
                         vcf::SamplesFieldBodyError*);
 
-           CHECK_THROWS_AS( (vcf::Record{
+            CHECK_THROWS_AS( (vcf::Record{
                             1,
                             "chr1",
                             123456,
@@ -231,6 +231,49 @@ namespace ebi
                             { "1.3,2.4" },
                             source}),
                         vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::GL },
+                            { "1/0:1.3,2.4" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::GL },
+                            { "1:1.3,2.4" },
+                            source}));
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GL },
+                            { "1.3,2.4,2.3" },
+                            source}));
 
             CHECK_THROWS_AS( (vcf::Record{
                             1,
@@ -411,6 +454,49 @@ namespace ebi
                             { "7,5" },
                             source}),
                         vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PL },
+                            { "1/0:1,2" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PL },
+                            { "1:1,2" },
+                            source}));
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::PL },
+                            { "1,2,5" },
+                            source}));
 
             CHECK_THROWS_AS( (vcf::Record{
                             1,

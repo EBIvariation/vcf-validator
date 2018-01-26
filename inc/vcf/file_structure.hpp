@@ -176,7 +176,7 @@ namespace ebi
             { HQ, { INTEGER, "2" } },
             { MQ, { INTEGER, "1" } },
             { NQ, { INTEGER, "1" } },
-            { PL, { INTEGER, G } },
+            { PL, { INTEGER, UNKNOWN_CARDINALITY } },
             { PQ, { INTEGER, "1" } },
             { PS, { INTEGER, "1" } }
     };
@@ -482,6 +482,11 @@ namespace ebi
         std::vector<MetaEntry> get_meta_entry_objects() const;
 
         /**
+         * Returns the ploidy of GT
+         */
+        size_t get_ploidy_from_GT(std::string const & sample) const;
+
+        /**
          * Checks the sample contents and accordance to the meta section
          * 
          * @throw SamplesBodyError
@@ -548,29 +553,46 @@ namespace ebi
          *  (e.g. with 1 reference, 2 alternate alleles (3 total alleles) and ploidy 2, it's 3 + 2 -1 choose 2, which is 6: 00, 01, 11, 02, 12, 22)
          *  - "." means unknown number of elements
          *  - number is a positive number [0, +inf)
-         * @param ploidy is the number of sets of chromosomes, so a given position in a chromosome needs `ploidy` bases to be completely specified
+         * @param alternate_allele_number the number of alternate alleles
          * @param cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number. 
+         * @param ploidy is the number of sets of chromosomes, so a given position in a chromosome needs `ploidy` bases to be completely specifie 
          * @throw std::invalid_argument if it's not a number
          * @throw std::out_of_range if it's out of range.
          * @return bool: whether the number was valid or not
          */
-        bool is_valid_cardinality(std::string const & number, size_t alternate_allele_number, long & cardinality) const;
+        bool is_valid_cardinality(std::string const & number, size_t alternate_allele_number, long & cardinality, size_t ploidy) const;
 
         /**
          * Checks that the values match either their type specified in the meta or the VCF specification for predefined tags not in meta
          */
         void check_value_type(std::string const & type, std::string const & value, std::string & message) const;
 
+        /**
+         * Checks that every field in info column matches the Number specification in the meta
+         * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_field_cardinality(std::string const & field, std::vector<std::string> const & values, std::string const & number) const;
 
+        /**
+         * Checks that every field in format column matches the Number specification in the meta
+         * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_field_cardinality(bool & valid, std::string const & field, std::vector<std::string> const & values,
+                                     std::string const & number, long & cardinality) const;
+ 
         /**
          * Checks that every field in a sample matches the Number specification in the meta
          * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
          * 
          * @throw std::invalid_argument
          */
-        void check_field_cardinality(std::string const & field,
-                                     std::vector<std::string> const & values,
-                                     std::string const & number) const;
+        void check_field_cardinality(bool & valid, std::string const & field, std::vector<std::string> const & values,
+                                     std::string const & number, long & cardinality, size_t & ploidy,
+                                     std::string const & sample) const;
         
         /**
          * Checks that every field in a column matches the Type specification in the meta

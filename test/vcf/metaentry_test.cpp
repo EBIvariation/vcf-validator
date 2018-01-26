@@ -581,14 +581,6 @@ namespace ebi
                             }),
                             vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::FORMAT,
-                                { {vcf::ID, vcf::GL}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Genotype likelihoods"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::FORMAT,
@@ -719,14 +711,6 @@ namespace ebi
                             }),
                             vcf::MetaSectionError* );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::FORMAT,
-                                { {vcf::ID, vcf::PL}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Phred-scaled genotype likelihoods rounded to the closest integer"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::FORMAT,
