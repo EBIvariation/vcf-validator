@@ -16,6 +16,8 @@
 
 #include <functional>
 #include <unordered_set>
+
+#include "util/algo_utils.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/record.hpp"
 
@@ -131,7 +133,7 @@ namespace ebi
     void Record::check_ids_no_semicolons_whitespaces() const
     {
         for (auto & id : ids) {
-            if (std::find_if(id.begin(), id.end(), [](char c) { return c == ' ' || c == ';'; }) != id.end()) {
+            if (util::contains_if(id, [](char c) { return c == ' ' || c == ';'; })) {
                 throw new IdBodyError{line, "ID must not contain semicolons or whitespaces"};
             }
         }
@@ -306,7 +308,7 @@ namespace ebi
 
     void Record::check_format_GT() const
     {
-        if (std::find(format.begin(), format.end(), GT) != format.end() && format[0] != GT) {
+        if (util::contains(format, GT) && format[0] != GT) {
             throw new FormatBodyError{line, "GT must be the first field in the FORMAT column"};
         }
     }
@@ -559,7 +561,7 @@ namespace ebi
 
     void Record::check_sample_alleles_is_integer(std::string const & allele, long ploidy) const
     {
-        if (std::find_if_not(allele.begin(), allele.end(), isdigit) != allele.end()) {
+        if (util::contains_if_not(allele, isdigit)) {
             throw new SamplesFieldBodyError{line, "Allele must be a non-negative integer number",
                                             "Index=" + allele, GT, ploidy};
         }        

@@ -15,6 +15,8 @@
  */
 
 #include <iostream>
+
+#include "util/algo_utils.hpp"
 #include "vcf/error.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/meta_entry_visitor.hpp"
@@ -75,7 +77,7 @@ namespace ebi
        
     void MetaEntryVisitor::operator()(std::string & value) const
     {
-        if (find_if(value.begin(), value.end(), [](char c) { return c == '\n'; }) != value.end()) {
+        if (util::contains_if(value, [](char c) { return c == '\n'; })) {
             throw new MetaSectionError{entry.line, "Metadata value contains a line break"};
         }
     }
@@ -180,7 +182,7 @@ namespace ebi
 
     void MetaEntryVisitor::check_format_or_info_number(std::string const & number_field, std::string const & field) const
     {
-        if (find_if(number_field.begin(), number_field.end(), [](char c) { return !isdigit(c); }) != number_field.end() &&
+        if (util::contains_if(number_field, [](char c) { return !isdigit(c); }) &&
             number_field != A &&
             number_field != R &&
             number_field != G &&

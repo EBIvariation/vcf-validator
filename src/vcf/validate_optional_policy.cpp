@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include "util/algo_utils.hpp"
 #include "vcf/optional_policy.hpp"
 
 namespace ebi
@@ -133,7 +134,7 @@ namespace ebi
     void ValidateOptionalPolicy::check_body_entry_id_commas(ParsingState & state, Record const & record) const
     {
         for (auto & id : record.ids) {
-            if (std::find(id.begin(), id.end(), ',') != id.end()) {
+            if (util::contains(id, ',')) {
                 throw new IdBodyError{state.n_lines,
                         "Comma found in the ID column; if used as separator, please replace it with semi-colon"};
             }
@@ -155,8 +156,7 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_alt_gvcf_gt_value(ParsingState & state, Record const & record) const
     {
-        if (std::find(record.alternate_alleles.begin(), record.alternate_alleles.end(), GVCF_NON_VARIANT_ALLELE)
-            != record.alternate_alleles.end() && record.format[0] == vcf::GT) {
+        if (util::contains(record.alternate_alleles, GVCF_NON_VARIANT_ALLELE) && record.format[0] == vcf::GT) {
             for (auto & sample : record.samples) {
                 if (sample_has_reference_in_all_alleles(sample)) {
                     return;
@@ -183,8 +183,8 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_info_gvcf_end(ParsingState & state, Record const & record) const
     {
-        if (std::find(record.alternate_alleles.begin(), record.alternate_alleles.end(), GVCF_NON_VARIANT_ALLELE)
-            != record.alternate_alleles.end() && record.info.find(END) == record.info.end()) {
+        if (util::contains(record.alternate_alleles, GVCF_NON_VARIANT_ALLELE)
+            && record.info.find(END) == record.info.end()) {
             throw new InfoBodyError{state.n_lines,
                     "INFO END should be provided when ALT is " + GVCF_NON_VARIANT_ALLELE
                     + " as it is supposed to be a region"};
