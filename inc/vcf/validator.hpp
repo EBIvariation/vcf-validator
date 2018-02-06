@@ -26,6 +26,9 @@
 #include <string>
 #include <vector>
 
+#include <boost/filesystem.hpp>
+#include <boost/log/trivial.hpp>
+
 #include "file_structure.hpp"
 #include "error_policy.hpp"
 #include "optional_policy.hpp"
@@ -177,6 +180,9 @@ namespace ebi
     using QuickValidator_v43 = ParserImpl_v43<QuickValidatorCfg>;
     using FullValidator_v43 = ParserImpl_v43<FullValidatorCfg>;
     using Reader_v43 = ParserImpl_v43<ReaderCfg>;
+
+    bool is_compressed_file(std::istream &input,
+                           const std::string &sourceName);
 
     bool is_valid_vcf_file(std::istream &input,
                            const std::string &sourceName,

@@ -222,6 +222,10 @@ int main(int argc, char** argv)
 
         if (path == ebi::vcf::STDIN) {
             BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
+            bool is_compressed = ebi::vcf::is_compressed_file(std::cin, path);
+            if (is_compressed) {
+                return is_compressed;
+            }
             is_valid = ebi::vcf::is_valid_vcf_file(std::cin, path, validationLevel, ploidy, outputs);
         } else {
             BOOST_LOG_TRIVIAL(info) << "Reading from input file...";
@@ -229,6 +233,10 @@ int main(int argc, char** argv)
             if (!input) {
                 throw std::runtime_error{"Couldn't open file " + path};
             } else {
+                bool is_compressed = ebi::vcf::is_compressed_file(input, path);
+                if (is_compressed) {
+                    return is_compressed;
+                }
                 is_valid = ebi::vcf::is_valid_vcf_file(input, path, validationLevel, ploidy, outputs);
             }
         }
