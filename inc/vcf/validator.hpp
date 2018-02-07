@@ -182,7 +182,7 @@ namespace ebi
     using Reader_v43 = ParserImpl_v43<ReaderCfg>;
 
     bool is_compressed_file(std::istream &input,
-                           const std::string &sourceName);
+                            const std::string &source);
 
     bool is_valid_vcf_file(std::istream &input,
                            const std::string &sourceName,
