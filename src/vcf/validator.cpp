@@ -132,63 +132,61 @@ namespace ebi
         }
     }
 
+    void compressed_file_warning(const std::string file_extension)
+    {
+        const std::string CF_WM_P = "Input file should not be compressed (detected ";
+        const std::string CF_WM_S = " compression)";
+        BOOST_LOG_TRIVIAL(warning) << CF_WM_P << file_extension << CF_WM_S;
+    }
+
+    bool compare_extension(std::istream &input,
+                           const std::string &source)
+    {
+        boost::filesystem::path source_name(source);
+        std::string file_extension = source_name.extension().string();
+
+        if (file_extension == RAR || file_extension == TAR ||
+            file_extension == TAR_GZ || file_extension == TAR_XZ ||
+            file_extension == TAR_Z || file_extension == ZIP)
+        {
+            compressed_file_warning(file_extension);
+            return true;
+        }
+        return false;
+    }
+
+    bool compare_magic_num(std::istream &input)
+    {
+        unsigned char magic[9];
+        input.read((char*)magic, sizeof(magic));
+        input.seekg(0);
+
+        std::vector<std::pair<std::vector<unsigned char>, std::string> > types
+        {
+            {{80, 75, 3, 4},ZIP},
+            {{31,139},TAR_GZ},
+            {{253, 55, 122, 88, 90},TAR_XZ},
+            {{31, 157},TAR_Z}
+        };
+
+        for(auto type: types) {
+            if(std::equal(type.first.begin(),type.first.end(),magic)) {
+                compressed_file_warning(type.second);
+                return true;
+            }
+        }
+        return false;
+    }
+
     bool is_compressed_file(std::istream &input,
                             const std::string &source)
     {
-        std::string message = "Input file is a compressed file ";
-
         if (source != ebi::vcf::STDIN) {
-            boost::filesystem::path source_name(source);
-            std::string file_extension = source_name.extension().string();
-
-            if (file_extension == ".zip") {
-                BOOST_LOG_TRIVIAL(warning) << message << "(zip)";
-                return true;
-            }
-            else if (file_extension == ".tar") {
-                BOOST_LOG_TRIVIAL(warning) << message << "(tar)";
-                return true;
-            }
-            else if (file_extension == ".gz") {
-                BOOST_LOG_TRIVIAL(warning) << message << "(tar.gz)";
-                return true;
-            }
-            else if (file_extension == ".xz") {
-                BOOST_LOG_TRIVIAL(warning) << message << "(tar.xz)";
-                return true;
-            }
-            else if (file_extension == ".rar") {
-                BOOST_LOG_TRIVIAL(warning) << message << "(rar)";
+            if (compare_extension(input, source)) {
                 return true;
             }
         }
-
-        unsigned char magic[10];
-        input.read((char*)magic, sizeof(magic));
-
-        const unsigned char zip[4] = { 80, 75, 3, 4 };
-        const unsigned char tar_gz[2] = { 31, 139 };
-        const unsigned char tar_xz[5] = { 253, 55, 122, 88, 90 };
-        const unsigned char tar_z[5] = { 31, 157 };
-
-        if (std::equal(zip, zip + sizeof(zip), magic)) {
-            BOOST_LOG_TRIVIAL(warning) << message << "(zip)";
-            return true;
-        }
-        else if (std::equal(tar_gz, tar_gz + sizeof(tar_gz), magic)) {
-            BOOST_LOG_TRIVIAL(warning) << message << "(tar_gz)";
-            return true;
-        }
-        else if (std::equal(tar_xz, tar_xz + sizeof(tar_xz), magic)) {
-            BOOST_LOG_TRIVIAL(warning) << message << "(tar_xz)";
-            return true;
-        }
-        else if (std::equal(tar_z, tar_z + sizeof(tar_z), magic)) {
-            BOOST_LOG_TRIVIAL(warning) << message << "(tar_z)";
-            return true;
-        }
-
-        return false;
+        return compare_magic_num(input);
     }
 
     bool is_valid_vcf_file(std::istream &input,
