@@ -174,7 +174,7 @@ namespace ebi
     const std::string PQ = "PQ";
     const std::string PS = "PS";
 
-    //Extensions of compressed files
+    // Compressed file extensions
     const std::string RAR = ".rar";
     const std::string TAR = ".tar";
     const std::string TAR_GZ = ".gz";

@@ -132,11 +132,10 @@ namespace ebi
         }
     }
 
-    void compressed_file_warning(const std::string file_extension)
+    void compressed_file_warning(std::string const & file_extension)
     {
-        const std::string CF_WM_P = "Input file should not be compressed (detected ";
-        const std::string CF_WM_S = " compression)";
-        BOOST_LOG_TRIVIAL(warning) << CF_WM_P << file_extension << CF_WM_S;
+        BOOST_LOG_TRIVIAL(warning) << "Input file should not be compressed (detected " << file_extension
+            << " compression)";
     }
 
     bool compare_extension(std::istream &input,
@@ -145,10 +144,8 @@ namespace ebi
         boost::filesystem::path source_name(source);
         std::string file_extension = source_name.extension().string();
 
-        if (file_extension == RAR || file_extension == TAR ||
-            file_extension == TAR_GZ || file_extension == TAR_XZ ||
-            file_extension == TAR_Z || file_extension == ZIP)
-        {
+        if (file_extension == RAR || file_extension == TAR || file_extension == TAR_GZ || file_extension == TAR_XZ ||
+            file_extension == TAR_Z || file_extension == ZIP) {
             compressed_file_warning(file_extension);
             return true;
         }
@@ -161,16 +158,15 @@ namespace ebi
         input.read((char*)magic, sizeof(magic));
         input.seekg(0);
 
-        std::vector<std::pair<std::vector<unsigned char>, std::string> > types
-        {
-            {{80, 75, 3, 4},ZIP},
-            {{31,139},TAR_GZ},
-            {{253, 55, 122, 88, 90},TAR_XZ},
-            {{31, 157},TAR_Z}
+        std::vector<std::pair<std::vector<unsigned char>, std::string>> types = {
+            { { 80, 75, 3, 4 }, ZIP },
+            { { 31, 139 }, TAR_GZ },
+            { { 253, 55, 122, 88, 90 }, TAR_XZ },
+            { { 31, 157}, TAR_Z }
         };
 
-        for(auto type: types) {
-            if(std::equal(type.first.begin(),type.first.end(),magic)) {
+        for (auto & type : types) {
+            if (std::equal(type.first.begin(), type.first.end(), magic)) {
                 compressed_file_warning(type.second);
                 return true;
             }
@@ -181,10 +177,8 @@ namespace ebi
     bool is_compressed_file(std::istream &input,
                             const std::string &source)
     {
-        if (source != ebi::vcf::STDIN) {
-            if (compare_extension(input, source)) {
-                return true;
-            }
+        if (source != ebi::vcf::STDIN && compare_extension(input, source)) {
+            return true;
         }
         return compare_magic_num(input);
     }
@@ -195,6 +189,9 @@ namespace ebi
                            Ploidy ploidy,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
     {
+        if (ebi::vcf::is_compressed_file(input, sourceName)) {
+            return false;
+        }
         std::vector<char> line;
         ebi::util::readline(input, line);
         ebi::vcf::Version version;
