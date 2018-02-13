@@ -179,8 +179,8 @@ namespace ebi
         boost::filesystem::path source_name(source);
         std::string file_extension = source_name.extension().string();
 
-        if (file_extension == RAR || file_extension == TAR || file_extension == TAR_GZ || file_extension == TAR_XZ ||
-            file_extension == TAR_Z || file_extension == ZIP) {
+        if (file_extension == BZ2 || file_extension == RAR || file_extension == TAR || file_extension == TAR_GZ ||
+            file_extension == TAR_XZ || file_extension == TAR_Z || file_extension == ZIP) {
             compressed_file_warning(file_extension);
             return true;
         }
@@ -200,10 +200,11 @@ namespace ebi
         input.seekg(0);
 
         std::vector<std::pair<std::vector<unsigned char>, std::string>> types = {
-            { { 80, 75, 3, 4 }, ZIP },
+            { { 66, 90, 104 }, BZ2 },
             { { 31, 139 }, TAR_GZ },
             { { 253, 55, 122, 88, 90 }, TAR_XZ },
-            { { 31, 157}, TAR_Z }
+            { { 31, 157}, TAR_Z },
+            { { 80, 75, 3, 4 }, ZIP }
         };
 
         for (auto & type : types) {

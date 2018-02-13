@@ -175,6 +175,7 @@ namespace ebi
     const std::string PS = "PS";
 
     // Compressed file extensions
+    const std::string BZ2 = ".bz2";
     const std::string RAR = ".rar";
     const std::string TAR = ".tar";
     const std::string TAR_GZ = ".gz";
