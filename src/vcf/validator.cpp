@@ -32,13 +32,6 @@ namespace ebi
                   ebi::vcf::Parser &validator,
                   std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
 
-    bool is_compressed_file(std::istream &input,
-                            const std::string &source);
-
-    bool is_compressed_extension(std::string const & source);
-
-    bool is_compressed_magic_num(std::istream &input);
-
     void compressed_file_warning(std::string const & file_extension);
 
     void write_errors(const Parser &validator, const std::vector<std::unique_ptr<ReportWriter>> &outputs);

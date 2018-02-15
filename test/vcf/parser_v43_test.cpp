@@ -25,6 +25,9 @@ namespace ebi
       std::vector<boost::filesystem::path> v;
       copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
+      folder = boost::filesystem::path("test/input_files/v4.3/compressed_files");
+      copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+
       for (auto path : v)
       {
           SECTION(path.string())
