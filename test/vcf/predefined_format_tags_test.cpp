@@ -31,7 +31,6 @@ namespace ebi
                 "Example VCF source",
                 vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
                 vcf::Version::v43,
-                vcf::Ploidy{2, {{"Y", 1}}},
                 {},
                 { "Sample1" }}};
 

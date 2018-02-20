@@ -519,7 +519,7 @@ namespace ebi
                 size_t ploidy;
 
                 try {
-                    check_field_cardinality(valid, subfield, values, G, cardinality, ploidy, samples[i]);
+                    check_field_cardinality(valid, subfield, values, G, samples[i], cardinality, ploidy);
                 } catch (std::shared_ptr<Error> ex) {
                     long number = valid ? cardinality : -1;
                     std::string detailed_message = ". It must derive its number of values from the ploidy of GT (if present), or "
@@ -582,7 +582,7 @@ namespace ebi
     {
         std::vector<std::string> alleles;
         util::string_split(subfields[0], "|/", alleles);
-        long ploidy = static_cast<long>(source->ploidy.get_ploidy(chromosome));
+        long ploidy = alleles.size();
         for (auto & allele : alleles) {
             if (allele == "") {
                 throw new SamplesFieldBodyError{line, "Allele index must not be empty", "", GT, ploidy};
@@ -625,8 +625,8 @@ namespace ebi
         }
     }
 
-    bool Record::is_valid_cardinality(std::string const & number, size_t alternate_allele_number, long & cardinality,
-                                      size_t ploidy) const
+    bool Record::is_valid_cardinality(std::string const &number, size_t alternate_allele_number, size_t ploidy,
+                                      long &cardinality) const
     {
         bool valid = true;
 
@@ -664,31 +664,32 @@ namespace ebi
         long cardinality;
         size_t ploidy;
         std::string sample;
-        check_field_cardinality(valid, field, values, number, cardinality, ploidy, sample);
+        check_field_cardinality(valid, field, values, number, sample, cardinality, ploidy);
     }
 
     void Record::check_field_cardinality(bool & valid, std::string const & field, std::vector<std::string> const & values,
                                          std::string const & number, long & cardinality) const
     {
-        size_t ploidy;
         std::string sample;
-        check_field_cardinality(valid, field, values, number, cardinality, ploidy, sample);
+        size_t ploidy;
+        check_field_cardinality(valid, field, values, number, sample, cardinality, ploidy);
     }
 
-    void Record::check_field_cardinality(bool & valid, std::string const & field, std::vector<std::string> const & values,
-                                         std::string const & number, long & cardinality, size_t & ploidy,
-                                         std::string const & sample) const
+    void Record::check_field_cardinality(bool &valid, std::string const &field, std::vector<std::string> const &values,
+                                         std::string const &number, std::string const &sample, long &cardinality,
+                                         size_t &ploidy) const
     {
-        ploidy = source->ploidy.get_ploidy(chromosome);
+        ploidy = 0;
         if (number == G) {
             ploidy = 2;  // diploidy is assumed
             if (format[0] == GT) {
                 ploidy = get_ploidy_from_GT(sample);
             }
         }
-        valid = is_valid_cardinality(number, alternate_alleles.size(), cardinality, ploidy);
+        valid = is_valid_cardinality(number, alternate_alleles.size(), ploidy, cardinality);
         if (not valid) {
-            raise(std::make_shared<Error>(line, field + " meta specification Number=" + number + " is not one of [A, R, G, ., <non-negative number>]"));
+            raise(std::make_shared<Error>(line, field + " meta specification Number=" + number
+                    + " is not one of [A, R, G, ., <non-negative number>]"));
         }
 
         bool number_matches = true;
@@ -703,7 +704,8 @@ namespace ebi
         }
 
         if (!number_matches) {
-            raise(std::make_shared<Error>(line, " specification Number=" + number + " (expected " + std::to_string(cardinality) + " value(s))"));
+            raise(std::make_shared<Error>(line, " specification Number=" + number + " (expected "
+                    + std::to_string(cardinality) + " value(s))"));
         }
     }
 

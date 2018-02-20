@@ -33,7 +33,6 @@ namespace ebi
                 "Example VCF source",
                 vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
                 vcf::Version::v41,
-                vcf::Ploidy{2},
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
 
@@ -61,7 +60,6 @@ namespace ebi
                 "Example VCF source",
                 vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
                 vcf::Version::v42,
-                vcf::Ploidy{2},
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
         
@@ -95,7 +93,6 @@ namespace ebi
                 "Example VCF source",
                 vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
                 vcf::Version::v43,
-                vcf::Ploidy{2},
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
 
@@ -134,7 +131,6 @@ namespace ebi
                 "Example VCF source",
                 vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
                 vcf::Version::v41,
-                vcf::Ploidy{2},
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
             
@@ -253,7 +249,6 @@ namespace ebi
                 "Example VCF source",
                 vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
                 vcf::Version::v42,
-                vcf::Ploidy{2},
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
             
@@ -290,7 +285,6 @@ namespace ebi
                 "Example VCF source",
                 vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
                 vcf::Version::v43,
-                vcf::Ploidy{2},
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
             
@@ -339,7 +333,6 @@ namespace ebi
                 "Example VCF source",
                 vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
                 vcf::Version::v41,
-                vcf::Ploidy{2},
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
 
@@ -348,7 +341,6 @@ namespace ebi
                 "Example VCF source",
                 vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
                 vcf::Version::v43,
-                vcf::Ploidy{2},
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
 
@@ -945,7 +937,6 @@ namespace ebi
                 "Example VCF source",
                 vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
                 vcf::Version::v43,
-                vcf::Ploidy{2},
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
             
@@ -2011,7 +2002,6 @@ namespace ebi
                 "Example VCF source",
                 vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
                 vcf::Version::v43,
-                vcf::Ploidy{2},
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
             

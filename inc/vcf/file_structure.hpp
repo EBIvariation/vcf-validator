@@ -29,7 +29,6 @@
 
 #include "util/stream_utils.hpp"
 #include "vcf/error.hpp"
-#include "vcf/ploidy.hpp"
 #include "vcf/string_constants.hpp"
 
 namespace ebi
@@ -252,7 +251,6 @@ namespace ebi
         std::string name;           /**< Name of the source to interact with (file, stdin...) */
         unsigned int input_format;  /**< Mask that stores whether the input is plain/gzipped VCF, BCF, etc */
         Version version;            /**< VCF version */
-        Ploidy ploidy;              /**< Class that keeps track of the ploidy of every contig */
 
         std::multimap<std::string, MetaEntry> meta_entries; /**< Entries in the file meta-data */
         std::vector<std::string> samples_names; /**< Names of the sequenced samples */
@@ -260,7 +258,6 @@ namespace ebi
         Source(std::string const & name,
                unsigned const input_format,
                Version version,
-               Ploidy ploidy,
                std::multimap<std::string, MetaEntry> const & meta_entries = {},
                std::vector<std::string> const & samples_names = {});
         
@@ -560,7 +557,8 @@ namespace ebi
          * @throw std::out_of_range if it's out of range.
          * @return bool: whether the number was valid or not
          */
-        bool is_valid_cardinality(std::string const & number, size_t alternate_allele_number, long & cardinality, size_t ploidy) const;
+        bool is_valid_cardinality(std::string const &number, size_t alternate_allele_number, size_t ploidy,
+                                  long &cardinality) const;
 
         /**
          * Checks that the values match either their type specified in the meta or the VCF specification for predefined tags not in meta
@@ -591,8 +589,8 @@ namespace ebi
          * @throw std::invalid_argument
          */
         void check_field_cardinality(bool & valid, std::string const & field, std::vector<std::string> const & values,
-                                     std::string const & number, long & cardinality, size_t & ploidy,
-                                     std::string const & sample) const;
+                                     std::string const & number, std::string const & sample, long & cardinality,
+                                     size_t & ploidy) const;
         
         /**
          * Checks that every field in a column matches the Type specification in the meta

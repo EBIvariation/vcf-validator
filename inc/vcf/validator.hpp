@@ -33,7 +33,6 @@
 #include "parsing_state.hpp"
 #include "record_cache.hpp"
 #include "util/string_utils.hpp"
-#include "vcf/ploidy.hpp"
 #include "vcf/report_writer.hpp"
 
 
@@ -181,7 +180,6 @@ namespace ebi
     bool is_valid_vcf_file(std::istream &input,
                            const std::string &sourceName,
                            ValidationLevel validationLevel,
-                           Ploidy ploidy,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
   }
 }
