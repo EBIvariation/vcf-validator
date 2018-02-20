@@ -176,7 +176,7 @@ namespace ebi
             { HQ, { INTEGER, "2" } },
             { MQ, { INTEGER, "1" } },
             { NQ, { INTEGER, "1" } },
-            { PL, { INTEGER, UNKNOWN_CARDINALITY } },
+            { PL, { INTEGER, G } },
             { PQ, { INTEGER, "1" } },
             { PS, { INTEGER, "1" } }
     };
