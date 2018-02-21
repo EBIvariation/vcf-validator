@@ -259,7 +259,7 @@ namespace ebi
                 if (key_values[ID] == field.first) {
                     found_in_meta = true;
                     try {
-                        check_field_cardinality(field.second, values, key_values[NUMBER]);
+                        check_info_field_cardinality(field.first, values, key_values[NUMBER]);
                         check_field_type(values, key_values[TYPE]);
                     } catch (std::shared_ptr<Error> ex) {
                         std::string message = "INFO " + key_values[ID] + " does not match the meta" + ex->message;
@@ -274,9 +274,9 @@ namespace ebi
             if (!found_in_meta) {
                 try {
                     if (source->version == Version::v41 || source->version == Version::v42) {
-                        check_predefined_tag(field.first, values, info_v41_v42);
+                        check_predefined_tag_info(field.first, values, info_v41_v42);
                     } else {
-                        check_predefined_tag(field.first, values, info_v43);
+                        check_predefined_tag_info(field.first, values, info_v43);
                     }
                 } catch (std::shared_ptr<Error> ex) {
                     throw new InfoBodyError{line, "INFO " + ex->message, field.first + "=" + field.second, ErrorFix::IRRECOVERABLE_VALUE, field.first};
@@ -326,19 +326,40 @@ namespace ebi
         }
     }
 
-    void Record::check_predefined_tag(std::string const & field_key, std::vector<std::string> const & values,
+    void Record::check_predefined_tag_info(std::string const & field_key, std::vector<std::string> const & values,
                                       std::map<std::string, std::pair<std::string, std::string>> const & tags) const
     {
         auto iterator = tags.find(field_key);
         if (iterator != tags.end()) {
             try {
-                if (field_key != GL && field_key != PL && field_key != GP && field_key != CNL && field_key != CNP)
-                    check_field_cardinality(field_key, values, iterator->second.second);
-                check_field_type(values, iterator->second.first);
+                check_info_field_cardinality(field_key, values, get_predefined_number(iterator));
+                check_field_type(values, get_predefined_type(iterator));
             } catch (std::shared_ptr<Error> ex) {
                 raise(std::make_shared<Error>(line, field_key + " does not match the" + ex->message));
             }
-            if (iterator->second.first == INTEGER) {
+            if (get_predefined_type(iterator) == INTEGER) {
+                check_field_integer_range(field_key, values);
+            }
+        }
+    }
+
+    void Record::check_predefined_tag_format(std::string const &field_key, std::vector<std::string> const &values,
+                                                 std::map<std::string, std::pair<std::string, std::string>> const &tags,
+                                                 size_t ploidy)
+                                             const
+    {
+        auto iterator = tags.find(field_key);
+        if (iterator != tags.end()) {
+            try {
+                bool valid;
+                long cardinality;
+                check_sample_field_cardinality(field_key, values, get_predefined_number(iterator), ploidy, valid,
+                                               cardinality);
+                check_field_type(values, get_predefined_type(iterator));
+            } catch (std::shared_ptr<Error> ex) {
+                raise(std::make_shared<Error>(line, field_key + " does not match the" + ex->message));
+            }
+            if (get_predefined_type(iterator) == INTEGER) {
                 check_field_integer_range(field_key, values);
             }
         }
@@ -506,58 +527,41 @@ namespace ebi
                                                          std::vector<MetaEntry> const & format_meta) const
     {
         std::vector<std::string> values;
+        size_t ploidy = 2;  // diploidy is assumed if no GT present
+        if (format[0] == GT) {
+            ploidy = get_ploidy_from_GT(samples[i]);
+        }
 
         for (size_t j = 0; j < subfields.size(); ++j) {
             MetaEntry meta = format_meta[j];
-            auto & subfield = subfields[j];
-
+            const std::string & subfield = subfields[j];
             util::string_split(subfield, ",", values);
 
-            if (format[j] == GL || format[j] == PL || format[j] == GP || format[j] == CNL || format[j] == CNP) {
+            if (meta.is_defined_in_header()) {
+                auto &meta_entry_properties = boost::get<std::map<std::string, std::string>>(meta.value);
                 bool valid;
                 long cardinality;
-                size_t ploidy;
 
                 try {
-                    check_field_cardinality(valid, subfield, values, G, samples[i], cardinality, ploidy);
+                    check_sample_field_cardinality(meta.id, values, meta_entry_properties[NUMBER], ploidy, valid,
+                                                   cardinality);
+                    check_field_type(values, meta_entry_properties[TYPE]);
                 } catch (std::shared_ptr<Error> ex) {
                     long number = valid ? cardinality : -1;
-                    std::string detailed_message = ". It must derive its number of values from the ploidy of GT (if present), or "
-                                                   "assume a diploidy. Contains " + std::to_string(values.size()) + " value(s), "
-                                                   "expected " + std::to_string(cardinality) + " (derived from ploidy " +
-                                                   std::to_string(ploidy) + ")";
                     std::string message = "Sample #" + std::to_string(i + 1) + " does not match the meta" + ex->message;
-                    throw new SamplesFieldBodyError{line, message, format[j] + "=" + subfield + detailed_message, format[j], number};
+                    std::string detailed_message = meta_entry_properties[ID] + "=" + subfield + ex->detailed_message;
+                    throw new SamplesFieldBodyError{line, message, detailed_message, meta_entry_properties[ID], number};
                 }
-            }
-
-            if (meta.id == "") {
+            } else {
                 try {
                     if (source->version == Version::v41 || source->version == Version::v42) {
-                        check_predefined_tag(format[j], values, format_v41_v42);
+                        check_predefined_tag_format(format[j], values, format_v41_v42, ploidy);
                     } else {
-                        check_predefined_tag(format[j], values, format_v43);
+                        check_predefined_tag_format(format[j], values, format_v43, ploidy);
                     }
                 } catch (std::shared_ptr<Error> ex) {
                     throw new SamplesFieldBodyError{line, "Sample #" + std::to_string(i + 1) + ", " + ex->message,
                                                     format[j] + "=" + subfield, format[j]};
-                }
-
-                // FORMAT fields not described in the meta section can't be checked
-
-            } else {
-                auto & key_values = boost::get<std::map<std::string, std::string>>(meta.value);
-                bool valid;
-                long cardinality;
-
-                try {
-                    if (format[j] != GL && format[j] != PL && format[j] != GP && format[j] != CNL && format[j] != CNP)
-                        check_field_cardinality(valid, subfield, values, key_values[NUMBER], cardinality);
-                    check_field_type(values, key_values[TYPE]);
-                } catch (std::shared_ptr<Error> ex) {
-                    long number = valid ? cardinality : -1;
-                    std::string message = "Sample #" + std::to_string(i + 1) + " does not match the meta" + ex->message;
-                    throw new SamplesFieldBodyError{line, message, key_values[ID] + "=" + subfield, key_values[ID], number};
                 }
             }
 
@@ -657,38 +661,28 @@ namespace ebi
         return valid;
     }
 
-    void Record::check_field_cardinality(std::string const & field, std::vector<std::string> const & values,
-                                         std::string const & number) const
+    void Record::check_info_field_cardinality(std::string const &field, std::vector<std::string> const &values,
+                                              std::string const &number) const
     {
         bool valid;
         long cardinality;
-        size_t ploidy;
-        std::string sample;
-        check_field_cardinality(valid, field, values, number, sample, cardinality, ploidy);
-    }
-
-    void Record::check_field_cardinality(bool & valid, std::string const & field, std::vector<std::string> const & values,
-                                         std::string const & number, long & cardinality) const
-    {
-        std::string sample;
-        size_t ploidy;
-        check_field_cardinality(valid, field, values, number, sample, cardinality, ploidy);
-    }
-
-    void Record::check_field_cardinality(bool &valid, std::string const &field, std::vector<std::string> const &values,
-                                         std::string const &number, std::string const &sample, long &cardinality,
-                                         size_t &ploidy) const
-    {
-        ploidy = 0;
-        if (number == G) {
-            ploidy = 2;  // diploidy is assumed
-            if (format[0] == GT) {
-                ploidy = get_ploidy_from_GT(sample);
-            }
+        size_t ploidy = 0;
+        if (number != G) {
+            check_sample_field_cardinality(field, values, number, ploidy, valid, cardinality);
+        } else {
+            // this case is not well defined, we just skip this check and allow any cardinality
+            // for further discussion see https://github.com/samtools/hts-specs/issues/272
         }
+    }
+
+    void Record::check_sample_field_cardinality(std::string const &field, std::vector<std::string> const &values,
+                                                std::string const &number, size_t ploidy, bool &valid,
+                                                long &cardinality) const
+    {
+
         valid = is_valid_cardinality(number, alternate_alleles.size(), ploidy, cardinality);
         if (not valid) {
-            raise(std::make_shared<Error>(line, field + " meta specification Number=" + number
+            raise(std::make_shared<Error>(line, " meta specification Number=" + number
                     + " is not one of [A, R, G, ., <non-negative number>]"));
         }
 
@@ -704,8 +698,14 @@ namespace ebi
         }
 
         if (!number_matches) {
+            std::string detailed_message;
+            if (number == G) {
+                detailed_message = ". It must derive its number of values from the ploidy of GT (if present), or "
+                        "assume a diploidy. Contains " + std::to_string(values.size()) + " value(s), expected "
+                        + std::to_string(cardinality) + " (derived from ploidy " + std::to_string(ploidy) + ")";
+            }
             raise(std::make_shared<Error>(line, " specification Number=" + number + " (expected "
-                    + std::to_string(cardinality) + " value(s))"));
+                    + std::to_string(cardinality) + " value(s))", detailed_message));
         }
     }
 

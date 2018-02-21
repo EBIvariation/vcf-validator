@@ -76,12 +76,6 @@ namespace
             return 1;
         }
 
-        long ploidy = vm[ebi::vcf::PLOIDY].as<long>();
-        if (ploidy <= 0) {
-            BOOST_LOG_TRIVIAL(error) << "Ploidy must be greater that 0";
-            return 1;
-        }
-
         return 0;
     }
 

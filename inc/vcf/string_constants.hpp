@@ -39,8 +39,6 @@ namespace ebi
     const char HELP[] = "help";
     const char VERSION[] = "version";
     const char LEVEL[] = "level";
-    const char PLOIDY[] = "ploidy";
-    const char SPECIAL_PLOIDY[] = "special-ploidy";
     const char DATABASE[] = "database";
     const char TEXT[] = "text";
     const char SUMMARY[] = "summary";
@@ -55,8 +53,6 @@ namespace ebi
     const char LEVEL_OPTION[] = "level,l";
     const char REPORT_OPTION[] = "report,r";
     const char OUTDIR_OPTION[] = "outdir,o";
-    const char PLOIDY_OPTION[] = "ploidy,p";
-    const char SPECIAL_PLOIDY_OPTION[] = "special-ploidy,s";
     const char OUTPUT_OPTION[] = "output,o";
 
     // fields

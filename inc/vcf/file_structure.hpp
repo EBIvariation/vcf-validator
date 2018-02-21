@@ -205,6 +205,20 @@ namespace ebi
             { PS, { INTEGER, "1" } }
     };
 
+    inline std::string get_predefined_type(std::map<std::string,
+                                                    std::pair<std::string, std::string>
+                                           >::const_iterator & predefined_tag)
+    {
+        return predefined_tag->second.first;
+    }
+
+    inline std::string get_predefined_number(std::map<std::string,
+                                                      std::pair<std::string, std::string>
+                                             >::const_iterator & predefined_tag)
+    {
+        return predefined_tag->second.second;
+    }
+
     struct MetaEntry
     {
         enum class Structure { NoValue, PlainValue, KeyValue };
@@ -236,6 +250,8 @@ namespace ebi
         bool operator==(MetaEntry const &) const;
 
         bool operator!=(MetaEntry const &) const;
+
+        bool is_defined_in_header() const;
         
     private:
         /**
@@ -437,12 +453,16 @@ namespace ebi
 
         /**
          * Checks that predefined tags are consistent with the specification
-         *
-         * @throw std::invalid_argument
          */
-        void check_predefined_tag(std::string const & field_key, std::vector<std::string> const & values,
-                                  std::map<std::string, std::pair<std::string, std::string>> const & tags) const;
+        void check_predefined_tag_info(std::string const &field_key, std::vector<std::string> const &values,
+                                       std::map<std::string, std::pair<std::string, std::string>> const &tags) const;
 
+        /**
+         * Checks that predefined tags are consistent with the specification
+         */
+        void check_predefined_tag_format(std::string const &field_key, std::vector<std::string> const &values,
+                                         std::map<std::string, std::pair<std::string, std::string>> const &tags,
+                                         size_t ploidy) const;
         /**
          * Strict validation of predefined INFO tags
          *
@@ -571,26 +591,18 @@ namespace ebi
          * 
          * @throw std::invalid_argument
          */
-        void check_field_cardinality(std::string const & field, std::vector<std::string> const & values, std::string const & number) const;
+        void check_info_field_cardinality(std::string const &field, std::vector<std::string> const &values,
+                                          std::string const &number) const;
 
-        /**
-         * Checks that every field in format column matches the Number specification in the meta
-         * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
-         * 
-         * @throw std::invalid_argument
-         */
-        void check_field_cardinality(bool & valid, std::string const & field, std::vector<std::string> const & values,
-                                     std::string const & number, long & cardinality) const;
- 
         /**
          * Checks that every field in a sample matches the Number specification in the meta
          * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
          * 
          * @throw std::invalid_argument
          */
-        void check_field_cardinality(bool & valid, std::string const & field, std::vector<std::string> const & values,
-                                     std::string const & number, std::string const & sample, long & cardinality,
-                                     size_t & ploidy) const;
+        void check_sample_field_cardinality(std::string const &field, std::vector<std::string> const &values,
+                                            std::string const &number, size_t ploidy, bool &valid, long &cardinality)
+                                            const;
         
         /**
          * Checks that every field in a column matches the Type specification in the meta

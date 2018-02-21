@@ -61,7 +61,12 @@ namespace ebi
     {
         return !(*this == other);
     }
-    
+
+    bool MetaEntry::is_defined_in_header() const
+    {
+        return !this->id.empty();
+    }
+
     void MetaEntry::check_value()
     {
         MetaEntryVisitor visitor = MetaEntryVisitor { *this }; 
