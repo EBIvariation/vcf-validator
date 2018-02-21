@@ -139,7 +139,7 @@ namespace ebi
 
           // semantic error, the number of values doesn't match the description in the meta section
           path = boost::filesystem::path(
-                  "test/input_files/v4." + std::to_string(i) + "/failed/failed_body_info_032.vcf");
+                  "test/input_files/v4." + std::to_string(i) + "/failed/failed_body_info_031.vcf");
           SECTION(path.string()) {
               std::ifstream file{path.c_str()};
               first_validation = validate(file, path, BEFORE_TAG);
@@ -163,8 +163,8 @@ namespace ebi
       long lines;
 
       for (size_t i = 1; i <= 3; ++i) {
-          // syntax error, AC must be a positive integer
-          path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_sample_002.vcf");
+          // syntax error, alleles are not digits
+          path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_sample_000.vcf");
           SECTION(path.string()) {
               std::ifstream file{path.c_str()};
               first_validation = validate(file, path, BEFORE_TAG);

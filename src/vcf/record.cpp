@@ -679,7 +679,6 @@ namespace ebi
                                                 std::string const &number, size_t ploidy, bool &valid,
                                                 long &cardinality) const
     {
-
         valid = is_valid_cardinality(number, alternate_alleles.size(), ploidy, cardinality);
         if (not valid) {
             raise(std::make_shared<Error>(line, " meta specification Number=" + number
