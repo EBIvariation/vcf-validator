@@ -327,7 +327,8 @@ namespace ebi
     }
 
     void Record::check_predefined_tag_info(std::string const & field_key, std::vector<std::string> const & values,
-                                      std::map<std::string, std::pair<std::string, std::string>> const & tags) const
+                                           std::map<std::string, std::pair<std::string, std::string>> const & tags
+                                          ) const
     {
         auto iterator = tags.find(field_key);
         if (iterator != tags.end()) {
@@ -344,9 +345,8 @@ namespace ebi
     }
 
     void Record::check_predefined_tag_format(std::string const &field_key, std::vector<std::string> const &values,
-                                                 std::map<std::string, std::pair<std::string, std::string>> const &tags,
-                                                 size_t ploidy)
-                                             const
+                                             std::map<std::string, std::pair<std::string, std::string>> const &tags,
+                                             size_t ploidy) const
     {
         auto iterator = tags.find(field_key);
         if (iterator != tags.end()) {

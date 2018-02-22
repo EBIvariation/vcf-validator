@@ -205,16 +205,14 @@ namespace ebi
             { PS, { INTEGER, "1" } }
     };
 
-    inline std::string get_predefined_type(std::map<std::string,
-                                                    std::pair<std::string, std::string>
-                                           >::const_iterator & predefined_tag)
+    inline std::string const &get_predefined_type(
+            std::map<std::string, std::pair<std::string, std::string>>::const_iterator const &predefined_tag)
     {
         return predefined_tag->second.first;
     }
 
-    inline std::string get_predefined_number(std::map<std::string,
-                                                      std::pair<std::string, std::string>
-                                             >::const_iterator & predefined_tag)
+    inline std::string const &get_predefined_number(
+            std::map<std::string, std::pair<std::string, std::string>>::const_iterator const &predefined_tag)
     {
         return predefined_tag->second.second;
     }

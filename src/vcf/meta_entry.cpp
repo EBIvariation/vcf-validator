@@ -244,7 +244,8 @@ namespace ebi
         auto iterator = predefined_meta_entries.find(meta_entry[ID]);
         if (iterator != predefined_meta_entries.end()) {
             // Determine the required value of the key based on whether we are checking for Type or Number
-            std::string predefined_value = (meta_entry_property == TYPE ? iterator->second.first : iterator->second.second);
+            std::string predefined_value = (meta_entry_property == TYPE ? get_predefined_type(iterator)
+                                                                        : get_predefined_number(iterator));
             // If the required value is a "." (dot), do nothing
             // Or if the required value does not match the value provided in the vcf file, throw an error
             if (predefined_value != MISSING_VALUE && predefined_value != meta_entry[meta_entry_property]) {
