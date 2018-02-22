@@ -452,13 +452,13 @@ namespace ebi
         void check_format_no_duplicates() const;
 
         /**
-         * Checks that predefined tags are consistent with the specification
+         * Checks that INFO predefined tags are consistent with the specification
          */
         void check_predefined_tag_info(std::string const &field_key, std::vector<std::string> const &values,
                                        std::map<std::string, std::pair<std::string, std::string>> const &tags) const;
 
         /**
-         * Checks that predefined tags are consistent with the specification
+         * Checks that FORMAT predefined tags are consistent with the specification
          */
         void check_predefined_tag_format(std::string const &field_key, std::vector<std::string> const &values,
                                          std::map<std::string, std::pair<std::string, std::string>> const &tags,
@@ -571,8 +571,8 @@ namespace ebi
          *  - "." means unknown number of elements
          *  - number is a positive number [0, +inf)
          * @param alternate_allele_number the number of alternate alleles
-         * @param cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number. 
-         * @param ploidy is the number of sets of chromosomes, so a given position in a chromosome needs `ploidy` bases to be completely specifie 
+         * @param ploidy is the number of sets of chromosomes, so a given position in a chromosome needs `ploidy` bases to be completely specifie
+         * @param cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number.
          * @throw std::invalid_argument if it's not a number
          * @throw std::out_of_range if it's out of range.
          * @return bool: whether the number was valid or not

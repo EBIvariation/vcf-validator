@@ -30,12 +30,13 @@ The validation level can be configured using `-l` / `--level`. This parameter is
 * warning: Display both syntax and semantic, both errors and warnings (default)
 * stop: Stop after the first syntax error is found
 
-The validation report can be exported in several ways with the `-r` / `--report` option. Several ones may be specified in the same execution.
+Different types of validation reports can be written with the `-r` / `--report` option. Several ones may be specified in the same execution, using commas to split each type (without spaces, e.g.: `-r summary,database,text`).
 
-* stdout: Write human-readable report to the standard output (default)
+* summary: Write a human-readable summary report to a file. This includes one line for each type of error and the number of occurrences, along with the first line that shows that type of error (default)
+* text: Write a human-readable report to a file, with one description line for each VCF line that has an error.
 * database: Write structured report to a database file. The database engine used is SQLite3, so the results can be inspected manually, but they are intended to be consumed by other applications.
 
-The reports written into a file are named after the input file, followed by a timestamp. The default output directory is the same as the input file's if provided using `-i`, or the current directory if using the standard input; it can be changed with the `-o` / `--outdir` option.
+Each report is written into its own file and it is named after the input file, followed by a timestamp. The default output directory is the same as the input file's if provided using `-i`, or the current directory if using the standard input; it can be changed with the `-o` / `--outdir` option.
 
 ### Debugulator
 
