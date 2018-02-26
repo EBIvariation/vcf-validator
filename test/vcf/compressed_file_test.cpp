@@ -43,10 +43,14 @@ namespace ebi
           std::vector<boost::filesystem::path> v;
           copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
+          std::vector<char> line;
+          line.reserve(ebi::vcf::default_line_buffer_size);
+
           for (auto path : v)
           {
               std::ifstream input{path.string()};
-              CHECK(vcf::is_compressed_magic_num(input));
+              ebi::util::readline(input, line);
+              CHECK(vcf::is_compressed_magic_num(line));
           }
       }
   }
@@ -75,21 +79,14 @@ namespace ebi
           folder = boost::filesystem::path("test/input_files/v4.3/failed");
           copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
+          std::vector<char> line;
+          line.reserve(ebi::vcf::default_line_buffer_size);
+
           for (auto path : v)
           {
               std::ifstream input{path.string()};
-              CHECK_FALSE(vcf::is_compressed_magic_num(input));
-
-              std::vector<char> line;
               ebi::util::readline(input, line);
-
-              std::ifstream input_dup{path.string()};
-              std::vector<char> line_dup;
-              ebi::util::readline(input_dup, line_dup);
-
-              std::string str{line.begin(), line.end()};
-              std::string str_dup{line_dup.begin(), line_dup.end()};
-              CHECK(str == str_dup);
+              CHECK_FALSE(vcf::is_compressed_magic_num(line));
           }
       }
   }

@@ -187,12 +187,12 @@ namespace ebi
                            Ploidy ploidy,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
 
-    bool is_compressed_file(std::istream &input,
-                            const std::string &source);
+    bool is_compressed_file(const std::string &source,
+                            const std::vector<char> &line);
 
     bool is_compressed_extension(std::string const & source);
 
-    bool is_compressed_magic_num(std::istream &input);
+    bool is_compressed_magic_num(const std::vector<char> &line);
 
   }
 }

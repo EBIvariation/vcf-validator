@@ -140,12 +140,12 @@ namespace ebi
                            Ploidy ploidy,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
     {
-        if (ebi::vcf::is_compressed_file(input, sourceName)) {
-            return false;
-        }
         std::vector<char> line;
         ebi::util::readline(input, line);
         ebi::vcf::Version version;
+        if (ebi::vcf::is_compressed_file(sourceName, line)) {
+            return false;
+        }
         try {
             version = detect_version(line);
         } catch (FileformatError * error) {
@@ -158,13 +158,13 @@ namespace ebi
         return validate(line, input, *validator, outputs);
     }
 
-    bool is_compressed_file(std::istream &input,
-                            const std::string &source)
+    bool is_compressed_file(const std::string &source,
+                            const std::vector<char> &line)
     {
         if (source != ebi::vcf::STDIN && is_compressed_extension(source)) {
             return true;
         }
-        return is_compressed_magic_num(input);
+        return is_compressed_magic_num(line);
     }
 
     bool is_compressed_extension(std::string const & source)
@@ -186,23 +186,18 @@ namespace ebi
             << " compression)";
     }
 
-    bool is_compressed_magic_num(std::istream &input)
+    bool is_compressed_magic_num(const std::vector<char> &line)
     {
-        unsigned char magic[9];
-        input.read((char*)magic, sizeof(magic));
-        input.clear();
-        input.seekg(0);
-
-        std::vector<std::pair<std::vector<unsigned char>, std::string>> types = {
+        std::vector<std::pair<std::vector<char>, std::string>> types = {
             { { 66, 90, 104 }, BZ2 },
-            { { 31, 139 }, TAR_GZ },
-            { { 253, 55, 122, 88, 90 }, TAR_XZ },
-            { { 31, 157}, TAR_Z },
+            { { 31, -117 }, TAR_GZ },
+            { { -3, 55, 122, 88, 90 }, TAR_XZ },
+            { { 31, -99 }, TAR_Z },
             { { 80, 75, 3, 4 }, ZIP }
         };
 
         for (auto & type : types) {
-            if (std::equal(type.first.begin(), type.first.end(), magic)) {
+            if (std::equal(type.first.begin(), type.first.end(), line.begin())) {
                 compressed_file_warning(type.second);
                 return true;
             }
