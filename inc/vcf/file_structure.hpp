@@ -497,7 +497,7 @@ namespace ebi
         std::vector<MetaEntry> get_meta_entry_objects() const;
 
         /**
-         * Returns the ploidy of GT
+         * Returns the ploidy of the GT sample field
          */
         size_t get_ploidy_from_GT(std::string const & sample) const;
 
@@ -569,14 +569,14 @@ namespace ebi
          *  - "." means unknown number of elements
          *  - number is a positive number [0, +inf)
          * @param alternate_allele_number the number of alternate alleles
-         * @param ploidy is the number of sets of chromosomes, so a given position in a chromosome needs `ploidy` bases to be completely specifie
-         * @param cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number.
+         * @param ploidy is the number of copies of a chromosome in a sample, so a given genotype in said chromosome needs `ploidy` alleles to be completely specified
+         * @param expected_cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number.
          * @throw std::invalid_argument if it's not a number
          * @throw std::out_of_range if it's out of range.
          * @return bool: whether the number was valid or not
          */
         bool is_valid_cardinality(std::string const &number, size_t alternate_allele_number, size_t ploidy,
-                                  long &cardinality) const;
+                                  long &expected_cardinality) const;
 
         /**
          * Checks that the values match either their type specified in the meta or the VCF specification for predefined tags not in meta
@@ -584,7 +584,7 @@ namespace ebi
         void check_value_type(std::string const & type, std::string const & value, std::string & message) const;
 
         /**
-         * Checks that every field in info column matches the Number specification in the meta
+         * Checks that every field in INFO column matches the Number specification in the meta
          * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
          * 
          * @throw std::invalid_argument
@@ -598,8 +598,8 @@ namespace ebi
          * 
          * @throw std::invalid_argument
          */
-        void check_sample_field_cardinality(std::string const &field, std::vector<std::string> const &values,
-                                            std::string const &number, size_t ploidy, bool &valid, long &cardinality)
+        void check_sample_field_cardinality(std::vector<std::string> const &values, std::string const &number,
+                                            size_t ploidy, bool &valid_cardinality, long &expected_cardinality)
                                             const;
         
         /**

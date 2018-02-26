@@ -16,7 +16,7 @@
 
 #include <functional>
 #include <unordered_set>
-#include<iostream>
+#include <iostream>
 
 #include "util/algo_utils.hpp"
 #include "util/logger.hpp"
@@ -353,8 +353,7 @@ namespace ebi
             try {
                 bool valid;
                 long cardinality;
-                check_sample_field_cardinality(field_key, values, get_predefined_number(iterator), ploidy, valid,
-                                               cardinality);
+                check_sample_field_cardinality(values, get_predefined_number(iterator), ploidy, valid, cardinality);
                 check_field_type(values, get_predefined_type(iterator));
             } catch (std::shared_ptr<Error> ex) {
                 raise(std::make_shared<Error>(line, field_key + " does not match the" + ex->message));
@@ -539,15 +538,15 @@ namespace ebi
 
             if (meta.is_defined_in_header()) {
                 auto &meta_entry_properties = boost::get<std::map<std::string, std::string>>(meta.value);
-                bool valid;
-                long cardinality;
+                bool valid_cardinality;
+                long expected_cardinality;
 
                 try {
-                    check_sample_field_cardinality(meta.id, values, meta_entry_properties[NUMBER], ploidy, valid,
-                                                   cardinality);
+                    check_sample_field_cardinality(values, meta_entry_properties[NUMBER], ploidy, valid_cardinality,
+                                                   expected_cardinality);
                     check_field_type(values, meta_entry_properties[TYPE]);
                 } catch (std::shared_ptr<Error> ex) {
-                    long number = valid ? cardinality : -1;
+                    long number = valid_cardinality ? expected_cardinality : -1;
                     std::string message = "Sample #" + std::to_string(i + 1) + " does not match the meta" + ex->message;
                     std::string detailed_message = meta_entry_properties[ID] + "=" + subfield + ex->detailed_message;
                     throw new SamplesFieldBodyError{line, message, detailed_message, meta_entry_properties[ID], number};
@@ -630,28 +629,28 @@ namespace ebi
     }
 
     bool Record::is_valid_cardinality(std::string const &number, size_t alternate_allele_number, size_t ploidy,
-                                      long &cardinality) const
+                                      long &expected_cardinality) const
     {
         bool valid = true;
 
         if (number == A) {
             // ...the number of alternate alleles
-            cardinality = alternate_allele_number;
+            expected_cardinality = alternate_allele_number;
         } else if (number == R) {
             // ...the number of alternate alleles + reference
-            cardinality = alternate_allele_number + 1;
+            expected_cardinality = alternate_allele_number + 1;
         } else if (number == G) {
             // ...the number of possible genotypes
             // The binomial coefficient is calculated considering the ploidy of the sample
-            cardinality = boost::math::binomial_coefficient<float>(alternate_alleles.size() + ploidy, ploidy);
+            expected_cardinality = boost::math::binomial_coefficient<float>(alternate_alleles.size() + ploidy, ploidy);
         } else if (number == UNKNOWN_CARDINALITY) {
             // ...it is unspecified
-            cardinality = -1;
+            expected_cardinality = -1;
         } else {
             // ...specified as a number in range [0, +MAX_LONG)
             try {
-                cardinality = stoi(number);
-                if (cardinality < 0) {
+                expected_cardinality = stoi(number);
+                if (expected_cardinality < 0) {
                     valid = false;
                 }
             } catch (...) {
@@ -668,43 +667,46 @@ namespace ebi
         long cardinality;
         size_t ploidy = 0;
         if (number != G) {
-            check_sample_field_cardinality(field, values, number, ploidy, valid, cardinality);
+            check_sample_field_cardinality(values, number, ploidy, valid, cardinality);
         } else {
             // this case is not well defined, we just skip this check and allow any cardinality
             // for further discussion see https://github.com/samtools/hts-specs/issues/272
         }
     }
 
-    void Record::check_sample_field_cardinality(std::string const &field, std::vector<std::string> const &values,
-                                                std::string const &number, size_t ploidy, bool &valid,
-                                                long &cardinality) const
+    void Record::check_sample_field_cardinality(std::vector<std::string> const &values, std::string const &number,
+                                                size_t ploidy, bool &valid_cardinality,
+                                                long &expected_cardinality) const
     {
-        valid = is_valid_cardinality(number, alternate_alleles.size(), ploidy, cardinality);
-        if (not valid) {
+        valid_cardinality = is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected_cardinality);
+        if (not valid_cardinality) {
             raise(std::make_shared<Error>(line, " meta specification Number=" + number
                     + " is not one of [A, R, G, ., <non-negative number>]"));
         }
 
         bool number_matches = true;
-        if (cardinality > 0) {
+        if (expected_cardinality > 0) {
             // The number of values must match the expected cardinality
-            number_matches = (values.size() == static_cast<size_t>(cardinality));
-        } else if (cardinality == 0) {
+            number_matches = (values.size() == static_cast<size_t>(expected_cardinality));
+        } else if (expected_cardinality == 0) {
             // There will be one empty value that needs to be specifically checked
             number_matches = values.size() == 0 || values.size() == 1;
         } else {
-            // if number=".", then `cardinality` was set to -1, and it should always match, letting `number_matches` as true
+            // if number=".", then `expected_cardinality` was set to -1, and it should always match, letting `number_matches` as true
         }
 
         if (!number_matches) {
+            std::string message =
+                    " specification Number=" + number + " (expected " + std::to_string(expected_cardinality)
+                            + " value(s))";
             std::string detailed_message;
             if (number == G) {
                 detailed_message = ". It must derive its number of values from the ploidy of GT (if present), or "
-                        "assume a diploidy. Contains " + std::to_string(values.size()) + " value(s), expected "
-                        + std::to_string(cardinality) + " (derived from ploidy " + std::to_string(ploidy) + ")";
+                        "assume diploidy. Contains " + std::to_string(values.size()) + " value(s), expected "
+                        + std::to_string(expected_cardinality) + " (derived from ploidy " + std::to_string(ploidy)
+                        + ")";
             }
-            raise(std::make_shared<Error>(line, " specification Number=" + number + " (expected "
-                    + std::to_string(cardinality) + " value(s))", detailed_message));
+            raise(std::make_shared<Error>(line, message, detailed_message));
         }
     }
 

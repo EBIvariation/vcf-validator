@@ -30,7 +30,7 @@ The validation level can be configured using `-l` / `--level`. This parameter is
 * warning: Display both syntax and semantic, both errors and warnings (default)
 * stop: Stop after the first syntax error is found
 
-Different types of validation reports can be written with the `-r` / `--report` option. Several ones may be specified in the same execution, using commas to split each type (without spaces, e.g.: `-r summary,database,text`).
+Different types of validation reports can be written with the `-r` / `--report` option. Several ones may be specified in the same execution, using commas to separate each type (without spaces, e.g.: `-r summary,database,text`).
 
 * summary: Write a human-readable summary report to a file. This includes one line for each type of error and the number of occurrences, along with the first line that shows that type of error (default)
 * text: Write a human-readable report to a file, with one description line for each VCF line that has an error.
