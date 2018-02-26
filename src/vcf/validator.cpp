@@ -190,6 +190,7 @@ namespace ebi
     {
         unsigned char magic[9];
         input.read((char*)magic, sizeof(magic));
+        input.clear();
         input.seekg(0);
 
         std::vector<std::pair<std::vector<unsigned char>, std::string>> types = {
