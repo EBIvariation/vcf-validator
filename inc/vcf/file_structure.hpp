@@ -589,8 +589,7 @@ namespace ebi
          * 
          * @throw std::invalid_argument
          */
-        void check_info_field_cardinality(std::string const &field, std::vector<std::string> const &values,
-                                          std::string const &number) const;
+        void check_info_field_cardinality(std::vector<std::string> const &values, std::string const &number) const;
 
         /**
          * Checks that every field in a sample matches the Number specification in the meta
@@ -599,8 +598,7 @@ namespace ebi
          * @throw std::invalid_argument
          */
         void check_sample_field_cardinality(std::vector<std::string> const &values, std::string const &number,
-                                            size_t ploidy, bool &valid_cardinality, long &expected_cardinality)
-                                            const;
+                                            size_t ploidy, long &expected_cardinality) const;
         
         /**
          * Checks that every field in a column matches the Type specification in the meta
