@@ -24,8 +24,7 @@ namespace ebi
 
     std::unique_ptr<Parser> build_parser(std::string const &path,
                                          ValidationLevel level,
-                                         Version version,
-                                         Ploidy ploidy);
+                                         Version version);
 
     bool validate(const std::vector<char> &firstLine,
                   std::istream &input,
@@ -82,12 +81,9 @@ namespace ebi
         return ParsingState::warnings;
     }
 
-    std::unique_ptr<ebi::vcf::Parser> build_parser(std::string const &path,
-                                                   ValidationLevel level,
-                                                   ebi::vcf::Version version,
-                                                   ebi::vcf::Ploidy ploidy)
+    std::unique_ptr<Parser> build_parser(std::string const & path, ValidationLevel level, Version version)
     {
-        std::shared_ptr<Source> source = std::make_shared<Source>(path, InputFormat::VCF_FILE_VCF, version, ploidy);
+        std::shared_ptr<Source> source = std::make_shared<Source>(path, InputFormat::VCF_FILE_VCF, version);
         auto records = std::vector<Record>{};
 
         switch (level) {
@@ -135,7 +131,6 @@ namespace ebi
     bool is_valid_vcf_file(std::istream &input,
                            const std::string &sourceName,
                            ValidationLevel validationLevel,
-                           Ploidy ploidy,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
     {
         std::vector<char> line;
@@ -149,7 +144,7 @@ namespace ebi
             }
             return false;
         }
-        std::unique_ptr<Parser> validator = build_parser(sourceName, validationLevel, version, ploidy);
+        std::unique_ptr<Parser> validator = build_parser(sourceName, validationLevel, version);
         return validate(line, input, *validator, outputs);
     }
 

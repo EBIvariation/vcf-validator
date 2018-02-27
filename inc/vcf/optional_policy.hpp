@@ -49,7 +49,6 @@ namespace ebi
         void optional_check_body_section(ParsingState const & state) const;
 
       private:
-        void check_body_entry_ploidy(ParsingState & state, Record const & record);
         void check_body_entry_position_zero(ParsingState & state, Record const & record) const;
         void check_body_entry_id_commas(ParsingState & state, Record const & record) const;
         void check_body_entry_reference_alternate_matching(ParsingState & state, Record const & record);

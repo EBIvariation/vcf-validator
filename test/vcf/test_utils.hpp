@@ -47,7 +47,6 @@ namespace ebi
       std::shared_ptr<vcf::Source> source{new vcf::Source{"filename.vcf",
                                                           vcf::VCF_FILE_VCF,
                                                           vcf::Version::v41,
-                                                          vcf::Ploidy{2},
                                                           {},
                                                           {"NA001", "NA002", "NA003", "NA004"}}};
 

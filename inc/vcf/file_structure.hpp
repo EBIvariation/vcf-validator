@@ -29,7 +29,6 @@
 
 #include "util/stream_utils.hpp"
 #include "vcf/error.hpp"
-#include "vcf/ploidy.hpp"
 #include "vcf/string_constants.hpp"
 
 namespace ebi
@@ -206,6 +205,18 @@ namespace ebi
             { PS, { INTEGER, "1" } }
     };
 
+    inline std::string const &get_predefined_type(
+            std::map<std::string, std::pair<std::string, std::string>>::const_iterator const &predefined_tag)
+    {
+        return predefined_tag->second.first;
+    }
+
+    inline std::string const &get_predefined_number(
+            std::map<std::string, std::pair<std::string, std::string>>::const_iterator const &predefined_tag)
+    {
+        return predefined_tag->second.second;
+    }
+
     struct MetaEntry
     {
         enum class Structure { NoValue, PlainValue, KeyValue };
@@ -237,6 +248,8 @@ namespace ebi
         bool operator==(MetaEntry const &) const;
 
         bool operator!=(MetaEntry const &) const;
+
+        bool is_defined_in_header() const;
         
     private:
         /**
@@ -252,7 +265,6 @@ namespace ebi
         std::string name;           /**< Name of the source to interact with (file, stdin...) */
         unsigned int input_format;  /**< Mask that stores whether the input is plain/gzipped VCF, BCF, etc */
         Version version;            /**< VCF version */
-        Ploidy ploidy;              /**< Class that keeps track of the ploidy of every contig */
 
         std::multimap<std::string, MetaEntry> meta_entries; /**< Entries in the file meta-data */
         std::vector<std::string> samples_names; /**< Names of the sequenced samples */
@@ -260,7 +272,6 @@ namespace ebi
         Source(std::string const & name,
                unsigned const input_format,
                Version version,
-               Ploidy ploidy,
                std::multimap<std::string, MetaEntry> const & meta_entries = {},
                std::vector<std::string> const & samples_names = {});
         
@@ -439,13 +450,17 @@ namespace ebi
         void check_format_no_duplicates() const;
 
         /**
-         * Checks that predefined tags are consistent with the specification
-         *
-         * @throw std::invalid_argument
+         * Checks that INFO predefined tags are consistent with the specification
          */
-        void check_predefined_tag(std::string const & field_key, std::vector<std::string> const & values,
-                                  std::map<std::string, std::pair<std::string, std::string>> const & tags) const;
+        void check_predefined_tag_info(std::string const &field_key, std::vector<std::string> const &values,
+                                       std::map<std::string, std::pair<std::string, std::string>> const &tags) const;
 
+        /**
+         * Checks that FORMAT predefined tags are consistent with the specification
+         */
+        void check_predefined_tag_format(std::string const &field_key, std::vector<std::string> const &values,
+                                         std::map<std::string, std::pair<std::string, std::string>> const &tags,
+                                         size_t ploidy) const;
         /**
          * Strict validation of predefined INFO tags
          *
@@ -480,6 +495,11 @@ namespace ebi
          * Returns a vector of MetaEntry objects in the same order as they are displayed in the samples
          */
         std::vector<MetaEntry> get_meta_entry_objects() const;
+
+        /**
+         * Returns the ploidy of the GT sample field
+         */
+        size_t get_ploidy_from_GT(std::string const & sample) const;
 
         /**
          * Checks the sample contents and accordance to the meta section
@@ -548,19 +568,28 @@ namespace ebi
          *  (e.g. with 1 reference, 2 alternate alleles (3 total alleles) and ploidy 2, it's 3 + 2 -1 choose 2, which is 6: 00, 01, 11, 02, 12, 22)
          *  - "." means unknown number of elements
          *  - number is a positive number [0, +inf)
-         * @param ploidy is the number of sets of chromosomes, so a given position in a chromosome needs `ploidy` bases to be completely specified
-         * @param cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number. 
+         * @param alternate_allele_number the number of alternate alleles
+         * @param ploidy is the number of copies of a chromosome in a sample, so a given genotype in said chromosome needs `ploidy` alleles to be completely specified
+         * @param expected_cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number.
          * @throw std::invalid_argument if it's not a number
          * @throw std::out_of_range if it's out of range.
          * @return bool: whether the number was valid or not
          */
-        bool is_valid_cardinality(std::string const & number, size_t alternate_allele_number, long & cardinality) const;
+        bool is_valid_cardinality(std::string const &number, size_t alternate_allele_number, size_t ploidy,
+                                  long &expected_cardinality) const;
 
         /**
          * Checks that the values match either their type specified in the meta or the VCF specification for predefined tags not in meta
          */
         void check_value_type(std::string const & type, std::string const & value, std::string & message) const;
 
+        /**
+         * Checks that every field in INFO column matches the Number specification in the meta
+         * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
+         * 
+         * @throw std::invalid_argument
+         */
+        void check_info_field_cardinality(std::vector<std::string> const &values, std::string const &number) const;
 
         /**
          * Checks that every field in a sample matches the Number specification in the meta
@@ -568,9 +597,8 @@ namespace ebi
          * 
          * @throw std::invalid_argument
          */
-        void check_field_cardinality(std::string const & field,
-                                     std::vector<std::string> const & values,
-                                     std::string const & number) const;
+        void check_sample_field_cardinality(std::vector<std::string> const &values, std::string const &number,
+                                            size_t ploidy, long &expected_cardinality) const;
         
         /**
          * Checks that every field in a column matches the Type specification in the meta

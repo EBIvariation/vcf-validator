@@ -1,5 +1,0 @@
-##fileformat=VCFv4.1
-##CauseOfFailure=INFO field does not match Number definition in meta section
-##INFO=<ID=MY,Number=G,Type=Integer,Description="INFO field to test Number=G">
-#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00096
-1	61462	rs56992750	T	A	100	PASS	MY=1,3	GT:DS:AL	0|0:0.050:-0.06,-0.90,-5.00

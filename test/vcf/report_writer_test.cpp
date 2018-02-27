@@ -41,7 +41,7 @@ namespace ebi
       std::vector<std::unique_ptr<vcf::ReportWriter>> outputs;
       outputs.push_back(std::move(output));
 
-      return ebi::vcf::is_valid_vcf_file(input, path, vcf::ValidationLevel::warning, vcf::Ploidy{2}, outputs);
+      return ebi::vcf::is_valid_vcf_file(input, path, vcf::ValidationLevel::warning, outputs);
   }
 
   TEST_CASE("Unit test: odb", "[output]")
@@ -221,7 +221,7 @@ namespace ebi
               outputs.emplace_back(output);
 
               std::ifstream input{path.string()};
-              vcf::is_valid_vcf_file(input, path.string(), vcf::ValidationLevel::warning, vcf::Ploidy{2}, outputs);
+              vcf::is_valid_vcf_file(input, path.string(), vcf::ValidationLevel::warning, outputs);
               input.close();
           }
 

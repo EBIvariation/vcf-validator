@@ -31,9 +31,6 @@ namespace ebi
     
     void ValidateOptionalPolicy::optional_check_body_entry(ParsingState & state, Record const & record) //const
     {
-        // All samples should have the same ploidy
-        check_body_entry_ploidy(state, record);
-        
         // Position zero should only be used for telomeres
         check_body_entry_position_zero(state, record);
         
@@ -82,47 +79,7 @@ namespace ebi
     void ValidateOptionalPolicy::optional_check_body_section(ParsingState const & state) const
     {
     }
-    
-    void ValidateOptionalPolicy::check_body_entry_ploidy(ParsingState & state, Record const & record)
-    {
-        bool format_column_contains_gt = record.format.size() >= 1 and record.format[0] == GT;
-        if (format_column_contains_gt) {
-            // All samples should have the same ploidy
-            size_t ploidy = 0;
-            size_t i = 1;
-            for (auto &sample : record.samples) {
-                std::vector<std::string> subfields;
-                util::string_split(sample, ":", subfields);
-                std::vector<std::string> alleles;
-                util::string_split(subfields[0], "|/", alleles);
 
-                if (ploidy > 0) {
-                    if (alleles.size() != ploidy) {
-                        throw new SamplesFieldBodyError{
-                                state.n_lines,
-                                "Sample #" + std::to_string(i) + " has " + std::to_string(alleles.size()) + " allele(s)",
-                                std::to_string(ploidy) + " alleles were found in other samples",
-                                GT,
-                                static_cast<long>(ploidy)};
-                    }
-                } else {
-                    ploidy = alleles.size();
-                }
-
-                ++i;
-            }
-
-            size_t provided_ploidy = state.source->ploidy.get_ploidy(record.chromosome);
-            if (provided_ploidy != ploidy) {
-                std::stringstream ss, ss_detail;
-                ss << "The specified ploidy for contig \"" << record.chromosome << "\" was " << provided_ploidy
-                   << ", which doesn't match the genotypes";
-                ss_detail << "Genotypes show ploidy " << ploidy;
-                throw new SamplesFieldBodyError{state.n_lines, ss.str(), ss_detail.str(), GT, static_cast<long>(provided_ploidy)};
-            }
-        }
-    }
-  
     void ValidateOptionalPolicy::check_body_entry_position_zero(ParsingState & state, Record const & record) const
     {
         if (record.position == 0) {
