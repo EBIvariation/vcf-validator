@@ -67,7 +67,7 @@ namespace ebi
     class SummaryReportWriter : public ReportWriter
     {
       public:
-        SummaryReportWriter(std::string filename)
+        SummaryReportWriter(std::string filename) : file_name(filename)
         {
             file.open(filename, std::ios::out);
         }
@@ -93,9 +93,15 @@ namespace ebi
             this->report_result = report_result;
         }
 
+        virtual std::string get_filename() override
+        {
+            return file_name;
+        }
+
       private:
         SummaryTracker summary;
         std::string report_result;
+        std::string file_name;
         std::ofstream file;
 
         void write_summary()

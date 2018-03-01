@@ -34,12 +34,14 @@ namespace ebi
             virtual void write_error(Error &error) = 0;
             virtual void write_warning(Error &error) = 0;
             virtual void write_message(const std::string &report_result) = 0;
+
+            virtual std::string get_filename() = 0;
     };
 
     class FileReportWriter : public ReportWriter
     {
         public:
-            FileReportWriter(std::string filename)
+            FileReportWriter(std::string filename) : file_name(filename)
             {
                 file.open(filename, std::ios::out);
             }
@@ -64,8 +66,14 @@ namespace ebi
                 file << report_result << std::endl;
             }
 
+            virtual std::string get_filename() override
+            {
+                return file_name;
+            }
+
         private:
             std::ofstream file;
+            std::string file_name;
     };
   }
 }

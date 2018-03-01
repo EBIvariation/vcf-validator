@@ -163,5 +163,10 @@ namespace ebi
             transaction.commit();
         }
     }
+
+    std::string OdbReportRW::get_filename()
+    {
+        return db_name;
+    }
   }
 }
