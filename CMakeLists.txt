@@ -185,3 +185,5 @@ target_link_libraries (vcf_validator ${LIBRARIES_TO_LINK})
 add_executable (vcf_debugulator src/debugulator_main.cpp)
 target_link_libraries (vcf_debugulator ${LIBRARIES_TO_LINK})
 
+add_executable (vcf_assembly_checker src/assembly_checker_main.cpp)
+target_link_libraries (vcf_assembly_checker ${LIBRARIES_TO_LINK})
