@@ -144,7 +144,7 @@ namespace ebi
         ebi::util::readline(input, line);
         ebi::vcf::Version version;
         if (ebi::vcf::is_compressed_file(sourceName, line)) {
-            return false;
+            throw std::invalid_argument{"Input file should not be compressed"};
         }
         try {
             version = detect_version(line);
@@ -182,8 +182,8 @@ namespace ebi
 
     void compressed_file_warning(std::string const & file_extension)
     {
-        BOOST_LOG_TRIVIAL(warning) << "Input file should not be compressed (detected " << file_extension
-            << " compression)";
+        BOOST_LOG_TRIVIAL(warning) << "detected " << file_extension
+            << " compression";
     }
 
     bool is_compressed_magic_num(const std::vector<char> &line)

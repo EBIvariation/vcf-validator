@@ -25,14 +25,26 @@ namespace ebi
       std::vector<boost::filesystem::path> v;
       copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
-      folder = boost::filesystem::path("test/input_files/v4.3/compressed_files");
+      for (auto path : v)
+      {
+          SECTION(path.string())
+          {
+              CHECK_FALSE(is_valid(path.string()));
+          }
+      }
+  }
+
+  TEST_CASE("Compressed files that throw std::invalid_argument", "[compressed]")
+  {
+      auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files");
+      std::vector<boost::filesystem::path> v;
       copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
       for (auto path : v)
       {
           SECTION(path.string())
           {
-              CHECK_FALSE(is_valid(path.string()));
+              CHECK_THROWS_AS(is_valid(path.string()), std::invalid_argument);
           }
       }
   }
