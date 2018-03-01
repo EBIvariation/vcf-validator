@@ -31,6 +31,8 @@ namespace ebi
                   ebi::vcf::Parser &validator,
                   std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
 
+    void compressed_file_warning(std::string const & file_extension);
+
     void write_errors(const Parser &validator, const std::vector<std::unique_ptr<ReportWriter>> &outputs);
 
     ParserImpl::ParserImpl(std::shared_ptr<Source> source)
@@ -136,6 +138,9 @@ namespace ebi
         std::vector<char> line;
         ebi::util::readline(input, line);
         ebi::vcf::Version version;
+        if (ebi::vcf::is_compressed_file(sourceName, line)) {
+            throw std::invalid_argument{"Input file should not be compressed"};
+        }
         try {
             version = detect_version(line);
         } catch (FileformatError * error) {
@@ -146,6 +151,53 @@ namespace ebi
         }
         std::unique_ptr<Parser> validator = build_parser(sourceName, validationLevel, version);
         return validate(line, input, *validator, outputs);
+    }
+
+    bool is_compressed_file(const std::string &source,
+                            const std::vector<char> &line)
+    {
+        if (source != ebi::vcf::STDIN && is_compressed_extension(source)) {
+            return true;
+        }
+        return is_compressed_magic_num(line);
+    }
+
+    bool is_compressed_extension(std::string const & source)
+    {
+        boost::filesystem::path source_name(source);
+        std::string file_extension = source_name.extension().string();
+
+        if (file_extension == BZ2 || file_extension == RAR || file_extension == TAR || file_extension == TAR_GZ ||
+            file_extension == TAR_XZ || file_extension == TAR_Z || file_extension == ZIP) {
+            compressed_file_warning(file_extension);
+            return true;
+        }
+        return false;
+    }
+
+    void compressed_file_warning(std::string const & file_extension)
+    {
+        BOOST_LOG_TRIVIAL(warning) << "detected " << file_extension
+            << " compression";
+    }
+
+    bool is_compressed_magic_num(const std::vector<char> &line)
+    {
+        std::vector<std::pair<std::vector<char>, std::string>> types = {
+            { { 66, 90, 104 }, BZ2 },
+            { { 31, -117 }, TAR_GZ },
+            { { -3, 55, 122, 88, 90 }, TAR_XZ },
+            { { 31, -99 }, TAR_Z },
+            { { 80, 75, 3, 4 }, ZIP }
+        };
+
+        for (auto & type : types) {
+            if (std::equal(type.first.begin(), type.first.end(), line.begin())) {
+                compressed_file_warning(type.second);
+                return true;
+            }
+        }
+        return false;
     }
 
     Version detect_version(const std::vector<char> &vector_line)

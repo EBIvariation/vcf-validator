@@ -26,6 +26,9 @@
 #include <string>
 #include <vector>
 
+#include <boost/filesystem.hpp>
+#include <boost/log/trivial.hpp>
+
 #include "file_structure.hpp"
 #include "error_policy.hpp"
 #include "optional_policy.hpp"
@@ -181,6 +184,14 @@ namespace ebi
                            const std::string &sourceName,
                            ValidationLevel validationLevel,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
+
+    bool is_compressed_file(const std::string &source,
+                            const std::vector<char> &line);
+
+    bool is_compressed_extension(std::string const & source);
+
+    bool is_compressed_magic_num(const std::vector<char> &line);
+
   }
 }
 
