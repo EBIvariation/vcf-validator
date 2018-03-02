@@ -187,11 +187,11 @@ int main(int argc, char** argv)
         }
 
         std::string report_result = "According to the VCF specification, the input file is " + std::string(is_valid ? "" : "not ") + "valid";
-        BOOST_LOG_TRIVIAL(info) << report_result;
         for (auto & output : outputs) {
-            BOOST_LOG_TRIVIAL(info) << "Output File : " << output->get_filename();
+            BOOST_LOG_TRIVIAL(info) << "Report written to : " << output->get_filename();
             output->write_message(report_result);
         }
+        BOOST_LOG_TRIVIAL(info) << report_result;
         return !is_valid; // A valid file returns an exit code 0
 
     } catch (std::invalid_argument const & ex) {
