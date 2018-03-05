@@ -172,6 +172,7 @@ namespace ebi
 
     // Compressed file extensions
     const std::string BZ2 = ".bz2";
+    const std::string NO_EXT = "";
     const std::string RAR = ".rar";
     const std::string TAR = ".tar";
     const std::string TAR_GZ = ".gz";
