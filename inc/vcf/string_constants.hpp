@@ -49,6 +49,7 @@ namespace ebi
     const char HELP_OPTION[] = "help,h";
     const char VERSION_OPTION[] = "version,v";
     const char INPUT_OPTION[] = "input,i";
+    const char FASTA_OPTION[] = "fasta,f";
     const char ERRORS_OPTION[] = "errors,e";
     const char LEVEL_OPTION[] = "level,l";
     const char REPORT_OPTION[] = "report,r";
