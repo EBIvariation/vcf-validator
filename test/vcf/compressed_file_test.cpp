@@ -27,20 +27,24 @@ namespace ebi
   {
       SECTION("File with extensions of compressed files")
       {
-          auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files");
+          auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/non_readable");
           std::vector<boost::filesystem::path> v;
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable");
           copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
           for (auto path : v)
           {
-              CHECK(vcf::is_compressed_extension(path.string()));
+              CHECK(vcf::is_compressed_extension(path.string()) != vcf::NO_EXT);
           }
       }
 
       SECTION("Compressed file streams")
       {
-          auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files");
+          auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/non_readable");
           std::vector<boost::filesystem::path> v;
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable");
           copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
           std::vector<char> line;
@@ -50,7 +54,7 @@ namespace ebi
           {
               std::ifstream input{path.string()};
               ebi::util::readline(input, line);
-              CHECK(vcf::is_compressed_magic_num(line));
+              CHECK(vcf::is_compressed_magic_num(line) != vcf::NO_EXT);
           }
       }
   }
@@ -67,7 +71,7 @@ namespace ebi
 
           for (auto path : v)
           {
-              CHECK_FALSE(vcf::is_compressed_extension(path.string()));
+              CHECK(vcf::is_compressed_extension(path.string()) == vcf::NO_EXT);
           }
       }
 
@@ -86,7 +90,7 @@ namespace ebi
           {
               std::ifstream input{path.string()};
               ebi::util::readline(input, line);
-              CHECK_FALSE(vcf::is_compressed_magic_num(line));
+              CHECK(vcf::is_compressed_magic_num(line) == vcf::NO_EXT);
           }
       }
   }
