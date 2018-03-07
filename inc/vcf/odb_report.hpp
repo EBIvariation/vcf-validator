@@ -52,6 +52,8 @@ namespace ebi
         virtual size_t count_errors() override;
         virtual void for_each_error(std::function<void(std::shared_ptr<Error>)> user_function) override;
 
+        virtual std::string get_filename() override;
+
       private:
         std::string db_name;
         std::unique_ptr<odb::core::database> db;
