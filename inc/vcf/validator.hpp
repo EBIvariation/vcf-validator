@@ -196,7 +196,9 @@ namespace ebi
 
     std::string is_compressed_magic_num(const std::vector<char> &line);
 
-    void uncompress(std::vector<char> &line, const std::string &file_ext);
+    void uncompress_it(std::istream & input,
+                       const std::string & file_ext,
+                       boost::iostreams::filtering_istream & in);
 
   }
 }

@@ -22,6 +22,7 @@
 #include <map>
 #include <string>
 #include <functional>
+#include <boost/iostreams/filtering_stream.hpp>
 
 namespace ebi
 {
@@ -47,6 +48,24 @@ namespace ebi
      */
     template <typename Container>
     Container &readline(std::istream & stream, Container & container)
+    {
+        char c;
+        container.clear();
+
+        // using operator bool: http://www.cplusplus.com/reference/ios/ios/fail/
+        // `stream.get()` sets failbit as well on eof
+        while (stream && stream.get(c)) {
+            container.push_back(c);
+            if (c == '\n') {
+                break;
+            }
+        }
+
+        return container;
+    }
+
+    template <typename Container>
+    Container &read_line(boost::iostreams::filtering_istream & stream, Container & container)
     {
         char c;
         container.clear();
