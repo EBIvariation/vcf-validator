@@ -5,6 +5,7 @@ g++ \
 make \
 cmake \
 libbz2-dev \
+libboost-all-dev \
 libboost-dev \
 libboost-filesystem-dev \
 libboost-iostreams-dev \

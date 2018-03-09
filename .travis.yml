@@ -22,6 +22,7 @@ matrix:
             - clang-3.9
             - libboost1.55-dev
             - libboost-filesystem1.55-dev
+            - libboost-iostreams1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
             - libboost-log1.55-dev
@@ -40,6 +41,7 @@ matrix:
             - clang-4.0
             - libboost1.55-dev
             - libboost-filesystem1.55-dev
+            - libboost-iostreams1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
             - libboost-log1.55-dev
@@ -58,6 +60,7 @@ matrix:
             - clang-5.0
             - libboost1.55-dev
             - libboost-filesystem1.55-dev
+            - libboost-iostreams1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
             - libboost-log1.55-dev
@@ -76,6 +79,7 @@ matrix:
             - g++-4.8
             - libboost1.55-dev
             - libboost-filesystem1.55-dev
+            - libboost-iostreams1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
             - libboost-log1.55-dev
@@ -94,6 +98,7 @@ matrix:
             - g++-4.9
             - libboost1.55-dev
             - libboost-filesystem1.55-dev
+            - libboost-iostreams1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
             - libboost-log1.55-dev
@@ -112,6 +117,7 @@ matrix:
             - g++-5
             - libboost1.55-dev
             - libboost-filesystem1.55-dev
+            - libboost-iostreams1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
             - libboost-log1.55-dev
@@ -130,6 +136,7 @@ matrix:
             - g++-6
             - libboost1.55-dev
             - libboost-filesystem1.55-dev
+            - libboost-iostreams1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
             - libboost-log1.55-dev
