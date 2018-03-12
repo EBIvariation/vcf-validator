@@ -21,7 +21,238 @@
 
 namespace ebi
 {
-    
+
+    TEST_CASE("Record Position warnings", "[body position warnings]")
+    {
+        std::shared_ptr<vcf::Source> source{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v43}};
+
+        source->meta_entries.emplace(vcf::REFERENCE,
+            vcf::MetaEntry{
+                1,
+                vcf::REFERENCE,
+                "file",
+                source
+        });
+
+        source->meta_entries.emplace(vcf::CONTIG,
+            vcf::MetaEntry{
+                1,
+                vcf::CONTIG,
+                { { vcf::ID, "chr1" } },
+                source
+        });
+
+        source->meta_entries.emplace(vcf::INFO,
+            vcf::MetaEntry{
+                1,
+                vcf::INFO,
+                {
+                    { vcf::ID, "XYZ" },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::DESCRIPTION, "Random info tag" }
+                },
+                source
+        });
+
+        vcf::ParsingState parsing_state{source};
+
+        vcf::ValidateOptionalPolicy optional_policy;
+
+        SECTION("Non-zero position for non-telomeres")
+        {
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { "XYZ", "1" } },
+                                { },
+                                { },
+                                source})) );
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                0,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { "XYZ", "1" } },
+                                { },
+                                { },
+                                source})),
+                            vcf::PositionBodyError*);
+        }
+    }
+
+    TEST_CASE("Id warnings", "[body id warnings]")
+    {
+        std::shared_ptr<vcf::Source> source{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v43}};
+
+        source->meta_entries.emplace(vcf::REFERENCE,
+            vcf::MetaEntry{
+                1,
+                vcf::REFERENCE,
+                "file",
+                source
+        });
+
+        source->meta_entries.emplace(vcf::CONTIG,
+            vcf::MetaEntry{
+                1,
+                vcf::CONTIG,
+                { { vcf::ID, "chr1" } },
+                source
+        });
+
+        source->meta_entries.emplace(vcf::INFO,
+            vcf::MetaEntry{
+                1,
+                vcf::INFO,
+                {
+                    { vcf::ID, "XYZ" },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::DESCRIPTION, "Random info tag" }
+                },
+                source
+        });
+
+        vcf::ParsingState parsing_state{source};
+
+        vcf::ValidateOptionalPolicy optional_policy;
+
+        SECTION("Commas in ID column")
+        {
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id1,id2" },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { "XYZ", "1" } },
+                                { },
+                                { },
+                                source})),
+                            vcf::IdBodyError*);
+        }
+    }
+
+    TEST_CASE("Record Reference Alternate matching warnings", "[body reference alternate matching warnings]")
+    {
+        std::shared_ptr<vcf::Source> source{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v43}};
+
+        source->meta_entries.emplace(vcf::REFERENCE,
+            vcf::MetaEntry{
+                1,
+                vcf::REFERENCE,
+                "file",
+                source
+        });
+
+        source->meta_entries.emplace(vcf::CONTIG,
+            vcf::MetaEntry{
+                1,
+                vcf::CONTIG,
+                { { vcf::ID, "chr1" } },
+                source
+        });
+
+        source->meta_entries.emplace(vcf::INFO,
+            vcf::MetaEntry{
+                1,
+                vcf::INFO,
+                {
+                    { vcf::ID, "XYZ" },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::DESCRIPTION, "Random info tag" }
+                },
+                source
+        });
+
+        vcf::ParsingState parsing_state{source};
+
+        vcf::ValidateOptionalPolicy optional_policy;
+
+        SECTION("Reference and alternate alleles share first nucleotide")
+        {
+            vcf::Record record1(
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { "XYZ", "1" } },
+                                { },
+                                { },
+                                source);
+            record1.types = { vcf::RecordType::INDEL };
+
+            vcf::Record record2(
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "CA" },
+                                1.0,
+                                { vcf::PASS },
+                                { { "XYZ", "1" } },
+                                { },
+                                { },
+                                source);
+            record2.types = { vcf::RecordType::MNV };
+
+            vcf::Record record3(
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "AT",
+                                { "AC", "TAG" },
+                                1.0,
+                                { vcf::PASS },
+                                { { "XYZ", "1" } },
+                                { },
+                                { },
+                                source);
+            record3.types = { vcf::RecordType::INDEL };
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, record1)) );
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, record2)) );
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, record3)),
+                                                                        vcf::ReferenceAlleleBodyError*);
+        }
+    }
+
     TEST_CASE("Info predefined tags warnings", "[body info warnings]")
     {
         std::shared_ptr<vcf::Source> source{
@@ -65,7 +296,121 @@ namespace ebi
 
         vcf::ValidateOptionalPolicy optional_policy;
 
-        SECTION("Confidence Interval Tags") 
+        SECTION("IMPRECISE test")
+        {
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::IMPRECISE },
+                        { vcf::NUMBER, "0" },
+                        { vcf::TYPE, vcf::FLAG },
+                        { vcf::DESCRIPTION, "Imprecise structural variation" }
+                    },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::CIPOS },
+                        { vcf::NUMBER, "2" },
+                        { vcf::TYPE, vcf::INTEGER },
+                        { vcf::DESCRIPTION, "Confidence interval around POS for imprecise variants" }
+                    },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::CIEND },
+                        { vcf::NUMBER, "2" },
+                        { vcf::TYPE, vcf::INTEGER },
+                        { vcf::DESCRIPTION, "Confidence interval around END for imprecise variants" }
+                    },
+                    source
+            });
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::IMPRECISE, "0" } },
+                                { vcf::GT },
+                                { "1|0" },
+                                source})) );
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::IMPRECISE, "1" }, { vcf::CIEND, "-2,1" } },
+                                { vcf::GT },
+                                { "1|0" },
+                                source})) );
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::CIPOS, "-1,2" }, { vcf::IMPRECISE, "1" } },
+                                { vcf::GT },
+                                { "1|0" },
+                                source})) );
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::CIEND, "-1,2"}, { vcf::IMPRECISE, "0" } },
+                                { vcf::GT },
+                                { "0|1" },
+                                source})),
+                            vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::IMPRECISE, "0" }, { vcf::CIPOS, "-2,1" } },
+                                { vcf::GT },
+                                { "0|1" },
+                                source})),
+                            vcf::InfoBodyError*);
+        }
+
+        SECTION("Confidence Interval Tags")
         {
             std::vector<std::string> confidence_interval_tags = { 
                                                                     vcf::CICN,
