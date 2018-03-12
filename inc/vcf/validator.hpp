@@ -28,10 +28,10 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/log/trivial.hpp>
-#include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filter/bzip2.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
 
 #include "file_structure.hpp"
 #include "error_policy.hpp"
@@ -189,16 +189,13 @@ namespace ebi
                            ValidationLevel validationLevel,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
 
-    std::string is_compressed_file(const std::string &source,
-                            const std::vector<char> &line);
+    std::string get_compression_from_extension(std::string const & source);
 
-    std::string is_compressed_extension(std::string const & source);
+    std::string get_compression_from_magic_num(const std::vector<char> &line);
 
-    std::string is_compressed_magic_num(const std::vector<char> &line);
-
-    void uncompress_it(std::istream & input,
-                       const std::string & file_ext,
-                       boost::iostreams::filtering_istream & in);
+    void create_uncompressed_stream(std::istream & input,
+                                    const std::string & sourceName,
+                                    boost::iostreams::filtering_istream & uncompressed_input);
 
   }
 }

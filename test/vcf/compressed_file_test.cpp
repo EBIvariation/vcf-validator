@@ -35,7 +35,7 @@ namespace ebi
 
           for (auto path : v)
           {
-              CHECK(vcf::is_compressed_extension(path.string()) != vcf::NO_EXT);
+              CHECK(vcf::get_compression_from_extension(path.string()) != vcf::NO_EXT);
           }
       }
 
@@ -54,7 +54,7 @@ namespace ebi
           {
               std::ifstream input{path.string()};
               ebi::util::readline(input, line);
-              CHECK(vcf::is_compressed_magic_num(line) != vcf::NO_EXT);
+              CHECK(vcf::get_compression_from_magic_num(line) != vcf::NO_EXT);
           }
       }
   }
@@ -71,7 +71,7 @@ namespace ebi
 
           for (auto path : v)
           {
-              CHECK(vcf::is_compressed_extension(path.string()) == vcf::NO_EXT);
+              CHECK(vcf::get_compression_from_extension(path.string()) == vcf::NO_EXT);
           }
       }
 
@@ -90,7 +90,7 @@ namespace ebi
           {
               std::ifstream input{path.string()};
               ebi::util::readline(input, line);
-              CHECK(vcf::is_compressed_magic_num(line) == vcf::NO_EXT);
+              CHECK(vcf::get_compression_from_magic_num(line) == vcf::NO_EXT);
           }
       }
   }
