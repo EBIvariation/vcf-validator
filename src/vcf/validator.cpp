@@ -31,10 +31,14 @@ namespace ebi
                   ebi::vcf::Parser &validator,
                   std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
 
+    std::string get_compression(std::string const & source,
+                                const std::vector<char> &line);
 
-    void check_readability_of_file(const std::string & file_ext);
+    void get_magic_num(std::istream & stream, std::vector<char> & container);
 
     void compressed_file_warning(std::string const & file_extension);
+
+    void check_readability_of_file(const std::string & file_ext);
 
     void write_errors(const Parser &validator, const std::vector<std::unique_ptr<ReportWriter>> &outputs);
 
@@ -162,6 +166,52 @@ namespace ebi
         return validate(line, uncompressed_input, *validator, outputs);
     }
 
+    void create_uncompressed_stream(std::istream & input,
+                                    const std::string & sourceName,
+                                    boost::iostreams::filtering_istream & uncompressed_input)
+    {
+        std::vector<char> line;
+        get_magic_num(input, line);
+
+        std::string file_ext = get_compression(sourceName, line);
+        check_readability_of_file(file_ext);
+
+        if(file_ext == BZ2) {
+            uncompressed_input.push(boost::iostreams::bzip2_decompressor());
+        }
+
+        uncompressed_input.push(input);
+    }
+
+    void get_magic_num(std::istream & stream, std::vector<char> & container)
+    {
+        std::ios_base::sync_with_stdio(false);
+        char c;
+        int i=0;
+        container.clear();
+
+        while (stream && stream.get(c)) {
+            container.push_back(c);
+            i++;
+            if (c == '\n' || i > 4) break;
+        }
+
+        for (int j = 0; j < (int)container.size(); ++j) {
+            stream.unget();
+        }
+    }
+
+    std::string get_compression(std::string const & source,
+                                const std::vector<char> &line)
+    {
+        std::string file_extension = get_compression_from_extension(source);
+        if (source != ebi::vcf::STDIN && file_extension != NO_EXT) {
+            return file_extension;
+        }
+
+        return get_compression_from_magic_num(line);
+    }
+
     std::string get_compression_from_extension(std::string const & source)
     {
         boost::filesystem::path source_name(source);
@@ -181,27 +231,6 @@ namespace ebi
             << " compression";
     }
 
-    void create_uncompressed_stream(std::istream & input,
-                                    const std::string & sourceName,
-                                    boost::iostreams::filtering_istream & uncompressed_input)
-    {
-        std::string file_ext = ebi::vcf::get_compression_from_extension(sourceName);
-        check_readability_of_file(file_ext);
-
-        if(file_ext == BZ2) {
-            uncompressed_input.push(boost::iostreams::bzip2_decompressor());
-        }
-        uncompressed_input.push(input);
-    }
-
-    void check_readability_of_file(const std::string & file_ext) {
-        std::set<std::string> readable_extentions = {BZ2,NO_EXT};
-
-        if (!readable_extentions.count(file_ext)) {
-            throw std::invalid_argument{"Input file should not be compressed"};
-        }
-    }
-
     std::string get_compression_from_magic_num(const std::vector<char> &line)
     {
         std::vector<std::pair<std::vector<char>, std::string>> types = {
@@ -219,6 +248,15 @@ namespace ebi
             }
         }
         return NO_EXT;
+    }
+
+    void check_readability_of_file(const std::string & file_ext)
+    {
+        std::set<std::string> readable_extentions = {BZ2,NO_EXT};
+
+        if (!readable_extentions.count(file_ext)) {
+            throw std::invalid_argument{"Input file should not be compressed"};
+        }
     }
 
     Version detect_version(const std::vector<char> &vector_line)
