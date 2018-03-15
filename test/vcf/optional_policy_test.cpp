@@ -22,7 +22,7 @@
 namespace ebi
 {
 
-    TEST_CASE("Record Position warnings", "[body position warnings]")
+    TEST_CASE("Record Position warnings", "[warnings]")
     {
         std::shared_ptr<vcf::Source> source{
             new vcf::Source{
@@ -96,7 +96,7 @@ namespace ebi
         }
     }
 
-    TEST_CASE("Id warnings", "[body id warnings]")
+    TEST_CASE("Id warnings", "[warnings]")
     {
         std::shared_ptr<vcf::Source> source{
             new vcf::Source{
@@ -156,7 +156,7 @@ namespace ebi
         }
     }
 
-    TEST_CASE("Record Reference Alternate matching warnings", "[body reference alternate matching warnings]")
+    TEST_CASE("Record Reference Alternate matching warnings", "[warnings]")
     {
         std::shared_ptr<vcf::Source> source{
             new vcf::Source{
@@ -244,7 +244,7 @@ namespace ebi
         }
     }
 
-    TEST_CASE("Info predefined tags warnings", "[body info warnings]")
+    TEST_CASE("Info predefined tags warnings", "[warnings]")
     {
         std::shared_ptr<vcf::Source> source{
             new vcf::Source{
@@ -518,7 +518,7 @@ namespace ebi
         }
     }
 
-    TEST_CASE("Alternate allele warnings", "[body alt warnings]")
+    TEST_CASE("Alternate allele warnings", "[warnings]")
     {
         std::vector<std::shared_ptr<vcf::Source>> sources = {
             std::shared_ptr<vcf::Source>{new vcf::Source{
