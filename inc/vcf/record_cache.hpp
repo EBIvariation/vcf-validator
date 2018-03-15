@@ -89,7 +89,10 @@ namespace ebi
                     duplicates.emplace_back(new DuplicationError{record_core.line, ss.str(), duplicate_variant_lines});
                 }
 
-                cache.insert(range.second, record_core);
+                // Insert the record in cache if the allele isn't a symbolic variant
+                if( !is_symbolic_allele(record_core) ) {
+                    cache.insert(range.second, record_core);
+                }
             }
 
             shrink_to_fit();
@@ -111,6 +114,23 @@ namespace ebi
                     cache.erase(cache.begin(), erase_until);
                 }
             }
+        }
+
+        /**
+         *Checks if the alternate allele is symbolic 
+         */ 
+        bool is_symbolic_allele(const RecordCore &record_core)
+        {
+            bool status;
+
+            // Checks if the alternate allele is enclosed by "<>"
+            if ( (record_core.alternate_allele.find("<") == 0) && (record_core.alternate_allele.find(">") == record_core.alternate_allele.length() - 1) ) {
+                status = true;
+            } else {
+                status = false;
+            }
+
+            return status;
         }
 
       private:
