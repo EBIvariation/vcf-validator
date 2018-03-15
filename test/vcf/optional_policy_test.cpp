@@ -199,7 +199,7 @@ namespace ebi
 
         SECTION("Reference and alternate alleles share first nucleotide")
         {
-            vcf::Record record1(
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
                                 1,
                                 "chr1",
                                 123456,
@@ -211,25 +211,23 @@ namespace ebi
                                 { { "XYZ", "1" } },
                                 { },
                                 { },
-                                source);
-            record1.types = { vcf::RecordType::INDEL };
+                                source})) );
 
-            vcf::Record record2(
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
                                 1,
                                 "chr1",
                                 123456,
                                 { vcf::MISSING_VALUE },
-                                "A",
-                                { "CA" },
+                                "GT",
+                                { "AC" },
                                 1.0,
                                 { vcf::PASS },
                                 { { "XYZ", "1" } },
                                 { },
                                 { },
-                                source);
-            record2.types = { vcf::RecordType::MNV };
+                                source})) );
 
-            vcf::Record record3(
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
                                 1,
                                 "chr1",
                                 123456,
@@ -241,15 +239,8 @@ namespace ebi
                                 { { "XYZ", "1" } },
                                 { },
                                 { },
-                                source);
-            record3.types = { vcf::RecordType::INDEL };
-
-            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, record1)) );
-
-            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, record2)) );
-
-            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, record3)),
-                                                                        vcf::ReferenceAlleleBodyError*);
+                                source})),
+                            vcf::ReferenceAlleleBodyError*);
         }
     }
 
@@ -412,7 +403,7 @@ namespace ebi
 
         SECTION("Confidence Interval Tags")
         {
-            std::vector<std::string> confidence_interval_tags = { 
+            std::vector<std::string> confidence_interval_tags = {
                                                                     vcf::CICN,
                                                                     vcf::CICNADJ,
                                                                     vcf::CIEND,
