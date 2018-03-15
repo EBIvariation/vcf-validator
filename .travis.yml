@@ -8,17 +8,18 @@ cache:
 
 matrix:
   include:
-    # Clang 3.5
+
+    # Clang 3.9
     - compiler: clang
-      env: C_COMPILER=clang-3.5 CXX_COMPILER=clang++-3.5
+      env: C_COMPILER=clang-3.9 CXX_COMPILER=clang++-3.9
       addons:
         apt:
           sources:
             - boost-latest
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.5
+            - llvm-toolchain-trusty-3.9
           packages:
-            - clang-3.5
+            - clang-3.9
             - libboost1.55-dev
             - libboost-filesystem1.55-dev
             - libboost-program-options1.55-dev
@@ -26,17 +27,17 @@ matrix:
             - libboost-log1.55-dev
             - ninja-build
 
-    # Clang 3.6
+    # Clang 4.0
     - compiler: clang
-      env: C_COMPILER=clang-3.6 CXX_COMPILER=clang++-3.6
+      env: C_COMPILER=clang-4.0 CXX_COMPILER=clang++-4.0
       addons:
         apt:
           sources:
             - boost-latest
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.6
+            - llvm-toolchain-trusty-4.0
           packages:
-            - clang-3.6
+            - clang-4.0
             - libboost1.55-dev
             - libboost-filesystem1.55-dev
             - libboost-program-options1.55-dev
@@ -44,17 +45,17 @@ matrix:
             - libboost-log1.55-dev
             - ninja-build
 
-    # Clang 3.7
+    # Clang 5.0
     - compiler: clang
-      env: C_COMPILER=clang-3.7 CXX_COMPILER=clang++-3.7
+      env: C_COMPILER=clang-5.0 CXX_COMPILER=clang++-5.0
       addons:
         apt:
           sources:
             - boost-latest
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.7
+            - llvm-toolchain-trusty-5.0
           packages:
-            - clang-3.7
+            - clang-5.0
             - libboost1.55-dev
             - libboost-filesystem1.55-dev
             - libboost-program-options1.55-dev
