@@ -8,53 +8,18 @@ cache:
 
 matrix:
   include:
-    # Clang 3.5
-    - compiler: clang
-      env: C_COMPILER=clang-3.5 CXX_COMPILER=clang++-3.5
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.5
-          packages:
-            - clang-3.5
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
 
-    # Clang 3.6
+    # Clang 3.9
     - compiler: clang
-      env: C_COMPILER=clang-3.6 CXX_COMPILER=clang++-3.6
+      env: C_COMPILER=clang-3.9 CXX_COMPILER=clang++-3.9
       addons:
         apt:
           sources:
             - boost-latest
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.6
+            - llvm-toolchain-trusty-3.9
           packages:
-            - clang-3.6
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
-
-    # Clang 3.7
-    - compiler: clang
-      env: C_COMPILER=clang-3.7 CXX_COMPILER=clang++-3.7
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.7
-          packages:
-            - clang-3.7
+            - clang-3.9
             - libboost1.55-dev
             - libboost-filesystem1.55-dev
             - libboost-program-options1.55-dev
