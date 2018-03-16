@@ -544,7 +544,8 @@ namespace ebi
                     check_sample_field_cardinality(values, meta_entry_properties[NUMBER], ploidy, expected_cardinality);
                     check_field_type(values, meta_entry_properties[TYPE]);
                 } catch (std::shared_ptr<Error> ex) {
-                    std::string message = "Sample #" + std::to_string(i + 1) + " does not match the meta" + ex->message;
+                    std::string message = "Sample #" + std::to_string(i + 1) + ", field " + meta_entry_properties[ID]
+                                          + " does not match the meta" + ex->message;
                     std::string detailed_message = meta_entry_properties[ID] + "=" + subfield + ex->detailed_message;
                     throw new SamplesFieldBodyError{line, message, detailed_message, meta_entry_properties[ID],
                                                     expected_cardinality};
