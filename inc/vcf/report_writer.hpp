@@ -36,6 +36,7 @@ namespace ebi
             virtual void write_message(const std::string &report_result) = 0;
 
             virtual std::string get_filename() = 0;
+            virtual std::string get_type() = 0;
     };
 
     class FileReportWriter : public ReportWriter
@@ -69,6 +70,11 @@ namespace ebi
             virtual std::string get_filename() override
             {
                 return file_name;
+            }
+
+            virtual std::string get_type() override
+            {
+                return "Text";
             }
 
         private:
