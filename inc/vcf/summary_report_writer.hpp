@@ -93,14 +93,9 @@ namespace ebi
             this->report_result = report_result;
         }
 
-        virtual std::string get_filename() override
+        virtual std::string get_report_message() override
         {
-            return file_name;
-        }
-
-        virtual std::string get_type() override
-        {
-            return "Summary";
+            return "Summary report written to : " + file_name;
         }
 
       private:
