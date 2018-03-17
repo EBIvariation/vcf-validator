@@ -98,6 +98,11 @@ namespace ebi
             return file_name;
         }
 
+        virtual std::string get_type() override
+        {
+            return "Summary";
+        }
+
       private:
         SummaryTracker summary;
         std::string report_result;

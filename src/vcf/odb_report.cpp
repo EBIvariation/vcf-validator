@@ -168,5 +168,10 @@ namespace ebi
     {
         return db_name;
     }
+
+    std::string OdbReportRW::get_type()
+    {
+        return "Database";
+    }
   }
 }

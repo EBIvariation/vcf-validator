@@ -53,6 +53,7 @@ namespace ebi
         virtual void for_each_error(std::function<void(std::shared_ptr<Error>)> user_function) override;
 
         virtual std::string get_filename() override;
+        virtual std::string get_type() override;
 
       private:
         std::string db_name;
