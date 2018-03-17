@@ -140,6 +140,7 @@ if (BUILD_STATIC)
         mod_odb
         ${Boost_LIBRARIES}
         bz2
+        z
         ${ODB_PATH}/libodb-sqlite.a
         ${ODB_PATH}/libodb.a
         sqlite3

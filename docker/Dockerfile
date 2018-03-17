@@ -12,6 +12,7 @@ libboost-program-options-dev \
 libboost-regex-dev \
 libboost-log-dev \
 libsqlite3-dev \
+zlib1g-dev \
 ragel \
 # Clean up to reduce layer size
 && apt-get clean \
