@@ -143,7 +143,8 @@ namespace ebi
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
     {
         boost::iostreams::filtering_istream uncompressed_input;
-        create_uncompressed_stream(input, sourceName, uncompressed_input);
+        boost::iostreams::filtering_istream input_stream(input);
+        create_uncompressed_stream(input_stream, sourceName, uncompressed_input);
 
         std::vector<char> line;
         ebi::util::readline(uncompressed_input, line);
@@ -187,7 +188,6 @@ namespace ebi
 
     void get_magic_num(std::istream & stream, std::vector<char> & container)
     {
-        std::ios_base::sync_with_stdio(false);
         char c;
         int i=0;
         container.clear();
@@ -229,7 +229,7 @@ namespace ebi
 
     void compressed_file_warning(std::string const & file_extension)
     {
-        BOOST_LOG_TRIVIAL(warning) << "detected " << file_extension
+        BOOST_LOG_TRIVIAL(warning) << "Detected " << file_extension
             << " compression";
     }
 
