@@ -200,6 +200,9 @@ namespace ebi
 
         for (int j = 0; j < (int)container.size(); ++j) {
             stream.unget();
+            if (stream.fail() || !stream) {
+                throw std::runtime_error("Stream failed");
+            }
         }
     }
 
@@ -254,9 +257,9 @@ namespace ebi
 
     void check_readability_of_file(const std::string & file_ext)
     {
-        std::set<std::string> readable_extentions = {BZ2,TAR_GZ,NO_EXT};
+        std::set<std::string> readable_extensions = {BZ2,TAR_GZ,NO_EXT};
 
-        if (!readable_extentions.count(file_ext)) {
+        if (!readable_extensions.count(file_ext)) {
             throw std::invalid_argument{"Input file should not be compressed"};
         }
     }
