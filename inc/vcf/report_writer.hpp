@@ -35,7 +35,7 @@ namespace ebi
             virtual void write_warning(Error &error) = 0;
             virtual void write_message(const std::string &report_result) = 0;
 
-            virtual std::string get_filename() = 0;
+            virtual std::string get_report_message() = 0;
     };
 
     class FileReportWriter : public ReportWriter
@@ -66,9 +66,9 @@ namespace ebi
                 file << report_result << std::endl;
             }
 
-            virtual std::string get_filename() override
+            virtual std::string get_report_message() override
             {
-                return file_name;
+                return "Text report written to : " + file_name;
             }
 
         private:

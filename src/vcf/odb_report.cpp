@@ -164,9 +164,9 @@ namespace ebi
         }
     }
 
-    std::string OdbReportRW::get_filename()
+    std::string OdbReportRW::get_report_message()
     {
-        return db_name;
+        return "Database report written to : " + db_name;
     }
   }
 }
