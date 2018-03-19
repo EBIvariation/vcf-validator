@@ -60,7 +60,12 @@ namespace ebi
          * Nonetheless, if the capacity is too small, it may cause incorrect reporting, such as reporting several times
          * the first occurrence or failing to report duplicates that are farther apart than the capacity.
          */
-        std::vector<std::unique_ptr<Error>> check_duplicates(const Record &record)
+
+        /**
+         * For a given set of Record, cache and checktype, returns a vector of Errors if duplicates are found
+         *
+         */
+        std::vector<std::unique_ptr<Error>> check_duplicates_core(const Record &record, std::multiset<RecordCore> &cache, bool symbolic_allele_check)
         {
             auto record_cores = normalize(record);
             std::vector<std::unique_ptr<Error>> duplicates{};
@@ -90,19 +95,38 @@ namespace ebi
                 }
 
                 // Insert the record in cache if the allele isn't a symbolic variant
-                if( !is_symbolic_allele(record_core) ) {
+                if( is_symbolic_allele(record_core) == symbolic_allele_check) {
                     cache.insert(range.second, record_core);
                 }
             }
 
-            shrink_to_fit();
+            shrink_to_fit(cache);
             return duplicates;
         }
 
         /**
+         * For a given Record, returns a vector of Errors if duplicates are found
+         *
+         */
+        std::vector<std::unique_ptr<Error>> check_duplicates(const Record &record)
+        {
+            return check_duplicates_core( record, cache_duplicates, false);
+        }
+
+        /**
+         * For a given Record with a symbolic allele variant, returns a vector of Errors if duplicates are found
+         *
+         */
+        std::vector<std::unique_ptr<Error>> check_symbolic_duplicates(const Record &record)
+        {
+            return check_duplicates_core( record, cache_symbolic_duplicates, true);
+        }
+        
+
+        /**
          * reduce cache size to this->capacity unless this->unlimited is true
          */
-        void shrink_to_fit()
+        void shrink_to_fit(std::multiset<RecordCore> &cache)
         {
             if (not unlimited) {
                 size_t count = cache.size();
@@ -134,7 +158,8 @@ namespace ebi
         }
 
       private:
-        std::multiset<RecordCore> cache;
+        std::multiset<RecordCore> cache_duplicates;
+        std::multiset<RecordCore> cache_symbolic_duplicates;
         size_t capacity;    ///< max amount of RecordCores that the cache can hold
         bool unlimited; ///< if true, the set is not capped and will not erase any RecordCore
     };
