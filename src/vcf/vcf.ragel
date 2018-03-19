@@ -219,11 +219,19 @@
         try {
             // Handle all columns and build record
             ParsePolicy::handle_body_line(*this);
-
+            
             if (record != nullptr) {
                 auto duplicated_errors = previous_records.check_duplicates(*record);
                 for(auto &error_ptr : duplicated_errors) {
                     ErrorPolicy::handle_error(*this, error_ptr.release());
+                }
+            }
+
+            // Checks warnings (Duplicated symbolic variant alleles)
+            if (record != nullptr) {
+                auto symbolic_duplicates = previous_records.check_symbolic_duplicates(*record);
+                for(auto &error_ptr : symbolic_duplicates) {
+                    ErrorPolicy::handle_warning(*this, error_ptr.release());
                 }
             }
 
