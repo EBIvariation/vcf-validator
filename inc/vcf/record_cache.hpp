@@ -49,8 +49,9 @@ namespace ebi
          */
         RecordCache(size_t capacity) : capacity{capacity}, unlimited{capacity == 0} { }
 
-        /**
-         * For a given Record, returns a vector of RecordCores that are duplicates.
+         /**
+         * Getter function which returns a vector of Errors.
+         * For a given Record, returned Errors correspond to the duplicates found that aren't symbolic alleles.
          *
          * Even if more than one duplicate is found for the same variant during the file validation, each occurrence 
          * is reported only once:
@@ -60,20 +61,56 @@ namespace ebi
          * Nonetheless, if the capacity is too small, it may cause incorrect reporting, such as reporting several times
          * the first occurrence or failing to report duplicates that are farther apart than the capacity.
          */
+        std::vector<Error*> get_duplicates()
+        {
+            return list_duplicates;
+        }
 
         /**
-         * For a given set of Record, cache and checktype, returns a vector of Errors if duplicates are found
+         * Getter function which returns a vector of Errors.
+         * For a given Record, returned Errors correspond to the duplicates found that are symbolic alleles.   
          *
+         * Even if more than one duplicate is found for the same variant during the file validation, each occurrence 
+         * is reported only once:
+         * - If just one processed record is equivalent to the parameter, both are reported in 2 different errors.
+         * - If more than one processed record is equivalent to the new one, only the new one is reported.
+         * 
+         * Nonetheless, if the capacity is too small, it may cause incorrect reporting, such as reporting several times
+         * the first occurrence or failing to report duplicates that are farther apart than the capacity.
          */
-        std::vector<std::unique_ptr<Error>> check_duplicates_core(const Record &record, std::multiset<RecordCore> &cache, bool symbolic_allele_check)
+        std::vector<Error*> get_symbolic_duplicates()
+        {
+            return list_symbolic_duplicates;
+        }
+        
+
+        /**
+         * This function serves as the data generator to be used before utilizing get_duplicates() and get_symbolic_duplicates() functions.
+         *
+         * For a given Record, populates the list_duplicates and list_symbolic_duplicates vectors with
+         * non symbolic and symbolic duplicates respectively
+         *
+         * Even if more than one duplicate is found for the same variant during the file validation, each occurrence 
+         * is reported only once:
+         * - If just one processed record is equivalent to the parameter, both are reported in 2 different errors.
+         * - If more than one processed record is equivalent to the new one, only the new one is reported.
+         * 
+         * Nonetheless, if the capacity is too small, it may cause incorrect reporting, such as reporting several times
+         * the first occurrence or failing to report duplicates that are farther apart than the capacity.
+         */
+        void check_duplicates(const Record &record)
         {
             auto record_cores = normalize(record);
-            std::vector<std::unique_ptr<Error>> duplicates{};
-
+            
             for (RecordCore &record_core: record_cores) {
-                std::pair<std::multiset<RecordCore>::iterator, std::multiset<RecordCore>::iterator> range =
-                        cache.equal_range(record_core);
 
+                // create references to the appropriate data structures for th alternate allele type
+                std::multiset<RecordCore>& cache = (record_core.is_symbolic_allele) ? cache_symbolic_duplicates : cache_duplicates;
+                std::vector<Error*>& duplicates = (record_core.is_symbolic_allele) ? list_symbolic_duplicates : list_duplicates;
+
+                std::pair<std::multiset<RecordCore>::iterator, std::multiset<RecordCore>::iterator> range = 
+                    cache.equal_range(record_core);                     
+                
                 if (range.first == range.second) {
                     // no matches found
                 } else {
@@ -88,40 +125,20 @@ namespace ebi
 
                     if (++range.first == range.second) {
                         // if only one match, return an extra error for the first occurrence
-                        duplicates.emplace_back(new DuplicationError{first_occurence_line, ss.str()});
+                        duplicates.emplace_back(new DuplicationError{first_occurence_line, ss.str()});        
                     }
 
                     duplicates.emplace_back(new DuplicationError{record_core.line, ss.str(), duplicate_variant_lines});
+
                 }
 
-                // Insert the record in cache if the allele isn't a symbolic variant
-                if( is_symbolic_allele(record_core) == symbolic_allele_check) {
-                    cache.insert(range.second, record_core);
-                }
+                cache.insert(range.second, record_core);        
+
             }
 
-            shrink_to_fit(cache);
-            return duplicates;
+            shrink_to_fit(cache_symbolic_duplicates);
+            shrink_to_fit(cache_duplicates);
         }
-
-        /**
-         * For a given Record, returns a vector of Errors if duplicates are found
-         *
-         */
-        std::vector<std::unique_ptr<Error>> check_duplicates(const Record &record)
-        {
-            return check_duplicates_core( record, cache_duplicates, false);
-        }
-
-        /**
-         * For a given Record with a symbolic allele variant, returns a vector of Errors if duplicates are found
-         *
-         */
-        std::vector<std::unique_ptr<Error>> check_symbolic_duplicates(const Record &record)
-        {
-            return check_duplicates_core( record, cache_symbolic_duplicates, true);
-        }
-        
 
         /**
          * reduce cache size to this->capacity unless this->unlimited is true
@@ -140,26 +157,11 @@ namespace ebi
             }
         }
 
-        /**
-         *Checks if the alternate allele is symbolic 
-         */ 
-        bool is_symbolic_allele(const RecordCore &record_core)
-        {
-            bool status;
-
-            // Checks if the alternate allele is enclosed by "<>"
-            if ( (record_core.alternate_allele.find("<") == 0) && (record_core.alternate_allele.find(">") == record_core.alternate_allele.length() - 1) ) {
-                status = true;
-            } else {
-                status = false;
-            }
-
-            return status;
-        }
-
       private:
         std::multiset<RecordCore> cache_duplicates;
         std::multiset<RecordCore> cache_symbolic_duplicates;
+        std::vector<Error*> list_duplicates{};
+        std::vector<Error*> list_symbolic_duplicates{};
         size_t capacity;    ///< max amount of RecordCores that the cache can hold
         bool unlimited; ///< if true, the set is not capped and will not erase any RecordCore
     };
