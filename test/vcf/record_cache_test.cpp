@@ -27,7 +27,8 @@ namespace ebi
     size_t count_duplicates_and_rethrow_error(vcf::RecordCache &cache, TestMultiRecord summary)
     {
         try {
-            return cache.check_duplicates(build_mock_record(summary)).size();
+            cache.check_duplicates(build_mock_record(summary));
+            return cache.get_duplicates().size();
         } catch (vcf::BodySectionError * e) {
           // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
             throw *e;
