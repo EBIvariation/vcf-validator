@@ -135,6 +135,51 @@ namespace ebi
                                 vcf::InfoBodyError*);
             }
         }
+
+        SECTION("SVLEN test")
+        {
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::SVLEN },
+                        { vcf::NUMBER, "2" },
+                        { vcf::TYPE, vcf::INTEGER },
+                        { vcf::DESCRIPTION, "Difference in length between REF and ALT alleles" }
+                    },
+                    source
+            });
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC", "ACT" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::SVLEN, "1,2" } },
+                                { vcf::GT },
+                                { "1|0" },
+                                source})) );
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::SVLEN, "1,2" } },
+                                { vcf::GT },
+                                { "0|1" },
+                                source})),
+                            vcf::InfoBodyError*);
+        }
     }
 
     TEST_CASE("Alternate allele warnings", "[body alt warnings]")
