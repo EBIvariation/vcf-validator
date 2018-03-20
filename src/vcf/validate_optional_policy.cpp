@@ -175,7 +175,7 @@ namespace ebi
             util::string_split(it->second, ",", values);
             if (values.size() != record.alternate_alleles.size()) {
                 throw new InfoBodyError{state.n_lines,
-                        "INFO SVLEN should have same number of values as ALT ", "Expected " + std::to_string(record.alternate_alleles.size())
+                        "INFO SVLEN should have same number of values as ALT", "Expected " + std::to_string(record.alternate_alleles.size())
                         + ", found " + std::to_string(values.size())};
             }
         }
