@@ -198,10 +198,11 @@ namespace ebi
             if (c == '\n' || i > 4) break;
         }
 
-        for (int j = 0; j < (int)container.size(); ++j) {
-            stream.unget();
+        for (int j = (int)container.size()-1; j >= 0; --j) {
+            stream.putback(container[j]);
             if (stream.fail() || !stream) {
-                throw std::runtime_error("Stream failed");
+                throw std::runtime_error("Stream failed while putting the magic_numbers back into stream \
+                        while reading magic numbers");
             }
         }
     }
