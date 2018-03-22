@@ -11306,12 +11306,12 @@ tr829:
                 
                 auto duplicates = previous_records.get_duplicates();
                 for(auto &error_ptr : duplicates) {
-                    ErrorPolicy::handle_error(*this, error_ptr);
+                    ErrorPolicy::handle_error(*this, error_ptr.release());
                 }
                 
                 auto symbolic_duplicates = previous_records.get_symbolic_duplicates();
                 for(auto &error_ptr : symbolic_duplicates) {
-                    ErrorPolicy::handle_warning(*this, error_ptr);
+                    ErrorPolicy::handle_warning(*this, error_ptr.release());
                 }
 
             }
@@ -11451,12 +11451,12 @@ tr830:
                 
                 auto duplicates = previous_records.get_duplicates();
                 for(auto &error_ptr : duplicates) {
-                    ErrorPolicy::handle_error(*this, error_ptr);
+                    ErrorPolicy::handle_error(*this, error_ptr.release());
                 }
                 
                 auto symbolic_duplicates = previous_records.get_symbolic_duplicates();
                 for(auto &error_ptr : symbolic_duplicates) {
-                    ErrorPolicy::handle_warning(*this, error_ptr);
+                    ErrorPolicy::handle_warning(*this, error_ptr.release());
                 }
 
             }
@@ -14253,12 +14253,12 @@ case 605:
                 
                 auto duplicates = previous_records.get_duplicates();
                 for(auto &error_ptr : duplicates) {
-                    ErrorPolicy::handle_error(*this, error_ptr);
+                    ErrorPolicy::handle_error(*this, error_ptr.release());
                 }
                 
                 auto symbolic_duplicates = previous_records.get_symbolic_duplicates();
                 for(auto &error_ptr : symbolic_duplicates) {
-                    ErrorPolicy::handle_warning(*this, error_ptr);
+                    ErrorPolicy::handle_warning(*this, error_ptr.release());
                 }
 
             }
