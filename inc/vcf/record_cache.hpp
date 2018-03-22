@@ -61,9 +61,9 @@ namespace ebi
          * Nonetheless, if the capacity is too small, it may cause incorrect reporting, such as reporting several times
          * the first occurrence or failing to report duplicates that are farther apart than the capacity.
          */
-        std::vector<Error*> get_duplicates()
-        {
-            return list_duplicates;
+        std::vector<std::unique_ptr<Error>> get_duplicates()
+        {   
+            return std::move(list_duplicates);
         }
 
         /**
@@ -78,9 +78,9 @@ namespace ebi
          * Nonetheless, if the capacity is too small, it may cause incorrect reporting, such as reporting several times
          * the first occurrence or failing to report duplicates that are farther apart than the capacity.
          */
-        std::vector<Error*> get_symbolic_duplicates()
+        std::vector<std::unique_ptr<Error>> get_symbolic_duplicates()
         {
-            return list_symbolic_duplicates;
+            return std::move(list_symbolic_duplicates);
         }
         
 
@@ -101,12 +101,15 @@ namespace ebi
         void check_duplicates(const Record &record)
         {
             auto record_cores = normalize(record);
+
+            list_duplicates.clear();
+            list_symbolic_duplicates.clear();
             
             for (RecordCore &record_core: record_cores) {
 
                 // create references to the appropriate data structures for th alternate allele type
                 std::multiset<RecordCore>& cache = (record_core.is_symbolic_allele) ? cache_symbolic_duplicates : cache_duplicates;
-                std::vector<Error*>& duplicates = (record_core.is_symbolic_allele) ? list_symbolic_duplicates : list_duplicates;
+                std::vector<std::unique_ptr<Error>>& duplicates = (record_core.is_symbolic_allele) ? list_symbolic_duplicates : list_duplicates;
 
                 std::pair<std::multiset<RecordCore>::iterator, std::multiset<RecordCore>::iterator> range = 
                     cache.equal_range(record_core);                     
@@ -160,8 +163,8 @@ namespace ebi
       private:
         std::multiset<RecordCore> cache_duplicates;
         std::multiset<RecordCore> cache_symbolic_duplicates;
-        std::vector<Error*> list_duplicates{};
-        std::vector<Error*> list_symbolic_duplicates{};
+        std::vector<std::unique_ptr<Error>> list_duplicates;
+        std::vector<std::unique_ptr<Error>> list_symbolic_duplicates;
         size_t capacity;    ///< max amount of RecordCores that the cache can hold
         bool unlimited; ///< if true, the set is not capped and will not erase any RecordCore
     };
