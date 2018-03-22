@@ -108,8 +108,10 @@ namespace ebi
             for (RecordCore &record_core: record_cores) {
 
                 // create references to the appropriate data structures for th alternate allele type
-                std::multiset<RecordCore>& cache = (record_core.is_symbolic_allele) ? cache_symbolic_duplicates : cache_duplicates;
-                std::vector<std::unique_ptr<Error>>& duplicates = (record_core.is_symbolic_allele) ? list_symbolic_duplicates : list_duplicates;
+                std::multiset<RecordCore>& cache = 
+                    (record_core.alternate_allele_type == RecordType::STRUCTURAL) ? cache_symbolic_duplicates : cache_duplicates;
+                std::vector<std::unique_ptr<Error>>& duplicates = 
+                    (record_core.alternate_allele_type == RecordType::STRUCTURAL) ? list_symbolic_duplicates : list_duplicates;
 
                 std::pair<std::multiset<RecordCore>::iterator, std::multiset<RecordCore>::iterator> range = 
                     cache.equal_range(record_core);                     

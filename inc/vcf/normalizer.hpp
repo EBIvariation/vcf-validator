@@ -32,20 +32,14 @@ namespace ebi
         size_t position;
         std::string reference_allele;
         std::string alternate_allele;
-        bool is_symbolic_allele;
+        RecordType alternate_allele_type;
         
         RecordCore(size_t line, const std::string &chromosome, size_t position, 
-                   const std::string &reference_allele, const std::string &alternate_alleles) 
+                   const std::string &reference_allele, const std::string &alternate_alleles, RecordType alternate_allele_types) 
             : line(line), chromosome(chromosome), position(position), 
-              reference_allele(reference_allele), alternate_allele(alternate_alleles)
+              reference_allele(reference_allele), alternate_allele(alternate_alleles),
+              alternate_allele_type(alternate_allele_types)
         {
-            // checks the alternate allele to see if it is a symbolic allele.
-            // For this, enclosure by angular brackets is the necessary and sufficient condition
-            if ( (alternate_alleles.find("<") == 0) && (alternate_alleles.find(">") == alternate_alleles.length() - 1) ) {
-                is_symbolic_allele = true;
-            } else {
-                is_symbolic_allele = false;
-            }
 
         }
         
