@@ -40,6 +40,8 @@ namespace ebi
 
     void check_readability_of_file(const std::string & file_ext);
 
+    void check_readability_of_stream(const std::vector<char> & line);
+
     void write_errors(const Parser &validator, const std::vector<std::unique_ptr<ReportWriter>> &outputs);
 
     ParserImpl::ParserImpl(std::shared_ptr<Source> source)
@@ -148,11 +150,7 @@ namespace ebi
 
         std::vector<char> line;
         ebi::util::readline(uncompressed_input, line);
-
-        std::string compression_type = ebi::vcf::get_compression_from_magic_num(line);
-        if (compression_type != NO_EXT) {
-            throw std::invalid_argument{"Input file should not be compressed"};
-        }
+        check_readability_of_stream(line);
 
         ebi::vcf::Version version;
         try {
@@ -179,7 +177,7 @@ namespace ebi
 
         if(file_ext == BZ2) {
             uncompressed_input.push(boost::iostreams::bzip2_decompressor());
-        } else if(file_ext == TAR_GZ) {
+        } else if(file_ext == GZ) {
             uncompressed_input.push(boost::iostreams::gzip_decompressor());
         }
 
@@ -189,7 +187,7 @@ namespace ebi
     void get_magic_num(std::istream & stream, std::vector<char> & container)
     {
         char c;
-        int i=0;
+        int i = 0;
         container.clear();
 
         while (stream && stream.get(c)) {
@@ -200,7 +198,7 @@ namespace ebi
 
         for (int j = (int)container.size()-1; j >= 0; --j) {
             stream.putback(container[j]);
-            if (stream.fail() || !stream) {
+            if (stream.fail()) {
                 throw std::runtime_error("Stream failed while putting the magic_numbers back into stream");
             }
         }
@@ -222,8 +220,8 @@ namespace ebi
         boost::filesystem::path source_name(source);
         std::string file_extension = source_name.extension().string();
 
-        if (file_extension == BZ2 || file_extension == RAR || file_extension == TAR || file_extension == TAR_GZ ||
-            file_extension == TAR_XZ || file_extension == TAR_Z || file_extension == ZIP) {
+        if (file_extension == BZ2 || file_extension == RAR || file_extension == TAR || file_extension == GZ ||
+            file_extension == XZ || file_extension == Z || file_extension == ZIP) {
             compressed_file_warning(file_extension);
             return file_extension;
         }
@@ -240,9 +238,9 @@ namespace ebi
     {
         std::vector<std::pair<std::vector<char>, std::string>> types = {
             { { 66, 90, 104 }, BZ2 },
-            { { 31, -117 }, TAR_GZ },
-            { { -3, 55, 122, 88, 90 }, TAR_XZ },
-            { { 31, -99 }, TAR_Z },
+            { { 31, -117 }, GZ },
+            { { -3, 55, 122, 88, 90 }, XZ },
+            { { 31, -99 }, Z },
             { { 80, 75, 3, 4 }, ZIP }
         };
 
@@ -257,10 +255,19 @@ namespace ebi
 
     void check_readability_of_file(const std::string & file_ext)
     {
-        std::set<std::string> readable_extensions = {BZ2,TAR_GZ,NO_EXT};
+        std::set<std::string> readable_extensions = {BZ2,GZ,NO_EXT};
 
         if (!readable_extensions.count(file_ext)) {
             throw std::invalid_argument{"Input file should not be compressed"};
+        }
+    }
+
+    void check_readability_of_stream(const std::vector<char> &line)
+    {
+        std::string compression_type = ebi::vcf::get_compression_from_magic_num(line);
+
+        if (compression_type != NO_EXT) {
+            throw std::invalid_argument{"Input file should not be compressed twice"};
         }
     }
 
