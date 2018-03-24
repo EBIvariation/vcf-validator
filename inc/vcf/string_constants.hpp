@@ -179,6 +179,7 @@ namespace ebi
     const std::string XZ = ".xz";
     const std::string Z = ".Z";
     const std::string ZIP = ".zip";
+    const std::string ZLIB = ".z";
 
   }
 }

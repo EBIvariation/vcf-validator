@@ -179,6 +179,8 @@ namespace ebi
             uncompressed_input.push(boost::iostreams::bzip2_decompressor());
         } else if(file_ext == GZ) {
             uncompressed_input.push(boost::iostreams::gzip_decompressor());
+        } else if(file_ext == ZLIB) {
+            uncompressed_input.push(boost::iostreams::zlib_decompressor());
         }
 
         uncompressed_input.push(input);
@@ -221,7 +223,7 @@ namespace ebi
         std::string file_extension = source_name.extension().string();
 
         if (file_extension == BZ2 || file_extension == RAR || file_extension == TAR || file_extension == GZ ||
-            file_extension == XZ || file_extension == Z || file_extension == ZIP) {
+            file_extension == XZ || file_extension == Z || file_extension == ZIP || file_extension == ZLIB) {
             compressed_file_warning(file_extension);
             return file_extension;
         }
@@ -241,7 +243,8 @@ namespace ebi
             { { 31, -117 }, GZ },
             { { -3, 55, 122, 88, 90 }, XZ },
             { { 31, -99 }, Z },
-            { { 80, 75, 3, 4 }, ZIP }
+            { { 80, 75, 3, 4 }, ZIP },
+            { { 120, -100 }, ZLIB }
         };
 
         for (auto & type : types) {
@@ -255,7 +258,7 @@ namespace ebi
 
     void check_readability_of_file(const std::string & file_ext)
     {
-        std::set<std::string> readable_extensions = {BZ2,GZ,NO_EXT};
+        std::set<std::string> readable_extensions = {BZ2,GZ,ZLIB,NO_EXT};
 
         if (!readable_extensions.count(file_ext)) {
             throw std::invalid_argument{"Input file should not be compressed"};
