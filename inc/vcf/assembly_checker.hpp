@@ -21,9 +21,12 @@ namespace ebi
 {
   namespace vcf
   {
-
+    namespace assembly_checker
+    {
+      void check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input);
+    
+    }
   }
-
 }
 
 #endif // VCF_ASSEMBLY_CHECKER_HPP
