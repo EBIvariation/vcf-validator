@@ -102,13 +102,15 @@ int main(int argc, char** argv)
         }
     
         BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA index file...";
-        std::ifstream fasta_index_input{fasta_index_path};
+        std::ifstream fasta_index_input{fasta_index_path, std::ios::binary};
         if (!fasta_index_input) {
             throw std::runtime_error{"Couldn't open FASTA index file " + fasta_index_path + ". Please use samtools "
                                      "faidx <fasta> to create the index file"};
         }
 
-        ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input);
+        if (ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input)) {
+            // TODO: BOOST_LOG_TRIVIAL(info) << "Problem lines written to: " << ebi::vcf::assembly_checker::get_problem_file_name();
+        }
 
         return 0;
 

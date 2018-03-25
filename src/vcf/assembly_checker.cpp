@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
+#include <boost/algorithm/string/predicate.hpp>
+
 #include "bioio/bioio.hpp"
+#include "util/stream_utils.hpp"
 #include "vcf/assembly_checker.hpp"
 #include "vcf/vcf_fasta_relation.hpp"
 
@@ -24,12 +27,15 @@ namespace ebi
   {
     namespace assembly_checker
     {
-      void check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input)
-      {
-          VcfFastaRelation vcf_fasta_relation{vcf_input, fasta_input, fasta_index_input};
-          auto chroms = get_chroms();
 
-          
+      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input)
+      {
+          std::vector<char> line;
+          line.reserve(default_line_buffer_size);
+
+          while (util::readline(vcf_input, line).size() != 0) {
+              
+          }
       }
     }
   }

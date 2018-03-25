@@ -69,6 +69,7 @@ namespace ebi
     const std::string ALT = "ALT";
     const std::string ASSEMBLY = "assembly";
     const std::string CHROM = "CHROM";
+    const std::string CHR = "chr";
     const std::string CONTIG = "contig";
     const std::string FILTER = "FILTER";
     const std::string FORMAT = "FORMAT";

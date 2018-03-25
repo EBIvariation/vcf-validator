@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+#include <algorithm>
+
+#include <boost/algorithm/string/predicate.hpp>
+
+#include "util/string_utils.hpp"
+#include "vcf/string_constants.hpp"
 #include "vcf/vcf_fasta_relation.hpp"
 
 namespace ebi
@@ -21,5 +27,39 @@ namespace ebi
   namespace vcf
   {
 
+    VcfVariant::VcfVariant(std::string const &line)
+    {
+        std::vector<std::string> record_columns;
+        util::string_split(line, '\t', record_columns);
+
+        chromosome = format_chromosome(record_columns[0]);
+        position = static_cast<size_t>(std::stoi(record_columns[1]));
+        reference_allele = record_columns[3];
+    }
+
+    std::string VcfVariant::format_chromosome(std::string const &chromosome)
+    {
+        std::string chromosome_copy;
+        std::transform(chromosome.begin(), chromosome.end(), chromosome_copy.begin(), ::tolower);
+        if (boost::starts_with(chromosome_copy, CHR)) {
+            return chromosome.substr(CHR.length());
+        }
+        return chromosome;
+    }
+
+    void VcfFastaRelation::add_vcf_variant(std::string const &line)
+    {
+
+    }
+
+    std::vector<VcfVariant> VcfFastaRelation::get_vcf_variants()
+    {
+        return vcf_variants;
+    }
+
+    std::set<std::string> VcfFastaRelation::get_chromosomes()
+    {
+        return chromosomes;
+    }
   }
 }
