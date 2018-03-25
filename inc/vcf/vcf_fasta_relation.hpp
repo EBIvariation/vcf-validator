@@ -17,22 +17,41 @@
 #ifndef VCF_VCF_FASTA_RELATION_HPP
 #define VCF_VCF_FASTA_RELATION_HPP
 
+#include <set>
+#include <string>
+#include <vector>
+
 namespace ebi
 {
   namespace vcf
   {
-    class VcfFastaRelation {
+
+    class VcfVariant
+    {
       public:
-        VcfFastaRelation(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input)
-                        : vcf_input{vcf_input}, fasta_input{fasta_input}, fasta_index_input{fasta_index_input} { }
-          
-        std::set<std::string> get_chroms();
+        std::string chromosome;
+        size_t position;
+        std::string reference_allele;
+
+        VcfVariant(std::string const &line);
 
       private:
-        std::istream vcf_input;
-        std::istream fasta_input;
-        std::istream fasta_index_input;
+        std::string format_chromosome(std::string const &chromosome);
     };
+
+
+    class VcfFastaRelation
+    {
+      public:
+        void add_vcf_variant(std::string const &line);
+        std::vector<VcfVariant> get_vcf_variants();
+        std::set<std::string> get_chromosomes();
+
+      private:
+        std::vector<VcfVariant> vcf_variants;
+        std::set<std::string> chromosomes;
+    };
+
   }
 }
 

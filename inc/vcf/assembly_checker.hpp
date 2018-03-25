@@ -17,14 +17,18 @@
 #ifndef VCF_ASSEMBLY_CHECKER_HPP
 #define VCF_ASSEMBLY_CHECKER_HPP
 
+#include <fstream>
+
 namespace ebi
 {
   namespace vcf
   {
     namespace assembly_checker
     {
-      void check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input);
-    
+
+      size_t const default_line_buffer_size = 64 * 1024;
+
+      void check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input);    
     }
   }
 }
