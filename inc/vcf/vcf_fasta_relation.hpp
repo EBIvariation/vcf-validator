@@ -1,5 +1,5 @@
 /**
- * Copyright 2014-2018 EMBL - European Bioinformatics Institute
+ * Copyright 2018 EMBL - European Bioinformatics Institute
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-#include "bioio/bioio.hpp"
-#include "vcf/assembly_checker.hpp"
-#include "vcf/vcf_fasta_relation.hpp"
+#ifndef VCF_VCF_FASTA_RELATION_HPP
+#define VCF_VCF_FASTA_RELATION_HPP
 
 namespace ebi
 {
   namespace vcf
   {
-    namespace assembly_checker
-    {
-      void check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input)
-      {
-          VcfFastaRelation vcf_fasta_relation{vcf_input, fasta_input, fasta_index_input};
-          auto chroms = get_chroms();
-
+    class VcfFastaRelation {
+      public:
+        VcfFastaRelation(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input)
+                        : vcf_input{vcf_input}, fasta_input{fasta_input}, fasta_index_input{fasta_index_input} { }
           
-      }
-    }
+        std::set<std::string> get_chroms();
+
+      private:
+        std::istream vcf_input;
+        std::istream fasta_input;
+        std::istream fasta_index_input;
+    };
   }
 }
+
+#endif // VCF_VCF_FASTA_RELATION_HPP
