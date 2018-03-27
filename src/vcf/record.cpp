@@ -375,6 +375,7 @@ namespace ebi
             }
         } else if (field_key == AF) {
             for (auto & value : values) {
+                if (value == MISSING_VALUE) { continue; }
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
                     throw new InfoBodyError{line, "INFO AF value does not lie in the interval [0,1]", "AA=" + field_value,
                             ErrorFix::IRRECOVERABLE_VALUE, field_key};
