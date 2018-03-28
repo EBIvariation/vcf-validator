@@ -87,8 +87,9 @@ int main(int argc, char** argv)
     try {
         auto vcf_path = vm[ebi::vcf::VCF].as<std::string>();
         auto fasta_path = vm[ebi::vcf::FASTA].as<std::string>();
+        boost::filesystem::path fasta_boost_path{fasta_path};
         auto fasta_index_path = fasta_path + ".fai";
-        auto problem_lines_path = vcf_path + "__" + fasta_path.filename() + ".nonmatches";
+        auto problem_lines_path = vcf_path + "__" + fasta_boost_path.filename().string() + ".nonmatches";
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
         std::ifstream vcf_input{vcf_path};
