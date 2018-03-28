@@ -20,22 +20,15 @@
 
 #include "util/string_utils.hpp"
 #include "vcf/string_constants.hpp"
-#include "vcf/vcf_fasta_relation.hpp"
+#include "vcf/vcf_fasta_variant.hpp"
 
 namespace ebi
 {
   namespace vcf
   {
 
-    VcfVariant::VcfVariant(std::string const &line)
-    {
-        std::vector<std::string> record_columns;
-        util::string_split(line, '\t', record_columns);
-
-        chromosome = format_chromosome(record_columns[0]);
-        position = static_cast<size_t>(std::stoi(record_columns[1]));
-        reference_allele = record_columns[3];
-    }
+    VcfVariant::VcfVariant(std::string const &line, std::string const &chromosome, size_t position, std::string const &reference_allele)
+                          : line{line}, chromosome{chromosome}, position{position}, reference_allele{reference_allele} { }
 
     std::string VcfVariant::format_chromosome(std::string const &chromosome)
     {
@@ -45,21 +38,6 @@ namespace ebi
             return chromosome.substr(CHR.length());
         }
         return chromosome;
-    }
-
-    void VcfFastaRelation::add_vcf_variant(std::string const &line)
-    {
-
-    }
-
-    std::vector<VcfVariant> VcfFastaRelation::get_vcf_variants()
-    {
-        return vcf_variants;
-    }
-
-    std::set<std::string> VcfFastaRelation::get_chromosomes()
-    {
-        return chromosomes;
     }
   }
 }
