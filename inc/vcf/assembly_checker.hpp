@@ -28,7 +28,8 @@ namespace ebi
 
       size_t const default_line_buffer_size = 64 * 1024;
 
-      void check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input);    
+      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input,
+                         std::ostream &problem_lines_output); 
     }
   }
 }

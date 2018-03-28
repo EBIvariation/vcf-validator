@@ -88,6 +88,7 @@ int main(int argc, char** argv)
         auto vcf_path = vm[ebi::vcf::VCF].as<std::string>();
         auto fasta_path = vm[ebi::vcf::FASTA].as<std::string>();
         auto fasta_index_path = fasta_path + ".fai";
+        auto problem_lines_path = vcf_path + "__" + fasta_path.filename() + ".nonmatches";
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
         std::ifstream vcf_input{vcf_path};
@@ -96,7 +97,7 @@ int main(int argc, char** argv)
         }
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA file...";
-        std::ifstream fasta_input{fasta_path};
+        std::ifstream fasta_input{fasta_path, std::ios::binary};
         if (!fasta_input) {
             throw std::runtime_error{"Couldn't open FASTA file " + fasta_path};
         }
@@ -108,8 +109,13 @@ int main(int argc, char** argv)
                                      "faidx <fasta> to create the index file"};
         }
 
-        if (ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input)) {
-            // TODO: BOOST_LOG_TRIVIAL(info) << "Problem lines written to: " << ebi::vcf::assembly_checker::get_problem_file_name();
+        std::ofstream problem_lines_output{problem_lines_path};
+        if (!problem_lines_output) {
+            throw std::runtime_error{"Couldn't open VCF problem lines file " + problem_lines_path};
+        }
+
+        if (!ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, problem_lines_output)) {
+            BOOST_LOG_TRIVIAL(info) << "Problem lines written to: " << problem_lines_path;
         }
 
         return 0;

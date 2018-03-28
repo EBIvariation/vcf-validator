@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef VCF_VCF_FASTA_RELATION_HPP
-#define VCF_VCF_FASTA_RELATION_HPP
+#ifndef VCF_VCF_FASTA_VARIANT_HPP
+#define VCF_VCF_FASTA_VARIANT_HPP
 
 #include <set>
 #include <string>
@@ -29,30 +29,17 @@ namespace ebi
     class VcfVariant
     {
       public:
+        std::string line;
         std::string chromosome;
         size_t position;
         std::string reference_allele;
 
-        VcfVariant(std::string const &line);
+        VcfVariant(std::string const &line, std::string const &chromosome, size_t position, std::string const &reference_allele);
 
       private:
         std::string format_chromosome(std::string const &chromosome);
     };
-
-
-    class VcfFastaRelation
-    {
-      public:
-        void add_vcf_variant(std::string const &line);
-        std::vector<VcfVariant> get_vcf_variants();
-        std::set<std::string> get_chromosomes();
-
-      private:
-        std::vector<VcfVariant> vcf_variants;
-        std::set<std::string> chromosomes;
-    };
-
   }
 }
 
-#endif // VCF_VCF_FASTA_RELATION_HPP
+#endif // VCF_VCF_FASTA_VARIANT_HPP
