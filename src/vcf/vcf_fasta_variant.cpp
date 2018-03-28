@@ -15,6 +15,7 @@
  */
 
 #include <algorithm>
+#include <vector>
 
 #include <boost/algorithm/string/predicate.hpp>
 
@@ -27,8 +28,15 @@ namespace ebi
   namespace vcf
   {
 
-    VcfVariant::VcfVariant(std::string const &line, std::string const &chromosome, size_t position, std::string const &reference_allele)
-                          : line{line}, chromosome{chromosome}, position{position}, reference_allele{reference_allele} { }
+    VcfVariant::VcfVariant(std::string const &line)
+    {
+        std::vector<std::string> record_columns;
+        util::string_split(line, "\t", record_columns);
+
+        chromosome = format_chromosome(record_columns[0]);
+        position = static_cast<size_t>(std::stoi(record_columns[1]));
+        reference_allele = record_columns[3];
+    }
 
     std::string VcfVariant::format_chromosome(std::string const &chromosome)
     {

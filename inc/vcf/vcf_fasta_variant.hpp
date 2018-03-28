@@ -17,9 +17,7 @@
 #ifndef VCF_VCF_FASTA_VARIANT_HPP
 #define VCF_VCF_FASTA_VARIANT_HPP
 
-#include <set>
 #include <string>
-#include <vector>
 
 namespace ebi
 {
@@ -29,12 +27,11 @@ namespace ebi
     class VcfVariant
     {
       public:
-        std::string line;
         std::string chromosome;
         size_t position;
         std::string reference_allele;
 
-        VcfVariant(std::string const &line, std::string const &chromosome, size_t position, std::string const &reference_allele);
+        VcfVariant(std::string const &line);
 
       private:
         std::string format_chromosome(std::string const &chromosome);

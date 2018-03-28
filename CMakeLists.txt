@@ -69,6 +69,7 @@ set (MOD_VCF_SOURCES
         inc/vcf/validator_detail_v42.hpp
         inc/vcf/validator_detail_v43.hpp
         inc/vcf/validator.hpp
+        inc/vcf/vcf_fasta_variant.hpp
         
         src/vcf/abort_error_policy.cpp
         src/vcf/assembly_checker.cpp
@@ -84,6 +85,7 @@ set (MOD_VCF_SOURCES
         src/vcf/store_parse_policy.cpp
         src/vcf/validate_optional_policy.cpp
         src/vcf/validator.cpp
+        src/vcf/vcf_fasta_variant.cpp
         )
 add_library(mod_vcf ${MOD_VCF_SOURCES})
 add_dependencies(mod_vcf mod_odb)
