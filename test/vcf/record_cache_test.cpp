@@ -61,6 +61,12 @@ namespace ebi
             // triplicate missed, reported as duplicate
             CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT"}}) == 2 );
         }
+        SECTION("Symbolic Duplicates")
+        {
+            CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
+            // This won't throw an error. Only warning would be generated, which isn't detected here.
+            CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
+        }
     }
 
     TEST_CASE("RecordCache tests: capacity==5")
@@ -94,6 +100,12 @@ namespace ebi
             // the first occurrence should not be reported again
             CHECK( count_duplicates_and_rethrow_error(cache, {104, "GA", {"GT"}}) == 1 );
         }
+        SECTION("Symbolic Duplicates")
+        {
+            CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
+            // This won't throw an error. Only warning would be generated, which isn't detected here.
+            CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
+        }
     }
 
     TEST_CASE("RecordCache tests: unlimited capacity")
@@ -126,6 +138,12 @@ namespace ebi
             CHECK( count_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) == 2 );
             // the first occurrence should not be reported again
             CHECK( count_duplicates_and_rethrow_error(cache, {100, "GA", {"GT"}}) == 1 );
+        }
+        SECTION("Symbolic Duplicates")
+        {
+            CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
+            // This won't throw an error. Only warning would be generated, which isn't detected here.
+            CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
         }
     }
 }

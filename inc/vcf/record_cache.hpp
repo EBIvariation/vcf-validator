@@ -62,7 +62,7 @@ namespace ebi
          * the first occurrence or failing to report duplicates that are farther apart than the capacity.
          */
         std::vector<std::unique_ptr<Error>> get_duplicates()
-        {   
+        {
             return std::move(list_duplicates);
         }
 
@@ -130,15 +130,13 @@ namespace ebi
 
                     if (++range.first == range.second) {
                         // if only one match, return an extra error for the first occurrence
-                        duplicates.emplace_back(new DuplicationError{first_occurence_line, ss.str()});        
+                        duplicates.emplace_back(new DuplicationError{first_occurence_line, ss.str()});
                     }
 
                     duplicates.emplace_back(new DuplicationError{record_core.line, ss.str(), duplicate_variant_lines});
-
                 }
 
-                cache.insert(range.second, record_core);        
-
+                cache.insert(range.second, record_core);
             }
 
             shrink_to_fit(cache_symbolic_duplicates);
