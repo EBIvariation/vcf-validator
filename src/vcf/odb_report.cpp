@@ -164,9 +164,9 @@ namespace ebi
         }
     }
 
-    std::string OdbReportRW::get_report_message()
+    void OdbReportRW::show_report_message()
     {
-        return "Database report written to : " + db_name;
+        BOOST_LOG_TRIVIAL(info) << "Database report written to : " + db_name;
     }
   }
 }

@@ -93,9 +93,9 @@ namespace ebi
             this->report_result = report_result;
         }
 
-        virtual std::string get_report_message() override
+        virtual void show_report_message() override
         {
-            return "Summary report written to : " + file_name;
+            BOOST_LOG_TRIVIAL(info) << "Summary report written to : " + file_name;
         }
 
       private:

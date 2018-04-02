@@ -21,6 +21,8 @@
 #include <string>
 #include <stdexcept>
 
+#include <boost/log/trivial.hpp>
+
 #include "vcf/error.hpp"
 
 namespace ebi
@@ -35,7 +37,7 @@ namespace ebi
             virtual void write_warning(Error &error) = 0;
             virtual void write_message(const std::string &report_result) = 0;
 
-            virtual std::string get_report_message() = 0;
+            virtual void show_report_message() = 0;
     };
 
     class FileReportWriter : public ReportWriter
@@ -66,9 +68,9 @@ namespace ebi
                 file << report_result << std::endl;
             }
 
-            virtual std::string get_report_message() override
+            virtual void show_report_message() override
             {
-                return "Text report written to : " + file_name;
+                BOOST_LOG_TRIVIAL(info) << "Text report written to : " + file_name;
             }
 
         private:
