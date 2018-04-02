@@ -32,6 +32,7 @@
 #include "vcf/validator.hpp"
 #include "vcf/report_writer.hpp"
 #include "vcf/odb_report.hpp"
+#include "vcf/stdout_report_writer.hpp"
 #include "vcf/summary_report_writer.hpp"
 
 namespace
@@ -50,7 +51,7 @@ namespace
             (ebi::vcf::VERSION_OPTION, "Display version of the validator")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
             (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING), "Validation level (error, warning, stop)")
-            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, database)")
+            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, database, stdout)")
             (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Directory for the output")
         ;
 
@@ -126,7 +127,7 @@ namespace
         auto epoch = std::chrono::system_clock::now().time_since_epoch();
         auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
         for (auto out : outs) {
-            if (out == ebi::vcf::DATABASE || out == ebi::vcf::TEXT || out == ebi::vcf::SUMMARY) {
+            if (out == ebi::vcf::DATABASE || out == ebi::vcf::TEXT || out == ebi::vcf::SUMMARY || out == ebi::vcf::STDOUT) {
                 std::string filetype = (out == ebi::vcf::DATABASE ? "db" : "txt");
                 std::string errortype = (out == ebi::vcf::SUMMARY) ? "errors_summary" : "errors";
                 std::string filename = input + "." + errortype + "." + std::to_string(timestamp) + "." + filetype;
@@ -138,8 +139,10 @@ namespace
                     outputs.emplace_back(new ebi::vcf::OdbReportRW(filename));
                 } else if (out == ebi::vcf::TEXT) {
                     outputs.emplace_back(new ebi::vcf::FileReportWriter(filename));
-                } else {
+                } else if (out == ebi::vcf::SUMMARY) {
                     outputs.emplace_back(new ebi::vcf::SummaryReportWriter(filename));
+                } else {
+                    outputs.emplace_back(new ebi::vcf::StdoutReportWriter());
                 }
             } else {
                 throw std::invalid_argument{"Please use only valid report types"};
@@ -188,7 +191,7 @@ int main(int argc, char** argv)
 
         std::string report_result = "According to the VCF specification, the input file is " + std::string(is_valid ? "" : "not ") + "valid";
         for (auto & output : outputs) {
-            BOOST_LOG_TRIVIAL(info) << output->get_report_message();
+            output->show_report_message();
             output->write_message(report_result);
         }
         BOOST_LOG_TRIVIAL(info) << report_result;

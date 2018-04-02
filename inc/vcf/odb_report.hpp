@@ -52,7 +52,7 @@ namespace ebi
         virtual size_t count_errors() override;
         virtual void for_each_error(std::function<void(std::shared_ptr<Error>)> user_function) override;
 
-        virtual std::string get_report_message() override;
+        virtual void show_report_message() override;
 
       private:
         std::string db_name;
