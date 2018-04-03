@@ -35,6 +35,17 @@ namespace ebi
         }
     }
 
+    size_t count_symbolic_duplicates_and_rethrow_error(vcf::RecordCache &cache, TestMultiRecord summary)
+    {
+        try {
+            cache.check_duplicates(build_mock_record(summary));
+            return cache.get_symbolic_duplicates().size();
+        } catch (vcf::BodySectionError * e) {
+          // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
+            throw *e;
+        }
+    }
+
     TEST_CASE("RecordCache tests: capacity==1")
     {
         vcf::RecordCache cache{1};
@@ -64,7 +75,7 @@ namespace ebi
         SECTION("Symbolic Duplicates")
         {
             CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
-            // This won't throw an error. Only warning would be generated, which isn't detected here.
+            // This won't throw an error. 
             CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
         }
     }
@@ -103,7 +114,7 @@ namespace ebi
         SECTION("Symbolic Duplicates")
         {
             CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
-            // This won't throw an error. Only warning would be generated, which isn't detected here.
+            // This won't throw an error.
             CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
         }
     }
@@ -142,8 +153,43 @@ namespace ebi
         SECTION("Symbolic Duplicates")
         {
             CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
-            // This won't throw an error. Only warning would be generated, which isn't detected here.
+            // This won't throw an error.
             CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
+        }
+    }
+
+    TEST_CASE("Symbolic Duplicates test")
+    {
+        vcf::RecordCache cache{0};
+
+        cache.check_duplicates(build_mock_record({100, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({101, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({102, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({103, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({104, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({105, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({107, "C", {"<INS>"}}));
+
+        SECTION("No symbolic duplicates") {
+            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {106, "A", {"T"}}) == 0 );
+            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 0 );
+            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {103, "A", {"T"}}) == 0 );
+            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) == 0 );
+            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {100, "GA", {"GT"}}) == 0 );
+            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {107, "C", {"<DEL>"}}) == 0 );
+            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {108, "C", {"<INS>"}}) == 0 );
+        }
+
+        SECTION("One Symbolic Duplicate")
+        {
+            // Symbolic duplicate detected
+            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 2 );
+        }
+        SECTION("Symbolic Triplicates")
+        {
+            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 2 );
+            // the first occurrence of symbolic duplicate should not be reported again
+            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 1 );
         }
     }
 }
