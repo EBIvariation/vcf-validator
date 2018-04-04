@@ -94,6 +94,8 @@ set (V41_TESTS test/vcf/parser_v41_test.cpp)
 set (V42_TESTS test/vcf/parser_v42_test.cpp)
 set (V43_TESTS test/vcf/parser_v43_test.cpp)
 set (ALL_TESTS
+        test/vcf/assembly_checker_integration_test.cpp
+        test/vcf/assembly_checker_test.cpp
         test/vcf/compressed_file_test.cpp
         test/vcf/debugulator_integration_test.cpp
         test/vcf/debugulator_test.cpp

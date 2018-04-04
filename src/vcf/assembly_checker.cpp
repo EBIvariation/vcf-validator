@@ -45,7 +45,7 @@ namespace ebi
           // Reading FASTA index, and querying FASTA file
           auto index = bioio::read_fasta_index(fasta_index_input);
 
-          // reading VCF file
+          // Reading VCF file
           while (util::readline(vcf_input, vector_line).size() != 0) {
               std::string line{vector_line.begin(), vector_line.end()};
 
@@ -65,7 +65,7 @@ namespace ebi
 
               if (vcf_variant.position == 0) {
                   BOOST_LOG_TRIVIAL(warning) << "Position 0 should only be used for a telomere";
-                  continue; // TODO: Don't know what to do, so todo
+                  continue;
               }
 
               auto sequence = bioio::read_fasta_contig(fasta_input, index.at(vcf_variant.chromosome),
@@ -82,17 +82,17 @@ namespace ebi
               }
           }
 
+          BOOST_LOG_TRIVIAL(info) << "Number of matches: " << num_matches << "/" << num_variants;
+          BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(num_matches) / num_variants) * 100 << "%";
+
           if (absent_chromosomes.size() > 0) {
-              std::string message = "Please check if FASTA is correct; chromosomes from vcf that don't appear in FASTA file:";
+              std::string message = "Please check if FASTA is correct; chromosomes from VCF that don't appear in FASTA file:";
               for (auto & absent_chromosome : absent_chromosomes) {
                   message += " " + absent_chromosome + ",";
               }
               message.pop_back();
               throw std::invalid_argument{message};
           }
-
-          BOOST_LOG_TRIVIAL(info) << "Number of matches: " << num_matches << "/" << num_variants;
-          BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(num_matches) / num_variants) * 100 << "%";
 
           return (num_matches == num_variants);
       }
