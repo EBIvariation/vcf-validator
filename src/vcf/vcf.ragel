@@ -219,7 +219,6 @@
         try {
             // Handle all columns and build record
             ParsePolicy::handle_body_line(*this);
-            
 
             if (record != nullptr) {
                 previous_records.check_duplicates(*record);
@@ -233,7 +232,6 @@
                 for(auto &error_ptr : symbolic_duplicates) {
                     ErrorPolicy::handle_warning(*this, error_ptr.release());
                 }
-
             }
 
             try {
