@@ -24,7 +24,7 @@
 
 namespace ebi
 {
-    size_t count_duplicates_and_rethrow_error(vcf::RecordCache &cache, TestMultiRecord summary)
+    size_t count_duplicates(vcf::RecordCache &cache, TestMultiRecord summary)
     {
         try {
             cache.check_duplicates(build_mock_record(summary));
@@ -35,7 +35,7 @@ namespace ebi
         }
     }
 
-    size_t count_symbolic_duplicates_and_rethrow_error(vcf::RecordCache &cache, TestMultiRecord summary)
+    size_t count_symbolic_duplicates(vcf::RecordCache &cache, TestMultiRecord summary)
     {
         try {
             cache.check_duplicates(build_mock_record(summary));
@@ -53,30 +53,30 @@ namespace ebi
         cache.check_duplicates(build_mock_record({100, "A", {"T"}}));
 
         SECTION("There's no duplicate") {
-            CHECK( count_duplicates_and_rethrow_error(cache, {101, "A", {"T"}}) == 0 );
+            CHECK( count_duplicates(cache, {101, "A", {"T"}}) == 0 );
         }
         SECTION("No duplicate detected because capacity is too small") {
-            CHECK( count_duplicates_and_rethrow_error(cache, {101, "A", {"T"}}) == 0 );
+            CHECK( count_duplicates(cache, {101, "A", {"T"}}) == 0 );
             // This is not going to throw because capacity is 1, we would need a bigger cache.
-            CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 0 );
+            CHECK( count_duplicates(cache, {99, "GA", {"GT", "C"}}) == 0 );
         }
 
         SECTION("One simple duplicate") {
-            CHECK( count_duplicates_and_rethrow_error(cache, {100, "A", {"T"}}) == 2 );
+            CHECK( count_duplicates(cache, {100, "A", {"T"}}) == 2 );
         }
         SECTION("One multiallelic duplicate") {
-            CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 2 );
+            CHECK( count_duplicates(cache, {99, "GA", {"GT", "C"}}) == 2 );
         }
         SECTION("Triplicate") {
-            CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 2 );
+            CHECK( count_duplicates(cache, {99, "GA", {"GT", "C"}}) == 2 );
             // triplicate missed, reported as duplicate
-            CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT"}}) == 2 );
+            CHECK( count_duplicates(cache, {99, "GA", {"GT"}}) == 2 );
         }
         SECTION("Symbolic Duplicates")
         {
-            CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
-            // This won't throw an error. 
-            CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
+            CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
+            // Not a duplicate, hence not detected 
+            CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
         }
     }
 
@@ -92,30 +92,30 @@ namespace ebi
         cache.check_duplicates(build_mock_record({105, "A", {"T"}}));
 
         SECTION("There's no duplicate") {
-            CHECK( count_duplicates_and_rethrow_error(cache, {106, "A", {"T"}}) == 0 );
+            CHECK( count_duplicates(cache, {106, "A", {"T"}}) == 0 );
         }
         SECTION("No duplicate detected because capacity is too small") {
             // This is not going to throw because capacity is 1, we would need a bigger cache.
-            CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 0 );
+            CHECK( count_duplicates(cache, {99, "GA", {"GT", "C"}}) == 0 );
         }
 
         SECTION("One simple duplicate") {
-            CHECK( count_duplicates_and_rethrow_error(cache, {103, "A", {"T"}}) == 2 );
+            CHECK( count_duplicates(cache, {103, "A", {"T"}}) == 2 );
         }
         SECTION("One multiallelic duplicate") {
-            CHECK( count_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) == 2 );
+            CHECK( count_duplicates(cache, {100, "GA", {"GT", "C"}}) == 2 );
         }
         SECTION("Triplicate")
         {
-            CHECK( count_duplicates_and_rethrow_error(cache, {104, "GA", {"GT", "C"}}) == 2 );
+            CHECK( count_duplicates(cache, {104, "GA", {"GT", "C"}}) == 2 );
             // the first occurrence should not be reported again
-            CHECK( count_duplicates_and_rethrow_error(cache, {104, "GA", {"GT"}}) == 1 );
+            CHECK( count_duplicates(cache, {104, "GA", {"GT"}}) == 1 );
         }
         SECTION("Symbolic Duplicates")
         {
-            CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
-            // This won't throw an error.
-            CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
+            CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
+            // Not a duplicate, hence not detected 
+            CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
         }
     }
 
@@ -131,65 +131,60 @@ namespace ebi
         cache.check_duplicates(build_mock_record({105, "A", {"T"}}));
 
         SECTION("There's no duplicate") {
-            CHECK( count_duplicates_and_rethrow_error(cache, {106, "A", {"T"}}) == 0 );
+            CHECK( count_duplicates(cache, {106, "A", {"T"}}) == 0 );
         }
 
         SECTION("Duplicate detected because there's no capacity limitation") {
             // This is not going to throw because capacity is 1, we would need a bigger cache.
-            CHECK( count_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 2 );
+            CHECK( count_duplicates(cache, {99, "GA", {"GT", "C"}}) == 2 );
         }
         SECTION("One simple duplicate") {
-            CHECK( count_duplicates_and_rethrow_error(cache, {103, "A", {"T"}}) == 2 );
+            CHECK( count_duplicates(cache, {103, "A", {"T"}}) == 2 );
         }
         SECTION("One multiallelic duplicate") {
-            CHECK( count_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) == 2 );
+            CHECK( count_duplicates(cache, {100, "GA", {"GT", "C"}}) == 2 );
         }
         SECTION("Triplicate")
         {
-            CHECK( count_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) == 2 );
+            CHECK( count_duplicates(cache, {100, "GA", {"GT", "C"}}) == 2 );
             // the first occurrence should not be reported again
-            CHECK( count_duplicates_and_rethrow_error(cache, {100, "GA", {"GT"}}) == 1 );
+            CHECK( count_duplicates(cache, {100, "GA", {"GT"}}) == 1 );
         }
         SECTION("Symbolic Duplicates")
         {
-            CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
-            // This won't throw an error.
-            CHECK( count_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 0 );
+            CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
+            // Not a duplicate, hence not detected 
+            CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
         }
     }
 
-    TEST_CASE("Symbolic Duplicates test")
+    TEST_CASE("RecordCache tests: symbolic duplicates")
     {
         vcf::RecordCache cache{0};
 
         cache.check_duplicates(build_mock_record({100, "A", {"T"}}));
         cache.check_duplicates(build_mock_record({101, "A", {"T"}}));
-        cache.check_duplicates(build_mock_record({102, "A", {"T"}}));
         cache.check_duplicates(build_mock_record({103, "A", {"T"}}));
-        cache.check_duplicates(build_mock_record({104, "A", {"T"}}));
-        cache.check_duplicates(build_mock_record({105, "A", {"T"}}));
         cache.check_duplicates(build_mock_record({107, "C", {"<INS>"}}));
 
         SECTION("No symbolic duplicates") {
-            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {106, "A", {"T"}}) == 0 );
-            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {99, "GA", {"GT", "C"}}) == 0 );
-            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {103, "A", {"T"}}) == 0 );
-            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {100, "GA", {"GT", "C"}}) == 0 );
-            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {100, "GA", {"GT"}}) == 0 );
-            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {107, "C", {"<DEL>"}}) == 0 );
-            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {108, "C", {"<INS>"}}) == 0 );
+            CHECK( count_symbolic_duplicates(cache, {106, "A", {"T"}}) == 0 );
+            CHECK( count_symbolic_duplicates(cache, {99, "GA", {"GT", "C"}}) == 0 );
+            CHECK( count_symbolic_duplicates(cache, {103, "A", {"T"}}) == 0 );
+            CHECK( count_symbolic_duplicates(cache, {107, "C", {"<DEL>"}}) == 0 );
+            CHECK( count_symbolic_duplicates(cache, {108, "C", {"<INS>"}}) == 0 );
         }
 
         SECTION("One Symbolic Duplicate")
         {
             // Symbolic duplicate detected
-            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 2 );
+            CHECK( count_symbolic_duplicates(cache, {107, "C", {"<INS>"}}) == 2 );
         }
         SECTION("Symbolic Triplicates")
         {
-            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 2 );
+            CHECK( count_symbolic_duplicates(cache, {107, "C", {"<INS>"}}) == 2 );
             // the first occurrence of symbolic duplicate should not be reported again
-            CHECK( count_symbolic_duplicates_and_rethrow_error(cache, {107, "C", {"<INS>"}}) == 1 );
+            CHECK( count_symbolic_duplicates(cache, {107, "C", {"<INS>"}}) == 1 );
         }
     }
 }
