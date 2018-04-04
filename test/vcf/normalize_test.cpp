@@ -38,7 +38,7 @@ namespace ebi
           std::vector<vcf::RecordCore> expected_normalization;
           for (auto result : results) {
               expected_normalization.push_back(
-                  {1, "1", result.normalized_pos, result.normalized_reference, result.normalized_alternate, result.normalized_alternate_type});
+                  {1, "1", result.normalized_pos, result.normalized_reference, result.normalized_alternate, vcf::RecordType::NO_VARIATION});
           }
 
           return {normalize_function(build_mock_record(orig)), expected_normalization};

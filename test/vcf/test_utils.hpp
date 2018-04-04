@@ -38,7 +38,6 @@ namespace ebi
       size_t normalized_pos;
       std::string normalized_reference;
       std::string normalized_alternate;
-      vcf::RecordType normalized_alternate_type;
   };
 
   inline vcf::Record build_mock_record(TestMultiRecord summary)
