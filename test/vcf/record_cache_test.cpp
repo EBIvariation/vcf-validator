@@ -167,7 +167,8 @@ namespace ebi
         cache.check_duplicates(build_mock_record({103, "A", {"T"}}));
         cache.check_duplicates(build_mock_record({107, "C", {"<INS>"}}));
 
-        SECTION("No symbolic duplicates") {
+        SECTION("No symbolic duplicates")
+        {
             CHECK( count_symbolic_duplicates(cache, {106, "A", {"T"}}) == 0 );
             CHECK( count_symbolic_duplicates(cache, {99, "GA", {"GT", "C"}}) == 0 );
             CHECK( count_symbolic_duplicates(cache, {103, "A", {"T"}}) == 0 );
