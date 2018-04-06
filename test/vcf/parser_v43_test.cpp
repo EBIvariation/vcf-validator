@@ -36,7 +36,7 @@ namespace ebi
 
   TEST_CASE("Compressed files that throw std::invalid_argument", "[compressed]")
   {
-      auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files");
+      auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/non_readable");
       std::vector<boost::filesystem::path> v;
       copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
@@ -45,6 +45,21 @@ namespace ebi
           SECTION(path.string())
           {
               CHECK_THROWS_AS(is_valid(path.string()), std::invalid_argument);
+          }
+      }
+  }
+
+  TEST_CASE("Compressed files that do not throw std::invalid_argument", "[compressed]")
+  {
+      auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable");
+      std::vector<boost::filesystem::path> v;
+      copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+
+      for (auto path : v)
+      {
+          SECTION(path.string())
+          {
+              CHECK_NOTHROW(is_valid(path.string()));
           }
       }
   }
