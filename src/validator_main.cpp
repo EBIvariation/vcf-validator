@@ -173,6 +173,10 @@ int main(int argc, char** argv)
         auto outdir = get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), path);
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
+        for (auto & output : outputs) {
+            output->write_message(version_info);
+        }
+
         if (path == ebi::vcf::STDIN) {
             BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
             is_valid = ebi::vcf::is_valid_vcf_file(std::cin, path, validationLevel, outputs);
