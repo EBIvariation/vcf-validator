@@ -225,7 +225,7 @@ namespace ebi
               input.close();
           }
 
-          CHECK(count_lines(summary_path.string()) == 3);
+          CHECK(count_lines(summary_path.string()) == 2);
       }
 
       boost::filesystem::remove(summary_path);
