@@ -62,6 +62,8 @@ vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timesta
 
 The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create an executable that can be run in any Linux machine.
 
+**Note:** If you are an OS-X user, you may follow a different set of steps for building a static docker based binary. After completing steps 1, 2.1 and 2.2 given below, head over to section [Alternative way to build (for Mac OS-X)](https://github.com/Anishka0107/vcf-validator/tree/docker_extend#alternative-way-to-build-for-mac-os-x).
+
 1. Install and configure Docker following [their tutorial](https://docs.docker.com/engine/getstarted/).
 2. Create the Docker image:
     1. Clone this Git repository: `git clone https://github.com/EBIvariation/vcf-validator.git`
@@ -136,3 +138,22 @@ And the full ODB-based code from the classes definitions using:
 odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp --output-dir inc/vcf/ inc/vcf/error.hpp
 mv inc/vcf/error-odb.cpp src/vcf/error-odb.cpp
 ```
+
+## Alternative way to build (for Mac OS-X)
+
+Build the image: `docker build -t ebivariation/vcf-validator docker_mac`
+
+To run the validator inside the image, append the validator command to `docker run -v ${PWD}:/tmp ebivariation/vcf-validator`.  
+Validator example:
+`docker run -v ${PWD}:/tmp ebivariation/vcf-validator vcf_validator -i path/to/file.vcf`
+
+For the debugulator, append the debugulator command to `docker run -v ${PWD}:/tmp ebivaraition/vcf-validator`. If you wish to generate the debugulator log file, use `1>` or `&>` for redirecting stdout (instead of redirecting stderr to the log file using `2>`).  
+Debugulator example:
+```
+docker run -v ${PWD}:/tmp ebivariation/vcf-validator vcf_validator -i path/to/file.vcf -r database -o path/to/write/report
+docker run -v ${PWD}:/tmp ebivariation/vcf-validator vcf_debugulator -i path/to/file.vcf -e path/to/write/report/vcf.errors.timestamp.db -o path/to/fixed.vcf 1>debugulator_log.txt
+```
+
+For running tests on the validator and debugulator, append the command to `docker run -w /home/vcf-validator ebivariation/vcf-validator`.  
+Test suite example:
+`docker run -w /home/vcf-validator ebivariation/vcf-validator test_validator`
