@@ -135,7 +135,7 @@ namespace
                     throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
                 if (out == ebi::vcf::DATABASE) {
-                    outputs.emplace_back(new ebi::vcf::OdbReportRW(filename));
+                    outputs.emplace_back(new ebi::vcf::OdbReportRW(filename, version_info));
                 } else if (out == ebi::vcf::TEXT) {
                     outputs.emplace_back(new ebi::vcf::FileReportWriter(filename));
                 } else {
@@ -174,7 +174,7 @@ int main(int argc, char** argv)
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
         for (auto & output : outputs) {
-            output->write_message(version_info);
+            output->write_version(ebi::vcf::ToolVersion{version_info});
         }
 
         if (path == ebi::vcf::STDIN) {
@@ -192,7 +192,7 @@ int main(int argc, char** argv)
 
         std::string report_result = "According to the VCF specification, the input file is " + std::string(is_valid ? "" : "not ") + "valid";
         for (auto & output : outputs) {
-            BOOST_LOG_TRIVIAL(info) << output->get_report_message();
+            BOOST_LOG_TRIVIAL(info) << "Report written to : " << output->get_filename();
             output->write_message(report_result);
         }
         BOOST_LOG_TRIVIAL(info) << report_result;
@@ -202,7 +202,7 @@ int main(int argc, char** argv)
         BOOST_LOG_TRIVIAL(error) << ex.what();
         return 1;
     } catch (std::runtime_error const & ex) {
-        BOOST_LOG_TRIVIAL(error) << "The validation could not be completed: " << ex.what();
+        BOOST_LOG_TRIVIAL(error) << "The input file is not valid: " << ex.what();
         return 1;
     } catch (std::exception const &ex) {
         BOOST_LOG_TRIVIAL(error) << ex.what();

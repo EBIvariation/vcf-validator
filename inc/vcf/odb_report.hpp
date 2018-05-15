@@ -37,7 +37,7 @@ namespace ebi
     {
       public:
 
-        OdbReportRW(const std::string &db_name);
+        OdbReportRW(const std::string &db_name, const std::string tool_version);
         virtual ~OdbReportRW();
         void flush();   // before reading, make sure you destroy or flush the writer OdbReportRW
 
@@ -45,6 +45,7 @@ namespace ebi
         virtual void write_error(Error &error) override;
         virtual void write_warning(Error &error) override;
         virtual void write_message(const std::string &message) override;
+        virtual void write_version(ToolVersion tool_version) override;
 
         // ReportReader implementation
         virtual size_t count_warnings() override;
@@ -52,10 +53,11 @@ namespace ebi
         virtual size_t count_errors() override;
         virtual void for_each_error(std::function<void(std::shared_ptr<Error>)> user_function) override;
 
-        virtual std::string get_report_message() override;
+        virtual std::string get_filename() override;
 
       private:
         std::string db_name;
+        ToolVersion tool_version;
         std::unique_ptr<odb::core::database> db;
         odb::core::transaction transaction;
         size_t current_transaction_size;

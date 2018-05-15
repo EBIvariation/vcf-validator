@@ -93,9 +93,14 @@ namespace ebi
             file << message << std::endl;
         }
 
-        virtual std::string get_report_message() override
+        virtual void write_version(ToolVersion tool_version) override 
         {
-            return "Summary report written to : " + file_name;
+            file << tool_version.get_tool_version() << std::endl;
+        }
+
+        virtual std::string get_filename() override
+        {
+            return file_name;
         }
 
       private:

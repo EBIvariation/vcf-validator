@@ -52,6 +52,8 @@ namespace ebi
     struct NormalizationError;
     struct DuplicationError;
 
+    struct ToolVersion;
+
     /**
      *
      * This function allows throwing Error with some polymorphism, without using raw pointers.
@@ -364,6 +366,23 @@ namespace ebi
         DuplicationError(size_t line) : DuplicationError{line, "A duplicated variant was found"} { }
         virtual ~DuplicationError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
+    };
+
+    /**
+     * class for writing the tool version to db.
+     */
+    #pragma db object
+    struct ToolVersion
+    {
+        ToolVersion(const std::string &tool_version) :  tool_version{tool_version} {}
+        const std::string tool_version;
+        std::string get_tool_version() const { return tool_version; }
+
+    private:
+        friend class odb::access;
+
+        #pragma db id auto
+        unsigned long id_;
     };
   }
 }
