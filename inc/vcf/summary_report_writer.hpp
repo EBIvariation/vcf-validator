@@ -93,6 +93,11 @@ namespace ebi
             file << message << std::endl;
         }
 
+        virtual void write_version(ToolVersion tool_version) override 
+        {
+            file << tool_version.get_tool_version() << std::endl;
+        }
+
         virtual std::string get_filename() override
         {
             return file_name;

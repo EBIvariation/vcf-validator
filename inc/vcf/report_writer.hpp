@@ -34,6 +34,7 @@ namespace ebi
             virtual void write_error(Error &error) = 0;
             virtual void write_warning(Error &error) = 0;
             virtual void write_message(const std::string &message) = 0;
+            virtual void write_version(ToolVersion tool_version) = 0;
 
             virtual std::string get_filename() = 0;
     };
@@ -64,6 +65,11 @@ namespace ebi
             virtual void write_message(const std::string &message) override
             {
                 file << message << std::endl;
+            }
+
+            virtual void write_version(ToolVersion tool_version) override
+            {
+                file << tool_version.get_tool_version() << std::endl;
             }
 
             virtual std::string get_filename() override

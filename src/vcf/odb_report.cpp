@@ -21,8 +21,8 @@ namespace ebi
 {
   namespace vcf
   {
-    OdbReportRW::OdbReportRW(const std::string &db_name) : db_name(db_name), current_transaction_size{0},
-                                                           transaction_size{1000000}
+    OdbReportRW::OdbReportRW(const std::string &db_name, const std::string tool_version) : db_name(db_name), tool_version{tool_version},
+                                                            current_transaction_size{0}, transaction_size{1000000}
     {
         try {
             boost::filesystem::path db_file{db_name};
@@ -48,6 +48,11 @@ namespace ebi
                     odb::core::transaction t{c->begin()};
                     odb::core::schema_catalog::create_schema(*db);
                     t.commit();
+
+                    // use class object for writing tool version to db
+                    write_version(tool_version);
+
+
 
                     c->execute("PRAGMA foreign_keys=ON");
                 }
@@ -85,6 +90,12 @@ namespace ebi
     {
         error.severity = Severity::ERROR;
         write(error);
+    }
+    void OdbReportRW::write_version(ToolVersion tool_version)
+    {
+        transaction.reset(db->begin()); 
+        db->persist(tool_version);
+        ++current_transaction_size;
     }
     void OdbReportRW::write_warning(Error &error)
     {

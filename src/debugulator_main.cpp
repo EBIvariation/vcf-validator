@@ -124,7 +124,7 @@ int main(int argc, char **argv)
             BOOST_LOG_TRIVIAL(info) << "Writing to standard output...";
         }
 
-        ebi::vcf::OdbReportRW errorDAO{errors};
+        ebi::vcf::OdbReportRW errorDAO{errors, version_info};
 
         auto &input_stream = input_path == ebi::vcf::STDIN ? std::cin : input_file;
         auto &output_stream = output_path == ebi::vcf::STDOUT ? std::cout : output_file;

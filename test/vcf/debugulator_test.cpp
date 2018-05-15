@@ -19,12 +19,16 @@
 
 #include "catch/catch.hpp"
 
+#include "cmake_config.hpp"
 #include "vcf/odb_report.hpp"
 #include "vcf/debugulator.hpp"
 #include "vcf/string_constants.hpp"
 
 namespace ebi
 {
+  const std::string version_info = "vcf-debugulator version " + std::to_string(VERSION_MAJOR) + "."
+                                   + std::to_string(VERSION_MINOR);
+
   TEST_CASE("Fixing errors", "[debugulator]")
   {
       SECTION("Fix meta definition Type for predefined tags")
@@ -509,7 +513,7 @@ namespace ebi
       std::stringstream ss;
       SECTION(path.string())
       {
-          vcf::OdbReportRW report{path.string()};
+          vcf::OdbReportRW report{path.string(), version_info};
           size_t fixed_errors = vcf::debugulator::fix_vcf_file(file, report, ss);
           CHECK(fixed_errors == 0);
       }

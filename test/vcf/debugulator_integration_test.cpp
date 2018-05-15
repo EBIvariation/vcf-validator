@@ -18,6 +18,7 @@
 
 #include "catch/catch.hpp"
 
+#include "cmake_config.hpp"
 #include "vcf/validator.hpp"
 #include "vcf/odb_report.hpp"
 #include "vcf/debugulator.hpp"
@@ -27,6 +28,8 @@ namespace ebi
 {
   static const std::string BEFORE_TAG = "before";
   static const std::string AFTER_TAG = "after";
+  const std::string version_info = "vcf-debugulator version " + std::to_string(VERSION_MAJOR) + "."
+                                   + std::to_string(VERSION_MINOR);
 
   bool validate(std::istream &file, const boost::filesystem::path &path, std::string report_tag)
   {
@@ -34,7 +37,7 @@ namespace ebi
       db_path += ".debugulator_test." + report_tag + ".db";
       boost::filesystem::remove(db_path);   // make sure the db doesn't exist from previous runs
 
-      auto report = new ebi::vcf::OdbReportRW{db_path.string()};
+      auto report = new ebi::vcf::OdbReportRW{db_path.string(), version_info};
       std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> reports;
       reports.emplace_back(report);
 
@@ -48,7 +51,7 @@ namespace ebi
       // report: SqliteReportRW to read the errors. the DB must be flushed before this
       auto db_path = boost::filesystem::path{"/tmp/"} / path.filename();
       db_path += ".debugulator_test." + report_tag + ".db";
-      ebi::vcf::OdbReportRW report{db_path.string()};
+      ebi::vcf::OdbReportRW report{db_path.string(), version_info};
 
       std::unique_ptr<std::stringstream> fixed_vcf{new std::stringstream{}}; // writing result vcf to a stringstream in memory
 

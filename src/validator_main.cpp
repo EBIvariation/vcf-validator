@@ -135,7 +135,7 @@ namespace
                     throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
                 if (out == ebi::vcf::DATABASE) {
-                    outputs.emplace_back(new ebi::vcf::OdbReportRW(filename));
+                    outputs.emplace_back(new ebi::vcf::OdbReportRW(filename, version_info));
                 } else if (out == ebi::vcf::TEXT) {
                     outputs.emplace_back(new ebi::vcf::FileReportWriter(filename));
                 } else {
@@ -174,7 +174,7 @@ int main(int argc, char** argv)
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
         for (auto & output : outputs) {
-            output->write_message(version_info);
+            output->write_version(ebi::vcf::ToolVersion{version_info});
         }
 
         if (path == ebi::vcf::STDIN) {
