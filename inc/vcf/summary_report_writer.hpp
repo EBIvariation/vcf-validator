@@ -88,9 +88,14 @@ namespace ebi
             summary.add_to_summary("Warning: " + error.message, error.line);
         }
 
-        virtual void write_message(const std::string &report_result) override
+        virtual void write_message(const std::string &message) override
         {
-            this->report_result = report_result;
+            file << message << std::endl;
+        }
+
+        virtual void write_version(ToolVersion tool_version) override 
+        {
+            file << tool_version.get_tool_version() << std::endl;
         }
 
         virtual std::string get_filename() override
@@ -100,14 +105,11 @@ namespace ebi
 
       private:
         SummaryTracker summary;
-        std::string report_result;
         std::string file_name;
         std::ofstream file;
 
         void write_summary()
         {
-            file << report_result << std::endl;
-
             for (auto & error_message : summary.error_order) {
                 file << error_message << ". This occurs " << summary.error_summary_report[error_message].occurrences
                      << " time(s), first time in line " << summary.error_summary_report[error_message].first_occurrence_line << "." << std::endl;

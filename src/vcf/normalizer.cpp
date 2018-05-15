@@ -122,7 +122,7 @@ namespace ebi
             corrected_position = position + (lead_mismatch_indices.first - reference.begin());
 
             records.emplace_back(record.line, record.chromosome, corrected_position,
-                                 corrected_reference, corrected_alternate);
+                                 corrected_reference, corrected_alternate, record.types[i]);
         }
 
         return records;
@@ -177,7 +177,7 @@ namespace ebi
             corrected_position = position + (lead_mismatch_indices.first - reference.begin());
 
             records.emplace_back(record.line, record.chromosome, corrected_position,
-                                 corrected_reference, corrected_alternate);
+                                 corrected_reference, corrected_alternate, record.types[i]);
         }
 
         return records;

@@ -22,6 +22,7 @@
 
 #include "catch/catch.hpp"
 
+#include "cmake_config.hpp"
 #include "vcf/odb_report.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/validator.hpp"
@@ -32,6 +33,9 @@
 
 namespace ebi
 {
+  const std::string version_info = "vcf_validator version " + std::to_string(VERSION_MAJOR) + "."
+                                     + std::to_string(VERSION_MINOR);
+
   bool is_valid(std::string path, std::unique_ptr<ebi::vcf::ReportWriter> output)
   {
       std::ifstream input{path};
@@ -48,7 +52,7 @@ namespace ebi
   {
 
       std::string db_name = "test/input_files/sqlite_test.errors.odb.db";
-      ebi::vcf::OdbReportRW errorDAO{db_name};
+      ebi::vcf::OdbReportRW errorDAO{db_name, version_info};
 
       SECTION("Write and count errors") {
           ebi::vcf::Error test_error{1, "testing errors"};
@@ -144,7 +148,7 @@ namespace ebi
       std::string db_name = path.string() + ".errors.db";
 
       {
-          std::unique_ptr<ebi::vcf::ReportWriter> output{new ebi::vcf::OdbReportRW{db_name}};
+          std::unique_ptr<ebi::vcf::ReportWriter> output{new ebi::vcf::OdbReportRW{db_name, version_info}};
           CHECK_FALSE(is_valid(path.string(), std::move(output)));
       }
 
@@ -154,7 +158,7 @@ namespace ebi
           size_t count_warnings;
 
           {
-              ebi::vcf::OdbReportRW errorsDAO{db_name};
+              ebi::vcf::OdbReportRW errorsDAO{db_name, version_info};
               count_errors = errorsDAO.count_errors();
               count_warnings = errorsDAO.count_warnings();
           }
@@ -166,7 +170,7 @@ namespace ebi
       SECTION(path.string() + " error details")
       {
           size_t errors_read = 0;
-          ebi::vcf::OdbReportRW errorsDAO{db_name};
+          ebi::vcf::OdbReportRW errorsDAO{db_name, version_info};
 
           errorsDAO.for_each_error([&errors_read](std::shared_ptr<ebi::vcf::Error> error) {
               CHECK(error->line == 4);
@@ -225,7 +229,7 @@ namespace ebi
               input.close();
           }
 
-          CHECK(count_lines(summary_path.string()) == 3);
+          CHECK(count_lines(summary_path.string()) == 2);
       }
 
       boost::filesystem::remove(summary_path);
