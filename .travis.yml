@@ -2,152 +2,40 @@ sudo: false
 
 language: cpp
 
+os: osx
+
 cache:
   directories:
     - odb
 
 matrix:
   include:
+    - os: osx
+      osx_image: xcode9.3
+      env: C_COMPILER=gcc CXX_COMPILER=g++
 
-    # Clang 3.9
-    - compiler: clang
-      env: C_COMPILER=clang-3.9 CXX_COMPILER=clang++-3.9
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-3.9
-          packages:
-            - clang-3.9
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
-
-    # Clang 4.0
-    - compiler: clang
-      env: C_COMPILER=clang-4.0 CXX_COMPILER=clang++-4.0
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
-          packages:
-            - clang-4.0
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
-
-    # Clang 5.0
-    - compiler: clang
-      env: C_COMPILER=clang-5.0 CXX_COMPILER=clang++-5.0
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
-          packages:
-            - clang-5.0
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
-
-    # GCC 4.8
+    # GCC
     - compiler: gcc
-      env: C_COMPILER=gcc-4.8 CXX_COMPILER=g++-4.8
+      env: C_COMPILER=gcc CXX_COMPILER=g++
       addons:
         apt:
           sources:
             - boost-latest
-            - ubuntu-toolchain-r-test
           packages:
-            - gcc-4.8
-            - g++-4.8
+            - gcc
+            - g++
             - libboost1.55-dev
             - libboost-filesystem1.55-dev
             - libboost-iostreams1.55-dev
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
             - libboost-log1.55-dev
-            - ninja-build
-
-    # GCC 4.9
-    - compiler: gcc
-      env: C_COMPILER=gcc-4.9 CXX_COMPILER=g++-4.9
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-4.9
-            - g++-4.9
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
-
-    # GCC 5
-    - compiler: gcc
-      env: C_COMPILER=gcc-5 CXX_COMPILER=g++-5
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-5
-            - g++-5
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
-
-    # GCC 6
-    - compiler: gcc
-      env: C_COMPILER=gcc-6 CXX_COMPILER=g++-6
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-6
-            - g++-6
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
 
 before_script:
-  - ./install_dependencies.sh
+  - ./install_dependencies_mac.sh
   - export PATH=$PATH:$PWD/odb/odb-2.4.0-x86_64-linux-gnu/bin/
-  - cmake -DBUILD_STATIC=1 -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iodb/libodb-2.4.0 -Iodb/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,odb/ -Lodb/"  -DODB_PATH=$PWD/odb/ -G Ninja
+  - cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iodb/libodb-2.4.0 -Iodb/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,odb/ -Lodb/"  -DODB_PATH=$PWD/odb/
 
 script:
-  - ninja -j 1 -v
-  - ninja test
+  - make
 

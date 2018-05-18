@@ -10,6 +10,26 @@ configure_file (
     "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp"
     )
 
+# Static build extra flags
+if (BUILD_STATIC)
+  set (BUILD_SHARED_LIBS OFF)
+  #set (BUILD_SHARED_LIBRARIES OFF)
+  set (CMAKE_EXE_LINKER_FLAGS "-static")
+  set (CMAKE_FIND_LIBRARY_SUFFIXES .a)
+  set (CMAKE_EXE_LINK_DYNAMIC_C_FLAGS)       # remove -Wl,-Bdynamic
+  set (CMAKE_EXE_LINK_DYNAMIC_CXX_FLAGS)
+  set (CMAKE_SHARED_LIBRARY_C_FLAGS)         # remove -fPIC
+  set (CMAKE_SHARED_LIBRARY_CXX_FLAGS)
+  set (CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
+  set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
+  set(Boost_USE_STATIC_LIBS ON) # only find static libs
+else (BUILD_STATIC)
+  add_definitions (-DBOOST_ALL_DYN_LINK=1)
+  #set (BUILD_SHARED_LIBRARIES ON)
+  set (BUILD_SHARED_LIBS ON)
+  #set (CMAKE_EXE_LINKER_FLAGS)
+endif (BUILD_STATIC)
+
 # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
 # Needed to statically link ODB
@@ -86,43 +106,7 @@ set (MOD_VCF_SOURCES
 add_library(mod_vcf ${MOD_VCF_SOURCES})
 add_dependencies(mod_vcf mod_odb)
 
-set (V41_TESTS test/vcf/parser_v41_test.cpp)
-set (V42_TESTS test/vcf/parser_v42_test.cpp)
-set (V43_TESTS test/vcf/parser_v43_test.cpp)
-set (ALL_TESTS
-        test/vcf/compressed_file_test.cpp
-        test/vcf/debugulator_integration_test.cpp
-        test/vcf/debugulator_test.cpp
-        test/vcf/metaentry_test.cpp
-        test/vcf/normalize_test.cpp
-        test/vcf/optional_policy_test.cpp
-        test/vcf/parser_test_aux.hpp
-        test/vcf/parser_v41_test.cpp
-        test/vcf/parser_v42_test.cpp
-        test/vcf/parser_v43_test.cpp
-        test/vcf/predefined_info_tags_test.cpp
-        test/vcf/predefined_format_tags_test.cpp
-        test/vcf/record_cache_test.cpp
-        test/vcf/record_test.cpp
-        test/vcf/report_writer_test.cpp
-        test/vcf/test_utils.hpp
-        )
 
-# Static build extra flags
-if (BUILD_STATIC)
-  set (BUILD_SHARED_LIBRARIES OFF)
-  set (CMAKE_EXE_LINKER_FLAGS "-static")
-  set (CMAKE_FIND_LIBRARY_SUFFIXES .a)
-  set (CMAKE_EXE_LINK_DYNAMIC_C_FLAGS)       # remove -Wl,-Bdynamic
-  set (CMAKE_EXE_LINK_DYNAMIC_CXX_FLAGS)
-  set (CMAKE_SHARED_LIBRARY_C_FLAGS)         # remove -fPIC
-  set (CMAKE_SHARED_LIBRARY_CXX_FLAGS)
-  set (CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
-  set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
-  set(Boost_USE_STATIC_LIBS ON) # only find static libs
-else (BUILD_STATIC)
-  add_definitions (-DBOOST_ALL_DYN_LINK=1)
-endif (BUILD_STATIC)
 
 # Dependency libraries
 find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
@@ -158,32 +142,7 @@ else (BUILD_STATIC)
        )
 endif (BUILD_STATIC)
 
-# Application tests
-add_executable (test_validator_v41 test/main_test.cpp ${V41_TESTS})
-target_link_libraries (test_validator_v41 ${LIBRARIES_TO_LINK})
-enable_testing ()
-add_test (NAME ValidatorTests_v41 COMMAND test_validator_v41)
-
-add_executable (test_validator_v42 test/main_test.cpp ${V42_TESTS})
-target_link_libraries (test_validator_v42 ${LIBRARIES_TO_LINK})
-enable_testing ()
-add_test (NAME ValidatorTests_v42 COMMAND test_validator_v42)
-
-add_executable (test_validator_v43 test/main_test.cpp ${V43_TESTS})
-target_link_libraries (test_validator_v43 ${LIBRARIES_TO_LINK})
-enable_testing ()
-add_test (NAME ValidatorTests_v43 COMMAND test_validator_v43)
-
-add_executable (test_validator test/main_test.cpp ${ALL_TESTS})
-target_link_libraries (test_validator ${LIBRARIES_TO_LINK})
-enable_testing ()
-add_test (NAME ValidatorTests COMMAND test_validator)
-
-
 # Build binary
 add_executable (vcf_validator src/validator_main.cpp)
 target_link_libraries (vcf_validator ${LIBRARIES_TO_LINK})
-
-add_executable (vcf_debugulator src/debugulator_main.cpp)
-target_link_libraries (vcf_debugulator ${LIBRARIES_TO_LINK})
 
