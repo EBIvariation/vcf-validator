@@ -25,10 +25,12 @@ if (BUILD_STATIC)
   set(Boost_USE_STATIC_LIBS ON) # only find static libs
 else (BUILD_STATIC)
   add_definitions (-DBOOST_ALL_DYN_LINK=1)
-  #set (BUILD_SHARED_LIBRARIES ON)
   set (BUILD_SHARED_LIBS ON)
-  #set (CMAKE_EXE_LINKER_FLAGS)
+  #set (BUILD_SHARED_LIBRARIES ON)
+  set (CMAKE_EXE_LINKER_FLAGS)
 endif (BUILD_STATIC)
+
+
 
 # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
@@ -39,8 +41,11 @@ if(NOT CMAKE_BUILD_TYPE)
     set (CMAKE_BUILD_TYPE  "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
+
+
 include_directories (inc)
 include_directories (lib)
+
 
 # Application modules
 
@@ -135,6 +140,8 @@ else (BUILD_STATIC)
         mod_vcf
         mod_odb
         ${Boost_LIBRARIES}
+        bz2
+        z
         odb-sqlite
         odb
         sqlite3
