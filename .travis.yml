@@ -1,30 +1,92 @@
-sudo: false
+language:
+  - cpp
 
-language: cpp
-
-os: osx
-
-cache:
-  directories:
-    - odb
+sudo: true
 
 matrix:
   include:
     - os: osx
       osx_image: xcode9.3
-      env: C_COMPILER=gcc CXX_COMPILER=g++
+
+    - os: linux
+      env: >
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - boost-latest
+            - ubuntu-toolchain-r-test
+          packages:
+            - libboost1.55-dev
+            - libboost-filesystem1.55-dev
+            - libboost-iostreams1.55-dev
+            - libboost-program-options1.55-dev
+            - libboost-regex1.55-dev
+            - libboost-log1.55-dev
+            - ninja-build
+
+install:
+  - uname -a
 
 before_script:
-  - ./install_dependencies_mac.sh
-  - export PATH=$PATH:$PWD/odb
-  #- cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iodb/libodb-2.4.0 -Iodb/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,odb/ -Lodb/"  -DODB_PATH=$PWD/odb/
+  - echo "installing libodb"
+  - mkdir -p odb && cd odb
+  - wget http://codesynthesis.com/download/odb/2.4/libodb-2.4.0.tar.bz2 -O /tmp/libodb.tar.bz2
+  - tar jxvf /tmp/libodb.tar.bz2
+  - cd libodb-2.4.0 && ./configure && make
+  - sudo make install
+  - cd ..
+
+  - echo "installing libodb-sqlite"
+  - wget http://codesynthesis.com/download/odb/2.4/libodb-sqlite-2.4.0.tar.bz2 -O /tmp/libodb-sqlite.tar.bz2
+  - tar jxvf /tmp/libodb-sqlite.tar.bz2
+  - cd libodb-sqlite-2.4.0 && ./configure --with-libodb=../libodb-2.4.0 && make
+  - sudo make install
+  - cd ..
+
+  - pwd
+  - |
+    if [[ $TRAVIS_OS_NAME == "linux" ]]; then
+      cp libodb-2.4.0/odb/.libs/libodb.a .
+      cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.a .
+
+      cp libodb-2.4.0/odb/.libs/libodb.so .
+      cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.so .
+
+
+      wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-x86_64-linux-gnu.tar.bz2 -O /tmp/odb.tar.bz2
+      tar jxvf /tmp/odb.tar.bz2
+      export PATH=$PATH:$PWD/odb/odb-2.4.0-x86_64-linux-gnu/bin/
+    fi
+  - |
+    if [[ $TRAVIS_OS_NAME == "osx" ]]; then
+      cp libodb-2.4.0/odb/.libs/libodb.a .
+      cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.a .
+
+      cp libodb-2.4.0/odb/.libs/libodb.dylib .
+      cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.dylib .
+
+      pwd
+      # crt0.o
+      cd ../dependencies/Csu-85/
+      make
+      cp crt0.o ../../odb/
+      cd ../../odb
+
+
+      wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-i686-macos.tar.bz2 -O /tmp/odb.tar.bz2
+      tar jxvf /tmp/odb.tar.bz2
+      export PATH=$PATH:$PWD/odb/odb-2.4.0-i686-macos/bin/
+    fi
+  - cd ..
+
+  - echo "downloaded odb:"
+  - ls odb
+
 
 script:
-  - echo "path"
-  - echo $PATH
-
+  - uname -a
   - mkdir -p srb_test/build
   - cd srb_test/build
   - cmake -DBUILD_STATIC=0 ../../
   - make
-
