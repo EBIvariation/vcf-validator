@@ -86,7 +86,5 @@ before_script:
 
 script:
   - uname -a
-  - mkdir -p srb_test/build
-  - cd srb_test/build
-  - cmake -DBUILD_STATIC=0 ../../
+  - cmake -DBUILD_STATIC=0 -DCMAKE_CXX_FLAGS="-Iodb/libodb-2.4.0 -Iodb/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,odb/ -Lodb/"  -DODB_PATH=$PWD/odb/ ./
   - make
