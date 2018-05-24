@@ -30,28 +30,13 @@ else (BUILD_STATIC)
   set (CMAKE_EXE_LINKER_FLAGS)
 endif (BUILD_STATIC)
 
+
+
+find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
+include_directories (${Boost_INCLUDE_DIR} )
+find_package (Threads REQUIRED)
 set (ODB_PATH "/usr/local/lib" CACHE STRING "Path to ODB libraries installation folder.")
-if (BUILD_STATIC)
-  set (LIBRARIES_TO_LINK_
-        ${Boost_LIBRARIES}
-        bz2
-        z
-        ${ODB_PATH}/libodb-sqlite.a
-        ${ODB_PATH}/libodb.a
-        sqlite3
-        ${CMAKE_THREAD_LIBS_INIT}
-       )
-else (BUILD_STATIC)
-  set (LIBRARIES_TO_LINK_
-        ${Boost_LIBRARIES}
-        bz2
-        z
-        ${ODB_PATH}/libodb-sqlite.dylib
-        ${ODB_PATH}/libodb.dylib
-        sqlite3
-        ${CMAKE_THREAD_LIBS_INIT}
-       )
-endif (BUILD_STATIC)
+
 
 
 
@@ -71,6 +56,29 @@ include_directories (lib)
 
 
 # Application modules
+add_library(mod_sqlite3 STATIC lib/sqlite/sqlite3.c)
+
+if (BUILD_STATIC)
+set (LIBRARIES_TO_LINK_TO_MOD
+        ${Boost_LIBRARIES}
+        bz2
+        z
+        mod_sqlite3
+        ${ODB_PATH}/libodb-sqlite.a
+        ${ODB_PATH}/libodb.a
+        ${CMAKE_THREAD_LIBS_INIT}
+       )
+else (BUILD_STATIC)
+  set (LIBRARIES_TO_LINK_TO_MOD
+        ${Boost_LIBRARIES}
+        bz2
+        z
+        mod_sqlite3
+        ${ODB_PATH}/libodb-sqlite.a
+        ${ODB_PATH}/libodb.a
+        ${CMAKE_THREAD_LIBS_INIT}
+       )
+endif (BUILD_STATIC)
 
 set (MOD_ODB_SOURCES)
 set (ODB_MAPPING_CLASSES inc/vcf/error.hpp)
@@ -88,8 +96,8 @@ foreach(_file ${ODB_MAPPING_CLASSES})
     )
     list(APPEND MOD_ODB_SOURCES ${right_place_gencppfile})
 endforeach()
-add_library(mod_odb ${MOD_ODB_SOURCES})
-target_link_libraries(mod_odb ${LIBRARIES_TO_LINK_})
+add_library(mod_odb STATIC ${MOD_ODB_SOURCES})
+#target_link_libraries(mod_odb ${LIBRARIES_TO_LINK_TO_MOD})
 
 
 
@@ -129,47 +137,38 @@ set (MOD_VCF_SOURCES
         src/vcf/validate_optional_policy.cpp
         src/vcf/validator.cpp
         )
-add_library(mod_vcf ${MOD_VCF_SOURCES})
+add_library(mod_vcf STATIC ${MOD_VCF_SOURCES})
 add_dependencies(mod_vcf mod_odb)
-target_link_libraries(mod_vcf ${LIBRARIES_TO_LINK_})
+#target_link_libraries(mod_vcf ${LIBRARIES_TO_LINK_TO_MOD} mod_odb)
 
 
 
-# Dependency libraries
-find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
-include_directories (${Boost_INCLUDE_DIR} )
-
-add_library(sqlite3 lib/sqlite/sqlite3.c)
-find_package (Threads REQUIRED)
-
-set (ODB_PATH "/usr/local/lib" CACHE STRING "Path to ODB libraries installation folder.")
+# Build binary
 if (BUILD_STATIC)
   set (LIBRARIES_TO_LINK
         mod_vcf
         mod_odb
+        mod_sqlite3
+        ${ODB_PATH}/libodb-sqlite.a
+        ${ODB_PATH}/libodb.a
         ${Boost_LIBRARIES}
         bz2
         z
-        ${ODB_PATH}/libodb-sqlite.a
-        ${ODB_PATH}/libodb.a
-        sqlite3
         ${CMAKE_THREAD_LIBS_INIT}
        )
 else (BUILD_STATIC)
   set (LIBRARIES_TO_LINK
         mod_vcf
         mod_odb
+        mod_sqlite3
+        ${ODB_PATH}/libodb-sqlite.a
+        ${ODB_PATH}/libodb.a
         ${Boost_LIBRARIES}
         bz2
         z
-        ${ODB_PATH}/libodb-sqlite.dylib
-        ${ODB_PATH}/libodb.dylib
-        sqlite3
         ${CMAKE_THREAD_LIBS_INIT}
        )
 endif (BUILD_STATIC)
 
-# Build binary
 add_executable (vcf_validator src/validator_main.cpp)
 target_link_libraries (vcf_validator ${LIBRARIES_TO_LINK})
-
