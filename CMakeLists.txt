@@ -10,7 +10,13 @@ configure_file (
     "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp"
     )
 
-# Static build extra flags
+
+# INCLUDE DIRECTORIES
+include_directories (inc)
+include_directories (lib)
+
+
+# STATIC BUILD EXTRA FLAGS
 if (BUILD_STATIC)
   set (BUILD_SHARED_LIBS OFF)
   #set (BUILD_SHARED_LIBRARIES OFF)
@@ -31,15 +37,6 @@ else (BUILD_STATIC)
 endif (BUILD_STATIC)
 
 
-
-find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
-include_directories (${Boost_INCLUDE_DIR} )
-find_package (Threads REQUIRED)
-set (ODB_PATH "/usr/local/lib" CACHE STRING "Path to ODB libraries installation folder.")
-
-
-
-
 # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
 # Needed to statically link ODB
@@ -50,12 +47,14 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 
+find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
+include_directories (${Boost_INCLUDE_DIR} )
+find_package (Threads REQUIRED)
+set (ODB_PATH "/usr/local/lib" CACHE STRING "Absolute path to ODB libraries installation folder.")
 
-include_directories (inc)
-include_directories (lib)
 
 
-# Application modules
+# APPLICATION MODULES
 add_library(mod_sqlite3 STATIC lib/sqlite/sqlite3.c)
 
 if (BUILD_STATIC)
@@ -99,8 +98,6 @@ endforeach()
 add_library(mod_odb STATIC ${MOD_ODB_SOURCES})
 target_link_libraries(mod_odb ${LIBRARIES_TO_LINK_TO_MOD})
 
-
-
 set (MOD_VCF_SOURCES
         inc/vcf/debugulator.hpp
         inc/vcf/error_policy.hpp
@@ -122,7 +119,7 @@ set (MOD_VCF_SOURCES
         inc/vcf/validator_detail_v42.hpp
         inc/vcf/validator_detail_v43.hpp
         inc/vcf/validator.hpp
-        
+
         src/vcf/abort_error_policy.cpp
         src/vcf/debugulator.cpp
         src/vcf/fixer.cpp
@@ -138,12 +135,12 @@ set (MOD_VCF_SOURCES
         src/vcf/validator.cpp
         )
 add_library(mod_vcf STATIC ${MOD_VCF_SOURCES})
-add_dependencies(mod_vcf mod_odb)
+add_dependencies(mod_vcf mod_odb) # works even without this if we add mod_vcf as target_link_libraries
 target_link_libraries(mod_vcf ${LIBRARIES_TO_LINK_TO_MOD} mod_odb)
 
 
 
-# Build binary
+# LIBRARIES TO LINK WITH EXECUTABLES
 if (BUILD_STATIC)
   set (LIBRARIES_TO_LINK
         mod_vcf
@@ -170,5 +167,55 @@ else (BUILD_STATIC)
        )
 endif (BUILD_STATIC)
 
+
+
+# APPLICATION TESTS
+set (V41_TESTS test/vcf/parser_v41_test.cpp)
+set (V42_TESTS test/vcf/parser_v42_test.cpp)
+set (V43_TESTS test/vcf/parser_v43_test.cpp)
+set (ALL_TESTS
+        test/vcf/compressed_file_test.cpp
+        test/vcf/debugulator_integration_test.cpp
+        test/vcf/debugulator_test.cpp
+        test/vcf/metaentry_test.cpp
+        test/vcf/normalize_test.cpp
+        test/vcf/optional_policy_test.cpp
+        test/vcf/parser_test_aux.hpp
+        test/vcf/parser_v41_test.cpp
+        test/vcf/parser_v42_test.cpp
+        test/vcf/parser_v43_test.cpp
+        test/vcf/predefined_info_tags_test.cpp
+        test/vcf/predefined_format_tags_test.cpp
+        test/vcf/record_cache_test.cpp
+        test/vcf/record_test.cpp
+        test/vcf/report_writer_test.cpp
+        test/vcf/test_utils.hpp
+        )
+
+add_executable (test_validator_v41 test/main_test.cpp ${V41_TESTS})
+target_link_libraries (test_validator_v41 ${LIBRARIES_TO_LINK})
+enable_testing ()
+add_test (NAME ValidatorTests_v41 COMMAND test_validator_v41)
+
+add_executable (test_validator_v42 test/main_test.cpp ${V42_TESTS})
+target_link_libraries (test_validator_v42 ${LIBRARIES_TO_LINK})
+enable_testing ()
+add_test (NAME ValidatorTests_v42 COMMAND test_validator_v42)
+
+add_executable (test_validator_v43 test/main_test.cpp ${V43_TESTS})
+target_link_libraries (test_validator_v43 ${LIBRARIES_TO_LINK})
+enable_testing ()
+add_test (NAME ValidatorTests_v43 COMMAND test_validator_v43)
+
+add_executable (test_validator test/main_test.cpp ${ALL_TESTS})
+target_link_libraries (test_validator ${LIBRARIES_TO_LINK})
+enable_testing ()
+add_test (NAME ValidatorTests COMMAND test_validator)
+
+
+# BUILD BINARIES
 add_executable (vcf_validator src/validator_main.cpp)
 target_link_libraries (vcf_validator ${LIBRARIES_TO_LINK})
+
+add_executable (vcf_debugulator src/debugulator_main.cpp)
+target_link_libraries (vcf_debugulator ${LIBRARIES_TO_LINK})
