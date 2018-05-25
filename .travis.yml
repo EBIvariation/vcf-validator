@@ -23,7 +23,6 @@ matrix:
             - libboost-program-options1.55-dev
             - libboost-regex1.55-dev
             - libboost-log1.55-dev
-            - ninja-build
 
 
 before_script:
@@ -50,9 +49,9 @@ before_script:
       cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.so .
 
 
-      #wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-x86_64-linux-gnu.tar.bz2 -O /tmp/odb.tar.bz2
-      #tar jxvf /tmp/odb.tar.bz2
-      #export PATH=$PATH:$PWD/odb/odb-2.4.0-x86_64-linux-gnu/bin/
+      wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-x86_64-linux-gnu.tar.bz2 -O /tmp/odb.tar.bz2
+      tar jxvf /tmp/odb.tar.bz2
+      export PATH=$PATH:$PWD/odb-2.4.0-x86_64-linux-gnu/bin/
     fi
   - |
     if [[ $TRAVIS_OS_NAME == "osx" ]]; then
@@ -63,16 +62,18 @@ before_script:
       cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.dylib .
 
 
-      #wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-i686-macos.tar.bz2 -O /tmp/odb.tar.bz2
-      #tar jxvf /tmp/odb.tar.bz2
-      #export PATH=$PATH:$PWD/odb/odb-2.4.0-i686-macos/bin/
+      wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-i686-macosx.tar.bz2 -O /tmp/odb.tar.bz2
+      tar jxvf /tmp/odb.tar.bz2
+      export PATH=$PATH:$PWD/odb-2.4.0-i686-macosx/bin/
     fi
   - cd ..
 
   - echo "downloaded odb:"
+  - echo $PATH
   - ls odb
 
 
 script:
   - cmake -DBUILD_STATIC=0 -DCMAKE_CXX_FLAGS="-Iodb/libodb-2.4.0 -Iodb/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,odb/ -Lodb/"  -DODB_PATH=$PWD/odb/ ./
-  - make
+  - make -j2
+  - make test
