@@ -63,9 +63,9 @@ set (LIBRARIES_TO_LINK_TO_MOD
         ${Boost_LIBRARIES}
         bz2
         z
-        mod_sqlite3
         ${ODB_PATH}/libodb-sqlite.a
         ${ODB_PATH}/libodb.a
+        mod_sqlite3
         ${CMAKE_THREAD_LIBS_INIT}
        )
 else (BUILD_STATIC)
@@ -73,9 +73,9 @@ else (BUILD_STATIC)
         ${Boost_LIBRARIES}
         bz2
         z
-        mod_sqlite3
         ${ODB_PATH}/libodb-sqlite.a
         ${ODB_PATH}/libodb.a
+        mod_sqlite3
         ${CMAKE_THREAD_LIBS_INIT}
        )
 endif (BUILD_STATIC)
@@ -97,7 +97,7 @@ foreach(_file ${ODB_MAPPING_CLASSES})
     list(APPEND MOD_ODB_SOURCES ${right_place_gencppfile})
 endforeach()
 add_library(mod_odb STATIC ${MOD_ODB_SOURCES})
-#target_link_libraries(mod_odb ${LIBRARIES_TO_LINK_TO_MOD})
+target_link_libraries(mod_odb ${LIBRARIES_TO_LINK_TO_MOD})
 
 
 
@@ -139,7 +139,7 @@ set (MOD_VCF_SOURCES
         )
 add_library(mod_vcf STATIC ${MOD_VCF_SOURCES})
 add_dependencies(mod_vcf mod_odb)
-#target_link_libraries(mod_vcf ${LIBRARIES_TO_LINK_TO_MOD} mod_odb)
+target_link_libraries(mod_vcf ${LIBRARIES_TO_LINK_TO_MOD} mod_odb)
 
 
 
@@ -148,24 +148,24 @@ if (BUILD_STATIC)
   set (LIBRARIES_TO_LINK
         mod_vcf
         mod_odb
-        mod_sqlite3
-        ${ODB_PATH}/libodb-sqlite.a
-        ${ODB_PATH}/libodb.a
         ${Boost_LIBRARIES}
         bz2
         z
+        ${ODB_PATH}/libodb-sqlite.a
+        ${ODB_PATH}/libodb.a
+        mod_sqlite3
         ${CMAKE_THREAD_LIBS_INIT}
        )
 else (BUILD_STATIC)
   set (LIBRARIES_TO_LINK
         mod_vcf
         mod_odb
-        mod_sqlite3
-        ${ODB_PATH}/libodb-sqlite.a
-        ${ODB_PATH}/libodb.a
         ${Boost_LIBRARIES}
         bz2
         z
+        ${ODB_PATH}/libodb-sqlite.a
+        ${ODB_PATH}/libodb.a
+        mod_sqlite3
         ${CMAKE_THREAD_LIBS_INIT}
        )
 endif (BUILD_STATIC)
