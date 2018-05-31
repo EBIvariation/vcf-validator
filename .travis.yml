@@ -132,54 +132,19 @@ matrix:
 
 
 before_script:
-  - echo "installing libodb"
-  - mkdir -p odb && cd odb
-  - wget http://codesynthesis.com/download/odb/2.4/libodb-2.4.0.tar.bz2 -O /tmp/libodb.tar.bz2
-  - tar jxvf /tmp/libodb.tar.bz2
-  - cd libodb-2.4.0 && ./configure && make
-  - cd ..
-
-  - echo "installing libodb-sqlite"
-  - wget http://codesynthesis.com/download/odb/2.4/libodb-sqlite-2.4.0.tar.bz2 -O /tmp/libodb-sqlite.tar.bz2
-  - tar jxvf /tmp/libodb-sqlite.tar.bz2
-  - cd libodb-sqlite-2.4.0 && ./configure --with-libodb=../libodb-2.4.0 && make
-  - cd ..
-
-  - pwd
   - |
     if [[ $TRAVIS_OS_NAME == "linux" ]]; then
-      cp libodb-2.4.0/odb/.libs/libodb.a .
-      cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.a .
-
-      cp libodb-2.4.0/odb/.libs/libodb.so .
-      cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.so .
-
-
-      wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-x86_64-linux-gnu.tar.bz2 -O /tmp/odb.tar.bz2
-      tar jxvf /tmp/odb.tar.bz2
-      export PATH=$PATH:$PWD/odb-2.4.0-x86_64-linux-gnu/bin/
+      ./install_dependencies.sh
+      export PATH=$PATH:$PWD/odb/odb-2.4.0-x86_64-linux-gnu/bin/
     fi
   - |
     if [[ $TRAVIS_OS_NAME == "osx" ]]; then
-      cp libodb-2.4.0/odb/.libs/libodb.a .
-      cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.a .
-
-      cp libodb-2.4.0/odb/.libs/libodb.dylib .
-      cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.dylib .
-
-
-      wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-i686-macosx.tar.bz2 -O /tmp/odb.tar.bz2
-      tar jxvf /tmp/odb.tar.bz2
-      export PATH=$PATH:$PWD/odb-2.4.0-i686-macosx/bin/
+      ./install_dependencies.sh osx
+      export PATH=$PATH:$PWD/odb/odb-2.4.0-i686-macosx/bin/
     fi
-  - cd ..
-
-  - echo "downloaded odb:"
-  - echo $PATH
-  - ls odb
+  - cmake -DBUILD_STATIC=0 -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iodb/libodb-2.4.0 -Iodb/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,odb/ -Lodb/"  -DODB_PATH=$PWD/odb/ ./ -GNinja
 
 
 script:
-  - cmake -DBUILD_STATIC=0 -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iodb/libodb-2.4.0 -Iodb/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,odb/ -Lodb/"  -DODB_PATH=$PWD/odb/ ./ -GNinja
   - ninja -v -j2
   - ninja test
