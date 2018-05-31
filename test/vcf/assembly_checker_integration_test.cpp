@@ -14,13 +14,51 @@
  * limitations under the License.
  */
 
-#include <boost/filesystem.hpp>
-
-#include "catch/catch.hpp"
-
-#include "test_utils.hpp"
+#include "assembly_checker_test_aux.hpp"
 
 namespace ebi
-{
+{	
 
+	TEST_CASE("Integration tests", "[assembly_checker]")
+	{
+	  	SECTION("Multiple entry, single mismatch")
+	    {
+			std::string folder = "test/input_files/assembly_checker/failed/failed_singlemismatch_multipleentry/";
+			std::string file_prefix = get_file_prefix(folder);
+			std::string command = get_command(folder, file_prefix);
+			if(std::system(command.c_str()) != 0)
+			{
+				throw std::runtime_error{"vcf_assembly_checker binary not found"};
+			}
+			auto output_file = get_output_path(folder, file_prefix);
+			CHECK(file_exists(output_file));
+			CHECK(count_lines(output_file) == 1);
+	    }
+	    SECTION("Multiple entry, multiple mismatch")
+	    {
+			std::string folder = "test/input_files/assembly_checker/failed/failed_multiplemismatch_multipleentry/";
+			std::string file_prefix = get_file_prefix(folder);
+			std::string command = get_command(folder, file_prefix);
+			if(std::system(command.c_str()) != 0)
+			{
+				throw std::runtime_error{"vcf_assembly_checker binary not found"};
+			}
+			auto output_file = get_output_path(folder, file_prefix);
+			CHECK(file_exists(output_file));
+			CHECK(count_lines(output_file) == 2);
+	    }
+	    SECTION("Full sample VCF, all match")
+	    {
+			std::string folder = "test/input_files/assembly_checker/passed/passed_fullsample/";
+			std::string file_prefix = get_file_prefix(folder);
+			std::string command = get_command(folder, file_prefix);
+			if(std::system(command.c_str()) != 0)
+			{
+				throw std::runtime_error{"vcf_assembly_checker binary not found"};
+			}
+			auto output_file = get_output_path(folder, file_prefix);
+			CHECK(file_exists(output_file));
+			CHECK(is_empty_file(output_file));
+	    }
+	}
 }
