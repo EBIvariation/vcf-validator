@@ -11,15 +11,14 @@ configure_file (
     )
 
 
-# INCLUDE DIRECTORIES
+# Include Directories
 include_directories (inc)
 include_directories (lib)
 
 
-# STATIC BUILD EXTRA FLAGS
+# Static Build Extra Flags
 if (BUILD_STATIC)
   set (BUILD_SHARED_LIBS OFF)
-  #set (BUILD_SHARED_LIBRARIES OFF)
   set (CMAKE_EXE_LINKER_FLAGS "-static")
   set (CMAKE_FIND_LIBRARY_SUFFIXES .a)
   set (CMAKE_EXE_LINK_DYNAMIC_C_FLAGS)       # remove -Wl,-Bdynamic
@@ -32,7 +31,6 @@ if (BUILD_STATIC)
 else (BUILD_STATIC)
   add_definitions (-DBOOST_ALL_DYN_LINK=1)
   set (BUILD_SHARED_LIBS ON)
-  #set (BUILD_SHARED_LIBRARIES ON)
   set (CMAKE_EXE_LINKER_FLAGS)
 endif (BUILD_STATIC)
 
@@ -47,6 +45,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 
+# Find packages to be linked
 find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
 include_directories (${Boost_INCLUDE_DIR} )
 find_package (Threads REQUIRED)
@@ -54,11 +53,11 @@ set (ODB_PATH "/usr/local/lib" CACHE STRING "Absolute path to ODB libraries inst
 
 
 
-# APPLICATION MODULES
+# Application modules
 add_library(mod_sqlite3 STATIC lib/sqlite/sqlite3.c)
 
 if (BUILD_STATIC)
-set (LIBRARIES_TO_LINK_TO_MOD
+  set (THIRD_PARTY_LIBRARIES
         ${Boost_LIBRARIES}
         bz2
         z
@@ -68,7 +67,7 @@ set (LIBRARIES_TO_LINK_TO_MOD
         ${CMAKE_THREAD_LIBS_INIT}
        )
 else (BUILD_STATIC)
-  set (LIBRARIES_TO_LINK_TO_MOD
+  set (THIRD_PARTY_LIBRARIES
         ${Boost_LIBRARIES}
         bz2
         z
@@ -96,7 +95,7 @@ foreach(_file ${ODB_MAPPING_CLASSES})
     list(APPEND MOD_ODB_SOURCES ${right_place_gencppfile})
 endforeach()
 add_library(mod_odb STATIC ${MOD_ODB_SOURCES})
-target_link_libraries(mod_odb ${LIBRARIES_TO_LINK_TO_MOD})
+target_link_libraries(mod_odb ${THIRD_PARTY_LIBRARIES})
 
 set (MOD_VCF_SOURCES
         inc/vcf/debugulator.hpp
@@ -136,11 +135,11 @@ set (MOD_VCF_SOURCES
         )
 add_library(mod_vcf STATIC ${MOD_VCF_SOURCES})
 add_dependencies(mod_vcf mod_odb) # works even without this if we add mod_vcf as target_link_libraries
-target_link_libraries(mod_vcf ${LIBRARIES_TO_LINK_TO_MOD} mod_odb)
+target_link_libraries(mod_vcf ${THIRD_PARTY_LIBRARIES} mod_odb)
 
 
 
-# LIBRARIES TO LINK WITH EXECUTABLES
+# Libraries to link with executables
 if (BUILD_STATIC)
   set (LIBRARIES_TO_LINK
         mod_vcf
@@ -169,7 +168,7 @@ endif (BUILD_STATIC)
 
 
 
-# APPLICATION TESTS
+# Application Tests
 set (V41_TESTS test/vcf/parser_v41_test.cpp)
 set (V42_TESTS test/vcf/parser_v42_test.cpp)
 set (V43_TESTS test/vcf/parser_v43_test.cpp)
@@ -213,7 +212,7 @@ enable_testing ()
 add_test (NAME ValidatorTests COMMAND test_validator)
 
 
-# BUILD BINARIES
+# Build Binaries
 add_executable (vcf_validator src/validator_main.cpp)
 target_link_libraries (vcf_validator ${LIBRARIES_TO_LINK})
 
