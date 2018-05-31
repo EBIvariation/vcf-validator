@@ -94,8 +94,6 @@ set (V41_TESTS test/vcf/parser_v41_test.cpp)
 set (V42_TESTS test/vcf/parser_v42_test.cpp)
 set (V43_TESTS test/vcf/parser_v43_test.cpp)
 set (ALL_TESTS
-        test/vcf/assembly_checker_integration_test.cpp
-        test/vcf/assembly_checker_test.cpp
         test/vcf/compressed_file_test.cpp
         test/vcf/debugulator_integration_test.cpp
         test/vcf/debugulator_test.cpp
@@ -112,6 +110,12 @@ set (ALL_TESTS
         test/vcf/record_test.cpp
         test/vcf/report_writer_test.cpp
         test/vcf/test_utils.hpp
+        )
+set (ASSEMBLY_CHECKER_TESTS 
+        test/vcf/assembly_checker_test.cpp
+        test/vcf/assembly_checker_integration_test.cpp
+        test/vcf/assembly_checker_test_aux.hpp
+        test/vcf/assembly_checker_test_aux.cpp
         )
 
 # Static build extra flags
@@ -185,6 +189,10 @@ target_link_libraries (test_validator ${LIBRARIES_TO_LINK})
 enable_testing ()
 add_test (NAME ValidatorTests COMMAND test_validator)
 
+add_executable (test_assembly_checker test/main_test.cpp ${ASSEMBLY_CHECKER_TESTS})
+target_link_libraries (test_assembly_checker ${LIBRARIES_TO_LINK})
+enable_testing ()
+add_test (NAME AssemblyCheckerTests COMMAND test_assembly_checker)
 
 # Build binary
 add_executable (vcf_validator src/validator_main.cpp)
