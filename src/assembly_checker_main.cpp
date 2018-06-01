@@ -57,13 +57,13 @@ namespace
 
       if (!vm.count(ebi::vcf::VCF)) {
           std::cout << desc << std::endl;
-          BOOST_LOG_TRIVIAL(error) << "Please specify the path to the VCF file (--vcf)";
+          BOOST_LOG_TRIVIAL(error) << "Please specify the path to the VCF file ("<<ebi::vcf::VCF_OPTION<<")";
           return 1;
       }
 
       if (!vm.count(ebi::vcf::FASTA)) {
           std::cout << desc << std::endl;
-          BOOST_LOG_TRIVIAL(error) << "Please specify the path to the FASTA file (--fasta)";
+          BOOST_LOG_TRIVIAL(error) << "Please specify the path to the FASTA file ("<<ebi::vcf::FASTA_OPTION<<")";
           return 1;
       }
 
