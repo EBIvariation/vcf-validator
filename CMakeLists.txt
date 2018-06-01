@@ -15,9 +15,19 @@ configure_file (
 include_directories (inc)
 include_directories (lib)
 
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  message(STATUS "Operating System detected osx")
+  set(OSX TRUE)
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
-# Static Build Extra Flags
-if (BUILD_STATIC)
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  message(STATUS "Operating System detected linux")
+  set(LINUX TRUE)
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
+
+# Static Build Extra Flags for Linux Static Build
+if (LINUX)
   set (BUILD_SHARED_LIBS OFF)
   set (CMAKE_EXE_LINKER_FLAGS "-static")
   set (CMAKE_FIND_LIBRARY_SUFFIXES .a)
@@ -27,12 +37,14 @@ if (BUILD_STATIC)
   set (CMAKE_SHARED_LIBRARY_CXX_FLAGS)
   set (CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
   set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
-  set(Boost_USE_STATIC_LIBS ON) # only find static libs
-else (BUILD_STATIC)
-  add_definitions (-DBOOST_ALL_DYN_LINK=1)
-  set (BUILD_SHARED_LIBS ON)
+  set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+endif (LINUX)
+
+# Mac build not fully static. include system libraries to be dynamic
+if (OSX)
   set (CMAKE_EXE_LINKER_FLAGS)
-endif (BUILD_STATIC)
+  set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+endif (OSX)
 
 
 # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
@@ -56,27 +68,15 @@ set (ODB_PATH "/usr/local/lib" CACHE STRING "Absolute path to ODB libraries inst
 # Application modules
 add_library(mod_sqlite3 STATIC lib/sqlite/sqlite3.c)
 
-if (BUILD_STATIC)
-  set (THIRD_PARTY_LIBRARIES
-        ${Boost_LIBRARIES}
-        bz2
-        z
-        ${ODB_PATH}/libodb-sqlite.a
-        ${ODB_PATH}/libodb.a
-        mod_sqlite3
-        ${CMAKE_THREAD_LIBS_INIT}
-       )
-else (BUILD_STATIC)
-  set (THIRD_PARTY_LIBRARIES
-        ${Boost_LIBRARIES}
-        bz2
-        z
-        ${ODB_PATH}/libodb-sqlite.a
-        ${ODB_PATH}/libodb.a
-        mod_sqlite3
-        ${CMAKE_THREAD_LIBS_INIT}
-       )
-endif (BUILD_STATIC)
+set (THIRD_PARTY_LIBRARIES
+    ${Boost_LIBRARIES}
+    bz2
+    z
+    ${ODB_PATH}/libodb-sqlite.a
+    ${ODB_PATH}/libodb.a
+    mod_sqlite3
+    ${CMAKE_THREAD_LIBS_INIT}
+   )
 
 set (MOD_ODB_SOURCES)
 set (ODB_MAPPING_CLASSES inc/vcf/error.hpp)
@@ -140,32 +140,17 @@ target_link_libraries(mod_vcf ${THIRD_PARTY_LIBRARIES} mod_odb)
 
 
 # Libraries to link with executables
-if (BUILD_STATIC)
-  set (LIBRARIES_TO_LINK
-        mod_vcf
-        mod_odb
-        ${Boost_LIBRARIES}
-        bz2
-        z
-        ${ODB_PATH}/libodb-sqlite.a
-        ${ODB_PATH}/libodb.a
-        mod_sqlite3
-        ${CMAKE_THREAD_LIBS_INIT}
-       )
-else (BUILD_STATIC)
-  set (LIBRARIES_TO_LINK
-        mod_vcf
-        mod_odb
-        ${Boost_LIBRARIES}
-        bz2
-        z
-        ${ODB_PATH}/libodb-sqlite.a
-        ${ODB_PATH}/libodb.a
-        mod_sqlite3
-        ${CMAKE_THREAD_LIBS_INIT}
-       )
-endif (BUILD_STATIC)
-
+set (LIBRARIES_TO_LINK
+    mod_vcf
+    mod_odb
+    ${Boost_LIBRARIES}
+    bz2
+    z
+    ${ODB_PATH}/libodb-sqlite.a
+    ${ODB_PATH}/libodb.a
+    mod_sqlite3
+    ${CMAKE_THREAD_LIBS_INIT}
+   )
 
 
 # Application Tests

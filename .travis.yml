@@ -149,12 +149,12 @@ script:
   - |
     if [[ $TRAVIS_OS_NAME == "linux" ]]; then
       echo "running cmake"
-      cmake -DBUILD_STATIC=0 -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Ilinux_dependencies/libodb-2.4.0 -Ilinux_dependencies/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,linux_dependencies/ -Llinux_dependencies/"  -DODB_PATH=$PWD/linux_dependencies/ ./ -GNinja
+      cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Ilinux_dependencies/libodb-2.4.0 -Ilinux_dependencies/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,linux_dependencies/ -Llinux_dependencies/"  -DODB_PATH=$PWD/linux_dependencies/ ./ -GNinja
     fi
   - |
     if [[ $TRAVIS_OS_NAME == "osx" ]]; then
       echo "running cmake"
-      cmake -DBUILD_STATIC=0 -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iosx_dependencies/libodb-2.4.0 -Iosx_dependencies/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,osx_dependencies/ -Losx_dependencies/"  -DODB_PATH=$PWD/osx_dependencies/ ./ -GNinja
+      cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iosx_dependencies/libodb-2.4.0 -Iosx_dependencies/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,osx_dependencies/ -Losx_dependencies/"  -DODB_PATH=$PWD/osx_dependencies/ ./ -GNinja
     fi
 
   - ninja -v -j2
