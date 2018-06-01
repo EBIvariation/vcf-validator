@@ -55,11 +55,7 @@ namespace ebi
 	bool file_exists(std::string file_path)
 	{
 		std::ifstream file{file_path};
-		bool exists_flag;
-		if(!file)
-			exists_flag = false;
-		else
-			exists_flag = true;
+		bool exists_flag = (bool)file;
 		file.close();
 
 		return exists_flag;
