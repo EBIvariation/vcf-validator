@@ -18,11 +18,19 @@ We recommend using the [latest release](https://github.com/EBIvariation/vcf-vali
 
 ### Validator
 
-vcf-validator only needs a non-compressed input VCF file to run, although pipes can be used for compressed files (see below). It accepts input in the following ways:
+vcf-validator can run on both compressed and non-compressed input VCF files.
+supported compressios are .bz2 .gz and .z extensions. For rest others pipes can be used for compressed files (see below). 
+It accepts input in the following ways:
 
-* File path as argument: `vcf_validator -i /path/to/file.vcf`
-* Standard input: `vcf_validator < /path/to/file.vcf`
-* Standard input from pipe: `zcat /path/to/file.vcf.gz | vcf_validator`
+* Reading Uncompressed files:
+  * File path as argument: `vcf_validator -i /path/to/file.vcf`
+  * Standard input: `vcf_validator < /path/to/file.vcf`
+  * Standard input from pipe: `zcat /path/to/file.vcf.gz | vcf_validator`
+
+* Reading compressed files:
+  * File path as argument: `vcf_validator -i /path/to/compressedfile.vcf.gz2`
+  * Standard input: `vcf_validator < /path/to/compressedfile.vcf.z`
+  * Standard input from pipe: `cat /path/to/compressedfile.vcf.z | vcf_validator`
 
 The validation level can be configured using `-l` / `--level`. This parameter is optional and accepts 3 values:
 
@@ -58,28 +66,6 @@ vcf_validator -i /path/to/file.vcf -r database -o /path/to/write/report/
 vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timestamp.db -o /path/to/fixed.vcf 2>debugulator_log.txt
 ```
 
-## Static build (Docker-based)
-
-The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create an executable that can be run in any Linux machine.
-
-1. Install and configure Docker following [their tutorial](https://docs.docker.com/engine/getstarted/).
-2. Create the Docker image:
-    1. Clone this Git repository: `git clone https://github.com/EBIvariation/vcf-validator.git`
-    2. Move to the folder the code was downloaded to: `cd vcf-validator`
-    3. Build the image: `docker build -t ebivariation/vcf-validator docker/`. Please replace `ebivariation` with your user account if you plan to push this image to [Docker Hub](https://hub.docker.com).
-3. Build the executable running `docker run -v ${PWD}:/tmp ebivariation/vcf-validator`. Again, replace `ebivariation` with your user name if necessary.
-
-The following executables will be created in the `build/bin` subfolder:
-
-* `vcf_validator`: validation tool
-* `vcf_debugulator`: automatic fixing tool
-* `test_validator` and derivatives: testing correct behaviour of the tools listed above
-
-## Dynamic build
-
-**Note:** Please ignore this section if you only want to use the application.
-
-The end-users build is perfectly valid during development to generate a static binary. Please follow the instructions below if you would like to generate a dynamically linked binary.
 
 ### Dependencies
 
@@ -98,11 +84,37 @@ To install the ODB compiler, the easiest way is to download the `.deb` or `.rpm`
 
 If you don't have root permissions, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`, without `sudo`.
 
-### Compile
+## Build
+### Linux
+#### Static build (Docker-based)
+
+The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create an executable that can be run in any Linux machine.
+
+1. Install and configure Docker following [their tutorial](https://docs.docker.com/engine/getstarted/).
+2. Create the Docker image:
+    1. Clone this Git repository: `git clone https://github.com/EBIvariation/vcf-validator.git`
+    2. Move to the folder the code was downloaded to: `cd vcf-validator`
+    3. Build the image: `docker build -t ebivariation/vcf-validator docker/`. Please replace `ebivariation` with your user account if you plan to push this image to [Docker Hub](https://hub.docker.com).
+3. Build the executable running `docker run -v ${PWD}:/tmp ebivariation/vcf-validator`. Again, replace `ebivariation` with your user name if necessary.
+
+The following executables will be created in the `build/bin` subfolder:
+
+* `vcf_validator`: validation tool
+* `vcf_debugulator`: automatic fixing tool
+* `test_validator` and derivatives: testing correct behaviour of the tools listed above
+
+#### Static build
+
+### Mac OSX
+
+
+
+
+## Compile
 
 The build has been tested on the following compilers:
-* Clang 3.5 to 3.7
-* GCC 4.8 to 5.0
+* Clang 3.5 to 5.0
+* GCC 4.8 to 7.0
 
 In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`. If the ODB libraries were not found during the build, please run `sudo updatedb && sudo ldconfig`.
 
