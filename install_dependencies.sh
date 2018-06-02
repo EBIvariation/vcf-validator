@@ -9,10 +9,12 @@ os_name can be:
   - linux
   - osx
 
-it installes the given dependencies:
+it installs the given dependencies:
   - odb compiler                            odb-2.4.0
   - odb common runtime library              libodb-2.4.0
   - odb sqlite runtime library              libodb-sqlite-2.4.0
+  - bzip library                            bzip2-1.0.6
+  - zlib library                            zlib-1.2.11
 
 for linux:
 ./install_dependencies.sh linux
@@ -45,19 +47,19 @@ else
   exit
 fi
 
-odb=$OS_NAME"_dependencies"
+dependencies_dir=$OS_NAME"_dependencies"
 
 #check for already downloaded files
-if [ -d "$odb/libodb-2.4.0" ]; then
-  echo "skipping odb installation: $odb directory found:"
-  ls $odb
+if [ -d "$dependencies_dir" ]; then
+  echo "skipping odb installation: $dependencies_dir directory found:"
+  ls $dependencies_dir
   exit
 fi
 
 
-# download and compile ODB compiler, ODB runtime library, and sqlite DB plugin for ODB
-echo creating directory $odb
-mkdir -p $odb && cd $odb
+# Download ODB runtime library, sqlite DB plugin for ODB, libbz2 and libz.
+echo "creating directory $dependencies_dir"
+mkdir -p $dependencies_dir && cd $dependencies_dir
 
 echo "installing libodb"
 wget http://codesynthesis.com/download/odb/2.4/libodb-2.4.0.tar.bz2 -O /tmp/libodb.tar.bz2
@@ -69,22 +71,31 @@ wget http://codesynthesis.com/download/odb/2.4/libodb-sqlite-2.4.0.tar.bz2 -O /t
 tar jxvf /tmp/libodb-sqlite.tar.bz2
 cd libodb-sqlite-2.4.0 && ./configure --with-libodb=../libodb-2.4.0 && make && cd ..
 
-# make easier to find the static libraries
+echo "installing libbz2"
+wget http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz -O /tmp/libbz2.tar.bz2
+tar jxvf /tmp/libbz2.tar.bz2
+cd bzip2-1.0.6 && make && cd ..
+
+echo "installing libz"
+wget http://prdownloads.sourceforge.net/libpng/zlib-1.2.11.tar.gz?download -O /tmp/libz.tar.bz2
+tar jxvf /tmp/libz.tar.bz2
+cd zlib-1.2.11 && cmake . && make && cd ..
+
+
+# Make easier to find the static libraries
 cp libodb-2.4.0/odb/.libs/libodb.a .
 cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.a .
+cp bzip2-1.0.6/libbz2.a .
+cp zlib-1.2.11/libz.a .
 
+
+# Download odb compiler
 if [[ "$OS_NAME" == "linux" ]]
 then
-  cp libodb-2.4.0/odb/.libs/libodb.so .
-  cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.so .
-
   wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-x86_64-linux-gnu.tar.bz2 -O /tmp/odb.tar.bz2
   tar jxvf /tmp/odb.tar.bz2
 elif [[ "$OS_NAME" == "osx" ]]
 then
-  cp libodb-2.4.0/odb/.libs/libodb.dylib .
-  cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.dylib .
-
   wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-i686-macosx.tar.bz2 -O /tmp/odb.tar.bz2
   tar jxvf /tmp/odb.tar.bz2
 else
@@ -96,4 +107,4 @@ fi
 
 cd ..
 echo "downloaded odb:"
-ls $odb
+ls $dependencies_dir

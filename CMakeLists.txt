@@ -61,7 +61,7 @@ endif(NOT CMAKE_BUILD_TYPE)
 find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
 include_directories (${Boost_INCLUDE_DIR} )
 find_package (Threads REQUIRED)
-set (ODB_PATH "/usr/local/lib" CACHE STRING "Absolute path to ODB libraries installation folder.")
+set (EXT_LIB_PATH "/usr/local/lib" CACHE STRING "Absolute path to libraries installation folder.")
 
 
 
@@ -72,11 +72,22 @@ set (THIRD_PARTY_LIBRARIES
     ${Boost_LIBRARIES}
     bz2
     z
-    ${ODB_PATH}/libodb-sqlite.a
-    ${ODB_PATH}/libodb.a
+    ${EXT_LIB_PATH}/libodb-sqlite.a
+    ${EXT_LIB_PATH}/libodb.a
     mod_sqlite3
     ${CMAKE_THREAD_LIBS_INIT}
    )
+if (OSX)
+  set (THIRD_PARTY_LIBRARIES
+      ${Boost_LIBRARIES}
+      ${EXT_LIB_PATH}/libbz2.a
+      ${EXT_LIB_PATH}/libz.a
+      ${EXT_LIB_PATH}/libodb-sqlite.a
+      ${EXT_LIB_PATH}/libodb.a
+      mod_sqlite3
+      ${CMAKE_THREAD_LIBS_INIT}
+     )
+endif (OSX)
 
 set (MOD_ODB_SOURCES)
 set (ODB_MAPPING_CLASSES inc/vcf/error.hpp)
@@ -146,11 +157,24 @@ set (LIBRARIES_TO_LINK
     ${Boost_LIBRARIES}
     bz2
     z
-    ${ODB_PATH}/libodb-sqlite.a
-    ${ODB_PATH}/libodb.a
+    ${EXT_LIB_PATH}/libodb-sqlite.a
+    ${EXT_LIB_PATH}/libodb.a
     mod_sqlite3
     ${CMAKE_THREAD_LIBS_INIT}
    )
+if (OSX)
+  set (LIBRARIES_TO_LINK
+      mod_vcf
+      mod_odb
+      ${Boost_LIBRARIES}
+      ${EXT_LIB_PATH}/libbz2.a
+      ${EXT_LIB_PATH}/libz.a
+      ${EXT_LIB_PATH}/libodb-sqlite.a
+      ${EXT_LIB_PATH}/libodb.a
+      mod_sqlite3
+      ${CMAKE_THREAD_LIBS_INIT}
+     )
+endif (OSX)
 
 
 # Application Tests
