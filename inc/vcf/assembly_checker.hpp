@@ -28,8 +28,28 @@ namespace ebi
 
       size_t const default_line_buffer_size = 64 * 1024;
 
-      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input,
-                         std::ostream &problem_lines_output); 
+      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input);
+
+      std::string get_missing_chromosomes_message(std::set<std::string> absent_chromosomes);
+
+      bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence);
+
+      inline void check_file_validity(std::ifstream &input, std::string error_msg)
+      {
+          if (!input) {
+            throw std::runtime_error{error_msg};
+          }
+      }
+
+      class MatchStats
+      {
+        public:
+          MatchStats();
+          void add_match_result(bool result);
+          bool is_valid_combination();
+          int num_matches;
+          int num_variants;
+      };
     }
   }
 }

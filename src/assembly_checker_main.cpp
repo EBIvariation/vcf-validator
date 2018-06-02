@@ -84,39 +84,29 @@ int main(int argc, char** argv)
     if (check_options < 0) { return 0; }
     if (check_options > 0) { return check_options; }
 
+    auto vcf_path = vm[ebi::vcf::VCF].as<std::string>();
+    auto fasta_path = vm[ebi::vcf::FASTA].as<std::string>();
+    boost::filesystem::path fasta_boost_path{fasta_path};
+    auto fasta_index_path = fasta_path + ".fai";
+    std::string file_error_msg;
+
     try {
-        auto vcf_path = vm[ebi::vcf::VCF].as<std::string>();
-        auto fasta_path = vm[ebi::vcf::FASTA].as<std::string>();
-        boost::filesystem::path fasta_boost_path{fasta_path};
-        auto fasta_index_path = fasta_path + ".fai";
-        auto problem_lines_path = vcf_path + "__" + fasta_boost_path.filename().string() + ".nonmatches";
 
-        BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
         std::ifstream vcf_input{vcf_path};
-        if (!vcf_input) {
-            throw std::runtime_error{"Couldn't open VCF file " + vcf_path};
-        }
+        file_error_msg = "Couldn't open VCF file " + vcf_path;
+        ebi::vcf::assembly_checker::check_file_validity(vcf_input, file_error_msg);
 
-        BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA file...";
         std::ifstream fasta_input{fasta_path, std::ios::binary};
-        if (!fasta_input) {
-            throw std::runtime_error{"Couldn't open FASTA file " + fasta_path};
-        }
+        file_error_msg = "Couldn't open FASTA file " + fasta_path;
+        ebi::vcf::assembly_checker::check_file_validity(fasta_input, file_error_msg);
     
-        BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA index file...";
         std::ifstream fasta_index_input{fasta_index_path, std::ios::binary};
-        if (!fasta_index_input) {
-            throw std::runtime_error{"Couldn't open FASTA index file " + fasta_index_path + ". Please use samtools "
-                                     "faidx <fasta> to create the index file"};
-        }
+        file_error_msg = "Couldn't open FASTA index file " + fasta_index_path + ". Please use samtools "
+                                     "faidx <fasta> to create the index file";
+        ebi::vcf::assembly_checker::check_file_validity(fasta_index_input, file_error_msg);
 
-        std::ofstream problem_lines_output{problem_lines_path};
-        if (!problem_lines_output) {
-            throw std::runtime_error{"Couldn't open VCF problem lines file " + problem_lines_path};
-        }
-
-        if (!ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, problem_lines_output)) {
-            BOOST_LOG_TRIVIAL(info) << "Problem lines written to: " << problem_lines_path;
+        if (!ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input)) {
+            BOOST_LOG_TRIVIAL(info) << "VCF and reference fasta are not matching";
         }
 
         return 0;

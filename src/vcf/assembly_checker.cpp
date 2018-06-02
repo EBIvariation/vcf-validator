@@ -32,15 +32,13 @@ namespace ebi
     namespace assembly_checker
     {
 
-      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input,
-                         std::ostream &problem_lines_output)
+      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input)
       {
           std::vector<char> vector_line;
           vector_line.reserve(default_line_buffer_size);
 
           std::set<std::string> absent_chromosomes;
-          size_t num_matches = 0;
-          size_t num_variants = 0;
+          MatchStats match_stats;
 
           // Reading FASTA index, and querying FASTA file
           auto index = bioio::read_fasta_index(fasta_index_input);
@@ -53,10 +51,7 @@ namespace ebi
                   continue;
               }
 
-              std::vector<std::string> record_columns;
-
               VcfVariant vcf_variant{line};
-              num_variants++;
 
               if (index.count(vcf_variant.chromosome) == 0) {
                   absent_chromosomes.insert(vcf_variant.chromosome);
@@ -68,32 +63,60 @@ namespace ebi
                   continue;
               }
 
-              auto sequence = bioio::read_fasta_contig(fasta_input, index.at(vcf_variant.chromosome),
+              auto fasta_sequence = bioio::read_fasta_contig(fasta_input, index.at(vcf_variant.chromosome),
                                                        vcf_variant.position - 1, vcf_variant.reference_allele.length());
               auto reference_sequence = vcf_variant.reference_allele;
 
-              std::transform(sequence.begin(), sequence.end(), sequence.begin(), ::tolower);
-              std::transform(reference_sequence.begin(), reference_sequence.end(), reference_sequence.begin(), ::tolower);
-
-              if (sequence == reference_sequence) {
-                  num_matches++;
-              } else {
-                  util::writeline(problem_lines_output, line);
-              }
+              match_stats.add_match_result(is_matching_sequence(fasta_sequence, reference_sequence));
           }
 
-          BOOST_LOG_TRIVIAL(info) << "Number of matches: " << num_matches << "/" << num_variants;
-          BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(num_matches) / num_variants) * 100 << "%";
+          BOOST_LOG_TRIVIAL(info) << "Number of matches: " << match_stats.num_matches << "/" << match_stats.num_variants;
+          BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(match_stats.num_matches) / match_stats.num_variants) * 100 << "%";
 
+          std::string missing_chromosomes_message = get_missing_chromosomes_message(absent_chromosomes);
+          
+          if (missing_chromosomes_message != "") {
+              throw std::invalid_argument{missing_chromosomes_message};
+          }
+
+          return (match_stats.is_valid_combination());
+      }
+
+      std::string get_missing_chromosomes_message(std::set<std::string> absent_chromosomes)
+      {
+          std::string message = "";
+          
           if (absent_chromosomes.size() > 0) {
-              std::string message = "Please check if FASTA is correct; chromosomes from VCF that don't appear in FASTA file:";
+              message = "Please check if FASTA is correct; chromosomes from VCF that don't appear in FASTA file:";
               for (auto & absent_chromosome : absent_chromosomes) {
                   message += " " + absent_chromosome + ",";
               }
               message.pop_back();
-              throw std::invalid_argument{message};
           }
+          
+          return message;
+      }
 
+      bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence)
+      {
+          std::transform(fasta_sequence.begin(), fasta_sequence.end(), fasta_sequence.begin(), ::tolower);
+          std::transform(reference_sequence.begin(), reference_sequence.end(), reference_sequence.begin(), ::tolower);
+
+          return (fasta_sequence == reference_sequence);
+      }
+
+      MatchStats::MatchStats()
+      {
+          num_matches = 0;
+          num_variants = 0;
+      }
+      void MatchStats::add_match_result(bool result)
+      {
+          num_variants++;
+          num_matches += (int)result;
+      }
+      bool MatchStats::is_valid_combination()
+      {
           return (num_matches == num_variants);
       }
     }
