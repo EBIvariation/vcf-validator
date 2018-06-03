@@ -21,22 +21,17 @@
 #include "boost/algorithm/string/classification.hpp"
 #include <fstream>
 #include "catch/catch.hpp"
+#include "vcf/assembly_checker.hpp"
+#include "vcf/string_constants.hpp"
 
 namespace ebi
 {
-  	std::string get_file_prefix(std::string folder);
-
-  	std::string get_command(std::string folder, std::string file_prefix);
-
-  	std::string get_output_path(std::string folder, std::string file_prefix);
-
-  	bool is_empty_file(std::string file_path);
-
-	bool file_exists(std::string file_path);
-
-	long count_lines(std::istream &input_stream);
-
-	long count_lines(std::string filename);
+  	inline std::string get_file_prefix(std::string folder)
+  	{
+  		std::vector<std::string> path_components;
+  		boost::split(path_components, folder, boost::is_any_of("/"));
+  		return path_components[path_components.size() - 2];
+  	}
 }
 
 #endif // EBI_ASSEMBLER_TEST_AUX_HPP
