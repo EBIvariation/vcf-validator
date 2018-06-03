@@ -115,7 +115,6 @@ set (ASSEMBLY_CHECKER_TESTS
         test/vcf/assembly_checker_test.cpp
         test/vcf/assembly_checker_integration_test.cpp
         test/vcf/assembly_checker_test_aux.hpp
-        test/vcf/assembly_checker_test_aux.cpp
         )
 
 # Static build extra flags
