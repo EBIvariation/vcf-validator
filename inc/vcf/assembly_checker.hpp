@@ -18,6 +18,17 @@
 #define VCF_ASSEMBLY_CHECKER_HPP
 
 #include <fstream>
+#include <set>
+#include <vector>
+
+#include <boost/algorithm/string/predicate.hpp>
+
+#include "bioio/bioio.hpp"
+#include "util/logger.hpp"
+#include "util/stream_utils.hpp"
+#include "vcf/vcf_fasta_variant.hpp"
+#include <fstream>
+
 
 namespace ebi
 {
@@ -28,9 +39,9 @@ namespace ebi
 
       size_t const default_line_buffer_size = 64 * 1024;
 
-      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input);
+      bool check_vcf_ref(std::string vcf_path, std::string fasta_path, std::string fasta_index_path);
 
-      std::string get_missing_chromosomes_message(std::set<std::string> absent_chromosomes);
+      void check_missing_chromosomes(std::set<std::string> absent_chromosomes);
 
       bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence);
 

@@ -14,16 +14,7 @@
  * limitations under the License.
  */
 
-#include <set>
-#include <vector>
-
-#include <boost/algorithm/string/predicate.hpp>
-
-#include "bioio/bioio.hpp"
-#include "util/logger.hpp"
-#include "util/stream_utils.hpp"
 #include "vcf/assembly_checker.hpp"
-#include "vcf/vcf_fasta_variant.hpp"
 
 namespace ebi
 {
@@ -31,9 +22,23 @@ namespace ebi
   {
     namespace assembly_checker
     {
-
-      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input)
+      bool check_vcf_ref(std::string vcf_path, std::string fasta_path, std::string fasta_index_path)
       {
+          std::string file_error_msg;
+
+          std::ifstream vcf_input{vcf_path};
+          file_error_msg = "Couldn't open VCF file " + vcf_path;
+          ebi::vcf::assembly_checker::check_file_validity(vcf_input, file_error_msg);
+
+          std::ifstream fasta_input{fasta_path, std::ios::binary};
+          file_error_msg = "Couldn't open FASTA file " + fasta_path;
+          ebi::vcf::assembly_checker::check_file_validity(fasta_input, file_error_msg);
+      
+          std::ifstream fasta_index_input{fasta_index_path, std::ios::binary};
+          file_error_msg = "Couldn't open FASTA index file " + fasta_index_path + ". Please use samtools "
+                                       "faidx <fasta> to create the index file";
+          ebi::vcf::assembly_checker::check_file_validity(fasta_index_input, file_error_msg);
+
           std::vector<char> vector_line;
           vector_line.reserve(default_line_buffer_size);
 
@@ -73,28 +78,22 @@ namespace ebi
           BOOST_LOG_TRIVIAL(info) << "Number of matches: " << match_stats.num_matches << "/" << match_stats.num_variants;
           BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(match_stats.num_matches) / match_stats.num_variants) * 100 << "%";
 
-          std::string missing_chromosomes_message = get_missing_chromosomes_message(absent_chromosomes);
-          
-          if (missing_chromosomes_message != "") {
-              throw std::invalid_argument{missing_chromosomes_message};
-          }
+          check_missing_chromosomes(absent_chromosomes);
 
           return (match_stats.is_valid_combination());
       }
 
-      std::string get_missing_chromosomes_message(std::set<std::string> absent_chromosomes)
-      {
-          std::string message = "";
-          
+      void check_missing_chromosomes(std::set<std::string> absent_chromosomes)
+      {        
           if (absent_chromosomes.size() > 0) {
+              std::string message = "";
               message = "Please check if FASTA is correct; chromosomes from VCF that don't appear in FASTA file:";
               for (auto & absent_chromosome : absent_chromosomes) {
                   message += " " + absent_chromosome + ",";
               }
               message.pop_back();
+              throw std::invalid_argument{message};
           }
-          
-          return message;
       }
 
       bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence)

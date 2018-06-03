@@ -88,24 +88,10 @@ int main(int argc, char** argv)
     auto fasta_path = vm[ebi::vcf::FASTA].as<std::string>();
     boost::filesystem::path fasta_boost_path{fasta_path};
     auto fasta_index_path = fasta_path + ".fai";
-    std::string file_error_msg;
 
     try {
 
-        std::ifstream vcf_input{vcf_path};
-        file_error_msg = "Couldn't open VCF file " + vcf_path;
-        ebi::vcf::assembly_checker::check_file_validity(vcf_input, file_error_msg);
-
-        std::ifstream fasta_input{fasta_path, std::ios::binary};
-        file_error_msg = "Couldn't open FASTA file " + fasta_path;
-        ebi::vcf::assembly_checker::check_file_validity(fasta_input, file_error_msg);
-    
-        std::ifstream fasta_index_input{fasta_index_path, std::ios::binary};
-        file_error_msg = "Couldn't open FASTA index file " + fasta_index_path + ". Please use samtools "
-                                     "faidx <fasta> to create the index file";
-        ebi::vcf::assembly_checker::check_file_validity(fasta_index_input, file_error_msg);
-
-        if (!ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input)) {
+        if (!ebi::vcf::assembly_checker::check_vcf_ref(vcf_path, fasta_path, fasta_index_path)) {
             BOOST_LOG_TRIVIAL(info) << "VCF and reference fasta are not matching";
         }
 
