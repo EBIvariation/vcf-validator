@@ -14,113 +14,57 @@
  * limitations under the License.
  */
 
+//#include "boost/algorithm/string/split.hpp"
+//#include "boost/algorithm/string/classification.hpp"
+//#include <fstream>
+//#iclude "catch/catch.hpp"
 #include "assembly_checker_test_aux.hpp"
+#include "vcf/vcf_fasta_variant.hpp"
 
 namespace ebi
 {  
   
-  TEST_CASE("Valid fasta and vcf combination", "[assembly_checker]")
+  TEST_CASE("Function checks", "[assembly_checker]")
   {
-      SECTION("Empty VCF File")
-      {
-          std::string folder = "test/input_files/assembly_checker/passed/passed_empty_vcf/";
-          std::string file_prefix = get_file_prefix(folder);
-          std::string command = get_command(folder, file_prefix);
-          if(std::system(command.c_str()) != 0) {
-              throw std::runtime_error{"vcf_assembly_checker binary not found"};
-          }
-          auto output_file = get_output_path(folder, file_prefix);
-          CHECK(file_exists(output_file));
-          CHECK(is_empty_file(output_file));
-      }
-      SECTION("Single entry")
-      {
-          std::string folder = "test/input_files/assembly_checker/passed/passed_single_variant/";
-          std::string file_prefix = get_file_prefix(folder);
-          std::string command = get_command(folder, file_prefix);
-          if(std::system(command.c_str()) != 0) {
-              throw std::runtime_error{"vcf_assembly_checker binary not found"};
-          }
-          auto output_file = get_output_path(folder, file_prefix);
-          CHECK(file_exists(output_file));
-          CHECK(is_empty_file(output_file));
-      }
-  }
-
-  TEST_CASE("Files missing", "[assembly_checker]")
-  {
-      SECTION("Missing fasta File")
+      SECTION("File check")
       {
           std::string folder = "test/input_files/assembly_checker/failed/failed_missing_fasta/";
           std::string file_prefix = get_file_prefix(folder);
-          std::string command = get_command(folder, file_prefix);
-          if(std::system(command.c_str()) != 256) {
-              throw std::runtime_error{"vcf_assembly_checker binary not found"};
-          }
-          auto output_file = get_output_path(folder, file_prefix);
-          CHECK_FALSE(file_exists(output_file));
+          std::ifstream fasta_input{folder + file_prefix + ebi::vcf::FASTA_EXT};
+          CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_file_validity(fasta_input, ""), std::runtime_error);
       }
-      SECTION("Missing index file")
+      SECTION("Missing chromosome")
       {
-          std::string folder = "test/input_files/assembly_checker/failed/failed_missing_index/";
-          std::string file_prefix = get_file_prefix(folder);
-          std::string command = get_command(folder, file_prefix);
-          if(std::system(command.c_str()) != 256) {
-              throw std::runtime_error{"vcf_assembly_checker binary not found"};
+          std::set<std::string> chromosomes;
+          chromosomes.insert("1");
+          CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_missing_chromosomes(chromosomes), std::invalid_argument);
+          try{
+              ebi::vcf::assembly_checker::check_missing_chromosomes(chromosomes);
           }
-          auto output_file = get_output_path(folder, file_prefix);
-          CHECK_FALSE(file_exists(output_file));
+          catch(std::invalid_argument e){
+              CHECK(((std::string)e.what()).compare("Please check if FASTA is correct; chromosomes from VCF that don't appear in FASTA file: 1")==0);
+          }
       }
-      SECTION("Missing VCF file")
+      SECTION("Check sequence matches")
       {
-          std::string folder = "test/input_files/assembly_checker/failed/failed_missing_vcf/";
-          std::string file_prefix = get_file_prefix(folder);
-          std::string command = get_command(folder, file_prefix);
-          if(std::system(command.c_str()) != 256) {
-              throw std::runtime_error{"vcf_assembly_checker binary not found"};
-          }
-          auto output_file = get_output_path(folder, file_prefix);
-          CHECK_FALSE(file_exists(output_file));
+          std::string line{"1\t10177\trs367896724\tA\tAC"};
+          vcf::VcfVariant vcf_variant{line};
+          CHECK(ebi::vcf::assembly_checker::is_matching_sequence(vcf_variant.reference_allele, "A"));
+          CHECK_FALSE(ebi::vcf::assembly_checker::is_matching_sequence(vcf_variant.reference_allele, "G"));
       }
-  }
-
-  TEST_CASE("Invalid fasta and VCF combination", "[assembly_checker]")
-  {
-      SECTION("Empty fasta file, single entry")
+      SECTION("All matches")
       {
-          std::string folder = "test/input_files/assembly_checker/failed/failed_empty_fasta/";
-          std::string file_prefix = get_file_prefix(folder);
-          std::string command = get_command(folder, file_prefix);
-          if(std::system(command.c_str()) != 0) {
-              throw std::runtime_error{"vcf_assembly_checker binary not found"};
-          }
-          auto output_file = get_output_path(folder, file_prefix);
-          CHECK(file_exists(output_file));
-          CHECK(count_lines(output_file) == 1);
+          ebi::vcf::assembly_checker::MatchStats match_stats;
+          match_stats.add_match_result(true);
+          match_stats.add_match_result(true);
+          CHECK(match_stats.is_valid_combination());
       }
-      SECTION("Single entry, single mismatch")
+      SECTION("Mismatches")
       {
-          std::string folder = "test/input_files/assembly_checker/failed/failed_singlemismatch_singleentry/";
-          std::string file_prefix = get_file_prefix(folder);
-          std::string command = get_command(folder, file_prefix);
-          if(std::system(command.c_str()) != 0) {
-              throw std::runtime_error{"vcf_assembly_checker binary not found"};
-          }
-          auto output_file = get_output_path(folder, file_prefix);
-          CHECK(file_exists(output_file));
-          CHECK(count_lines(output_file) == 1);
-      }
-      SECTION("Multiple entry, all mismatch")
-      {
-          std::string folder = "test/input_files/assembly_checker/failed/failed_allmismatch_multipleentry/";
-          std::string file_prefix = get_file_prefix(folder);
-          std::string command = get_command(folder, file_prefix);
-          if(std::system(command.c_str()) != 0) {
-              throw std::runtime_error{"vcf_assembly_checker binary not found"};
-          }
-          auto output_file = get_output_path(folder, file_prefix);
-          CHECK(file_exists(output_file));
-          CHECK(count_lines(output_file) == 2);
+          ebi::vcf::assembly_checker::MatchStats match_stats;
+          match_stats.add_match_result(true);
+          match_stats.add_match_result(false);
+          CHECK_FALSE(match_stats.is_valid_combination());
       }
   }
 }

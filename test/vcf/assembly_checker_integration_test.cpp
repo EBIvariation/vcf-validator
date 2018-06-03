@@ -19,43 +19,75 @@
 namespace ebi
 {  
 
-  TEST_CASE("Integration tests", "[assembly_checker]")
+  TEST_CASE("Valid fasta and vcf combination", "[assembly_checker]")
   {
-      SECTION("Multiple entry, single mismatch")
+      SECTION("Empty VCF File")
       {
-          std::string folder = "test/input_files/assembly_checker/failed/failed_singlemismatch_multipleentry/";
+          std::string folder = "test/input_files/assembly_checker/passed/passed_empty_vcf/";
           std::string file_prefix = get_file_prefix(folder);
-          std::string command = get_command(folder, file_prefix);
-          if(std::system(command.c_str()) != 0) {
-              throw std::runtime_error{"vcf_assembly_checker binary not found"};
-          }
-          auto output_file = get_output_path(folder, file_prefix);
-          CHECK(file_exists(output_file));
-          CHECK(count_lines(output_file) == 1);
+          CHECK(ebi::vcf::assembly_checker::check_vcf_ref(folder + file_prefix + ebi::vcf::VCF_EXT, folder + file_prefix + ebi::vcf::FASTA_EXT, folder + file_prefix + ebi::vcf::INDEX_EXT));
       }
-      SECTION("Multiple entry, multiple mismatch")
+      SECTION("Single entry")
       {
-          std::string folder = "test/input_files/assembly_checker/failed/failed_multiplemismatch_multipleentry/";
+          std::string folder = "test/input_files/assembly_checker/passed/passed_single_variant/";
           std::string file_prefix = get_file_prefix(folder);
-          std::string command = get_command(folder, file_prefix);
-          if(std::system(command.c_str()) != 0) {
-              throw std::runtime_error{"vcf_assembly_checker binary not found"};
-          }
-          auto output_file = get_output_path(folder, file_prefix);
-          CHECK(file_exists(output_file));
-          CHECK(count_lines(output_file) == 2);
+          CHECK(ebi::vcf::assembly_checker::check_vcf_ref(folder + file_prefix + ebi::vcf::VCF_EXT, folder + file_prefix + ebi::vcf::FASTA_EXT, folder + file_prefix + ebi::vcf::INDEX_EXT));
       }
       SECTION("Full sample VCF, all match")
       {
           std::string folder = "test/input_files/assembly_checker/passed/passed_fullsample/";
           std::string file_prefix = get_file_prefix(folder);
-          std::string command = get_command(folder, file_prefix);
-          if(std::system(command.c_str()) != 0) {
-              throw std::runtime_error{"vcf_assembly_checker binary not found"};
-          }
-          auto output_file = get_output_path(folder, file_prefix);
-          CHECK(file_exists(output_file));
-          CHECK(is_empty_file(output_file));
+          CHECK(ebi::vcf::assembly_checker::check_vcf_ref(folder + file_prefix + ebi::vcf::VCF_EXT, folder + file_prefix + ebi::vcf::FASTA_EXT, folder + file_prefix + ebi::vcf::INDEX_EXT));
+      }
+  }
+
+  TEST_CASE("Invalid VCF and Fasta combination", "[assembly_checker]")
+  {
+      SECTION("Single entry, single mismatch")
+      {
+          std::string folder = "test/input_files/assembly_checker/failed/failed_singlemismatch_singleentry/";
+          std::string file_prefix = get_file_prefix(folder);
+          CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(folder + file_prefix + ebi::vcf::VCF_EXT, folder + file_prefix + ebi::vcf::FASTA_EXT, folder + file_prefix + ebi::vcf::INDEX_EXT));
+      }
+      SECTION("Multiple entry, multiple mismatch")
+      {
+          std::string folder = "test/input_files/assembly_checker/failed/failed_multiplemismatch_multipleentry/";
+          std::string file_prefix = get_file_prefix(folder);
+          CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(folder + file_prefix + ebi::vcf::VCF_EXT, folder + file_prefix + ebi::vcf::FASTA_EXT, folder + file_prefix + ebi::vcf::INDEX_EXT));
+      }
+      SECTION("Empty fasta file, single entry")
+      {
+          std::string folder = "test/input_files/assembly_checker/failed/failed_empty_fasta/";
+          std::string file_prefix = get_file_prefix(folder);
+          CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(folder + file_prefix + ebi::vcf::VCF_EXT, folder + file_prefix + ebi::vcf::FASTA_EXT, folder + file_prefix + ebi::vcf::INDEX_EXT));
+      }
+      SECTION("Multiple entry, all mismatch")
+      {
+          std::string folder = "test/input_files/assembly_checker/failed/failed_allmismatch_multipleentry/";
+          std::string file_prefix = get_file_prefix(folder);
+          CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(folder + file_prefix + ebi::vcf::VCF_EXT, folder + file_prefix + ebi::vcf::FASTA_EXT, folder + file_prefix + ebi::vcf::INDEX_EXT));
+      } 
+  }
+
+  TEST_CASE("Files missing", "[assembly_checker]")
+  {
+      SECTION("Missing fasta File")
+      {
+          std::string folder = "test/input_files/assembly_checker/failed/failed_missing_fasta/";
+          std::string file_prefix = get_file_prefix(folder);
+          CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_vcf_ref(folder + file_prefix + ebi::vcf::VCF_EXT, folder + file_prefix + ebi::vcf::FASTA_EXT, folder + file_prefix + ebi::vcf::INDEX_EXT), std::runtime_error);
+      }
+      SECTION("Missing index file")
+      {
+          std::string folder = "test/input_files/assembly_checker/failed/failed_missing_index/";
+          std::string file_prefix = get_file_prefix(folder);
+          CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_vcf_ref(folder + file_prefix + ebi::vcf::VCF_EXT, folder + file_prefix + ebi::vcf::FASTA_EXT, folder + file_prefix + ebi::vcf::INDEX_EXT), std::runtime_error);
+      }
+      SECTION("Missing VCF file")
+      {
+          std::string folder = "test/input_files/assembly_checker/failed/failed_missing_vcf/";
+          std::string file_prefix = get_file_prefix(folder);
+          CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_vcf_ref(folder + file_prefix + ebi::vcf::VCF_EXT, folder + file_prefix + ebi::vcf::FASTA_EXT, folder + file_prefix + ebi::vcf::INDEX_EXT), std::runtime_error);
       }
   }
 }
