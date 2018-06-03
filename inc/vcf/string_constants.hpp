@@ -175,6 +175,11 @@ namespace ebi
     const std::string PQ = "PQ";
     const std::string PS = "PS";
 
+    // File extensions
+    const std::string VCF_EXT = ".vcf";
+    const std::string FASTA_EXT = ".fa";
+    const std::string INDEX_EXT = ".fa.fai";
+
     // Compressed file extensions
     const std::string BZ2 = ".bz2";
     const std::string NO_EXT = "";
