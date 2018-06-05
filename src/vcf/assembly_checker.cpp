@@ -22,23 +22,8 @@ namespace ebi
   {
     namespace assembly_checker
     {
-      bool check_vcf_ref(std::string vcf_path, std::string fasta_path, std::string fasta_index_path)
+      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input)
       {
-          std::string file_error_msg;
-
-          std::ifstream vcf_input{vcf_path};
-          file_error_msg = "Couldn't open VCF file " + vcf_path;
-          ebi::vcf::assembly_checker::check_file_validity(vcf_input, file_error_msg);
-
-          std::ifstream fasta_input{fasta_path, std::ios::binary};
-          file_error_msg = "Couldn't open FASTA file " + fasta_path;
-          ebi::vcf::assembly_checker::check_file_validity(fasta_input, file_error_msg);
-      
-          std::ifstream fasta_index_input{fasta_index_path, std::ios::binary};
-          file_error_msg = "Couldn't open FASTA index file " + fasta_index_path + ". Please use samtools "
-                                       "faidx <fasta> to create the index file";
-          ebi::vcf::assembly_checker::check_file_validity(fasta_index_input, file_error_msg);
-
           std::vector<char> vector_line;
           vector_line.reserve(default_line_buffer_size);
 
@@ -69,7 +54,7 @@ namespace ebi
               }
 
               auto fasta_sequence = bioio::read_fasta_contig(fasta_input, index.at(vcf_variant.chromosome),
-                                                       vcf_variant.position - 1, vcf_variant.reference_allele.length());
+                                                             vcf_variant.position - 1, vcf_variant.reference_allele.length());
               auto reference_sequence = vcf_variant.reference_allele;
 
               match_stats.add_match_result(is_matching_sequence(fasta_sequence, reference_sequence));
@@ -80,7 +65,7 @@ namespace ebi
 
           check_missing_chromosomes(absent_chromosomes);
 
-          return (match_stats.is_valid_combination());
+          return match_stats.is_valid_combination();
       }
 
       void check_missing_chromosomes(std::set<std::string> absent_chromosomes)
@@ -101,7 +86,7 @@ namespace ebi
           std::transform(fasta_sequence.begin(), fasta_sequence.end(), fasta_sequence.begin(), ::tolower);
           std::transform(reference_sequence.begin(), reference_sequence.end(), reference_sequence.begin(), ::tolower);
 
-          return (fasta_sequence == reference_sequence);
+          return fasta_sequence == reference_sequence;
       }
 
       MatchStats::MatchStats()
@@ -116,7 +101,7 @@ namespace ebi
       }
       bool MatchStats::is_valid_combination()
       {
-          return (num_matches == num_variants);
+          return num_matches == num_variants;
       }
     }
   }

@@ -19,6 +19,7 @@
 
 #include "boost/algorithm/string/split.hpp"
 #include "boost/algorithm/string/classification.hpp"
+#include <boost/filesystem.hpp>
 #include <fstream>
 #include "catch/catch.hpp"
 #include "vcf/assembly_checker.hpp"
@@ -26,11 +27,12 @@
 
 namespace ebi
 {
-  	inline std::string get_file_prefix(std::string folder)
+  	inline std::string get_file_prefix(boost::filesystem::path folder_path)
   	{
-  		std::vector<std::string> path_components;
-  		boost::split(path_components, folder, boost::is_any_of("/"));
-  		return path_components[path_components.size() - 2];
+  		boost::filesystem::path::iterator folder = folder_path.end();
+  		folder--;
+  		folder--;
+  		return (*folder).string();
   	}
 }
 

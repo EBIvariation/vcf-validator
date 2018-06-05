@@ -39,7 +39,7 @@ namespace ebi
 
       size_t const default_line_buffer_size = 64 * 1024;
 
-      bool check_vcf_ref(std::string vcf_path, std::string fasta_path, std::string fasta_index_path);
+      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input);
 
       void check_missing_chromosomes(std::set<std::string> absent_chromosomes);
 

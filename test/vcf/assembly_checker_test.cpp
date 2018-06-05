@@ -26,24 +26,11 @@ namespace ebi
   
   TEST_CASE("Function checks", "[assembly_checker]")
   {
-      SECTION("File check")
-      {
-          std::string folder = "test/input_files/assembly_checker/failed/failed_missing_fasta/";
-          std::string file_prefix = get_file_prefix(folder);
-          std::ifstream fasta_input{folder + file_prefix + ebi::vcf::FASTA_EXT};
-          CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_file_validity(fasta_input, ""), std::runtime_error);
-      }
       SECTION("Missing chromosome")
       {
           std::set<std::string> chromosomes;
           chromosomes.insert("1");
           CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_missing_chromosomes(chromosomes), std::invalid_argument);
-          try{
-              ebi::vcf::assembly_checker::check_missing_chromosomes(chromosomes);
-          }
-          catch(std::invalid_argument e){
-              CHECK(((std::string)e.what()).compare("Please check if FASTA is correct; chromosomes from VCF that don't appear in FASTA file: 1")==0);
-          }
       }
       SECTION("Check sequence matches")
       {
@@ -67,5 +54,29 @@ namespace ebi
           CHECK_FALSE(match_stats.is_valid_combination());
       }
   }
-}
 
+  TEST_CASE("Files missing", "[assembly_checker]")
+  {
+      SECTION("Missing FASTA File")
+      {
+          auto folder = boost::filesystem::path("test/input_files/assembly_checker/failed/failed_missing_fasta/");
+          std::string file_prefix = get_file_prefix(folder);
+          std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+          CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_file_validity(fasta_input, ""), std::runtime_error);
+      }
+      SECTION("Missing index file")
+      {
+          auto folder = boost::filesystem::path("test/input_files/assembly_checker/failed/failed_missing_index/");
+          std::string file_prefix = get_file_prefix(folder);
+          std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::INDEX_EXT};
+          CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_file_validity(fasta_index_input, ""), std::runtime_error);
+      }
+      SECTION("Missing VCF file")
+      {
+          auto folder = boost::filesystem::path("test/input_files/assembly_checker/failed/failed_missing_vcf/");
+          std::string file_prefix = get_file_prefix(folder);
+          std::ifstream vcf_input{folder.string() + file_prefix + ebi::vcf::VCF_EXT};
+          CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_file_validity(vcf_input, ""), std::runtime_error);
+      }
+  }
+}
