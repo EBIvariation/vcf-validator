@@ -110,8 +110,6 @@ set (ALL_TESTS
         test/vcf/record_test.cpp
         test/vcf/report_writer_test.cpp
         test/vcf/test_utils.hpp
-        )
-set (ASSEMBLY_CHECKER_TESTS 
         test/vcf/assembly_checker_test.cpp
         test/vcf/assembly_checker_integration_test.cpp
         test/vcf/assembly_checker_test_aux.hpp
