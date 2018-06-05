@@ -186,11 +186,6 @@ target_link_libraries (test_validator ${LIBRARIES_TO_LINK})
 enable_testing ()
 add_test (NAME ValidatorTests COMMAND test_validator)
 
-add_executable (test_assembly_checker test/main_test.cpp ${ASSEMBLY_CHECKER_TESTS})
-target_link_libraries (test_assembly_checker ${LIBRARIES_TO_LINK})
-enable_testing ()
-add_test (NAME AssemblyCheckerTests COMMAND test_assembly_checker)
-
 # Build binary
 add_executable (vcf_validator src/validator_main.cpp)
 target_link_libraries (vcf_validator ${LIBRARIES_TO_LINK})
