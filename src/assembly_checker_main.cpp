@@ -36,7 +36,7 @@ namespace
       description.add_options()
           (ebi::vcf::HELP_OPTION, "Display this help")
           (ebi::vcf::VERSION_OPTION, "Display version of the assembly-checker")
-          (ebi::vcf::VCF_OPTION, po::value<std::string>(), "Path to the input VCF file")
+          (ebi::vcf::INPUT_OPTION, po::value<std::string>(), "Path to the input VCF file")
           (ebi::vcf::FASTA_OPTION, po::value<std::string>(), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .idx extension")
       ;
 
@@ -57,7 +57,7 @@ namespace
 
       if (!vm.count(ebi::vcf::VCF)) {
           std::cout << desc << std::endl;
-          BOOST_LOG_TRIVIAL(error) << "Please specify the path to the VCF file ("<<ebi::vcf::VCF_OPTION<<")";
+          BOOST_LOG_TRIVIAL(error) << "Please specify the path to the VCF file ("<<ebi::vcf::INPUT_OPTION<<")";
           return 1;
       }
 
@@ -91,12 +91,33 @@ int main(int argc, char** argv)
 
     try {
 
-        if (!ebi::vcf::assembly_checker::check_vcf_ref(vcf_path, fasta_path, fasta_index_path)) {
-            BOOST_LOG_TRIVIAL(info) << "VCF and reference fasta are not matching";
+        std::string file_error_msg;
+
+        std::ifstream vcf_input{vcf_path};
+        file_error_msg = "Couldn't open VCF file " + vcf_path;
+        ebi::vcf::assembly_checker::check_file_validity(vcf_input, file_error_msg);
+
+        std::ifstream fasta_input{fasta_path, std::ios::binary};
+        file_error_msg = "Couldn't open FASTA file " + fasta_path;
+        ebi::vcf::assembly_checker::check_file_validity(fasta_input, file_error_msg);
+
+        std::ifstream fasta_index_input{fasta_index_path, std::ios::binary};
+        file_error_msg = "Couldn't open FASTA index file " + fasta_index_path + ". Please use samtools "
+                         "faidx <fasta> to create the index file";
+        ebi::vcf::assembly_checker::check_file_validity(fasta_index_input, file_error_msg);
+
+        if (!ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input)) {
+            BOOST_LOG_TRIVIAL(info) << "VCF and reference FASTA are not matching";
         }
 
         return 0;
 
+    } catch (std::invalid_argument const & ex) {
+        BOOST_LOG_TRIVIAL(error) << "Invalid VCF and FASTA combination: " << ex.what();
+        return 1;
+    } catch (std::runtime_error const & ex) {
+        BOOST_LOG_TRIVIAL(error) << "Input file is missing from path: " << ex.what();
+        return 1;
     } catch (std::exception const &ex) {
         BOOST_LOG_TRIVIAL(error) << "Aborting execution, error: " << ex.what();
         return 1;
