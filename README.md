@@ -18,19 +18,17 @@ We recommend using the [latest release](https://github.com/EBIvariation/vcf-vali
 
 ### Validator
 
-vcf-validator can run on both compressed and non-compressed input VCF files.
-supported compressios are .bz2 .gz and .z extensions. For rest others pipes can be used for compressed files (see below). 
-It accepts input in the following ways:
+vcf-validator accepts both compressed and non-compressed input VCF files. Supported compression formats are .bz2, .gz and .z. For other formats such as .zip, the `zcat` command and a pipe can be used (see below).
 
-* Reading Uncompressed files:
+Reading uncompressed files:
   * File path as argument: `vcf_validator -i /path/to/file.vcf`
   * Standard input: `vcf_validator < /path/to/file.vcf`
-  * Standard input from pipe: `zcat /path/to/file.vcf.gz | vcf_validator`
+  * Standard input from pipe: `zcat /path/to/file.vcf | vcf_validator`
 
-* Reading compressed files:
-  * File path as argument: `vcf_validator -i /path/to/compressedfile.vcf.gz2`
-  * Standard input: `vcf_validator < /path/to/compressedfile.vcf.z`
-  * Standard input from pipe: `cat /path/to/compressedfile.vcf.z | vcf_validator`
+Reading compressed files:
+  * File path as argument: `vcf_validator -i /path/to/compressed_file.vcf.gz`
+  * Standard input: `vcf_validator < /path/to/compressed_file.vcf.z`
+  * Standard input from pipe: `cat /path/to/compressed_file.vcf.zip | vcf_validator`
 
 The validation level can be configured using `-l` / `--level`. This parameter is optional and accepts 3 values:
 
@@ -52,7 +50,7 @@ There are some simple errors that can be automatically fixed. The most common er
  
 The fixed VCF will be written into the standard output, which you can redirect to a file, or use the `-o` / `--output` option and specify the desired file name.
 
-The logs about what the debugulator is doing will be written into the error output. The logs may be redirected to a log file `2>debugulator_log.txt` or completely discarded ` 2>/dev/null`.
+The logs about what the debugulator is doing will be written into the error output. The logs may be redirected to a log file using `2>debugulator_log.txt` or completely discarded with `2>/dev/null`.
 
 ### Examples
 
