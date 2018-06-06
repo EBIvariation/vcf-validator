@@ -57,7 +57,7 @@ namespace
           return -1;
       }
 
-      if (!vm.count(ebi::vcf::VCF)) {
+      if (!vm.count(ebi::vcf::INPUT)) {
           std::cout << desc << std::endl;
           BOOST_LOG_TRIVIAL(error) << "Please specify the path to the VCF file ("<<ebi::vcf::INPUT_OPTION<<")";
           return 1;
@@ -75,7 +75,7 @@ namespace
   std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> get_outputs(std::string const &output_str) 
   {
       std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> outputs;
-      if (output_str.compare(std::string(ebi::vcf::STDOUT))) {
+      if (output_str.compare(std::string(ebi::vcf::STDOUT)) == 0) {
           outputs.emplace_back(new ebi::vcf::StdoutAssemblyReportWriter());
       } else {
           throw std::invalid_argument{"Please use only valid report types"};
@@ -88,21 +88,17 @@ namespace
 int main(int argc, char** argv)
 {
     ebi::util::init_boost_loggers();
-
     po::options_description desc = build_command_line_options();
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
-
     int check_options = check_command_line_options(vm, desc);
     if (check_options < 0) { return 0; }
     if (check_options > 0) { return check_options; }
-
-    auto vcf_path = vm[ebi::vcf::VCF].as<std::string>();
+    auto vcf_path = vm[ebi::vcf::INPUT].as<std::string>();
     auto fasta_path = vm[ebi::vcf::FASTA].as<std::string>();
     boost::filesystem::path fasta_boost_path{fasta_path};
     auto fasta_index_path = fasta_path + ".fai";
-
     auto outputs = get_outputs(std::string(ebi::vcf::STDOUT));
     ebi::vcf::assembly_checker::MatchStats match_stats;
 
