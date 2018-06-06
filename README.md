@@ -23,12 +23,12 @@ vcf-validator accepts both compressed and non-compressed input VCF files. Suppor
 Reading uncompressed files:
   * File path as argument: `vcf_validator -i /path/to/file.vcf`
   * Standard input: `vcf_validator < /path/to/file.vcf`
-  * Standard input from pipe: `zcat /path/to/file.vcf | vcf_validator`
+  * Standard input from pipe: `cat /path/to/file.vcf | vcf_validator`
 
 Reading compressed files:
   * File path as argument: `vcf_validator -i /path/to/compressed_file.vcf.gz`
   * Standard input: `vcf_validator < /path/to/compressed_file.vcf.z`
-  * Standard input from pipe: `cat /path/to/compressed_file.vcf.zip | vcf_validator`
+  * Standard input from pipe: `zcat /path/to/compressed_file.vcf.zip | vcf_validator`
 
 The validation level can be configured using `-l` / `--level`. This parameter is optional and accepts 3 values:
 
