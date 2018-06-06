@@ -16,11 +16,13 @@
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/program_options.hpp>
+#include <boost/log/trivial.hpp>
 
 #include "cmake_config.hpp"
 #include "util/logger.hpp"
 #include "vcf/assembly_checker.hpp"
 #include "vcf/string_constants.hpp"
+#include "vcf/assembly_report_writer.hpp"
 
 namespace
 {
@@ -69,6 +71,18 @@ namespace
 
       return 0;
   }
+
+  std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> get_outputs(std::string const &output_str) 
+  {
+      std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> outputs;
+      if (output_str.compare(std::string(ebi::vcf::STDOUT))) {
+          outputs.emplace_back(new ebi::vcf::StdoutAssemblyReportWriter());
+      } else {
+          throw std::invalid_argument{"Please use only valid report types"};
+      }
+
+      return outputs;
+  }
 }
 
 int main(int argc, char** argv)
@@ -89,6 +103,9 @@ int main(int argc, char** argv)
     boost::filesystem::path fasta_boost_path{fasta_path};
     auto fasta_index_path = fasta_path + ".fai";
 
+    auto outputs = get_outputs(std::string(ebi::vcf::STDOUT));
+    ebi::vcf::assembly_checker::MatchStats match_stats;
+
     try {
 
         std::string file_error_msg;
@@ -106,11 +123,9 @@ int main(int argc, char** argv)
                          "faidx <fasta> to create the index file";
         ebi::vcf::assembly_checker::check_file_validity(fasta_index_input, file_error_msg);
 
-        if (!ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input)) {
+        if (!ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, match_stats)) {
             BOOST_LOG_TRIVIAL(info) << "VCF and reference FASTA are not matching";
         }
-
-        return 0;
 
     } catch (std::invalid_argument const & ex) {
         BOOST_LOG_TRIVIAL(error) << "Invalid VCF and FASTA combination: " << ex.what();
@@ -122,4 +137,11 @@ int main(int argc, char** argv)
         BOOST_LOG_TRIVIAL(error) << "Aborting execution, error: " << ex.what();
         return 1;
     }
+
+    for (auto &output : outputs) {
+        output->write_number_matches(match_stats);
+        output->write_percentage(match_stats);
+    }
+
+    return 0;
 }

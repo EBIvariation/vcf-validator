@@ -22,13 +22,12 @@ namespace ebi
   {
     namespace assembly_checker
     {
-      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input)
+      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input, MatchStats &match_stats)
       {
           std::vector<char> vector_line;
           vector_line.reserve(default_line_buffer_size);
 
           std::set<std::string> absent_chromosomes;
-          MatchStats match_stats;
 
           // Reading FASTA index, and querying FASTA file
           auto index = bioio::read_fasta_index(fasta_index_input);
@@ -59,9 +58,6 @@ namespace ebi
 
               match_stats.add_match_result(is_matching_sequence(fasta_sequence, reference_sequence));
           }
-
-          BOOST_LOG_TRIVIAL(info) << "Number of matches: " << match_stats.num_matches << "/" << match_stats.num_variants;
-          BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(match_stats.num_matches) / match_stats.num_variants) * 100 << "%";
 
           check_missing_chromosomes(absent_chromosomes);
 

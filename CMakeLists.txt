@@ -49,6 +49,7 @@ add_library(mod_odb ${MOD_ODB_SOURCES})
 
 set (MOD_VCF_SOURCES
         inc/vcf/assembly_checker.hpp
+        inc/vcf/assembly_report_writer.hpp
         inc/vcf/debugulator.hpp
         inc/vcf/error_policy.hpp
         inc/vcf/file_structure.hpp

@@ -39,7 +39,17 @@ namespace ebi
 
       size_t const default_line_buffer_size = 64 * 1024;
 
-      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input);
+      class MatchStats
+      {
+        public:
+          MatchStats();
+          void add_match_result(bool result);
+          bool is_valid_combination();
+          int num_matches;
+          int num_variants;
+      };
+
+      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input, ebi::vcf::assembly_checker::MatchStats &match_stats);
 
       void check_missing_chromosomes(std::set<std::string> absent_chromosomes);
 
@@ -51,16 +61,6 @@ namespace ebi
             throw std::runtime_error{error_msg};
           }
       }
-
-      class MatchStats
-      {
-        public:
-          MatchStats();
-          void add_match_result(bool result);
-          bool is_valid_combination();
-          int num_matches;
-          int num_variants;
-      };
     }
   }
 }

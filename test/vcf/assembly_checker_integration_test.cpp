@@ -15,12 +15,15 @@
  */
 
 #include "assembly_checker_test_aux.hpp"
+#include "vcf/assembly_checker.hpp"
 
 namespace ebi
 {  
+  
+  ebi::vcf::assembly_checker::MatchStats match_stats;
 
   TEST_CASE("Matching FASTA and VCF combination", "[assembly_checker]")
-  {
+  {   
       SECTION("Empty VCF File")
       {
           auto folder = boost::filesystem::path("test/input_files/assembly_checker/passed/passed_empty_vcf/");
@@ -28,7 +31,7 @@ namespace ebi
           std::ifstream vcf_input{folder.string() + file_prefix + ebi::vcf::VCF_EXT};
           std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
           std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::INDEX_EXT};
-          CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input));
+          CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, match_stats));
       }
       SECTION("Single entry")
       {
@@ -37,7 +40,7 @@ namespace ebi
           std::ifstream vcf_input{folder.string() + file_prefix + ebi::vcf::VCF_EXT};
           std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
           std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::INDEX_EXT};
-          CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input));
+          CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, match_stats));
       }
       SECTION("Full sample VCF, all match")
       {
@@ -46,7 +49,7 @@ namespace ebi
           std::ifstream vcf_input{folder.string() + file_prefix + ebi::vcf::VCF_EXT};
           std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
           std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::INDEX_EXT};
-          CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input));
+          CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, match_stats));
       }
   }
 
@@ -59,7 +62,7 @@ namespace ebi
           std::ifstream vcf_input{folder.string() + file_prefix + ebi::vcf::VCF_EXT};
           std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
           std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::INDEX_EXT};
-          CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input));
+          CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, match_stats));
       }
       SECTION("Multiple entry, multiple mismatch")
       {
@@ -68,7 +71,7 @@ namespace ebi
           std::ifstream vcf_input{folder.string() + file_prefix + ebi::vcf::VCF_EXT};
           std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
           std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::INDEX_EXT};
-          CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input));
+          CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, match_stats));
       }
       SECTION("Empty FASTA file, single entry")
       {
@@ -77,7 +80,7 @@ namespace ebi
           std::ifstream vcf_input{folder.string() + file_prefix + ebi::vcf::VCF_EXT};
           std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
           std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::INDEX_EXT};
-          CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input));
+          CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, match_stats));
       }
       SECTION("Multiple entry, all mismatch")
       {
@@ -86,7 +89,7 @@ namespace ebi
           std::ifstream vcf_input{folder.string() + file_prefix + ebi::vcf::VCF_EXT};
           std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
           std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::INDEX_EXT};
-          CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input));
+          CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, match_stats));
       } 
   }  
 }
