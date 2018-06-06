@@ -101,13 +101,13 @@ ODB requires SQLite3 to be installed. If you are using Ubuntu, the required pack
 
 To install the ODB compiler, the easiest way is to download the `.deb` or `.rpm` packages, in order to be installed automatically with `dpkg`. Both the ODB runtime and SQLite database runtime libraries can be installed manually running `./configure && make && sudo make install`. This will install the libraries in `/usr/local/lib`.
 
-If you don't have root permissions, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`, without `sudo`.
+If you don't have root permissions, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`, without `sudo`. Also you will have to provide the path to odb while configuring libodb-sqlite using `./configure --with-libodb=/path/to/odb/libraries`
 
 ##### bzip2 and zlib
 You will require libbz2.a and libz.a.
 For Ubuntu Users, the required padkages' names will be `libbz2-dev` and `zlib1g-dev`.
 
-**Note:** You can easily install dependencies using install_dependencies.sh script. Run it as: `./install_dependencies.sh linux`. You may run `./install_dependencies.sh --help` for help.
+**Note** : You can easily install dependencies using install_dependencies.sh script. Run it as: `./install_dependencies.sh linux`. You may run `./install_dependencies.sh --help` for help.
 
 #### Compile
 
@@ -117,8 +117,8 @@ The build has been tested on the following compilers:
 
 In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`. If the ODB libraries were not found during the build, please run `sudo updatedb && sudo ldconfig`.
 
-**Note:** We have removed `BUILD_STATIC` flag from `cmake`.
-Cmake will automatically generate build files for static build. Also, if ODB has been installed in a non-default location, the option `-DEXT_LIB_PATH=/path/to/external/libraries/folder` must be also provided to the `cmake` command.
+**Note** : We have removed `BUILD_STATIC` flag from `cmake`.
+Cmake will automatically generate build scripts for static build. Also, if ODB has been installed in a non-default location, the option `-DEXT_LIB_PATH=/path/to/external/libraries/folder` must be also provided to the `cmake` command.
 
 Binaries will be created in the `bin` subfolder.
 
@@ -130,24 +130,33 @@ On Mac OSX you can obitain a statically linked binaries with only system-librari
 
 ##### Boost
 
-The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system.
-If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-iostreams`, `libboost-program-options-dev`, `libboost-regex-dev` and `libboost-log-dev`.
+The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. Use `brew` to install boost using `brew install boost`.
 
 ##### ODB
-
 You will need to download the ODB compiler, the ODB common runtime library, and the SQLite database runtime library from [this page](http://codesynthesis.com/products/odb/download.xhtml).
 
 ODB requires SQLite3 to be installed. which can be installed. Which can be installed using `brew install sqlite3`
 
-To install the ODB compiler, the easiest way is to download the `.deb` or `.rpm` packages, in order to be installed automatically with `dpkg`. Both the ODB runtime and SQLite database runtime libraries can be installed manually running `./configure && make && sudo make install`. This will install the libraries in `/usr/local/lib`.
+Pre compiled binaries of ODB compiler for mac osx are provided. Both the ODB runtime and SQLite database runtime libraries can be installed manually running `./configure && make && make install`. This will install the libraries in `/usr/local/lib`.
 
-If you don't have root permissions, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`, without `sudo`.
+You may install ODB in some other location, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`. Also you will have to provide the path to odb while configuring libodb-sqlite using `./configure --with-libodb=/path/to/odb/libraries`
 
 ##### bzip2 and zlib
 You will require libbz2.a and libz.a.
-You will require to build these from source to obitain static library files. You may simply use `install_dependencies.sh` to make these dependencies.
+Pre-compiled static libraries for mac are not available. You will require to build these from source to obitain static library files. You may simply use `install_dependencies.sh` to make these dependencies.
 
-**Note:** You can easily install dependencies using install_dependencies.sh script. Run it as: `./install_dependencies.sh osx`. You may run `./install_dependencies.sh --help` for help.
+**Note** : You can easily install dependencies using install_dependencies.sh script. Run it as: `./install_dependencies.sh osx`. You may run `./install_dependencies.sh --help` for help.
+
+#### Compile
+
+In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`.
+
+If ODB has been installed in a non-default location, the option `-DEXT_LIB_PATH=/path/to/external/libraries/folder` must be also provided to the `cmake` command.
+Also you may not get precompiled static libraries libbz2.a and libz.a so you will have to build them from source or better to use `install_dependencies.sh osx` to obitain these libraries.
+
+**Note** - keep all the external libraries `libodb.a`, `libodb-sqlite.a`, `libbz2.a` and `libz.a` in same directory.In case the libraries are installed in non-default location, you will have to pass it to cmake using `-DEXT_LIB_PATH=/absolute/path/to/external/libraries`
+
+Binaries will be created in the `bin` subfolder.
 
 
 ## Deliverables
