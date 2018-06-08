@@ -50,7 +50,7 @@ fi
 dependencies_dir=$OS_NAME"_dependencies"
 
 #check for already downloaded files
-if [ -d "$dependencies_dir" ]; then
+if [ -d "$dependencies_dir/libodb-2.4.0" ]; then
   echo "skipping odb installation: $dependencies_dir directory found:"
   ls $dependencies_dir
   exit
