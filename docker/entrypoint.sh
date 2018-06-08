@@ -11,6 +11,5 @@ mkdir -p /tmp/build
 cd /tmp/build
 
 # Build a static binary
-cmake -DBUILD_STATIC=1 ..
+cmake ..
 make -j${NPROCS}
-

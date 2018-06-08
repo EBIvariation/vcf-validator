@@ -10,28 +10,92 @@ configure_file (
     "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp"
     )
 
+
+# Include Directories
+include_directories (inc)
+include_directories (lib)
+
+# Detect OS
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  message (STATUS "Operating System detected OSX")
+  set (OSX TRUE)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  message (STATUS "Operating System detected Linux")
+  set (LINUX TRUE)
+else ()
+  message (ERROR "Operating System not recognised")
+endif ()
+
+# Static Build Extra Flags for Linux Static Build
+if (LINUX)
+  set (BUILD_SHARED_LIBS OFF)
+  set (CMAKE_EXE_LINKER_FLAGS "-static")
+  set (CMAKE_FIND_LIBRARY_SUFFIXES .a)
+  set (CMAKE_EXE_LINK_DYNAMIC_C_FLAGS)       # remove -Wl,-Bdynamic
+  set (CMAKE_EXE_LINK_DYNAMIC_CXX_FLAGS)
+  set (CMAKE_SHARED_LIBRARY_C_FLAGS)         # remove -fPIC
+  set (CMAKE_SHARED_LIBRARY_CXX_FLAGS)
+  set (CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
+  set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
+  set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+endif ()
+
+# Mac build not fully static. include system libraries to be dynamic
+if (OSX)
+  set (CMAKE_EXE_LINKER_FLAGS)
+  set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+endif ()
+
+
 # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
 # Needed to statically link ODB
 set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION")
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-if(NOT CMAKE_BUILD_TYPE)
+if (NOT CMAKE_BUILD_TYPE)
     set (CMAKE_BUILD_TYPE  "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
-endif(NOT CMAKE_BUILD_TYPE)
+endif ()
 
-include_directories (inc)
-include_directories (lib)
+
+# Find packages to be linked
+find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
+include_directories (${Boost_INCLUDE_DIR} )
+find_package (Threads REQUIRED)
+set (EXT_LIB_PATH "/usr/local/lib" CACHE STRING "Absolute path to libraries installation folder.")
+
+
 
 # Application modules
+add_library (mod_sqlite3 STATIC lib/sqlite/sqlite3.c)
+
+if (LINUX)
+  set (THIRD_PARTY_LIBRARIES
+      ${Boost_LIBRARIES}
+      bz2
+      z
+      ${EXT_LIB_PATH}/libodb-sqlite.a
+      ${EXT_LIB_PATH}/libodb.a
+      mod_sqlite3
+      ${CMAKE_THREAD_LIBS_INIT}
+     )
+elseif (OSX)
+  set (THIRD_PARTY_LIBRARIES
+      ${Boost_LIBRARIES}
+      ${EXT_LIB_PATH}/libbz2.a
+      ${EXT_LIB_PATH}/libz.a
+      ${EXT_LIB_PATH}/libodb-sqlite.a
+      ${EXT_LIB_PATH}/libodb.a
+      mod_sqlite3
+      ${CMAKE_THREAD_LIBS_INIT}
+     )
+endif ()
 
 set (MOD_ODB_SOURCES)
-
 set (ODB_MAPPING_CLASSES inc/vcf/error.hpp)
-
-foreach(_file ${ODB_MAPPING_CLASSES})
-    string(REPLACE ".hpp" "-odb.cpp" gencppfile ${_file})
-    string(REPLACE "inc" "src" right_place_gencppfile ${gencppfile})
-    add_custom_command(
+foreach (_file ${ODB_MAPPING_CLASSES})
+    string (REPLACE ".hpp" "-odb.cpp" gencppfile ${_file})
+    string (REPLACE "inc" "src" right_place_gencppfile ${gencppfile})
+    add_custom_command (
             OUTPUT ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
             COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
             --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp
@@ -40,12 +104,10 @@ foreach(_file ${ODB_MAPPING_CLASSES})
             DEPENDS ${_file}
             COMMENT "Building odb for ${_file}"
     )
-    list(APPEND MOD_ODB_SOURCES ${right_place_gencppfile})
-endforeach()
-
-add_library(mod_odb ${MOD_ODB_SOURCES})
-
-
+    list (APPEND MOD_ODB_SOURCES ${right_place_gencppfile})
+endforeach ()
+add_library (mod_odb STATIC ${MOD_ODB_SOURCES})
+target_link_libraries (mod_odb ${THIRD_PARTY_LIBRARIES})
 
 set (MOD_VCF_SOURCES
         inc/vcf/debugulator.hpp
@@ -68,7 +130,7 @@ set (MOD_VCF_SOURCES
         inc/vcf/validator_detail_v42.hpp
         inc/vcf/validator_detail_v43.hpp
         inc/vcf/validator.hpp
-        
+
         src/vcf/abort_error_policy.cpp
         src/vcf/debugulator.cpp
         src/vcf/fixer.cpp
@@ -83,9 +145,41 @@ set (MOD_VCF_SOURCES
         src/vcf/validate_optional_policy.cpp
         src/vcf/validator.cpp
         )
-add_library(mod_vcf ${MOD_VCF_SOURCES})
-add_dependencies(mod_vcf mod_odb)
+add_library (mod_vcf STATIC ${MOD_VCF_SOURCES})
+add_dependencies (mod_vcf mod_odb) # works even without this if we add mod_vcf as target_link_libraries
+target_link_libraries (mod_vcf ${THIRD_PARTY_LIBRARIES} mod_odb)
 
+
+
+# Libraries to link with executables
+if (LINUX)
+  set (LIBRARIES_TO_LINK
+      mod_vcf
+      mod_odb
+      ${Boost_LIBRARIES}
+      bz2
+      z
+      ${EXT_LIB_PATH}/libodb-sqlite.a
+      ${EXT_LIB_PATH}/libodb.a
+      mod_sqlite3
+      ${CMAKE_THREAD_LIBS_INIT}
+     )
+elseif (OSX)
+  set (LIBRARIES_TO_LINK
+      mod_vcf
+      mod_odb
+      ${Boost_LIBRARIES}
+      ${EXT_LIB_PATH}/libbz2.a
+      ${EXT_LIB_PATH}/libz.a
+      ${EXT_LIB_PATH}/libodb-sqlite.a
+      ${EXT_LIB_PATH}/libodb.a
+      mod_sqlite3
+      ${CMAKE_THREAD_LIBS_INIT}
+     )
+endif ()
+
+
+# Application Tests
 set (V41_TESTS test/vcf/parser_v41_test.cpp)
 set (V42_TESTS test/vcf/parser_v42_test.cpp)
 set (V43_TESTS test/vcf/parser_v43_test.cpp)
@@ -108,57 +202,6 @@ set (ALL_TESTS
         test/vcf/test_utils.hpp
         )
 
-# Static build extra flags
-if (BUILD_STATIC)
-  set (BUILD_SHARED_LIBRARIES OFF)
-  set (CMAKE_EXE_LINKER_FLAGS "-static")
-  set (CMAKE_FIND_LIBRARY_SUFFIXES .a)
-  set (CMAKE_EXE_LINK_DYNAMIC_C_FLAGS)       # remove -Wl,-Bdynamic
-  set (CMAKE_EXE_LINK_DYNAMIC_CXX_FLAGS)
-  set (CMAKE_SHARED_LIBRARY_C_FLAGS)         # remove -fPIC
-  set (CMAKE_SHARED_LIBRARY_CXX_FLAGS)
-  set (CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
-  set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
-  set(Boost_USE_STATIC_LIBS ON) # only find static libs
-else (BUILD_STATIC)
-  add_definitions (-DBOOST_ALL_DYN_LINK=1)
-endif (BUILD_STATIC)
-
-# Dependency libraries
-find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
-include_directories (${Boost_INCLUDE_DIR} )
-
-add_library(sqlite3 lib/sqlite/sqlite3.c)
-find_package (Threads REQUIRED)
-
-if (BUILD_STATIC)
-  set (ODB_PATH "/usr/local/lib" CACHE STRING
-          "Path to ODB libraries installation folder. Use absolute paths. Relative paths will be treated as libraries to link dynamically.")
-
-  set (LIBRARIES_TO_LINK
-        mod_vcf
-        mod_odb
-        ${Boost_LIBRARIES}
-        bz2
-        z
-        ${ODB_PATH}/libodb-sqlite.a
-        ${ODB_PATH}/libodb.a
-        sqlite3
-        ${CMAKE_THREAD_LIBS_INIT}
-       )
-else (BUILD_STATIC)
-  set (LIBRARIES_TO_LINK
-        mod_vcf
-        mod_odb
-        ${Boost_LIBRARIES}
-        odb-sqlite
-        odb
-        sqlite3
-        ${CMAKE_THREAD_LIBS_INIT}
-       )
-endif (BUILD_STATIC)
-
-# Application tests
 add_executable (test_validator_v41 test/main_test.cpp ${V41_TESTS})
 target_link_libraries (test_validator_v41 ${LIBRARIES_TO_LINK})
 enable_testing ()
@@ -180,10 +223,9 @@ enable_testing ()
 add_test (NAME ValidatorTests COMMAND test_validator)
 
 
-# Build binary
+# Build Binaries
 add_executable (vcf_validator src/validator_main.cpp)
 target_link_libraries (vcf_validator ${LIBRARIES_TO_LINK})
 
 add_executable (vcf_debugulator src/debugulator_main.cpp)
 target_link_libraries (vcf_debugulator ${LIBRARIES_TO_LINK})
-
