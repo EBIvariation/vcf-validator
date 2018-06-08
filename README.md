@@ -12,7 +12,7 @@ Please read the wiki for more details about checks already implemented.
 
 ## Download
 
-We recommend using the [latest release](https://github.com/EBIvariation/vcf-validator/releases) for the most stable experience using vcf-validator. Along with the release notes, you will find the executables `vcf_validator` and `vcf_debugulator`, which will allow you to validate and fix VCF files.
+We recommend using the [latest release](https://github.com/EBIvariation/vcf-validator/releases) for the most stable experience using vcf-validator. Along with the release notes, you will find the executables `vcf_validator` and `vcf_debugulator`, which will allow you to validate and fix VCF files. Currently we provide executables for Linux and macOS.
 
 
 ## Run
