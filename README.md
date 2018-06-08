@@ -9,6 +9,7 @@ It includes all the checks from the vcftools suite, and some more that involve l
 
 Please read the wiki for more details about checks already implemented.
 
+
 ## Download
 
 We recommend using the [latest release](https://github.com/EBIvariation/vcf-validator/releases) for the most stable experience using vcf-validator. Along with the release notes, you will find the executables `vcf_validator` and `vcf_debugulator`, which will allow you to validate and fix VCF files.
@@ -65,13 +66,13 @@ vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timesta
 ```
 
 
-
-
 ## Build
-We support building in 3 platforms: linux, mac, docker (inside linux without installing dependencies)
-### Docker (Static Build)
 
-The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create an executable that can be run in any Linux machine.
+If you would like to use an unreleased version of vcf-validator, you can build it under 3 platforms: Docker (generates Linux binary without installing dependencies), Linux and macOS. A statically linked executable will be generated, which means you won't need to install any dependencies to run it.
+
+### Docker
+
+The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create an executable that can be run on any Linux machine.
 
 1. Install and configure Docker following [their tutorial](https://docs.docker.com/engine/getstarted/).
 2. Create the Docker image:
@@ -84,14 +85,21 @@ Executables will be created in the `build/bin` subfolder.
 
 ### Linux
 
-In Linux You can obitain staticlly linked binaries of vcf-validator.
+The build has been tested on the following compilers:
+* Clang 3.9 to 5.0
+* GCC 4.8 to 6.0
 
 #### Dependencies
 
+You can easily install some of the required dependencies running `./install_dependencies.sh linux`, and you may run `./install_dependencies.sh --help` for help. Otherwise please follow the steps below.
+
+##### Compression libraries
+
+You will need to install bzip2 and zlib. For Ubuntu Users, the required packages' names will be `libbz2-dev` and `zlib1g-dev`.
+
 ##### Boost
 
-The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system.
-If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-iostreams`, `libboost-program-options-dev`, `libboost-regex-dev` and `libboost-log-dev`.
+The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-iostreams`, `libboost-program-options-dev`, `libboost-regex-dev` and `libboost-log-dev`.
 
 ##### ODB
 
@@ -99,62 +107,49 @@ You will need to download the ODB compiler, the ODB common runtime library, and 
 
 ODB requires SQLite3 to be installed. If you are using Ubuntu, the required packages' names will be `libsqlite3-0` and `libsqlite3-dev`.
 
-To install the ODB compiler, the easiest way is to download the `.deb` or `.rpm` packages, in order to be installed automatically with `dpkg`. Both the ODB runtime and SQLite database runtime libraries can be installed manually running `./configure && make && sudo make install`. This will install the libraries in `/usr/local/lib`.
+To install the ODB compiler, the easiest way is to download the `.deb` or `.rpm` packages and install them automatically with `dpkg`. Both the ODB runtime and SQLite database runtime libraries can be installed manually running `./configure && make && sudo make install`. This will install the libraries in `/usr/local/lib`.
 
-If you don't have root permissions, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`, without `sudo`. Also you will have to provide the path to odb while configuring libodb-sqlite using `./configure --with-libodb=/path/to/odb/libraries`
-
-##### bzip2 and zlib
-You will require libbz2.a and libz.a.
-For Ubuntu Users, the required padkages' names will be `libbz2-dev` and `zlib1g-dev`.
-
-**Note** : You can easily install dependencies using install_dependencies.sh script. Run it as: `./install_dependencies.sh linux`. You may run `./install_dependencies.sh --help` for help.
-
-#### Compile
-
-The build has been tested on the following compilers:
-* Clang 3.9 to 5.0
-* GCC 4.8 to 6.0
-
-In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`. If the ODB libraries were not found during the build, please run `sudo updatedb && sudo ldconfig`.
-
-**Note** : We have removed `BUILD_STATIC` flag from `cmake`.
-Cmake will automatically generate build scripts for static build. Also, if ODB has been installed in a non-default location, the option `-DEXT_LIB_PATH=/path/to/external/libraries/folder` must be also provided to the `cmake` command.
-
-Binaries will be created in the `bin` subfolder.
-
-### Mac OSX
-
-On Mac OSX you can obitain a statically linked binaries with only system-libraries linked dynamically.
-
-#### Dependencies
-
-##### Boost
-
-The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. Use `brew` to install boost using `brew install boost`.
-
-##### ODB
-You will need to download the ODB compiler, the ODB common runtime library, and the SQLite database runtime library from [this page](http://codesynthesis.com/products/odb/download.xhtml).
-
-ODB requires SQLite3 to be installed. which can be installed. Which can be installed using `brew install sqlite3`
-
-Pre compiled binaries of ODB compiler for mac osx are provided. Both the ODB runtime and SQLite database runtime libraries can be installed manually running `./configure && make && make install`. This will install the libraries in `/usr/local/lib`.
-
-You may install ODB in some other location, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`. Also you will have to provide the path to odb while configuring libodb-sqlite using `./configure --with-libodb=/path/to/odb/libraries`
-
-##### bzip2 and zlib
-You will require libbz2.a and libz.a.
-Pre-compiled static libraries for mac are not available. You will require to build these from source to obitain static library files. You may simply use `install_dependencies.sh` to make these dependencies.
-
-**Note** : You can easily install dependencies using install_dependencies.sh script. Run it as: `./install_dependencies.sh osx`. You may run `./install_dependencies.sh --help` for help.
+If you don't have root permissions, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`, without `sudo`. Also you will have to provide the path to ODB while configuring libodb-sqlite using `./configure --with-libodb=/path/to/odb/libraries`.
 
 #### Compile
 
 In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`.
 
-If ODB has been installed in a non-default location, the option `-DEXT_LIB_PATH=/path/to/external/libraries/folder` must be also provided to the `cmake` command.
-Also you may not get precompiled static libraries libbz2.a and libz.a so you will have to build them from source or better to use `install_dependencies.sh osx` to obitain these libraries.
+If the ODB libraries were not found during the build, please run `sudo updatedb && sudo ldconfig`. Also, if ODB has been installed in a non-default location, the option `-DEXT_LIB_PATH=/path/to/external/libraries/folder` must be also provided to the `cmake` command.
 
-**Note** - keep all the external libraries `libodb.a`, `libodb-sqlite.a`, `libbz2.a` and `libz.a` in same directory.In case the libraries are installed in non-default location, you will have to pass it to cmake using `-DEXT_LIB_PATH=/absolute/path/to/external/libraries`
+Binaries will be created in the `bin` subfolder.
+
+### macOS
+
+On macOS the binaries obtained with have system libraries dynamically linked. You won't need to install any dependencies to run vcf-validator.
+
+#### Dependencies
+
+You can easily install some of the required dependencies running `./install_dependencies.sh osx`, and you may run `./install_dependencies.sh --help` for help. Otherwise please follow the steps below.
+
+##### Compression libraries
+
+Pre-compiled static libraries for macOS are not available. You will require to build these from source to obitain static library files. You may simply use `install_dependencies.sh` to make these dependencies.
+
+##### Boost
+
+The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. You can install them using `brew install boost`.
+
+##### ODB
+
+You will need to download the ODB compiler, the ODB common runtime library, and the SQLite database runtime library from [this page](http://codesynthesis.com/products/odb/download.xhtml).
+
+ODB requires SQLite3 to be installed, which you can do using `brew install sqlite3`.
+
+Pre compiled binaries of ODB compiler for macOS are provided. Both the ODB runtime and SQLite database runtime libraries can be installed manually running `./configure && make && make install`. This will install the libraries in `/usr/local/lib`.
+
+You may install ODB in some other location, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`. Also you will have to provide the path to ODB while configuring libodb-sqlite using `./configure --with-libodb=/path/to/odb/libraries`.
+
+#### Compile
+
+In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`.
+
+Please keep all the external libraries `libodb.a`, `libodb-sqlite.a`, `libbz2.a` and `libz.a` in the same directory. In case any of the libraries are installed in non-default location, the option `-DEXT_LIB_PATH=/path/to/external/libraries/folder` must be also provided to the `cmake` command.
 
 Binaries will be created in the `bin` subfolder.
 
