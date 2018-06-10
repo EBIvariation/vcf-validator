@@ -365,6 +365,32 @@ namespace ebi
         virtual ~DuplicationError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
+
+    #pragma db object
+    class MatchStats
+    {
+      public:
+        MatchStats()
+        {
+            num_matches = 0;
+            num_variants = 0;
+        }
+        void add_match_result(bool result)
+        {
+            num_variants++;
+            num_matches += (int)result;
+        }
+        bool is_valid_combination()
+        {
+            return num_matches == num_variants;
+        }
+        int num_matches;
+        int num_variants;
+      private:
+        friend class odb::access;
+        #pragma db id auto
+        unsigned long id_;
+    };   
   }
 }
 

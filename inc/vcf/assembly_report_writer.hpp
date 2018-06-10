@@ -18,32 +18,12 @@
 #define ASSEMBLY_REPORT_WRITER_HPP
 
 #include <boost/filesystem/operations.hpp>
+#include "vcf/error.hpp"
 
 namespace ebi
 {
   namespace vcf
-  {
-
-  	class MatchStats
-	{
-	    public:
-			MatchStats()
-			{
-				num_matches = 0;
-				num_variants = 0;
-			}
-			void add_match_result(bool result)
-			{
-				num_variants++;
-				num_matches += (int)result;
-      		}
-			bool is_valid_combination()
-			{
-				return num_matches == num_variants;
-			}
-			int num_matches;
-			int num_variants;
-	};      
+  {   
 
     class AssemblyReportWriter
     {
