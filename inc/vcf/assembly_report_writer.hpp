@@ -46,6 +46,26 @@ namespace ebi
             }
 
     };
+
+    class OdbAssemblyReportWriter : public AssemblyReportWriter
+    {
+        public:
+
+        	OdbAssemblyReportWriter(const std::string &db_name)
+        	{
+
+        	}
+            virtual void write_number_matches(ebi::vcf::assembly_checker::MatchStats &match_stats) override
+            {
+
+            }
+            virtual void write_percentage(ebi::vcf::assembly_checker::MatchStats &match_stats) override
+            {
+
+            }
+
+    };
+
   }
 }
 

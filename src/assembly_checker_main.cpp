@@ -74,7 +74,7 @@ namespace
       return 0;
   }
 
-  std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> get_outputs(std::string const &output_str) {
+  std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> get_outputs(std::string const &output_str, std::string const &input) {
         std::vector<std::string> outs;
         ebi::util::string_split(output_str, ",", outs);
         size_t initial_size = outs.size();
@@ -88,7 +88,15 @@ namespace
         std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> outputs;
 
         for (auto out : outs) {
-            if (out == ebi::vcf::STDOUT){
+            if (out == ebi::vcf::DATABASE) {
+                std::string filetype = "db";
+                std::string filename = input + ".assembly_report." + filetype;
+                boost::filesystem::path file{filename};
+                if (boost::filesystem::exists(file)) {
+                    throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
+                }
+                outputs.emplace_back(new ebi::vcf::OdbAssemblyReportWriter(filename));
+            } else if (out == ebi::vcf::STDOUT){
                 outputs.emplace_back(new ebi::vcf::StdoutAssemblyReportWriter());
             } else {
                 throw std::invalid_argument{"Please use only valid report types"};
@@ -113,7 +121,7 @@ int main(int argc, char** argv)
     auto fasta_path = vm[ebi::vcf::FASTA].as<std::string>();
     boost::filesystem::path fasta_boost_path{fasta_path};
     auto fasta_index_path = fasta_path + ".fai";
-    auto outputs = get_outputs(std::string(ebi::vcf::STDOUT));
+    auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), fasta_path);
     ebi::vcf::assembly_checker::MatchStats match_stats;
 
     try {
