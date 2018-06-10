@@ -20,6 +20,7 @@
 
 #include "cmake_config.hpp"
 #include "util/logger.hpp"
+#include "util/string_utils.hpp"
 #include "vcf/assembly_checker.hpp"
 #include "vcf/string_constants.hpp"
 #include "vcf/assembly_report_writer.hpp"
@@ -40,6 +41,7 @@ namespace
           (ebi::vcf::VERSION_OPTION, "Display version of the assembly-checker")
           (ebi::vcf::INPUT_OPTION, po::value<std::string>(), "Path to the input VCF file")
           (ebi::vcf::FASTA_OPTION, po::value<std::string>(), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .idx extension")
+          (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDOUT), "Comma separated values for types of reports (stdout, database)")
       ;
 
       return description;
@@ -72,17 +74,29 @@ namespace
       return 0;
   }
 
-  std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> get_outputs(std::string const &output_str) 
-  {
-      std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> outputs;
-      if (output_str.compare(std::string(ebi::vcf::STDOUT)) == 0) {
-          outputs.emplace_back(new ebi::vcf::StdoutAssemblyReportWriter());
-      } else {
-          throw std::invalid_argument{"Please use only valid report types"};
-      }
+  std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> get_outputs(std::string const &output_str) {
+        std::vector<std::string> outs;
+        ebi::util::string_split(output_str, ",", outs);
+        size_t initial_size = outs.size();
 
-      return outputs;
-  }
+        std::sort(outs.begin(), outs.end());
+        std::unique(outs.begin(), outs.end());
+        if (initial_size != outs.size()) {
+            BOOST_LOG_TRIVIAL(warning) << "Duplicated outputs! will write just once to each output specified by -r/--report";
+        }
+
+        std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> outputs;
+
+        for (auto out : outs) {
+            if (out == ebi::vcf::STDOUT){
+                outputs.emplace_back(new ebi::vcf::StdoutAssemblyReportWriter());
+            } else {
+                throw std::invalid_argument{"Please use only valid report types"};
+            }
+        }
+
+        return outputs;
+    }
 }
 
 int main(int argc, char** argv)
