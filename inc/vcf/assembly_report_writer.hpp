@@ -18,32 +18,62 @@
 #define ASSEMBLY_REPORT_WRITER_HPP
 
 #include <boost/filesystem/operations.hpp>
-#include "vcf/assembly_checker.hpp"
 
 namespace ebi
 {
   namespace vcf
   {
+
+  	class MatchStats
+	{
+	    public:
+			MatchStats()
+			{
+				num_matches = 0;
+				num_variants = 0;
+			}
+			void add_match_result(bool result)
+			{
+				num_variants++;
+				num_matches += (int)result;
+      		}
+			bool is_valid_combination()
+			{
+				return num_matches == num_variants;
+			}
+			int num_matches;
+			int num_variants;
+	};      
+
     class AssemblyReportWriter
     {
         public:
-            virtual void write_number_matches(ebi::vcf::assembly_checker::MatchStats &match_stats) = 0;
-            virtual void write_percentage(ebi::vcf::assembly_checker::MatchStats &match_stats) = 0;
+            virtual void add_result(bool result) = 0;
+            virtual void write_number_matches() = 0;
+            virtual void write_percentage() = 0;
     };
 
     class StdoutAssemblyReportWriter : public AssemblyReportWriter
     {
         public:
 
-            virtual void write_number_matches(ebi::vcf::assembly_checker::MatchStats &match_stats) override
+            virtual void write_number_matches() override
             {
                 BOOST_LOG_TRIVIAL(info) << "Number of matches: " << match_stats.num_matches << "/" << match_stats.num_variants;
             }
 
-            virtual void write_percentage(ebi::vcf::assembly_checker::MatchStats &match_stats) override
+            virtual void write_percentage() override
             {
                 BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(match_stats.num_matches) / match_stats.num_variants) * 100 << "%";
             }
+
+            virtual void add_result(bool result) override
+            {
+				match_stats.add_match_result(result);
+            }
+
+        private:
+        	MatchStats match_stats;
 
     };
 
@@ -55,15 +85,20 @@ namespace ebi
         	{
 
         	}
-            virtual void write_number_matches(ebi::vcf::assembly_checker::MatchStats &match_stats) override
+            virtual void write_number_matches() override
             {
 
             }
-            virtual void write_percentage(ebi::vcf::assembly_checker::MatchStats &match_stats) override
+            virtual void write_percentage() override
             {
 
             }
+            virtual void add_result(bool result) override
+            {
+            	
+            }
 
+        private:
     };
 
   }

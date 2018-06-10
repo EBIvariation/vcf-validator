@@ -27,6 +27,7 @@
 #include "util/logger.hpp"
 #include "util/stream_utils.hpp"
 #include "vcf/vcf_fasta_variant.hpp"
+#include "vcf/assembly_report_writer.hpp"
 #include <fstream>
 
 
@@ -39,17 +40,8 @@ namespace ebi
 
       size_t const default_line_buffer_size = 64 * 1024;
 
-      class MatchStats
-      {
-        public:
-          MatchStats();
-          void add_match_result(bool result);
-          bool is_valid_combination();
-          int num_matches;
-          int num_variants;
-      };
-
-      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input, ebi::vcf::assembly_checker::MatchStats &match_stats);
+      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input, 
+                         std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs);
 
       void check_missing_chromosomes(std::set<std::string> absent_chromosomes);
 

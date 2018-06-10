@@ -22,8 +22,19 @@ namespace ebi
   {
     namespace assembly_checker
     {
-      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input, MatchStats &match_stats)
+
+      void update_outputs(bool result, std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
       {
+          for (auto &output : outputs) {
+              output->add_result(result);
+          }
+      }
+      bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input,  
+                         std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+      {
+
+          bool assembly_valid_flag = true;
+          
           std::vector<char> vector_line;
           vector_line.reserve(default_line_buffer_size);
 
@@ -56,12 +67,20 @@ namespace ebi
                                                              vcf_variant.position - 1, vcf_variant.reference_allele.length());
               auto reference_sequence = vcf_variant.reference_allele;
 
-              match_stats.add_match_result(is_matching_sequence(fasta_sequence, reference_sequence));
+              auto match_result = is_matching_sequence(fasta_sequence, reference_sequence);
+              assembly_valid_flag &= match_result;
+
+              update_outputs(match_result, outputs);
           }
 
           check_missing_chromosomes(absent_chromosomes);
 
-          return match_stats.is_valid_combination();
+          for (auto &output : outputs) {
+              output->write_number_matches();
+              output->write_percentage();
+          }
+
+          return assembly_valid_flag;
       }
 
       void check_missing_chromosomes(std::set<std::string> absent_chromosomes)
@@ -83,21 +102,6 @@ namespace ebi
           std::transform(reference_sequence.begin(), reference_sequence.end(), reference_sequence.begin(), ::tolower);
 
           return fasta_sequence == reference_sequence;
-      }
-
-      MatchStats::MatchStats()
-      {
-          num_matches = 0;
-          num_variants = 0;
-      }
-      void MatchStats::add_match_result(bool result)
-      {
-          num_variants++;
-          num_matches += (int)result;
-      }
-      bool MatchStats::is_valid_combination()
-      {
-          return num_matches == num_variants;
       }
     }
   }

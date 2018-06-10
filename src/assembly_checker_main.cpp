@@ -122,7 +122,7 @@ int main(int argc, char** argv)
     boost::filesystem::path fasta_boost_path{fasta_path};
     auto fasta_index_path = fasta_path + ".fai";
     auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), fasta_path);
-    ebi::vcf::assembly_checker::MatchStats match_stats;
+    ebi::vcf::MatchStats match_stats;
 
     try {
 
@@ -141,7 +141,7 @@ int main(int argc, char** argv)
                          "faidx <fasta> to create the index file";
         ebi::vcf::assembly_checker::check_file_validity(fasta_index_input, file_error_msg);
 
-        if (!ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, match_stats)) {
+        if (!ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, outputs)) {
             BOOST_LOG_TRIVIAL(info) << "VCF and reference FASTA are not matching";
         }
 
@@ -154,11 +154,6 @@ int main(int argc, char** argv)
     } catch (std::exception const &ex) {
         BOOST_LOG_TRIVIAL(error) << "Aborting execution, error: " << ex.what();
         return 1;
-    }
-
-    for (auto &output : outputs) {
-        output->write_number_matches(match_stats);
-        output->write_percentage(match_stats);
     }
 
     return 0;

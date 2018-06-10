@@ -20,6 +20,7 @@
 //#iclude "catch/catch.hpp"
 #include "assembly_checker_test_aux.hpp"
 #include "vcf/vcf_fasta_variant.hpp"
+#include "vcf/assembly_report_writer.hpp"
 
 namespace ebi
 {  
@@ -41,14 +42,14 @@ namespace ebi
       }
       SECTION("All matches")
       {
-          ebi::vcf::assembly_checker::MatchStats match_stats;
+            ebi::vcf::MatchStats match_stats;
           match_stats.add_match_result(true);
           match_stats.add_match_result(true);
           CHECK(match_stats.is_valid_combination());
       }
       SECTION("Mismatches")
       {
-          ebi::vcf::assembly_checker::MatchStats match_stats;
+          ebi::vcf::MatchStats match_stats;
           match_stats.add_match_result(true);
           match_stats.add_match_result(false);
           CHECK_FALSE(match_stats.is_valid_combination());
