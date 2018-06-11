@@ -25,7 +25,7 @@ namespace ebi
 
   TEST_CASE("Matching FASTA and VCF combination", "[assembly_checker]")
   {   
-      outputs.emplace_back(new ebi::vcf::StdoutAssemblyReportWriter());
+      outputs.emplace_back(new ebi::vcf::SummaryAssemblyReportWriter());
       SECTION("Empty VCF File")
       {
           auto folder = boost::filesystem::path("test/input_files/assembly_checker/passed/passed_empty_vcf/");
@@ -57,7 +57,7 @@ namespace ebi
 
   TEST_CASE("Not fully matching VCF and Fasta combination", "[assembly_checker]")
   {   
-      outputs.emplace_back(new ebi::vcf::StdoutAssemblyReportWriter());
+      outputs.emplace_back(new ebi::vcf::SummaryAssemblyReportWriter());
       SECTION("Single entry, single mismatch")
       {
           auto folder = boost::filesystem::path("test/input_files/assembly_checker/failed/failed_singlemismatch_singleentry/");

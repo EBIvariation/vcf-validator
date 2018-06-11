@@ -39,7 +39,7 @@ namespace ebi
         virtual void write_results() = 0;
     };
 
-    class StdoutAssemblyReportWriter : public AssemblyReportWriter
+    class SummaryAssemblyReportWriter : public AssemblyReportWriter
     {
       public:
         virtual void write_number_matches() override

@@ -41,7 +41,7 @@ namespace
           (ebi::vcf::VERSION_OPTION, "Display version of the assembly-checker")
           (ebi::vcf::INPUT_OPTION, po::value<std::string>(), "Path to the input VCF file")
           (ebi::vcf::FASTA_OPTION, po::value<std::string>(), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .idx extension")
-          (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDOUT), "Comma separated values for types of reports (stdout, database)")
+          (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, database)")
       ;
 
       return description;
@@ -96,8 +96,8 @@ namespace
                     throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
                 outputs.emplace_back(new ebi::vcf::OdbAssemblyReportWriter(filename));
-            } else if (out == ebi::vcf::STDOUT){
-                outputs.emplace_back(new ebi::vcf::StdoutAssemblyReportWriter());
+            } else if (out == ebi::vcf::SUMMARY){
+                outputs.emplace_back(new ebi::vcf::SummaryAssemblyReportWriter());
             } else {
                 throw std::invalid_argument{"Please use only valid report types"};
             }
