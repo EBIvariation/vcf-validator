@@ -23,10 +23,10 @@ namespace ebi
     namespace assembly_checker
     {
 
-      void update_outputs(bool result, std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+      void update_outputs(bool result, const vcf::VcfVariant &vcf_variant, std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
       {
           for (auto &output : outputs) {
-              output->add_result(result);
+              output->add_result(result, vcf_variant);
           }
       }
       bool check_vcf_ref(std::istream &vcf_input, std::istream &fasta_input, std::istream &fasta_index_input,  
@@ -70,14 +70,13 @@ namespace ebi
               auto match_result = is_matching_sequence(fasta_sequence, reference_sequence);
               assembly_valid_flag &= match_result;
 
-              update_outputs(match_result, outputs);
+              update_outputs(match_result, vcf_variant, outputs);
           }
 
           check_missing_chromosomes(absent_chromosomes);
 
           for (auto &output : outputs) {
-              output->write_number_matches();
-              output->write_percentage();
+              output->write_results();
           }
 
           return assembly_valid_flag;

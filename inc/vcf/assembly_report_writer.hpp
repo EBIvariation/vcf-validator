@@ -19,6 +19,7 @@
 
 #include <boost/filesystem/operations.hpp>
 #include "vcf/error.hpp"
+#include "vcf/vcf_fasta_variant.hpp"
 #include <odb/database.hxx>
 #include <odb/sqlite/query.hxx>
 #include <odb/schema-catalog.hxx>
@@ -33,34 +34,39 @@ namespace ebi
     class AssemblyReportWriter
     {
       public:
-        virtual void add_result(bool result) = 0;
-        virtual void write_number_matches() = 0;
-        virtual void write_percentage() = 0;
+        //virtual void add_result(bool result) = 0;
+        //virtual void write_number_matches() = 0;
+        //virtual void write_percentage() = 0;
         virtual void write_results() = 0;
+        virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) = 0;
+        virtual void write_match(const vcf::VcfVariant &vcf_variant) = 0;
+        virtual void add_result(bool result, const vcf::VcfVariant &vcf_variant) = 0;
     };
 
     class SummaryAssemblyReportWriter : public AssemblyReportWriter
     {
       public:
-        virtual void write_number_matches() override
+        virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) override
         {
-            BOOST_LOG_TRIVIAL(info) << "Number of matches: " << match_stats.num_matches << "/" << match_stats.num_variants;
+            match_stats.num_variants++;
         }
-
-        virtual void write_percentage() override
+        virtual void write_match(const vcf::VcfVariant &vcf_variant) override
         {
-            BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(match_stats.num_matches) / match_stats.num_variants) * 100 << "%";
+            match_stats.num_variants++;
+            match_stats.num_matches++;
         }
-
         virtual void write_results() override
         {
-        	write_number_matches();
-        	write_percentage();
+        	BOOST_LOG_TRIVIAL(info) << "Number of matches: " << match_stats.num_matches << "/" << match_stats.num_variants;
+        	BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(match_stats.num_matches) / match_stats.num_variants) * 100 << "%";
         }
-
-        virtual void add_result(bool result) override
+        virtual void add_result(bool result, const vcf::VcfVariant &vcf_variant) override
         {
-			match_stats.add_match_result(result);
+            if(result) {
+                write_match(vcf_variant);
+            } else {
+                write_mismatch(vcf_variant);
+            }
         }
 
       private:
@@ -115,37 +121,39 @@ namespace ebi
 		        BOOST_LOG_TRIVIAL(error) << "An error occurred finalizing the error reporting: " << e.what();
 		    }
 		}
-        virtual void write_number_matches() override
+        virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) override
         {
-
+            match_stats.num_variants++;
         }
-        virtual void write_percentage() override
+
+        virtual void write_match(const vcf::VcfVariant &vcf_variant) override
         {
-        	
+            match_stats.num_variants++;
+            match_stats.num_matches++;
         }
         virtual void write_results() override
         {
-        	write_db(match_stats);
-        }
-        void write_db(MatchStats &result)
-        {
-        	if (current_transaction_size == 0) {
-	            // start transaction
-	            transaction.reset(db->begin());
-	        }
+            if (current_transaction_size == 0) {
+                // start transaction
+                transaction.reset(db->begin());
+            }
 
-	        db->persist(result);
+            db->persist(match_stats);
 
-	        ++current_transaction_size;
-	        if (current_transaction_size == transaction_size) {
-	            // commit transaction
-	            flush();
-	            current_transaction_size = 0;
-	        }
+            ++current_transaction_size;
+            if (current_transaction_size == transaction_size) {
+                // commit transaction
+                flush();
+                current_transaction_size = 0;
+            }
         }
-        virtual void add_result(bool result) override
+        virtual void add_result(bool result, const vcf::VcfVariant &vcf_variant) override
         {
-        	match_stats.add_match_result(result);
+        	if(result) {
+                write_match(vcf_variant);
+            } else {
+                write_mismatch(vcf_variant);
+            }
         }
         void flush()
 	    {
