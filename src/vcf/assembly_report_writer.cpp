@@ -31,8 +31,8 @@ namespace ebi
     }
     void SummaryAssemblyReportWriter::write_results() 
     {
-    	BOOST_LOG_TRIVIAL(info) << "Number of matches: " << match_stats.num_matches << "/" << match_stats.num_variants;
-    	BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(match_stats.num_matches) / match_stats.num_variants) * 100 << "%";
+        BOOST_LOG_TRIVIAL(info) << "Number of matches: " << match_stats.num_matches << "/" << match_stats.num_variants;
+        BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(match_stats.num_matches) / match_stats.num_variants) * 100 << "%";
     }
     void SummaryAssemblyReportWriter::add_result(bool result, const vcf::VcfVariant &vcf_variant) 
     {
@@ -43,10 +43,10 @@ namespace ebi
         }
     }
 
-	OdbAssemblyReportWriter::OdbAssemblyReportWriter(const std::string &db_name) : db_name(db_name), current_transaction_size{0},
+    OdbAssemblyReportWriter::OdbAssemblyReportWriter(const std::string &db_name) : db_name(db_name), current_transaction_size{0},
                                                           transaction_size{1000000}
-	{	
-		try {
+    {    
+        try {
             boost::filesystem::path db_file{db_name};
             if (boost::filesystem::exists(db_file)) {
                 db = std::unique_ptr<odb::sqlite::database> (
@@ -77,15 +77,15 @@ namespace ebi
         } catch (const odb::exception& e) {
             throw std::runtime_error{std::string{"ODB report: Can't initialize database: "} + e.what()};
         }
-	}
-	OdbAssemblyReportWriter::~OdbAssemblyReportWriter()
-	{
-	    try {
-	        flush();
-	    } catch (std::exception &e) {
-	        BOOST_LOG_TRIVIAL(error) << "An error occurred finalizing the error reporting: " << e.what();
-	    }
-	}
+    }
+    OdbAssemblyReportWriter::~OdbAssemblyReportWriter()
+    {
+        try {
+            flush();
+        } catch (std::exception &e) {
+            BOOST_LOG_TRIVIAL(error) << "An error occurred finalizing the error reporting: " << e.what();
+        }
+    }
     void OdbAssemblyReportWriter::write_mismatch(const vcf::VcfVariant &vcf_variant) 
     {
         match_stats.num_variants++;
@@ -113,7 +113,7 @@ namespace ebi
     }
     void OdbAssemblyReportWriter::add_result(bool result, const vcf::VcfVariant &vcf_variant) 
     {
-    	if(result) {
+        if(result) {
             write_match(vcf_variant);
         } else {
             write_mismatch(vcf_variant);

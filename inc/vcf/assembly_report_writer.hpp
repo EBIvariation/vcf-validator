@@ -36,38 +36,42 @@ namespace ebi
     {
       public:
         virtual void write_results() = 0;
+        virtual void add_result(bool result, const vcf::VcfVariant &vcf_variant) = 0;
+
+      private:
         virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) = 0;
         virtual void write_match(const vcf::VcfVariant &vcf_variant) = 0;
-        virtual void add_result(bool result, const vcf::VcfVariant &vcf_variant) = 0;
+        
     };
 
     class SummaryAssemblyReportWriter : public AssemblyReportWriter
     {
       public:
-        virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) override;
-        virtual void write_match(const vcf::VcfVariant &vcf_variant) override;
         virtual void write_results() override;
         virtual void add_result(bool result, const vcf::VcfVariant &vcf_variant) override;
 
       private:
-    	MatchStats match_stats;
-
+        virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) override;
+        virtual void write_match(const vcf::VcfVariant &vcf_variant) override;
+    	  
+        MatchStats match_stats;
     };
 
     class OdbAssemblyReportWriter : public AssemblyReportWriter
     {
       public:
-    	OdbAssemblyReportWriter(const std::string &db_name);
-    	~OdbAssemblyReportWriter();
-        virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) override;
-        virtual void write_match(const vcf::VcfVariant &vcf_variant) override;
+    	  OdbAssemblyReportWriter(const std::string &db_name);
+    	  ~OdbAssemblyReportWriter();
         virtual void write_results() override;
         virtual void add_result(bool result, const vcf::VcfVariant &vcf_variant) override;
-        void flush();
 
       private:
-    	MatchStats match_stats;
-    	std::string db_name;
+        virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) override;
+        virtual void write_match(const vcf::VcfVariant &vcf_variant) override;
+        void flush();
+    	  
+        MatchStats match_stats;
+    	  std::string db_name;
         std::unique_ptr<odb::core::database> db;
         odb::core::transaction transaction;
         size_t current_transaction_size;
