@@ -1,35 +1,34 @@
-sudo: false
+sudo:
+  - false
 
-language: cpp
+language:
+  - cpp
 
 cache:
   directories:
-    - odb
+    - linux_dependencies
+    - osx_dependencies
 
 matrix:
   include:
 
-    # Clang 3.9
-    - compiler: clang
-      env: C_COMPILER=clang-3.9 CXX_COMPILER=clang++-3.9
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-3.9
-          packages:
-            - clang-3.9
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
+      # OS X Clang
+    - os: osx
+      osx_image: xcode9.3
+      env: C_COMPILER=clang CXX_COMPILER=clang++
+      before_install:
+        - brew install ninja
+
+      # OS X GCC
+    - os: osx
+      osx_image: xcode9.3
+      env: C_COMPILER=gcc CXX_COMPILER=g++
+      before_install:
+        - brew install ninja
 
     # Clang 4.0
-    - compiler: clang
+    - os: linux
+      compiler: clang
       env: C_COMPILER=clang-4.0 CXX_COMPILER=clang++-4.0
       addons:
         apt:
@@ -48,7 +47,8 @@ matrix:
             - ninja-build
 
     # Clang 5.0
-    - compiler: clang
+    - os: linux
+      compiler: clang
       env: C_COMPILER=clang-5.0 CXX_COMPILER=clang++-5.0
       addons:
         apt:
@@ -67,7 +67,8 @@ matrix:
             - ninja-build
 
     # GCC 4.8
-    - compiler: gcc
+    - os: linux
+      compiler: gcc
       env: C_COMPILER=gcc-4.8 CXX_COMPILER=g++-4.8
       addons:
         apt:
@@ -85,27 +86,9 @@ matrix:
             - libboost-log1.55-dev
             - ninja-build
 
-    # GCC 4.9
-    - compiler: gcc
-      env: C_COMPILER=gcc-4.9 CXX_COMPILER=g++-4.9
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-4.9
-            - g++-4.9
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
-
     # GCC 5
-    - compiler: gcc
+    - os: linux
+      compiler: gcc
       env: C_COMPILER=gcc-5 CXX_COMPILER=g++-5
       addons:
         apt:
@@ -124,7 +107,8 @@ matrix:
             - ninja-build
 
     # GCC 6
-    - compiler: gcc
+    - os: linux
+      compiler: gcc
       env: C_COMPILER=gcc-6 CXX_COMPILER=g++-6
       addons:
         apt:
@@ -142,12 +126,33 @@ matrix:
             - libboost-log1.55-dev
             - ninja-build
 
+
 before_script:
-  - ./install_dependencies.sh
-  - export PATH=$PATH:$PWD/odb/odb-2.4.0-x86_64-linux-gnu/bin/
-  - cmake -DBUILD_STATIC=1 -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iodb/libodb-2.4.0 -Iodb/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,odb/ -Lodb/"  -DODB_PATH=$PWD/odb/ -G Ninja
+  - |
+    if [[ $TRAVIS_OS_NAME == "linux" ]]; then
+      ./install_dependencies.sh
+      export PATH=$PATH:$PWD/linux_dependencies/odb-2.4.0-x86_64-linux-gnu/bin/
+    fi
+  - |
+    if [[ $TRAVIS_OS_NAME == "osx" ]]; then
+      ./install_dependencies.sh osx
+      export PATH=$PATH:$PWD/osx_dependencies/odb-2.4.0-i686-macosx/bin/
+    fi
+
 
 script:
-  - ninja -j 1 -v
-  - ninja test
+  - |
+    if [[ $TRAVIS_OS_NAME == "linux" ]]; then
+      cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Ilinux_dependencies/libodb-2.4.0 -Ilinux_dependencies/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,linux_dependencies/ -Llinux_dependencies/"  -DEXT_LIB_PATH=$PWD/linux_dependencies/ ./ -GNinja
+    fi
+  - |
+    if [[ $TRAVIS_OS_NAME == "osx" ]]; then
+      cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iosx_dependencies/libodb-2.4.0 -Iosx_dependencies/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,osx_dependencies/ -Losx_dependencies/"  -DEXT_LIB_PATH=$PWD/osx_dependencies/ ./ -GNinja
+    fi
 
+  - ninja -v -j2
+  - ninja test
+  - |
+    if [[ $TRAVIS_OS_NAME == "osx" ]]; then
+      otool -L bin/vcf_validator
+    fi
