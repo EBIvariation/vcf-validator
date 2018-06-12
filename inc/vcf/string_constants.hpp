@@ -177,7 +177,7 @@ namespace ebi
     // File extensions
     const std::string VCF_EXT = ".vcf";
     const std::string FASTA_EXT = ".fa";
-    const std::string INDEX_EXT = ".fa.fai";
+    const std::string INDEX_EXT = ".fai";
 
     // Compressed file extensions
     const std::string BZ2 = ".bz2";

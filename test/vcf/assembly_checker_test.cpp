@@ -69,7 +69,7 @@ namespace ebi
       {
           auto folder = boost::filesystem::path("test/input_files/assembly_checker/failed/failed_missing_index/");
           std::string file_prefix = get_file_prefix(folder);
-          std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::INDEX_EXT};
+          std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
           CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_file_validity(fasta_index_input, ""), std::runtime_error);
       }
       SECTION("Missing VCF file")
