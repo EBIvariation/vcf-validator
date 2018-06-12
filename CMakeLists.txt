@@ -22,6 +22,9 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   message (STATUS "Operating System detected Linux")
   set (LINUX TRUE)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  message (STATUS "Operating System detected Windows")
+  set (WINDOWS TRUE)
 else ()
   message (ERROR "Operating System not recognised")
 endif ()
@@ -46,6 +49,11 @@ if (OSX)
   set (Boost_USE_STATIC_LIBS ON)             # only find static libs
 endif ()
 
+if (WINDOWS)
+  set (CMAKE_CXX_STANDARD 11)
+  set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+endif ()
+
 
 # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
@@ -58,7 +66,11 @@ endif ()
 
 
 # Find packages to be linked
+if(WINDOWS)
+find_package (Boost COMPONENTS filesystem zlib bzip2 iostreams program_options regex log thread system REQUIRED )
+else()
 find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
+endif()
 include_directories (${Boost_INCLUDE_DIR} )
 find_package (Threads REQUIRED)
 set (EXT_LIB_PATH "/usr/local/lib" CACHE STRING "Absolute path to libraries installation folder.")
@@ -88,6 +100,14 @@ elseif (OSX)
       mod_sqlite3
       ${CMAKE_THREAD_LIBS_INIT}
      )
+elseif (WINDOWS)
+  set (THIRD_PARTY_LIBRARIES
+      ${Boost_LIBRARIES}
+      ${EXT_LIB_PATH}/libodb-sqlite.a
+      ${EXT_LIB_PATH}/libodb.a
+      mod_sqlite3
+      ${CMAKE_THREAD_LIBS_INIT}
+     )
 endif ()
 
 set (MOD_ODB_SOURCES)
@@ -95,15 +115,15 @@ set (ODB_MAPPING_CLASSES inc/vcf/error.hpp)
 foreach (_file ${ODB_MAPPING_CLASSES})
     string (REPLACE ".hpp" "-odb.cpp" gencppfile ${_file})
     string (REPLACE "inc" "src" right_place_gencppfile ${gencppfile})
-    add_custom_command (
-            OUTPUT ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
-            COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
-            --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp
-            --output-dir ${CMAKE_HOME_DIRECTORY}/inc/vcf/ ${_file}
-            && mv ${CMAKE_HOME_DIRECTORY}/${gencppfile} ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
-            DEPENDS ${_file}
-            COMMENT "Building odb for ${_file}"
-    )
+    #add_custom_command (
+            #OUTPUT ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
+            #COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
+            #--hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp
+            #--output-dir ${CMAKE_HOME_DIRECTORY}/inc/vcf/ ${_file}
+            #&& mv ${CMAKE_HOME_DIRECTORY}/${gencppfile} ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
+            #DEPENDS ${_file}
+            #COMMENT "Building odb for ${_file}"
+    #)
     list (APPEND MOD_ODB_SOURCES ${right_place_gencppfile})
 endforeach ()
 add_library (mod_odb STATIC ${MOD_ODB_SOURCES})
@@ -171,6 +191,16 @@ elseif (OSX)
       ${Boost_LIBRARIES}
       ${EXT_LIB_PATH}/libbz2.a
       ${EXT_LIB_PATH}/libz.a
+      ${EXT_LIB_PATH}/libodb-sqlite.a
+      ${EXT_LIB_PATH}/libodb.a
+      mod_sqlite3
+      ${CMAKE_THREAD_LIBS_INIT}
+     )
+elseif (WINDOWS)
+  set (LIBRARIES_TO_LINK
+      mod_vcf
+      mod_odb
+      ${Boost_LIBRARIES}
       ${EXT_LIB_PATH}/libodb-sqlite.a
       ${EXT_LIB_PATH}/libodb.a
       mod_sqlite3
