@@ -20,12 +20,14 @@
 #include <boost/filesystem/operations.hpp>
 #include "vcf/error.hpp"
 #include "vcf/vcf_fasta_variant.hpp"
+#include "vcf/assembly_report_reader.hpp"
 #include <odb/database.hxx>
 #include <odb/sqlite/query.hxx>
 #include <odb/schema-catalog.hxx>
 #include <odb/sqlite/database.hxx>
 #include "vcf/error-odb.hpp"
 #include "util/logger.hpp"
+#include "vcf/assembly_report_reader.hpp"
 
 namespace ebi
 {
@@ -57,18 +59,22 @@ namespace ebi
         MatchStats match_stats;
     };
 
-    class OdbAssemblyReportWriter : public AssemblyReportWriter
+    class OdbAssemblyReportRW : public AssemblyReportWriter, public AssemblyReportReader
     {
       public:
-    	  OdbAssemblyReportWriter(const std::string &db_name);
-    	  ~OdbAssemblyReportWriter();
+    	  OdbAssemblyReportRW(const std::string &db_name);
+    	  ~OdbAssemblyReportRW();
         virtual void write_results() override;
         virtual void add_result(bool result, const vcf::VcfVariant &vcf_variant) override;
+        virtual size_t count_entry() override;
+        virtual void for_each_entry(std::function<void(std::shared_ptr<MatchStats>)> user_function) override;
 
       private:
         virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) override;
         virtual void write_match(const vcf::VcfVariant &vcf_variant) override;
+        void for_each(std::function<void(std::shared_ptr<MatchStats>)> user_function, odb::query<MatchStats> query);
         void flush();
+        size_t count(odb::query<MatchStatsCount> query);
     	  
         MatchStats match_stats;
     	  std::string db_name;

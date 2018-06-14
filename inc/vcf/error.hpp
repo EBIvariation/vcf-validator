@@ -390,7 +390,13 @@ namespace ebi
         friend class odb::access;
         #pragma db id auto
         unsigned long id_;
-    };   
+    };
+    #pragma db view object(MatchStats)
+    struct MatchStatsCount
+    {
+        #pragma db column("COUNT(" + MatchStats::id_ + ")")
+        std::size_t count;
+    };
   }
 }
 

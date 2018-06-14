@@ -95,7 +95,7 @@ namespace
                 if (boost::filesystem::exists(file)) {
                     throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
-                outputs.emplace_back(new ebi::vcf::OdbAssemblyReportWriter(filename));
+                outputs.emplace_back(new ebi::vcf::OdbAssemblyReportRW(filename));
             } else if (out == ebi::vcf::SUMMARY){
                 outputs.emplace_back(new ebi::vcf::SummaryAssemblyReportWriter());
             } else {

@@ -43,7 +43,8 @@ namespace ebi
         }
     }
 
-    OdbAssemblyReportWriter::OdbAssemblyReportWriter(const std::string &db_name) : db_name(db_name), current_transaction_size{0},
+    // Implementation of AssemblyReportWriter
+    OdbAssemblyReportRW::OdbAssemblyReportRW(const std::string &db_name) : db_name(db_name), current_transaction_size{0},
                                                           transaction_size{1000000}
     {    
         try {
@@ -78,7 +79,7 @@ namespace ebi
             throw std::runtime_error{std::string{"ODB report: Can't initialize database: "} + e.what()};
         }
     }
-    OdbAssemblyReportWriter::~OdbAssemblyReportWriter()
+    OdbAssemblyReportRW::~OdbAssemblyReportRW()
     {
         try {
             flush();
@@ -86,16 +87,16 @@ namespace ebi
             BOOST_LOG_TRIVIAL(error) << "An error occurred finalizing the error reporting: " << e.what();
         }
     }
-    void OdbAssemblyReportWriter::write_mismatch(const vcf::VcfVariant &vcf_variant) 
+    void OdbAssemblyReportRW::write_mismatch(const vcf::VcfVariant &vcf_variant) 
     {
         match_stats.num_variants++;
     }
-    void OdbAssemblyReportWriter::write_match(const vcf::VcfVariant &vcf_variant) 
+    void OdbAssemblyReportRW::write_match(const vcf::VcfVariant &vcf_variant) 
     {
         match_stats.num_variants++;
         match_stats.num_matches++;
     }
-    void OdbAssemblyReportWriter::write_results() 
+    void OdbAssemblyReportRW::write_results() 
     {
         if (current_transaction_size == 0) {
             // start transaction
@@ -111,7 +112,7 @@ namespace ebi
             current_transaction_size = 0;
         }
     }
-    void OdbAssemblyReportWriter::add_result(bool result, const vcf::VcfVariant &vcf_variant) 
+    void OdbAssemblyReportRW::add_result(bool result, const vcf::VcfVariant &vcf_variant) 
     {
         if(result) {
             write_match(vcf_variant);
@@ -119,7 +120,7 @@ namespace ebi
             write_mismatch(vcf_variant);
         }
     }
-    void OdbAssemblyReportWriter::flush()
+    void OdbAssemblyReportRW::flush()
     {
         if (transaction.has_current()) {
             transaction.commit();
@@ -129,6 +130,46 @@ namespace ebi
             odb::core::connection_ptr c{db->connection()};
             c->execute("PRAGMA shrink_memory");
         }
+    }
+
+    // Implementation of AssemblyReportReader 
+    size_t OdbAssemblyReportRW::count_entry()
+    {
+        return count(odb::query<MatchStatsCount>::num_variants >= 0);
+    }
+    void OdbAssemblyReportRW::for_each_entry(std::function<void(std::shared_ptr<MatchStats>)> user_function)
+    {
+        for_each(user_function, odb::query<MatchStats>::num_variants >= 0);
+    }
+    void OdbAssemblyReportRW::for_each(std::function<void(std::shared_ptr<MatchStats>)> user_function, odb::query<MatchStats> query)
+    {
+        typedef odb::result<MatchStats> result_t;
+
+        if (transaction.has_current()) {
+            throw std::logic_error{"There's another transaction active. You can only read if the changes were flushed"};
+        } else {
+            transaction.reset(db->begin());
+
+            result_t result{db->query<MatchStats>(query)};
+
+            for (result_t::iterator it{result.begin()}; it != result.end(); ++it) {
+                user_function(std::shared_ptr<ebi::vcf::MatchStats>{it.load()});
+            }
+
+            transaction.commit();
+        }
+    }
+    size_t OdbAssemblyReportRW::count(odb::query<MatchStatsCount> query)
+    {
+        MatchStatsCount count;
+        if (transaction.has_current()) {
+            throw std::logic_error{"There's another transaction active. You can only read if the changes were flushed"};
+        } else {
+            transaction.reset(db->begin());
+            count = db->query_value<MatchStatsCount>(query);
+            flush();
+        }
+        return count.count;
     }
   }
 }
