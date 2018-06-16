@@ -1,5 +1,6 @@
 cmake_minimum_required (VERSION 2.8)
 project (vcf-validator CXX C)
+#cmake -DCMAKE_CXX_FLAGS="-I../odb/libodb-2.4.0 -I../odb/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,../odb/ -L../odb/"  -DEXT_LIB_PATH=%cd%/../odb/ -G "NMake Makefiles" ../..
 
 set (vcf-validator_VERSION_MAJOR 0)
 set (vcf-validator_VERSION_MINOR 8)
@@ -14,6 +15,9 @@ configure_file (
 # Include Directories
 include_directories (inc)
 include_directories (lib)
+include_directories (lib/sqlite)# windows specific
+include_directories (srb_test/odb/libodb-2.4.0)# windows specific
+include_directories (srb_test/odb/libodb-sqlite-2.4.0)# windows specific
 
 # Detect OS
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -49,31 +53,39 @@ if (OSX)
   set (Boost_USE_STATIC_LIBS ON)             # only find static libs
 endif ()
 
+if(COMPILER_SUPPORTS_CXX11)
+    #set(CMAKE_REQUIRED_FLAGS "-std=g++11")
+endif()
+
+set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+
 if (WINDOWS)
-  set (CMAKE_CXX_STANDARD 11)
-  set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+  #set (CMAKE_CXX_STANDARD 11)
+  #set (Boost_USE_STATIC_LIBS ON)             # only find static libs
 endif ()
 
 
+#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
 # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
-# Needed to statically link ODB
-set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION")
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-if (NOT CMAKE_BUILD_TYPE)
-    set (CMAKE_BUILD_TYPE  "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
-endif ()
+#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
+#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fext-numeric-literals")
+## Needed to statically link ODB
+#set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION")
+#if (NOT CMAKE_BUILD_TYPE)
+    #set (CMAKE_BUILD_TYPE  "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
+#endif ()
 
 
 # Find packages to be linked
 if(WINDOWS)
-find_package (Boost COMPONENTS filesystem zlib bzip2 iostreams program_options regex log thread system REQUIRED )
+    find_package (Boost COMPONENTS REQUIRED )
+    set (EXT_LIB_PATH "C:/srb_test/lib" CACHE STRING "Absolute path to libraries installation folder.")
 else()
-find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
+    find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
+    set (EXT_LIB_PATH "usr/local/lib" CACHE STRING "Absolute path to libraries installation folder.")
 endif()
 include_directories (${Boost_INCLUDE_DIR} )
 find_package (Threads REQUIRED)
-set (EXT_LIB_PATH "/usr/local/lib" CACHE STRING "Absolute path to libraries installation folder.")
 
 
 
@@ -102,9 +114,8 @@ elseif (OSX)
      )
 elseif (WINDOWS)
   set (THIRD_PARTY_LIBRARIES
-      ${Boost_LIBRARIES}
-      ${EXT_LIB_PATH}/libodb-sqlite.a
-      ${EXT_LIB_PATH}/libodb.a
+      ${EXT_LIB_PATH}/odb-sqlite.lib
+      ${EXT_LIB_PATH}/odb.lib
       mod_sqlite3
       ${CMAKE_THREAD_LIBS_INIT}
      )
@@ -200,9 +211,8 @@ elseif (WINDOWS)
   set (LIBRARIES_TO_LINK
       mod_vcf
       mod_odb
-      ${Boost_LIBRARIES}
-      ${EXT_LIB_PATH}/libodb-sqlite.a
-      ${EXT_LIB_PATH}/libodb.a
+      ${EXT_LIB_PATH}/odb-sqlite.lib
+      ${EXT_LIB_PATH}/odb.lib
       mod_sqlite3
       ${CMAKE_THREAD_LIBS_INIT}
      )
@@ -210,52 +220,54 @@ endif ()
 
 
 # Application Tests
-set (V41_TESTS test/vcf/parser_v41_test.cpp)
-set (V42_TESTS test/vcf/parser_v42_test.cpp)
-set (V43_TESTS test/vcf/parser_v43_test.cpp)
-set (ALL_TESTS
-        test/vcf/compressed_file_test.cpp
-        test/vcf/debugulator_integration_test.cpp
-        test/vcf/debugulator_test.cpp
-        test/vcf/metaentry_test.cpp
-        test/vcf/normalize_test.cpp
-        test/vcf/optional_policy_test.cpp
-        test/vcf/parser_test_aux.hpp
-        test/vcf/parser_v41_test.cpp
-        test/vcf/parser_v42_test.cpp
-        test/vcf/parser_v43_test.cpp
-        test/vcf/predefined_info_tags_test.cpp
-        test/vcf/predefined_format_tags_test.cpp
-        test/vcf/record_cache_test.cpp
-        test/vcf/record_test.cpp
-        test/vcf/report_writer_test.cpp
-        test/vcf/test_utils.hpp
-        )
+#set (V41_TESTS test/vcf/parser_v41_test.cpp)
+#set (V42_TESTS test/vcf/parser_v42_test.cpp)
+#set (V43_TESTS test/vcf/parser_v43_test.cpp)
+#set (ALL_TESTS
+        #test/vcf/compressed_file_test.cpp
+        #test/vcf/debugulator_integration_test.cpp
+        #test/vcf/debugulator_test.cpp
+        #test/vcf/metaentry_test.cpp
+        #test/vcf/normalize_test.cpp
+        #test/vcf/optional_policy_test.cpp
+        #test/vcf/parser_test_aux.hpp
+        #test/vcf/parser_v41_test.cpp
+        #test/vcf/parser_v42_test.cpp
+        #test/vcf/parser_v43_test.cpp
+        #test/vcf/predefined_info_tags_test.cpp
+        #test/vcf/predefined_format_tags_test.cpp
+        #test/vcf/record_cache_test.cpp
+        #test/vcf/record_test.cpp
+        #test/vcf/report_writer_test.cpp
+        #test/vcf/test_utils.hpp
+        #)
 
-add_executable (test_validator_v41 test/main_test.cpp ${V41_TESTS})
-target_link_libraries (test_validator_v41 ${LIBRARIES_TO_LINK})
-enable_testing ()
-add_test (NAME ValidatorTests_v41 COMMAND test_validator_v41)
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_executable (test_validator_v42 test/main_test.cpp ${V42_TESTS})
-target_link_libraries (test_validator_v42 ${LIBRARIES_TO_LINK})
-enable_testing ()
-add_test (NAME ValidatorTests_v42 COMMAND test_validator_v42)
+#add_executable (test_validator_v41 test/main_test.cpp ${V41_TESTS})
+#target_link_libraries (test_validator_v41 ${LIBRARIES_TO_LINK})
+#enable_testing ()
+#add_test (NAME ValidatorTests_v41 COMMAND test_validator_v41)
 
-add_executable (test_validator_v43 test/main_test.cpp ${V43_TESTS})
-target_link_libraries (test_validator_v43 ${LIBRARIES_TO_LINK})
-enable_testing ()
-add_test (NAME ValidatorTests_v43 COMMAND test_validator_v43)
+#add_executable (test_validator_v42 test/main_test.cpp ${V42_TESTS})
+#target_link_libraries (test_validator_v42 ${LIBRARIES_TO_LINK})
+#enable_testing ()
+#add_test (NAME ValidatorTests_v42 COMMAND test_validator_v42)
 
-add_executable (test_validator test/main_test.cpp ${ALL_TESTS})
-target_link_libraries (test_validator ${LIBRARIES_TO_LINK})
-enable_testing ()
-add_test (NAME ValidatorTests COMMAND test_validator)
+#add_executable (test_validator_v43 test/main_test.cpp ${V43_TESTS})
+#target_link_libraries (test_validator_v43 ${LIBRARIES_TO_LINK})
+#enable_testing ()
+#add_test (NAME ValidatorTests_v43 COMMAND test_validator_v43)
+
+#add_executable (test_validator test/main_test.cpp ${ALL_TESTS})
+#target_link_libraries (test_validator ${LIBRARIES_TO_LINK})
+#enable_testing ()
+#add_test (NAME ValidatorTests COMMAND test_validator)
 
 
 # Build Binaries
 add_executable (vcf_validator src/validator_main.cpp)
 target_link_libraries (vcf_validator ${LIBRARIES_TO_LINK})
 
-add_executable (vcf_debugulator src/debugulator_main.cpp)
-target_link_libraries (vcf_debugulator ${LIBRARIES_TO_LINK})
+#add_executable (vcf_debugulator src/debugulator_main.cpp)
+#target_link_libraries (vcf_debugulator ${LIBRARIES_TO_LINK})
