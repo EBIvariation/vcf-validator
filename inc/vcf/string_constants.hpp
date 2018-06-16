@@ -32,10 +32,10 @@ namespace ebi
     // validator and debugulator command line arguments
     const char STDIN[] = "stdin";
     const char STDOUT[] = "stdout";
-    const char WARNING[] = "warning";
-    const char ERROR[] = "error";
+    const char WARNING_LEVEL[] = "warning";
+    const char ERROR_LEVEL[] = "error";
     const char ERRORS[] = "errors";
-    const char STOP[] = "stop";
+    const char STOP_LEVEL[] = "stop";
     const char HELP[] = "help";
     const char VERSION[] = "version";
     const char LEVEL[] = "level";

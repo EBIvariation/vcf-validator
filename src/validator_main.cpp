@@ -49,7 +49,7 @@ namespace
             (ebi::vcf::HELP_OPTION, "Display this help")
             (ebi::vcf::VERSION_OPTION, "Display version of the validator")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
-            (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING), "Validation level (error, warning, stop)")
+            (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING_LEVEL), "Validation level (error, warning, stop)")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, database)")
             (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Directory for the output")
         ;
@@ -70,7 +70,7 @@ namespace
         }
 
         std::string level = vm[ebi::vcf::LEVEL].as<std::string>();
-        if (level != ebi::vcf::ERROR && level != ebi::vcf::WARNING && level != ebi::vcf::STOP) {
+        if (level != ebi::vcf::ERROR_LEVEL && level != ebi::vcf::WARNING_LEVEL && level != ebi::vcf::STOP_LEVEL) {
             std::cout << desc << std::endl;
             BOOST_LOG_TRIVIAL(error) << "Please choose one of the accepted validation levels";
             return 1;
@@ -81,11 +81,11 @@ namespace
 
     ebi::vcf::ValidationLevel get_validation_level(std::string const & level_str)
     {
-        if (level_str == ebi::vcf::ERROR) {
+        if (level_str == ebi::vcf::ERROR_LEVEL) {
             return ebi::vcf::ValidationLevel::error;
-        } else if (level_str == ebi::vcf::WARNING) {
+        } else if (level_str == ebi::vcf::WARNING_LEVEL) {
             return ebi::vcf::ValidationLevel::warning;
-        } else if (level_str == ebi::vcf::STOP) {
+        } else if (level_str == ebi::vcf::STOP_LEVEL) {
             return ebi::vcf::ValidationLevel::stop;
         }
 
@@ -100,7 +100,7 @@ namespace
         
         boost::filesystem::path file_boost_path{file_path};
         boost::filesystem::path outdir_boost_path{outdir};
-        if (not boost::filesystem::is_directory(outdir_boost_path)) {
+        if (!boost::filesystem::is_directory(outdir_boost_path)) {
             throw std::invalid_argument{"outdir should be a directory, not a file: " + outdir_boost_path.string()};
         }
 

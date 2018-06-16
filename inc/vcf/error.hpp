@@ -28,7 +28,7 @@ namespace ebi
 {
   namespace vcf
   {
-    enum class Severity { WARNING, ERROR };
+    enum class Severity { WARNING_LEVEL, ERROR_LEVEL };
 
     enum class ErrorFix { IRRECOVERABLE_VALUE, RECOVERABLE_VALUE, DUPLICATE_VALUES };
 

@@ -83,12 +83,12 @@ namespace ebi
     // ReportWriter implementation
     void OdbReportRW::write_error(Error &error)
     {
-        error.severity = Severity::ERROR;
+        error.severity = Severity::ERROR_LEVEL;
         write(error);
     }
     void OdbReportRW::write_warning(Error &error)
     {
-        error.severity = Severity::WARNING;
+        error.severity = Severity::WARNING_LEVEL;
         write(error);
     }
     void OdbReportRW::write_message(const std::string &report_result)
@@ -116,20 +116,20 @@ namespace ebi
     // ReportReader implementation
     size_t OdbReportRW::count_warnings()
     {
-        return count(odb::query<ErrorCount>::severity == Severity::WARNING);
+        return count(odb::query<ErrorCount>::severity == Severity::WARNING_LEVEL);
     }
     void OdbReportRW::for_each_warning(std::function<void(std::shared_ptr<Error>)> user_function)
     {
-        for_each(user_function, odb::query<Error>::severity == Severity::WARNING);
+        for_each(user_function, odb::query<Error>::severity == Severity::WARNING_LEVEL);
     }
 
     size_t OdbReportRW::count_errors()
     {
-        return count(odb::query<ErrorCount>::severity == Severity::ERROR);
+        return count(odb::query<ErrorCount>::severity == Severity::ERROR_LEVEL);
     }
     void OdbReportRW::for_each_error(std::function<void(std::shared_ptr<Error>)> user_function)
     {
-        for_each(user_function, odb::query<Error>::severity == Severity::ERROR);
+        for_each(user_function, odb::query<Error>::severity == Severity::ERROR_LEVEL);
     }
 
     size_t OdbReportRW::count(odb::query<ErrorCount> query)

@@ -244,7 +244,7 @@ namespace ebi
         std::set<std::string> already_present;
         auto is_value_duplicated = [&](const std::string &value, size_t index) -> bool {
             bool first_appearance = already_present.insert(value).second;
-            return not first_appearance;
+            return !first_appearance;
         };
         return remove_fields(column, separator, is_value_duplicated);
     }
@@ -473,12 +473,12 @@ namespace ebi
 
         if (columns.size() > 0) {
             size_t j = 0;
-            if (not condition_to_remove(columns[j], j)) {
+            if (!condition_to_remove(columns[j], j)) {
                 written++;
                 output << columns[j];
             }
             for (j = 1; j < columns.size(); ++j) {
-                if (not condition_to_remove(columns[j], j)) {
+                if (!condition_to_remove(columns[j], j)) {
                     if (written > 0) {
                         output << separators;
                     }
