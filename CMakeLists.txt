@@ -1,6 +1,5 @@
 cmake_minimum_required (VERSION 2.8)
 project (vcf-validator CXX C)
-#cmake -DCMAKE_CXX_FLAGS="-I../odb/libodb-2.4.0 -I../odb/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,../odb/ -L../odb/"  -DEXT_LIB_PATH=%cd%/../odb/ -G "NMake Makefiles" ../..
 
 set (vcf-validator_VERSION_MAJOR 0)
 set (vcf-validator_VERSION_MINOR 8)
@@ -53,40 +52,34 @@ if (OSX)
   set (Boost_USE_STATIC_LIBS ON)             # only find static libs
 endif ()
 
-if(COMPILER_SUPPORTS_CXX11)
-    #set(CMAKE_REQUIRED_FLAGS "-std=g++11")
-endif()
-
-set (Boost_USE_STATIC_LIBS ON)             # only find static libs
-
 if (WINDOWS)
-  #set (CMAKE_CXX_STANDARD 11)
-  #set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+  # set (Boost_DEBUG ON)
+  set (Boost_USE_STATIC_LIBS ON)             # only find static libs
 endif ()
 
-
+if (WINDOWS)
 #set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
-# no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
-#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
-#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fext-numeric-literals")
-## Needed to statically link ODB
-#set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION")
-#if (NOT CMAKE_BUILD_TYPE)
-    #set (CMAKE_BUILD_TYPE  "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
-#endif ()
+else ()
+    # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fext-numeric-literals")
+    # Needed to statically link ODB
+    set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION")
+    if (NOT CMAKE_BUILD_TYPE)
+       set (CMAKE_BUILD_TYPE  "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
+    endif ()
+endif ()
 
-
-# Find packages to be linked
-if(WINDOWS)
-    find_package (Boost COMPONENTS REQUIRED )
+if (WINDOWS)
+    #find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
+    # to be changed lateron
     set (EXT_LIB_PATH "C:/srb_test/lib" CACHE STRING "Absolute path to libraries installation folder.")
-else()
+else ()
     find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
     set (EXT_LIB_PATH "usr/local/lib" CACHE STRING "Absolute path to libraries installation folder.")
 endif()
 include_directories (${Boost_INCLUDE_DIR} )
 find_package (Threads REQUIRED)
-
 
 
 # Application modules
@@ -213,6 +206,8 @@ elseif (WINDOWS)
       mod_odb
       ${EXT_LIB_PATH}/odb-sqlite.lib
       ${EXT_LIB_PATH}/odb.lib
+      #${EXT_LIB_PATH}/odb-2.4-vc12.dll
+      #${EXT_LIB_PATH}/odb-sqlite-2.4-vc12.dll
       mod_sqlite3
       ${CMAKE_THREAD_LIBS_INIT}
      )
