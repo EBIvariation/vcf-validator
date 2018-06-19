@@ -15,8 +15,8 @@ configure_file (
 include_directories (inc)
 include_directories (lib)
 include_directories (lib/sqlite)# windows specific
-include_directories (srb_test/odb/libodb-2.4.0)# windows specific
-include_directories (srb_test/odb/libodb-sqlite-2.4.0)# windows specific
+include_directories (srb_test/odb32/libodb-2.4.0)# windows specific
+include_directories (srb_test/odb32/libodb-sqlite-2.4.0)# windows specific
 
 # Detect OS
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -58,7 +58,10 @@ if (WINDOWS)
 endif ()
 
 if (WINDOWS)
-#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+    #set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+    if (NOT CMAKE_BUILD_TYPE)
+       set (CMAKE_BUILD_TYPE  "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
+    endif ()
 else ()
     # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
@@ -73,7 +76,7 @@ endif ()
 if (WINDOWS)
     #find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
     # to be changed lateron
-    set (EXT_LIB_PATH "C:/srb_test/lib" CACHE STRING "Absolute path to libraries installation folder.")
+    set (EXT_LIB_PATH "C:/srb_test/lib32" CACHE STRING "Absolute path to libraries installation folder.")
 else ()
     find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
     set (EXT_LIB_PATH "usr/local/lib" CACHE STRING "Absolute path to libraries installation folder.")
