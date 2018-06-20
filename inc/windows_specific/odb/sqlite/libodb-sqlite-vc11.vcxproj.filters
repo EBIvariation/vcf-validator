@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{CAE48EC7-E979-4076-ABDB-DF5CFD41D7AB}</UniqueIdentifier>
+      <Extensions>cxx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{1C70458E-63CA-455F-AFDC-E2F291BD0F2A}</UniqueIdentifier>
+      <Extensions>h;hxx;ixx;txx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+
+    <ClInclude Include="auto-handle.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="binding.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="connection-factory.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="connection.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="connection.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="container-statements.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="container-statements.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="database.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="database.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\config.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\conversion.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\export.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\options.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\options.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="error.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="exceptions.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="forward.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="no-id-object-result.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="no-id-object-result.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="no-id-object-statements.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="no-id-object-statements.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="polymorphic-object-result.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="polymorphic-object-result.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="polymorphic-object-statements.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="polymorphic-object-statements.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="prepared-query.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="query-dynamic.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="query-dynamic.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="query-dynamic.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="query.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="query.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="query.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="section-statements.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="section-statements.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simple-object-result.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simple-object-result.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simple-object-statements.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simple-object-statements.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simple-object-statements.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite-types.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="statement-cache.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="statement-cache.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="statement.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="statements-base.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tracer.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="traits-calls.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="transaction-impl.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="transaction-impl.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="transaction.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="transaction.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="version.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="view-result.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="view-result.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="view-statements.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="view-statements.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+
+    <ClCompile Include="connection.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="connection-factory.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="database.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="error.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="exceptions.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="prepared-query.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="query.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="query-dynamic.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="query-const-expr.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="simple-object-statements.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="statement.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="statements-base.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="statement-cache.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tracer.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="traits.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="transaction.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="transaction-impl.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="details\options.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

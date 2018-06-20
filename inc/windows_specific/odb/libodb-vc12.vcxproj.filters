@@ -1,0 +1,461 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cxx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hxx;ixx;txx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="std-unordered-map-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="query-dynamic.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="schema-catalog-impl.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="version.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="polymorphic-map.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="result.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lazy-ptr-impl.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="schema-catalog.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pointer-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="std-list-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="compilers\vc\post.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="compilers\vc\pre.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="query-dynamic.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="statement.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vector-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="object-result.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="std-set-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lazy-ptr.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vector.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="prepared-query.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="exception.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vector-impl.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vector.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="std-array-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="no-op-cache-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="section.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="no-id-object-result.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lazy-ptr-impl.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="container-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="view-result.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="transaction.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="polymorphic-object-result.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="view-image.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="connection.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="connection.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="std-vector-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="view-result.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tracer.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="database.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="post.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="schema-version.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vector-traits.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="session.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="forward.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="polymorphic-map.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="function-table.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="session.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="connection.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="std-unordered-set-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\lock.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\thread.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\shared-ptr-fwd.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\tls.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\wrapper-p.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\shared-ptr\base.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\shared-ptr\exception.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\shared-ptr\counter-type.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\shared-ptr\base.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\shared-ptr\base.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\exception.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\type-info.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\function-wrapper.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\function-wrapper.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\meta\remove-volatile.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\meta\class-p.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\meta\remove-const.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\meta\static-assert.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\meta\remove-const-volatile.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\meta\polymorphic-p.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\meta\answer.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\meta\remove-pointer.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\condition.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\buffer.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\shared-ptr.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\transfer-ptr.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\mutex.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\c-string.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\export.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\function-wrapper.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\unused.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\config.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\unique-ptr.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="polymorphic-map.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cache-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simple-object-result.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="std-map-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lazy-pointer-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="std-forward-list-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lazy-ptr-impl.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simple-object-result.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="result.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="polymorphic-info.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="database.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tr1\pointer-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tr1\lazy-ptr.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tr1\memory.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tr1\lazy-pointer-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tr1\lazy-ptr.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tr1\wrapper-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tr1\lazy-ptr.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pre.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="query-dynamic.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="query.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="transaction.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="callback.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lazy-ptr.ixx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="polymorphic-object-result.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wrapper-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="exceptions.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nullable.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="no-id-object-result.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="session.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lazy-ptr.txx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vector-impl.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="database.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="std-deque-traits.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="statement-processing-common.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="details\config-vc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="callback.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="exceptions.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="database.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vector-impl.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="connection.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lazy-ptr-impl.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="prepared-query.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="query-dynamic.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="result.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="schema-catalog.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="section.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="session.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="statement.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="statement-processing.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tracer.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="transaction.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="details\buffer.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="details\condition.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="details\lock.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="details\mutex.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="details\shared-ptr\base.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="details\win32\init.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="details\win32\once.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="details\win32\tls.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="details\win32\condition.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="details\win32\thread.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="details\win32\exceptions.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="details\win32\dll.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
