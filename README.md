@@ -121,35 +121,24 @@ Binaries will be created in the `bin` subfolder.
 
 ### macOS
 
-On macOS the binaries obtained with have system libraries dynamically linked. You won't need to install any dependencies to run vcf-validator.
+On macOS the binaries obtained will only have system libraries dynamically linked. This means you will need to install dependencies to build vcf-validator but not to run it.
 
 #### Dependencies
 
-You can easily install some of the required dependencies running `./install_dependencies.sh osx`, and you may run `./install_dependencies.sh --help` for help. Otherwise please follow the steps below.
+In order to compile this project, first you need to run `brew install cmake ninja boost sqlite3`.
 
-##### Compression libraries
+Now you can easily install ODB ORM and compression libraries just by running `./install_dependencies.sh osx`. You may run `./install_dependencies.sh --help` for usage instructions.
 
-Pre-compiled static libraries for macOS are not available. You will require to build these from source to obitain static library files. You may simply use `install_dependencies.sh` to make these dependencies.
-
-##### Boost
-
-The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. You can install them using `brew install boost`.
-
-##### ODB
-
-You will need to download the ODB compiler, the ODB common runtime library, and the SQLite database runtime library from [this page](http://codesynthesis.com/products/odb/download.xhtml).
-
-ODB requires SQLite3 to be installed, which you can do using `brew install sqlite3`.
-
-Pre compiled binaries of ODB compiler for macOS are provided. Both the ODB runtime and SQLite database runtime libraries can be installed manually running `./configure && make && make install`. This will install the libraries in `/usr/local/lib`.
-
-You may install ODB in some other location, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`. Also you will have to provide the path to ODB while configuring libodb-sqlite using `./configure --with-libodb=/path/to/odb/libraries`.
+Finally, add the `osx_dependencies/odb-2.4.0-i686-macosx/bin` subfolder to your PATH to be able to run the ODB compiler.
 
 #### Compile
 
-In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`.
+In order to create the build scripts and compile vcf-validator, please run the following commands from the project root folder:
 
-Please keep all the external libraries `libodb.a`, `libodb-sqlite.a`, `libbz2.a` and `libz.a` in the same directory. In case any of the libraries are installed in non-default location, the option `-DEXT_LIB_PATH=/path/to/external/libraries/folder` must be also provided to the `cmake` command.
+```
+cmake -DCMAKE_CXX_FLAGS="-Iosx_dependencies/libodb-2.4.0 -Iosx_dependencies/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,osx_dependencies/ -Losx_dependencies/" -DEXT_LIB_PATH=$PWD/osx_dependencies/ ./ -GNinja
+ninja -v -j2
+```
 
 Binaries will be created in the `bin` subfolder.
 
