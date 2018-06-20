@@ -74,7 +74,7 @@ namespace ebi
 
       boost::filesystem::remove(fixed_vcf_path);
 
-      if (not successfully_fixed) {
+      if (!successfully_fixed) {
           // dump fixed file to manually inspect
           std::ofstream fixed_file{fixed_vcf_path.string()};
           fixed_file << fixed_vcf.str();
