@@ -1,0 +1,36 @@
+callback.lo: callback.cxx ../odb/callback.hxx ../odb/pre.hxx \
+  ../odb/forward.hxx \
+  /Library/Developer/CommandLineTools/usr/include/c++/v1/cstddef \
+  /Library/Developer/CommandLineTools/usr/include/c++/v1/__config \
+  /Library/Developer/CommandLineTools/usr/lib/clang/9.1.0/include/stddef.h \
+  /Library/Developer/CommandLineTools/usr/include/c++/v1/__nullptr \
+  ../odb/details/export.hxx ../odb/details/config.hxx \
+  ../odb/details/config.h ../odb/post.hxx \
+  ../odb/details/shared-ptr-fwd.hxx \
+  ../odb/details/shared-ptr/counter-type.hxx
+
+../odb/callback.hxx:
+
+../odb/pre.hxx:
+
+../odb/forward.hxx:
+
+/Library/Developer/CommandLineTools/usr/include/c++/v1/cstddef:
+
+/Library/Developer/CommandLineTools/usr/include/c++/v1/__config:
+
+/Library/Developer/CommandLineTools/usr/lib/clang/9.1.0/include/stddef.h:
+
+/Library/Developer/CommandLineTools/usr/include/c++/v1/__nullptr:
+
+../odb/details/export.hxx:
+
+../odb/details/config.hxx:
+
+../odb/details/config.h:
+
+../odb/post.hxx:
+
+../odb/details/shared-ptr-fwd.hxx:
+
+../odb/details/shared-ptr/counter-type.hxx:
