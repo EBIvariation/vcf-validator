@@ -1,0 +1,47 @@
+// file      : odb/sqlite/details/options.cli
+// copyright : Copyright (c) 2009-2015 Code Synthesis Tools CC
+// license   : GNU GPL v2; see accompanying LICENSE file
+
+include <string>;
+
+namespace odb
+{
+  namespace sqlite
+  {
+    namespace details
+    {
+      class options
+      {
+        std::string --database
+        {
+          "<filename>",
+          "SQLite database file name. If the database file is not specified
+           then a private, temporary on-disk database will be created. Use
+           the \cb{:memory:} special name to create a private, temporary
+           in-memory database."
+        };
+
+        bool --create
+        {
+          "Create the SQLite database if it does not already exist. By default
+           opening the database fails if it does not already exist."
+        };
+
+        bool --read-only
+        {
+          "Open the SQLite database in read-only mode. By default the database
+           is opened for reading and writing if possible, or reading only if
+           the file is write-protected by the operating system."
+        };
+
+        std::string --options-file
+        {
+          "<file>",
+          "Read additional options from <file>. Each option appearing on a
+           separate line optionally followed by space and an option value.
+           Empty lines and lines starting with \cb{#} are ignored."
+        };
+      };
+    }
+  }
+}
