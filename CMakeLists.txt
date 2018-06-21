@@ -38,6 +38,7 @@ if (LINUX)
   set (CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
   set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
   set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+  set (EXT_LIB_PATH "/usr/local/lib" CACHE STRING "Absolute path to libraries installation folder.")
 endif ()
 
 # Mac build not fully static. include system libraries to be dynamic
@@ -45,6 +46,7 @@ if (OSX)
   set (CMAKE_EXE_LINKER_FLAGS)
   set (Boost_USE_STATIC_LIBS ON)             # only find static libs
   include_directories (inc/mac_specific)
+  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/osx_dependencies" CACHE STRING "Absolute path to libraries installation folder.")
 endif ()
 
 
@@ -62,7 +64,6 @@ endif ()
 find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
 include_directories (${Boost_INCLUDE_DIR} )
 find_package (Threads REQUIRED)
-set (EXT_LIB_PATH "/usr/local/lib" CACHE STRING "Absolute path to libraries installation folder.")
 
 
 
