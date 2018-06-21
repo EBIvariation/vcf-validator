@@ -42,16 +42,18 @@ namespace ebi
           ebi::vcf::OdbAssemblyReportRW TestReportRW{db_name};
           TestReportRW.add_result(true, vcf_variant);
           TestReportRW.add_result(true, vcf_variant);
+          TestReportRW.write_results();
           TestReportRW.flush();
           size_t count_entry = TestReportRW.count_entry();
           CHECK(count_entry == 1);
       }
-/*
+
       SECTION("Write and read MatchStats entries")
       {
           ebi::vcf::OdbAssemblyReportRW TestReportRW{db_name};
           TestReportRW.add_result(true, vcf_variant);
           TestReportRW.add_result(false, vcf_variant);
+          TestReportRW.write_results();
           TestReportRW.flush();
 
           size_t entry_count = 0;
@@ -61,10 +63,10 @@ namespace ebi
               entry_count++;
           });
           CHECK(entry_count == 1);
-      }*/
-/*
-  
-*/
+      }
+      boost::filesystem::path db_file{db_name};
+      boost::filesystem::remove(db_file);
+      CHECK_FALSE(boost::filesystem::exists(db_file));  
   }
 
 }
