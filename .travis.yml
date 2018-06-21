@@ -147,7 +147,8 @@ script:
     fi
   - |
     if [[ $TRAVIS_OS_NAME == "osx" ]]; then
-      cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iosx_dependencies/libodb-2.4.0 -Iosx_dependencies/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,osx_dependencies/ -Losx_dependencies/"  -DEXT_LIB_PATH=$PWD/osx_dependencies/ ./ -GNinja
+      #cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iosx_dependencies/libodb-2.4.0 -Iosx_dependencies/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,osx_dependencies/ -Losx_dependencies/"  -DEXT_LIB_PATH=$PWD/osx_dependencies/ ./ -GNinja
+      cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER}  -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,osx_dependencies/ -Losx_dependencies/"  -DEXT_LIB_PATH=$PWD/osx_dependencies/ ./ -GNinja
     fi
 
   - ninja -v -j2

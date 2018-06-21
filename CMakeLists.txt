@@ -44,6 +44,7 @@ endif ()
 if (OSX)
   set (CMAKE_EXE_LINKER_FLAGS)
   set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+  include_directories (inc/mac_specific)
 endif ()
 
 
