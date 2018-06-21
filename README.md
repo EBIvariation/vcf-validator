@@ -136,9 +136,15 @@ Finally, add the `osx_dependencies/odb-2.4.0-i686-macosx/bin` subfolder to your 
 In order to create the build scripts and compile vcf-validator, please run the following commands from the project root folder:
 
 ```
-cmake -DCMAKE_CXX_FLAGS="-Iosx_dependencies/libodb-2.4.0 -Iosx_dependencies/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,osx_dependencies/ -Losx_dependencies/" -DEXT_LIB_PATH=$PWD/osx_dependencies/ ./ -GNinja
+export PATH=$PATH:$PWD/osx_dependencies/odb-2.4.0-i686-macosx/bin
+mkdir -p build
+cd build
+cmake -GNinja ..
 ninja -v -j2
 ```
+
+you can skip the first command if you have permanently added the path.
+you can also specify the location of osx_dependencies folder if you have installed it at non-default location. default location of osx_dependencies folder is in root folder of project. to specify the location you can pass -DEXT_LIB_PATH=/full/path/to/osx_dependencies/ to cmake command.
 
 Binaries will be created in the `bin` subfolder.
 

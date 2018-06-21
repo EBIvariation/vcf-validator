@@ -1,0 +1,388 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1C53C543-8038-4C8A-8AB1-65E74FD7DE2E}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>libodb</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\bin\</OutDir>
+    <TargetName>odb-d-2.4-vc12</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\bin64\</OutDir>
+    <TargetName>odb-d-2.4-vc12</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\</OutDir>
+    <TargetName>odb-2.4-vc12</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin64\</OutDir>
+    <TargetName>odb-2.4-vc12</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBODB_DYNAMIC_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4355;4800;4290;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(TargetPath)</OutputFile>
+      <ImportLibrary>..\lib\odb-d.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBODB_DYNAMIC_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4355;4800;4290;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(TargetPath)</OutputFile>
+      <ImportLibrary>..\lib64\odb-d.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBODB_DYNAMIC_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4355;4800;4290;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>$(TargetPath)</OutputFile>
+      <ImportLibrary>..\lib\odb.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBODB_DYNAMIC_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4355;4800;4290;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>$(TargetPath)</OutputFile>
+      <ImportLibrary>..\lib64\odb.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+
+    <ClInclude Include="std-unordered-map-traits.hxx" />
+    <ClInclude Include="query-dynamic.txx" />
+    <ClInclude Include="traits.hxx" />
+    <ClInclude Include="schema-catalog-impl.hxx" />
+    <ClInclude Include="version.hxx" />
+    <ClInclude Include="polymorphic-map.hxx" />
+    <ClInclude Include="result.hxx" />
+    <ClInclude Include="lazy-ptr-impl.txx" />
+    <ClInclude Include="schema-catalog.hxx" />
+    <ClInclude Include="pointer-traits.hxx" />
+    <ClInclude Include="std-list-traits.hxx" />
+    <ClInclude Include="compilers\vc\post.hxx" />
+    <ClInclude Include="compilers\vc\pre.hxx" />
+    <ClInclude Include="query-dynamic.hxx" />
+    <ClInclude Include="statement.hxx" />
+    <ClInclude Include="vector-traits.hxx" />
+    <ClInclude Include="object-result.hxx" />
+    <ClInclude Include="std-set-traits.hxx" />
+    <ClInclude Include="lazy-ptr.hxx" />
+    <ClInclude Include="vector.hxx" />
+    <ClInclude Include="prepared-query.hxx" />
+    <ClInclude Include="exception.hxx" />
+    <ClInclude Include="vector-impl.ixx" />
+    <ClInclude Include="vector.ixx" />
+    <ClInclude Include="std-array-traits.hxx" />
+    <ClInclude Include="no-op-cache-traits.hxx" />
+    <ClInclude Include="section.hxx" />
+    <ClInclude Include="no-id-object-result.txx" />
+    <ClInclude Include="lazy-ptr-impl.hxx" />
+    <ClInclude Include="container-traits.hxx" />
+    <ClInclude Include="view-result.hxx" />
+    <ClInclude Include="transaction.hxx" />
+    <ClInclude Include="polymorphic-object-result.txx" />
+    <ClInclude Include="view-image.hxx" />
+    <ClInclude Include="connection.ixx" />
+    <ClInclude Include="connection.txx" />
+    <ClInclude Include="std-vector-traits.hxx" />
+    <ClInclude Include="view-result.txx" />
+    <ClInclude Include="tracer.hxx" />
+    <ClInclude Include="database.ixx" />
+    <ClInclude Include="post.hxx" />
+    <ClInclude Include="schema-version.hxx" />
+    <ClInclude Include="vector-traits.txx" />
+    <ClInclude Include="session.ixx" />
+    <ClInclude Include="forward.hxx" />
+    <ClInclude Include="polymorphic-map.txx" />
+    <ClInclude Include="function-table.hxx" />
+    <ClInclude Include="session.hxx" />
+    <ClInclude Include="connection.hxx" />
+    <ClInclude Include="std-unordered-set-traits.hxx" />
+    <ClInclude Include="details\lock.hxx" />
+    <ClInclude Include="details\thread.hxx" />
+    <ClInclude Include="details\shared-ptr-fwd.hxx" />
+    <ClInclude Include="details\tls.hxx" />
+    <ClInclude Include="details\wrapper-p.hxx" />
+    <ClInclude Include="details\shared-ptr\base.txx" />
+    <ClInclude Include="details\shared-ptr\exception.hxx" />
+    <ClInclude Include="details\shared-ptr\counter-type.hxx" />
+    <ClInclude Include="details\shared-ptr\base.ixx" />
+    <ClInclude Include="details\shared-ptr\base.hxx" />
+    <ClInclude Include="details\exception.hxx" />
+    <ClInclude Include="details\type-info.hxx" />
+    <ClInclude Include="details\function-wrapper.hxx" />
+    <ClInclude Include="details\function-wrapper.txx" />
+    <ClInclude Include="details\meta\remove-volatile.hxx" />
+    <ClInclude Include="details\meta\class-p.hxx" />
+    <ClInclude Include="details\meta\remove-const.hxx" />
+    <ClInclude Include="details\meta\static-assert.hxx" />
+    <ClInclude Include="details\meta\remove-const-volatile.hxx" />
+    <ClInclude Include="details\meta\polymorphic-p.hxx" />
+    <ClInclude Include="details\meta\answer.hxx" />
+    <ClInclude Include="details\meta\remove-pointer.hxx" />
+    <ClInclude Include="details\condition.hxx" />
+    <ClInclude Include="details\buffer.hxx" />
+    <ClInclude Include="details\shared-ptr.hxx" />
+    <ClInclude Include="details\transfer-ptr.hxx" />
+    <ClInclude Include="details\mutex.hxx" />
+    <ClInclude Include="details\c-string.hxx" />
+    <ClInclude Include="details\export.hxx" />
+    <ClInclude Include="details\function-wrapper.ixx" />
+    <ClInclude Include="details\unused.hxx" />
+    <ClInclude Include="details\config.hxx" />
+    <ClInclude Include="details\unique-ptr.hxx" />
+    <ClInclude Include="polymorphic-map.ixx" />
+    <ClInclude Include="cache-traits.hxx" />
+    <ClInclude Include="simple-object-result.txx" />
+    <ClInclude Include="std-map-traits.hxx" />
+    <ClInclude Include="lazy-pointer-traits.hxx" />
+    <ClInclude Include="std-forward-list-traits.hxx" />
+    <ClInclude Include="lazy-ptr-impl.ixx" />
+    <ClInclude Include="core.hxx" />
+    <ClInclude Include="simple-object-result.hxx" />
+    <ClInclude Include="result.txx" />
+    <ClInclude Include="polymorphic-info.hxx" />
+    <ClInclude Include="database.txx" />
+    <ClInclude Include="tr1\pointer-traits.hxx" />
+    <ClInclude Include="tr1\lazy-ptr.hxx" />
+    <ClInclude Include="tr1\memory.hxx" />
+    <ClInclude Include="tr1\lazy-pointer-traits.hxx" />
+    <ClInclude Include="tr1\lazy-ptr.ixx" />
+    <ClInclude Include="tr1\wrapper-traits.hxx" />
+    <ClInclude Include="tr1\lazy-ptr.txx" />
+    <ClInclude Include="pre.hxx" />
+    <ClInclude Include="query-dynamic.ixx" />
+    <ClInclude Include="query.hxx" />
+    <ClInclude Include="transaction.ixx" />
+    <ClInclude Include="callback.hxx" />
+    <ClInclude Include="lazy-ptr.ixx" />
+    <ClInclude Include="polymorphic-object-result.hxx" />
+    <ClInclude Include="wrapper-traits.hxx" />
+    <ClInclude Include="exceptions.hxx" />
+    <ClInclude Include="nullable.hxx" />
+    <ClInclude Include="no-id-object-result.hxx" />
+    <ClInclude Include="session.txx" />
+    <ClInclude Include="lazy-ptr.txx" />
+    <ClInclude Include="vector-impl.hxx" />
+    <ClInclude Include="database.hxx" />
+    <ClInclude Include="std-deque-traits.hxx" />
+    <ClInclude Include="statement-processing-common.hxx" />
+    <ClInclude Include="details\config-vc.h" />
+  </ItemGroup>
+  <ItemGroup>
+
+    <ClCompile Include="callback.cxx" />
+    <ClCompile Include="exceptions.cxx" />
+    <ClCompile Include="database.cxx" />
+    <ClCompile Include="vector-impl.cxx" />
+    <ClCompile Include="connection.cxx" />
+    <ClCompile Include="lazy-ptr-impl.cxx" />
+    <ClCompile Include="prepared-query.cxx" />
+    <ClCompile Include="query-dynamic.cxx" />
+    <ClCompile Include="result.cxx" />
+    <ClCompile Include="schema-catalog.cxx" />
+    <ClCompile Include="section.cxx" />
+    <ClCompile Include="session.cxx" />
+    <ClCompile Include="statement.cxx" />
+    <ClCompile Include="statement-processing.cxx" />
+    <ClCompile Include="tracer.cxx" />
+    <ClCompile Include="transaction.cxx" />
+    <ClCompile Include="details\buffer.cxx">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\details\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\details\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\details\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)\details\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="details\condition.cxx">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\details\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\details\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\details\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)\details\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="details\lock.cxx">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\details\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\details\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\details\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)\details\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="details\mutex.cxx">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\details\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\details\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\details\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)\details\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="details\shared-ptr\base.cxx">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\details\shared-ptr\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\details\shared-ptr\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\details\shared-ptr\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)\details\shared-ptr\</ObjectFileName>
+    </ClCompile>
+
+    <ClCompile Include="details\win32\init.cxx">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)\details\win32\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="details\win32\once.cxx">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)\details\win32\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="details\win32\tls.cxx">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)\details\win32\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="details\win32\condition.cxx">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)\details\win32\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="details\win32\thread.cxx">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)\details\win32\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="details\win32\exceptions.cxx">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)\details\win32\</ObjectFileName>
+    </ClCompile>
+
+    <ClCompile Include="details\win32\dll.cxx">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\details\win32\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)\details\win32\</ObjectFileName>
+    </ClCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
