@@ -44,7 +44,9 @@ namespace ebi
             FileReportWriter(std::string filename) : file_name(filename)
             {
                 file.open(filename, std::ios::out);
-                if(!file) throw std::runtime_error{"Unable to write output file " + file_name};
+                if(!file) {
+                    throw std::runtime_error{"Unable to write output file " + file_name};
+                }
             }
 
             ~FileReportWriter()
