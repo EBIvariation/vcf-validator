@@ -51,13 +51,14 @@ endif ()
 
 
 if (WINDOWS)
-    include_directories (lib/sqlite)# windows specific
-    include_directories (inc/windows_specific)# windows specific
+    include_directories (lib/sqlite)            # windows specific
+    include_directories (inc/windows_specific)  # windows specific
     if (NOT CMAKE_BUILD_TYPE)
         set (CMAKE_BUILD_TYPE "Release" CACHE STRING "On windows we only support release mode")
     endif ()
-    set (Boost_USE_STATIC_LIBS ON)             # only find static libs instead of dlls
+    set (Boost_USE_STATIC_LIBS ON)              # only find static libs instead of dlls
     set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT") # also requires boost with runtime-link=static
+    set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd") # also requires boost with runtime-link=static
     set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION")
     set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows_specific" CACHE STRING "Absolute path to libraries")
 else ()
@@ -72,6 +73,8 @@ else ()
     find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
     include_directories (${Boost_INCLUDE_DIR} )
 endif ()
+
+message(STATUS "Build type is ${CMAKE_BUILD_TYPE}")
 
 find_package (Threads REQUIRED)
 
