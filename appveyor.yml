@@ -6,11 +6,6 @@ init:
     - cmd: set INCLUDE=C:\Libraries\boost_1_67_0;%INCLUDE%
     - cmd: set LIB=C:\Libraries\boost_1_67_0\lib32-msvc-14.1;%LIB%
 
-install:
-    - cmd: curl https://www.codesynthesis.com/download/odb/2.4/odb-2.4.0-i686-windows.zip -o odbc.zip
-    - cmd: unzip odbc.zip
-    - cmd: set PATH=C:\projects\vcf-validator\odb-2.4.0-i686-windows\bin;%PATH%
-
 build_script:
     - cmd: cmake -G "NMake Makefiles" .
     - cmd: nmake

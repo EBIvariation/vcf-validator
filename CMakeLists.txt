@@ -116,15 +116,17 @@ set (ODB_MAPPING_CLASSES inc/vcf/error.hpp)
 foreach (_file ${ODB_MAPPING_CLASSES})
     string (REPLACE ".hpp" "-odb.cpp" gencppfile ${_file})
     string (REPLACE "inc" "src" right_place_gencppfile ${gencppfile})
-    add_custom_command (
-            OUTPUT ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
-            COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
-            --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp
-            --output-dir ${CMAKE_HOME_DIRECTORY}/inc/vcf/ ${_file}
-            && mv ${CMAKE_HOME_DIRECTORY}/${gencppfile} ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
-            DEPENDS ${_file}
-            COMMENT "Building odb for ${_file}"
-    )
+    if (NOT WINDOWS)
+        add_custom_command (
+                OUTPUT ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
+                COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
+                --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp
+                --output-dir ${CMAKE_HOME_DIRECTORY}/inc/vcf/ ${_file}
+                && mv ${CMAKE_HOME_DIRECTORY}/${gencppfile} ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
+                DEPENDS ${_file}
+                COMMENT "Building odb for ${_file}"
+        )
+    endif ()
     list (APPEND MOD_ODB_SOURCES ${right_place_gencppfile})
 endforeach ()
 add_library (mod_odb STATIC ${MOD_ODB_SOURCES})
