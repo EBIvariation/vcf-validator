@@ -12,3 +12,9 @@ install:
 build_script:
     - cmd: cmake -G "NMake Makefiles" .
     - cmd: nmake
+
+test_script:
+    - cmd: bin\test_validator.exe
+    - cmd: bin\test_validator_v41.exe
+    - cmd: bin\test_validator_v42.exe
+    - cmd: bin\test_validator_v43.exe
