@@ -6,6 +6,9 @@ init:
     - cmd: set INCLUDE=C:\Libraries\boost_1_67_0;%INCLUDE%
     - cmd: set LIB=C:\Libraries\boost_1_67_0\lib32-msvc-14.1;%LIB%
 
+install:
+    - cmd: install_dependencies.bat
+
 build_script:
     - cmd: cmake -G "NMake Makefiles" .
     - cmd: nmake

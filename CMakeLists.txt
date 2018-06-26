@@ -52,7 +52,7 @@ endif ()
 
 if (WINDOWS)
     include_directories (lib/sqlite)            # windows specific
-    include_directories (inc/windows_specific)  # windows specific
+    include_directories (windows_dependencies)  # windows specific
     if (NOT CMAKE_BUILD_TYPE)
         set (CMAKE_BUILD_TYPE "Release" CACHE STRING "On windows we only support release mode")
     endif ()
