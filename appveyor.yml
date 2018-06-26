@@ -10,7 +10,7 @@ install:
     - cmd: install_dependencies.bat
 
 build_script:
-    - cmd: cmake -G "NMake Makefiles" .
+    - cmd: cmake -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" .
     - cmd: nmake
 
 test_script:
