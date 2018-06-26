@@ -30,7 +30,7 @@ namespace ebi
 
   bool validate(std::istream &file, const boost::filesystem::path &path, std::string report_tag)
   {
-      auto db_path = boost::filesystem::path{"/tmp/"} / path.filename();
+      auto db_path = boost::filesystem::temp_directory_path() / path.filename();
       db_path += ".debugulator_test." + report_tag + ".db";
       boost::filesystem::remove(db_path);   // make sure the db doesn't exist from previous runs
 
@@ -46,7 +46,7 @@ namespace ebi
       std::ifstream file{path.c_str()};
 
       // report: SqliteReportRW to read the errors. the DB must be flushed before this
-      auto db_path = boost::filesystem::path{"/tmp/"} / path.filename();
+      auto db_path = boost::filesystem::temp_directory_path() / path.filename();
       db_path += ".debugulator_test." + report_tag + ".db";
       ebi::vcf::OdbReportRW report{db_path.string()};
 
@@ -66,7 +66,7 @@ namespace ebi
   {
       std::stringstream debug_message;
       boost::filesystem::path fixed_vcf_path, db_path, db_path_after;
-      boost::filesystem::path base_path = boost::filesystem::path{"/tmp/"} / path.filename();
+      boost::filesystem::path base_path = boost::filesystem::temp_directory_path() / path.filename();
       fixed_vcf_path = db_path = db_path_after = base_path;
       fixed_vcf_path += ".debugulator_test.fixed.vcf";
       db_path += ".debugulator_test." + BEFORE_TAG + ".db";
