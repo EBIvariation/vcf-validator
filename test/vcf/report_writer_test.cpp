@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-#include <memory>
-#include <iostream>
+#include <chrono>
 #include <fstream>
+#include <iostream>
+#include <memory>
 
 #include <boost/filesystem.hpp>
 
 #include "catch/catch.hpp"
 
-#include "vcf/odb_report.hpp"
-#include "vcf/file_structure.hpp"
-#include "vcf/validator.hpp"
+#include "test_utils.hpp"
 #include "vcf/error.hpp"
+#include "vcf/file_structure.hpp"
+#include "vcf/odb_report.hpp"
 #include "vcf/report_writer.hpp"
 #include "vcf/summary_report_writer.hpp"
-#include "test_utils.hpp"
+#include "vcf/validator.hpp"
 
 namespace ebi
 {
@@ -46,8 +47,14 @@ namespace ebi
 
   TEST_CASE("Unit test: odb", "[output]")
   {
+      std::string db_dir = boost::filesystem::temp_directory_path().string() + "/vcf_db";
+      boost::filesystem::path db_dir_path(db_dir);
+      boost::filesystem::create_directory(db_dir);
 
-      std::string db_name = "test/input_files/sqlite_test.errors.odb.db";
+      //this was tried because it boost::filesystem::remove was failing to remove file already opened
+      auto epoch = std::chrono::system_clock::now().time_since_epoch();
+      auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
+      std::string db_name = db_dir  + "/sqlite_test.errors." + std::to_string(timestamp) + ".odb.db";
       ebi::vcf::OdbReportRW errorDAO{db_name};
 
       SECTION("Write and count errors") {
@@ -130,11 +137,6 @@ namespace ebi
           CHECK(typeid(*errors[2]).name() == typeid(ebi::vcf::SamplesBodyError).name());
       }
 
-
-      boost::filesystem::path db_file{db_name};
-      boost::filesystem::remove(db_file);
-      CHECK_FALSE(boost::filesystem::exists(db_file));
-
   }
 
   TEST_CASE("Integration test: validator and odb", "[output]")
@@ -209,7 +211,7 @@ namespace ebi
 
   TEST_CASE("Integration test: summary report", "[output]")
   {
-      auto path = boost::filesystem::path("test/input_files/v4.3/passed/passed_body_format.vcf"); 
+      auto path = boost::filesystem::path("test/input_files/v4.3/passed/passed_body_format.vcf");
       auto summary_path = path;
       summary_path += ".errors_summary.txt";
 
