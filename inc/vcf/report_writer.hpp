@@ -33,9 +33,10 @@ namespace ebi
             virtual ~ReportWriter() {}  // needed if using raw pointers, instead of references or shared_ptrs in children
             virtual void write_error(Error &error) = 0;
             virtual void write_warning(Error &error) = 0;
-            virtual void write_message(const std::string &report_result) = 0;
+            virtual void write_message(const std::string &message) = 0;
+            virtual void write_version(ToolVersion tool_version) = 0;
 
-            virtual std::string get_report_message() = 0;
+            virtual std::string get_filename() = 0;
     };
 
     class FileReportWriter : public ReportWriter
@@ -64,14 +65,19 @@ namespace ebi
                 file << error.what() << " (warning)" << std::endl;
             }
 
-            virtual void write_message(const std::string &report_result) override
+            virtual void write_message(const std::string &message) override
             {
-                file << report_result << std::endl;
+                file << message << std::endl;
             }
 
-            virtual std::string get_report_message() override
+            virtual void write_version(ToolVersion tool_version) override
             {
-                return "Text report written to : " + file_name;
+                file << tool_version.get_tool_version() << std::endl;
+            }
+
+            virtual std::string get_filename() override
+            {
+                return file_name;
             }
 
         private:
