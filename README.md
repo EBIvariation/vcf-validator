@@ -119,6 +119,7 @@ If the ODB libraries were not found during the build, please run `sudo updatedb 
 
 Binaries will be created in the `bin` subfolder.
 
+
 ### macOS
 
 On macOS the binaries obtained will only have system libraries dynamically linked. This means you will need to install dependencies to build vcf-validator but not to run it.
@@ -141,6 +142,46 @@ ninja -v -j2
 ```
 
 Binaries will be created in the `bin` subfolder.
+
+
+### Windows
+
+On Windows the binaries obtained will only have odb libraries dynamically linked, boost and system libraries are statically linked. We have provided the pre-compiled dependencies odb dlls and libs within the repository. You will need to download and build boost and download required headers for odb.
+
+#### Dependencies
+
+##### Boost
+
+The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. You would require to compile boost with zlib and bzip2 support and statically linking the runtime libraries.
+you can follow these steps.
+ - download and unzip a boost_1_xx_x folder
+ - chnge the directory to the boost_1_xx_x
+ - run these commands:
+```
+bootstrap
+.\b2 --with-atomic --with-chrono --with-date_time --with-filesystem --with-log --with-program_options --with-regex --with-system --with-thread --with-iostreams -sBZIP2_SOURCE=path\to\bzip2-1.0.6 -sZLIB_SOURCE=path\to\zlib-1.2.11 runtime-link=static --build-type=complete
+```
+ - set some environment variables to make compiler able to locate boost libraries
+ - now add boost_1_xx_x/stage/lib folder to `LIB`
+ - add boost_1_xx_x folder to `INCLUDE`
+
+##### ODB
+
+You will be provided with precompiled libraries of odb and odb-sqlite. You will need to download headers. Simply run the comand `install_dependencies.bat` it will create a windows_dependencies folder in the root directory of project.
+
+#### Compile
+
+In order to create the build scripts and compile vcf-validator, please run the following commands from the project root folder:
+
+```
+cmake -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" /path/to/CMakeLists.txt
+nmake
+```
+
+Binaries will be created in the `bin` subfolder.
+
+In order to run those binaries. you will need to set a `PATH` variable to locate the dll files in `lib/windows_specific` directory. Add that directory to `PATH` before running the software or tests.
+
 
 
 ## Deliverables
