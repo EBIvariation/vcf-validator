@@ -11,10 +11,6 @@ configure_file (
     )
 
 
-# Include Directories
-include_directories (inc)
-include_directories (lib)
-
 # Detect OS
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   message (STATUS "Operating System detected OSX")
@@ -29,8 +25,33 @@ else ()
   message (ERROR "Operating System not recognised required Windows, Linux or Darwin. Found ${CMAKE_SYSTEM_NAME}")
 endif ()
 
-# Static Build Extra Flags for Linux Static Build
+
+# Include Directories
+include_directories (inc)
+include_directories (lib)
+if (WINDOWS AND EXISTS "${PROJECT_SOURCE_DIR}/windows_dependencies")
+  include_directories (lib/sqlite)            # windows specific
+  include_directories (windows_dependencies)
+  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows_specific" CACHE STRING "Absolute path to libraries")
+elseif (OSX AND EXISTS "${PROJECT_SOURCE_DIR}/osx_dependencies")
+  include_directories (osx_dependencies)
+  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/osx_dependencies" CACHE STRING "Absolute path to libraries")
+elseif (LINUX AND EXISTS "${PROJECT_SOURCE_DIR}/linux_dependencies")
+  include_directories (linux_dependencies)
+  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/linux_dependencies" CACHE STRING "Absolute path to libraries")
+else ()
+  set (EXT_LIB_PATH "/usr/local/bin" CACHE STRING "Absolute path to libraries")
+  if (WINDOWS)
+    message(ERROR "please run install_dependencies.bat")
+  elseif (OSX)
+    message(ERROR "please run install_dependencies.sh osx")
+  endif()
+endif ()
+
+
+# Compiler and linkers flags
 if (LINUX)
+  # Static Build Extra Flags for Linux Static Build
   set (BUILD_SHARED_LIBS OFF)
   set (CMAKE_EXE_LINKER_FLAGS "-static")
   set (CMAKE_FIND_LIBRARY_SUFFIXES .a)
@@ -41,40 +62,31 @@ if (LINUX)
   set (CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
   set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
   set (Boost_USE_STATIC_LIBS ON)             # only find static libs
-endif ()
-
-# Mac build not fully static. include system libraries to be dynamic
-if (OSX)
+elseif (OSX)
+  # Mac build not fully static. include system libraries to be dynamic
   set (CMAKE_EXE_LINKER_FLAGS)
   set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+elseif (WINDOWS)
+  set (Boost_USE_STATIC_LIBS ON)              # only find static libs instead of dlls
+  set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT") # also requires boost with runtime-link=static
+  set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd") # also requires boost with runtime-link=static
 endif ()
 
 
-if (WINDOWS)
-    include_directories (lib/sqlite)            # windows specific
-    include_directories (windows_dependencies)  # windows specific
-    if (NOT CMAKE_BUILD_TYPE)
-        set (CMAKE_BUILD_TYPE "Release" CACHE STRING "On windows we only support release mode")
-    endif ()
-    set (Boost_USE_STATIC_LIBS ON)              # only find static libs instead of dlls
-    set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT") # also requires boost with runtime-link=static
-    set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd") # also requires boost with runtime-link=static
-    set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION")
-    set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows_specific" CACHE STRING "Absolute path to libraries")
-else ()
-    if (NOT CMAKE_BUILD_TYPE)
-       set (CMAKE_BUILD_TYPE  "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
-    endif ()
-    # no unknown pragmas: ODB compiler uses some pragmas that the regular compiler doesn't need
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
-    # Needed to statically link ODB
-    set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION")
-    set (EXT_LIB_PATH "usr/local/lib" CACHE STRING "Absolute path to libraries installation folder.")
-    find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
-    include_directories (${Boost_INCLUDE_DIR} )
+# Build type
+if (NOT CMAKE_BUILD_TYPE)
+   set (CMAKE_BUILD_TYPE  "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif ()
-
 message(STATUS "Build type is ${CMAKE_BUILD_TYPE}")
+
+
+# flags specific to unix
+if (UNIX)
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas") # no unknows pragmas warnings
+  set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION") # Needed to statically link ODB
+  find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
+  include_directories (${Boost_INCLUDE_DIR} )
+endif ()
 
 find_package (Threads REQUIRED)
 
@@ -116,7 +128,7 @@ set (ODB_MAPPING_CLASSES inc/vcf/error.hpp)
 foreach (_file ${ODB_MAPPING_CLASSES})
     string (REPLACE ".hpp" "-odb.cpp" gencppfile ${_file})
     string (REPLACE "inc" "src" right_place_gencppfile ${gencppfile})
-    if (NOT WINDOWS)
+    if (UNIX)
         add_custom_command (
                 OUTPUT ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
                 COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
