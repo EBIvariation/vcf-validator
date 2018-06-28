@@ -6,9 +6,11 @@ set (vcf-validator_VERSION_MINOR 8)
 set (vcf-validator_VERSION_PATCH 0)
 
 configure_file (
-    "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp.in"
-    "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp"
-    )
+  "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp.in"
+  "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp"
+)
+
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
 # Detect OS
@@ -72,13 +74,13 @@ elseif (WINDOWS)
   set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd") # also requires boost with runtime-link=static
 endif ()
 
-
 # Build type
 if (NOT CMAKE_BUILD_TYPE)
-   set (CMAKE_BUILD_TYPE  "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
+  set (CMAKE_BUILD_TYPE  "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif ()
-message(STATUS "Build type is ${CMAKE_BUILD_TYPE}")
 
+message(STATUS "Build type is ${CMAKE_BUILD_TYPE}")
+find_package (Threads REQUIRED)
 
 # flags specific to unix
 if (UNIX)
@@ -88,138 +90,135 @@ if (UNIX)
   include_directories (${Boost_INCLUDE_DIR} )
 endif ()
 
-find_package (Threads REQUIRED)
-
 
 # Application modules
 add_library (mod_sqlite3 STATIC lib/sqlite/sqlite3.c)
 
 if (LINUX)
   set (THIRD_PARTY_LIBRARIES
-      ${Boost_LIBRARIES}
-      bz2
-      z
-      ${EXT_LIB_PATH}/libodb-sqlite.a
-      ${EXT_LIB_PATH}/libodb.a
-      mod_sqlite3
-      ${CMAKE_THREAD_LIBS_INIT}
-     )
+    ${Boost_LIBRARIES}
+    bz2
+    z
+    ${EXT_LIB_PATH}/libodb-sqlite.a
+    ${EXT_LIB_PATH}/libodb.a
+    mod_sqlite3
+    ${CMAKE_THREAD_LIBS_INIT}
+  )
 elseif (OSX)
   set (THIRD_PARTY_LIBRARIES
-      ${Boost_LIBRARIES}
-      ${EXT_LIB_PATH}/libbz2.a
-      ${EXT_LIB_PATH}/libz.a
-      ${EXT_LIB_PATH}/libodb-sqlite.a
-      ${EXT_LIB_PATH}/libodb.a
-      mod_sqlite3
-      ${CMAKE_THREAD_LIBS_INIT}
-     )
+    ${Boost_LIBRARIES}
+    ${EXT_LIB_PATH}/libbz2.a
+    ${EXT_LIB_PATH}/libz.a
+    ${EXT_LIB_PATH}/libodb-sqlite.a
+    ${EXT_LIB_PATH}/libodb.a
+    mod_sqlite3
+    ${CMAKE_THREAD_LIBS_INIT}
+  )
 elseif (WINDOWS)
   set (THIRD_PARTY_LIBRARIES
-      ${EXT_LIB_PATH}/odb-sqlite.lib
-      ${EXT_LIB_PATH}/odb.lib
-      mod_sqlite3
-      ${CMAKE_THREAD_LIBS_INIT}
-     )
+    ${EXT_LIB_PATH}/odb-sqlite.lib
+    ${EXT_LIB_PATH}/odb.lib
+    mod_sqlite3
+    ${CMAKE_THREAD_LIBS_INIT}
+  )
 endif ()
 
 set (MOD_ODB_SOURCES)
 set (ODB_MAPPING_CLASSES inc/vcf/error.hpp)
 foreach (_file ${ODB_MAPPING_CLASSES})
-    string (REPLACE ".hpp" "-odb.cpp" gencppfile ${_file})
-    string (REPLACE "inc" "src" right_place_gencppfile ${gencppfile})
-    if (UNIX)
-        add_custom_command (
-                OUTPUT ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
-                COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
-                --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp
-                --output-dir ${CMAKE_HOME_DIRECTORY}/inc/vcf/ ${_file}
-                && mv ${CMAKE_HOME_DIRECTORY}/${gencppfile} ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
-                DEPENDS ${_file}
-                COMMENT "Building odb for ${_file}"
-        )
-    endif ()
-    list (APPEND MOD_ODB_SOURCES ${right_place_gencppfile})
+  string (REPLACE ".hpp" "-odb.cpp" gencppfile ${_file})
+  string (REPLACE "inc" "src" right_place_gencppfile ${gencppfile})
+  if (UNIX)
+    add_custom_command (
+      OUTPUT ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
+      COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
+      --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp
+      --output-dir ${CMAKE_HOME_DIRECTORY}/inc/vcf/ ${_file}
+      && mv ${CMAKE_HOME_DIRECTORY}/${gencppfile} ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
+      DEPENDS ${_file}
+      COMMENT "Building odb for ${_file}"
+    )
+  endif ()
+  list (APPEND MOD_ODB_SOURCES ${right_place_gencppfile})
 endforeach ()
 add_library (mod_odb STATIC ${MOD_ODB_SOURCES})
 target_link_libraries (mod_odb ${THIRD_PARTY_LIBRARIES})
 
 set (MOD_VCF_SOURCES
-        inc/vcf/debugulator.hpp
-        inc/vcf/error_policy.hpp
-        inc/vcf/file_structure.hpp
-        inc/vcf/fixer.hpp
-        inc/vcf/meta_entry_visitor.hpp
-        inc/vcf/normalizer.hpp
-        inc/vcf/odb_report.hpp
-        inc/vcf/optional_policy.hpp
-        inc/vcf/parse_policy.hpp
-        inc/vcf/parsing_state.hpp
-        inc/vcf/record.hpp
-        inc/vcf/record_cache.hpp
-        inc/vcf/report_reader.hpp
-        inc/vcf/report_writer.hpp
-        inc/vcf/string_constants.hpp
-        inc/vcf/summary_report_writer.hpp
-        inc/vcf/validator_detail_v41.hpp
-        inc/vcf/validator_detail_v42.hpp
-        inc/vcf/validator_detail_v43.hpp
-        inc/vcf/validator.hpp
+  inc/vcf/debugulator.hpp
+  inc/vcf/error_policy.hpp
+  inc/vcf/file_structure.hpp
+  inc/vcf/fixer.hpp
+  inc/vcf/meta_entry_visitor.hpp
+  inc/vcf/normalizer.hpp
+  inc/vcf/odb_report.hpp
+  inc/vcf/optional_policy.hpp
+  inc/vcf/parse_policy.hpp
+  inc/vcf/parsing_state.hpp
+  inc/vcf/record.hpp
+  inc/vcf/record_cache.hpp
+  inc/vcf/report_reader.hpp
+  inc/vcf/report_writer.hpp
+  inc/vcf/string_constants.hpp
+  inc/vcf/summary_report_writer.hpp
+  inc/vcf/validator_detail_v41.hpp
+  inc/vcf/validator_detail_v42.hpp
+  inc/vcf/validator_detail_v43.hpp
+  inc/vcf/validator.hpp
 
-        src/vcf/abort_error_policy.cpp
-        src/vcf/debugulator.cpp
-        src/vcf/fixer.cpp
-        src/vcf/meta_entry.cpp
-        src/vcf/normalizer.cpp
-        src/vcf/odb_report.cpp
-        src/vcf/parsing_state.cpp
-        src/vcf/record.cpp
-        src/vcf/report_error_policy.cpp
-        src/vcf/source.cpp
-        src/vcf/store_parse_policy.cpp
-        src/vcf/validate_optional_policy.cpp
-        src/vcf/validator.cpp
-        )
+  src/vcf/abort_error_policy.cpp
+  src/vcf/debugulator.cpp
+  src/vcf/fixer.cpp
+  src/vcf/meta_entry.cpp
+  src/vcf/normalizer.cpp
+  src/vcf/odb_report.cpp
+  src/vcf/parsing_state.cpp
+  src/vcf/record.cpp
+  src/vcf/report_error_policy.cpp
+  src/vcf/source.cpp
+  src/vcf/store_parse_policy.cpp
+  src/vcf/validate_optional_policy.cpp
+  src/vcf/validator.cpp
+)
 add_library (mod_vcf STATIC ${MOD_VCF_SOURCES})
 add_dependencies (mod_vcf mod_odb) # works even without this if we add mod_vcf as target_link_libraries
 target_link_libraries (mod_vcf ${THIRD_PARTY_LIBRARIES} mod_odb)
 
 
-
 # Libraries to link with executables
 if (LINUX)
   set (LIBRARIES_TO_LINK
-      mod_vcf
-      mod_odb
-      ${Boost_LIBRARIES}
-      bz2
-      z
-      ${EXT_LIB_PATH}/libodb-sqlite.a
-      ${EXT_LIB_PATH}/libodb.a
-      mod_sqlite3
-      ${CMAKE_THREAD_LIBS_INIT}
-     )
+    mod_vcf
+    mod_odb
+    ${Boost_LIBRARIES}
+    bz2
+    z
+    ${EXT_LIB_PATH}/libodb-sqlite.a
+    ${EXT_LIB_PATH}/libodb.a
+    mod_sqlite3
+    ${CMAKE_THREAD_LIBS_INIT}
+  )
 elseif (OSX)
   set (LIBRARIES_TO_LINK
-      mod_vcf
-      mod_odb
-      ${Boost_LIBRARIES}
-      ${EXT_LIB_PATH}/libbz2.a
-      ${EXT_LIB_PATH}/libz.a
-      ${EXT_LIB_PATH}/libodb-sqlite.a
-      ${EXT_LIB_PATH}/libodb.a
-      mod_sqlite3
-      ${CMAKE_THREAD_LIBS_INIT}
-     )
+    mod_vcf
+    mod_odb
+    ${Boost_LIBRARIES}
+    ${EXT_LIB_PATH}/libbz2.a
+    ${EXT_LIB_PATH}/libz.a
+    ${EXT_LIB_PATH}/libodb-sqlite.a
+    ${EXT_LIB_PATH}/libodb.a
+    mod_sqlite3
+    ${CMAKE_THREAD_LIBS_INIT}
+  )
 elseif (WINDOWS)
   set (LIBRARIES_TO_LINK
-      mod_vcf
-      mod_odb
-      ${EXT_LIB_PATH}/odb-sqlite.lib
-      ${EXT_LIB_PATH}/odb.lib
-      mod_sqlite3
-      ${CMAKE_THREAD_LIBS_INIT}
-     )
+    mod_vcf
+    mod_odb
+    ${EXT_LIB_PATH}/odb-sqlite.lib
+    ${EXT_LIB_PATH}/odb.lib
+    mod_sqlite3
+    ${CMAKE_THREAD_LIBS_INIT}
+  )
 endif ()
 
 
@@ -228,25 +227,23 @@ set (V41_TESTS test/vcf/parser_v41_test.cpp)
 set (V42_TESTS test/vcf/parser_v42_test.cpp)
 set (V43_TESTS test/vcf/parser_v43_test.cpp)
 set (ALL_TESTS
-        test/vcf/compressed_file_test.cpp
-        test/vcf/debugulator_integration_test.cpp
-        test/vcf/debugulator_test.cpp
-        test/vcf/metaentry_test.cpp
-        test/vcf/normalize_test.cpp
-        test/vcf/optional_policy_test.cpp
-        test/vcf/parser_test_aux.hpp
-        test/vcf/parser_v41_test.cpp
-        test/vcf/parser_v42_test.cpp
-        test/vcf/parser_v43_test.cpp
-        test/vcf/predefined_info_tags_test.cpp
-        test/vcf/predefined_format_tags_test.cpp
-        test/vcf/record_cache_test.cpp
-        test/vcf/record_test.cpp
-        test/vcf/report_writer_test.cpp
-        test/vcf/test_utils.hpp
-        )
-
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+  test/vcf/compressed_file_test.cpp
+  test/vcf/debugulator_integration_test.cpp
+  test/vcf/debugulator_test.cpp
+  test/vcf/metaentry_test.cpp
+  test/vcf/normalize_test.cpp
+  test/vcf/optional_policy_test.cpp
+  test/vcf/parser_test_aux.hpp
+  test/vcf/parser_v41_test.cpp
+  test/vcf/parser_v42_test.cpp
+  test/vcf/parser_v43_test.cpp
+  test/vcf/predefined_info_tags_test.cpp
+  test/vcf/predefined_format_tags_test.cpp
+  test/vcf/record_cache_test.cpp
+  test/vcf/record_test.cpp
+  test/vcf/report_writer_test.cpp
+  test/vcf/test_utils.hpp
+)
 
 add_executable (test_validator_v41 test/main_test.cpp ${V41_TESTS})
 target_link_libraries (test_validator_v41 ${LIBRARIES_TO_LINK})

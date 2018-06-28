@@ -1,21 +1,21 @@
 os:
-    - Visual Studio 2017
+  - Visual Studio 2017
 
 init:
-    - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
-    - cmd: set INCLUDE=C:\Libraries\boost_1_67_0;%INCLUDE%
-    - cmd: set LIB=C:\Libraries\boost_1_67_0\lib32-msvc-14.1;%LIB%
-    - cmd: set PATH=C:\projects\vcf-validator\lib\windows_specific;%PATH%
+  - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
+  - cmd: set INCLUDE=C:\Libraries\boost_1_67_0;%INCLUDE%
+  - cmd: set LIB=C:\Libraries\boost_1_67_0\lib32-msvc-14.1;%LIB%
+  - cmd: set PATH=C:\projects\vcf-validator\lib\windows_specific;%PATH%
 
 install:
-    - cmd: install_dependencies.bat
+  - cmd: install_dependencies.bat
 
 build_script:
-    - cmd: cmake -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" .
-    - cmd: nmake
+  - cmd: cmake -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" .
+  - cmd: nmake
 
 test_script:
-    - cmd: bin\test_validator.exe
-    - cmd: bin\test_validator_v41.exe
-    - cmd: bin\test_validator_v42.exe
-    - cmd: bin\test_validator_v43.exe
+  - cmd: bin\test_validator.exe
+  - cmd: bin\test_validator_v41.exe
+  - cmd: bin\test_validator_v42.exe
+  - cmd: bin\test_validator_v43.exe
