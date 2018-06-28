@@ -215,3 +215,41 @@ And the full ODB-based code from the classes definitions using:
 odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp --output-dir inc/vcf/ inc/vcf/error.hpp
 mv inc/vcf/error-odb.cpp src/vcf/error-odb.cpp
 ```
+
+
+### Build ODB Libraries for windows
+
+This section is for building odb libraries for windows. You may ignore it if you want to use pre-compiled libraries given inside the repository. To build those libraries first download the source code using install_dependencies.bat it will create following directories in windows_dependencies folder.
+    - libodb-2.4.0
+    - libodb-sqlite-2.4.0
+    - sqlite
+    - odb (header files only)
+you will have to compile libodb-2.4.0, sqlite and then libodb-sqlite-2.4.0. To do so you will need Visual Studio IDE (tested on VS-Studio-2017).
+
+#### Build Odb runtime
+    1. Open libodb-2.4.0/libodb-vc12.sln in VS-Studio. File->Open->Project/Solution.
+    2. Retarget the solution file to latest version. Project->Retarget Solution.
+    3. Select Build type Release and configuration win32.
+    4. Select /MT in Project->Properties->Configuration Properties->C/C++->Code Generation->Runtime Library options.
+    5. Build the solution using Build->Build Solution.
+
+#### Build Sqlite for odb-sqlite
+    1. Open sqlite/sqlite3-vc12.sln in VS-Studio.
+    2. Retarget the solution file.
+    3. Select Build type Release and configuration win32.
+    4. Select /MT in Project->Properties->Configuration Properties->C/C++->Code Generation->Runtime Library options.
+    5. Build the solution using Build->Build Solution.
+
+#### Build Odb-sqlite runtime
+    1. Open libodb-sqlite-2.4.0/libodb-sqlite-vc12.sln in VS-Studio.
+    2. Retarget the solution file.
+    3. Select Build type Release and configuration win32.
+    4. Select /MT in Project->Properties->Configuration Properties->C/C++->Code Generation->Runtime Library options.
+    5. Go to Project->Properties->Configuration Properties->VC++ Directories and append these paths to following variables.
+        - Executable Directories => path/to/libodb-2.4.0/bin and path/to/sqlite/bin
+        - Include Directories => path/to/libodb-2.4.0 and path/to/sqlite
+        - Library Directories => path/to/libodb-2.4.0/lib and path/to/sqlite/lib
+    Note the paths should be absolute and the directories will be present within windows_dependencies folder.
+    6. Build the solution using Build->Build Solution.
+
+Now you will obitain compiled libs and dlls in lib and bin folders respectively.
