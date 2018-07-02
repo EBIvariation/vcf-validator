@@ -11,10 +11,10 @@ curl -o sqlite-dll.zip https://www.sqlite.org/2018/sqlite-dll-win32-x86-3240000.
 curl -o sqlite-amalgamation.zip https://www.sqlite.org/2018/sqlite-amalgamation-3240000.zip
 
 :: Unzip zip files
-unzip libodb-2.4.0.zip
-unzip libodb-sqlite-2.4.0.zip
-unzip sqlite-dll.zip
-unzip sqlite-amalgamation.zip
+powershell -command "Expand-Archive libodb-2.4.0.zip ."
+powershell -command "Expand-Archive libodb-sqlite-2.4.0.zip ."
+powershell -command "Expand-Archive sqlite.zip ."
+powershell -command "Expand-Archive sqlite-amalgamation.zip ."
 
 :: Restructure Directory
 move libodb-sqlite-2.4.0\etc\sqlite .\
