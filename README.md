@@ -145,22 +145,23 @@ On Windows the binaries obtained will only have odb libraries dynamically linked
 
 #### Dependencies
 
+##### Compression libraries
+
+You will need to install bzip2 and zlib. You can download their source code from [here](https://zlib.net/zlib1211.zip) and [here](http://www.bzip.org/downloads.html).
+
 ##### Boost
 
-The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. You would require to compile [boost](https://www.boost.org) with [zlib](https://zlib.net/) and [bzip2](http://www.bzip.org) support and statically linking the runtime libraries.
-you can follow these steps.
- - download and unzip a boost_1_xx_x. download it from [link](https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.zip)
- - download and unzip zlib source code. download it from [link](https://excellmedia.dl.sourceforge.net/project/libpng/zlib/1.2.11/zlib1211.zip)
- - download and uncompress bzip2 source code, download it from [link](http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz)
- - change the directory to the boost_1_xx_x
- - run these commands:
+The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. You will need to compile them with zlib and bzip2 support and statically linking the runtime libraries.
+
+- Download Boost from [here](https://www.boost.org/users/download/) and uncompress it
+- From the directory where Boost was uncompressed, run these commands:
+
 ```
 bootstrap
 .\b2 --with-atomic --with-chrono --with-date_time --with-filesystem --with-log --with-program_options --with-regex --with-system --with-thread --with-iostreams -sBZIP2_SOURCE=path\to\bzip2-1.x.x -sZLIB_SOURCE=path\to\zlib-1.x.x runtime-link=static --build-type=complete
 ```
- - set some environment variables to make compiler able to locate boost libraries
-   - now add boost_1_xx_x/stage/lib folder to `LIB`
-   - add boost_1_xx_x folder to `INCLUDE`
+- Add boost_1_xx_x/stage/lib folder to the environment variable `LIB`
+- Add boost_1_xx_x folder to the environment variable `INCLUDE`
 
 ##### ODB
 
