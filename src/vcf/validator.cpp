@@ -179,8 +179,6 @@ namespace ebi
             uncompressed_input.push(boost::iostreams::bzip2_decompressor());
         } else if(file_ext == GZ) {
             uncompressed_input.push(boost::iostreams::gzip_decompressor());
-        } else if(file_ext == ZLIB) {
-            uncompressed_input.push(boost::iostreams::zlib_decompressor());
         }
 
         uncompressed_input.push(input);
@@ -258,7 +256,7 @@ namespace ebi
 
     void check_readability_of_file(const std::string & file_ext)
     {
-        std::set<std::string> readable_extensions = {BZ2,GZ,ZLIB,NO_EXT};
+        std::set<std::string> readable_extensions = {BZ2, GZ, NO_EXT};
 
         if (!readable_extensions.count(file_ext)) {
             throw std::invalid_argument{"Input file should not be compressed"};

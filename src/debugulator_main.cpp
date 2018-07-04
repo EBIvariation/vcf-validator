@@ -46,7 +46,7 @@ namespace
               (ebi::vcf::VERSION_OPTION, "Display version of the debugulator")
               (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
               (ebi::vcf::ERRORS_OPTION, po::value<std::string>(), "Path to the errors report from the input VCF file")
-              (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING), "Validation level (error, warning, stop)")
+              (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING_LEVEL), "Validation level (error, warning, stop)")
               (ebi::vcf::OUTPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDOUT), "Write to a file or stdout")
       ;
 
@@ -66,7 +66,7 @@ namespace
       }
 
       std::string level = vm[ebi::vcf::LEVEL].as<std::string>();
-      if (level != ebi::vcf::ERROR && level != ebi::vcf::WARNING && level != ebi::vcf::STOP) {
+      if (level != ebi::vcf::ERROR_LEVEL && level != ebi::vcf::WARNING_LEVEL && level != ebi::vcf::STOP_LEVEL) {
           std::cout << desc << std::endl;
           BOOST_LOG_TRIVIAL(error) << "Please choose one of the accepted validation levels";
           return 1;

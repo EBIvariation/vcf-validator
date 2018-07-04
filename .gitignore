@@ -41,3 +41,8 @@ cmake_config.hpp
 
 # IDE
 .idea
+
+# Dependencies directories
+linux_dependencies
+osx_dependencies
+windows_dependencies

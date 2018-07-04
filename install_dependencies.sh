@@ -88,6 +88,9 @@ cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.a .
 cp bzip2-1.0.6/libbz2.a .
 cp zlib-1.2.11/libz.a .
 
+# copy headers
+cp -r libodb-2.4.0/odb ./
+cp -r libodb-sqlite-2.4.0/odb/sqlite ./odb/
 
 # Download odb compiler
 if [[ "$OS_NAME" == "linux" ]]

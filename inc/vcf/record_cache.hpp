@@ -145,7 +145,7 @@ namespace ebi
          */
         void shrink_to_fit(std::multiset<RecordCore> &cache)
         {
-            if (not unlimited) {
+            if (!unlimited) {
                 size_t count = cache.size();
                 if (count > capacity) {
                     auto erase_until = cache.begin();

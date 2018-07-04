@@ -95,7 +95,7 @@ You can easily install some of the required dependencies running `./install_depe
 
 ##### Compression libraries
 
-You will need to install bzip2 and zlib. For Ubuntu Users, the required packages' names will be `libbz2-dev` and `zlib1g-dev`.
+You will need to install the bzip2 and zlib development packages. For Ubuntu users, these are `libbz2-dev` and `zlib1g-dev`.
 
 ##### Boost
 
@@ -119,6 +119,7 @@ If the ODB libraries were not found during the build, please run `sudo updatedb 
 
 Binaries will be created in the `bin` subfolder.
 
+
 ### macOS
 
 On macOS the binaries obtained will only have system libraries dynamically linked. This means you will need to install dependencies to build vcf-validator but not to run it.
@@ -133,14 +134,52 @@ Finally, add the `osx_dependencies/odb-2.4.0-i686-macosx/bin` subfolder to your 
 
 #### Compile
 
+In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`.
+
+Binaries will be created in the `bin` subfolder.
+
+
+### Windows
+
+On Windows the binaries obtained will only have odb libraries dynamically linked, boost and system libraries are statically linked. We have provided the pre-compiled dependencies odb dlls and libs within the repository. You will need to download and build boost and download required headers for odb.
+
+#### Dependencies
+
+##### Compression libraries
+
+You will need to download the bzip2 and zlib source code, from [here](http://www.bzip.org/downloads.html) and [here](https://zlib.net/zlib1211.zip) respectively.
+
+##### Boost
+
+The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. You will need to compile them with zlib and bzip2 support and statically linking the runtime libraries.
+
+- Download Boost from [here](https://www.boost.org/users/download/) and uncompress it
+- From the directory where Boost was uncompressed, run these commands:
+
+```
+bootstrap
+.\b2 --with-atomic --with-chrono --with-date_time --with-filesystem --with-log --with-program_options --with-regex --with-system --with-thread --with-iostreams -sBZIP2_SOURCE=path\to\bzip2-1.x.x -sZLIB_SOURCE=path\to\zlib-1.x.x runtime-link=static --build-type=complete
+```
+- Add boost_1_xx_x/stage/lib folder to the environment variable `LIB`
+- Add boost_1_xx_x folder to the environment variable `INCLUDE`
+
+##### ODB
+
+Precompiled libraries of odb and odb-sqlite are provided. In order to download headers, simply run the comand `install_dependencies.bat`, which will create a `windows_dependencies` folder in the root directory of project.
+
+#### Compile
+
 In order to create the build scripts and compile vcf-validator, please run the following commands from the project root folder:
 
 ```
-cmake -DCMAKE_CXX_FLAGS="-Iosx_dependencies/libodb-2.4.0 -Iosx_dependencies/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,osx_dependencies/ -Losx_dependencies/" -DEXT_LIB_PATH=$PWD/osx_dependencies/ ./ -GNinja
-ninja -v -j2
+cmake -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" /path/to/CMakeLists.txt
+nmake
 ```
 
 Binaries will be created in the `bin` subfolder.
+
+In order to run those binaries, you will need to add the `lib/windows_specific` directory to the `PATH`. This will allow the dll files inside that directory to be found.
+
 
 
 ## Deliverables
@@ -174,3 +213,41 @@ And the full ODB-based code from the classes definitions using:
 odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp --output-dir inc/vcf/ inc/vcf/error.hpp
 mv inc/vcf/error-odb.cpp src/vcf/error-odb.cpp
 ```
+
+
+### Build ODB Libraries for windows
+
+This section is for building odb libraries for windows. You may ignore it if you want to use pre-compiled libraries given inside the repository. To build those libraries first download the source code using install_dependencies.bat it will create following directories in windows_dependencies folder.
+    - libodb-2.4.0
+    - libodb-sqlite-2.4.0
+    - sqlite
+    - odb (header files only)
+you will have to compile libodb-2.4.0, sqlite and then libodb-sqlite-2.4.0. To do so you will need Visual Studio IDE (tested on VS-Studio-2017).
+
+#### Build Odb runtime
+    1. Open libodb-2.4.0/libodb-vc12.sln in VS-Studio. File->Open->Project/Solution.
+    2. Retarget the solution file to latest version. Project->Retarget Solution.
+    3. Select Build type Release and configuration win32.
+    4. Select /MT in Project->Properties->Configuration Properties->C/C++->Code Generation->Runtime Library options.
+    5. Build the solution using Build->Build Solution.
+
+#### Build Sqlite for odb-sqlite
+    1. Open sqlite/sqlite3-vc12.sln in VS-Studio.
+    2. Retarget the solution file.
+    3. Select Build type Release and configuration win32.
+    4. Select /MT in Project->Properties->Configuration Properties->C/C++->Code Generation->Runtime Library options.
+    5. Build the solution using Build->Build Solution.
+
+#### Build Odb-sqlite runtime
+    1. Open libodb-sqlite-2.4.0/libodb-sqlite-vc12.sln in VS-Studio.
+    2. Retarget the solution file.
+    3. Select Build type Release and configuration win32.
+    4. Select /MT in Project->Properties->Configuration Properties->C/C++->Code Generation->Runtime Library options.
+    5. Go to Project->Properties->Configuration Properties->VC++ Directories and append these paths to following variables.
+        - Executable Directories => path/to/libodb-2.4.0/bin and path/to/sqlite/bin
+        - Include Directories => path/to/libodb-2.4.0 and path/to/sqlite
+        - Library Directories => path/to/libodb-2.4.0/lib and path/to/sqlite/lib
+    Note the paths should be absolute and the directories will be present within windows_dependencies folder.
+    6. Build the solution using Build->Build Solution.
+
+Now you will obitain compiled libs and dlls in lib and bin folders respectively.

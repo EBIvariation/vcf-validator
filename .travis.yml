@@ -12,14 +12,14 @@ cache:
 matrix:
   include:
 
-      # OS X Clang
+    # OS X Clang
     - os: osx
       osx_image: xcode9.3
       env: C_COMPILER=clang CXX_COMPILER=clang++
       before_install:
         - brew install ninja
 
-      # OS X GCC
+    # OS X GCC
     - os: osx
       osx_image: xcode9.3
       env: C_COMPILER=gcc CXX_COMPILER=g++
@@ -141,15 +141,7 @@ before_script:
 
 
 script:
-  - |
-    if [[ $TRAVIS_OS_NAME == "linux" ]]; then
-      cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Ilinux_dependencies/libodb-2.4.0 -Ilinux_dependencies/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,linux_dependencies/ -Llinux_dependencies/"  -DEXT_LIB_PATH=$PWD/linux_dependencies/ ./ -GNinja
-    fi
-  - |
-    if [[ $TRAVIS_OS_NAME == "osx" ]]; then
-      cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} -DCMAKE_CXX_FLAGS="-Iosx_dependencies/libodb-2.4.0 -Iosx_dependencies/libodb-sqlite-2.4.0" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,osx_dependencies/ -Losx_dependencies/"  -DEXT_LIB_PATH=$PWD/osx_dependencies/ ./ -GNinja
-    fi
-
+  - cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} ./ -GNinja
   - ninja -v -j2
   - ninja test
   - |

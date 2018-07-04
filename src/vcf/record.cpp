@@ -676,7 +676,7 @@ namespace ebi
     void Record::check_sample_field_cardinality(std::vector<std::string> const &values, std::string const &number,
                                                 size_t ploidy, long &expected_cardinality) const
     {
-        if (not is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected_cardinality)) {
+        if (!is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected_cardinality)) {
             raise(std::make_shared<Error>(line, " meta specification Number=" + number
                     + " is not one of [A, R, G, ., <non-negative number>]"));
         }
