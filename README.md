@@ -95,7 +95,7 @@ You can easily install some of the required dependencies running `./install_depe
 
 ##### Compression libraries
 
-You will need to install the bzip2 and zlib headers. For Ubuntu Users, the required packages' names are `libbz2-dev` and `zlib1g-dev`.
+You will need to install the bzip2 and zlib development packages. For Ubuntu users, these are `libbz2-dev` and `zlib1g-dev`.
 
 ##### Boost
 
