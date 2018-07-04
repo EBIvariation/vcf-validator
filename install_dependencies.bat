@@ -16,13 +16,13 @@ powershell -command "Expand-Archive libodb-sqlite-2.4.0.zip ."
 powershell -command "Expand-Archive sqlite-dll.zip ."
 powershell -command "Expand-Archive sqlite-amalgamation.zip ."
 
-:: Restructure Directory
+:: Restructure directory
 move libodb-sqlite-2.4.0\etc\sqlite .\
 move sqlite3.def .\sqlite\
 move sqlite-amalgamation-3240000\sqlite3.c .\sqlite\
 move sqlite-amalgamation-3240000\sqlite3.h .\sqlite\
 
-:: copy headers
+:: Copy headers
 xcopy /e/i libodb-2.4.0\odb .\odb\
 xcopy /e/i libodb-sqlite-2.4.0\odb\sqlite odb\sqlite\
 

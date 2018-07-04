@@ -14,39 +14,40 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
 # Detect OS
-if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-  message (STATUS "Operating System detected OSX")
-  set (OSX TRUE)
-elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-  message (STATUS "Operating System detected Linux")
+if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  message (STATUS "Operating system detected: Linux")
   set (LINUX TRUE)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  message (STATUS "Operating system detected: OSX")
+  set (OSX TRUE)
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-  message (STATUS "Operating System detected Windows")
+  message (STATUS "Operating system detected: Windows")
   set (WINDOWS TRUE)
 else ()
-  message (ERROR "Operating System not recognised required Windows, Linux or Darwin. Found ${CMAKE_SYSTEM_NAME}")
+  message (ERROR "Operating system not recognised. Expected Windows, Linux or Darwin, but found ${CMAKE_SYSTEM_NAME}")
 endif ()
 
 
-# Include Directories
+# Include directories
 include_directories (inc)
 include_directories (lib)
-if (WINDOWS AND EXISTS "${PROJECT_SOURCE_DIR}/windows_dependencies")
-  include_directories (lib/sqlite)            # windows specific
-  include_directories (windows_dependencies)
-  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows_specific" CACHE STRING "Absolute path to libraries")
+
+if (LINUX AND EXISTS "${PROJECT_SOURCE_DIR}/linux_dependencies")
+  include_directories (linux_dependencies)
+  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/linux_dependencies" CACHE STRING "Absolute path to libraries")
 elseif (OSX AND EXISTS "${PROJECT_SOURCE_DIR}/osx_dependencies")
   include_directories (osx_dependencies)
   set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/osx_dependencies" CACHE STRING "Absolute path to libraries")
-elseif (LINUX AND EXISTS "${PROJECT_SOURCE_DIR}/linux_dependencies")
-  include_directories (linux_dependencies)
-  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/linux_dependencies" CACHE STRING "Absolute path to libraries")
+elseif (WINDOWS AND EXISTS "${PROJECT_SOURCE_DIR}/windows_dependencies")
+  include_directories (lib/sqlite)            # Windows specific
+  include_directories (windows_dependencies)
+  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows_specific" CACHE STRING "Absolute path to libraries")
 else ()
   set (EXT_LIB_PATH "/usr/local/bin" CACHE STRING "Absolute path to libraries")
-  if (WINDOWS)
-    message(ERROR "please run install_dependencies.bat")
-  elseif (OSX)
-    message(ERROR "please run install_dependencies.sh osx")
+  if (OSX)
+    message(ERROR "Please run first install_dependencies.sh osx")
+  elseif (WINDOWS)
+    message(ERROR "Please run first install_dependencies.bat")
   endif()
 endif ()
 
@@ -69,7 +70,7 @@ elseif (OSX)
   set (CMAKE_EXE_LINKER_FLAGS)
   set (Boost_USE_STATIC_LIBS ON)             # only find static libs
 elseif (WINDOWS)
-  set (Boost_USE_STATIC_LIBS ON)              # only find static libs instead of dlls
+  set (Boost_USE_STATIC_LIBS ON)             # only find static libs
   set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT") # also requires boost with runtime-link=static
   set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd") # also requires boost with runtime-link=static
 endif ()
@@ -82,8 +83,8 @@ endif ()
 message(STATUS "Build type is ${CMAKE_BUILD_TYPE}")
 find_package (Threads REQUIRED)
 
-# flags specific to unix
-if (UNIX)
+# Flags specific to Unix
+if (LINUX OR OSX)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas") # no unknows pragmas warnings
   set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION") # Needed to statically link ODB
   find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
@@ -128,7 +129,7 @@ set (ODB_MAPPING_CLASSES inc/vcf/error.hpp)
 foreach (_file ${ODB_MAPPING_CLASSES})
   string (REPLACE ".hpp" "-odb.cpp" gencppfile ${_file})
   string (REPLACE "inc" "src" right_place_gencppfile ${gencppfile})
-  if (UNIX)
+  if (LINUX OR OSX)
     add_custom_command (
       OUTPUT ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
       COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
@@ -222,7 +223,7 @@ elseif (WINDOWS)
 endif ()
 
 
-# Application Tests
+# Build tests
 set (V41_TESTS test/vcf/parser_v41_test.cpp)
 set (V42_TESTS test/vcf/parser_v42_test.cpp)
 set (V43_TESTS test/vcf/parser_v43_test.cpp)
@@ -266,7 +267,7 @@ enable_testing ()
 add_test (NAME ValidatorTests COMMAND test_validator)
 
 
-# Build Binaries
+# Build application binaries
 add_executable (vcf_validator src/validator_main.cpp)
 target_link_libraries (vcf_validator ${LIBRARIES_TO_LINK})
 

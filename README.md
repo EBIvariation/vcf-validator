@@ -95,7 +95,7 @@ You can easily install some of the required dependencies running `./install_depe
 
 ##### Compression libraries
 
-You will need to install bzip2 and zlib. For Ubuntu Users, the required packages' names will be `libbz2-dev` and `zlib1g-dev`.
+You will need to install the bzip2 and zlib headers. For Ubuntu Users, the required packages' names are `libbz2-dev` and `zlib1g-dev`.
 
 ##### Boost
 
@@ -147,7 +147,7 @@ On Windows the binaries obtained will only have odb libraries dynamically linked
 
 ##### Compression libraries
 
-You will need to install bzip2 and zlib. You can download their source code from [here](https://zlib.net/zlib1211.zip) and [here](http://www.bzip.org/downloads.html).
+You will need to download the bzip2 and zlib source code, from [here](http://www.bzip.org/downloads.html) and [here](https://zlib.net/zlib1211.zip) respectively.
 
 ##### Boost
 
@@ -165,7 +165,7 @@ bootstrap
 
 ##### ODB
 
-You will be provided with precompiled libraries of odb and odb-sqlite. You will need to download headers. Simply run the comand `install_dependencies.bat` it will create a windows_dependencies folder in the root directory of project.
+Precompiled libraries of odb and odb-sqlite are provided. In order to download headers, simply run the comand `install_dependencies.bat`, which will create a `windows_dependencies` folder in the root directory of project.
 
 #### Compile
 
@@ -178,7 +178,7 @@ nmake
 
 Binaries will be created in the `bin` subfolder.
 
-In order to run those binaries. you will need to set a `PATH` variable to locate the dll files in `lib/windows_specific` directory. Add that directory to `PATH` before running the software or tests.
+In order to run those binaries, you will need to add the `lib/windows_specific` directory to the `PATH`. This will allow the dll files inside that directory to be found.
 
 
 
