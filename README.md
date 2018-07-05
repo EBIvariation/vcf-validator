@@ -19,7 +19,7 @@ We recommend using the [latest release](https://github.com/EBIvariation/vcf-vali
 
 ### Validator
 
-vcf-validator accepts both compressed and non-compressed input VCF files. Supported compression formats are .bz2, .gz and .z. For other formats such as .zip, the `zcat` command and a pipe can be used (see below).
+vcf-validator accepts both compressed and non-compressed input VCF files. Supported compression formats are .bz2 and .gz. For other formats such as .zip, the `zcat` command and a pipe can be used (see below).
 
 Reading uncompressed files:
   * File path as argument: `vcf_validator -i /path/to/file.vcf`
@@ -28,7 +28,7 @@ Reading uncompressed files:
 
 Reading compressed files:
   * File path as argument: `vcf_validator -i /path/to/compressed_file.vcf.gz`
-  * Standard input: `vcf_validator < /path/to/compressed_file.vcf.z`
+  * Standard input: `vcf_validator < /path/to/compressed_file.vcf.bz2`
   * Standard input from pipe: `zcat /path/to/compressed_file.vcf.zip | vcf_validator`
 
 The validation level can be configured using `-l` / `--level`. This parameter is optional and accepts 3 values:
@@ -68,7 +68,7 @@ vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timesta
 
 ## Build
 
-If you would like to use an unreleased version of vcf-validator, you can build it under 3 platforms: Docker (generates Linux binary without installing dependencies), Linux and macOS. A statically linked executable will be generated, which means you won't need to install any dependencies to run it.
+If you would like to use an unreleased version of vcf-validator, you can build it under 4 platforms: Docker (generates Linux binary without installing dependencies), Linux , macOS and windows. A statically linked executable will be generated, which means you won't need to install any dependencies to run it.
 
 ### Docker
 
