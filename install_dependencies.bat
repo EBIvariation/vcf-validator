@@ -1,5 +1,8 @@
 @echo off
 
+if %1'==/?' goto :help
+
+:main
 if not exist windows_dependencies mkdir windows_dependencies
 if exist windows_dependencies/odb exit /b
 cd windows_dependencies
@@ -36,3 +39,16 @@ rmdir /s /q sqlite-amalgamation-3240000
 
 dir
 cd ..
+
+goto :eof
+
+:help
+echo Usage:
+echo install_dependencies.bat
+echo.
+echo it downloads the given dependencies:
+echo  - odb common runtime library              libodb-2.4.0
+echo  - odb sqlite runtime library              libodb-sqlite-2.4.0
+echo.
+echo Requires powershell version >= 5
+
