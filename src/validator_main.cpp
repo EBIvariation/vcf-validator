@@ -97,7 +97,7 @@ namespace
         if (outdir == "") {
             return file_path;
         }
-        
+
         boost::filesystem::path file_boost_path{file_path};
         boost::filesystem::path outdir_boost_path{outdir};
         if (!boost::filesystem::is_directory(outdir_boost_path)) {
