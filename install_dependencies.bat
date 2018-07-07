@@ -14,16 +14,17 @@ powershell -command "(new-object System.Net.WebClient).DownloadFile('https://www
 powershell -command "(new-object System.Net.WebClient).DownloadFile('https://www.sqlite.org/2018/sqlite-amalgamation-3240000.zip','sqlite-amalgamation.zip')"
 
 :: Unzip zip files
-if "%1" == "use_unzip" (
-    unzip libodb-2.4.0.zip
-    unzip libodb-sqlite-2.4.0.zip
-    unzip sqlite-dll.zip
-    unzip sqlite-amalgamation.zip
-) ELSE (
+ver | findstr /i "10\.0\." > nul && (set use=expand_archive)
+if "%use%" == "expand_archive" (
     powershell -command "Expand-Archive libodb-2.4.0.zip ."
     powershell -command "Expand-Archive libodb-sqlite-2.4.0.zip ."
     powershell -command "Expand-Archive sqlite-dll.zip ."
     powershell -command "Expand-Archive sqlite-amalgamation.zip ."
+) ELSE (
+    unzip libodb-2.4.0.zip
+    unzip libodb-sqlite-2.4.0.zip
+    unzip sqlite-dll.zip
+    unzip sqlite-amalgamation.zip
 )
 
 :: Restructure directory
@@ -51,10 +52,12 @@ goto :eof
 
 :help
 echo Usage:
-echo install_dependencies.bat                   installs using powershell(>=5.0) commands to unzip
-echo install_dependencies.bat use_unzip         use GNU32 unzip utility to unzip files
+echo install_dependencies.bat                   run install scripts
 echo install_dependencies.bat /?                displays help
 echo.
 echo it downloads the given dependencies:
 echo  - odb common runtime library              libodb-2.4.0
 echo  - odb sqlite runtime library              libodb-sqlite-2.4.0
+echo.
+echo Requires unzip for windows version below 10
+
