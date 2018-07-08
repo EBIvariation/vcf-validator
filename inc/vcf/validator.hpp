@@ -189,12 +189,17 @@ namespace ebi
                            ValidationLevel validationLevel,
                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
 
+    bool process_vcf_stream(std::istream &input,
+                          const std::string &sourceName,
+                          ValidationLevel validationLevel,
+                          std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
+
     std::string get_compression_from_extension(std::string const & source);
 
     std::string get_compression_from_magic_num(const std::vector<char> &line);
 
     void create_uncompressed_stream(std::istream & input,
-                                    const std::string & sourceName,
+                                    const std::string & file_extension,
                                     boost::iostreams::filtering_istream & uncompressed_input);
 
   }
