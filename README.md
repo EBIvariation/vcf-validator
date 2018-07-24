@@ -1,4 +1,6 @@
-# vcf-validator [![Build Status](https://travis-ci.org/EBIvariation/vcf-validator.svg?branch=develop)](https://travis-ci.org/EBIvariation/vcf-validator)
+# vcf-validator
+[![Build Status](https://travis-ci.org/EBIvariation/vcf-validator.svg?branch=develop)](https://travis-ci.org/EBIvariation/vcf-validator)
+[![Build status](https://ci.appveyor.com/api/projects/status/vt4ldlwhm91e3n49/branch/develop?svg=true)](https://ci.appveyor.com/project/ebivariation-bot/vcf-validator/branch/develop)
 
 Validator for the Variant Call Format (VCF) implemented using C++11.
 
