@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef VCF_REPORT_READER_HPP
-#define VCF_REPORT_READER_HPP
+#ifndef ASSEMBLY_REPORT_READER_HPP
+#define ASSEMBLY_REPORT_READER_HPP
 
 #include <memory>
 #include "vcf/error.hpp"
@@ -24,19 +24,17 @@ namespace ebi
 {
   namespace vcf
   {
-    class ReportReader
+    class AssemblyReportReader
     {
       public:
-        virtual ~ReportReader() {}  // needed if inheriting classes use raw pointers, instead of references or shared_ptrs
-        virtual size_t count_errors() = 0;
-        virtual void for_each_error(std::function<void(std::shared_ptr<Error>)> user_function) = 0;
+        virtual ~AssemblyReportReader() {}
 
-        virtual size_t count_warnings() = 0;
-        virtual void for_each_warning(std::function<void(std::shared_ptr<Error>)> user_function) = 0;
+        virtual MatchStats count_entry() = 0;
+        virtual void for_each_entry(std::function<void(std::shared_ptr<MatchStats>)> user_function) = 0;
     };
 
   }
 }
 
 
-#endif // VCF_REPORT_READER_HPP
+#endif // ASSEMBLY_REPORT_READER_HPP
