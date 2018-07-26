@@ -30,6 +30,7 @@ namespace ebi
         std::string chromosome;
         size_t position;
         std::string reference_allele;
+        std::string line;
 
         VcfVariant(std::string const &line);
 

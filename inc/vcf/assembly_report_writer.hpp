@@ -22,10 +22,10 @@
 #include <odb/sqlite/query.hxx>
 #include <odb/schema-catalog.hxx>
 #include <odb/sqlite/database.hxx>
+#include <fstream>
 
 #include "util/logger.hpp"
 #include "vcf/assembly_report_reader.hpp"
-#include "vcf/assembly_report_writer.hpp"
 #include "vcf/error.hpp"
 #include "vcf/error-odb.hpp"
 #include "vcf/vcf_fasta_variant.hpp"
@@ -38,23 +38,69 @@ namespace ebi
     class AssemblyReportWriter
     {
       public:
-        virtual void finish_report() = 0;
         virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) = 0;
         virtual void write_match(const vcf::VcfVariant &vcf_variant) = 0;
-
-    };
-
-    class SummaryAssemblyReportWriter : public AssemblyReportWriter, public AssemblyReportReader
-    {
-      public:
-        virtual void finish_report() override;
-        virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) override;
-        virtual void write_match(const vcf::VcfVariant &vcf_variant) override;
-
+        virtual void finish_report()
+        {
+            BOOST_LOG_TRIVIAL(info) << "Number of matches: " << match_stats.num_matches << "/" << match_stats.num_variants;
+            BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(match_stats.num_matches) / match_stats.num_variants) * 100 << "%";
+        }
+      protected:
         MatchStats match_stats;
     };
 
-    class OdbAssemblyReportRW : public AssemblyReportWriter
+    class SummaryAssemblyReportWriter : public AssemblyReportWriter
+    {
+      public:
+        SummaryAssemblyReportWriter(){}
+
+        void write_mismatch(const vcf::VcfVariant &vcf_variant)
+        {
+            match_stats.num_variants++;
+        }
+
+        void write_match(const vcf::VcfVariant &vcf_variant)
+        {
+            match_stats.num_variants++;
+            match_stats.num_matches++;
+        }
+    };
+
+    class TextAssemblyReportWriter : public AssemblyReportWriter
+    {
+      public:
+        TextAssemblyReportWriter(std::string filename) : file_name(filename)
+        {
+            file.open(filename, std::ios::out);
+            if(!file) {
+                throw std::runtime_error{"Unable to write output file " + file_name};
+            }
+        }
+
+        ~TextAssemblyReportWriter()
+        {
+            file.close();
+        }
+
+        virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) override
+        {
+            match_stats.num_variants++;
+            file << vcf_variant.line << std::endl;
+        }
+
+        virtual void write_match(const vcf::VcfVariant &vcf_variant) override
+        {
+            match_stats.num_variants++;
+            match_stats.num_matches++;
+            file << vcf_variant.line << std::endl;
+        }
+
+      private:
+        std::ofstream file;
+        std::string file_name;
+    };
+
+    class OdbAssemblyReportRW : public AssemblyReportWriter, public AssemblyReportReader
     {
       public:
     	OdbAssemblyReportRW(const std::string &db_name);

@@ -28,7 +28,7 @@ namespace ebi
   namespace vcf
   {
 
-    VcfVariant::VcfVariant(std::string const &line)
+    VcfVariant::VcfVariant(std::string const &line) : line(line)
     {
         std::vector<std::string> record_columns;
         util::string_split(line, "\t", record_columns);
