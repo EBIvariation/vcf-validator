@@ -87,7 +87,7 @@ namespace ebi
         {
             match_stats.num_variants++;
             if(report_type == ebi::vcf::INVALID) {
-                file << vcf_variant.line << std::endl;
+                file << vcf_variant.line;
             }
         }
 
@@ -96,7 +96,7 @@ namespace ebi
             match_stats.num_variants++;
             match_stats.num_matches++;
             if(report_type == ebi::vcf::VALID) {
-                file << vcf_variant.line << std::endl;
+                file << vcf_variant.line;
             }
         }
 
