@@ -97,7 +97,7 @@ namespace ebi
     const std::string G = "G";
     const std::string R = "R";
     const std::string UNKNOWN_CARDINALITY = ".";
-    
+
     // Pass value for Filter
     const std::string PASS = "PASS";
 
@@ -171,10 +171,15 @@ namespace ebi
     const std::string GT = "GT";
     const std::string HAP = "HAP";
     const std::string HQ = "HQ";
-    const std::string NQ = "NQ"; 
+    const std::string NQ = "NQ";
     const std::string PL = "PL";
     const std::string PQ = "PQ";
     const std::string PS = "PS";
+
+    // File extensions
+    const std::string VCF_EXT = ".vcf";
+    const std::string FASTA_EXT = ".fa";
+    const std::string INDEX_EXT = ".fai";
 
     // Compressed file extensions
     const std::string BZ2 = ".bz2";
