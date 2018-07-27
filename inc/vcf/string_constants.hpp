@@ -42,6 +42,8 @@ namespace ebi
     const char DATABASE[] = "database";
     const char TEXT[] = "text";
     const char SUMMARY[] = "summary";
+    const char VALID[] = "valid";
+    const char INVALID[] = "invalid";
     const char INPUT[] = "input";
     const char VCF[] = "vcf";
     const char FASTA[] = "fasta";

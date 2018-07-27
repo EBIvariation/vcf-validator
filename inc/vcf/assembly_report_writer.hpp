@@ -28,6 +28,7 @@
 #include "vcf/assembly_report_reader.hpp"
 #include "vcf/error.hpp"
 #include "vcf/error-odb.hpp"
+#include "vcf/string_constants.hpp"
 #include "vcf/vcf_fasta_variant.hpp"
 
 namespace ebi
@@ -69,7 +70,7 @@ namespace ebi
     class TextAssemblyReportWriter : public AssemblyReportWriter
     {
       public:
-        TextAssemblyReportWriter(std::string filename) : file_name(filename)
+        TextAssemblyReportWriter(std::string filename, std::string type) : file_name(filename) , report_type(type)
         {
             file.open(filename, std::ios::out);
             if(!file) {
@@ -85,19 +86,24 @@ namespace ebi
         virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) override
         {
             match_stats.num_variants++;
-            file << vcf_variant.line << std::endl;
+            if(report_type == ebi::vcf::INVALID) {
+                file << vcf_variant.line << std::endl;
+            }
         }
 
         virtual void write_match(const vcf::VcfVariant &vcf_variant) override
         {
             match_stats.num_variants++;
             match_stats.num_matches++;
-            file << vcf_variant.line << std::endl;
+            if(report_type == ebi::vcf::VALID) {
+                file << vcf_variant.line << std::endl;
+            }
         }
 
       private:
         std::ofstream file;
         std::string file_name;
+        std::string report_type;
     };
 
     class OdbAssemblyReportRW : public AssemblyReportWriter, public AssemblyReportReader

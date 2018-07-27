@@ -17,6 +17,7 @@
 #ifndef VCF_ASSEMBLY_CHECKER_HPP
 #define VCF_ASSEMBLY_CHECKER_HPP
 
+#include <chrono>
 #include <fstream>
 #include <set>
 #include <vector>

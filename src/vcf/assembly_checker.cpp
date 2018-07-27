@@ -74,6 +74,7 @@ namespace ebi
               }
           }
 
+          outputs[0]->finish_report();
           check_missing_chromosomes(absent_chromosomes);
 
           return assembly_valid_flag;
