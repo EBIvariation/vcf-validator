@@ -28,7 +28,6 @@ namespace ebi
                          std::istream &fasta_index_input,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
       {
-          bool assembly_valid_flag = true;
           std::vector<char> vector_line;
           vector_line.reserve(default_line_buffer_size);
           std::set<std::string> absent_chromosomes;
@@ -63,7 +62,6 @@ namespace ebi
               auto reference_sequence = vcf_variant.reference_allele;
 
               bool match_result = is_matching_sequence(fasta_sequence, reference_sequence);
-              assembly_valid_flag &= match_result;
 
               for (auto &output : outputs ) {
                   if (match_result) {
@@ -76,8 +74,7 @@ namespace ebi
 
           outputs[0]->finish_report();
           check_missing_chromosomes(absent_chromosomes);
-
-          return assembly_valid_flag;
+          return outputs[0]->is_valid_report();
       }
 
       bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence)

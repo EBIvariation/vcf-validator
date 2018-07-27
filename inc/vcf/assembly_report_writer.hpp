@@ -41,11 +41,17 @@ namespace ebi
       public:
         virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) = 0;
         virtual void write_match(const vcf::VcfVariant &vcf_variant) = 0;
+
         virtual void finish_report()
         {
-            BOOST_LOG_TRIVIAL(info) << "Number of matches: " << match_stats.num_matches << "/" << match_stats.num_variants;
-            BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(match_stats.num_matches) / match_stats.num_variants) * 100 << "%";
+            BOOST_LOG_TRIVIAL(info) << "Number of matches: " << match_stats.get_num_matches() << "/" << match_stats.get_num_variants();
+            BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(match_stats.get_num_matches()) / match_stats.get_num_variants()) * 100 << "%";
         }
+
+        bool is_valid_report() {
+            return match_stats.is_valid_combination();
+        }
+
       protected:
         MatchStats match_stats;
     };
@@ -57,13 +63,12 @@ namespace ebi
 
         void write_mismatch(const vcf::VcfVariant &vcf_variant)
         {
-            match_stats.num_variants++;
+            match_stats.add_match_result(false);
         }
 
         void write_match(const vcf::VcfVariant &vcf_variant)
         {
-            match_stats.num_variants++;
-            match_stats.num_matches++;
+            match_stats.add_match_result(true);
         }
     };
 
@@ -85,7 +90,7 @@ namespace ebi
 
         virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) override
         {
-            match_stats.num_variants++;
+            match_stats.add_match_result(false);
             if(report_type == ebi::vcf::INVALID) {
                 file << vcf_variant.line;
             }
@@ -93,8 +98,7 @@ namespace ebi
 
         virtual void write_match(const vcf::VcfVariant &vcf_variant) override
         {
-            match_stats.num_variants++;
-            match_stats.num_matches++;
+            match_stats.add_match_result(true);
             if(report_type == ebi::vcf::VALID) {
                 file << vcf_variant.line;
             }
