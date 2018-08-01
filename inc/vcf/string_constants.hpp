@@ -29,7 +29,7 @@ namespace ebi
     const std::string VCF_V42 = "VCFv4.2";
     const std::string VCF_V43 = "VCFv4.3";
 
-    // validator and debugulator command line arguments
+    // validator, debugulator and assembly_checker command line arguments
     const char STDIN[] = "stdin";
     const char STDOUT[] = "stdout";
     const char WARNING_LEVEL[] = "warning";
@@ -43,12 +43,16 @@ namespace ebi
     const char TEXT[] = "text";
     const char SUMMARY[] = "summary";
     const char INPUT[] = "input";
+    const char VCF[] = "vcf";
+    const char FASTA[] = "fasta";
     const char OUTPUT[] = "output";
     const char OUTDIR[] = "outdir";
     const char REPORT[] = "report";
     const char HELP_OPTION[] = "help,h";
     const char VERSION_OPTION[] = "version,v";
     const char INPUT_OPTION[] = "input,i";
+    const char VCF_OPTION[] = "vcf,c"; // NOTE: think of a better option name!!
+    const char FASTA_OPTION[] = "fasta,f";
     const char ERRORS_OPTION[] = "errors,e";
     const char LEVEL_OPTION[] = "level,l";
     const char REPORT_OPTION[] = "report,r";
@@ -65,6 +69,7 @@ namespace ebi
     const std::string ALT = "ALT";
     const std::string ASSEMBLY = "assembly";
     const std::string CHROM = "CHROM";
+    const std::string CHR = "chr";
     const std::string CONTIG = "contig";
     const std::string FILTER = "FILTER";
     const std::string FORMAT = "FORMAT";
