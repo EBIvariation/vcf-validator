@@ -29,6 +29,7 @@
 #include <odb/no-op-cache-traits.hxx>
 #include <odb/polymorphic-info.hxx>
 #include <odb/result.hxx>
+#include <odb/simple-object-result.hxx>
 #include <odb/polymorphic-object-result.hxx>
 #include <odb/view-image.hxx>
 #include <odb/view-result.hxx>
@@ -986,6 +987,67 @@ namespace odb
 
     static void
     callback (database&, const object_type&, callback_event);
+  };
+
+  // MatchStats
+  //
+  template <>
+  struct class_traits< ::ebi::vcf::MatchStats >
+  {
+    static const class_kind kind = class_object;
+  };
+
+  template <>
+  class access::object_traits< ::ebi::vcf::MatchStats >
+  {
+    public:
+    typedef ::ebi::vcf::MatchStats object_type;
+    typedef ::ebi::vcf::MatchStats* pointer_type;
+    typedef odb::pointer_traits<pointer_type> pointer_traits;
+
+    static const bool polymorphic = false;
+
+    typedef long unsigned int id_type;
+
+    static const bool auto_id = true;
+
+    static const bool abstract = false;
+
+    static id_type
+    id (const object_type&);
+
+    typedef
+    no_op_pointer_cache_traits<pointer_type>
+    pointer_cache_traits;
+
+    typedef
+    no_op_reference_cache_traits<object_type>
+    reference_cache_traits;
+
+    static void
+    callback (database&, object_type&, callback_event);
+
+    static void
+    callback (database&, const object_type&, callback_event);
+  };
+
+  // MatchStatsCount
+  //
+  template <>
+  struct class_traits< ::ebi::vcf::MatchStatsCount >
+  {
+    static const class_kind kind = class_view;
+  };
+
+  template <>
+  class access::view_traits< ::ebi::vcf::MatchStatsCount >
+  {
+    public:
+    typedef ::ebi::vcf::MatchStatsCount view_type;
+    typedef ::ebi::vcf::MatchStatsCount* pointer_type;
+
+    static void
+    callback (database&, view_type&, callback_event);
   };
 }
 
@@ -4810,6 +4872,257 @@ namespace odb
   {
   };
 
+  // MatchStats
+  //
+  template <typename A>
+  struct query_columns< ::ebi::vcf::MatchStats, id_sqlite, A >
+  {
+    // num_matches
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        int,
+        sqlite::id_integer >::query_type,
+      sqlite::id_integer >
+    num_matches_type_;
+
+    static const num_matches_type_ num_matches;
+
+    // num_variants
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        int,
+        sqlite::id_integer >::query_type,
+      sqlite::id_integer >
+    num_variants_type_;
+
+    static const num_variants_type_ num_variants;
+
+    // id
+    //
+    typedef
+    sqlite::query_column<
+      sqlite::value_traits<
+        long unsigned int,
+        sqlite::id_integer >::query_type,
+      sqlite::id_integer >
+    id_type_;
+
+    static const id_type_ id;
+  };
+
+  template <typename A>
+  const typename query_columns< ::ebi::vcf::MatchStats, id_sqlite, A >::num_matches_type_
+  query_columns< ::ebi::vcf::MatchStats, id_sqlite, A >::
+  num_matches (A::table_name, "\"num_matches\"", 0);
+
+  template <typename A>
+  const typename query_columns< ::ebi::vcf::MatchStats, id_sqlite, A >::num_variants_type_
+  query_columns< ::ebi::vcf::MatchStats, id_sqlite, A >::
+  num_variants (A::table_name, "\"num_variants\"", 0);
+
+  template <typename A>
+  const typename query_columns< ::ebi::vcf::MatchStats, id_sqlite, A >::id_type_
+  query_columns< ::ebi::vcf::MatchStats, id_sqlite, A >::
+  id (A::table_name, "\"id\"", 0);
+
+  template <typename A>
+  struct pointer_query_columns< ::ebi::vcf::MatchStats, id_sqlite, A >:
+    query_columns< ::ebi::vcf::MatchStats, id_sqlite, A >
+  {
+  };
+
+  template <>
+  class access::object_traits_impl< ::ebi::vcf::MatchStats, id_sqlite >:
+    public access::object_traits< ::ebi::vcf::MatchStats >
+  {
+    public:
+    struct id_image_type
+    {
+      long long id_value;
+      bool id_null;
+
+      std::size_t version;
+    };
+
+    struct image_type
+    {
+      // num_matches
+      //
+      long long num_matches_value;
+      bool num_matches_null;
+
+      // num_variants
+      //
+      long long num_variants_value;
+      bool num_variants_null;
+
+      // id_
+      //
+      long long id_value;
+      bool id_null;
+
+      std::size_t version;
+    };
+
+    struct extra_statement_cache_type;
+
+    using object_traits<object_type>::id;
+
+    static id_type
+    id (const id_image_type&);
+
+    static id_type
+    id (const image_type&);
+
+    static bool
+    grow (image_type&,
+          bool*);
+
+    static void
+    bind (sqlite::bind*,
+          image_type&,
+          sqlite::statement_kind);
+
+    static void
+    bind (sqlite::bind*, id_image_type&);
+
+    static bool
+    init (image_type&,
+          const object_type&,
+          sqlite::statement_kind);
+
+    static void
+    init (object_type&,
+          const image_type&,
+          database*);
+
+    static void
+    init (id_image_type&, const id_type&);
+
+    typedef sqlite::object_statements<object_type> statements_type;
+
+    typedef sqlite::query_base query_base_type;
+
+    static const std::size_t column_count = 3UL;
+    static const std::size_t id_column_count = 1UL;
+    static const std::size_t inverse_column_count = 0UL;
+    static const std::size_t readonly_column_count = 0UL;
+    static const std::size_t managed_optimistic_column_count = 0UL;
+
+    static const std::size_t separate_load_column_count = 0UL;
+    static const std::size_t separate_update_column_count = 0UL;
+
+    static const bool versioned = false;
+
+    static const char persist_statement[];
+    static const char find_statement[];
+    static const char update_statement[];
+    static const char erase_statement[];
+    static const char query_statement[];
+    static const char erase_query_statement[];
+
+    static const char table_name[];
+
+    static void
+    persist (database&, object_type&);
+
+    static pointer_type
+    find (database&, const id_type&);
+
+    static bool
+    find (database&, const id_type&, object_type&);
+
+    static bool
+    reload (database&, object_type&);
+
+    static void
+    update (database&, const object_type&);
+
+    static void
+    erase (database&, const id_type&);
+
+    static void
+    erase (database&, const object_type&);
+
+    static result<object_type>
+    query (database&, const query_base_type&);
+
+    static unsigned long long
+    erase_query (database&, const query_base_type&);
+
+    public:
+    static bool
+    find_ (statements_type&,
+           const id_type*);
+
+    static void
+    load_ (statements_type&,
+           object_type&,
+           bool reload);
+  };
+
+  template <>
+  class access::object_traits_impl< ::ebi::vcf::MatchStats, id_common >:
+    public access::object_traits_impl< ::ebi::vcf::MatchStats, id_sqlite >
+  {
+  };
+
+  // MatchStatsCount
+  //
+  template <>
+  class access::view_traits_impl< ::ebi::vcf::MatchStatsCount, id_sqlite >:
+    public access::view_traits< ::ebi::vcf::MatchStatsCount >
+  {
+    public:
+    struct image_type
+    {
+      // count
+      //
+      long long count_value;
+      bool count_null;
+
+      std::size_t version;
+    };
+
+    typedef sqlite::view_statements<view_type> statements_type;
+
+    typedef sqlite::query_base query_base_type;
+    struct query_columns;
+
+    static const bool versioned = false;
+
+    static bool
+    grow (image_type&,
+          bool*);
+
+    static void
+    bind (sqlite::bind*,
+          image_type&);
+
+    static void
+    init (view_type&,
+          const image_type&,
+          database*);
+
+    static const std::size_t column_count = 1UL;
+
+    static query_base_type
+    query_statement (const query_base_type&);
+
+    static result<view_type>
+    query (database&, const query_base_type&);
+  };
+
+  template <>
+  class access::view_traits_impl< ::ebi::vcf::MatchStatsCount, id_common >:
+    public access::view_traits_impl< ::ebi::vcf::MatchStatsCount, id_sqlite >
+  {
+  };
+
   // Error
   //
   // ErrorCount
@@ -4858,6 +5171,17 @@ namespace odb
   //
   // DuplicationError
   //
+  // MatchStats
+  //
+  // MatchStatsCount
+  //
+  struct access::view_traits_impl< ::ebi::vcf::MatchStatsCount, id_sqlite >::query_columns:
+    odb::pointer_query_columns<
+      ::ebi::vcf::MatchStats,
+      id_sqlite,
+      odb::access::object_traits_impl< ::ebi::vcf::MatchStats, id_sqlite > >
+  {
+  };
 }
 
 #include "vcf/error-odb.ipp"

@@ -566,6 +566,47 @@ namespace odb
     ODB_POTENTIALLY_UNUSED (x);
     ODB_POTENTIALLY_UNUSED (e);
   }
+
+  // MatchStats
+  //
+
+  inline
+  access::object_traits< ::ebi::vcf::MatchStats >::id_type
+  access::object_traits< ::ebi::vcf::MatchStats >::
+  id (const object_type& o)
+  {
+    return o.id_;
+  }
+
+  inline
+  void access::object_traits< ::ebi::vcf::MatchStats >::
+  callback (database& db, object_type& x, callback_event e)
+  {
+    ODB_POTENTIALLY_UNUSED (db);
+    ODB_POTENTIALLY_UNUSED (x);
+    ODB_POTENTIALLY_UNUSED (e);
+  }
+
+  inline
+  void access::object_traits< ::ebi::vcf::MatchStats >::
+  callback (database& db, const object_type& x, callback_event e)
+  {
+    ODB_POTENTIALLY_UNUSED (db);
+    ODB_POTENTIALLY_UNUSED (x);
+    ODB_POTENTIALLY_UNUSED (e);
+  }
+
+  // MatchStatsCount
+  //
+
+  inline
+  void access::view_traits< ::ebi::vcf::MatchStatsCount >::
+  callback (database& db, view_type& x, callback_event e)
+  {
+    ODB_POTENTIALLY_UNUSED (db);
+    ODB_POTENTIALLY_UNUSED (x);
+    ODB_POTENTIALLY_UNUSED (e);
+  }
 }
 
 #include <odb/details/unique-ptr.hxx>
@@ -1277,5 +1318,30 @@ namespace odb
     b[1UL].version++;
     b[2UL].version++;
   }
+
+  // MatchStats
+  //
+
+  inline
+  void access::object_traits_impl< ::ebi::vcf::MatchStats, id_sqlite >::
+  erase (database& db, const object_type& obj)
+  {
+    callback (db, obj, callback_event::pre_erase);
+    erase (db, id (obj));
+    callback (db, obj, callback_event::post_erase);
+  }
+
+  inline
+  void access::object_traits_impl< ::ebi::vcf::MatchStats, id_sqlite >::
+  load_ (statements_type& sts,
+         object_type& obj,
+         bool)
+  {
+    ODB_POTENTIALLY_UNUSED (sts);
+    ODB_POTENTIALLY_UNUSED (obj);
+  }
+
+  // MatchStatsCount
+  //
 }
 
