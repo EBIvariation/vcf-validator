@@ -35,9 +35,11 @@ include_directories (lib)
 if (LINUX AND EXISTS "${PROJECT_SOURCE_DIR}/linux_dependencies")
   include_directories (linux_dependencies)
   set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/linux_dependencies" CACHE STRING "Absolute path to libraries")
+  set (ODB_PATH "${EXT_LIB_PATH}/odb-2.4.0-x86_64-linux-gnu/bin/" CACHE STRING "Path to odb binaries")
 elseif (OSX AND EXISTS "${PROJECT_SOURCE_DIR}/osx_dependencies")
   include_directories (osx_dependencies)
   set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/osx_dependencies" CACHE STRING "Absolute path to libraries")
+  set (ODB_PATH "${EXT_LIB_PATH}/odb-2.4.0-i686-macosx/bin/" CACHE STRING "Path to odb binaries")
 elseif (WINDOWS AND EXISTS "${PROJECT_SOURCE_DIR}/windows_dependencies")
   include_directories (lib/sqlite)            # Windows specific
   include_directories (windows_dependencies)
@@ -122,7 +124,7 @@ foreach (_file ${ODB_MAPPING_CLASSES})
   if (LINUX OR OSX)
     add_custom_command (
       OUTPUT ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
-      COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
+      COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && ${ODB_PATH}odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
       --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp
       --output-dir ${CMAKE_HOME_DIRECTORY}/inc/vcf/ ${_file}
       && mv ${CMAKE_HOME_DIRECTORY}/${gencppfile} ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}

@@ -132,12 +132,10 @@ before_script:
   - |
     if [[ $TRAVIS_OS_NAME == "linux" ]]; then
       ./install_dependencies.sh
-      export PATH=$PATH:$PWD/linux_dependencies/odb-2.4.0-x86_64-linux-gnu/bin/
     fi
   - |
     if [[ $TRAVIS_OS_NAME == "osx" ]]; then
       ./install_dependencies.sh osx
-      export PATH=$PATH:$PWD/osx_dependencies/odb-2.4.0-i686-macosx/bin/
     fi
 
 
