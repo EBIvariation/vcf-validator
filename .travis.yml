@@ -4,10 +4,11 @@ sudo:
 language:
   - cpp
 
-cache:
-  directories:
-    - linux_dependencies
-    - osx_dependencies
+# UNCOMMENT BEFORE MERGING THE PR
+#cache:
+  #directories:
+    #- linux_dependencies
+    #- osx_dependencies
 
 matrix:
   include:
@@ -19,92 +20,92 @@ matrix:
       before_install:
         - brew install ninja
 
-    # OS X GCC
-    - os: osx
-      osx_image: xcode9.3
-      env: C_COMPILER=gcc CXX_COMPILER=g++
-      before_install:
-        - brew install ninja
+    ## OS X GCC
+    #- os: osx
+      #osx_image: xcode9.3
+      #env: C_COMPILER=gcc CXX_COMPILER=g++
+      #before_install:
+        #- brew install ninja
 
-    # Clang 4.0
-    - os: linux
-      compiler: clang
-      env: C_COMPILER=clang-4.0 CXX_COMPILER=clang++-4.0
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
-          packages:
-            - clang-4.0
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
+    ## Clang 4.0
+    #- os: linux
+      #compiler: clang
+      #env: C_COMPILER=clang-4.0 CXX_COMPILER=clang++-4.0
+      #addons:
+        #apt:
+          #sources:
+            #- boost-latest
+            #- ubuntu-toolchain-r-test
+            #- llvm-toolchain-trusty-4.0
+          #packages:
+            #- clang-4.0
+            #- libboost1.55-dev
+            #- libboost-filesystem1.55-dev
+            #- libboost-iostreams1.55-dev
+            #- libboost-program-options1.55-dev
+            #- libboost-regex1.55-dev
+            #- libboost-log1.55-dev
+            #- ninja-build
 
-    # Clang 5.0
-    - os: linux
-      compiler: clang
-      env: C_COMPILER=clang-5.0 CXX_COMPILER=clang++-5.0
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
-          packages:
-            - clang-5.0
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
+    ## Clang 5.0
+    #- os: linux
+      #compiler: clang
+      #env: C_COMPILER=clang-5.0 CXX_COMPILER=clang++-5.0
+      #addons:
+        #apt:
+          #sources:
+            #- boost-latest
+            #- ubuntu-toolchain-r-test
+            #- llvm-toolchain-trusty-5.0
+          #packages:
+            #- clang-5.0
+            #- libboost1.55-dev
+            #- libboost-filesystem1.55-dev
+            #- libboost-iostreams1.55-dev
+            #- libboost-program-options1.55-dev
+            #- libboost-regex1.55-dev
+            #- libboost-log1.55-dev
+            #- ninja-build
 
-    # GCC 4.8
-    - os: linux
-      compiler: gcc
-      env: C_COMPILER=gcc-4.8 CXX_COMPILER=g++-4.8
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-4.8
-            - g++-4.8
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
+    ## GCC 4.8
+    #- os: linux
+      #compiler: gcc
+      #env: C_COMPILER=gcc-4.8 CXX_COMPILER=g++-4.8
+      #addons:
+        #apt:
+          #sources:
+            #- boost-latest
+            #- ubuntu-toolchain-r-test
+          #packages:
+            #- gcc-4.8
+            #- g++-4.8
+            #- libboost1.55-dev
+            #- libboost-filesystem1.55-dev
+            #- libboost-iostreams1.55-dev
+            #- libboost-program-options1.55-dev
+            #- libboost-regex1.55-dev
+            #- libboost-log1.55-dev
+            #- ninja-build
 
-    # GCC 5
-    - os: linux
-      compiler: gcc
-      env: C_COMPILER=gcc-5 CXX_COMPILER=g++-5
-      addons:
-        apt:
-          sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-5
-            - g++-5
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
-            - ninja-build
+    ## GCC 5
+    #- os: linux
+      #compiler: gcc
+      #env: C_COMPILER=gcc-5 CXX_COMPILER=g++-5
+      #addons:
+        #apt:
+          #sources:
+            #- boost-latest
+            #- ubuntu-toolchain-r-test
+          #packages:
+            #- gcc-5
+            #- g++-5
+            #- libboost1.55-dev
+            #- libboost-filesystem1.55-dev
+            #- libboost-iostreams1.55-dev
+            #- libboost-program-options1.55-dev
+            #- libboost-regex1.55-dev
+            #- libboost-log1.55-dev
+            #- ninja-build
 
     # GCC 6
     - os: linux
