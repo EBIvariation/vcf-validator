@@ -88,31 +88,49 @@ The easiest way to build vcf-validator is using the Docker image provided with t
 
 Executables will be created in the `build/bin` subfolder.
 
+
 ### Linux
+
+The build has been tested on the following distros:
+* Ubuntu
+* Arch
 
 The build has been tested on the following compilers:
 * Clang 3.9 to 5.0
 * GCC 4.8 to 6.0
 
+#### Using install_dependencies.sh (Recommended for normal users)
+
+Normal users can install most of the dependencies using install_dependencies.sh script using the command `./install_dependencies.sh linux` . You will need to install SQLite3 before running the script (Check commands for your distro under `Miscellaneous` section). You may run `./install_dependencies.sh --help` for help.
+`install_dependencies.sh` script includes the following dependencies:
+```
+  - odb compiler                            odb-2.4.0
+  - odb common runtime library              libodb-2.4.0
+  - odb sqlite runtime library              libodb-sqlite-2.4.0
+  - bzip library                            bzip2-1.0.6
+  - zlib library                            zlib-1.2.11
+```
+After installing the dependencies a folder named `linux_dependencies` will be created with all the required libraies in it. Now you will have to install boost packages as described in boost section. Now you may simply run `cmake -G "Unix Makefiles" /path/to/CMakeLists.txt` to create build scripts.
+
 #### Dependencies
 
-You can easily install some of the required dependencies running `./install_dependencies.sh linux`, and you may run `./install_dependencies.sh --help` for help. Otherwise please follow the steps below.
-
-##### Compression libraries
-
-You will need to install the bzip2 and zlib development packages. For Ubuntu users, these are `libbz2-dev` and `zlib1g-dev`.
+It is recommended to use install_dependencies.sh (explained in upper section) to install dependencies. Still if you want to manually install the dependencies you can install/build the following dependencies.
 
 ##### Boost
 
-The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-iostreams`, `libboost-program-options-dev`, `libboost-regex-dev` and `libboost-log-dev`.
+The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. 
+If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-iostreams`, `libboost-program-options-dev`, `libboost-regex-dev` and `libboost-log-dev`.
+Arch/pacman users may use `sudo pacman -S boost`
 
 ##### ODB
+
+You may ignore this section if you are using `install_dependencies script`.
 
 You will need to download the ODB compiler, the ODB common runtime library, and the SQLite database runtime library from [this page](http://codesynthesis.com/products/odb/download.xhtml).
 
 ODB requires SQLite3 to be installed. If you are using Ubuntu, the required packages' names will be `libsqlite3-0` and `libsqlite3-dev`.
 
-To install the ODB compiler, the easiest way is to download the `.deb` or `.rpm` packages and install them automatically with `dpkg`. Both the ODB runtime and SQLite database runtime libraries can be installed manually running `./configure && make && sudo make install`. This will install the libraries in `/usr/local/lib`.
+To install the ODB compiler, the easiest way is to download the `.deb` or `.rpm` packages and install them automatically with `dpkg` or `rpm` respectively. Both the ODB common runtime and SQLite database runtime libraries can be installed manually running `./configure && make && sudo make install`. This will install the libraries in `/usr/local/lib`.
 
 If you don't have root permissions, please run `./configure --prefix=/path/to/odb/libraries/folder` to specify which folder to install ODB in, then `make && make install`, without `sudo`. Also you will have to provide the path to ODB while configuring libodb-sqlite using `./configure --with-libodb=/path/to/odb/libraries`.
 
@@ -219,6 +237,24 @@ odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schem
 mv inc/vcf/error-odb.cpp src/vcf/error-odb.cpp
 ```
 
+## Miscellaneous
+
+### Commands for downloading packages in different linux distros
+
+#### Ubuntu
+
+Ubuntu/Debian based linux users can install sqlite3 packages using:
+```
+sudo apt install libsqlite3-dev 
+sudo apt install libsqlite3-0
+```
+
+#### Arch
+
+Arch/pacman based linux users can isntall sqlite3 packages using:
+```
+sudo pacman -S sqlite3
+```
 
 ### Build ODB Libraries for windows
 
