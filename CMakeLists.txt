@@ -95,17 +95,7 @@ endif ()
 # Application modules
 add_library (mod_sqlite3 STATIC lib/sqlite/sqlite3.c)
 
-if (LINUX)
-  set (THIRD_PARTY_LIBRARIES
-    ${Boost_LIBRARIES}
-    bz2
-    z
-    ${EXT_LIB_PATH}/libodb-sqlite.a
-    ${EXT_LIB_PATH}/libodb.a
-    mod_sqlite3
-    ${CMAKE_THREAD_LIBS_INIT}
-  )
-elseif (OSX)
+if (LINUX OR OSX)
   set (THIRD_PARTY_LIBRARIES
     ${Boost_LIBRARIES}
     ${EXT_LIB_PATH}/libbz2.a
@@ -187,19 +177,7 @@ target_link_libraries (mod_vcf ${THIRD_PARTY_LIBRARIES} mod_odb)
 
 
 # Libraries to link with executables
-if (LINUX)
-  set (LIBRARIES_TO_LINK
-    mod_vcf
-    mod_odb
-    ${Boost_LIBRARIES}
-    bz2
-    z
-    ${EXT_LIB_PATH}/libodb-sqlite.a
-    ${EXT_LIB_PATH}/libodb.a
-    mod_sqlite3
-    ${CMAKE_THREAD_LIBS_INIT}
-  )
-elseif (OSX)
+if (LINUX OR OSX)
   set (LIBRARIES_TO_LINK
     mod_vcf
     mod_odb
