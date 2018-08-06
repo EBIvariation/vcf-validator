@@ -30,7 +30,8 @@ elif [ "$#" -eq 1 ]
 then
   if [[ "$1" == "--help" ]]
   then
-      OS_NAME="$help_install_dependencies"
+      echo "$help_install_dependencies"
+      exit
   elif [[ "$1" == "linux" ]]
   then
       OS_NAME="linux"
