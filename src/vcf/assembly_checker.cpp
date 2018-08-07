@@ -42,7 +42,7 @@ namespace ebi
                   continue;
               }
 
-              RecordCore record_core{line};
+              Record_Core record_core{line};
 
               if (index.count(record_core.chromosome) == 0) {
                   BOOST_LOG_TRIVIAL(warning) << record_core.chromosome << " is not present in FASTA file";

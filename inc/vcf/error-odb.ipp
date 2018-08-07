@@ -595,18 +595,6 @@ namespace odb
     ODB_POTENTIALLY_UNUSED (x);
     ODB_POTENTIALLY_UNUSED (e);
   }
-
-  // MatchStatsCount
-  //
-
-  inline
-  void access::view_traits< ::ebi::vcf::MatchStatsCount >::
-  callback (database& db, view_type& x, callback_event e)
-  {
-    ODB_POTENTIALLY_UNUSED (db);
-    ODB_POTENTIALLY_UNUSED (x);
-    ODB_POTENTIALLY_UNUSED (e);
-  }
 }
 
 #include <odb/details/unique-ptr.hxx>
@@ -1340,8 +1328,5 @@ namespace odb
     ODB_POTENTIALLY_UNUSED (sts);
     ODB_POTENTIALLY_UNUSED (obj);
   }
-
-  // MatchStatsCount
-  //
 }
 

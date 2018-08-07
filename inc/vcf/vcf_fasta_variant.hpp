@@ -30,23 +30,29 @@ namespace ebi
   namespace vcf
   {
 
-    struct RecordCore
+    struct Record_Core
     {
         std::string chromosome;
         size_t position;
         std::string reference_allele;
         std::string line;
 
-        RecordCore(std::string const &line) : line(line)
+        Record_Core(std::string const &line) : line(line)
         {
             std::vector<std::string> record_columns;
             util::string_split(line, "\t", record_columns);
 
-            chromosome = record_columns[0];
+            chromosome = format_chromosome(record_columns[0]);
             position = static_cast<size_t>(std::stoi(record_columns[1]));
             reference_allele = record_columns[3];
         }
 
+        std::string format_chromosome(std::string const &chromosome)
+        {
+            std::string chromosome_copy;
+            std::transform(chromosome.begin(), chromosome.end(), chromosome_copy.begin(), ::tolower);
+            return chromosome;
+        }
     };
   }
 }

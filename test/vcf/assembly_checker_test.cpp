@@ -27,17 +27,10 @@ namespace ebi
 {
     TEST_CASE("Function checks", "[assembly_checker]")
     {
-        SECTION("Missing chromosome")
-        {
-            std::set<std::string> chromosomes;
-            chromosomes.insert("1");
-            CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_missing_chromosomes(chromosomes), std::invalid_argument);
-        }
-
         SECTION("Check sequence matches")
         {
             std::string line{"1\t10177\trs367896724\tA\tAC"};
-            vcf::RecordCore record_core{line};
+            vcf::Record_Core record_core{line};
             CHECK(ebi::vcf::assembly_checker::is_matching_sequence(record_core.reference_allele, "A"));
             CHECK_FALSE(ebi::vcf::assembly_checker::is_matching_sequence(record_core.reference_allele, "G"));
         }

@@ -1030,25 +1030,6 @@ namespace odb
     static void
     callback (database&, const object_type&, callback_event);
   };
-
-  // MatchStatsCount
-  //
-  template <>
-  struct class_traits< ::ebi::vcf::MatchStatsCount >
-  {
-    static const class_kind kind = class_view;
-  };
-
-  template <>
-  class access::view_traits< ::ebi::vcf::MatchStatsCount >
-  {
-    public:
-    typedef ::ebi::vcf::MatchStatsCount view_type;
-    typedef ::ebi::vcf::MatchStatsCount* pointer_type;
-
-    static void
-    callback (database&, view_type&, callback_event);
-  };
 }
 
 #include <odb/details/buffer.hxx>
@@ -5071,58 +5052,6 @@ namespace odb
   {
   };
 
-  // MatchStatsCount
-  //
-  template <>
-  class access::view_traits_impl< ::ebi::vcf::MatchStatsCount, id_sqlite >:
-    public access::view_traits< ::ebi::vcf::MatchStatsCount >
-  {
-    public:
-    struct image_type
-    {
-      // count
-      //
-      long long count_value;
-      bool count_null;
-
-      std::size_t version;
-    };
-
-    typedef sqlite::view_statements<view_type> statements_type;
-
-    typedef sqlite::query_base query_base_type;
-    struct query_columns;
-
-    static const bool versioned = false;
-
-    static bool
-    grow (image_type&,
-          bool*);
-
-    static void
-    bind (sqlite::bind*,
-          image_type&);
-
-    static void
-    init (view_type&,
-          const image_type&,
-          database*);
-
-    static const std::size_t column_count = 1UL;
-
-    static query_base_type
-    query_statement (const query_base_type&);
-
-    static result<view_type>
-    query (database&, const query_base_type&);
-  };
-
-  template <>
-  class access::view_traits_impl< ::ebi::vcf::MatchStatsCount, id_common >:
-    public access::view_traits_impl< ::ebi::vcf::MatchStatsCount, id_sqlite >
-  {
-  };
-
   // Error
   //
   // ErrorCount
@@ -5173,15 +5102,6 @@ namespace odb
   //
   // MatchStats
   //
-  // MatchStatsCount
-  //
-  struct access::view_traits_impl< ::ebi::vcf::MatchStatsCount, id_sqlite >::query_columns:
-    odb::pointer_query_columns<
-      ::ebi::vcf::MatchStats,
-      id_sqlite,
-      odb::access::object_traits_impl< ::ebi::vcf::MatchStats, id_sqlite > >
-  {
-  };
 }
 
 #include "vcf/error-odb.ipp"

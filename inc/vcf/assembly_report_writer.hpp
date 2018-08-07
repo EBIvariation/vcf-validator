@@ -25,7 +25,6 @@
 #include <fstream>
 
 #include "util/logger.hpp"
-#include "vcf/assembly_report_reader.hpp"
 #include "vcf/error.hpp"
 #include "vcf/error-odb.hpp"
 #include "vcf/string_constants.hpp"
@@ -39,8 +38,8 @@ namespace ebi
     class AssemblyReportWriter
     {
       public:
-        virtual void write_mismatch(const vcf::RecordCore &record_core) = 0;
-        virtual void write_match(const vcf::RecordCore &record_core) = 0;
+        virtual void write_mismatch(const vcf::Record_Core &record_core) = 0;
+        virtual void write_match(const vcf::Record_Core &record_core) = 0;
 
         virtual void finish_report()
         {
@@ -61,12 +60,12 @@ namespace ebi
       public:
         SummaryAssemblyReportWriter(){}
 
-        void write_mismatch(const vcf::RecordCore &record_core)
+        void write_mismatch(const vcf::Record_Core &record_core)
         {
             match_stats.add_match_result(false);
         }
 
-        void write_match(const vcf::RecordCore &record_core)
+        void write_match(const vcf::Record_Core &record_core)
         {
             match_stats.add_match_result(true);
         }
@@ -88,7 +87,7 @@ namespace ebi
             file.close();
         }
 
-        virtual void write_mismatch(const vcf::RecordCore &record_core) override
+        virtual void write_mismatch(const vcf::Record_Core &record_core) override
         {
             match_stats.add_match_result(false);
             if(report_type == ebi::vcf::INVALID) {
@@ -96,7 +95,7 @@ namespace ebi
             }
         }
 
-        virtual void write_match(const vcf::RecordCore &record_core) override
+        virtual void write_match(const vcf::Record_Core &record_core) override
         {
             match_stats.add_match_result(true);
             if(report_type == ebi::vcf::VALID) {
@@ -109,35 +108,6 @@ namespace ebi
         std::string file_name;
         std::string report_type;
     };
-
-    class OdbAssemblyReportRW : public AssemblyReportWriter, public AssemblyReportReader
-    {
-      public:
-        OdbAssemblyReportRW(const std::string &db_name);
-        ~OdbAssemblyReportRW();
-        void flush();
-
-        // ReportWriter implementation
-        virtual void write_mismatch(const vcf::RecordCore &record_core) override;
-        virtual void write_match(const vcf::RecordCore &record_core) override;
-        virtual void finish_report() override;
-
-        // ReportReader implementation
-        virtual MatchStats count_entry() override;
-        virtual void for_each_entry(std::function<void(std::shared_ptr<MatchStats>)> user_function) override;
-
-        void for_each(std::function<void(std::shared_ptr<MatchStats>)> user_function, odb::query<MatchStats> query);
-        size_t count(odb::query<MatchStatsCount> query);
-
-      private:
-        MatchStats match_stats;
-        std::string db_name;
-        std::unique_ptr<odb::core::database> db;
-        odb::core::transaction transaction;
-        size_t current_transaction_size;
-        const size_t transaction_size;
-    };
-
   }
 }
 

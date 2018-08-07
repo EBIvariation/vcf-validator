@@ -378,7 +378,8 @@ namespace ebi
 
         void add_match_result(bool result)
         {
-            num_variants += result ? 1 : 0;
+            num_variants++;
+            num_matches += result ? 1 : 0;
         }
 
         bool is_valid_combination()
