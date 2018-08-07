@@ -39,8 +39,8 @@ namespace ebi
     class AssemblyReportWriter
     {
       public:
-        virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) = 0;
-        virtual void write_match(const vcf::VcfVariant &vcf_variant) = 0;
+        virtual void write_mismatch(const vcf::RecordCore &record_core) = 0;
+        virtual void write_match(const vcf::RecordCore &record_core) = 0;
 
         virtual void finish_report()
         {
@@ -61,12 +61,12 @@ namespace ebi
       public:
         SummaryAssemblyReportWriter(){}
 
-        void write_mismatch(const vcf::VcfVariant &vcf_variant)
+        void write_mismatch(const vcf::RecordCore &record_core)
         {
             match_stats.add_match_result(false);
         }
 
-        void write_match(const vcf::VcfVariant &vcf_variant)
+        void write_match(const vcf::RecordCore &record_core)
         {
             match_stats.add_match_result(true);
         }
@@ -88,19 +88,19 @@ namespace ebi
             file.close();
         }
 
-        virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) override
+        virtual void write_mismatch(const vcf::RecordCore &record_core) override
         {
             match_stats.add_match_result(false);
             if(report_type == ebi::vcf::INVALID) {
-                file << vcf_variant.line;
+                file << record_core.line;
             }
         }
 
-        virtual void write_match(const vcf::VcfVariant &vcf_variant) override
+        virtual void write_match(const vcf::RecordCore &record_core) override
         {
             match_stats.add_match_result(true);
             if(report_type == ebi::vcf::VALID) {
-                file << vcf_variant.line;
+                file << record_core.line;
             }
         }
 
@@ -113,13 +113,13 @@ namespace ebi
     class OdbAssemblyReportRW : public AssemblyReportWriter, public AssemblyReportReader
     {
       public:
-    	OdbAssemblyReportRW(const std::string &db_name);
-    	~OdbAssemblyReportRW();
+        OdbAssemblyReportRW(const std::string &db_name);
+        ~OdbAssemblyReportRW();
         void flush();
 
         // ReportWriter implementation
-        virtual void write_mismatch(const vcf::VcfVariant &vcf_variant) override;
-        virtual void write_match(const vcf::VcfVariant &vcf_variant) override;
+        virtual void write_mismatch(const vcf::RecordCore &record_core) override;
+        virtual void write_match(const vcf::RecordCore &record_core) override;
         virtual void finish_report() override;
 
         // ReportReader implementation
@@ -131,7 +131,7 @@ namespace ebi
 
       private:
         MatchStats match_stats;
-    	std::string db_name;
+        std::string db_name;
         std::unique_ptr<odb::core::database> db;
         odb::core::transaction transaction;
         size_t current_transaction_size;

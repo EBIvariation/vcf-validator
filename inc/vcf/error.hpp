@@ -375,33 +375,33 @@ namespace ebi
             num_matches = 0;
             num_variants = 0;
         }
+
         void add_match_result(bool result)
         {
-            num_variants++;
-            num_matches += (int)result;
+            num_variants += result ? 1 : 0;
         }
+
         bool is_valid_combination()
         {
             return num_matches == num_variants;
         }
-        int get_num_matches() {
+
+        int get_num_matches()
+        {
             return num_matches;
         }
-        int get_num_variants() {
+
+        int get_num_variants()
+        {
             return num_variants;
         }
+
       private:
         int num_matches;
         int num_variants;
         friend class odb::access;
         #pragma db id auto
         unsigned long id_;
-    };
-    #pragma db view object(MatchStats)
-    struct MatchStatsCount
-    {
-        #pragma db column("COUNT(" + MatchStats::id_ + ")")
-        std::size_t count;
     };
   }
 }

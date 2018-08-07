@@ -37,9 +37,9 @@ namespace ebi
         SECTION("Check sequence matches")
         {
             std::string line{"1\t10177\trs367896724\tA\tAC"};
-            vcf::VcfVariant vcf_variant{line};
-            CHECK(ebi::vcf::assembly_checker::is_matching_sequence(vcf_variant.reference_allele, "A"));
-            CHECK_FALSE(ebi::vcf::assembly_checker::is_matching_sequence(vcf_variant.reference_allele, "G"));
+            vcf::RecordCore record_core{line};
+            CHECK(ebi::vcf::assembly_checker::is_matching_sequence(record_core.reference_allele, "A"));
+            CHECK_FALSE(ebi::vcf::assembly_checker::is_matching_sequence(record_core.reference_allele, "G"));
         }
 
         SECTION("All matches")

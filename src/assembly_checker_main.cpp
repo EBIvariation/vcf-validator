@@ -82,7 +82,7 @@ namespace
         std::sort(outs.begin(), outs.end());
         std::unique(outs.begin(), outs.end());
         if (initial_size != outs.size()) {
-            BOOST_LOG_TRIVIAL(warning) << "Duplicated outputs! will write just once to each output specified by -r/--report";
+            BOOST_LOG_TRIVIAL(warning) << "Duplicated outputs! Will write just once to each output specified by -r/--report";
         }
 
         std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> outputs;
@@ -115,11 +115,14 @@ namespace
         return outputs;
     }
 
-    inline void check_file_validity(std::ifstream &input, std::string error_msg)
+    inline std::ifstream open_file(std::string path)
     {
+        std::ifstream input{path};
         if (!input) {
-          throw std::runtime_error{error_msg};
+            std::string file_error_msg = "Couldn't open file " + path;
+            throw std::runtime_error{error_msg};
         }
+        return input;
     }
 }
 
@@ -142,25 +145,24 @@ int main(int argc, char** argv)
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), vcf_path);
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
-        std::ifstream vcf_input{vcf_path};
-        std::string file_error_msg = "Couldn't open VCF file " + vcf_path;
-        check_file_validity(vcf_input, file_error_msg);
+        std::ifstream vcf_input = open_file(vcf_path);
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA file...";
-        std::ifstream fasta_input{fasta_path, std::ios::binary};
-        file_error_msg = "Couldn't open FASTA file " + fasta_path;
-        check_file_validity(fasta_input, file_error_msg);
+        std::ifstream fasta_input = open_file(fasta_path);
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA index file...";
-        std::ifstream fasta_index_input{fasta_index_path, std::ios::binary};
-        file_error_msg = "Couldn't open FASTA index file " + fasta_index_path + ". Please use samtools "
-                         "faidx <fasta> to create the index file";
-        check_file_validity(fasta_index_input, file_error_msg);
+        std::ifstream fasta_index_input = open_file(file_index_path);
 
         ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, outputs);
         return 0;
+    } catch (std::invalid_argument const & ex) {
+        BOOST_LOG_TRIVIAL(error) << ex.what();
+        return 1;
+    } catch (std::runtime_error const & ex) {
+        BOOST_LOG_TRIVIAL(error) << "The validation could not be completed: " << ex.what();
+        return 1;
     } catch (std::exception const &ex) {
-        BOOST_LOG_TRIVIAL(error) << "Aborting execution, error: " << ex.what();
+        BOOST_LOG_TRIVIAL(error) << ex.what();
         return 1;
     }
 }

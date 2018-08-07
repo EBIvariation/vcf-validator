@@ -23,10 +23,12 @@
 #include <vector>
 
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/log/trivial.hpp>
 
 #include "bioio/bioio.hpp"
 #include "vcf/assembly_report_writer.hpp"
 #include "vcf/vcf_fasta_variant.hpp"
+#include "vcf/validator.hpp"
 #include "util/logger.hpp"
 #include "util/stream_utils.hpp"
 #include "util/string_utils.hpp"

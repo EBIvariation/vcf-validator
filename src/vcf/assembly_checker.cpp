@@ -30,7 +30,6 @@ namespace ebi
       {
           std::vector<char> vector_line;
           vector_line.reserve(default_line_buffer_size);
-          std::set<std::string> absent_chromosomes;
 
           // Reading FASTA index, and querying FASTA file
           auto index = bioio::read_fasta_index(fasta_index_input);
@@ -43,37 +42,36 @@ namespace ebi
                   continue;
               }
 
-              VcfVariant vcf_variant{line};
+              RecordCore record_core{line};
 
-              if (index.count(vcf_variant.chromosome) == 0) {
-                  absent_chromosomes.insert(vcf_variant.chromosome);
+              if (index.count(record_core.chromosome) == 0) {
+                  BOOST_LOG_TRIVIAL(warning) << record_core.chromosome << " is not present in FASTA file";
                   continue;
               }
 
-              if (vcf_variant.position == 0) {
+              if (record_core.position == 0) {
                   BOOST_LOG_TRIVIAL(warning) << "Position 0 should only be used for a telomere";
                   continue;
               }
 
               auto fasta_sequence = bioio::read_fasta_contig(fasta_input,
-                                                             index.at(vcf_variant.chromosome),
-                                                             vcf_variant.position - 1,
-                                                             vcf_variant.reference_allele.length());
-              auto reference_sequence = vcf_variant.reference_allele;
+                                                             index.at(record_core.chromosome),
+                                                             record_core.position - 1,
+                                                             record_core.reference_allele.length());
+              auto reference_sequence = record_core.reference_allele;
 
               bool match_result = is_matching_sequence(fasta_sequence, reference_sequence);
 
               for (auto &output : outputs ) {
                   if (match_result) {
-                      output->write_match(vcf_variant);
+                      output->write_match(record_core);
                   } else {
-                      output->write_mismatch(vcf_variant);
+                      output->write_mismatch(record_core);
                   }
               }
           }
 
           outputs[0]->finish_report();
-          check_missing_chromosomes(absent_chromosomes);
           return outputs[0]->is_valid_report();
       }
 
@@ -83,18 +81,6 @@ namespace ebi
           std::transform(reference_sequence.begin(), reference_sequence.end(), reference_sequence.begin(), ::tolower);
 
           return fasta_sequence == reference_sequence;
-      }
-
-      void check_missing_chromosomes(std::set<std::string> absent_chromosomes)
-      {
-          if (absent_chromosomes.size() > 0) {
-              std::string message = "Please check if FASTA is correct; chromosomes from VCF that don't appear in FASTA file:";
-              for (auto & absent_chromosome : absent_chromosomes) {
-                  message += " " + absent_chromosome + ",";
-              }
-              message.pop_back();
-              throw std::invalid_argument{message};
-          }
       }
 
     }

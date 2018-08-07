@@ -175,7 +175,6 @@ set (MOD_VCF_SOURCES
   src/vcf/store_parse_policy.cpp
   src/vcf/validate_optional_policy.cpp
   src/vcf/validator.cpp
-  src/vcf/vcf_fasta_variant.cpp
 )
 add_library (mod_vcf STATIC ${MOD_VCF_SOURCES})
 add_dependencies (mod_vcf mod_odb) # works even without this if we add mod_vcf as target_link_libraries

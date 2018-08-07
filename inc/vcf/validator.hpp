@@ -89,7 +89,7 @@ namespace ebi
         virtual const std::vector<std::unique_ptr<Error>> & errors() const = 0;
         virtual const std::vector<std::unique_ptr<Error>> & warnings() const = 0;
     };
-    
+
     class ParserImpl
     : public Parser,
       public ParsingState
@@ -107,7 +107,7 @@ namespace ebi
         const std::vector<std::unique_ptr<Error>> & errors() const override;
         const std::vector<std::unique_ptr<Error>> & warnings() const override;
 
-       
+
       protected:
         virtual void parse_buffer(char const * p, char const * pe, char const * eof) = 0;
 
@@ -116,7 +116,7 @@ namespace ebi
          */
         RecordCache previous_records;
     };
-    
+
     template <typename Configuration>
     class ParserImpl_v41
     : public ParserImpl,
@@ -175,11 +175,11 @@ namespace ebi
     using QuickValidator_v41 = ParserImpl_v41<QuickValidatorCfg>;
     using FullValidator_v41 = ParserImpl_v41<FullValidatorCfg>;
     using Reader_v41 = ParserImpl_v41<ReaderCfg>;
-    
+
     using QuickValidator_v42 = ParserImpl_v42<QuickValidatorCfg>;
     using FullValidator_v42 = ParserImpl_v42<FullValidatorCfg>;
     using Reader_v42 = ParserImpl_v42<ReaderCfg>;
-    
+
     using QuickValidator_v43 = ParserImpl_v43<QuickValidatorCfg>;
     using FullValidator_v43 = ParserImpl_v43<FullValidatorCfg>;
     using Reader_v43 = ParserImpl_v43<ReaderCfg>;

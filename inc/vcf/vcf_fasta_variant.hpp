@@ -17,25 +17,36 @@
 #ifndef VCF_VCF_FASTA_VARIANT_HPP
 #define VCF_VCF_FASTA_VARIANT_HPP
 
+#include <algorithm>
 #include <string>
+#include <vector>
+
+#include "util/string_utils.hpp"
+#include "vcf/string_constants.hpp"
+#include "vcf/vcf_fasta_variant.hpp"
 
 namespace ebi
 {
   namespace vcf
   {
 
-    class VcfVariant
+    struct RecordCore
     {
-      public:
         std::string chromosome;
         size_t position;
         std::string reference_allele;
         std::string line;
 
-        VcfVariant(std::string const &line);
+        RecordCore(std::string const &line) : line(line)
+        {
+            std::vector<std::string> record_columns;
+            util::string_split(line, "\t", record_columns);
 
-      private:
-        std::string format_chromosome(std::string const &chromosome);
+            chromosome = record_columns[0];
+            position = static_cast<size_t>(std::stoi(record_columns[1]));
+            reference_allele = record_columns[3];
+        }
+
     };
   }
 }
