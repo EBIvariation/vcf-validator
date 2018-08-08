@@ -115,14 +115,15 @@ namespace
         return outputs;
     }
 
-    inline std::ifstream open_file(std::string path, std::ios_base::openmode mode = std::ios_base::in)
+    inline void open_file(std::ifstream & input,
+                          std::string path,
+                          std::ios_base::openmode mode = std::ios_base::in)
     {
-        std::ifstream input{path, mode};
+        input.open(path,mode);
         if (!input) {
             std::string file_error_msg = "Couldn't open file " + path;
             throw std::runtime_error{file_error_msg};
         }
-        return input;
     }
 }
 
@@ -145,13 +146,16 @@ int main(int argc, char** argv)
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), vcf_path);
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
-        std::ifstream vcf_input = open_file(vcf_path);
+        std::ifstream vcf_input;
+        open_file(vcf_input, vcf_path);
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA file...";
-        std::ifstream fasta_input = open_file(fasta_path, std::ifstream::binary);
+        std::ifstream fasta_input;
+        open_file(fasta_input, fasta_path, std::ifstream::binary);
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA index file...";
-        std::ifstream fasta_index_input = open_file(fasta_index_path, std::ifstream::binary);
+        std::ifstream fasta_index_input;
+        open_file(fasta_index_input, fasta_index_path, std::ifstream::binary);
 
         ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, outputs);
         return 0;
