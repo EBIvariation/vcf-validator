@@ -1,13 +1,13 @@
 # vcf-validator
 
-Branch | Linux/macOS | Windows
-:----: | :---------: | :-----:
-Develop | [![Build Status](https://travis-ci.org/EBIvariation/vcf-validator.svg?branch=develop)](https://travis-ci.org/EBIvariation/vcf-validator) | [![Build status](https://ci.appveyor.com/api/projects/status/vt4ldlwhm91e3n49/branch/develop?svg=true)](https://ci.appveyor.com/project/ebivariation-bot/vcf-validator/branch/develop)
+Branch | Linux / macOS | Windows
+:----: | :-----------: | :-----:
 Master | [![Build Status](https://travis-ci.org/EBIvariation/vcf-validator.svg?branch=master)](https://travis-ci.org/EBIvariation/vcf-validator) | [![Build status](https://ci.appveyor.com/api/projects/status/vt4ldlwhm91e3n49/branch/master?svg=true)](https://ci.appveyor.com/project/ebivariation-bot/vcf-validator/branch/master)
+Develop | [![Build Status](https://travis-ci.org/EBIvariation/vcf-validator.svg?branch=develop)](https://travis-ci.org/EBIvariation/vcf-validator) | [![Build status](https://ci.appveyor.com/api/projects/status/vt4ldlwhm91e3n49/branch/develop?svg=true)](https://ci.appveyor.com/project/ebivariation-bot/vcf-validator/branch/develop)
 
 Validator for the Variant Call Format (VCF) implemented using C++11.
 
-It includes all the checks from the vcftools suite, and some more that involve lexical, syntactic and semantic analysis of the VCF input. If any inconsistencies are found, they are classified in one of the following categories:
+It includes all the checks from the vcftools suite as well as additional lexical, syntactic and semantic analysis of the VCF input. If any inconsistencies are found, they are classified in one of the following categories:
 
 * Errors: Violations of the VCF specification
 * Warnings: An indication that something weird happened (commas were used instead of colons to split ids) or a recommendation is not followed (missing meta-data)
@@ -17,24 +17,24 @@ Please read the wiki for more details about checks already implemented.
 
 ## Download
 
-We recommend using the [latest release](https://github.com/EBIvariation/vcf-validator/releases) for the most stable experience using vcf-validator. Along with the release notes, you will find the executables `vcf_validator` and `vcf_debugulator`, which will allow you to validate and fix VCF files. Currently we provide executables for Linux and macOS.
+We recommend using the [latest release](https://github.com/EBIvariation/vcf-validator/releases) for the most stable experience using vcf-validator. Along with the release notes, you will find the executables `vcf_validator` and `vcf_debugulator`, which allow to validate and fix VCF files. Executables for Linux, macOS and Windows are available.
 
 
 ## Run
 
 ### Validator
 
-vcf-validator accepts both compressed and non-compressed input VCF files. Supported compression formats are .bz2 and .gz. For other formats such as .zip, the `zcat` command and a pipe can be used (see below).
+vcf-validator accepts both compressed and non-compressed input VCF files. Supported compression formats are .gz and .bz2. For other formats such as .zip, the `zcat` command and a pipe can be used (see below).
 
 Reading uncompressed files:
-  * File path as argument: `vcf_validator -i /path/to/file.vcf`
-  * Standard input: `vcf_validator < /path/to/file.vcf`
-  * Standard input from pipe: `cat /path/to/file.vcf | vcf_validator`
+* File path as argument: `vcf_validator -i /path/to/file.vcf`
+* Standard input: `vcf_validator < /path/to/file.vcf`
+* Standard input from pipe: `cat /path/to/file.vcf | vcf_validator`
 
 Reading compressed files:
-  * File path as argument: `vcf_validator -i /path/to/compressed_file.vcf.gz`
-  * Standard input: `vcf_validator < /path/to/compressed_file.vcf.bz2`
-  * Standard input from pipe: `zcat /path/to/compressed_file.vcf.zip | vcf_validator`
+* File path as argument: `vcf_validator -i /path/to/compressed_file.vcf.gz`
+* Standard input: `vcf_validator < /path/to/compressed_file.vcf.bz2`
+* Standard input from pipe: `zcat /path/to/compressed_file.vcf.zip | vcf_validator`
 
 The validation level can be configured using `-l` / `--level`. This parameter is optional and accepts 3 values:
 
@@ -46,7 +46,7 @@ Different types of validation reports can be written with the `-r` / `--report` 
 
 * summary: Write a human-readable summary report to a file. This includes one line for each type of error and the number of occurrences, along with the first line that shows that type of error (default)
 * text: Write a human-readable report to a file, with one description line for each VCF line that has an error.
-* database: Write structured report to a database file. The database engine used is SQLite3, so the results can be inspected manually, but they are intended to be consumed by other applications.
+* database: Write structured report to a database file. The database engine used is SQLite3, so the results can be inspected manually, but they are intended to be consumed by the debugulator.
 
 Each report is written into its own file and it is named after the input file, followed by a timestamp. The default output directory is the same as the input file's if provided using `-i`, or the current directory if using the standard input; it can be changed with the `-o` / `--outdir` option.
 
@@ -65,6 +65,7 @@ Simple example: `vcf_validator -i /path/to/file.vcf`
 Full example: `vcf_validator -i /path/to/file.vcf -l stop -r database,stdout -o /path/to/output/folder/`
 
 Debugulator example:
+
 ```
 vcf_validator -i /path/to/file.vcf -r database -o /path/to/write/report/
 vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timestamp.db -o /path/to/fixed.vcf 2>debugulator_log.txt
@@ -73,7 +74,7 @@ vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timesta
 
 ## Build
 
-If you would like to use an unreleased version of vcf-validator, you can build it under 4 platforms: Docker (generates Linux binary without installing dependencies), Linux , macOS and windows. A statically linked executable will be generated, which means you won't need to install any dependencies to run it.
+If you would like to use an unreleased version of vcf-validator, you can build it under 4 platforms: Docker (generates Linux binary without installing dependencies), Linux, macOS and Windows. A statically linked executable will be generated, which means you won't need to install any dependencies to run it.
 
 ### Docker
 
@@ -97,19 +98,21 @@ The build has been tested on the following compilers:
 
 #### Dependencies
 
-Normal users can install most of the dependencies using install_dependencies.sh script using the command `./install_dependencies.sh linux` . You will need to install SQLite3 before running the script (Check commands for your distro under `Miscellaneous` section). You may run `./install_dependencies.sh --help` for help.
-`install_dependencies.sh` script includes the following dependencies:
-```
-  - odb compiler                            odb-2.4.0
-  - odb common runtime library              libodb-2.4.0
-  - odb sqlite runtime library              libodb-sqlite-2.4.0
-  - bzip library                            bzip2-1.0.6
-  - zlib library                            zlib-1.2.11
-```
-After installing the dependencies a folder named `linux_dependencies` will be created with all the required libraies in it. Now you will have to install boost packages as described in boost section. Now you may simply run `cmake -G "Unix Makefiles" /path/to/CMakeLists.txt` to create build scripts.
+We strongly recommend to install most of the dependencies using the command `./install_dependencies.sh linux`, and help can be ontained with `./install_dependencies.sh --help`. Please install SQLite3 before running the script.
 
+The following dependencies are managed by the installation script:
 
-It is recommended to use install_dependencies.sh (explained in upper section) to install dependencies. Still if you want to manually install the dependencies you can install/build the following dependencies.
+Dependency | Version
+:--------: | :-----:
+ODB compiler | 2.4.0
+ODB common runtime | 2.4.0
+ODB SQLite runtime | 2.4.0
+bzip2 | 1.0.6
+zlib | 1.2.11
+
+A subfolder named `linux_dependencies` will be created, with all the required libraries copied into it. Now you will have to install Boost packages as described in the following section.
+
+After that, you may simply run `cmake -G "Unix Makefiles" /path/to/CMakeLists.txt` to create the build scripts.
 
 ##### Boost
 
@@ -118,7 +121,7 @@ If you are using Ubuntu, the required packages' names will be `libboost-dev`, `l
 
 ##### ODB
 
-You may ignore this section if you are using `install_dependencies script`.
+You can ignore this section if you are using `install_dependencies script`.
 
 You will need to download the ODB compiler, the ODB common runtime library, and the SQLite database runtime library from [this page](http://codesynthesis.com/products/odb/download.xhtml).
 
@@ -145,7 +148,7 @@ On macOS the binaries obtained will only have system libraries dynamically linke
 
 In order to compile this project, first you need to run `brew install cmake ninja boost sqlite3`.
 
-Now you can easily install ODB ORM and compression libraries just by running `./install_dependencies.sh osx`. You may run `./install_dependencies.sh --help` for usage instructions.
+Now you can easily install the ODB ORM and compression libraries just by running `./install_dependencies.sh osx`. You may run `./install_dependencies.sh --help` for usage instructions.
 
 Finally, add the `osx_dependencies/odb-2.4.0-i686-macosx/bin` subfolder to your PATH to be able to run the ODB compiler.
 
@@ -158,7 +161,7 @@ Binaries will be created in the `bin` subfolder.
 
 ### Windows
 
-On Windows the binaries obtained will only have odb libraries dynamically linked, boost and system libraries are statically linked. We have provided the pre-compiled dependencies odb dlls and libs within the repository. You will need to download and build boost and download required headers for odb.
+On Windows the binaries obtained will only have ODB libraries dynamically linked. We provide a pre-compiled version of these within the repository because they are not easy to build; but if you would like to do it yourself, please check the *Miscellaneous* section below.
 
 #### Dependencies
 
@@ -170,19 +173,20 @@ You will need to download the bzip2 and zlib source code, from [here](http://www
 
 The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. You will need to compile them with zlib and bzip2 support and statically linking the runtime libraries.
 
-- Download Boost from [here](https://www.boost.org/users/download/) and uncompress it
-- From the directory where Boost was uncompressed, run these commands:
+* Download Boost from [here](https://www.boost.org/users/download/) and uncompress it
+* From the directory where Boost was uncompressed, run these commands:
 
 ```
 bootstrap
 .\b2 --with-atomic --with-chrono --with-date_time --with-filesystem --with-log --with-program_options --with-regex --with-system --with-thread --with-iostreams -sBZIP2_SOURCE=path\to\bzip2-1.x.x -sZLIB_SOURCE=path\to\zlib-1.x.x runtime-link=static --build-type=complete
 ```
-- Add boost_1_xx_x/stage/lib folder to the environment variable `LIB`
-- Add boost_1_xx_x folder to the environment variable `INCLUDE`
+
+* Add boost_1_xx_x/stage/lib folder to the environment variable `LIB`
+* Add boost_1_xx_x folder to the environment variable `INCLUDE`
 
 ##### ODB
 
-Precompiled libraries of odb and odb-sqlite are provided. In order to download headers, simply run the comand `install_dependencies.bat`, which will create a `windows_dependencies` folder in the root directory of project.
+Precompiled libraries of ODB and the ODB SQLite runtime are provided. In order to download headers, simply run the comand `install_dependencies.bat`, which will create a `windows_dependencies` folder in the root directory of the project.
 
 #### Compile
 
@@ -235,37 +239,42 @@ mv inc/vcf/error-odb.cpp src/vcf/error-odb.cpp
 
 ### Build ODB Libraries for windows
 
-This section is for building odb libraries for windows. You may ignore it if you want to use pre-compiled libraries given inside the repository. To build those libraries first download the source code using install_dependencies.bat it will create following directories in windows_dependencies folder.
-    - libodb-2.4.0
-    - libodb-sqlite-2.4.0
-    - sqlite
-    - odb (header files only)
-you will have to compile libodb-2.4.0, sqlite and then libodb-sqlite-2.4.0. To do so you will need Visual Studio IDE (tested on VS-Studio-2017).
+This section is for building odb libraries for windows. You may ignore it if you want to use pre-compiled libraries provided inside the repository. To build those libraries, first download the source code using `install_dependencies.bat`, which will create the following subfolder inside `windows_dependencies`:
 
-#### Build Odb runtime
-    1. Open libodb-2.4.0/libodb-vc12.sln in VS-Studio. File->Open->Project/Solution.
-    2. Retarget the solution file to latest version. Project->Retarget Solution.
-    3. Select Build type Release and configuration win32.
-    4. Select /MT in Project->Properties->Configuration Properties->C/C++->Code Generation->Runtime Library options.
-    5. Build the solution using Build->Build Solution.
+* libodb-2.4.0
+* libodb-sqlite-2.4.0
+* sqlite
+* odb (header files only)
 
-#### Build Sqlite for odb-sqlite
-    1. Open sqlite/sqlite3-vc12.sln in VS-Studio.
-    2. Retarget the solution file.
-    3. Select Build type Release and configuration win32.
-    4. Select /MT in Project->Properties->Configuration Properties->C/C++->Code Generation->Runtime Library options.
-    5. Build the solution using Build->Build Solution.
+You will have to compile libodb-2.4.0, sqlite and then libodb-sqlite-2.4.0. To do so you will need Visual Studio IDE (tested on VS-Studio-2017).
 
-#### Build Odb-sqlite runtime
-    1. Open libodb-sqlite-2.4.0/libodb-sqlite-vc12.sln in VS-Studio.
-    2. Retarget the solution file.
-    3. Select Build type Release and configuration win32.
-    4. Select /MT in Project->Properties->Configuration Properties->C/C++->Code Generation->Runtime Library options.
-    5. Go to Project->Properties->Configuration Properties->VC++ Directories and append these paths to following variables.
-        - Executable Directories => path/to/libodb-2.4.0/bin and path/to/sqlite/bin
-        - Include Directories => path/to/libodb-2.4.0 and path/to/sqlite
-        - Library Directories => path/to/libodb-2.4.0/lib and path/to/sqlite/lib
-    Note the paths should be absolute and the directories will be present within windows_dependencies folder.
-    6. Build the solution using Build->Build Solution.
+#### Build ODB runtime
 
-Now you will obitain compiled libs and dlls in lib and bin folders respectively.
+1. Open libodb-2.4.0/libodb-vc12.sln in VS-Studio. File->Open->Project/Solution.
+2. Retarget the solution file to latest version. Project->Retarget Solution.
+3. Select Build type Release and configuration win32.
+4. Select /MT in Project->Properties->Configuration Properties->C/C++->Code Generation->Runtime Library options.
+5. Build the solution using Build->Build Solution.
+
+#### Build SQLite for odb-sqlite
+
+1. Open sqlite/sqlite3-vc12.sln in VS-Studio.
+2. Retarget the solution file.
+3. Select Build type Release and configuration win32.
+4. Select /MT in Project->Properties->Configuration Properties->C/C++->Code Generation->Runtime Library options.
+5. Build the solution using Build->Build Solution.
+
+#### Build ODB-SQLite runtime
+
+1. Open libodb-sqlite-2.4.0/libodb-sqlite-vc12.sln in VS-Studio.
+2. Retarget the solution file.
+3. Select Build type Release and configuration win32.
+4. Select /MT in Project->Properties->Configuration Properties->C/C++->Code Generation->Runtime Library options.
+5. Go to Project->Properties->Configuration Properties->VC++ Directories and append these paths to following variables.
+    - Executable Directories => path/to/libodb-2.4.0/bin and path/to/sqlite/bin
+    - Include Directories => path/to/libodb-2.4.0 and path/to/sqlite
+    - Library Directories => path/to/libodb-2.4.0/lib and path/to/sqlite/lib
+Note the paths should be absolute and the directories will be present within windows_dependencies folder.
+6. Build the solution using Build->Build Solution.
+
+Now you will obitain compiled LIB and DLL files, in the `lib` and `bin` folders respectively.
