@@ -91,15 +91,11 @@ Executables will be created in the `build/bin` subfolder.
 
 ### Linux
 
-The build has been tested on the following distros:
-* Ubuntu
-* Arch
-
 The build has been tested on the following compilers:
 * Clang 3.9 to 5.0
 * GCC 4.8 to 6.0
 
-#### Using install_dependencies.sh (Recommended for normal users)
+#### Dependencies
 
 Normal users can install most of the dependencies using install_dependencies.sh script using the command `./install_dependencies.sh linux` . You will need to install SQLite3 before running the script (Check commands for your distro under `Miscellaneous` section). You may run `./install_dependencies.sh --help` for help.
 `install_dependencies.sh` script includes the following dependencies:
@@ -112,15 +108,13 @@ Normal users can install most of the dependencies using install_dependencies.sh 
 ```
 After installing the dependencies a folder named `linux_dependencies` will be created with all the required libraies in it. Now you will have to install boost packages as described in boost section. Now you may simply run `cmake -G "Unix Makefiles" /path/to/CMakeLists.txt` to create build scripts.
 
-#### Dependencies
 
 It is recommended to use install_dependencies.sh (explained in upper section) to install dependencies. Still if you want to manually install the dependencies you can install/build the following dependencies.
 
 ##### Boost
 
-The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. 
+The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system.
 If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-iostreams`, `libboost-program-options-dev`, `libboost-regex-dev` and `libboost-log-dev`.
-Arch/pacman users may use `sudo pacman -S boost`
 
 ##### ODB
 
@@ -238,23 +232,6 @@ mv inc/vcf/error-odb.cpp src/vcf/error-odb.cpp
 ```
 
 ## Miscellaneous
-
-### Commands for downloading packages in different linux distros
-
-#### Ubuntu
-
-Ubuntu/Debian based linux users can install sqlite3 packages using:
-```
-sudo apt install libsqlite3-dev 
-sudo apt install libsqlite3-0
-```
-
-#### Arch
-
-Arch/pacman based linux users can isntall sqlite3 packages using:
-```
-sudo pacman -S sqlite3
-```
 
 ### Build ODB Libraries for windows
 
