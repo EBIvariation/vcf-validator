@@ -48,7 +48,7 @@ namespace ebi
         }
 
         bool is_valid_report() {
-            return match_stats.is_valid_combination();
+            return match_stats.is_assembly_match();
         }
 
       protected:

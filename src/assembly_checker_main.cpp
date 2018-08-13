@@ -36,7 +36,7 @@ namespace
 
         description.add_options()
             (ebi::vcf::HELP_OPTION, "Display this help")
-            (ebi::vcf::VERSION_OPTION, "Display version of the assembly-checker")
+            (ebi::vcf::VERSION_OPTION, "Display version of the assembly checker")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>(), "Path to the input VCF file")
             (ebi::vcf::FASTA_OPTION, po::value<std::string>(), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .idx extension")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, valid, invalid)")

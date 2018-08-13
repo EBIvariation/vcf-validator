@@ -40,7 +40,7 @@ namespace ebi
             ebi::vcf::MatchStats match_stats;
             match_stats.add_match_result(true);
             match_stats.add_match_result(true);
-            CHECK(match_stats.is_valid_combination());
+            CHECK(match_stats.is_assembly_match());
         }
 
         SECTION("Mismatches")
@@ -48,7 +48,7 @@ namespace ebi
             ebi::vcf::MatchStats match_stats;
             match_stats.add_match_result(true);
             match_stats.add_match_result(false);
-            CHECK_FALSE(match_stats.is_valid_combination());
+            CHECK_FALSE(match_stats.is_assembly_match());
         }
     }
 }

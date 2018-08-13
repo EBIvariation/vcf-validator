@@ -42,17 +42,11 @@ namespace ebi
             std::vector<std::string> record_columns;
             util::string_split(line, "\t", record_columns);
 
-            chromosome = format_chromosome(record_columns[0]);
+            chromosome = record_columns[0];
             position = static_cast<size_t>(std::stoi(record_columns[1]));
             reference_allele = record_columns[3];
         }
 
-        std::string format_chromosome(std::string const &chromosome)
-        {
-            std::string chromosome_copy;
-            std::transform(chromosome.begin(), chromosome.end(), chromosome_copy.begin(), ::tolower);
-            return chromosome;
-        }
     };
   }
 }

@@ -382,7 +382,7 @@ namespace ebi
             num_matches += result ? 1 : 0;
         }
 
-        bool is_valid_combination()
+        bool is_assembly_match()
         {
             return num_matches == num_variants;
         }
