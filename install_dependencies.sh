@@ -73,13 +73,17 @@ tar jxvf /tmp/libodb-sqlite.tar.bz2
 cd libodb-sqlite-2.4.0 && ./configure --with-libodb=../libodb-2.4.0 && make && cd ..
 
 echo "installing libbz2"
-wget http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz -O /tmp/libbz2.tar.gz
-tar xvzf /tmp/libbz2.tar.gz
+# This is commented till the bzip.org site is recovered.
+# wget http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz -O /tmp/libbz2.tar.gz
+# tar zxvf /tmp/libbz2.tar.gz
+# Till then we can trust ubuntu archives.
+wget http://archive.ubuntu.com/ubuntu/pool/main/b/bzip2/bzip2_1.0.6.orig.tar.bz2 -O /tmp/libbz2.tar.bz2
+tar jxvf /tmp/libbz2.tar.bz2
 cd bzip2-1.0.6 && make && cd ..
 
 echo "installing libz"
 wget http://prdownloads.sourceforge.net/libpng/zlib-1.2.11.tar.gz?download -O /tmp/libz.tar.gz
-tar xvzf /tmp/libz.tar.gz
+tar zxvf /tmp/libz.tar.gz
 cd zlib-1.2.11 && cmake . && make && cd ..
 
 
