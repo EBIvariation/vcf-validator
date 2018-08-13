@@ -150,8 +150,6 @@ In order to compile this project, first you need to run `brew install cmake ninj
 
 Now you can easily install the ODB ORM and compression libraries just by running `./install_dependencies.sh osx`. You may run `./install_dependencies.sh --help` for usage instructions.
 
-Finally, add the `osx_dependencies/odb-2.4.0-i686-macosx/bin` subfolder to your PATH to be able to run the ODB compiler.
-
 #### Compile
 
 In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`.
