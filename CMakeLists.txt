@@ -35,9 +35,11 @@ include_directories (lib)
 if (LINUX AND EXISTS "${PROJECT_SOURCE_DIR}/linux_dependencies")
   include_directories (linux_dependencies)
   set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/linux_dependencies" CACHE STRING "Absolute path to libraries")
+  set (ODB_PATH "${EXT_LIB_PATH}/odb-2.4.0-x86_64-linux-gnu/bin/" CACHE STRING "Path to odb binaries")
 elseif (OSX AND EXISTS "${PROJECT_SOURCE_DIR}/osx_dependencies")
   include_directories (osx_dependencies)
   set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/osx_dependencies" CACHE STRING "Absolute path to libraries")
+  set (ODB_PATH "${EXT_LIB_PATH}/odb-2.4.0-i686-macosx/bin/" CACHE STRING "Path to odb binaries")
 elseif (WINDOWS AND EXISTS "${PROJECT_SOURCE_DIR}/windows_dependencies")
   include_directories (lib/sqlite)            # Windows specific
   include_directories (windows_dependencies)
@@ -95,17 +97,7 @@ endif ()
 # Application modules
 add_library (mod_sqlite3 STATIC lib/sqlite/sqlite3.c)
 
-if (LINUX)
-  set (THIRD_PARTY_LIBRARIES
-    ${Boost_LIBRARIES}
-    bz2
-    z
-    ${EXT_LIB_PATH}/libodb-sqlite.a
-    ${EXT_LIB_PATH}/libodb.a
-    mod_sqlite3
-    ${CMAKE_THREAD_LIBS_INIT}
-  )
-elseif (OSX)
+if (LINUX OR OSX)
   set (THIRD_PARTY_LIBRARIES
     ${Boost_LIBRARIES}
     ${EXT_LIB_PATH}/libbz2.a
@@ -132,7 +124,7 @@ foreach (_file ${ODB_MAPPING_CLASSES})
   if (LINUX OR OSX)
     add_custom_command (
       OUTPUT ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
-      COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
+      COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && ${ODB_PATH}odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
       --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp
       --output-dir ${CMAKE_HOME_DIRECTORY}/inc/vcf/ ${_file}
       && mv ${CMAKE_HOME_DIRECTORY}/${gencppfile} ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
@@ -187,19 +179,7 @@ target_link_libraries (mod_vcf ${THIRD_PARTY_LIBRARIES} mod_odb)
 
 
 # Libraries to link with executables
-if (LINUX)
-  set (LIBRARIES_TO_LINK
-    mod_vcf
-    mod_odb
-    ${Boost_LIBRARIES}
-    bz2
-    z
-    ${EXT_LIB_PATH}/libodb-sqlite.a
-    ${EXT_LIB_PATH}/libodb.a
-    mod_sqlite3
-    ${CMAKE_THREAD_LIBS_INIT}
-  )
-elseif (OSX)
+if (LINUX OR OSX)
   set (LIBRARIES_TO_LINK
     mod_vcf
     mod_odb
