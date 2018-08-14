@@ -98,7 +98,7 @@ The build has been tested on the following compilers:
 
 #### Dependencies
 
-We strongly recommend to install most of the dependencies using the command `./install_dependencies.sh linux`, and help can be ontained with `./install_dependencies.sh --help`. Please install SQLite3 before running the script.
+We strongly recommend to install most of the dependencies using the command `./install_dependencies.sh linux`, and help can be obtained with `./install_dependencies.sh --help`. Please install SQLite3 before running the script.
 
 The following dependencies are managed by the installation script:
 
@@ -110,9 +110,7 @@ ODB SQLite runtime | 2.4.0
 bzip2 | 1.0.6
 zlib | 1.2.11
 
-A subfolder named `linux_dependencies` will be created, with all the required libraries copied into it. Now you will have to install Boost packages as described in the following section.
-
-After that, you may simply run `cmake -G "Unix Makefiles" /path/to/CMakeLists.txt` to create the build scripts.
+A subfolder named `linux_dependencies` will be created, with all the required libraries copied into it. You will also have to install Boost packages as described in the following section.
 
 ##### Boost
 
@@ -121,7 +119,7 @@ If you are using Ubuntu, the required packages' names will be `libboost-dev`, `l
 
 ##### ODB
 
-You can ignore this section if you are using `install_dependencies script`.
+**Note**: You can ignore this section if you are using the `install_dependencies.sh` script.
 
 You will need to download the ODB compiler, the ODB common runtime library, and the SQLite database runtime library from [this page](http://codesynthesis.com/products/odb/download.xhtml).
 
@@ -133,7 +131,7 @@ If you don't have root permissions, please run `./configure --prefix=/path/to/od
 
 #### Compile
 
-In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`.
+In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles" /path/to/CMakeLists.txt` will create Makefiles, and to build the binaries, you will need to run `make`.
 
 If the ODB libraries were not found during the build, please run `sudo updatedb && sudo ldconfig`. Also, if ODB has been installed in a non-default location, the option `-DEXT_LIB_PATH=/path/to/external/libraries/folder` must be also provided to the `cmake` command.
 
@@ -146,13 +144,25 @@ On macOS the binaries obtained will only have system libraries dynamically linke
 
 #### Dependencies
 
-In order to compile this project, first you need to run `brew install cmake ninja boost sqlite3`.
+In order to set up the environment to compile the dependencies, first you need to run `brew install cmake ninja boost sqlite3`. We strongly recommend to install most of the dependencies using the command `./install_dependencies.sh osx`, and help can be obtained with `./install_dependencies.sh --help`.
+
+The following dependencies are managed by the installation script:
+
+Dependency | Version
+:--------: | :-----:
+ODB compiler | 2.4.0
+ODB common runtime | 2.4.0
+ODB SQLite runtime | 2.4.0
+bzip2 | 1.0.6
+zlib | 1.2.11
+
+A subfolder named `osx_dependencies` will be created, with all the required libraries copied into it.
 
 Now you can easily install the ODB ORM and compression libraries just by running `./install_dependencies.sh osx`. You may run `./install_dependencies.sh --help` for usage instructions.
 
 #### Compile
 
-In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles"` will create Makefiles, and to build the binaries, you will need to run `make`.
+In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles" /path/to/CMakeLists.txt` will create Makefiles, and to build the binaries, you will need to run `make`.
 
 Binaries will be created in the `bin` subfolder.
 
@@ -237,14 +247,14 @@ mv inc/vcf/error-odb.cpp src/vcf/error-odb.cpp
 
 ### Build ODB Libraries for windows
 
-This section is for building odb libraries for windows. You may ignore it if you want to use pre-compiled libraries provided inside the repository. To build those libraries, first download the source code using `install_dependencies.bat`, which will create the following subfolder inside `windows_dependencies`:
+This section describes how to build the ODB libraries for Windows. You may ignore it if you want to use pre-compiled libraries provided inside the repository. To build those libraries, first download the source code using `install_dependencies.bat`, which will create the following subfolder inside `windows_dependencies`:
 
 * libodb-2.4.0
 * libodb-sqlite-2.4.0
 * sqlite
 * odb (header files only)
 
-You will have to compile libodb-2.4.0, sqlite and then libodb-sqlite-2.4.0. To do so you will need Visual Studio IDE (tested on VS-Studio-2017).
+You will have to compile libodb-2.4.0, sqlite and then libodb-sqlite-2.4.0. The build has been tested on Visual Studio 2017.
 
 #### Build ODB runtime
 
@@ -275,4 +285,4 @@ You will have to compile libodb-2.4.0, sqlite and then libodb-sqlite-2.4.0. To d
 Note the paths should be absolute and the directories will be present within windows_dependencies folder.
 6. Build the solution using Build->Build Solution.
 
-Now you will obitain compiled LIB and DLL files, in the `lib` and `bin` folders respectively.
+Now you will obtain compiled LIB and DLL files, in the `lib` and `bin` folders respectively.
