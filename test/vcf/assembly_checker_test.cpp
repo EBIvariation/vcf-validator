@@ -25,16 +25,24 @@
 
 namespace ebi
 {
-    TEST_CASE("Function checks", "[assembly_checker]")
+    TEST_CASE("Sequence comparison", "[assembly_checker]")
     {
         SECTION("Check sequence matches")
         {
             std::string line{"1\t10177\trs367896724\tA\tAC"};
-            vcf::Record_Core record_core{line};
+            std::string chromosome{"1"};
+            size_t position = 10177;
+            std::string reference_allele{"A"};
+            std::string alternate_allele{"AC"};
+
+            vcf::Record_Core record_core{line, chromosome, position, reference_allele, alternate_allele};
             CHECK(ebi::vcf::assembly_checker::is_matching_sequence(record_core.reference_allele, "A"));
             CHECK_FALSE(ebi::vcf::assembly_checker::is_matching_sequence(record_core.reference_allele, "G"));
         }
+    }
 
+    TEST_CASE("Match statistics", "[assembly_checker]")
+    {
         SECTION("All matches")
         {
             ebi::vcf::MatchStats match_stats;

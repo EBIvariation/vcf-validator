@@ -32,20 +32,16 @@ namespace ebi
 
     struct Record_Core
     {
+        std::string line;
         std::string chromosome;
         size_t position;
         std::string reference_allele;
-        std::string line;
+        std::string alternate_allele;
 
-        Record_Core(std::string const &line) : line(line)
-        {
-            std::vector<std::string> record_columns;
-            util::string_split(line, "\t", record_columns);
-
-            chromosome = record_columns[0];
-            position = static_cast<size_t>(std::stoi(record_columns[1]));
-            reference_allele = record_columns[3];
-        }
+        Record_Core(const std::string & line, const std::string & chromosome, size_t position,
+                   const std::string & reference_allele, const std::string & alternate_alleles)
+            : line(line), chromosome(chromosome), position(position), reference_allele(reference_allele),
+              alternate_allele(alternate_alleles) { }
 
     };
   }

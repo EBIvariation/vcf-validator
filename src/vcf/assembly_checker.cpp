@@ -23,6 +23,19 @@ namespace ebi
     namespace assembly_checker
     {
 
+      Record_Core build_record_core(std::string const & line)
+      {
+          std::vector<std::string> record_columns;
+          util::string_split(line, "\t", record_columns);
+
+          std::string chromosome = record_columns[0];
+          size_t position = static_cast<size_t>(std::stoi(record_columns[1]));
+          std::string reference_allele = record_columns[3];
+          std::string alternate_alleles = record_columns[4];
+
+          return Record_Core{line, chromosome, position, reference_allele, alternate_alleles};
+      }
+
       bool check_vcf_ref(std::istream &vcf_input,
                          std::istream &fasta_input,
                          std::istream &fasta_index_input,
@@ -36,13 +49,12 @@ namespace ebi
 
           while (util::readline(vcf_input, vector_line).size() != 0) {
               std::string line{vector_line.begin(), vector_line.end()};
-              std::vector<std::string> record_columns;
 
               if (boost::starts_with(line, "#")) {
                   continue;
               }
 
-              Record_Core record_core{line};
+              Record_Core record_core = build_record_core(line);
 
               if (index.count(record_core.chromosome) == 0) {
                   BOOST_LOG_TRIVIAL(warning) << record_core.chromosome << " is not present in FASTA file";
