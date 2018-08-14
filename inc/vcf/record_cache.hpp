@@ -37,7 +37,7 @@ namespace ebi
     class RecordCache
     {
       public:
-          
+
         /**
          * Creates a cache that can hold at most 1000 entries.
          */
@@ -53,11 +53,11 @@ namespace ebi
          * Getter function which returns a vector of Errors.
          * For a given Record, returned Errors correspond to the duplicates found that aren't symbolic alleles.
          *
-         * Even if more than one duplicate is found for the same variant during the file validation, each occurrence 
+         * Even if more than one duplicate is found for the same variant during the file validation, each occurrence
          * is reported only once:
          * - If just one processed record is equivalent to the parameter, both are reported in 2 different errors.
          * - If more than one processed record is equivalent to the new one, only the new one is reported.
-         * 
+         *
          * Nonetheless, if the capacity is too small, it may cause incorrect reporting, such as reporting several times
          * the first occurrence or failing to report duplicates that are farther apart than the capacity.
          */
@@ -68,13 +68,13 @@ namespace ebi
 
         /**
          * Getter function which returns a vector of Errors.
-         * For a given Record, returned Errors correspond to the duplicates found that are symbolic alleles.   
+         * For a given Record, returned Errors correspond to the duplicates found that are symbolic alleles.
          *
-         * Even if more than one duplicate is found for the same variant during the file validation, each occurrence 
+         * Even if more than one duplicate is found for the same variant during the file validation, each occurrence
          * is reported only once:
          * - If just one processed record is equivalent to the parameter, both are reported in 2 different errors.
          * - If more than one processed record is equivalent to the new one, only the new one is reported.
-         * 
+         *
          * Nonetheless, if the capacity is too small, it may cause incorrect reporting, such as reporting several times
          * the first occurrence or failing to report duplicates that are farther apart than the capacity.
          */
@@ -82,7 +82,7 @@ namespace ebi
         {
             return std::move(list_symbolic_duplicates);
         }
-        
+
 
         /**
          * This function serves as the data generator to be used before utilizing get_duplicates() and get_symbolic_duplicates() functions.
@@ -90,11 +90,11 @@ namespace ebi
          * For a given Record, populates the list_duplicates and list_symbolic_duplicates vectors with
          * non symbolic and symbolic duplicates respectively
          *
-         * Even if more than one duplicate is found for the same variant during the file validation, each occurrence 
+         * Even if more than one duplicate is found for the same variant during the file validation, each occurrence
          * is reported only once:
          * - If just one processed record is equivalent to the parameter, both are reported in 2 different errors.
          * - If more than one processed record is equivalent to the new one, only the new one is reported.
-         * 
+         *
          * Nonetheless, if the capacity is too small, it may cause incorrect reporting, such as reporting several times
          * the first occurrence or failing to report duplicates that are farther apart than the capacity.
          */
@@ -104,15 +104,15 @@ namespace ebi
 
             list_duplicates.clear();
             list_symbolic_duplicates.clear();
-            
+
             for (RecordCore &record_core: record_cores) {
 
                 // create references to the appropriate data structures for th alternate allele type
                 auto & cache = (record_core.alternate_allele_type == RecordType::STRUCTURAL) ? cache_symbolic_duplicates : cache_duplicates;
                 auto & duplicates = (record_core.alternate_allele_type == RecordType::STRUCTURAL) ? list_symbolic_duplicates : list_duplicates;
 
-                auto range = cache.equal_range(record_core);                     
-                
+                auto range = cache.equal_range(record_core);
+
                 if (range.first == range.second) {
                     // no matches found
                 } else {

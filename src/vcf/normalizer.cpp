@@ -49,7 +49,7 @@ namespace ebi
                && reference_allele == other.reference_allele
                && alternate_allele == other.alternate_allele;
     }
-    
+
     std::ostream &operator<<(std::ostream &os, const RecordCore &record)
     {
         using util::operator<<;
@@ -59,14 +59,14 @@ namespace ebi
         os << "}";
         return os;
     }
-    
+
     //result is undefined if passed container.rend()
     template <class ReverseIterator>
     typename ReverseIterator::iterator_type make_forward(ReverseIterator rit)
     {
         return --(rit.base()); // move result of .base() back by one.
     }
-    
+
     template <class ReverseIterator>
     typename ReverseIterator::iterator_type make_forward_and_advance(ReverseIterator rit)
     {
@@ -127,7 +127,7 @@ namespace ebi
 
         return records;
     }
-    
+
     std::vector<RecordCore> normalize_right_alignment(const Record &record/* , ParsingState?*/)
     {
         std::vector<RecordCore> records;

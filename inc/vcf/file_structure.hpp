@@ -38,10 +38,10 @@ namespace ebi
     struct Source;
     struct MetaEntry;
     struct Record;
-    
+
     typedef std::multimap<std::string, MetaEntry>::iterator meta_iterator;
 
-    enum InputFormat 
+    enum InputFormat
     {
         VCF_FILE_VCF    = 0x01,
         VCF_FILE_GVCF   = 0x02,
@@ -49,14 +49,14 @@ namespace ebi
         VCF_FILE_BGZIP  = 0x08,
         VCF_FILE_BCF    = 0x10,
     };
-    
-    enum class Version 
+
+    enum class Version
     {
-        v41, 
-        v42, 
-        v43 
+        v41,
+        v42,
+        v43
     };
-    
+
     enum class RecordType
     {
         SNV,
@@ -222,45 +222,45 @@ namespace ebi
         enum class Structure { NoValue, PlainValue, KeyValue };
 
         size_t line;
-        
+
         std::string id;
         Structure structure; // Union discriminant
 
-        boost::variant< std::string, 
+        boost::variant< std::string,
                         std::map<std::string, std::string> > value;
 
         std::shared_ptr<Source> source;
-        
+
         MetaEntry(size_t line,
                   std::string const & id,
                   std::shared_ptr<Source> source);
-        
+
         MetaEntry(size_t line,
                   std::string const & id,
                   std::string const & plain_value,
                   std::shared_ptr<Source> source);
-        
+
         MetaEntry(size_t line,
                   std::string const & id,
                   std::map<std::string, std::string> const & key_values,
                   std::shared_ptr<Source> source);
-        
+
         bool operator==(MetaEntry const &) const;
 
         bool operator!=(MetaEntry const &) const;
 
         bool is_defined_in_header() const;
-        
+
     private:
         /**
          * Checks that the entry value satisfies the VCF specification.
-         * 
+         *
          * @throw std::invalid_argument
          */
         void check_value();
     };
-    
-    struct Source 
+
+    struct Source
     {
         std::string name;           /**< Name of the source to interact with (file, stdin...) */
         unsigned int input_format;  /**< Mask that stores whether the input is plain/gzipped VCF, BCF, etc */
@@ -268,16 +268,16 @@ namespace ebi
 
         std::multimap<std::string, MetaEntry> meta_entries; /**< Entries in the file meta-data */
         std::vector<std::string> samples_names; /**< Names of the sequenced samples */
-        
+
         Source(std::string const & name,
                unsigned const input_format,
                Version version,
                std::multimap<std::string, MetaEntry> const & meta_entries = {},
                std::vector<std::string> const & samples_names = {});
-        
+
     };
-    
-    struct Record 
+
+    struct Record
     {
         size_t line;
 
@@ -288,7 +288,7 @@ namespace ebi
         std::string reference_allele;
         std::vector<std::string> alternate_alleles;
         std::vector<RecordType> types;
-        
+
         float quality;
         std::vector<std::string> filters;
         std::multimap<std::string, std::string> info;
@@ -310,98 +310,98 @@ namespace ebi
                 std::vector<std::string> const & format,
                 std::vector<std::string> const & samples,
                 std::shared_ptr<Source> source);
-        
+
         bool operator==(Record const &) const;
 
         bool operator!=(Record const &) const;
-        
+
     private:
-        
+
         void set_types();
-        
+
         /**
          * Checks that chromosome does not contain colons or white-spaces
-         * 
+         *
          * @throw ChromosomeBodyError
          */
         void check_chromosome() const;
 
         /**
          * Checks that chromosome does not contain any colons
-         * 
+         *
          * @throw ChromosomeBodyError
          */
         void check_chromosome_no_colons() const;
 
         /**
          * Checks that chromosome does not contain any white-spaces
-         * 
+         *
          * @throw ChromosomeBodyError
          */
         void check_chromosome_no_whitespaces() const;
 
         /**
          * Checks that IDs are alphanumeric and do not contain duplicate values
-         * 
+         *
          * @throw IdBodyError
          */
         void check_ids() const;
-        
+
         /**
          * Checks that ID contains no semicolons or white-spaces
-         * 
+         *
          * @throw IdBodyError
          */
         void check_ids_no_semicolons_whitespaces() const;
 
         /**
          * Checks that ID contains no duplicate values in the same line
-         * 
+         *
          * @throw IdBodyError
          */
         void check_ids_no_duplicates() const;
 
         /**
          * Checks the structure of an alternate allele and its accordance to the meta section
-         * 
+         *
          * @throw AlternateAllelesBodyError
          */
         void check_alternate_alleles() const;
-        
+
         /**
          * Checks the structure of an alternate allele against the reference:
          * - The dot is not combined with others
          * - Is not the same as the reference
          * - Shares the first nucleotide with the reference (does not apply to SV, break-ends and custom ALTs)
-         * 
+         *
          * @throw AlternateAllelesBodyError
          */
         void check_alternate_allele_structure(std::string const & alternate, RecordType type) const;
-        
+
         /**
          * Check that alternates of the form <SOME_ALT> begin with DEL, INS, DUP, INV or CNV
-         * 
+         *
          * @throw AlternateAllelesBodyError
          */
         void check_alternate_allele_symbolic_prefix(std::string const & alternate) const;
-        
+
         /**
          * Checks that quality is zero or greater
-         * 
+         *
          * @throw QualityBodyError
          */
         void check_quality() const;
-        
+
         /**
          * Checks that all the filters are listed in the meta section, do not contain duplicates and are non-zero
-         * 
+         *
          * @throw FilterBodyError
          */
         void check_filter() const;
-        
+
         /**
          * Checks that FILTER contains no duplicate failed filters in the same line
-         * 
+         *
          * @throw FilterBodyError
          */
         void check_filter_no_duplicates() const;
@@ -414,37 +414,37 @@ namespace ebi
         void check_filter_not_zero() const;
 
         /**
-         * Checks that all the INFO fields are listed in the meta section, their number and 
+         * Checks that all the INFO fields are listed in the meta section, their number and
          * type match those specifications, and contain no duplicates
-         * 
+         *
          * @throw InfoBodyError
          */
         void check_info() const;
 
         /**
          * Checks that INFO contains no duplicate keys in the same line
-         * 
+         *
          * @throw InfoBodyError
          */
         void check_info_no_duplicates() const;
 
        /**
          * Checks that format starts with GT and has no duplicate fields
-         * 
+         *
          * @throw FormatBodyError
          */
         void check_format() const;
 
         /**
          * Checks that GT is the first field in the FORMAT column
-         * 
+         *
          * @throw FormatBodyError
          */
         void check_format_GT() const;
 
         /**
          * Checks that format has no duplicate fields in the same line
-         * 
+         *
          * @throw FormatBodyError
          */
         void check_format_no_duplicates() const;
@@ -479,14 +479,14 @@ namespace ebi
          * - Are the same number as specified in the Source object
          * - Their allele indexes are not greater than the total number of alleles
          * - The number and type of the fields match the FORMAT meta information
-         * 
+         *
          * @throw SamplesBodyError
          */
         void check_samples() const;
 
         /**
          * Checks that the number of samples matches those listed in the header line
-         * 
+         *
          * @throw SamplesBodyError
          */
         void check_samples_count() const;
@@ -503,7 +503,7 @@ namespace ebi
 
         /**
          * Checks the sample contents and accordance to the meta section
-         * 
+         *
          * @throw SamplesBodyError
          * @throw SamplesFieldBodyError
          */
@@ -511,14 +511,14 @@ namespace ebi
 
         /**
          * Checks that the number of subfields in the sample is not greater than the number in the FORMAT column
-         * 
+         *
          * @throw SamplesBodyError
          */
         void check_sample_subfields_count(size_t i, std::vector<std::string> const & subfields) const;
 
         /**
          * Checks that the cardinality and type of the fields in the sample match the FORMAT meta information
-         * 
+         *
          * @throw SamplesFieldBodyError
          */
         void check_sample_subfields_cardinality_type(size_t i, std::vector<std::string> const & subfields, std::vector<MetaEntry> const & format_meta) const;
@@ -533,21 +533,21 @@ namespace ebi
 
         /**
          * Check that the allele indexes in a sample are not greater than the total number of alleles
-         * 
+         *
          * @throw SamplesFieldBodyError
          */
         void check_sample_alleles(std::vector<std::string> const & subfields) const;
 
         /**
          * Checks that the allele index in a sample is an integer number
-         * 
+         *
          * @throw SamplesFieldBodyError
-         */        
+         */
         void check_sample_alleles_is_integer(std::string const & allele, long ploidy) const;
 
         /**
          * Checks that the allele index is in range
-         * 
+         *
          * @throw SamplesFieldBodyError
          */
         void check_sample_alleles_range(std::string const & allele, long ploidy) const;
@@ -586,7 +586,7 @@ namespace ebi
         /**
          * Checks that every field in INFO column matches the Number specification in the meta
          * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
-         * 
+         *
          * @throw std::invalid_argument
          */
         void check_info_field_cardinality(std::vector<std::string> const &values, std::string const &number) const;
@@ -594,12 +594,12 @@ namespace ebi
         /**
          * Checks that every field in a sample matches the Number specification in the meta
          * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification
-         * 
+         *
          * @throw std::invalid_argument
          */
         void check_sample_field_cardinality(std::vector<std::string> const &values, std::string const &number,
                                             size_t ploidy, long &expected_cardinality) const;
-        
+
         /**
          * Checks that every field in a column matches the Type specification in the meta
          * Or if it is not present in the meta and is a predefined tag, check that it matches the VCF specification

@@ -44,13 +44,13 @@ namespace ebi
         chromosome{chromosome},
         position{position},
         ids{ids},
-        reference_allele{reference_allele}, 
-        alternate_alleles{alternate_alleles}, 
+        reference_allele{reference_allele},
+        alternate_alleles{alternate_alleles},
         types{},
-        quality{quality}, 
-        filters{filters}, 
-        info{info}, 
-        format{format}, 
+        quality{quality},
+        filters{filters},
+        info{info},
+        format{format},
         samples{samples},
         source{source}
     {
@@ -91,8 +91,8 @@ namespace ebi
                 types.push_back(RecordType::NO_VARIATION);
             } else if (alternate[0] == '<') {
                 types.push_back(RecordType::STRUCTURAL);
-            } else if (std::count(alternate.begin(), alternate.end(), '[') == 2 || 
-                   std::count(alternate.begin(), alternate.end(), ']') == 2) { 
+            } else if (std::count(alternate.begin(), alternate.end(), '[') == 2 ||
+                   std::count(alternate.begin(), alternate.end(), ']') == 2) {
                 types.push_back(RecordType::STRUCTURAL_BREAKEND);
             } else if (alternate.size() != reference_allele.size()) {
                 types.push_back(RecordType::INDEL);
@@ -101,7 +101,7 @@ namespace ebi
             }
         }
     }
-    
+
     void Record::check_chromosome() const
     {
         check_chromosome_no_colons();
@@ -127,7 +127,7 @@ namespace ebi
         if (ids.size() == 1 && ids[0] == MISSING_VALUE) {
             return; // No need to check if no IDs are provided
         }
-        
+
         check_ids_no_semicolons_whitespaces();
         check_ids_no_duplicates();
     }
@@ -153,17 +153,17 @@ namespace ebi
     }
 
     void Record::check_alternate_alleles() const
-    {        
+    {
         for (size_t i = 0 ; i < alternate_alleles.size(); ++i) {
             auto & alternate = alternate_alleles[i];
             auto & type = types[i];
-            
+
             check_alternate_allele_structure(alternate, type);
             check_alternate_allele_symbolic_prefix(alternate);
         }
-        
+
     }
-    
+
     void Record::check_alternate_allele_structure(std::string const & alternate, RecordType type) const
     {
         switch (type) {
@@ -186,9 +186,9 @@ namespace ebi
                 // Custom ALTs (STRUCTURAL) and break-ends (STRUCTURAL_BREAKEND) can't be checked against the reference
                 break;
         }
-        
+
     }
-    
+
     void Record::check_alternate_allele_symbolic_prefix(std::string const & alternate) const
     {
         static boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
@@ -196,10 +196,10 @@ namespace ebi
 
         if (alternate[0] == '<' && boost::regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
             std::string alt_id = pieces_match[1];
-            if (!boost::starts_with(alt_id, DEL) && 
-                !boost::starts_with(alt_id, INS) && 
-                !boost::starts_with(alt_id, DUP) && 
-                !boost::starts_with(alt_id, INV) && 
+            if (!boost::starts_with(alt_id, DEL) &&
+                !boost::starts_with(alt_id, INS) &&
+                !boost::starts_with(alt_id, DUP) &&
+                !boost::starts_with(alt_id, INV) &&
                 !boost::starts_with(alt_id, CNV)) {
                 throw new AlternateAllelesBodyError{line,
                         "Alternate ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"};
@@ -212,7 +212,7 @@ namespace ebi
             throw new QualityBodyError{line, "Quality is not equal or greater than zero"};
         }
     }
-    
+
     void Record::check_filter() const
     {
         check_filter_no_duplicates();
@@ -286,7 +286,7 @@ namespace ebi
             strict_validation_info_predefined_tags(field.first, field.second, values);
        }
     }
-    
+
     void Record::check_info_no_duplicates() const
     {
         if (source->version == Version::v43 && info.size() > 1) {
@@ -303,7 +303,7 @@ namespace ebi
         if (format.size() == 0) {
             return; // Nothing to check
         }
-        
+
         check_format_GT();
         check_format_no_duplicates();
     }
@@ -437,18 +437,18 @@ namespace ebi
     void Record::check_samples() const
     {
         check_samples_count();
-        
+
         if (samples.size() == 0) {
             return; // Nothing to check if no samples are listed in the file
         }
-        
+
         std::vector<MetaEntry> format_meta = get_meta_entry_objects();
 
         for (size_t i = 0; i < samples.size(); ++i) {
             check_sample(i, format_meta);
         }
     }
-    
+
     void Record::check_samples_count() const
     {
         if (samples.size() != source->samples_names.size()) {
@@ -464,7 +464,7 @@ namespace ebi
 
         for (auto & fm : format) {
             bool found_in_header = false;
-            
+
             for (iter current = range.first; current != range.second; ++current) {
                 auto & key_values = boost::get<std::map<std::string, std::string>>((current->second).value);
 
@@ -474,7 +474,7 @@ namespace ebi
                     break;
                 }
             }
-            
+
             if (!found_in_header) {
                 // If not found in header, a null-value meta entry must be created to make sizes match
                 format_meta.push_back(MetaEntry{line, "", source});
@@ -503,7 +503,7 @@ namespace ebi
     {
         std::vector<std::string> subfields;
         util::string_split(samples[i], ":", subfields);
-        
+
         check_sample_subfields_count(i, subfields);
 
         // If the first format field is not a GT, then no alleles need to be checked
@@ -782,17 +782,17 @@ namespace ebi
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     std::ostream &operator<<(std::ostream &os, const Record &record)
     {
         using util::operator<<;
         os << "{";
         os << record.line << ", " << record.chromosome << ", " << record.position << ", ";
         os << record.ids << ", " << record.reference_allele << ", " << record.alternate_alleles;
-        
+
         os << ", [";
         if (record.types.size() > 0) {
             auto type_it = record.types.begin();
@@ -803,13 +803,13 @@ namespace ebi
             }
         }
         os << "]";
-        
+
         os << ", " << record.quality;
         os << ", " << record.filters;
         os << ", " << record.info;
         os << ", " << record.format;
         os << ", " << record.samples;
-        
+
         os << "}";
         return os;
     }
