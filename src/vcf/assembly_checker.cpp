@@ -23,7 +23,7 @@ namespace ebi
     namespace assembly_checker
     {
 
-      Record_Core build_record_core(std::string const & line)
+      Record_Core build_record_core(std::string const & line, size_t line_num)
       {
           std::vector<std::string> record_columns;
           util::string_split(line, "\t", record_columns);
@@ -33,7 +33,13 @@ namespace ebi
           std::string reference_allele = record_columns[3];
           std::string alternate_alleles = record_columns[4];
 
-          return Record_Core{line, chromosome, position, reference_allele, alternate_alleles};
+          /*
+           * Here the last parameter which is having type `RecordType` is kept `NO_VARIATION`
+           *
+           * Till now the behaviour of assemblychecker is independent from this parameter.
+           * In future this can be modified if needed.
+           */
+          return Record_Core{line, line_num, chromosome, position, reference_allele, alternate_alleles, vcf::RecordType::NO_VARIATION };
       }
 
       bool check_vcf_ref(std::istream &vcf_input,
@@ -47,6 +53,7 @@ namespace ebi
           // Reading FASTA index, and querying FASTA file
           auto index = bioio::read_fasta_index(fasta_index_input);
 
+          size_t line_num = 0;
           while (util::readline(vcf_input, vector_line).size() != 0) {
               std::string line{vector_line.begin(), vector_line.end()};
 
@@ -54,7 +61,7 @@ namespace ebi
                   continue;
               }
 
-              Record_Core record_core = build_record_core(line);
+              Record_Core record_core = build_record_core(line,++line_num);
 
               if (index.count(record_core.chromosome) == 0) {
                   BOOST_LOG_TRIVIAL(warning) << record_core.chromosome << " is not present in FASTA file";

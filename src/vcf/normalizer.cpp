@@ -54,7 +54,7 @@ namespace ebi
     {
         using util::operator<<;
         os << "{";
-        os << record.line << ", " << record.chromosome << ", " << record.position << ", ";
+        os << record.line_num << ", " << record.chromosome << ", " << record.position << ", ";
         os << record.reference_allele << ", " << record.alternate_allele;
         os << "}";
         return os;

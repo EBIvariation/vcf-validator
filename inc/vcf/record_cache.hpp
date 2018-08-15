@@ -121,16 +121,16 @@ namespace ebi
                     ss << "Duplicated variant " << record_core.chromosome << ":" << record_core.position << ":"
                     << record_core.reference_allele << ">" << record_core.alternate_allele << " found";
 
-                    std::string duplicate_variant_lines = "It occurs in lines " + std::to_string(range.first->line)
-                                                          + " and " + std::to_string(record_core.line);
-                    size_t first_occurence_line{range.first->line};
+                    std::string duplicate_variant_lines = "It occurs in lines " + std::to_string(range.first->line_num)
+                                                          + " and " + std::to_string(record_core.line_num);
+                    size_t first_occurence_line{range.first->line_num};
 
                     if (++range.first == range.second) {
                         // if only one match, return an extra error for the first occurrence
                         duplicates.emplace_back(new DuplicationError{first_occurence_line, ss.str()});
                     }
 
-                    duplicates.emplace_back(new DuplicationError{record_core.line, ss.str(), duplicate_variant_lines});
+                    duplicates.emplace_back(new DuplicationError{record_core.line_num, ss.str(), duplicate_variant_lines});
                 }
 
                 cache.insert(range.second, record_core);

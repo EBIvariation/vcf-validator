@@ -27,20 +27,42 @@ namespace ebi
      */
     struct RecordCore
     {
-        size_t line;
+        std::string line;
+        size_t line_num;
         std::string chromosome;
         size_t position;
         std::string reference_allele;
         std::string alternate_allele;
         RecordType alternate_allele_type;
 
-        RecordCore(size_t line,
-                   const std::string &chromosome,
+        RecordCore(size_t line_num,
+                   const std::string & chromosome,
                    size_t position,
-                   const std::string &reference_allele,
-                   const std::string &alternate_alleles,
+                   const std::string & reference_allele,
+                   const std::string & alternate_alleles,
+                   RecordType alternate_allele_types
+                   ) : line_num(line_num),
+                       chromosome(chromosome),
+                       position(position),
+                       reference_allele(reference_allele),
+                       alternate_allele(alternate_alleles),
+                       alternate_allele_type(alternate_allele_types)
+        {
+            line = "";
+        }
+
+        /*
+         * Overloaded Constructor specially for Assembly Checker
+         */
+        RecordCore(const std::string & line,
+                   size_t line_num,
+                   const std::string & chromosome,
+                   size_t position,
+                   const std::string & reference_allele,
+                   const std::string & alternate_alleles,
                    RecordType alternate_allele_types
                    ) : line(line),
+                       line_num(line_num),
                        chromosome(chromosome),
                        position(position),
                        reference_allele(reference_allele),
@@ -49,6 +71,8 @@ namespace ebi
         {
 
         }
+
+
 
         /** A record "a" is less than another "b" iff:
          * - the chromosome string from "a" is lexicographically less than the chromosome string from "b", or if they equal:

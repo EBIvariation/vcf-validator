@@ -24,6 +24,7 @@
 #include "util/string_utils.hpp"
 #include "vcf/string_constants.hpp"
 #include "vcf/vcf_fasta_variant.hpp"
+#include "file_structure.hpp"
 
 namespace ebi
 {
@@ -33,15 +34,30 @@ namespace ebi
     struct Record_Core
     {
         std::string line;
+        size_t line_num;
         std::string chromosome;
         size_t position;
         std::string reference_allele;
         std::string alternate_allele;
+        RecordType alternate_allele_type;
 
-        Record_Core(const std::string & line, const std::string & chromosome, size_t position,
-                   const std::string & reference_allele, const std::string & alternate_alleles)
-            : line(line), chromosome(chromosome), position(position), reference_allele(reference_allele),
-              alternate_allele(alternate_alleles) { }
+        Record_Core(const std::string & line,
+                    size_t line_num,
+                    const std::string & chromosome,
+                    size_t position,
+                    const std::string & reference_allele,
+                    const std::string & alternate_alleles,
+                    RecordType alternate_allele_types
+                    ) : line(line),
+                        line_num(line_num),
+                        chromosome(chromosome),
+                        position(position),
+                        reference_allele(reference_allele),
+                        alternate_allele(alternate_alleles),
+                        alternate_allele_type(alternate_allele_types)
+        {
+
+        }
 
     };
   }

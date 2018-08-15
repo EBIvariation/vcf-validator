@@ -18,6 +18,7 @@
 #include <string>
 
 #include "vcf/assembly_checker.hpp"
+#include "vcf/file_structure.hpp"
 #include "vcf/error.hpp"
 #include "vcf/vcf_fasta_variant.hpp"
 
@@ -31,11 +32,12 @@ namespace ebi
         {
             std::string line{"1\t10177\trs367896724\tA\tAC"};
             std::string chromosome{"1"};
+            size_t line_num = 1;
             size_t position = 10177;
             std::string reference_allele{"A"};
             std::string alternate_allele{"AC"};
 
-            vcf::Record_Core record_core{line, chromosome, position, reference_allele, alternate_allele};
+            vcf::Record_Core record_core{line, line_num, chromosome, position, reference_allele, alternate_allele, vcf::RecordType::NO_VARIATION};
             CHECK(ebi::vcf::assembly_checker::is_matching_sequence(record_core.reference_allele, "A"));
             CHECK_FALSE(ebi::vcf::assembly_checker::is_matching_sequence(record_core.reference_allele, "G"));
         }
