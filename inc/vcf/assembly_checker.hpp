@@ -28,7 +28,7 @@
 #include "bioio/bioio.hpp"
 #include "vcf/assembly_report_writer.hpp"
 #include "vcf/file_structure.hpp"
-#include "vcf/vcf_fasta_variant.hpp"
+#include "vcf/normalizer.hpp"
 #include "vcf/validator.hpp"
 #include "util/logger.hpp"
 #include "util/stream_utils.hpp"

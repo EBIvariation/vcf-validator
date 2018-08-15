@@ -160,7 +160,6 @@ set (MOD_VCF_SOURCES
   inc/vcf/validator_detail_v42.hpp
   inc/vcf/validator_detail_v43.hpp
   inc/vcf/validator.hpp
-  inc/vcf/vcf_fasta_variant.hpp
 
   src/vcf/abort_error_policy.cpp
   src/vcf/assembly_checker.cpp

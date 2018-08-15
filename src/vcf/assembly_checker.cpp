@@ -23,7 +23,7 @@ namespace ebi
     namespace assembly_checker
     {
 
-      Record_Core build_record_core(std::string const & line, size_t line_num)
+      RecordCore build_record_core(std::string const & line, size_t line_num)
       {
           std::vector<std::string> record_columns;
           util::string_split(line, "\t", record_columns);
@@ -39,7 +39,13 @@ namespace ebi
            * Till now the behaviour of assemblychecker is independent from this parameter.
            * In future this can be modified if needed.
            */
-          return Record_Core{line, line_num, chromosome, position, reference_allele, alternate_alleles, vcf::RecordType::NO_VARIATION };
+          return RecordCore{line,
+                            line_num,
+                            chromosome,
+                            position,
+                            reference_allele,
+                            alternate_alleles,
+                            vcf::RecordType::NO_VARIATION};
       }
 
       bool check_vcf_ref(std::istream &vcf_input,
@@ -61,7 +67,7 @@ namespace ebi
                   continue;
               }
 
-              Record_Core record_core = build_record_core(line,++line_num);
+              RecordCore record_core = build_record_core(line,++line_num);
 
               if (index.count(record_core.chromosome) == 0) {
                   BOOST_LOG_TRIVIAL(warning) << record_core.chromosome << " is not present in FASTA file";

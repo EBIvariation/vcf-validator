@@ -27,8 +27,8 @@
 #include "util/logger.hpp"
 #include "vcf/error.hpp"
 #include "vcf/error-odb.hpp"
+#include "vcf/normalizer.hpp"
 #include "vcf/string_constants.hpp"
-#include "vcf/vcf_fasta_variant.hpp"
 
 namespace ebi
 {
@@ -38,8 +38,8 @@ namespace ebi
     class AssemblyReportWriter
     {
       public:
-        virtual void write_mismatch(const vcf::Record_Core &record_core) = 0;
-        virtual void write_match(const vcf::Record_Core &record_core) = 0;
+        virtual void write_mismatch(const vcf::RecordCore &record_core) = 0;
+        virtual void write_match(const vcf::RecordCore &record_core) = 0;
 
         virtual void finish_report()
         {
@@ -60,12 +60,12 @@ namespace ebi
       public:
         SummaryAssemblyReportWriter(){}
 
-        void write_mismatch(const vcf::Record_Core &record_core)
+        void write_mismatch(const vcf::RecordCore &record_core)
         {
             match_stats.add_match_result(false);
         }
 
-        void write_match(const vcf::Record_Core &record_core)
+        void write_match(const vcf::RecordCore &record_core)
         {
             match_stats.add_match_result(true);
         }
@@ -87,7 +87,7 @@ namespace ebi
             file.close();
         }
 
-        virtual void write_mismatch(const vcf::Record_Core &record_core) override
+        virtual void write_mismatch(const vcf::RecordCore &record_core) override
         {
             match_stats.add_match_result(false);
             if(report_type == ebi::vcf::INVALID) {
@@ -95,7 +95,7 @@ namespace ebi
             }
         }
 
-        virtual void write_match(const vcf::Record_Core &record_core) override
+        virtual void write_match(const vcf::RecordCore &record_core) override
         {
             match_stats.add_match_result(true);
             if(report_type == ebi::vcf::VALID) {
