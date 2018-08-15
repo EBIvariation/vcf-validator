@@ -72,8 +72,6 @@ namespace ebi
 
         }
 
-
-
         /** A record "a" is less than another "b" iff:
          * - the chromosome string from "a" is lexicographically less than the chromosome string from "b", or if they equal:
          * - the position from "a" is numerically less than the position from "b", or if they equal:

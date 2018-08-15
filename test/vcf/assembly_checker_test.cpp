@@ -17,12 +17,12 @@
 #include <set>
 #include <string>
 
+#include "catch/catch.hpp"
 #include "vcf/assembly_checker.hpp"
 #include "vcf/error.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/normalizer.hpp"
 
-#include "catch/catch.hpp"
 
 namespace ebi
 {

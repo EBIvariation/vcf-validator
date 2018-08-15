@@ -23,31 +23,6 @@ namespace ebi
     namespace assembly_checker
     {
 
-      RecordCore build_record_core(std::string const & line, size_t line_num)
-      {
-          std::vector<std::string> record_columns;
-          util::string_split(line, "\t", record_columns);
-
-          std::string chromosome = record_columns[0];
-          size_t position = static_cast<size_t>(std::stoi(record_columns[1]));
-          std::string reference_allele = record_columns[3];
-          std::string alternate_alleles = record_columns[4];
-
-          /*
-           * Here the last parameter which is having type `RecordType` is kept `NO_VARIATION`
-           *
-           * Till now the behaviour of assemblychecker is independent from this parameter.
-           * In future this can be modified if needed.
-           */
-          return RecordCore{line,
-                            line_num,
-                            chromosome,
-                            position,
-                            reference_allele,
-                            alternate_alleles,
-                            vcf::RecordType::NO_VARIATION};
-      }
-
       bool check_vcf_ref(std::istream &vcf_input,
                          std::istream &fasta_input,
                          std::istream &fasta_index_input,
@@ -98,6 +73,31 @@ namespace ebi
 
           outputs[0]->finish_report();
           return outputs[0]->is_valid_report();
+      }
+
+      RecordCore build_record_core(std::string const & line, size_t line_num)
+      {
+          std::vector<std::string> record_columns;
+          util::string_split(line, "\t", record_columns);
+
+          std::string chromosome = record_columns[0];
+          size_t position = static_cast<size_t>(std::stoi(record_columns[1]));
+          std::string reference_allele = record_columns[3];
+          std::string alternate_alleles = record_columns[4];
+
+          /*
+           * Here the last parameter which is having type `RecordType` is kept `NO_VARIATION`
+           *
+           * Till now the behaviour of assemblychecker is independent from this parameter.
+           * In future this can be modified if needed.
+           */
+          return RecordCore{line,
+                            line_num,
+                            chromosome,
+                            position,
+                            reference_allele,
+                            alternate_alleles,
+                            vcf::RecordType::NO_VARIATION};
       }
 
       bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence)

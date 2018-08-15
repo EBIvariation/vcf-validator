@@ -18,10 +18,10 @@
 #include <boost/program_options.hpp>
 
 #include "cmake_config.hpp"
-#include "util/logger.hpp"
 #include "vcf/assembly_checker.hpp"
-#include "vcf/string_constants.hpp"
 #include "vcf/assembly_report_writer.hpp"
+#include "vcf/string_constants.hpp"
+#include "util/logger.hpp"
 
 namespace
 {
@@ -169,4 +169,5 @@ int main(int argc, char** argv)
         BOOST_LOG_TRIVIAL(error) << ex.what();
         return 1;
     }
+
 }

@@ -17,18 +17,21 @@
 #ifndef ASSEMBLY_REPORT_WRITER_HPP
 #define ASSEMBLY_REPORT_WRITER_HPP
 
+#include <fstream>
+
 #include <boost/filesystem/operations.hpp>
+
 #include <odb/database.hxx>
 #include <odb/sqlite/query.hxx>
 #include <odb/schema-catalog.hxx>
 #include <odb/sqlite/database.hxx>
-#include <fstream>
 
-#include "util/logger.hpp"
+
 #include "vcf/error.hpp"
 #include "vcf/error-odb.hpp"
 #include "vcf/normalizer.hpp"
 #include "vcf/string_constants.hpp"
+#include "util/logger.hpp"
 
 namespace ebi
 {

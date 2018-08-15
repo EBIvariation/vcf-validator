@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-#include <boost/filesystem.hpp>
 #include <fstream>
 #include <memory>
 #include <string>
+
+#include <boost/filesystem.hpp>
 
 #include "catch/catch.hpp"
 #include "vcf/assembly_checker.hpp"

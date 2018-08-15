@@ -49,9 +49,10 @@ namespace ebi
                          std::istream &fasta_index_input,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs);
 
-      void check_missing_chromosomes(std::set<std::string> absent_chromosomes);
-
       bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence);
+
+      RecordCore build_record_core(std::string const & line, size_t line_num);
+
     }
   }
 }
