@@ -47,7 +47,7 @@ namespace ebi
     ParserImpl::ParserImpl(std::shared_ptr<Source> source)
             : ParsingState{source}
     {
-        
+
     }
 
     void ParserImpl::parse(std::vector<char> const & text)

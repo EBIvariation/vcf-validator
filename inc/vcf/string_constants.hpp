@@ -29,7 +29,7 @@ namespace ebi
     const std::string VCF_V42 = "VCFv4.2";
     const std::string VCF_V43 = "VCFv4.3";
 
-    // validator and debugulator command line arguments
+    // validator, debugulator and assembly_checker command line arguments
     const char STDIN[] = "stdin";
     const char STDOUT[] = "stdout";
     const char WARNING_LEVEL[] = "warning";
@@ -42,13 +42,18 @@ namespace ebi
     const char DATABASE[] = "database";
     const char TEXT[] = "text";
     const char SUMMARY[] = "summary";
+    const char VALID[] = "valid";
+    const char INVALID[] = "invalid";
     const char INPUT[] = "input";
+    const char VCF[] = "vcf";
+    const char FASTA[] = "fasta";
     const char OUTPUT[] = "output";
     const char OUTDIR[] = "outdir";
     const char REPORT[] = "report";
     const char HELP_OPTION[] = "help,h";
     const char VERSION_OPTION[] = "version,v";
     const char INPUT_OPTION[] = "input,i";
+    const char FASTA_OPTION[] = "fasta,f";
     const char ERRORS_OPTION[] = "errors,e";
     const char LEVEL_OPTION[] = "level,l";
     const char REPORT_OPTION[] = "report,r";
@@ -65,6 +70,7 @@ namespace ebi
     const std::string ALT = "ALT";
     const std::string ASSEMBLY = "assembly";
     const std::string CHROM = "CHROM";
+    const std::string CHR = "chr";
     const std::string CONTIG = "contig";
     const std::string FILTER = "FILTER";
     const std::string FORMAT = "FORMAT";
@@ -91,7 +97,7 @@ namespace ebi
     const std::string G = "G";
     const std::string R = "R";
     const std::string UNKNOWN_CARDINALITY = ".";
-    
+
     // Pass value for Filter
     const std::string PASS = "PASS";
 
@@ -165,10 +171,15 @@ namespace ebi
     const std::string GT = "GT";
     const std::string HAP = "HAP";
     const std::string HQ = "HQ";
-    const std::string NQ = "NQ"; 
+    const std::string NQ = "NQ";
     const std::string PL = "PL";
     const std::string PQ = "PQ";
     const std::string PS = "PS";
+
+    // File extensions
+    const std::string VCF_EXT = ".vcf";
+    const std::string FASTA_EXT = ".fa";
+    const std::string INDEX_EXT = ".fai";
 
     // Compressed file extensions
     const std::string BZ2 = ".bz2";

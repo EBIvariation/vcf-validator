@@ -138,6 +138,8 @@ add_library (mod_odb STATIC ${MOD_ODB_SOURCES})
 target_link_libraries (mod_odb ${THIRD_PARTY_LIBRARIES})
 
 set (MOD_VCF_SOURCES
+  inc/vcf/assembly_checker.hpp
+  inc/vcf/assembly_report_writer.hpp
   inc/vcf/debugulator.hpp
   inc/vcf/error_policy.hpp
   inc/vcf/file_structure.hpp
@@ -160,6 +162,7 @@ set (MOD_VCF_SOURCES
   inc/vcf/validator.hpp
 
   src/vcf/abort_error_policy.cpp
+  src/vcf/assembly_checker.cpp
   src/vcf/debugulator.cpp
   src/vcf/fixer.cpp
   src/vcf/meta_entry.cpp
@@ -208,6 +211,8 @@ set (V41_TESTS test/vcf/parser_v41_test.cpp)
 set (V42_TESTS test/vcf/parser_v42_test.cpp)
 set (V43_TESTS test/vcf/parser_v43_test.cpp)
 set (ALL_TESTS
+  test/vcf/assembly_checker_integration_test.cpp
+  test/vcf/assembly_checker_test.cpp
   test/vcf/compressed_file_test.cpp
   test/vcf/debugulator_integration_test.cpp
   test/vcf/debugulator_test.cpp
@@ -253,3 +258,6 @@ target_link_libraries (vcf_validator ${LIBRARIES_TO_LINK})
 
 add_executable (vcf_debugulator src/debugulator_main.cpp)
 target_link_libraries (vcf_debugulator ${LIBRARIES_TO_LINK})
+
+add_executable (vcf_assembly_checker src/assembly_checker_main.cpp)
+target_link_libraries (vcf_assembly_checker ${LIBRARIES_TO_LINK})
