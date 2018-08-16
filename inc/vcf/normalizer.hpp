@@ -39,14 +39,14 @@ namespace ebi
                    const std::string & chromosome,
                    size_t position,
                    const std::string & reference_allele,
-                   const std::string & alternate_alleles,
-                   RecordType alternate_allele_types
+                   const std::string & alternate_allele,
+                   RecordType alternate_allele_type
                    ) : line_num(line_num),
                        chromosome(chromosome),
                        position(position),
                        reference_allele(reference_allele),
-                       alternate_allele(alternate_alleles),
-                       alternate_allele_type(alternate_allele_types)
+                       alternate_allele(alternate_allele),
+                       alternate_allele_type(alternate_allele_type)
         {
             line = "";
         }
@@ -54,22 +54,21 @@ namespace ebi
         /*
          * Overloaded Constructor specially for Assembly Checker
          */
-        RecordCore(const std::string & line,
+        RecordCore(const std::string & vcf_line,
                    size_t line_num,
                    const std::string & chromosome,
                    size_t position,
                    const std::string & reference_allele,
-                   const std::string & alternate_alleles,
-                   RecordType alternate_allele_types
-                   ) : line(line),
-                       line_num(line_num),
-                       chromosome(chromosome),
-                       position(position),
-                       reference_allele(reference_allele),
-                       alternate_allele(alternate_alleles),
-                       alternate_allele_type(alternate_allele_types)
+                   const std::string & alternate_allele,
+                   RecordType alternate_allele_type
+                   ) : RecordCore(line_num,
+                       chromosome,
+                       position,
+                       reference_allele,
+                       alternate_allele,
+                       alternate_allele_type)
         {
-
+            line = vcf_line;
         }
 
         /** A record "a" is less than another "b" iff:

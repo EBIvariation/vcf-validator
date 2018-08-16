@@ -34,15 +34,14 @@ namespace ebi
           // Reading FASTA index, and querying FASTA file
           auto index = bioio::read_fasta_index(fasta_index_input);
 
-          size_t line_num = 0;
-          while (util::readline(vcf_input, vector_line).size() != 0) {
+          for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
               std::string line{vector_line.begin(), vector_line.end()};
 
               if (boost::starts_with(line, "#")) {
                   continue;
               }
 
-              RecordCore record_core = build_record_core(line,++line_num);
+              RecordCore record_core = build_record_core(line,line_num);
 
               if (index.count(record_core.chromosome) == 0) {
                   BOOST_LOG_TRIVIAL(warning) << record_core.chromosome << " is not present in FASTA file";
