@@ -160,7 +160,7 @@ int main(int argc, char** argv)
             BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
             std::ifstream vcf_input;
             open_file(vcf_input, vcf_path);
-            ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, outputs);
+            ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs);
         }
 
         return 0;

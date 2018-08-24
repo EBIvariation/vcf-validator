@@ -22,7 +22,11 @@
 #include <set>
 #include <vector>
 
-#include <boost/algorithm/string/predicate.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/iostreams/filter/bzip2.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/filter/zlib.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
 #include <boost/log/trivial.hpp>
 
 #include "bioio/bioio.hpp"
@@ -45,6 +49,12 @@ namespace ebi
       size_t const default_line_buffer_size = 64 * 1024;
 
       bool check_vcf_ref(std::istream &vcf_input,
+                         const std::string &sourceName,
+                         std::istream &fasta_input,
+                         std::istream &fasta_index_input,
+                         std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs);
+
+      bool process_vcf_ref(std::istream &vcf_input,
                          std::istream &fasta_input,
                          std::istream &fasta_index_input,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs);
@@ -52,6 +62,14 @@ namespace ebi
       bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence);
 
       RecordCore build_record_core(std::string const & line, size_t line_num);
+
+      std::string get_compression_from_extension(std::string const & source);
+
+      std::string get_compression_from_magic_num(const std::vector<char> &line);
+
+      void create_uncompressed_stream(std::istream & input,
+                                      const std::string & file_extension,
+                                      boost::iostreams::filtering_istream & uncompressed_input);
 
     }
   }
