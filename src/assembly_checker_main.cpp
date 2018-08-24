@@ -155,7 +155,7 @@ int main(int argc, char** argv)
 
         if (vcf_path == ebi::vcf::STDIN) {
             BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
-            ebi::vcf::assembly_checker::check_vcf_ref(std::cin, fasta_input, fasta_index_input, outputs);
+            ebi::vcf::assembly_checker::check_vcf_ref(std::cin, vcf_path, fasta_input, fasta_index_input, outputs);
         } else {
             BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
             std::ifstream vcf_input;
