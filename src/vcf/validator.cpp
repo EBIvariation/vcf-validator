@@ -254,12 +254,21 @@ namespace ebi
             { { 120, -100 }, ZLIB }
         };
 
-        for (auto & type : types) {
-            if (std::equal(type.first.begin(), type.first.end(), line.begin())) {
-                compressed_file_warning(type.second);
-                return type.second;
-            }
-        }
+        /*
+        * First line of vcf file is having smaller size than 5 characters
+        * which will be a problem for std::equal to check its extension
+        * It will cause a segmentation fault.
+        * According to spec first line of vcf, file can't be smaller than 5 characters.
+        */
+		if(line.size() >=5){
+			for (auto & type : types) {
+		        if (std::equal(type.first.begin(), type.first.end(), line.begin())) {
+		            compressed_file_warning(type.second);
+		            return type.second;
+		        }
+		    }
+		}
+
         return NO_EXT;
     }
 
