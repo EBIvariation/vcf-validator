@@ -258,12 +258,14 @@ namespace ebi
          * If the first line of the VCF file has less than 5 characters,
          * std::equal will cause a segmentation fault.
          */
-        if (line.size() >= 5) {
-            for (auto & type : types) {
-                if (std::equal(type.first.begin(), type.first.end(), line.begin())) {
-                    compressed_file_warning(type.second);
-                    return type.second;
-                }
+        if (line.size() < 5) {
+            return NO_EXT;
+        }
+
+        for (auto & type : types) {
+            if (std::equal(type.first.begin(), type.first.end(), line.begin())) {
+                compressed_file_warning(type.second);
+                return type.second;
             }
         }
 
