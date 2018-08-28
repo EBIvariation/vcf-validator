@@ -259,6 +259,9 @@ namespace ebi
          * std::equal will cause a segmentation fault.
          */
         if (line.size() < 5) {
+            if (line.size() == 0) {
+                BOOST_LOG_TRIVIAL(warning) << "Empty vcf file";
+            }
             return NO_EXT;
         }
 
