@@ -255,12 +255,13 @@ namespace ebi
         };
 
         /*
-         * If the first line of the VCF file has less than 5 characters,
-         * std::equal will cause a segmentation fault.
+         * If the first line of the VCF file is shorter than any magic number string (stored in the variable "types"),
+         * std::equal will cause a segmentation fault, so if the line is shorter than the longest magic number string
+         * (5 characters), then we assume there's no compression.
          */
         if (line.size() < 5) {
             if (line.size() == 0) {
-                BOOST_LOG_TRIVIAL(warning) << "Empty vcf file";
+                BOOST_LOG_TRIVIAL(warning) << "The VCF file provided is empty";
             }
             return NO_EXT;
         }
