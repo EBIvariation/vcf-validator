@@ -254,12 +254,25 @@ namespace ebi
             { { 120, -100 }, ZLIB }
         };
 
+        /*
+         * If the first line of the VCF file is shorter than any magic number string (stored in the variable "types"),
+         * std::equal will cause a segmentation fault, so if the line is shorter than the longest magic number string
+         * (5 characters), then we assume there's no compression.
+         */
+        if (line.size() < 5) {
+            if (line.size() == 0) {
+                BOOST_LOG_TRIVIAL(warning) << "The VCF file provided is empty";
+            }
+            return NO_EXT;
+        }
+
         for (auto & type : types) {
             if (std::equal(type.first.begin(), type.first.end(), line.begin())) {
                 compressed_file_warning(type.second);
                 return type.second;
             }
         }
+
         return NO_EXT;
     }
 
