@@ -20,6 +20,17 @@ Once you found an interesting issue to work on you may check if someone other is
 -  PR message should be well explanatory and should contain reference to the issue this PR is for.
 -  Once the PR is ready for a review, ask for a review.
 
+## Coding Practice
+There are some coding practices that we follow to make code easily readable and modifiable. few of them that should be kept in mind while coding are:
+
+- Consistent Indentation - we generally prefer 4 spaces for indentation
+- Comments - provide comments whenever required, so that it may be easy for other developers to read your code. Also avoid obvious comments.
+- Tests - add tests if new functionality is added to ensure that this functionality doesn't break in future.
+- Consistent Naming Scheme - follow a consistent naming scheme. we prefer `snake_case`(underscored) instead of `camelCase`. naming of variables should be done in well explanatory way.
+- DRY Principle - Every piece of knowledge must have a single, unambiguous, authoritative representation within a system.
+- Avoid deep nesting - too many levels of nesting make code harder to read.
+- Limit line length - It is a good practice to avoid writing horizontally long lines of code.
+- Bracket style - we generally use attached brackets for `conditions` and `loops` and broken brackets for `functions` and `classes`.
 
 ## Bug reports & troubleshooting
 
