@@ -32,16 +32,16 @@ namespace ebi
         std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> outputs;
         outputs.emplace_back(new ebi::vcf::SummaryAssemblyReportWriter());
 
-        //SECTION("Empty VCF File")
-        //{
-            //auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/passed/passed_empty_vcf/");
-            //std::string file_prefix = folder.parent_path().filename().string();
-            //std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
-            //std::ifstream vcf_input{vcf_path};
-            //std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-            //std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            //CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs));
-        //}
+        SECTION("Empty VCF File")
+        {
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/passed/passed_empty_vcf/");
+            std::string file_prefix = folder.parent_path().filename().string();
+            std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
+            std::ifstream vcf_input{vcf_path};
+            std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs));
+        }
 
         SECTION("Single entry")
         {
