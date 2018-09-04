@@ -33,6 +33,7 @@
 #include <boost/iostreams/filter/zlib.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 
+#include "compression.hpp"
 #include "file_structure.hpp"
 #include "error_policy.hpp"
 #include "optional_policy.hpp"
