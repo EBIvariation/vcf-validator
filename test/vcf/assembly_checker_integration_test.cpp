@@ -125,5 +125,16 @@ namespace ebi
             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs));
         }
+
+        SECTION("compressed vcf, bz2 compression")
+        {
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/compressed/failed_compressed_bz2/");
+            std::string file_prefix = folder.parent_path().filename().string();
+            std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_BZ2_EXT;
+            std::ifstream vcf_input{vcf_path};
+            std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs));
+        }
     }
 }
