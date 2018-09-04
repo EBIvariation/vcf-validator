@@ -31,6 +31,7 @@
 
 #include "bioio/bioio.hpp"
 #include "vcf/assembly_report_writer.hpp"
+#include "vcf/compression.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/normalizer.hpp"
 #include "vcf/validator.hpp"
@@ -62,14 +63,6 @@ namespace ebi
       bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence);
 
       RecordCore build_record_core(std::string const & line, size_t line_num);
-
-      std::string get_compression_from_extension(std::string const & source);
-
-      std::string get_compression_from_magic_num(const std::vector<char> &line);
-
-      void create_uncompressed_stream(std::istream & input,
-                                      const std::string & file_extension,
-                                      boost::iostreams::filtering_istream & uncompressed_input);
 
     }
   }
