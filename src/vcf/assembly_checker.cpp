@@ -84,9 +84,9 @@ namespace ebi
 
               for (auto &output : outputs ) {
                   if (match_result) {
-                      output->write_match(record_core);
+                      output->match(record_core);
                   } else {
-                      output->write_mismatch(record_core);
+                      output->mismatch(record_core);
                   }
               }
           }

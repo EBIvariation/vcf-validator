@@ -41,8 +41,8 @@ namespace ebi
     class AssemblyReportWriter
     {
       public:
-        virtual void write_mismatch(const vcf::RecordCore &record_core) = 0;
-        virtual void write_match(const vcf::RecordCore &record_core) = 0;
+        virtual void mismatch(const vcf::RecordCore &record_core) = 0;
+        virtual void match(const vcf::RecordCore &record_core) = 0;
 
         virtual void finish_report()
         {
@@ -63,12 +63,12 @@ namespace ebi
       public:
         SummaryAssemblyReportWriter(){}
 
-        void write_mismatch(const vcf::RecordCore &record_core)
+        void mismatch(const vcf::RecordCore &record_core)
         {
             match_stats.add_match_result(false);
         }
 
-        void write_match(const vcf::RecordCore &record_core)
+        void match(const vcf::RecordCore &record_core)
         {
             match_stats.add_match_result(true);
         }
@@ -90,12 +90,12 @@ namespace ebi
             file.close();
         }
 
-        virtual void write_mismatch(const vcf::RecordCore &record_core) override
+        virtual void mismatch(const vcf::RecordCore &record_core) override
         {
             match_stats.add_match_result(false);
         }
 
-        virtual void write_match(const vcf::RecordCore &record_core) override
+        virtual void match(const vcf::RecordCore &record_core) override
         {
             match_stats.add_match_result(true);
             file << record_core.line;
@@ -122,13 +122,13 @@ namespace ebi
             file.close();
         }
 
-        virtual void write_mismatch(const vcf::RecordCore &record_core) override
+        virtual void mismatch(const vcf::RecordCore &record_core) override
         {
             match_stats.add_match_result(false);
             file << record_core.line;
         }
 
-        virtual void write_match(const vcf::RecordCore &record_core) override
+        virtual void match(const vcf::RecordCore &record_core) override
         {
             match_stats.add_match_result(true);
         }
