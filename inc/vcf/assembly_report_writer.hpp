@@ -74,10 +74,42 @@ namespace ebi
         }
     };
 
+    class ValidAssemblyReportWriter : public AssemblyReportWriter
+    {
+      public:
+        ValidAssemblyReportWriter(std::string filename) : file_name(filename)
+        {
+            file.open(filename, std::ios::out);
+            if(!file) {
+                throw std::runtime_error{"Unable to write output file " + file_name};
+            }
+        }
+
+        ~ValidAssemblyReportWriter()
+        {
+            file.close();
+        }
+
+        virtual void write_mismatch(const vcf::RecordCore &record_core) override
+        {
+            match_stats.add_match_result(false);
+        }
+
+        virtual void write_match(const vcf::RecordCore &record_core) override
+        {
+            match_stats.add_match_result(true);
+            file << record_core.line;
+        }
+
+      private:
+        std::ofstream file;
+        std::string file_name;
+    };
+
     class TextAssemblyReportWriter : public AssemblyReportWriter
     {
       public:
-        TextAssemblyReportWriter(std::string filename, std::string type) : file_name(filename) , report_type(type)
+        TextAssemblyReportWriter(std::string filename) : file_name(filename)
         {
             file.open(filename, std::ios::out);
             if(!file) {
@@ -93,23 +125,17 @@ namespace ebi
         virtual void write_mismatch(const vcf::RecordCore &record_core) override
         {
             match_stats.add_match_result(false);
-            if(report_type == ebi::vcf::INVALID) {
-                file << record_core.line;
-            }
+            file << record_core.line;
         }
 
         virtual void write_match(const vcf::RecordCore &record_core) override
         {
             match_stats.add_match_result(true);
-            if(report_type == ebi::vcf::VALID) {
-                file << record_core.line;
-            }
         }
 
       private:
         std::ofstream file;
         std::string file_name;
-        std::string report_type;
     };
   }
 }

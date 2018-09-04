@@ -39,7 +39,7 @@ namespace
             (ebi::vcf::VERSION_OPTION, "Display version of the assembly checker")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
             (ebi::vcf::FASTA_OPTION, po::value<std::string>(), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .idx extension")
-            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, valid, invalid)")
+            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, valid, text)")
         ;
 
         return description;
@@ -97,14 +97,14 @@ namespace
                 if (boost::filesystem::exists(file)) {
                     throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
-                outputs.emplace_back(new ebi::vcf::TextAssemblyReportWriter(filename, out));
-            } else if (out == ebi::vcf::INVALID) {
-                std::string filename = input + ".invalid_assembly_report." + std::to_string(timestamp) + filetype;
+                outputs.emplace_back(new ebi::vcf::ValidAssemblyReportWriter(filename));
+            } else if (out == ebi::vcf::TEXT) {
+                std::string filename = input + ".text_assembly_report." + std::to_string(timestamp) + filetype;
                 boost::filesystem::path file{filename};
                 if (boost::filesystem::exists(file)) {
                     throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
-                outputs.emplace_back(new ebi::vcf::TextAssemblyReportWriter(filename, out));
+                outputs.emplace_back(new ebi::vcf::TextAssemblyReportWriter(filename));
             } else if (out == ebi::vcf::SUMMARY) {
                 outputs.emplace_back(new ebi::vcf::SummaryAssemblyReportWriter());
             } else {
