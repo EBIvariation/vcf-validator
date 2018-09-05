@@ -84,9 +84,14 @@ namespace ebi
 
               for (auto &output : outputs ) {
                   if (match_result) {
-                      output->match(record_core);
+                      std::string match_result = "Line " + std::to_string(line_num) + ": Reference allele \'"
+                          + reference_sequence + "\' matches with the fasta_sequence";
+                      output->match(record_core,match_result);
                   } else {
-                      output->mismatch(record_core);
+                      std::string mismatch_result = "Line " + std::to_string(line_num) + ": Reference allele \'"
+                          + reference_sequence + "\' doesnot match with the fasta_sequence, sequence found \'"
+                          + fasta_sequence + "\'";
+                      output->mismatch(record_core,mismatch_result);
                   }
               }
           }

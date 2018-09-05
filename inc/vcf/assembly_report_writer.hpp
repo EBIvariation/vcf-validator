@@ -41,16 +41,22 @@ namespace ebi
     class AssemblyReportWriter
     {
       public:
-        virtual void mismatch(const vcf::RecordCore &record_core) = 0;
-        virtual void match(const vcf::RecordCore &record_core) = 0;
+        virtual ~AssemblyReportWriter(){}
+
+        virtual void match(const vcf::RecordCore &record_core, std::string &match_result) = 0;
+
+        virtual void mismatch(const vcf::RecordCore &record_core, std::string &mismatch_result) = 0;
 
         virtual void finish_report()
         {
-            BOOST_LOG_TRIVIAL(info) << "Number of matches: " << match_stats.get_num_matches() << "/" << match_stats.get_num_variants();
-            BOOST_LOG_TRIVIAL(info) << "Percentage of matches: " << (static_cast<double>(match_stats.get_num_matches()) / match_stats.get_num_variants()) * 100 << "%";
+            BOOST_LOG_TRIVIAL(info) << "Number of matches: "
+                << match_stats.get_num_matches() << "/" << match_stats.get_num_variants();
+            BOOST_LOG_TRIVIAL(info) << "Percentage of matches: "
+                << (static_cast<double>(match_stats.get_num_matches()) / match_stats.get_num_variants()) * 100 << "%";
         }
 
-        bool is_valid_report() {
+        bool is_valid_report()
+        {
             return match_stats.is_assembly_match();
         }
 
@@ -63,14 +69,19 @@ namespace ebi
       public:
         SummaryAssemblyReportWriter(){}
 
-        void mismatch(const vcf::RecordCore &record_core)
+        ~SummaryAssemblyReportWriter()
         {
-            match_stats.add_match_result(false);
+
         }
 
-        void match(const vcf::RecordCore &record_core)
+        void match(const vcf::RecordCore &record_core, std::string & match_result) override
         {
             match_stats.add_match_result(true);
+        }
+
+        void mismatch(const vcf::RecordCore &record_core, std::string &mismatch_result) override
+        {
+            match_stats.add_match_result(false);
         }
     };
 
@@ -90,15 +101,15 @@ namespace ebi
             file.close();
         }
 
-        virtual void mismatch(const vcf::RecordCore &record_core) override
-        {
-            match_stats.add_match_result(false);
-        }
-
-        virtual void match(const vcf::RecordCore &record_core) override
+        virtual void match(const vcf::RecordCore &record_core, std::string &match_result) override
         {
             match_stats.add_match_result(true);
             file << record_core.line;
+        }
+
+        virtual void mismatch(const vcf::RecordCore &record_core, std::string &mismatch_result) override
+        {
+            match_stats.add_match_result(false);
         }
 
       private:
@@ -122,15 +133,15 @@ namespace ebi
             file.close();
         }
 
-        virtual void mismatch(const vcf::RecordCore &record_core) override
-        {
-            match_stats.add_match_result(false);
-            file << record_core.line;
-        }
-
-        virtual void match(const vcf::RecordCore &record_core) override
+        virtual void match(const vcf::RecordCore &record_core, std::string &match_result) override
         {
             match_stats.add_match_result(true);
+        }
+
+        virtual void mismatch(const vcf::RecordCore &record_core, std::string &mismatch_result) override
+        {
+            match_stats.add_match_result(false);
+            file << mismatch_result << std::endl;
         }
 
       private:
