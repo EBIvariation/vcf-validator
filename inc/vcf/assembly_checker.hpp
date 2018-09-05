@@ -61,6 +61,13 @@ namespace ebi
 
       RecordCore build_record_core(std::string const & line, size_t line_num);
 
+      void report_missing_chromosome(size_t line_num,
+                                     RecordCore &record_core,
+                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs);
+
+      void report_telomere_position(size_t line_num,
+                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs);
+
     }
   }
 }

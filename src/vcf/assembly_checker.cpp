@@ -66,22 +66,12 @@ namespace ebi
               RecordCore record_core = build_record_core(line,line_num);
 
               if (index.count(record_core.chromosome) == 0) {
-                  std::string missing_warning = "Line " + std::to_string(line_num)
-                      + ": Chromosome " + record_core.chromosome + " is not present in FASTA file";
-                  for (auto &output : outputs ) {
-                      output->write_warning(missing_warning);
-                  }
-                  BOOST_LOG_TRIVIAL(warning) << missing_warning;
+                  report_missing_chromosome(line_num,record_core,outputs);
                   continue;
               }
 
               if (record_core.position == 0) {
-                  std::string position_0_warning = "Line " + std::to_string(line_num)
-                      + ": Position 0 should only be used for a telomere";
-                  for (auto &output : outputs ) {
-                      output->write_warning(position_0_warning);
-                  }
-                  BOOST_LOG_TRIVIAL(warning) << position_0_warning;
+                  report_telomere_position(line_num,outputs);
                   continue;
               }
 
@@ -104,6 +94,27 @@ namespace ebi
           }
 
           return is_valid;
+      }
+
+      void report_missing_chromosome(size_t line_num,
+                                     RecordCore &record_core,
+                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+      {
+          std::string missing_warning = "Line " + std::to_string(line_num)
+              + ": Chromosome " + record_core.chromosome + " is not present in FASTA file";
+          for (auto &output : outputs ) {
+              output->write_warning(missing_warning);
+          }
+      }
+
+      void report_telomere_position(size_t line_num,
+                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+      {
+          std::string position_0_warning = "Line " + std::to_string(line_num)
+              + ": Position 0 should only be used for a telomere";
+          for (auto &output : outputs ) {
+              output->write_warning(position_0_warning);
+          }
       }
 
       RecordCore build_record_core(std::string const & line, size_t line_num)
