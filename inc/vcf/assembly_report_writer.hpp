@@ -142,6 +142,11 @@ namespace ebi
 
         ~TextAssemblyReportWriter()
         {
+            file << "Number of matches: " << match_stats.get_num_matches()
+                 << "/" << match_stats.get_num_variants() << std::endl;
+            file << "Percentage of matches: "
+                 << (static_cast<double>(match_stats.get_num_matches()) / match_stats.get_num_variants()) * 100
+                 << "%" << std::endl;
             file.close();
         }
 
