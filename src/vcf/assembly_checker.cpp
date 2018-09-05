@@ -55,6 +55,7 @@ namespace ebi
           // Reading FASTA index, and querying FASTA file
           auto index = bioio::read_fasta_index(fasta_index_input);
 
+          bool is_valid = true;
           for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
               std::string line{vector_line.begin(), vector_line.end()};
 
@@ -68,7 +69,7 @@ namespace ebi
                   std::string missing_warning = "Line " + std::to_string(line_num)
                       + ": Chromosome " + record_core.chromosome + " is not present in FASTA file";
                   for (auto &output : outputs ) {
-                      output->write_warning(record_core,missing_warning);
+                      output->write_warning(missing_warning);
                   }
                   BOOST_LOG_TRIVIAL(warning) << missing_warning;
                   continue;
@@ -78,7 +79,7 @@ namespace ebi
                   std::string position_0_warning = "Line " + std::to_string(line_num)
                       + ": Position 0 should only be used for a telomere";
                   for (auto &output : outputs ) {
-                      output->write_warning(record_core,position_0_warning);
+                      output->write_warning(position_0_warning);
                   }
                   BOOST_LOG_TRIVIAL(warning) << position_0_warning;
                   continue;
@@ -94,26 +95,15 @@ namespace ebi
 
               for (auto &output : outputs ) {
                   if (match_result) {
-                      std::string match_result = "Line " + std::to_string(line_num)
-                          + ": Chromosome " + record_core.chromosome
-                          + ", position " + std::to_string(record_core.position)
-                          + ", reference allele \'" + reference_sequence
-                          + "\' matches with the reference sequence";
-                      output->match(record_core,match_result);
+                      output->match(line);
                   } else {
-                      std::string mismatch_result = "Line " + std::to_string(line_num)
-                          + ": Chromosome " + record_core.chromosome
-                          + ", position " + std::to_string(record_core.position)
-                          + ", reference allele \'" + reference_sequence
-                          + "\' does not match the reference sequence, expected \'"
-                          + fasta_sequence + "\'";
-                      output->mismatch(record_core,mismatch_result);
+                      is_valid = false;
+                      output->mismatch(record_core,line,line_num,fasta_sequence);
                   }
               }
           }
 
-          outputs[0]->finish_report();
-          return outputs[0]->is_valid_report();
+          return is_valid;
       }
 
       RecordCore build_record_core(std::string const & line, size_t line_num)
