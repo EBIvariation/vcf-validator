@@ -133,8 +133,7 @@ namespace ebi
            * Till now the behaviour of assemblychecker is independent from this parameter.
            * In future this can be modified if needed.
            */
-          return RecordCore{line,
-                            line_num,
+          return RecordCore{line_num,
                             chromosome,
                             position,
                             reference_allele,
