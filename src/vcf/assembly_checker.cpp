@@ -65,12 +65,22 @@ namespace ebi
               RecordCore record_core = build_record_core(line,line_num);
 
               if (index.count(record_core.chromosome) == 0) {
-                  BOOST_LOG_TRIVIAL(warning) << record_core.chromosome << " is not present in FASTA file";
+                  std::string missing_warning = "Line " + std::to_string(line_num)
+                      + ": Chromosome " + record_core.chromosome + " is not present in FASTA file";
+                  for (auto &output : outputs ) {
+                      output->write_warning(record_core,missing_warning);
+                  }
+                  BOOST_LOG_TRIVIAL(warning) << missing_warning;
                   continue;
               }
 
               if (record_core.position == 0) {
-                  BOOST_LOG_TRIVIAL(warning) << "Position 0 should only be used for a telomere";
+                  std::string position_0_warning = "Line " + std::to_string(line_num)
+                      + ": Position 0 should only be used for a telomere";
+                  for (auto &output : outputs ) {
+                      output->write_warning(record_core,position_0_warning);
+                  }
+                  BOOST_LOG_TRIVIAL(warning) << position_0_warning;
                   continue;
               }
 

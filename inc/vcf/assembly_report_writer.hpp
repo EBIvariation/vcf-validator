@@ -47,6 +47,8 @@ namespace ebi
 
         virtual void mismatch(const vcf::RecordCore &record_core, std::string &mismatch_result) = 0;
 
+        virtual void write_warning(const vcf::RecordCore &record_core, std::string &warning) = 0;
+
         virtual void finish_report()
         {
             BOOST_LOG_TRIVIAL(info) << "Number of matches: "
@@ -83,6 +85,11 @@ namespace ebi
         {
             match_stats.add_match_result(false);
         }
+
+        virtual void write_warning(const vcf::RecordCore &record_core, std::string &warning) override
+        {
+
+        }
     };
 
     class ValidAssemblyReportWriter : public AssemblyReportWriter
@@ -110,6 +117,11 @@ namespace ebi
         virtual void mismatch(const vcf::RecordCore &record_core, std::string &mismatch_result) override
         {
             match_stats.add_match_result(false);
+        }
+
+        virtual void write_warning(const vcf::RecordCore &record_core, std::string &warning) override
+        {
+
         }
 
       private:
@@ -142,6 +154,11 @@ namespace ebi
         {
             match_stats.add_match_result(false);
             file << mismatch_result << std::endl;
+        }
+
+        virtual void write_warning(const vcf::RecordCore &record_core, std::string &warning) override
+        {
+            file << warning << std::endl;
         }
 
       private:
