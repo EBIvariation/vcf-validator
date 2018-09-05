@@ -94,12 +94,18 @@ namespace ebi
 
               for (auto &output : outputs ) {
                   if (match_result) {
-                      std::string match_result = "Line " + std::to_string(line_num) + ": Reference allele \'"
-                          + reference_sequence + "\' matches with the fasta_sequence";
+                      std::string match_result = "Line " + std::to_string(line_num)
+                          + ": Chromosome " + record_core.chromosome
+                          + ", position " + std::to_string(record_core.position)
+                          + ", reference allele \'" + reference_sequence
+                          + "\' matches with the reference sequence";
                       output->match(record_core,match_result);
                   } else {
-                      std::string mismatch_result = "Line " + std::to_string(line_num) + ": Reference allele \'"
-                          + reference_sequence + "\' doesnot match with the fasta_sequence, sequence found \'"
+                      std::string mismatch_result = "Line " + std::to_string(line_num)
+                          + ": Chromosome " + record_core.chromosome
+                          + ", position " + std::to_string(record_core.position)
+                          + ", reference allele \'" + reference_sequence
+                          + "\' does not match the reference sequence, expected \'"
                           + fasta_sequence + "\'";
                       output->mismatch(record_core,mismatch_result);
                   }
