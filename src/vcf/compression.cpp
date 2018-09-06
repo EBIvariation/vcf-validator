@@ -106,9 +106,6 @@ namespace ebi
          * (5 characters), then we assume there's no compression.
          */
         if (line.size() < 5) {
-            if (line.size() == 0) {
-                BOOST_LOG_TRIVIAL(warning) << "The VCF file provided is empty";
-            }
             return NO_EXT;
         }
 
