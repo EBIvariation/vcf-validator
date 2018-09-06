@@ -132,6 +132,10 @@ namespace ebi
     {
         std::string compression_type = ebi::vcf::get_compression_from_magic_num(line);
 
+        if (line.size() == 0) {
+            BOOST_LOG_TRIVIAL(warning) << "The VCF file provided is empty";
+        }
+
         if (compression_type != NO_EXT) {
             throw std::invalid_argument{"Input file should not be compressed twice"};
         }
