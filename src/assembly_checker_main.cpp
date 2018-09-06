@@ -39,7 +39,7 @@ namespace
             (ebi::vcf::VERSION_OPTION, "Display version of the assembly checker")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
             (ebi::vcf::FASTA_OPTION, po::value<std::string>(), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .idx extension")
-            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text)")
+            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, valid)")
         ;
 
         return description;
@@ -92,7 +92,14 @@ namespace
             auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
             std::string filetype = ".txt";
 
-            if (out == ebi::vcf::TEXT) {
+            if (out == ebi::vcf::VALID) {
+                std::string filename = input + ".valid_assembly_report." + std::to_string(timestamp) + filetype;
+                boost::filesystem::path file{filename};
+                if (boost::filesystem::exists(file)) {
+                    throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
+                }
+                outputs.emplace_back(new ebi::vcf::TextAssemblyReportWriter(filename));
+            } else if (out == ebi::vcf::TEXT) {
                 std::string filename = input + ".text_assembly_report." + std::to_string(timestamp) + filetype;
                 boost::filesystem::path file{filename};
                 if (boost::filesystem::exists(file)) {
