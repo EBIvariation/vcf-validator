@@ -30,7 +30,9 @@ namespace ebi
           auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/non_readable");
           std::vector<boost::filesystem::path> v;
           copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
-          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable");
+          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable/passed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable/failed");
           copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
           for (auto path : v)
@@ -44,7 +46,9 @@ namespace ebi
           auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/non_readable");
           std::vector<boost::filesystem::path> v;
           copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
-          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable");
+          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable/passed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable/failed");
           copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
           std::vector<char> line;
