@@ -107,6 +107,7 @@ namespace ebi
         MatchStats match_stats;
     };
 
+    // TODO: the "valid" report should include the header. this report should not be used until then.
     class ValidAssemblyReportWriter : public AssemblyReportWriter
     {
       public:
