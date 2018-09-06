@@ -37,7 +37,7 @@ namespace
         description.add_options()
             (ebi::vcf::HELP_OPTION, "Display this help")
             (ebi::vcf::VERSION_OPTION, "Display version of the assembly checker")
-            (ebi::vcf::INPUT_OPTION, po::value<std::string>(), "Path to the input VCF file")
+            (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
             (ebi::vcf::FASTA_OPTION, po::value<std::string>(), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .idx extension")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, valid, invalid)")
         ;
@@ -145,10 +145,6 @@ int main(int argc, char** argv)
         auto fasta_index_path = fasta_path + ".fai";
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), vcf_path);
 
-        BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
-        std::ifstream vcf_input;
-        open_file(vcf_input, vcf_path);
-
         BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA file...";
         std::ifstream fasta_input;
         open_file(fasta_input, fasta_path, std::ifstream::binary);
@@ -157,7 +153,16 @@ int main(int argc, char** argv)
         std::ifstream fasta_index_input;
         open_file(fasta_index_input, fasta_index_path, std::ifstream::binary);
 
-        ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, fasta_input, fasta_index_input, outputs);
+        if (vcf_path == ebi::vcf::STDIN) {
+            BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
+            ebi::vcf::assembly_checker::check_vcf_ref(std::cin, vcf_path, fasta_input, fasta_index_input, outputs);
+        } else {
+            BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
+            std::ifstream vcf_input;
+            open_file(vcf_input, vcf_path);
+            ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs);
+        }
+
         return 0;
     } catch (std::invalid_argument const & ex) {
         BOOST_LOG_TRIVIAL(error) << ex.what();

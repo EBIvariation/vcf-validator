@@ -22,11 +22,32 @@ namespace ebi
   {
     namespace assembly_checker
     {
-
       bool check_vcf_ref(std::istream &vcf_input,
+                         const std::string &sourceName,
                          std::istream &fasta_input,
                          std::istream &fasta_index_input,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+
+      {
+          std::vector<char> line;
+          ebi::vcf::get_magic_num(vcf_input, line);
+          std::string file_extension = ebi::vcf::get_compression(sourceName, line);
+          ebi::vcf::check_readability_of_file(file_extension);
+
+          if (file_extension == NO_EXT) {
+              return process_vcf_ref(vcf_input, fasta_input, fasta_index_input, outputs);
+          } else {
+              boost::iostreams::filtering_istream uncompressed_input;
+              ebi::vcf::create_uncompressed_stream(vcf_input, file_extension, uncompressed_input);
+              return process_vcf_ref(uncompressed_input, fasta_input, fasta_index_input, outputs);
+          }
+      }
+
+      bool process_vcf_ref(std::istream &vcf_input,
+                              std::istream &fasta_input,
+                              std::istream &fasta_index_input,
+                              std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+
       {
           std::vector<char> vector_line;
           vector_line.reserve(default_line_buffer_size);

@@ -22,11 +22,13 @@
 #include <set>
 #include <vector>
 
-#include <boost/algorithm/string/predicate.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
 #include <boost/log/trivial.hpp>
 
 #include "bioio/bioio.hpp"
 #include "vcf/assembly_report_writer.hpp"
+#include "vcf/compression.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/normalizer.hpp"
 #include "vcf/validator.hpp"
@@ -45,6 +47,12 @@ namespace ebi
       size_t const default_line_buffer_size = 64 * 1024;
 
       bool check_vcf_ref(std::istream &vcf_input,
+                         const std::string &sourceName,
+                         std::istream &fasta_input,
+                         std::istream &fasta_index_input,
+                         std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs);
+
+      bool process_vcf_ref(std::istream &vcf_input,
                          std::istream &fasta_input,
                          std::istream &fasta_index_input,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs);
