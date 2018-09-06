@@ -37,7 +37,7 @@ namespace ebi
             std::string reference_allele{"A"};
             std::string alternate_allele{"AC"};
 
-            vcf::RecordCore record_core{line, line_num, chromosome, position, reference_allele, alternate_allele, vcf::RecordType::NO_VARIATION};
+            vcf::RecordCore record_core{line_num, chromosome, position, reference_allele, alternate_allele, vcf::RecordType::NO_VARIATION};
             CHECK(ebi::vcf::assembly_checker::is_matching_sequence(record_core.reference_allele, "A"));
             CHECK_FALSE(ebi::vcf::assembly_checker::is_matching_sequence(record_core.reference_allele, "G"));
         }

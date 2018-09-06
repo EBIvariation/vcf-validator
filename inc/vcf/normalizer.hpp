@@ -41,35 +41,14 @@ namespace ebi
                    const std::string & reference_allele,
                    const std::string & alternate_allele,
                    RecordType alternate_allele_type
-                   ) : RecordCore("",
-                       line_num,
-                       chromosome,
-                       position,
-                       reference_allele,
-                       alternate_allele,
-                       alternate_allele_type)
-                       
-        {
-        }
-
-        /*
-         * Overloaded Constructor specially for Assembly Checker
-         */
-        RecordCore(const std::string & vcf_line,
-                   size_t line_num,
-                   const std::string & chromosome,
-                   size_t position,
-                   const std::string & reference_allele,
-                   const std::string & alternate_allele,
-                   RecordType alternate_allele_type
-                   ) : line(vcf_line),
-                       line_num(line_num),
+                   ) : line_num(line_num),
                        chromosome(chromosome),
                        position(position),
                        reference_allele(reference_allele),
                        alternate_allele(alternate_allele),
                        alternate_allele_type(alternate_allele_type)
         {
+
         }
 
         /** A record "a" is less than another "b" iff:

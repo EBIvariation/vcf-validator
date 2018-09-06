@@ -55,6 +55,7 @@ namespace ebi
           // Reading FASTA index, and querying FASTA file
           auto index = bioio::read_fasta_index(fasta_index_input);
 
+          bool is_valid = true;
           for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
               std::string line{vector_line.begin(), vector_line.end()};
 
@@ -65,12 +66,12 @@ namespace ebi
               RecordCore record_core = build_record_core(line,line_num);
 
               if (index.count(record_core.chromosome) == 0) {
-                  BOOST_LOG_TRIVIAL(warning) << record_core.chromosome << " is not present in FASTA file";
+                  report_missing_chromosome(line_num,record_core,outputs);
                   continue;
               }
 
               if (record_core.position == 0) {
-                  BOOST_LOG_TRIVIAL(warning) << "Position 0 should only be used for a telomere";
+                  report_telomere_position(line_num,outputs);
                   continue;
               }
 
@@ -84,15 +85,36 @@ namespace ebi
 
               for (auto &output : outputs ) {
                   if (match_result) {
-                      output->write_match(record_core);
+                      output->match(line);
                   } else {
-                      output->write_mismatch(record_core);
+                      is_valid = false;
+                      output->mismatch(record_core,line,line_num,fasta_sequence);
                   }
               }
           }
 
-          outputs[0]->finish_report();
-          return outputs[0]->is_valid_report();
+          return is_valid;
+      }
+
+      void report_missing_chromosome(size_t line_num,
+                                     RecordCore &record_core,
+                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+      {
+          std::string missing_warning = "Line " + std::to_string(line_num)
+              + ": Chromosome " + record_core.chromosome + " is not present in FASTA file";
+          for (auto &output : outputs ) {
+              output->write_warning(missing_warning);
+          }
+      }
+
+      void report_telomere_position(size_t line_num,
+                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+      {
+          std::string position_0_warning = "Line " + std::to_string(line_num)
+              + ": Position 0 should only be used for a telomere";
+          for (auto &output : outputs ) {
+              output->write_warning(position_0_warning);
+          }
       }
 
       RecordCore build_record_core(std::string const & line, size_t line_num)
@@ -111,8 +133,7 @@ namespace ebi
            * Till now the behaviour of assemblychecker is independent from this parameter.
            * In future this can be modified if needed.
            */
-          return RecordCore{line,
-                            line_num,
+          return RecordCore{line_num,
                             chromosome,
                             position,
                             reference_allele,

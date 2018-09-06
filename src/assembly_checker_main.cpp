@@ -39,7 +39,7 @@ namespace
             (ebi::vcf::VERSION_OPTION, "Display version of the assembly checker")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
             (ebi::vcf::FASTA_OPTION, po::value<std::string>(), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .idx extension")
-            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, valid, invalid)")
+            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text)")
         ;
 
         return description;
@@ -91,20 +91,14 @@ namespace
             auto epoch = std::chrono::system_clock::now().time_since_epoch();
             auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
             std::string filetype = ".txt";
-            if (out == ebi::vcf::VALID) {
-                std::string filename = input + ".valid_assembly_report." + std::to_string(timestamp) + filetype;
+
+            if (out == ebi::vcf::TEXT) {
+                std::string filename = input + ".text_assembly_report." + std::to_string(timestamp) + filetype;
                 boost::filesystem::path file{filename};
                 if (boost::filesystem::exists(file)) {
                     throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
-                outputs.emplace_back(new ebi::vcf::TextAssemblyReportWriter(filename, out));
-            } else if (out == ebi::vcf::INVALID) {
-                std::string filename = input + ".invalid_assembly_report." + std::to_string(timestamp) + filetype;
-                boost::filesystem::path file{filename};
-                if (boost::filesystem::exists(file)) {
-                    throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
-                }
-                outputs.emplace_back(new ebi::vcf::TextAssemblyReportWriter(filename, out));
+                outputs.emplace_back(new ebi::vcf::TextAssemblyReportWriter(filename));
             } else if (out == ebi::vcf::SUMMARY) {
                 outputs.emplace_back(new ebi::vcf::SummaryAssemblyReportWriter());
             } else {
@@ -153,17 +147,20 @@ int main(int argc, char** argv)
         std::ifstream fasta_index_input;
         open_file(fasta_index_input, fasta_index_path, std::ifstream::binary);
 
+        bool is_valid;
         if (vcf_path == ebi::vcf::STDIN) {
             BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
-            ebi::vcf::assembly_checker::check_vcf_ref(std::cin, vcf_path, fasta_input, fasta_index_input, outputs);
+            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(std::cin, vcf_path, fasta_input, fasta_index_input,
+                                                                 outputs);
         } else {
             BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
             std::ifstream vcf_input;
             open_file(vcf_input, vcf_path);
-            ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs);
+            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input,
+                                                                 outputs);
         }
 
-        return 0;
+        return !is_valid; // A valid file returns an exit code 0
     } catch (std::invalid_argument const & ex) {
         BOOST_LOG_TRIVIAL(error) << ex.what();
         return 1;
