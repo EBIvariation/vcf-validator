@@ -72,8 +72,6 @@ namespace ebi
         {
 
         }
-
-        MatchStats match_stats;
     };
 
     class SummaryAssemblyReportWriter : public AssemblyReportWriter
@@ -105,6 +103,8 @@ namespace ebi
             match_stats.add_match_result(false);
         }
 
+      private:
+        MatchStats match_stats;
     };
 
     class ValidAssemblyReportWriter : public AssemblyReportWriter
