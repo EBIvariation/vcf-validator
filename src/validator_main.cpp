@@ -100,6 +100,9 @@ namespace
 
         boost::filesystem::path file_boost_path{file_path};
         boost::filesystem::path outdir_boost_path{outdir};
+        if (!boost::filesystem::exists(outdir_boost_path)) {
+            throw std::invalid_argument{"Directory not found: " + outdir_boost_path.string()};
+        }
         if (!boost::filesystem::is_directory(outdir_boost_path)) {
             throw std::invalid_argument{"outdir should be a directory, not a file: " + outdir_boost_path.string()};
         }
