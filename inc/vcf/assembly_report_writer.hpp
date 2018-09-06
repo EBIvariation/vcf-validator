@@ -59,6 +59,11 @@ namespace ebi
 
         }
 
+        virtual void write_meta_info(std::string &meta_info_line)
+        {
+
+        }
+
         virtual void write_warning(std::string &warning)
         {
 
@@ -127,6 +132,11 @@ namespace ebi
         virtual void match(std::string &vcf_line) override
         {
             file << vcf_line;
+        }
+
+        virtual void write_meta_info(std::string &meta_info_line) override
+        {
+            file << meta_info_line;
         }
 
       private:
