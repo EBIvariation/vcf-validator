@@ -51,7 +51,7 @@ namespace
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
             (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING_LEVEL), "Validation level (error, warning, stop)")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, database)")
-            (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Directory for the output")
+            (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Output directory")
         ;
 
         return description;
