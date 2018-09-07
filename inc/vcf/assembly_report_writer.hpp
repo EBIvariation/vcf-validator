@@ -59,6 +59,11 @@ namespace ebi
 
         }
 
+        virtual void write_meta_info(std::string &meta_info_line)
+        {
+
+        }
+
         virtual void write_warning(std::string &warning)
         {
 
@@ -107,7 +112,6 @@ namespace ebi
         MatchStats match_stats;
     };
 
-    // TODO: the "valid" report should include the header. this report should not be used until then.
     class ValidAssemblyReportWriter : public AssemblyReportWriter
     {
       public:
@@ -127,6 +131,11 @@ namespace ebi
         virtual void match(std::string &vcf_line) override
         {
             file << vcf_line;
+        }
+
+        virtual void write_meta_info(std::string &meta_info_line) override
+        {
+            file << meta_info_line;
         }
 
       private:

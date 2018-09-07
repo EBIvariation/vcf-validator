@@ -60,6 +60,9 @@ namespace ebi
               std::string line{vector_line.begin(), vector_line.end()};
 
               if (boost::starts_with(line, "#")) {
+                  for (auto &output : outputs ) {
+                      output->write_meta_info(line);
+                  }
                   continue;
               }
 
