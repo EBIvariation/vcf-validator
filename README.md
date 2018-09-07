@@ -229,12 +229,12 @@ The following binaries are be created after successful build:
 * `vcf_validator`: validation tool
 * `vcf_debugulator`: automatic fixing tool
 * `vcf_assembly_checker`: variant checking tool
-* `test_validator` and derivatives: testing correct behaviour of the tools listed above
+* `test_validation_suite` and derivatives: testing correct behaviour of the tools listed above
 
 
 ## Tests
 
-Unit tests can be run using the binary `bin/test_validator` or, if the generator supports it, a command like `make test`. The first option may provide a more detailed output in case of test failure.
+Unit tests can be run using the binary `bin/test_validation_suite` or, if the generator supports it, a command like `make test`. The first option may provide a more detailed output in case of test failure.
 
 **Note**: Tests that require input files will only work when executed with `make test` or running the binary from the project root folder (not the `bin` subfolder).
 
