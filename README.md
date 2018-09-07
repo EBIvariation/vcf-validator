@@ -60,7 +60,7 @@ The logs about what the debugulator is doing will be written into the error outp
 
 ### Assembly Checker
 
-Assembly Checker is a tool to check the validity of vcf file with respect to the fasta file. Assembly Checker reads the CHR, POS and REF columns in the VCF, and for each line, look into the FASTA file to see if the REF sequence matches in that region. A vcf file is said to be valid if all the variants matches with the sequence in fasta file. Assembly Checker requires a fasta-index file with extension `.fai` for indexed reading of fasta file.
+Assembly Checker is a tool to check the validity of a VCF file with respect to the fasta file. Assembly Checker reads the CHR, POS and REF columns in the VCF, and for each line, look into the FASTA file to see if the REF sequence matches in that region. A VCF file is said to be valid if all the variants matches with the sequence in fasta file. Assembly Checker requires a fasta-index file with extension `.fai` for indexed reading of fasta file.
 
 ### Examples
 
