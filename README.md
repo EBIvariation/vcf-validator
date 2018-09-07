@@ -62,6 +62,14 @@ The logs about what the debugulator is doing will be written into the error outp
 
 Assembly Checker is a tool to check the validity of a VCF file with respect to the fasta file. Assembly Checker reads the CHR, POS and REF columns in the VCF, and for each line, look into the FASTA file to see if the REF sequence matches in that region. A VCF file is said to be valid if all the variants matches with the sequence in fasta file. Assembly Checker requires a fasta-index file with extension `.fai` for indexed reading of fasta file.
 
+Different types of validation reports can be written with the `-r` / `--report` option. Several ones may be specified in the same execution, using commas to separate each type (without spaces, e.g.: `-r summary,valid,text`).
+
+* `summary` - Logs the number of matches, total variants checked and percentage of correctness of VCF file on the terminal.
+* `valid` - Write valid lines (including meta-info lines) from the input VCF file into an output file.
+* `text` - Write a human readable into file, containing errors and warnings generated while checking a VCF file.
+
+Each report is written into its own file and it is named after the input file, followed by a timestamp. The default output directory is the same as the input file's if provided using `-i`, or the current directory if using the standard input; it can be changed with the `-o` / `--outdir` option.
+
 ### Examples
 
 Simple example: `vcf_validator -i /path/to/file.vcf`
