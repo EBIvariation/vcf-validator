@@ -248,10 +248,10 @@ target_link_libraries (test_validator_v43 ${LIBRARIES_TO_LINK})
 enable_testing ()
 add_test (NAME ValidatorTests_v43 COMMAND test_validator_v43)
 
-add_executable (test_validator test/main_test.cpp ${ALL_TESTS})
-target_link_libraries (test_validator ${LIBRARIES_TO_LINK})
+add_executable (test_validation_suite test/main_test.cpp ${ALL_TESTS})
+target_link_libraries (test_validation_suite ${LIBRARIES_TO_LINK})
 enable_testing ()
-add_test (NAME ValidatorTests COMMAND test_validator)
+add_test (NAME ValidatorTests COMMAND test_validation_suite)
 
 
 # Build application binaries

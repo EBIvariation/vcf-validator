@@ -15,10 +15,10 @@ build_script:
   - cmd: nmake
 
 test_script:
-  - cmd: bin\test_validator.exe
   - cmd: bin\test_validator_v41.exe
   - cmd: bin\test_validator_v42.exe
   - cmd: bin\test_validator_v43.exe
+  - cmd: bin\test_validation_suite.exe
 
 artifacts:
   - path: bin\vcf_validator.exe

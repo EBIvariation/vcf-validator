@@ -34,6 +34,21 @@ namespace ebi
       }
   }
 
+  TEST_CASE("Files that pass the validation under specification v4.3", "[passed]")
+  {
+      auto folder = boost::filesystem::path("test/input_files/v4.3/passed");
+      std::vector<boost::filesystem::path> v;
+      copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+
+      for (auto path : v)
+      {
+          SECTION(path.string())
+          {
+              CHECK(is_valid(path.string()));
+          }
+      }
+  }
+
   TEST_CASE("Compressed files that throw std::invalid_argument", "[compressed]")
   {
       auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/non_readable");
@@ -51,30 +66,17 @@ namespace ebi
 
   TEST_CASE("Compressed files that do not throw std::invalid_argument", "[compressed]")
   {
-      auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable");
       std::vector<boost::filesystem::path> v;
-      copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+      auto pass_folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable/passed");
+      copy(boost::filesystem::directory_iterator(pass_folder), boost::filesystem::directory_iterator(), back_inserter(v));
+      auto fail_folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable/failed");
+      copy(boost::filesystem::directory_iterator(fail_folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
       for (auto path : v)
       {
           SECTION(path.string())
           {
               CHECK_NOTHROW(is_valid(path.string()));
-          }
-      }
-  }
-
-  TEST_CASE("Files that pass the validation under specification v4.3", "[passed]")
-  {
-      auto folder = boost::filesystem::path("test/input_files/v4.3/passed");
-      std::vector<boost::filesystem::path> v;
-      copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
-
-      for (auto path : v)
-      {
-          SECTION(path.string())
-          {
-              CHECK(is_valid(path.string()));
           }
       }
   }

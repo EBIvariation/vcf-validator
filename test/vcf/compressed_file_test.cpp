@@ -17,6 +17,7 @@
 #include <fstream>
 
 #include "catch/catch.hpp"
+#include "parser_test_aux.hpp"
 
 #include "vcf/validator.hpp"
 
@@ -27,10 +28,13 @@ namespace ebi
   {
       SECTION("File with extensions of compressed files")
       {
-          auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/non_readable");
           std::vector<boost::filesystem::path> v;
+
+          auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/non_readable");
           copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
-          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable");
+          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable/passed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable/failed");
           copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
           for (auto path : v)
@@ -41,10 +45,13 @@ namespace ebi
 
       SECTION("Compressed file streams")
       {
-          auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/non_readable");
           std::vector<boost::filesystem::path> v;
+
+          auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/non_readable");
           copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
-          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable");
+          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable/passed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+          folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable/failed");
           copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
 
           std::vector<char> line;
@@ -55,6 +62,33 @@ namespace ebi
               std::ifstream input{path.string()};
               ebi::util::readline(input, line);
               CHECK(vcf::get_compression_from_magic_num(line) != vcf::NO_EXT);
+          }
+      }
+
+      // TODO: make this test work in windows
+#ifndef _WIN32
+      SECTION("Passed compressed files")
+      {
+          std::vector<boost::filesystem::path> v;
+          auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable/passed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+
+          for (auto path : v)
+          {
+              CHECK(is_valid(path.string()));
+          }
+      }
+#endif // _WIN32
+
+      SECTION("Failed compressed files")
+      {
+          std::vector<boost::filesystem::path> v;
+          auto folder = boost::filesystem::path("test/input_files/v4.3/compressed_files/readable/failed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+
+          for (auto path : v)
+          {
+              CHECK_FALSE(is_valid(path.string()));
           }
       }
   }
