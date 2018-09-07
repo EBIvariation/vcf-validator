@@ -8,7 +8,6 @@ cache:
   directories:
     - linux_dependencies
     - osx_dependencies
-    - build
 
 matrix:
   include:
@@ -140,15 +139,10 @@ before_script:
 
 
 script:
-  - ls
-  - mkdir -p build
-  - ls build
-  - cd build
-  - cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} ../ -GNinja
+  - cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} ./ -GNinja
   - ninja -v -j2
-  - cd ..
-  - ./build/bin/test_validator
+  - ninja test
   - |
     if [[ $TRAVIS_OS_NAME == "osx" ]]; then
-      otool -L build/bin/vcf_validator
+      otool -L bin/vcf_validator
     fi

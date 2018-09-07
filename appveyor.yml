@@ -11,24 +11,18 @@ install:
   - cmd: install_dependencies.bat
 
 build_script:
-  - cmd: if not exist build mkdir build
-  - cmd: cd build
-  - cmd: cmake -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" ..
+  - cmd: cmake -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" .
   - cmd: nmake
-  - cmd: cd ..
 
 test_script:
-  - cmd: build\bin\test_validator.exe
-  - cmd: build\bin\test_validator_v41.exe
-  - cmd: build\bin\test_validator_v42.exe
-  - cmd: build\bin\test_validator_v43.exe
+  - cmd: bin\test_validator.exe
+  - cmd: bin\test_validator_v41.exe
+  - cmd: bin\test_validator_v42.exe
+  - cmd: bin\test_validator_v43.exe
 
 artifacts:
-  - path: build\bin\vcf_validator.exe
+  - path: bin\vcf_validator.exe
     name: vcf_validator_win.exe
 
-  - path: build\bin\vcf_debugulator.exe
+  - path: bin\vcf_debugulator.exe
     name: vcf_debugulator_win.exe
-
-cache:
-  - build
