@@ -58,6 +58,10 @@ The fixed VCF will be written into the standard output, which you can redirect t
 
 The logs about what the debugulator is doing will be written into the error output. The logs may be redirected to a log file using `2>debugulator_log.txt` or completely discarded with `2>/dev/null`.
 
+### Assembly Checker
+
+Assembly Checker is a tool to check the validity of vcf file with respect to the fasta file. Assembly Checker reads the CHR, POS and REF columns in the VCF, and for each line, look into the FASTA file to see if the REF sequence matches in that region. A vcf file is said to be valid if all the variants matches with the sequence in fasta file. Assembly Checker requires a fasta-index file with extension `.fai` for indexed reading of fasta file.
+
 ### Examples
 
 Simple example: `vcf_validator -i /path/to/file.vcf`
@@ -69,6 +73,13 @@ Debugulator example:
 ```
 vcf_validator -i /path/to/file.vcf -r database -o /path/to/write/report/
 vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timestamp.db -o /path/to/fixed.vcf 2>debugulator_log.txt
+```
+
+Assembly Checker example:
+
+```
+vcf_assembly_checker -i /path/to/file.vcf -f /path/to/fasta_file.fa
+vcf_assembly_checker -f /path/to/fasta.fa -r text < /path/to/file.vcf
 ```
 
 
@@ -217,6 +228,7 @@ The following binaries are be created after successful build:
 
 * `vcf_validator`: validation tool
 * `vcf_debugulator`: automatic fixing tool
+* `vcf_assembly_checker`: variant checking tool
 * `test_validator` and derivatives: testing correct behaviour of the tools listed above
 
 
