@@ -125,6 +125,7 @@ namespace ebi
 
         ~ValidAssemblyReportWriter()
         {
+            BOOST_LOG_TRIVIAL(info) << "Valid report written to : " + file_name;
             file.close();
         }
 
@@ -156,6 +157,7 @@ namespace ebi
 
         ~TextAssemblyReportWriter()
         {
+            BOOST_LOG_TRIVIAL(info) << "Text report written to : " + file_name;
             file.close();
         }
 
