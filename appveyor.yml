@@ -11,7 +11,9 @@ install:
   - cmd: install_dependencies.bat
 
 build_script:
-  - cmd: cmake -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" .
+  - cmd: if not exits "build" mkdir build
+  - cmd: cd build
+  - cmd: cmake -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" ..
   - cmd: nmake
 
 test_script:
@@ -26,3 +28,6 @@ artifacts:
 
   - path: bin\vcf_debugulator.exe
     name: vcf_debugulator_win.exe
+
+cache:
+  - build
