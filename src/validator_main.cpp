@@ -51,7 +51,7 @@ namespace
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
             (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING_LEVEL), "Validation level (error, warning, stop)")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, database)")
-            (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Directory for the output")
+            (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Output directory")
         ;
 
         return description;
@@ -100,6 +100,9 @@ namespace
 
         boost::filesystem::path file_boost_path{file_path};
         boost::filesystem::path outdir_boost_path{outdir};
+        if (!boost::filesystem::exists(outdir_boost_path)) {
+            throw std::invalid_argument{"Directory not found: " + outdir_boost_path.string()};
+        }
         if (!boost::filesystem::is_directory(outdir_boost_path)) {
             throw std::invalid_argument{"outdir should be a directory, not a file: " + outdir_boost_path.string()};
         }
