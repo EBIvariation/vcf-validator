@@ -100,19 +100,15 @@ namespace ebi
             { { 120, -100 }, ZLIB }
         };
 
-        /*
-         * If the first line of the VCF file is shorter than any magic number string (stored in the variable "types"),
-         * std::equal will cause a segmentation fault, so if the line is shorter than the longest magic number string
-         * (5 characters), then we assume there's no compression.
-         */
-        if (line.size() < 5) {
-            if (line.size() == 0) {
-                BOOST_LOG_TRIVIAL(warning) << "The VCF file provided is empty";
-            }
-            return NO_EXT;
-        }
-
         for (auto & type : types) {
+            /*
+             * If the first line of the VCF file is shorter than the magic number string (stored in the
+             * variable "types"), the std::equal call below will cause a segmentation fault.
+             */
+            if (type.first.size() > line.size()) {
+                continue;
+            }
+
             if (std::equal(type.first.begin(), type.first.end(), line.begin())) {
                 compressed_file_warning(type.second);
                 return type.second;
@@ -134,6 +130,10 @@ namespace ebi
     void check_readability_of_stream(const std::vector<char> &line)
     {
         std::string compression_type = ebi::vcf::get_compression_from_magic_num(line);
+
+        if (line.size() == 0) {
+            BOOST_LOG_TRIVIAL(warning) << "The VCF file provided is empty";
+        }
 
         if (compression_type != NO_EXT) {
             throw std::invalid_argument{"Input file should not be compressed twice"};
