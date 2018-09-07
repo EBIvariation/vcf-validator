@@ -140,12 +140,15 @@ before_script:
 
 
 script:
+  - ls
   - mkdir -p build
+  - ls build
   - cd build
   - cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} ../ -GNinja
   - ninja -v -j2
-  - ninja test
+  - cd ..
+  - ./build/bin/test_validator
   - |
     if [[ $TRAVIS_OS_NAME == "osx" ]]; then
-      otool -L bin/vcf_validator
+      otool -L build/bin/vcf_validator
     fi
