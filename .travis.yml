@@ -153,6 +153,7 @@ deploy:
   file:
     - bin/vcf_validator
     - bin/vcf_debugulator
+    - bin/vcf_assembly_checker
   skip_cleanup: true
   on:
     repo: cyenyxe/vcf-validator
