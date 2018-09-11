@@ -9,7 +9,7 @@ cache:
     - linux_dependencies
     - osx_dependencies
 
-matrix:
+jobs:
   include:
 
     # OS X Clang
@@ -126,6 +126,54 @@ matrix:
             - libboost-log1.55-dev
             - ninja-build
 
+    - stage: "Linux release"
+      deploy:
+        provider: releases
+        api_key: $GITHUB_TOKEN
+        file:
+            - bin/vcf_validator_linux
+            - bin/vcf_debugulator_linux
+            - bin/vcf_assembly_checker_linux
+        skip_cleanup: true
+        on:
+            repo: cyenyxe/vcf-validator
+            branch: release/0.9
+      os: linux
+      compiler: gcc
+      env: C_COMPILER=gcc-6 CXX_COMPILER=g++-6
+      addons:
+        apt:
+          sources:
+            - boost-latest
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-6
+            - g++-6
+            - libboost1.55-dev
+            - libboost-filesystem1.55-dev
+            - libboost-iostreams1.55-dev
+            - libboost-program-options1.55-dev
+            - libboost-regex1.55-dev
+            - libboost-log1.55-dev
+            - ninja-build
+    - stage: "Mac release"
+      deploy:
+        provider: releases
+        api_key: $GITHUB_TOKEN
+        file:
+            - bin/vcf_validator_macos
+            - bin/vcf_debugulator_macos
+            - bin/vcf_assembly_checker_macos
+        skip_cleanup: true
+        on:
+            repo: cyenyxe/vcf-validator
+            branch: release/0.9
+      os: osx
+      osx_image: xcode9.3
+      env: C_COMPILER=clang CXX_COMPILER=clang++
+      before_install:
+        - brew install ninja
+
 
 before_script:
   - |
@@ -137,24 +185,25 @@ before_script:
       ./install_dependencies.sh osx
     fi
 
-
 script:
   - cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} ./ -GNinja
   - ninja -v -j2
   - ninja test
   - |
-    if [[ $TRAVIS_OS_NAME == "osx" ]]; then
-      otool -L bin/vcf_validator
-    fi
+      if [[ $TRAVIS_OS_NAME == "osx" ]]; then
+        otool -L bin/vcf_validator
+      fi
 
-deploy:
-  provider: releases
-  api_key: $GITHUB_TOKEN
-  file:
-    - bin/vcf_validator
-    - bin/vcf_debugulator
-    - bin/vcf_assembly_checker
-  skip_cleanup: true
-  on:
-    repo: cyenyxe/vcf-validator
-    branch: release/0.9
+before_deploy:
+  - |
+      if [[ $TRAVIS_OS_NAME == "linux" ]]; then
+        mv bin/vcf_validator bin/vcf_validator_linux
+        mv bin/vcf_debugulator bin/vcf_debugulator_linux
+        mv bin/vcf_assembly_checker bin/vcf_assembly_checker_linux
+      fi
+  - |
+      if [[ $TRAVIS_OS_NAME == "osx" ]]; then
+        mv bin/vcf_validator bin/vcf_validator_macos
+        mv bin/vcf_debugulator bin/vcf_debugulator_macos
+        mv bin/vcf_assembly_checker bin/vcf_assembly_checker_macos
+      fi
