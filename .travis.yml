@@ -146,3 +146,14 @@ script:
     if [[ $TRAVIS_OS_NAME == "osx" ]]; then
       otool -L bin/vcf_validator
     fi
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file:
+    - bin/vcf_validator
+    - bin/vcf_debugulator
+  skip_cleanup: true
+  on:
+    repo: cyenyxe/vcf-validator
+    branch: release/0.9
