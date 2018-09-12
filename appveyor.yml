@@ -26,3 +26,6 @@ artifacts:
 
   - path: bin\vcf_debugulator.exe
     name: vcf_debugulator_win.exe
+
+  - path: bin\vcf_assembly_checker.exe
+    name: vcf_assembly_checker_win.exe
