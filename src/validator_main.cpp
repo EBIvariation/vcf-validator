@@ -134,9 +134,16 @@ namespace
                 std::string errortype = (out == ebi::vcf::SUMMARY) ? "errors_summary" : "errors";
                 std::string filename = input + "." + errortype + "." + std::to_string(timestamp) + "." + filetype;
                 boost::filesystem::path file{filename};
-                if (boost::filesystem::exists(file)) {
-                    throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
+
+                try {
+                    if (boost::filesystem::exists(file)) {
+                        throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
+                    }
+                } catch (boost::filesystem::filesystem_error const & er) {
+                    // commented it to let it be caught in RepportWriter
+                    // throw std::runtime_error{"Permissions denied, can't access the location " + filename};
                 }
+
                 if (out == ebi::vcf::DATABASE) {
                     outputs.emplace_back(new ebi::vcf::OdbReportRW(filename));
                 } else if (out == ebi::vcf::TEXT) {
