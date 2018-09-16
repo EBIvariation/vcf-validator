@@ -160,15 +160,20 @@ int main(int argc, char** argv)
 
     po::options_description desc = build_command_line_options();
     po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
+    po::parsed_options parsed = po::command_line_parser(argc, argv).options(desc).allow_unregistered().run();
+    po::store(parsed,vm);
+    std::vector<std::string> unused_args = collect_unrecognized(parsed.options, po::include_positional);
 
+    for (auto a: unused_args) {
+        BOOST_LOG_TRIVIAL(warning) << "unused parameter: " << a;
+    }
+
+    po::notify(vm);
     int check_options = check_command_line_options(vm, desc);
     if (check_options < 0) { return 0; }
     if (check_options > 0) { return check_options; }
 
     bool is_valid;
-
     try {
         auto path = vm[ebi::vcf::INPUT].as<std::string>();
         auto level = vm[ebi::vcf::LEVEL].as<std::string>();
