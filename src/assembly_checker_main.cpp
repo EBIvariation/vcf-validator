@@ -46,6 +46,21 @@ namespace
         return description;
     }
 
+    po::variables_map build_variables_map(int argc, char** argv, const po::options_description & desc)
+    {
+        po::variables_map vm;
+        po::parsed_options parsed = po::command_line_parser(argc, argv).options(desc).allow_unregistered().run();
+        po::store(parsed,vm);
+        std::vector<std::string> unrecognised_parameters = collect_unrecognized(parsed.options, po::include_positional);
+
+        for (auto & a: unrecognised_parameters) {
+            BOOST_LOG_TRIVIAL(warning) << "unused parameter: " << a;
+        }
+
+        po::notify(vm);
+        return vm;
+    }
+
     int check_command_line_options(po::variables_map const & vm, po::options_description const & desc)
     {
         if (vm.count(ebi::vcf::HELP)) {
@@ -152,10 +167,9 @@ namespace
 int main(int argc, char** argv)
 {
     ebi::util::init_boost_loggers();
+
     po::options_description desc = build_command_line_options();
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
+    po::variables_map vm = build_variables_map(argc, argv, desc);
 
     int check_options = check_command_line_options(vm, desc);
     if (check_options < 0) { return 0; }
