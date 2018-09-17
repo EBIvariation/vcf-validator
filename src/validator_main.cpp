@@ -62,9 +62,9 @@ namespace
         po::variables_map vm;
         po::parsed_options parsed = po::command_line_parser(argc, argv).options(desc).allow_unregistered().run();
         po::store(parsed,vm);
-        std::vector<std::string> unused_args = collect_unrecognized(parsed.options, po::include_positional);
+        std::vector<std::string> unrecognised_parameters = collect_unrecognized(parsed.options, po::include_positional);
 
-        for (auto a: unused_args) {
+        for (auto & a: unrecognised_parameters) {
             BOOST_LOG_TRIVIAL(warning) << "unused parameter: " << a;
         }
 
