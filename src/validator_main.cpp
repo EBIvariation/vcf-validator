@@ -57,6 +57,21 @@ namespace
         return description;
     }
 
+    po::variables_map build_variables_map(int argc, char** argv, const po::options_description & desc)
+    {
+        po::variables_map vm;
+        po::parsed_options parsed = po::command_line_parser(argc, argv).options(desc).allow_unregistered().run();
+        po::store(parsed,vm);
+        std::vector<std::string> unused_args = collect_unrecognized(parsed.options, po::include_positional);
+
+        for (auto a: unused_args) {
+            BOOST_LOG_TRIVIAL(warning) << "unused parameter: " << a;
+        }
+
+        po::notify(vm);
+        return vm;
+    }
+
     int check_command_line_options(po::variables_map const & vm, po::options_description const & desc)
     {
         if (vm.count(ebi::vcf::HELP)) {
@@ -112,7 +127,8 @@ namespace
         return outdir_boost_path.string();
     }
 
-    std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> get_outputs(std::string const &output_str, std::string const &input) {
+    std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> get_outputs(std::string const &output_str, std::string const &input)
+    {
         std::vector<std::string> outs;
         ebi::util::string_split(output_str, ",", outs);
         size_t initial_size = outs.size();
@@ -159,16 +175,7 @@ int main(int argc, char** argv)
     ebi::util::init_boost_loggers();
 
     po::options_description desc = build_command_line_options();
-    po::variables_map vm;
-    po::parsed_options parsed = po::command_line_parser(argc, argv).options(desc).allow_unregistered().run();
-    po::store(parsed,vm);
-    std::vector<std::string> unused_args = collect_unrecognized(parsed.options, po::include_positional);
-
-    for (auto a: unused_args) {
-        BOOST_LOG_TRIVIAL(warning) << "unused parameter: " << a;
-    }
-
-    po::notify(vm);
+    po::variables_map vm = build_variables_map(argc, argv, desc);
     int check_options = check_command_line_options(vm, desc);
     if (check_options < 0) { return 0; }
     if (check_options > 0) { return check_options; }
