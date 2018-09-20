@@ -53,7 +53,7 @@ namespace ebi
                 }
             }
         } catch (const odb::exception& e) {
-            throw std::runtime_error{std::string{"ODB report: Can't initialize database: "} + e.what()};
+            throw std::runtime_error{"ODB report: Can't initialize database file \"" + db_name + "\": " + e.what()};
         }
 
     }
