@@ -54,19 +54,29 @@ else ()
 endif ()
 
 
+# Even in "Debug" build type, static linking prevents storing some symbol information and makes debugging more difficult.
+# use this flag to avoid `$1 = <incomplete type>` messages
+if (NOT KEEP_SYMBOL_INFO)
+  set (KEEP_SYMBOL_INFO false CACHE BOOL "Even in Debug build type, static linking prevents storing some symbol information and makes debugging more difficult. Use this flag to avoid `$1 = <incomplete type>` messages" FORCE)
+endif ()
+
 # Compiler and linkers flags
 if (LINUX)
-  # Static Build Extra Flags for Linux Static Build
-  set (BUILD_SHARED_LIBS OFF)
-  set (CMAKE_EXE_LINKER_FLAGS "-static")
-  set (CMAKE_FIND_LIBRARY_SUFFIXES .a)
-  set (CMAKE_EXE_LINK_DYNAMIC_C_FLAGS)       # remove -Wl,-Bdynamic
-  set (CMAKE_EXE_LINK_DYNAMIC_CXX_FLAGS)
-  set (CMAKE_SHARED_LIBRARY_C_FLAGS)         # remove -fPIC
-  set (CMAKE_SHARED_LIBRARY_CXX_FLAGS)
-  set (CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
-  set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
   set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+  if (NOT KEEP_SYMBOL_INFO)
+      # Static Build Extra Flags for Linux Static Build
+    set (BUILD_SHARED_LIBS OFF)
+    set (CMAKE_EXE_LINKER_FLAGS "-static")
+    set (CMAKE_FIND_LIBRARY_SUFFIXES .a)
+    set (CMAKE_EXE_LINK_DYNAMIC_C_FLAGS)       # remove -Wl,-Bdynamic
+    set (CMAKE_EXE_LINK_DYNAMIC_CXX_FLAGS)
+    set (CMAKE_SHARED_LIBRARY_C_FLAGS)         # remove -fPIC
+    set (CMAKE_SHARED_LIBRARY_CXX_FLAGS)
+    set (CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
+    set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
+  else()
+    message(STATUS "KEEP_SYMBOL_INFO is true, so won't link everything statically")
+  endif()
 elseif (OSX)
   # Mac build not fully static. include system libraries to be dynamic
   set (CMAKE_EXE_LINKER_FLAGS)
