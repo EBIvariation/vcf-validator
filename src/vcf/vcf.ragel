@@ -206,7 +206,11 @@
     }
     
     action header_end {
-        ParsePolicy::handle_header_line(*this);
+        try {
+            ParsePolicy::handle_header_line(*this);
+        } catch (Error *error) {
+            ErrorPolicy::handle_error(*this, error);
+        }
     }
 
     ########### Correct body actions ##########

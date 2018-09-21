@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
+#include <set>
+#include <sstream>
 #include "vcf/parse_policy.hpp"
+#include "util/stream_utils.hpp"
 
 namespace ebi
 {
@@ -112,6 +115,28 @@ namespace ebi
     void StoreParsePolicy::handle_header_line(ParsingState & state)
     {
         state.set_samples(m_grouped_tokens);
+        check_each_sample_appears_only_once(state);
+    }
+    
+    void StoreParsePolicy::check_each_sample_appears_only_once(ParsingState const &state) const
+    {
+        using util::operator<<;
+        std::set<std::string> unique_samples;
+        std::vector<std::string> repeated_sample_names;
+        for (const auto &sample_name : m_grouped_tokens) {
+            std::pair<std::set<std::string>::iterator, bool> inserted = unique_samples.insert(sample_name);
+            bool is_inserted = inserted.second;
+
+            if (!is_inserted) {
+                repeated_sample_names.push_back(sample_name);
+            }
+        }
+        if (!repeated_sample_names.empty()) {
+            std::stringstream message;
+            message << "The header line has " << m_grouped_tokens.size() - unique_samples.size()
+                    << " repeated sample names: " << repeated_sample_names;
+            throw new HeaderSectionError{state.n_lines, message.str()};
+        }
     }
 
 

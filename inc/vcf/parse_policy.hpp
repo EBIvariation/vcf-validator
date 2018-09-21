@@ -93,6 +93,7 @@ namespace ebi
       private:
 
         void check_sorted(ParsingState &state, size_t position);
+        void check_each_sample_appears_only_once(ParsingState const &state) const;
 
         /**
          * Token being currently parsed
