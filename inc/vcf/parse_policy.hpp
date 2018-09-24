@@ -94,22 +94,24 @@ namespace ebi
 
         void check_sorted(ParsingState &state, size_t position);
         void check_each_sample_appears_only_once(ParsingState const &state) const;
+        std::string build_duplicated_samples_message(std::map<std::string, int> const &sample_counts,
+                                                     unsigned long repeated_sample_count) const;
 
         /**
          * Token being currently parsed
          */
         std::string m_current_token;
-        
+
         /**
          * Token that acts as type ID for the whole line, like ALT/FILTER in meta entries
          */
         std::string m_line_typeid;
-        
+
         /**
          * Tokens that must be grouped, like all key-value pairs in the INFO column
          */
         std::vector<std::string> m_grouped_tokens;
-        
+
         /**
          * Tokens read in a line and grouped by an ID
          */
@@ -117,22 +119,21 @@ namespace ebi
 
         /**
          * Tool to check that the chromosomes (and contigs) are contiguous.
-         * 
+         *
          * Map keys are contig names, and the values flag whether they have been "fully read". Values mean the following:
          * - Not found in the map: This contig has not appeared yet.
          * - False: This contig has been found but not all its records have been listed yet.
-         * - True: Previously read records belonged to this contig and a record of another contig has been already found, 
+         * - True: Previously read records belonged to this contig and a record of another contig has been already found,
          *         so the former is considered "fully read".
-         * 
+         *
          * For a contig block to be contiguous, no record should be found that belongs to a "fully read" contig.
          */
         std::map<std::string, bool> finished_contigs;
-        
+
         /**
          * Contig name previously read.
          */
         std::string previous_contig;
-
         /**
          * Position previously read within a contig.
          */

@@ -122,25 +122,48 @@ namespace ebi
     {
         using util::operator<<;
         std::set<std::string> unique_samples;
-        std::vector<std::string> repeated_sample_names;
+        std::map<std::string, int> repeated_sample_names;
         for (const auto &sample_name : m_grouped_tokens) {
-            std::pair<std::set<std::string>::iterator, bool> inserted = unique_samples.insert(sample_name);
+            auto inserted = unique_samples.insert(sample_name);
             bool is_inserted = inserted.second;
 
             if (!is_inserted) {
-                repeated_sample_names.push_back(sample_name);
+                repeated_sample_names[sample_name]++;
             }
         }
         if (!repeated_sample_names.empty()) {
-            std::stringstream message;
-            message << "The header line has " << m_grouped_tokens.size() - unique_samples.size()
-                    << " repeated sample names: " << repeated_sample_names;
-            throw new HeaderSectionError{state.n_lines, message.str()};
+            throw new HeaderSectionError{state.n_lines, build_duplicated_samples_message(repeated_sample_names,
+                    m_grouped_tokens.size() - unique_samples.size())};
         }
     }
 
 
-    void StoreParsePolicy::handle_column_end(ParsingState const & state, size_t n_columns) 
+    std::string StoreParsePolicy::build_duplicated_samples_message(std::map<std::string, int> const &repeated_sample_names,
+                                                                       unsigned long repeated_sample_count) const
+    {
+        std::stringstream message;
+        std::set<std::string> unique_samples;
+        message << "The header line has " << repeated_sample_count
+                << " repeated sample names. Please remove these names from the header line and the data lines: ";
+
+
+        for (const auto &name_count : repeated_sample_names) {
+            auto name = name_count.first;
+            auto extra_occurrences = name_count.second;
+            if (extra_occurrences == 1) {
+                message << name << ", ";
+            } else {
+                message << name << " (" << extra_occurrences << " times), ";
+            }
+
+        }
+        std::string complete_message = message.str();
+        complete_message.pop_back();
+        complete_message[complete_message.size() - 1] = '.';
+        return complete_message;
+    }
+
+    void StoreParsePolicy::handle_column_end(ParsingState const & state, size_t n_columns)
     {
         switch(n_columns) {
             case 1:
@@ -236,7 +259,7 @@ namespace ebi
 
         check_sorted(state, position);
     }
-    
+
     std::string StoreParsePolicy::current_token() const
     {
         return m_current_token;
@@ -250,7 +273,6 @@ namespace ebi
             return {};
         }
     }
-
     void StoreParsePolicy::check_sorted(ParsingState &state, size_t position)
     {
         // check contigs are contiguous
