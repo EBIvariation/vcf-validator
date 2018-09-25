@@ -93,26 +93,6 @@ namespace
         throw std::invalid_argument{"Please choose one of the accepted validation levels"};
     }
 
-    std::string get_output_path(const std::string &outdir, const std::string &file_path)
-    {
-        if (outdir == "") {
-            return file_path;
-        }
-
-        boost::filesystem::path file_boost_path{file_path};
-        boost::filesystem::path outdir_boost_path{outdir};
-        if (!boost::filesystem::exists(outdir_boost_path)) {
-            throw std::invalid_argument{"Directory not found: " + outdir_boost_path.string()};
-        }
-        if (!boost::filesystem::is_directory(outdir_boost_path)) {
-            throw std::invalid_argument{"outdir should be a directory, not a file: " + outdir_boost_path.string()};
-        }
-
-        outdir_boost_path /= file_boost_path.filename();
-
-        return outdir_boost_path.string();
-    }
-
     std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> get_outputs(std::string const &output_str, std::string const &input)
     {
         std::vector<std::string> outs;
@@ -171,7 +151,7 @@ int main(int argc, char** argv)
         auto path = vm[ebi::vcf::INPUT].as<std::string>();
         auto level = vm[ebi::vcf::LEVEL].as<std::string>();
         ebi::vcf::ValidationLevel validationLevel = get_validation_level(level);
-        auto outdir = get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), path);
+        auto outdir = ebi::util::get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), path);
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
         if (path == ebi::vcf::STDIN) {

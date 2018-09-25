@@ -74,26 +74,6 @@ namespace
         return 0;
     }
 
-    std::string get_output_path(const std::string &outdir, const std::string &file_path)
-    {
-        if (outdir == "") {
-            return file_path;
-        }
-
-        boost::filesystem::path file_boost_path{file_path};
-        boost::filesystem::path outdir_boost_path{outdir};
-        if (!boost::filesystem::exists(outdir_boost_path)) {
-            throw std::invalid_argument{"Directory not found: " + outdir_boost_path.string()};
-        }
-        if (!boost::filesystem::is_directory(outdir_boost_path)) {
-            throw std::invalid_argument{"outdir should be a directory, not a file: " + outdir_boost_path.string()};
-        }
-
-        outdir_boost_path /= file_boost_path.filename();
-
-        return outdir_boost_path.string();
-    }
-
     std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> get_outputs(std::string const &output_str,
                                                                              std::string const &input)
     {
@@ -165,7 +145,7 @@ int main(int argc, char** argv)
         auto vcf_path = vm[ebi::vcf::INPUT].as<std::string>();
         auto fasta_path = vm[ebi::vcf::FASTA].as<std::string>();
         auto fasta_index_path = fasta_path + ".fai";
-        auto outdir = get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), vcf_path);
+        auto outdir = ebi::util::get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), vcf_path);
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA file...";
