@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-#include <iostream>
+#include <chrono>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <vector>
-#include <stdexcept>
-#include <chrono>
-#include <iomanip>
 
 #include <boost/program_options.hpp>
 #include <boost/filesystem/operations.hpp>
 
 #include "cmake_config.hpp"
+#include "util/cli_utils.hpp"
 #include "util/logger.hpp"
 #include "vcf/file_structure.hpp"
-#include "vcf/validator.hpp"
-#include "vcf/report_writer.hpp"
 #include "vcf/odb_report.hpp"
+#include "vcf/report_writer.hpp"
 #include "vcf/summary_report_writer.hpp"
+#include "vcf/validator.hpp"
 
 namespace
 {
@@ -55,21 +56,6 @@ namespace
         ;
 
         return description;
-    }
-
-    po::variables_map build_variables_map(int argc, char** argv, const po::options_description & desc)
-    {
-        po::variables_map vm;
-        po::parsed_options parsed = po::command_line_parser(argc, argv).options(desc).allow_unregistered().run();
-        po::store(parsed,vm);
-        std::vector<std::string> unrecognised_parameters = collect_unrecognized(parsed.options, po::include_positional);
-
-        for (auto & parameter: unrecognised_parameters) {
-            BOOST_LOG_TRIVIAL(warning) << "unused parameter: " << parameter;
-        }
-
-        po::notify(vm);
-        return vm;
     }
 
     int check_command_line_options(po::variables_map const & vm, po::options_description const & desc)
@@ -175,7 +161,7 @@ int main(int argc, char** argv)
     ebi::util::init_boost_loggers();
 
     po::options_description desc = build_command_line_options();
-    po::variables_map vm = build_variables_map(argc, argv, desc);
+    po::variables_map vm = ebi::util::build_variables_map(argc, argv, desc);
     int check_options = check_command_line_options(vm, desc);
     if (check_options < 0) { return 0; }
     if (check_options > 0) { return check_options; }
