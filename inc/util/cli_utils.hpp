@@ -24,7 +24,6 @@
 #include <boost/filesystem/operations.hpp>
 
 #include "util/logger.hpp"
-#include "vcf/validator.hpp"
 
 namespace ebi
 {
