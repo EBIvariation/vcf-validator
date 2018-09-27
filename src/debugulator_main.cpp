@@ -20,78 +20,75 @@
 #include <boost/program_options.hpp>
 
 #include "cmake_config.hpp"
+#include "util/cli_utils.hpp"
 #include "util/logger.hpp"
+#include "vcf/debugulator.hpp"
 #include "vcf/odb_report.hpp"
 #include "vcf/string_constants.hpp"
-#include "vcf/debugulator.hpp"
 
 namespace
 {
-  namespace po = boost::program_options;
+    namespace po = boost::program_options;
 
-  enum class ValidationLevel
-  {
-      error, warning, stop
-  };
+    enum class ValidationLevel
+    {
+        error, warning, stop
+    };
 
-  const std::string version_info = "vcf-debugulator version " + std::to_string(VERSION_MAJOR) + "."
-                                   + std::to_string(VERSION_MINOR);
+    const std::string version_info = "vcf-debugulator version " + std::to_string(VERSION_MAJOR) + "."
+                                     + std::to_string(VERSION_MINOR);
 
-  po::options_description build_command_line_options()
-  {
-      po::options_description description(version_info + "\n\nUsage: vcf-debugulator [OPTIONS] [< input_file]\nAllowed options");
+    po::options_description build_command_line_options()
+    {
+        po::options_description description(version_info + "\n\nUsage: vcf-debugulator [OPTIONS] [< input_file]\nAllowed options");
 
-      description.add_options()
-              (ebi::vcf::HELP_OPTION, "Display this help")
-              (ebi::vcf::VERSION_OPTION, "Display version of the debugulator")
-              (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
-              (ebi::vcf::ERRORS_OPTION, po::value<std::string>(), "Path to the errors report from the input VCF file")
-              (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING_LEVEL), "Validation level (error, warning, stop)")
-              (ebi::vcf::OUTPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDOUT), "Write to a file or stdout")
-      ;
+        description.add_options()
+                (ebi::vcf::HELP_OPTION, "Display this help")
+                (ebi::vcf::VERSION_OPTION, "Display version of the debugulator")
+                (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
+                (ebi::vcf::ERRORS_OPTION, po::value<std::string>(), "Path to the errors report from the input VCF file")
+                (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING_LEVEL), "Validation level (error, warning, stop)")
+                (ebi::vcf::OUTPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDOUT), "Write to a file or stdout")
+        ;
 
-      return description;
-  }
+        return description;
+    }
 
-  int check_command_line_options(po::variables_map const &vm, po::options_description const &desc)
-  {
-      if (vm.count(ebi::vcf::HELP)) {
-          std::cout << desc << std::endl;
-          return -1;
-      }
+    int check_command_line_options(po::variables_map const &vm, po::options_description const &desc)
+    {
+        if (vm.count(ebi::vcf::HELP)) {
+            std::cout << desc << std::endl;
+            return -1;
+        }
 
-      if (vm.count(ebi::vcf::VERSION)) {
-          std::cout << version_info << std::endl;
-          return -1;
-      }
+        if (vm.count(ebi::vcf::VERSION)) {
+            std::cout << version_info << std::endl;
+            return -1;
+        }
 
-      std::string level = vm[ebi::vcf::LEVEL].as<std::string>();
-      if (level != ebi::vcf::ERROR_LEVEL && level != ebi::vcf::WARNING_LEVEL && level != ebi::vcf::STOP_LEVEL) {
-          std::cout << desc << std::endl;
-          BOOST_LOG_TRIVIAL(error) << "Please choose one of the accepted validation levels";
-          return 1;
-      }
+        std::string level = vm[ebi::vcf::LEVEL].as<std::string>();
+        if (level != ebi::vcf::ERROR_LEVEL && level != ebi::vcf::WARNING_LEVEL && level != ebi::vcf::STOP_LEVEL) {
+            std::cout << desc << std::endl;
+            BOOST_LOG_TRIVIAL(error) << "Please choose one of the accepted validation levels";
+            return 1;
+        }
 
-      if (!vm.count(ebi::vcf::ERRORS)) {
-          std::cout << desc << std::endl;
-          BOOST_LOG_TRIVIAL(error) << "Please specify the path to the errors report (--errors)";
-          return 1;
-      }
+        if (!vm.count(ebi::vcf::ERRORS)) {
+            std::cout << desc << std::endl;
+            BOOST_LOG_TRIVIAL(error) << "Please specify the path to the errors report (--errors)";
+            return 1;
+        }
 
-      return 0;
-  }
+        return 0;
+    }
 }
 
 int main(int argc, char **argv)
 {
     ebi::util::init_boost_loggers();
 
-    namespace po = boost::program_options;
-
     po::options_description desc = build_command_line_options();
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
+    po::variables_map vm = ebi::util::build_variables_map(argc, argv, desc);
 
     int check_options = check_command_line_options(vm, desc);
     if (check_options < 0) { return 0; }

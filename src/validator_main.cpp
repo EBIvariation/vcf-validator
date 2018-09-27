@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-#include <iostream>
+#include <chrono>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <vector>
-#include <stdexcept>
-#include <chrono>
-#include <iomanip>
 
 #include <boost/program_options.hpp>
 #include <boost/filesystem/operations.hpp>
 
 #include "cmake_config.hpp"
+#include "util/cli_utils.hpp"
 #include "util/logger.hpp"
 #include "vcf/file_structure.hpp"
-#include "vcf/validator.hpp"
-#include "vcf/report_writer.hpp"
 #include "vcf/odb_report.hpp"
+#include "vcf/report_writer.hpp"
 #include "vcf/summary_report_writer.hpp"
+#include "vcf/validator.hpp"
 
 namespace
 {
@@ -92,27 +93,8 @@ namespace
         throw std::invalid_argument{"Please choose one of the accepted validation levels"};
     }
 
-    std::string get_output_path(const std::string &outdir, const std::string &file_path)
+    std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> get_outputs(std::string const &output_str, std::string const &input)
     {
-        if (outdir == "") {
-            return file_path;
-        }
-
-        boost::filesystem::path file_boost_path{file_path};
-        boost::filesystem::path outdir_boost_path{outdir};
-        if (!boost::filesystem::exists(outdir_boost_path)) {
-            throw std::invalid_argument{"Directory not found: " + outdir_boost_path.string()};
-        }
-        if (!boost::filesystem::is_directory(outdir_boost_path)) {
-            throw std::invalid_argument{"outdir should be a directory, not a file: " + outdir_boost_path.string()};
-        }
-
-        outdir_boost_path /= file_boost_path.filename();
-
-        return outdir_boost_path.string();
-    }
-
-    std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> get_outputs(std::string const &output_str, std::string const &input) {
         std::vector<std::string> outs;
         ebi::util::string_split(output_str, ",", outs);
         size_t initial_size = outs.size();
@@ -159,21 +141,17 @@ int main(int argc, char** argv)
     ebi::util::init_boost_loggers();
 
     po::options_description desc = build_command_line_options();
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
-
+    po::variables_map vm = ebi::util::build_variables_map(argc, argv, desc);
     int check_options = check_command_line_options(vm, desc);
     if (check_options < 0) { return 0; }
     if (check_options > 0) { return check_options; }
 
     bool is_valid;
-
     try {
         auto path = vm[ebi::vcf::INPUT].as<std::string>();
         auto level = vm[ebi::vcf::LEVEL].as<std::string>();
         ebi::vcf::ValidationLevel validationLevel = get_validation_level(level);
-        auto outdir = get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), path);
+        auto outdir = ebi::util::get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), path);
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
         if (path == ebi::vcf::STDIN) {
