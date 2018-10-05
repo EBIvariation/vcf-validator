@@ -26,6 +26,7 @@ namespace ebi
                          const std::string &sourceName,
                          std::istream &fasta_input,
                          std::istream &fasta_index_input,
+                         const std::string &assembly_report,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
 
       {

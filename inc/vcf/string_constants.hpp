@@ -49,10 +49,15 @@ namespace ebi
     const char OUTPUT[] = "output";
     const char OUTDIR[] = "outdir";
     const char REPORT[] = "report";
+    const char ASSEMBLY_REPORT[] = "assembly";
+    const char NO_MAPPING[] = "no_mapping";
+
+    // options for parser
     const char HELP_OPTION[] = "help,h";
     const char VERSION_OPTION[] = "version,v";
     const char INPUT_OPTION[] = "input,i";
     const char FASTA_OPTION[] = "fasta,f";
+    const char ASSEMBLY_REPORT_OPTION[] = "assembly,a";
     const char ERRORS_OPTION[] = "errors,e";
     const char LEVEL_OPTION[] = "level,l";
     const char REPORT_OPTION[] = "report,r";

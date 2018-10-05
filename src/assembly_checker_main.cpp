@@ -40,6 +40,7 @@ namespace
             (ebi::vcf::VERSION_OPTION, "Display version of the assembly checker")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
             (ebi::vcf::FASTA_OPTION, po::value<std::string>(), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .idx extension")
+            (ebi::vcf::ASSEMBLY_REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::NO_MAPPING), "Path to the input assembly report used for contig synonym mapping")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, valid)")
             (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Output directory")
         ;
@@ -144,6 +145,7 @@ int main(int argc, char** argv)
     try {
         auto vcf_path = vm[ebi::vcf::INPUT].as<std::string>();
         auto fasta_path = vm[ebi::vcf::FASTA].as<std::string>();
+        auto assembly_report = vm[ebi::vcf::ASSEMBLY_REPORT].as<std::string>();
         auto fasta_index_path = fasta_path + ".fai";
         auto outdir = ebi::util::get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), vcf_path);
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
@@ -159,14 +161,14 @@ int main(int argc, char** argv)
         bool is_valid;
         if (vcf_path == ebi::vcf::STDIN) {
             BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
-            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(std::cin, vcf_path, fasta_input, fasta_index_input,
-                                                                 outputs);
+            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(std::cin, vcf_path, fasta_input,
+                                                                    fasta_index_input, assembly_report, outputs);
         } else {
             BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
             std::ifstream vcf_input;
             open_file(vcf_input, vcf_path);
-            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input,
-                                                                 outputs);
+            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input,
+                                                                    fasta_index_input, assembly_report, outputs);
         }
 
         return !is_valid; // A valid file returns an exit code 0
