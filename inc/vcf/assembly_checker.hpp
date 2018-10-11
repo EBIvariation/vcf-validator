@@ -26,6 +26,7 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/log/trivial.hpp>
 
+#include "assembly_report/assembly_report.hpp"
 #include "bioio/bioio.hpp"
 #include "vcf/assembly_check_report_writer.hpp"
 #include "vcf/compression.hpp"

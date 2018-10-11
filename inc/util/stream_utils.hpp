@@ -115,7 +115,7 @@ namespace ebi
     std::ostream &print_container(std::ostream &os, const T &container) {
         return print_container(os, container, "[", ", ", "]");
     }
-    
+
     // the next functions allow using the previous print_container in a easier syntax
     template <typename T>
     std::ostream &operator<<(std::ostream &os, const std::vector<T> &container)
