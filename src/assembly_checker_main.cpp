@@ -21,7 +21,7 @@
 #include "util/cli_utils.hpp"
 #include "util/logger.hpp"
 #include "vcf/assembly_checker.hpp"
-#include "vcf/assembly_report_writer.hpp"
+#include "vcf/assembly_check_report_writer.hpp"
 #include "vcf/string_constants.hpp"
 
 namespace

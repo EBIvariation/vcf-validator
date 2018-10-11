@@ -139,7 +139,7 @@ target_link_libraries (mod_odb ${THIRD_PARTY_LIBRARIES})
 
 set (MOD_VCF_SOURCES
   inc/vcf/assembly_checker.hpp
-  inc/vcf/assembly_report_writer.hpp
+  inc/vcf/assembly_check_report_writer.hpp
   inc/vcf/compression.hpp
   inc/vcf/debugulator.hpp
   inc/vcf/error_policy.hpp

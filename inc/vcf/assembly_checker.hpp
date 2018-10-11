@@ -27,7 +27,7 @@
 #include <boost/log/trivial.hpp>
 
 #include "bioio/bioio.hpp"
-#include "vcf/assembly_report_writer.hpp"
+#include "vcf/assembly_check_report_writer.hpp"
 #include "vcf/compression.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/normalizer.hpp"

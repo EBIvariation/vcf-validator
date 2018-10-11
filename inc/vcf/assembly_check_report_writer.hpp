@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef ASSEMBLY_REPORT_WRITER_HPP
-#define ASSEMBLY_REPORT_WRITER_HPP
+#ifndef ASSEMBLY_CHECK_REPORT_WRITER_HPP
+#define ASSEMBLY_CHECK_REPORT_WRITER_HPP
 
 #include <fstream>
 
@@ -188,4 +188,4 @@ namespace ebi
 }
 
 
-#endif // ASSEMBLY_REPORT_WRITER_HPP
+#endif // ASSEMBLY_CHECK_REPORT_WRITER_HPP
