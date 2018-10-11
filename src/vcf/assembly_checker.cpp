@@ -79,18 +79,29 @@ namespace ebi
               RecordCore record_core = build_record_core(line,line_num);
               auto synonyms_list = synonyms_map.get_synonym_list(record_core.chromosome);
 
-              if (index.count(record_core.chromosome) == 0) {
-                  report_missing_chromosome(line_num,record_core,outputs);
-                  continue;
-              }
-
               if (record_core.position == 0) {
                   report_telomere_position(line_num,outputs);
                   continue;
               }
 
+              std::string found_synonym = "no_match";
+              for (auto chrom_synonym : synonyms_list.list) {
+                  if (index.count(record_core.chromosome) != 0) {
+                      if (found_synonym != "no_match") {
+                          // report multiple matches
+                      } else {
+                          found_synonym = chrom_synonym;
+                          // report match found
+                      }
+                  }
+              }
+              if (found_synonym == "no_match") {
+                  report_missing_chromosome(line_num,record_core,outputs);
+                  continue;
+              }
+
               auto fasta_sequence = bioio::read_fasta_contig(fasta_input,
-                                                             index.at(record_core.chromosome),
+                                                             index.at(found_synonym),
                                                              record_core.position - 1,
                                                              record_core.reference_allele.length());
               auto reference_sequence = record_core.reference_allele;
