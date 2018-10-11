@@ -33,6 +33,7 @@
 #include "vcf/file_structure.hpp"
 #include "vcf/normalizer.hpp"
 #include "vcf/validator.hpp"
+#include "util/file_utils.hpp"
 #include "util/logger.hpp"
 #include "util/stream_utils.hpp"
 #include "util/string_utils.hpp"
@@ -57,6 +58,7 @@ namespace ebi
       bool process_vcf_ref(std::istream &vcf_input,
                          std::istream &fasta_input,
                          std::istream &fasta_index_input,
+                         const std::string &assembly_report,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs);
 
       bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence);

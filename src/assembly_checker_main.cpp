@@ -19,6 +19,7 @@
 
 #include "cmake_config.hpp"
 #include "util/cli_utils.hpp"
+#include "util/file_utils.hpp"
 #include "util/logger.hpp"
 #include "vcf/assembly_checker.hpp"
 #include "vcf/assembly_check_report_writer.hpp"
@@ -118,17 +119,6 @@ namespace
 
         return outputs;
     }
-
-    inline void open_file(std::ifstream & input,
-                          std::string path,
-                          std::ios_base::openmode mode = std::ios_base::in)
-    {
-        input.open(path,mode);
-        if (!input) {
-            std::string file_error_msg = "Couldn't open file " + path;
-            throw std::runtime_error{file_error_msg};
-        }
-    }
 }
 
 int main(int argc, char** argv)
@@ -152,11 +142,11 @@ int main(int argc, char** argv)
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA file...";
         std::ifstream fasta_input;
-        open_file(fasta_input, fasta_path, std::ifstream::binary);
+        ebi::util::open_file(fasta_input, fasta_path, std::ifstream::binary);
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA index file...";
         std::ifstream fasta_index_input;
-        open_file(fasta_index_input, fasta_index_path, std::ifstream::binary);
+        ebi::util::open_file(fasta_index_input, fasta_index_path, std::ifstream::binary);
 
         bool is_valid;
         if (vcf_path == ebi::vcf::STDIN) {
@@ -166,7 +156,7 @@ int main(int argc, char** argv)
         } else {
             BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
             std::ifstream vcf_input;
-            open_file(vcf_input, vcf_path);
+            ebi::util::open_file(vcf_input, vcf_path);
             is_valid = ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input,
                                                                     fasta_index_input, assembly_report, outputs);
         }

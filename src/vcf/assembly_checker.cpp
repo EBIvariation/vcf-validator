@@ -36,22 +36,31 @@ namespace ebi
           ebi::vcf::check_readability_of_file(file_extension);
 
           if (file_extension == NO_EXT) {
-              return process_vcf_ref(vcf_input, fasta_input, fasta_index_input, outputs);
+              return process_vcf_ref(vcf_input, fasta_input, fasta_index_input, assembly_report, outputs);
           } else {
               boost::iostreams::filtering_istream uncompressed_input;
               ebi::vcf::create_uncompressed_stream(vcf_input, file_extension, uncompressed_input);
-              return process_vcf_ref(uncompressed_input, fasta_input, fasta_index_input, outputs);
+              return process_vcf_ref(uncompressed_input, fasta_input, fasta_index_input, assembly_report, outputs);
           }
       }
 
       bool process_vcf_ref(std::istream &vcf_input,
                               std::istream &fasta_input,
                               std::istream &fasta_index_input,
+                              const std::string &assembly_report,
                               std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
 
       {
           std::vector<char> vector_line;
           vector_line.reserve(default_line_buffer_size);
+
+          // create a synonym_map
+          ebi::assembly_report::Synonyms_map synonyms_map;
+          if (assembly_report != ebi::vcf::NO_MAPPING) {
+              std::ifstream assembly_report_file;
+              ebi::util::open_file(assembly_report_file, assembly_report, std::ifstream::binary);
+              synonyms_map.parse_file(assembly_report_file);
+          }
 
           // Reading FASTA index, and querying FASTA file
           auto index = bioio::read_fasta_index(fasta_index_input);
@@ -68,6 +77,7 @@ namespace ebi
               }
 
               RecordCore record_core = build_record_core(line,line_num);
+              auto synonyms_list = synonyms_map.get_synonym_list(record_core.chromosome);
 
               if (index.count(record_core.chromosome) == 0) {
                   report_missing_chromosome(line_num,record_core,outputs);
