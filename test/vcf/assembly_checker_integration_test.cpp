@@ -31,6 +31,7 @@ namespace ebi
     {
         std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> outputs;
         outputs.emplace_back(new ebi::vcf::SummaryAssemblyReportWriter());
+        std::string assembly_report = ebi::vcf::NO_MAPPING;
 
         SECTION("Empty VCF File")
         {
@@ -40,7 +41,7 @@ namespace ebi
             std::ifstream vcf_input{vcf_path};
             std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs));
+            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
         }
 
         SECTION("Single entry")
@@ -51,7 +52,7 @@ namespace ebi
             std::ifstream vcf_input{vcf_path};
             std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs));
+            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
         }
 
         SECTION("Full sample VCF, all match")
@@ -62,7 +63,7 @@ namespace ebi
             std::ifstream vcf_input{vcf_path};
             std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs));
+            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
         }
 
         SECTION("compressed VCF, gz compression")
@@ -73,7 +74,7 @@ namespace ebi
             std::ifstream vcf_input{vcf_path};
             std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs));
+            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
         }
     }
 
@@ -81,6 +82,7 @@ namespace ebi
     {
         std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> outputs;
         outputs.emplace_back(new ebi::vcf::SummaryAssemblyReportWriter());
+        std::string assembly_report = ebi::vcf::NO_MAPPING;
 
         SECTION("Single entry, single mismatch")
         {
@@ -90,7 +92,7 @@ namespace ebi
             std::ifstream vcf_input{vcf_path};
             std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs));
+            CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
         }
 
         SECTION("Multiple entry, multiple mismatch")
@@ -101,7 +103,7 @@ namespace ebi
             std::ifstream vcf_input{vcf_path};
             std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs));
+            CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
         }
 
         SECTION("Empty FASTA file, single entry")
@@ -112,7 +114,7 @@ namespace ebi
             std::ifstream vcf_input{vcf_path};
             std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs));
+            CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
         }
 
         SECTION("Multiple entry, all mismatch")
@@ -123,7 +125,7 @@ namespace ebi
             std::ifstream vcf_input{vcf_path};
             std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs));
+            CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
         }
 
 // TODO: make the next work in windows as well
@@ -137,7 +139,7 @@ namespace ebi
              std::ifstream vcf_input{vcf_path};
              std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
              std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, outputs));
+             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
          }
 #endif
     }
