@@ -75,7 +75,7 @@ namespace
         return 0;
     }
 
-    std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> get_outputs(std::string const &output_str,
+    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> get_outputs(std::string const &output_str,
                                                                              std::string const &input)
     {
         std::vector<std::string> outs;
@@ -88,7 +88,7 @@ namespace
             BOOST_LOG_TRIVIAL(warning) << "Duplicated outputs! Will write just once to each output specified by -r/--report";
         }
 
-        std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> outputs;
+        std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> outputs;
 
         for (auto out : outs) {
             auto epoch = std::chrono::system_clock::now().time_since_epoch();
@@ -101,16 +101,16 @@ namespace
                 if (boost::filesystem::exists(file)) {
                     throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
-                outputs.emplace_back(new ebi::vcf::TextAssemblyReportWriter(filename));
+                outputs.emplace_back(new ebi::vcf::TextAssemblyCheckReportWriter(filename));
             } else if (out == ebi::vcf::TEXT) {
                 std::string filename = input + ".text_assembly_report." + std::to_string(timestamp) + filetype;
                 boost::filesystem::path file{filename};
                 if (boost::filesystem::exists(file)) {
                     throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
-                outputs.emplace_back(new ebi::vcf::TextAssemblyReportWriter(filename));
+                outputs.emplace_back(new ebi::vcf::TextAssemblyCheckReportWriter(filename));
             } else if (out == ebi::vcf::SUMMARY) {
-                outputs.emplace_back(new ebi::vcf::SummaryAssemblyReportWriter());
+                outputs.emplace_back(new ebi::vcf::SummaryAssemblyCheckReportWriter());
             } else {
                 throw std::invalid_argument{"Please use only valid report types"};
             }

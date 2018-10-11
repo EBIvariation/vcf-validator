@@ -29,8 +29,8 @@ namespace ebi
 {
     TEST_CASE("Matching FASTA and VCF combination", "[assembly_checker]")
     {
-        std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> outputs;
-        outputs.emplace_back(new ebi::vcf::SummaryAssemblyReportWriter());
+        std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> outputs;
+        outputs.emplace_back(new ebi::vcf::SummaryAssemblyCheckReportWriter());
         std::string assembly_report = ebi::vcf::NO_MAPPING;
 
         SECTION("Empty VCF File")
@@ -80,8 +80,8 @@ namespace ebi
 
     TEST_CASE("Not fully matching VCF and Fasta combination", "[assembly_checker]")
     {
-        std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> outputs;
-        outputs.emplace_back(new ebi::vcf::SummaryAssemblyReportWriter());
+        std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> outputs;
+        outputs.emplace_back(new ebi::vcf::SummaryAssemblyCheckReportWriter());
         std::string assembly_report = ebi::vcf::NO_MAPPING;
 
         SECTION("Single entry, single mismatch")

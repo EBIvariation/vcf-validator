@@ -27,7 +27,7 @@ namespace ebi
                          std::istream &fasta_input,
                          std::istream &fasta_index_input,
                          const std::string &assembly_report,
-                         std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
 
       {
           std::vector<char> line;
@@ -47,7 +47,7 @@ namespace ebi
       bool process_vcf_ref(std::istream &vcf_input,
                               std::istream &fasta_input,
                               std::istream &fasta_index_input,
-                              std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+                              std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
 
       {
           std::vector<char> vector_line;
@@ -102,7 +102,7 @@ namespace ebi
 
       void report_missing_chromosome(size_t line_num,
                                      RecordCore &record_core,
-                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
       {
           std::string missing_warning = "Line " + std::to_string(line_num)
               + ": Chromosome " + record_core.chromosome + " is not present in FASTA file";
@@ -112,7 +112,7 @@ namespace ebi
       }
 
       void report_telomere_position(size_t line_num,
-                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
       {
           std::string position_0_warning = "Line " + std::to_string(line_num)
               + ": Position 0 should only be used for a telomere";

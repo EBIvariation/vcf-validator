@@ -51,12 +51,12 @@ namespace ebi
                          std::istream &fasta_input,
                          std::istream &fasta_index_input,
                          const std::string &assembly_report,
-                         std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs);
+                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs);
 
       bool process_vcf_ref(std::istream &vcf_input,
                          std::istream &fasta_input,
                          std::istream &fasta_index_input,
-                         std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs);
+                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs);
 
       bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence);
 
@@ -64,10 +64,10 @@ namespace ebi
 
       void report_missing_chromosome(size_t line_num,
                                      RecordCore &record_core,
-                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs);
+                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs);
 
       void report_telomere_position(size_t line_num,
-                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs);
+                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs);
 
     }
   }

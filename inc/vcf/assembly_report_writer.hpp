@@ -38,10 +38,10 @@ namespace ebi
   namespace vcf
   {
 
-    class AssemblyReportWriter
+    class AssemblyCheckReportWriter
     {
       public:
-        virtual ~AssemblyReportWriter()
+        virtual ~AssemblyCheckReportWriter()
         {
 
         }
@@ -73,21 +73,21 @@ namespace ebi
         /*
          * creating protected constructor to make class abstract instead of using pure virtual functions
          */
-        AssemblyReportWriter()
+        AssemblyCheckReportWriter()
         {
 
         }
     };
 
-    class SummaryAssemblyReportWriter : public AssemblyReportWriter
+    class SummaryAssemblyCheckReportWriter : public AssemblyCheckReportWriter
     {
       public:
-        SummaryAssemblyReportWriter()
+        SummaryAssemblyCheckReportWriter()
         {
 
         }
 
-        ~SummaryAssemblyReportWriter()
+        ~SummaryAssemblyCheckReportWriter()
         {
             BOOST_LOG_TRIVIAL(info) << "Number of matches: "
                 << match_stats.get_num_matches() << "/" << match_stats.get_num_variants();
@@ -112,10 +112,10 @@ namespace ebi
         MatchStats match_stats;
     };
 
-    class ValidAssemblyReportWriter : public AssemblyReportWriter
+    class ValidAssemblyCheckReportWriter : public AssemblyCheckReportWriter
     {
       public:
-        ValidAssemblyReportWriter(std::string filename) : file_name(filename)
+        ValidAssemblyCheckReportWriter(std::string filename) : file_name(filename)
         {
             file.open(filename, std::ios::out);
             if(!file) {
@@ -123,7 +123,7 @@ namespace ebi
             }
         }
 
-        ~ValidAssemblyReportWriter()
+        ~ValidAssemblyCheckReportWriter()
         {
             BOOST_LOG_TRIVIAL(info) << "Valid report written to : " + file_name;
             file.close();
@@ -144,10 +144,10 @@ namespace ebi
         std::string file_name;
     };
 
-    class TextAssemblyReportWriter : public AssemblyReportWriter
+    class TextAssemblyCheckReportWriter : public AssemblyCheckReportWriter
     {
       public:
-        TextAssemblyReportWriter(std::string filename) : file_name(filename)
+        TextAssemblyCheckReportWriter(std::string filename) : file_name(filename)
         {
             file.open(filename, std::ios::out);
             if(!file) {
@@ -155,7 +155,7 @@ namespace ebi
             }
         }
 
-        ~TextAssemblyReportWriter()
+        ~TextAssemblyCheckReportWriter()
         {
             BOOST_LOG_TRIVIAL(info) << "Text report written to : " + file_name;
             file.close();
