@@ -86,7 +86,7 @@ namespace ebi
 
               std::string found_synonym = "no_match";
               for (auto chrom_synonym : synonyms_list.list) {
-                  if (index.count(record_core.chromosome) != 0) {
+                  if (index.count(chrom_synonym) != 0) {
                       if (found_synonym != "no_match") {
                           // report multiple matches
                       } else {
