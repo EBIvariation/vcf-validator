@@ -66,6 +66,19 @@ namespace ebi
             CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
         }
 
+        SECTION("Mapping contigs , all match")
+        {
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/passed/passed_with_mapping/");
+            std::string file_prefix = folder.parent_path().filename().string();
+            std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
+            std::ifstream vcf_input{vcf_path};
+            std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::string assembly_report_path = folder.string() + "assembly_report.txt";
+            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report_path, outputs));
+        }
+
+
         SECTION("compressed VCF, gz compression")
         {
             auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/compressed/passed_compressed_gz/");
@@ -126,6 +139,17 @@ namespace ebi
             std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
+        }
+
+        SECTION("Not mapping contigs , fail")
+        {
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/passed/passed_with_mapping/");
+            std::string file_prefix = folder.parent_path().filename().string();
+            std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
+            std::ifstream vcf_input{vcf_path};
+            std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
         }
 
 // TODO: make the next work in windows as well
