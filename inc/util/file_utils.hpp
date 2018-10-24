@@ -40,4 +40,4 @@ namespace ebi
   }
 }
 
-#endif // UTIL_CLI_UTILS_HPP
+#endif // UTIL_FILE_UTILS_HPP

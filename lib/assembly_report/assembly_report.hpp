@@ -32,17 +32,18 @@ namespace ebi
     /*
      * Struct to contain all the synonyms of a contig
      */
-    struct Synonyms_list {
-        std::vector<std::string> list;
-        Synonyms_list() {
+    struct ContigSynonyms {
+        std::vector<std::string> synonyms;
+
+        ContigSynonyms() {
 
         }
 
-        Synonyms_list(std::string contig) {
-            list.push_back(contig);
+        ContigSynonyms(std::string contig) {
+            synonyms.push_back(contig);
         }
 
-        Synonyms_list(std::vector<std::string> & list) : list(list) {
+        ContigSynonyms(std::vector<std::string> & synonyms) : synonyms(synonyms) {
 
         }
     };
@@ -52,55 +53,66 @@ namespace ebi
      */
     class Synonyms_map {
         std::map<std::string,int> index_map;
-        std::map<int,Synonyms_list> list_map;
+        std::vector<ContigSynonyms> contigs;
 
-        Synonyms_list extract_synonyms(std::vector<std::string> & list) {
+        ContigSynonyms extract_synonyms(std::vector<std::string> & synonyms) {
             std::vector<int> synonym_indices{0,4,6,9};
-            Synonyms_list synonyms_list;
+            ContigSynonyms contig_synonyms;
             for (auto index : synonym_indices) {
-                synonyms_list.list.push_back(list[index]);
+                contig_synonyms.synonyms.push_back(synonyms[index]);
             }
 
-            return synonyms_list;
+            return contig_synonyms;
         }
 
         public:
-        Synonyms_list get_synonym_list(std::string & contig) {
+        bool is_contig_available(std::string & contig) {
             if (index_map.find(contig) != index_map.end()) {
-                return list_map[index_map[contig]];
+                return true;
+            } else {
+                return false;
             }
-            else {
-                return Synonyms_list(contig);
+        }
+
+        ContigSynonyms get_contig_synonyms(std::string & contig) {
+            if (index_map.find(contig) != index_map.end()) {
+                return contigs[index_map[contig]];
+            } else {
+                throw std::invalid_argument("Contig : " + contig + " not present in synonyms map");
             }
         }
 
         void parse_file(std::istream &report) {
             std::vector<char> report_line;
             size_t const default_line_buffer_size = 64 * 1024;
-            size_t const assembly_report_line_size = 10;
+            size_t const assembly_report_column_count = 10;
             report_line.reserve(default_line_buffer_size);
 
-            int list_index = 0;
+            int contig_index = 0, line_num = -1;
             while (util::readline(report, report_line).size() != 0) {
+                line_num++;
                 if (report_line[0] == '#') {
                     continue;
                 }
 
-                std::vector<std::string> list;
+                std::vector<std::string> columns;
                 std::string line{report_line.begin(), report_line.end()};
                 boost::algorithm::trim(line);
-                util::string_split(line, "\t", list);
-                if(list.size() != assembly_report_line_size) {
-                    // report wrong line
-                    continue;
+                util::string_split(line, "\t", columns);
+                if(columns.size() != assembly_report_column_count) {
+                    // todo : think some lazy way of it. process whole file before throwing the error
+                    throw std::runtime_error("Error while parsing assembly report on line num : "
+                                            + std::to_string(line_num) + ", "
+                                            + " found " + std::to_string(columns.size()) + " columns, "
+                                            + " expected " + std::to_string(assembly_report_column_count));
                 }
 
-                auto synonyms_list = extract_synonyms(list);
-                list_map[list_index] = synonyms_list;
-                for (auto synonym : synonyms_list.list) {
-                    index_map[synonym] = list_index;
+                auto contig_synonyms = extract_synonyms(columns);
+                contigs.push_back(contig_synonyms);
+                for (auto contig : contig_synonyms.synonyms) {
+                    index_map[contig] = contig_index;
                 }
-                list_index++;
+                contig_index++;
 
             }
         }

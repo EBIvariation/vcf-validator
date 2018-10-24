@@ -58,12 +58,12 @@ namespace ebi
           ebi::assembly_report::Synonyms_map synonyms_map;
           if (assembly_report != ebi::vcf::NO_MAPPING) {
               std::ifstream assembly_report_file;
-              ebi::util::open_file(assembly_report_file, assembly_report, std::ifstream::binary);
+              ebi::util::open_file(assembly_report_file, assembly_report);
               synonyms_map.parse_file(assembly_report_file);
           }
 
           // Reading FASTA index, and querying FASTA file
-          auto index = bioio::read_fasta_index(fasta_index_input);
+          auto fasta_index = bioio::read_fasta_index(fasta_index_input);
 
           bool is_valid = true;
           for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
@@ -76,36 +76,28 @@ namespace ebi
                   continue;
               }
 
-              RecordCore record_core = build_record_core(line,line_num);
-              auto synonyms_list = synonyms_map.get_synonym_list(record_core.chromosome);
+              RecordCore record_core = build_record_core(line, line_num);
 
               if (record_core.position == 0) {
                   report_telomere_position(line_num,outputs);
                   continue;
               }
 
-              std::string found_synonym = "no_match";
-              for (auto chrom_synonym : synonyms_list.list) {
-                  if (index.count(chrom_synonym) != 0) {
-                      if (found_synonym != "no_match") {
-                          // report multiple matches
-                      } else {
-                          found_synonym = chrom_synonym;
-                          // report match found
-                      }
-                  }
-              }
-              if (found_synonym == "no_match") {
-                  report_missing_chromosome(line_num,record_core,outputs);
+              std::vector<std::string> found_synonyms = get_matching_synonyms_list(synonyms_map,
+                                                                                   line_num,
+                                                                                   record_core,
+                                                                                   fasta_index,
+                                                                                   outputs);
+              if(found_synonyms.size() != 1) {
                   continue;
               }
+              std::string synonym_found_in_assembly_report = found_synonyms[0];
 
               auto fasta_sequence = bioio::read_fasta_contig(fasta_input,
-                                                             index.at(found_synonym),
+                                                             fasta_index.at(synonym_found_in_assembly_report),
                                                              record_core.position - 1,
                                                              record_core.reference_allele.length());
               auto reference_sequence = record_core.reference_allele;
-
               bool match_result = is_matching_sequence(fasta_sequence, reference_sequence);
 
               for (auto &output : outputs ) {
@@ -119,6 +111,49 @@ namespace ebi
           }
 
           return is_valid;
+      }
+
+      std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::Synonyms_map &synonyms_map,
+                                  size_t line_num,
+                                  RecordCore &record_core,
+                                  bioio::FastaIndex &fasta_index,
+                                  std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
+      {
+              auto contig_synonyms = synonyms_map.get_contig_synonyms(record_core.chromosome);
+
+              std::vector<std::string> found_synonyms;
+              for (auto contig : contig_synonyms.synonyms) {
+                  if (fasta_index.count(contig) != 0) {
+                      found_synonyms.push_back(contig);
+                  }
+              }
+
+              if (found_synonyms.size() == 0) {
+                  report_missing_chromosome(line_num, record_core, outputs);
+              } else if (found_synonyms.size() > 1) {
+                  report_multiple_synonym_match(line_num, record_core, found_synonyms, outputs);
+              }
+
+              return found_synonyms;
+      }
+
+      void report_multiple_synonym_match(size_t line_num,
+                                         RecordCore &record_core,
+                                         std::vector<std::string> found_synonyms,
+                                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
+      {
+          std::string multiple_synonym_match_warning = "Line " + std::to_string(line_num)
+              + ": Chromosome " + record_core.chromosome + " has multiple synonyms present in fasta index file,"
+              + " synonyms found : ";
+
+          for (auto contig : found_synonyms) {
+              multiple_synonym_match_warning += contig + " ";
+          }
+
+          for (auto &output : outputs ) {
+              output->write_warning(multiple_synonym_match_warning);
+          }
+
       }
 
       void report_missing_chromosome(size_t line_num,
