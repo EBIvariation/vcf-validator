@@ -83,15 +83,18 @@ namespace ebi
                   continue;
               }
 
-              std::vector<std::string> found_synonyms = get_matching_synonyms_list(synonyms_map,
-                                                                                   line_num,
-                                                                                   record_core,
-                                                                                   fasta_index,
-                                                                                   outputs);
-              if(found_synonyms.size() != 1) {
-                  continue;
+              std::string synonym_found_in_assembly_report = record_core.chromosome;
+              if (assembly_report != ebi::vcf::NO_MAPPING) {
+                  std::vector<std::string> found_synonyms = get_matching_synonyms_list(synonyms_map,
+                                                               line_num, record_core, fasta_index, outputs);
+                  if(found_synonyms.size() != 1) {
+                      // found one or more synonyms matching in fasta index file
+                      // so we wont validate the ambigious contig
+                      is_valid = false;
+                      continue;
+                  }
+                  synonym_found_in_assembly_report = found_synonyms[0];
               }
-              std::string synonym_found_in_assembly_report = found_synonyms[0];
 
               auto fasta_sequence = bioio::read_fasta_contig(fasta_input,
                                                              fasta_index.at(synonym_found_in_assembly_report),
