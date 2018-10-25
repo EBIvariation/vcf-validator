@@ -52,7 +52,7 @@ namespace ebi
     /*
      * Map to map all contigs to their synonym_maps
      */
-    class Synonyms_map {
+    class SynonymsMap {
         std::map<std::string,int> index_map;
         std::vector<ContigSynonyms> contigs;
 
@@ -91,10 +91,10 @@ namespace ebi
             std::vector<std::string> assembly_report_errors; // to contain errors while parsing
             std::map<std::string,std::set<int>> multiple_occurance_of_contig_errors;
 
-            int contig_index = 0, line_num = -1;
+            int contig_index = 0, line_offset = 1;
             while (util::readline(report, report_line).size() != 0) {
-                line_num++;
                 if (report_line[0] == '#') {
+                    line_offset++;
                     continue;
                 }
 
@@ -103,7 +103,8 @@ namespace ebi
                 boost::algorithm::trim(line);
                 util::string_split(line, "\t", columns);
                 if(columns.size() != assembly_report_column_count) {
-                    std::string error = "Expected " + std::to_string(assembly_report_column_count)
+                    std::string error = "Line num " + std::to_string(line_offset + contig_index)
+                                        + " : Expected " + std::to_string(assembly_report_column_count)
                                         + " columns, found " + std::to_string(columns.size()) + "\n";
                     assembly_report_errors.push_back(error);
                 }
@@ -113,8 +114,8 @@ namespace ebi
                 for (auto contig : contig_synonyms.synonyms) {
                     if(index_map.find(contig) != index_map.end() && index_map[contig] != contig_index) {
                         // if a contig is found in two different lines that would be treated as error
-                        multiple_occurance_of_contig_errors[contig].insert(contig_index);
-                        multiple_occurance_of_contig_errors[contig].insert(index_map[contig]);
+                        multiple_occurance_of_contig_errors[contig].insert(contig_index+line_offset);
+                        multiple_occurance_of_contig_errors[contig].insert(index_map[contig]+line_offset);
                         continue;
                     }
                     index_map[contig] = contig_index;

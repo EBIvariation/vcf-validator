@@ -66,7 +66,7 @@ namespace ebi
       RecordCore build_record_core(std::string const & line, size_t line_num);
 
 
-      std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::Synonyms_map &synonyms_map,
+      std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap &synonyms_map,
                                   size_t line_num,
                                   RecordCore &record_core,
                                   bioio::FastaIndex &fasta_index,

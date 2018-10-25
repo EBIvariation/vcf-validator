@@ -55,7 +55,7 @@ namespace ebi
           vector_line.reserve(default_line_buffer_size);
 
           // create a synonym_map
-          ebi::assembly_report::Synonyms_map synonyms_map;
+          ebi::assembly_report::SynonymsMap synonyms_map;
           if (assembly_report != ebi::vcf::NO_MAPPING) {
               std::ifstream assembly_report_file;
               ebi::util::open_file(assembly_report_file, assembly_report);
@@ -122,7 +122,7 @@ namespace ebi
           return is_valid;
       }
 
-      std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::Synonyms_map &synonyms_map,
+      std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap &synonyms_map,
                                   size_t line_num,
                                   RecordCore &record_core,
                                   bioio::FastaIndex &fasta_index,
