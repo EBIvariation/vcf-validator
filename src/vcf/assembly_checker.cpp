@@ -83,7 +83,7 @@ namespace ebi
                   continue;
               }
 
-              std::string synonym_found_in_assembly_report = record_core.chromosome;
+              std::string contig_name = record_core.chromosome;
               if (assembly_report != ebi::vcf::NO_MAPPING) {
                   std::vector<std::string> found_synonyms = get_matching_synonyms_list(synonyms_map,
                                                                line_num, record_core, fasta_index, outputs);
@@ -93,11 +93,17 @@ namespace ebi
                       is_valid = false;
                       continue;
                   }
-                  synonym_found_in_assembly_report = found_synonyms[0];
+                  contig_name = found_synonyms[0];
+              } else {
+                  if (fasta_index.count(contig_name) == 0) {
+                      report_missing_chromosome(line_num,record_core,outputs);
+                      is_valid = false;
+                      continue;
+                  }
               }
 
               auto fasta_sequence = bioio::read_fasta_contig(fasta_input,
-                                                             fasta_index.at(synonym_found_in_assembly_report),
+                                                             fasta_index.at(contig_name),
                                                              record_core.position - 1,
                                                              record_core.reference_allele.length());
               auto reference_sequence = record_core.reference_allele;
@@ -122,22 +128,28 @@ namespace ebi
                                   bioio::FastaIndex &fasta_index,
                                   std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
       {
-              auto contig_synonyms = synonyms_map.get_contig_synonyms(record_core.chromosome);
+          std::vector<std::string> found_synonyms;
 
-              std::vector<std::string> found_synonyms;
-              for (auto contig : contig_synonyms.synonyms) {
-                  if (fasta_index.count(contig) != 0) {
-                      found_synonyms.push_back(contig);
-                  }
-              }
-
-              if (found_synonyms.size() == 0) {
-                  report_missing_chromosome(line_num, record_core, outputs);
-              } else if (found_synonyms.size() > 1) {
-                  report_multiple_synonym_match(line_num, record_core, found_synonyms, outputs);
-              }
-
+          bool is_contig_available = synonyms_map.is_contig_available(record_core.chromosome);
+          if (!is_contig_available) {
+              found_synonyms.push_back(record_core.chromosome);
               return found_synonyms;
+          }
+
+          auto contig_synonyms = synonyms_map.get_contig_synonyms(record_core.chromosome);
+          for (auto contig : contig_synonyms.synonyms) {
+              if (fasta_index.count(contig) != 0) {
+                  found_synonyms.push_back(contig);
+              }
+          }
+
+          if (found_synonyms.size() == 0) {
+              report_missing_chromosome(line_num, record_core, outputs);
+          } else if (found_synonyms.size() > 1) {
+              report_multiple_synonym_match(line_num, record_core, found_synonyms, outputs);
+          }
+
+          return found_synonyms;
       }
 
       void report_multiple_synonym_match(size_t line_num,
@@ -145,8 +157,8 @@ namespace ebi
                                          std::vector<std::string> found_synonyms,
                                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
       {
-          std::string multiple_synonym_match_warning = "Line " + std::to_string(line_num)
-              + ": Chromosome " + record_core.chromosome + " has multiple synonyms present in fasta index file,"
+          std::string multiple_synonym_match_warning = "Line " + std::to_string(line_num) + ": Chromosome "
+              + record_core.chromosome + " has multiple synonyms present in fasta index file,"
               + " synonyms found : ";
 
           for (auto contig : found_synonyms) {

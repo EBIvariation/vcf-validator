@@ -149,7 +149,7 @@ namespace ebi
             std::ifstream vcf_input{vcf_path};
             std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
+            CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
         }
 
 // TODO: make the next work in windows as well
