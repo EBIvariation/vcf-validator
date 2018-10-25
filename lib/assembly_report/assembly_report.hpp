@@ -87,6 +87,7 @@ namespace ebi
             size_t const default_line_buffer_size = 64 * 1024;
             size_t const assembly_report_column_count = 10;
             report_line.reserve(default_line_buffer_size);
+            std::vector<std::string> assembly_report_errors; // to contain errors while parsing
 
             int contig_index = 0, line_num = -1;
             while (util::readline(report, report_line).size() != 0) {
@@ -100,11 +101,9 @@ namespace ebi
                 boost::algorithm::trim(line);
                 util::string_split(line, "\t", columns);
                 if(columns.size() != assembly_report_column_count) {
-                    // todo : think some lazy way of it. process whole file before throwing the error
-                    throw std::runtime_error("Error while parsing assembly report on line num : "
-                                            + std::to_string(line_num) + ", "
-                                            + " found " + std::to_string(columns.size()) + " columns, "
-                                            + " expected " + std::to_string(assembly_report_column_count));
+                    std::string error = "Expected " + std::to_string(assembly_report_column_count)
+                                        + " columns, found " + std::to_string(columns.size()) + "\n";
+                    assembly_report_errors.push_back(error);
                 }
 
                 auto contig_synonyms = extract_synonyms(columns);
@@ -114,6 +113,14 @@ namespace ebi
                 }
                 contig_index++;
 
+            }
+
+            if (!assembly_report_errors.empty()) {
+                std::string error_report = "Some errors occurred while parsing assembly report file \n";
+                for(auto error : assembly_report_errors) {
+                    error_report += error;
+                }
+                throw std::runtime_error(error_report);
             }
         }
     };
