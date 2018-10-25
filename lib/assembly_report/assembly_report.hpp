@@ -18,6 +18,7 @@
 #define ASSEMBLY_REPORT_HPP
 
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -88,6 +89,7 @@ namespace ebi
             size_t const assembly_report_column_count = 10;
             report_line.reserve(default_line_buffer_size);
             std::vector<std::string> assembly_report_errors; // to contain errors while parsing
+            std::map<std::string,std::set<int>> multiple_occurance_of_contig_errors;
 
             int contig_index = 0, line_num = -1;
             while (util::readline(report, report_line).size() != 0) {
@@ -109,10 +111,26 @@ namespace ebi
                 auto contig_synonyms = extract_synonyms(columns);
                 contigs.push_back(contig_synonyms);
                 for (auto contig : contig_synonyms.synonyms) {
+                    if(index_map.find(contig) != index_map.end() && index_map[contig] != contig_index) {
+                        // if a contig is found in two different lines that would be treated as error
+                        multiple_occurance_of_contig_errors[contig].insert(contig_index);
+                        multiple_occurance_of_contig_errors[contig].insert(index_map[contig]);
+                        continue;
+                    }
                     index_map[contig] = contig_index;
                 }
                 contig_index++;
 
+            }
+
+            for (auto contig_error: multiple_occurance_of_contig_errors) {
+                std::string error = "Contig " + contig_error.first + ", found in multiple lines : ";
+                for (auto line_num : contig_error.second) {
+                    error += std::to_string(line_num) + " ";
+                }
+                error.pop_back();
+                error += "\n";
+                assembly_report_errors.push_back(error);
             }
 
             if (!assembly_report_errors.empty()) {
