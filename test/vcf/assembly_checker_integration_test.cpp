@@ -151,6 +151,7 @@ namespace ebi
             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
         }
+// TODO test non-equivalent synonyms (Genbank <> RefSeq)
 
 // TODO: make the next work in windows as well
 #ifdef _WIN32

@@ -132,8 +132,7 @@ namespace ebi
 
           bool is_contig_available = synonyms_map.is_contig_available(record_core.chromosome);
           if (!is_contig_available) {
-              found_synonyms.push_back(record_core.chromosome);
-              return found_synonyms;
+              throw std::runtime_error("Contig : " + record_core.chromosome + ", is not found in assembly report");
           }
 
           auto contig_synonyms = synonyms_map.get_contig_synonyms(record_core.chromosome);
