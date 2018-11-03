@@ -67,7 +67,7 @@ namespace ebi
         }
 
         public:
-        bool is_contig_available(std::string & contig) {
+        bool is_contig_available(std::string contig) {
             if (index_map.find(contig) != index_map.end()) {
                 return true;
             } else {
@@ -75,7 +75,7 @@ namespace ebi
             }
         }
 
-        ContigSynonyms get_contig_synonyms(std::string & contig) {
+        ContigSynonyms get_contig_synonyms(std::string contig) {
             if (index_map.find(contig) != index_map.end()) {
                 return contigs[index_map[contig]];
             } else {

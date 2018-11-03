@@ -151,6 +151,19 @@ namespace ebi
             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
         }
+
+        SECTION("Bad assembly_report , throws exception")
+        {
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/failed/failed_to_parse_assembly_report/");
+            std::string file_prefix = folder.parent_path().filename().string();
+            std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
+            std::ifstream vcf_input{vcf_path};
+            std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::string assembly_report_path = folder.string() + "assembly_report.txt";
+            CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report_path, outputs), std::runtime_error);
+        }
+
 // TODO test non-equivalent synonyms (Genbank <> RefSeq)
 
 // TODO: make the next work in windows as well
