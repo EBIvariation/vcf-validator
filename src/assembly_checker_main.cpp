@@ -102,7 +102,7 @@ namespace
                 if (boost::filesystem::exists(file)) {
                     throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
-                outputs.emplace_back(new ebi::vcf::TextAssemblyCheckReportWriter(filename));
+                outputs.emplace_back(new ebi::vcf::ValidAssemblyCheckReportWriter(filename));
             } else if (out == ebi::vcf::TEXT) {
                 std::string filename = input + ".text_assembly_report." + std::to_string(timestamp) + filetype;
                 boost::filesystem::path file{filename};
