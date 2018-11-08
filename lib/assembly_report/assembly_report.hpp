@@ -107,6 +107,7 @@ namespace ebi
                                         + " : Expected " + std::to_string(assembly_report_column_count)
                                         + " columns, found " + std::to_string(columns.size()) + "\n";
                     assembly_report_errors.push_back(error);
+                    continue;
                 }
 
                 auto contig_synonyms = extract_synonyms(columns);
