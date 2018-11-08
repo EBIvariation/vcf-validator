@@ -55,11 +55,18 @@ namespace ebi
     class SynonymsMap {
         std::map<std::string,int> index_map;
         std::vector<ContigSynonyms> contigs;
+        /*
+         * set of names that needs to be ignored if present in assembly report
+         */
+        std::set<std::string> ignore_contig{"na"};
 
         ContigSynonyms extract_synonyms(std::vector<std::string> & synonyms) {
             std::vector<int> synonym_indices{0,4,6,9};
             ContigSynonyms contig_synonyms;
             for (auto index : synonym_indices) {
+                if(ignore_contig.find(synonyms[index]) != ignore_contig.end()) {
+                    continue;
+                }
                 contig_synonyms.synonyms.push_back(synonyms[index]);
             }
 
@@ -113,6 +120,9 @@ namespace ebi
                 auto contig_synonyms = extract_synonyms(columns);
                 contigs.push_back(contig_synonyms);
                 for (auto contig : contig_synonyms.synonyms) {
+                    if(ignore_contig.find(contig) != ignore_contig.end()) {
+                        continue;
+                    }
                     if(index_map.find(contig) != index_map.end() && index_map[contig] != contig_index) {
                         // if a contig is found in two different lines that would be treated as error
                         multiple_occurance_of_contig_errors[contig].insert(contig_index+line_offset);

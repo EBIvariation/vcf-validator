@@ -39,8 +39,7 @@ namespace ebi
             ebi::assembly_report::SynonymsMap synonyms_map;
             std::string assembly_report_path = "test/input_files/assembly_report/full_assembly_report/assembly_report.txt";
             std::ifstream input{assembly_report_path};
-            // TODO: handle "na"
-            //CHECK_NOTHROW(synonyms_map.parse_file(input));
+            CHECK_NOTHROW(synonyms_map.parse_file(input));
         }
 
         SECTION("failing to parse assembly report throw runtime error")
