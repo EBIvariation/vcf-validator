@@ -40,7 +40,7 @@ namespace
             (ebi::vcf::HELP_OPTION, "Display this help")
             (ebi::vcf::VERSION_OPTION, "Display version of the assembly checker")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
-            (ebi::vcf::FASTA_OPTION, po::value<std::string>(), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .idx extension")
+            (ebi::vcf::FASTA_OPTION, po::value<std::string>(), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .fai extension")
             (ebi::vcf::ASSEMBLY_REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::NO_MAPPING), "Path to the input assembly report used for contig synonym mapping")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, valid)")
             (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Output directory")
@@ -136,7 +136,7 @@ int main(int argc, char** argv)
         auto vcf_path = vm[ebi::vcf::INPUT].as<std::string>();
         auto fasta_path = vm[ebi::vcf::FASTA].as<std::string>();
         auto assembly_report = vm[ebi::vcf::ASSEMBLY_REPORT].as<std::string>();
-        auto fasta_index_path = fasta_path + ".fai";
+        auto fasta_index_path = fasta_path + ebi::vcf::INDEX_EXT;
         auto outdir = ebi::util::get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), vcf_path);
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
