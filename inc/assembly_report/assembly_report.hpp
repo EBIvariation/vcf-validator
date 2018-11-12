@@ -19,6 +19,7 @@
 
 #include <map>
 #include <set>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -143,13 +144,11 @@ namespace ebi
             }
 
             for (auto contig_error: multiple_occurrence_of_contig_errors) {
-                std::string error = "Contig '" + contig_error.first + "' found in multiple lines: ";
-                for (auto line_num : contig_error.second) {
-                    error += std::to_string(line_num) + " ";
-                }
-                error.pop_back();
-                error += "\n";
-                assembly_report_errors.push_back(error);
+                std::stringstream error;
+                error << "Contig '" + contig_error.first + "' found in multiple lines : ";
+                ebi::util::print_container(error, contig_error.second, "", ",", "");
+                error << std::endl;
+                assembly_report_errors.push_back(error.str());
             }
 
             if (!assembly_report_errors.empty()) {
