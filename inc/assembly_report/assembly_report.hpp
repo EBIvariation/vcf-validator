@@ -47,6 +47,14 @@ namespace ebi
         ContigSynonyms(std::vector<std::string> & synonyms) : synonyms(synonyms) {
 
         }
+
+        std::vector<std::string> const & get_synonyms() const {
+            return synonyms;
+        }
+
+        void add_synonym(std::string synonym) {
+            synonyms.push_back(synonym);
+        }
     };
 
     /**
@@ -61,7 +69,7 @@ namespace ebi
         /*
          * set of names that needs to be ignored if present in assembly report
          */
-        std::set<std::string> ignore_contig{"na"};
+        const std::set<std::string> ignore_contig{"na"};
 
         ContigSynonyms extract_synonyms(std::vector<std::string> & synonyms) {
             std::vector<int> synonym_indices{0,4,6,9};
@@ -70,20 +78,20 @@ namespace ebi
                 if (ignore_contig.find(synonyms[index]) != ignore_contig.end()) {
                     continue;
                 }
-                contig_synonyms.synonyms.push_back(synonyms[index]);
+                contig_synonyms.add_synonym(synonyms[index]);
             }
 
             return contig_synonyms;
         }
 
         public:
-        bool is_contig_available(std::string contig) {
+        bool is_contig_available(std::string contig) const {
             return index_map.find(contig) != index_map.end();
         }
 
-        ContigSynonyms get_contig_synonyms(std::string contig) {
+        const std::vector<std::string> & get_contig_synonyms(std::string contig) const {
             if (is_contig_available(contig)) {
-                return contigs[index_map[contig]];
+                return contigs[index_map.at(contig)].get_synonyms();
             } else {
                 throw std::invalid_argument("Contig '" + contig + "' not found in synonyms map");
             }

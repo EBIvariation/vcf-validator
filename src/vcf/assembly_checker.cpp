@@ -135,8 +135,8 @@ namespace ebi
               throw std::runtime_error("Contig '" + record_core.chromosome + "' not found in assembly report");
           }
 
-          auto contig_synonyms = synonyms_map.get_contig_synonyms(record_core.chromosome);
-          for (auto contig : contig_synonyms.synonyms) {
+          auto & contig_synonyms = synonyms_map.get_contig_synonyms(record_core.chromosome);
+          for (auto contig : contig_synonyms) {
               if (fasta_index.count(contig) != 0) {
                   found_synonyms.push_back(contig);
               }

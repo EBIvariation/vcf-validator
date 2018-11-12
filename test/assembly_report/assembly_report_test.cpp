@@ -74,8 +74,8 @@ namespace ebi
 
         SECTION("Get Contig Synonyms")
         {
-            ebi::assembly_report::ContigSynonyms contig_synonyms = synonyms_map.get_contig_synonyms("chr1");
-            CHECK(contig_synonyms.synonyms.size() == 4);
+            auto contig_synonyms = synonyms_map.get_contig_synonyms("chr1");
+            CHECK(contig_synonyms.size() == 4);
             CHECK_THROWS_AS(synonyms_map.get_contig_synonyms("chr0"),std::invalid_argument);
         }
     }
