@@ -47,7 +47,7 @@ namespace ebi
             ebi::assembly_report::SynonymsMap synonyms_map;
             std::string assembly_report_path = "test/input_files/assembly_report/failed_different_col_size.txt";
             std::ifstream input{assembly_report_path};
-            CHECK_THROWS_AS(synonyms_map.parse_assembly_report(input),std::runtime_error);
+            CHECK_THROWS_AS(synonyms_map.parse_assembly_report(input), std::runtime_error);
         }
 
         SECTION("Failing to parse assembly report due to duplicate synonyms")
@@ -55,7 +55,7 @@ namespace ebi
             ebi::assembly_report::SynonymsMap synonyms_map;
             std::string assembly_report_path = "test/input_files/assembly_report/failed_same_synonym_for_different_contigs.txt";
             std::ifstream input{assembly_report_path};
-            CHECK_THROWS_AS(synonyms_map.parse_assembly_report(input),std::runtime_error);
+            CHECK_THROWS_AS(synonyms_map.parse_assembly_report(input), std::runtime_error);
         }
     }
 
@@ -76,7 +76,7 @@ namespace ebi
         {
             auto contig_synonyms = synonyms_map.get_contig_synonyms("chr1");
             CHECK(contig_synonyms.size() == 4);
-            CHECK_THROWS_AS(synonyms_map.get_contig_synonyms("chr0"),std::invalid_argument);
+            CHECK_THROWS_AS(synonyms_map.get_contig_synonyms("chr0"), std::invalid_argument);
         }
     }
 }

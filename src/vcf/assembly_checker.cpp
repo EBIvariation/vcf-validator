@@ -22,12 +22,12 @@ namespace ebi
   {
     namespace assembly_checker
     {
-      bool check_vcf_ref(std::istream &vcf_input,
-                         const std::string &sourceName,
-                         std::istream &fasta_input,
-                         std::istream &fasta_index_input,
-                         const std::string &assembly_report,
-                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
+      bool check_vcf_ref(std::istream & vcf_input,
+                         const std::string & sourceName,
+                         std::istream & fasta_input,
+                         std::istream & fasta_index_input,
+                         const std::string & assembly_report,
+                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
 
       {
           std::vector<char> line;
@@ -44,11 +44,11 @@ namespace ebi
           }
       }
 
-      bool process_vcf_ref(std::istream &vcf_input,
-                              std::istream &fasta_input,
-                              std::istream &fasta_index_input,
-                              const std::string &assembly_report,
-                              std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
+      bool process_vcf_ref(std::istream & vcf_input,
+                              std::istream & fasta_input,
+                              std::istream & fasta_index_input,
+                              const std::string & assembly_report,
+                              std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
 
       {
           std::vector<char> vector_line;
@@ -70,7 +70,7 @@ namespace ebi
               std::string line{vector_line.begin(), vector_line.end()};
 
               if (boost::starts_with(line, "#")) {
-                  for (auto &output : outputs ) {
+                  for (auto & output : outputs ) {
                       output->write_meta_info(line);
                   }
                   continue;
@@ -88,8 +88,7 @@ namespace ebi
                   std::vector<std::string> found_synonyms = get_matching_synonyms_list(synonyms_map,
                                                                line_num, record_core, fasta_index, outputs);
                   if (found_synonyms.size() > 1) {
-                      // found one or more synonyms matching in fasta index file
-                      // so we won't validate the ambiguous contig
+                      // found more than one synonyms matching in fasta index file
                       is_valid = false;
                       continue;
                   }
@@ -109,7 +108,7 @@ namespace ebi
               auto reference_sequence = record_core.reference_allele;
               bool match_result = is_matching_sequence(fasta_sequence, reference_sequence);
 
-              for (auto &output : outputs ) {
+              for (auto & output : outputs ) {
                   if (match_result) {
                       output->match(line);
                   } else {
@@ -122,11 +121,11 @@ namespace ebi
           return is_valid;
       }
 
-      std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap &synonyms_map,
+      std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap & synonyms_map,
                                   size_t line_num,
-                                  RecordCore &record_core,
-                                  bioio::FastaIndex &fasta_index,
-                                  std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
+                                  RecordCore & record_core,
+                                  bioio::FastaIndex & fasta_index,
+                                  std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
       {
           std::vector<std::string> found_synonyms;
 
@@ -152,9 +151,9 @@ namespace ebi
       }
 
       void report_multiple_synonym_match(size_t line_num,
-                                         RecordCore &record_core,
+                                         RecordCore & record_core,
                                          std::vector<std::string> found_synonyms,
-                                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
+                                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
       {
           std::string multiple_synonym_match_warning = "Line " + std::to_string(line_num)
                     + ": Multiple synonyms " + " found for contig '"
@@ -164,15 +163,15 @@ namespace ebi
               multiple_synonym_match_warning += contig + " ";
           }
 
-          for (auto &output : outputs) {
+          for (auto & output : outputs) {
               output->write_warning(multiple_synonym_match_warning);
           }
 
       }
 
       void report_missing_chromosome(size_t line_num,
-                                     RecordCore &record_core,
-                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
+                                     RecordCore & record_core,
+                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
       {
           std::string missing_warning = "Line " + std::to_string(line_num)
               + ": Chromosome " + record_core.chromosome + " is not present in FASTA file";
@@ -182,11 +181,11 @@ namespace ebi
       }
 
       void report_telomere_position(size_t line_num,
-                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
+                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
       {
           std::string position_0_warning = "Line " + std::to_string(line_num)
               + ": Position 0 should only be used for a telomere";
-          for (auto &output : outputs ) {
+          for (auto & output : outputs ) {
               output->write_warning(position_0_warning);
           }
       }

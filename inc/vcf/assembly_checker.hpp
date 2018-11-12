@@ -27,16 +27,19 @@
 #include <boost/log/trivial.hpp>
 
 #include "assembly_report/assembly_report.hpp"
+
 #include "bioio/bioio.hpp"
+
+#include "util/file_utils.hpp"
+#include "util/logger.hpp"
+#include "util/stream_utils.hpp"
+#include "util/string_utils.hpp"
+
 #include "vcf/assembly_check_report_writer.hpp"
 #include "vcf/compression.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/normalizer.hpp"
 #include "vcf/validator.hpp"
-#include "util/file_utils.hpp"
-#include "util/logger.hpp"
-#include "util/stream_utils.hpp"
-#include "util/string_utils.hpp"
 
 
 namespace ebi
@@ -48,41 +51,41 @@ namespace ebi
 
       size_t const default_line_buffer_size = 64 * 1024;
 
-      bool check_vcf_ref(std::istream &vcf_input,
-                         const std::string &sourceName,
-                         std::istream &fasta_input,
-                         std::istream &fasta_index_input,
-                         const std::string &assembly_report,
-                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs);
+      bool check_vcf_ref(std::istream & vcf_input,
+                         const std::string & sourceName,
+                         std::istream & fasta_input,
+                         std::istream & fasta_index_input,
+                         const std::string & assembly_report,
+                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
-      bool process_vcf_ref(std::istream &vcf_input,
-                         std::istream &fasta_input,
-                         std::istream &fasta_index_input,
-                         const std::string &assembly_report,
-                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs);
+      bool process_vcf_ref(std::istream & vcf_input,
+                         std::istream & fasta_input,
+                         std::istream & fasta_index_input,
+                         const std::string & assembly_report,
+                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
       bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence);
 
       RecordCore build_record_core(std::string const & line, size_t line_num);
 
 
-      std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap &synonyms_map,
+      std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap & synonyms_map,
                                   size_t line_num,
-                                  RecordCore &record_core,
-                                  bioio::FastaIndex &fasta_index,
-                                  std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs);
+                                  RecordCore & record_core,
+                                  bioio::FastaIndex & fasta_index,
+                                  std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
       void report_multiple_synonym_match(size_t line_num,
-                                         RecordCore &record_core,
+                                         RecordCore & record_core,
                                          std::vector<std::string> found_synonyms,
-                                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs);
+                                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
       void report_missing_chromosome(size_t line_num,
-                                     RecordCore &record_core,
-                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs);
+                                     RecordCore & record_core,
+                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
       void report_telomere_position(size_t line_num,
-                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs);
+                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
     }
   }
