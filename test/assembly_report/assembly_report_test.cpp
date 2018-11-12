@@ -31,7 +31,7 @@ namespace ebi
             ebi::assembly_report::SynonymsMap synonyms_map;
             std::string assembly_report_path = "test/input_files/assembly_report/assembly_report.txt";
             std::ifstream input{assembly_report_path};
-            CHECK_NOTHROW(synonyms_map.parse_file(input));
+            CHECK_NOTHROW(synonyms_map.parse_assembly_report(input));
         }
 
         SECTION("Parsing official assembly report")
@@ -39,23 +39,23 @@ namespace ebi
             ebi::assembly_report::SynonymsMap synonyms_map;
             std::string assembly_report_path = "test/input_files/assembly_report/full_assembly_report/assembly_report.txt";
             std::ifstream input{assembly_report_path};
-            CHECK_NOTHROW(synonyms_map.parse_file(input));
+            CHECK_NOTHROW(synonyms_map.parse_assembly_report(input));
         }
 
-        SECTION("failing to parse assembly report throw runtime error")
+        SECTION("Failing to parse assembly report due to incorrect column size")
         {
             ebi::assembly_report::SynonymsMap synonyms_map;
             std::string assembly_report_path = "test/input_files/assembly_report/failed_different_col_size.txt";
             std::ifstream input{assembly_report_path};
-            CHECK_THROWS_AS(synonyms_map.parse_file(input),std::runtime_error);
+            CHECK_THROWS_AS(synonyms_map.parse_assembly_report(input),std::runtime_error);
         }
 
-        SECTION("failing to parse assembly report throw runtime error")
+        SECTION("Failing to parse assembly report due to duplicate synonyms")
         {
             ebi::assembly_report::SynonymsMap synonyms_map;
             std::string assembly_report_path = "test/input_files/assembly_report/failed_same_synonym_for_different_contigs.txt";
             std::ifstream input{assembly_report_path};
-            CHECK_THROWS_AS(synonyms_map.parse_file(input),std::runtime_error);
+            CHECK_THROWS_AS(synonyms_map.parse_assembly_report(input),std::runtime_error);
         }
     }
 
@@ -64,7 +64,7 @@ namespace ebi
         ebi::assembly_report::SynonymsMap synonyms_map;
         std::string assembly_report_path = "test/input_files/assembly_report/assembly_report.txt";
         std::ifstream input{assembly_report_path};
-        CHECK_NOTHROW(synonyms_map.parse_file(input));
+        CHECK_NOTHROW(synonyms_map.parse_assembly_report(input));
 
         SECTION("Check availability of contig")
         {

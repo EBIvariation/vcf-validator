@@ -54,12 +54,12 @@ namespace ebi
           std::vector<char> vector_line;
           vector_line.reserve(default_line_buffer_size);
 
-          // create a synonym_map
+          // Create contig synonyms mapping from assembly report
           ebi::assembly_report::SynonymsMap synonyms_map;
           if (assembly_report != ebi::vcf::NO_MAPPING) {
               std::ifstream assembly_report_file;
               ebi::util::open_file(assembly_report_file, assembly_report);
-              synonyms_map.parse_file(assembly_report_file);
+              synonyms_map.parse_assembly_report(assembly_report_file);
           }
 
           // Reading FASTA index, and querying FASTA file
@@ -87,16 +87,16 @@ namespace ebi
               if (assembly_report != ebi::vcf::NO_MAPPING) {
                   std::vector<std::string> found_synonyms = get_matching_synonyms_list(synonyms_map,
                                                                line_num, record_core, fasta_index, outputs);
-                  if(found_synonyms.size() != 1) {
+                  if (found_synonyms.size() > 1) {
                       // found one or more synonyms matching in fasta index file
-                      // so we wont validate the ambigious contig
+                      // so we won't validate the ambiguous contig
                       is_valid = false;
                       continue;
                   }
                   contig_name = found_synonyms[0];
               } else {
                   if (fasta_index.count(contig_name) == 0) {
-                      report_missing_chromosome(line_num,record_core,outputs);
+                      report_missing_chromosome(line_num, record_core, outputs);
                       is_valid = false;
                       continue;
                   }
@@ -132,7 +132,7 @@ namespace ebi
 
           bool is_contig_available = synonyms_map.is_contig_available(record_core.chromosome);
           if (!is_contig_available) {
-              throw std::runtime_error("Contig : " + record_core.chromosome + ", is not found in assembly report");
+              throw std::runtime_error("Contig '" + record_core.chromosome + "' not found in assembly report");
           }
 
           auto contig_synonyms = synonyms_map.get_contig_synonyms(record_core.chromosome);
@@ -156,15 +156,15 @@ namespace ebi
                                          std::vector<std::string> found_synonyms,
                                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> &outputs)
       {
-          std::string multiple_synonym_match_warning = "Line " + std::to_string(line_num) + ": Chromosome "
-              + record_core.chromosome + " has multiple synonyms present in fasta index file,"
-              + " synonyms found : ";
+          std::string multiple_synonym_match_warning = "Line " + std::to_string(line_num)
+                    + ": Multiple synonyms " + " found for contig '"
+                    + record_core.chromosome + "' in FASTA index file: ";
 
           for (auto contig : found_synonyms) {
               multiple_synonym_match_warning += contig + " ";
           }
 
-          for (auto &output : outputs ) {
+          for (auto &output : outputs) {
               output->write_warning(multiple_synonym_match_warning);
           }
 

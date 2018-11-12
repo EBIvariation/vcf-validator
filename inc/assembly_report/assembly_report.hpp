@@ -30,7 +30,7 @@ namespace ebi
 {
   namespace assembly_report
   {
-    /*
+    /**
      * Struct to contain all the synonyms of a contig
      */
     struct ContigSynonyms {
@@ -49,8 +49,11 @@ namespace ebi
         }
     };
 
-    /*
-     * Map to map all contigs to their synonym_maps
+    /**
+     * Mapping from every contig to all its synonyms, using an additional vector to efficiently search for repeated
+     * records in the assembly report.
+     * This vector contains the structs that associate a contig with all its synonyms.
+     * A map stores the correspondence between a name and the index its synonyms are located in the vector.
      */
     class SynonymsMap {
         std::map<std::string,int> index_map;
@@ -64,7 +67,7 @@ namespace ebi
             std::vector<int> synonym_indices{0,4,6,9};
             ContigSynonyms contig_synonyms;
             for (auto index : synonym_indices) {
-                if(ignore_contig.find(synonyms[index]) != ignore_contig.end()) {
+                if (ignore_contig.find(synonyms[index]) != ignore_contig.end()) {
                     continue;
                 }
                 contig_synonyms.synonyms.push_back(synonyms[index]);
@@ -75,28 +78,24 @@ namespace ebi
 
         public:
         bool is_contig_available(std::string contig) {
-            if (index_map.find(contig) != index_map.end()) {
-                return true;
-            } else {
-                return false;
-            }
+            return index_map.find(contig) != index_map.end();
         }
 
         ContigSynonyms get_contig_synonyms(std::string contig) {
-            if (index_map.find(contig) != index_map.end()) {
+            if (is_contig_available(contig)) {
                 return contigs[index_map[contig]];
             } else {
-                throw std::invalid_argument("Contig : " + contig + " not present in synonyms map");
+                throw std::invalid_argument("Contig '" + contig + "' not found in synonyms map");
             }
         }
 
-        void parse_file(std::istream &report) {
+        void parse_assembly_report(std::istream &report) {
             std::vector<char> report_line;
             size_t const default_line_buffer_size = 64 * 1024;
             size_t const assembly_report_column_count = 10;
             report_line.reserve(default_line_buffer_size);
             std::vector<std::string> assembly_report_errors; // to contain errors while parsing
-            std::map<std::string,std::set<int>> multiple_occurance_of_contig_errors;
+            std::map<std::string,std::set<int>> multiple_occurrence_of_contig_errors;
 
             int contig_index = 0, line_offset = 1;
             while (util::readline(report, report_line).size() != 0) {
@@ -109,7 +108,7 @@ namespace ebi
                 std::string line{report_line.begin(), report_line.end()};
                 boost::algorithm::trim(line);
                 util::string_split(line, "\t", columns);
-                if(columns.size() != assembly_report_column_count) {
+                if (columns.size() != assembly_report_column_count) {
                     std::string error = "Line num " + std::to_string(line_offset + contig_index)
                                         + " : Expected " + std::to_string(assembly_report_column_count)
                                         + " columns, found " + std::to_string(columns.size()) + "\n";
@@ -120,13 +119,13 @@ namespace ebi
                 auto contig_synonyms = extract_synonyms(columns);
                 contigs.push_back(contig_synonyms);
                 for (auto contig : contig_synonyms.synonyms) {
-                    if(ignore_contig.find(contig) != ignore_contig.end()) {
+                    if (ignore_contig.find(contig) != ignore_contig.end()) {
                         continue;
                     }
-                    if(index_map.find(contig) != index_map.end() && index_map[contig] != contig_index) {
+                    if (index_map.find(contig) != index_map.end() && index_map[contig] != contig_index) {
                         // if a contig is found in two different lines that would be treated as error
-                        multiple_occurance_of_contig_errors[contig].insert(contig_index+line_offset);
-                        multiple_occurance_of_contig_errors[contig].insert(index_map[contig]+line_offset);
+                        multiple_occurrence_of_contig_errors[contig].insert(contig_index+line_offset);
+                        multiple_occurrence_of_contig_errors[contig].insert(index_map[contig]+line_offset);
                         continue;
                     }
                     index_map[contig] = contig_index;
@@ -135,8 +134,8 @@ namespace ebi
 
             }
 
-            for (auto contig_error: multiple_occurance_of_contig_errors) {
-                std::string error = "Contig " + contig_error.first + ", found in multiple lines : ";
+            for (auto contig_error: multiple_occurrence_of_contig_errors) {
+                std::string error = "Contig '" + contig_error.first + "' found in multiple lines: ";
                 for (auto line_num : contig_error.second) {
                     error += std::to_string(line_num) + " ";
                 }
@@ -147,7 +146,7 @@ namespace ebi
 
             if (!assembly_report_errors.empty()) {
                 std::string error_report = "Some errors occurred while parsing assembly report file \n";
-                for(auto error : assembly_report_errors) {
+                for (auto error : assembly_report_errors) {
                     error_report += error;
                 }
                 throw std::runtime_error(error_report);
