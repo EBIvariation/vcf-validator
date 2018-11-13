@@ -64,6 +64,20 @@ vcf-assembly-checker assesses the correctness of a VCF file with respect to a FA
 
 vcf-assembly-checker requires a FASTA-index file with extension `.fai` for efficient reading of the FASTA file.
 
+If the VCF and FASTA files to compare don't use the same contig name nomenclature (GenBank, RefSeq, UCSC...) you may provide an assembly report file to map between them, using the `-a` option.
+
+vcf-assembly-checker accepts both compressed and non-compressed input VCF files. Supported compression formats are .gz and .bz2. For other formats such as .zip, the `zcat` command and a pipe can be used (see below).
+
+Reading uncompressed files:
+* File path as argument: `vcf_assembly_checker -i /path/to/vcf-file -f /path/to/fasta-file -a /path/to/assembly-report`
+* Standard input: `vcf_assembly_checker -f /path/to/fasta-file -a /path/to/assembly-report < /path/to/vcf-file`
+* Standard input from pipe: `cat /path/to/vcf-file | vcf_assembly_checker -f /path/to/fasta-file -a /path/to/assembly-report`
+
+Reading compressed files:
+* File path as argument: `vcf_assembly_checker -i /path/to/compressed-vcf-file -f /path/to/fasta-file -a /path/to/assembly-report`
+* Standard input: `vcf_assembly_checker -f /path/to/fasta-file -a /path/to/assembly-report < /path/to/compressed-vcf-file`
+* Standard input from pipe: `zcat /path/to/compressed-vcf-file | vcf_assembly_checker -f /path/to/fasta-file -a /path/to/assembly-report`
+
 Different types of validation reports can be written with the `-r` / `--report` option. Several ones may be specified in the same execution, using commas to separate each type (without spaces, e.g.: `-r summary,valid,text`).
 
 * `summary` - Logs the number of matches, total variants checked and percentage of correctness of VCF file on the terminal.
@@ -90,6 +104,7 @@ Assembly Checker example:
 ```
 vcf_assembly_checker -i /path/to/file.vcf -f /path/to/fasta_file.fa
 vcf_assembly_checker -f /path/to/fasta.fa -r text < /path/to/file.vcf
+vcf_assembly_checker -i /path/to/file.vcf -f /path/to/fasta_file.fa -r valid -a /path/to/assembly_report
 ```
 
 
