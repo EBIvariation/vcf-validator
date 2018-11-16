@@ -139,5 +139,17 @@ namespace ebi
             throw std::invalid_argument{"Input file should not be compressed twice"};
         }
     }
-  }
-}
+
+
+    void verify_uncompressed_file(std::istream & input, std::string file_name)
+    {
+        std::vector<char> line;
+        ebi::vcf::get_magic_num(input, line);
+        std::string file_extension = ebi::vcf::get_compression("", line);
+        if (file_extension != NO_EXT) {
+            throw std::invalid_argument{"Compressed " + file_name + " file is not supported"};
+        }
+    }
+
+  } // namespace vcf
+} // namespace ebi

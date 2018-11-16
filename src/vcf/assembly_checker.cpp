@@ -35,6 +35,10 @@ namespace ebi
           std::string file_extension = ebi::vcf::get_compression(sourceName, line);
           ebi::vcf::check_readability_of_file(file_extension);
 
+          // verify uncompressed files
+          ebi::vcf::verify_uncompressed_file(fasta_input, "fasta");
+          ebi::vcf::verify_uncompressed_file(fasta_index_input, "fasta index");
+
           if (file_extension == NO_EXT) {
               return process_vcf_ref(vcf_input, fasta_input, fasta_index_input, assembly_report, outputs);
           } else {
@@ -59,6 +63,8 @@ namespace ebi
           if (assembly_report != ebi::vcf::NO_MAPPING) {
               std::ifstream assembly_report_file;
               ebi::util::open_file(assembly_report_file, assembly_report);
+              // verify uncompressed assembly report file
+              ebi::vcf::verify_uncompressed_file(assembly_report_file, "assembly report");
               synonyms_map.parse_assembly_report(assembly_report_file);
           }
 

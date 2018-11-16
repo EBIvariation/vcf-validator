@@ -72,6 +72,13 @@ namespace ebi
      * The magic number is the first few characters of a file from which we can detect the compression type.
      */
     void get_magic_num(std::istream & stream, std::vector<char> & container);
+
+    /**
+     * Verify a given stream is not compressed
+     *
+     * In case of a compressed file, throws an exceptiono
+     */
+    void verify_uncompressed_file(std::istream & input, std::string file_name);
   }
 }
 
