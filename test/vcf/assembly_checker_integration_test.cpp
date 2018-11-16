@@ -169,16 +169,47 @@ namespace ebi
 // TODO: make the next work in windows as well
 #ifdef _WIN32
 #else
-         SECTION("compressed vcf, bz2 compression")
-         {
-             auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/compressed/failed_compressed_bz2/");
-             std::string file_prefix = folder.parent_path().filename().string();
-             std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_BZ2_EXT;
-             std::ifstream vcf_input{vcf_path};
-             std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-             std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
-         }
+        SECTION("compressed vcf, bz2 compression")
+        {
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/compressed/failed_compressed_bz2/");
+            std::string file_prefix = folder.parent_path().filename().string();
+            std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_BZ2_EXT;
+            std::ifstream vcf_input{vcf_path};
+            std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs));
+        }
 #endif
+    }
+
+    TEST_CASE("Compressed files", "[assembly_checker]")
+    {
+        std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> outputs;
+        outputs.emplace_back(new ebi::vcf::SummaryAssemblyCheckReportWriter());
+        std::string assembly_report = ebi::vcf::NO_MAPPING;
+
+        SECTION("compressed fasta file")
+        {
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/compressed/compressed_fasta/");
+            std::string file_prefix = folder.parent_path().filename().string();
+            std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_BZ2_EXT;
+            std::ifstream vcf_input{vcf_path};
+            std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::GZ};
+            std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report, outputs), std::invalid_argument);
+        }
+
+        SECTION("compressed assembly report")
+        {
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/compressed/compressed_assembly_report/");
+            std::string file_prefix = folder.parent_path().filename().string();
+            std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_BZ2_EXT;
+            std::ifstream vcf_input{vcf_path};
+            std::ifstream fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::ifstream fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::string assembly_report_path = folder.string() + "assembly_report.txt.gz";
+            CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input, assembly_report_path, outputs), std::invalid_argument);
+        }
+
     }
 }
