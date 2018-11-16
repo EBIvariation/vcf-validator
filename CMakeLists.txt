@@ -139,7 +139,7 @@ target_link_libraries (mod_odb ${THIRD_PARTY_LIBRARIES})
 
 set (MOD_VCF_SOURCES
   inc/vcf/assembly_checker.hpp
-  inc/vcf/assembly_report_writer.hpp
+  inc/vcf/assembly_check_report_writer.hpp
   inc/vcf/compression.hpp
   inc/vcf/debugulator.hpp
   inc/vcf/error_policy.hpp
@@ -213,6 +213,7 @@ set (V41_TESTS test/vcf/parser_v41_test.cpp)
 set (V42_TESTS test/vcf/parser_v42_test.cpp)
 set (V43_TESTS test/vcf/parser_v43_test.cpp)
 set (ALL_TESTS
+  test/assembly_report/assembly_report_test.cpp
   test/vcf/assembly_checker_integration_test.cpp
   test/vcf/assembly_checker_test.cpp
   test/vcf/compressed_file_test.cpp

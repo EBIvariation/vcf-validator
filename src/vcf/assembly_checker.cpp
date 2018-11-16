@@ -22,11 +22,12 @@ namespace ebi
   {
     namespace assembly_checker
     {
-      bool check_vcf_ref(std::istream &vcf_input,
-                         const std::string &sourceName,
-                         std::istream &fasta_input,
-                         std::istream &fasta_index_input,
-                         std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+      bool check_vcf_ref(std::istream & vcf_input,
+                         const std::string & sourceName,
+                         std::istream & fasta_input,
+                         std::istream & fasta_index_input,
+                         const std::string & assembly_report,
+                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
 
       {
           std::vector<char> line;
@@ -35,58 +36,79 @@ namespace ebi
           ebi::vcf::check_readability_of_file(file_extension);
 
           if (file_extension == NO_EXT) {
-              return process_vcf_ref(vcf_input, fasta_input, fasta_index_input, outputs);
+              return process_vcf_ref(vcf_input, fasta_input, fasta_index_input, assembly_report, outputs);
           } else {
               boost::iostreams::filtering_istream uncompressed_input;
               ebi::vcf::create_uncompressed_stream(vcf_input, file_extension, uncompressed_input);
-              return process_vcf_ref(uncompressed_input, fasta_input, fasta_index_input, outputs);
+              return process_vcf_ref(uncompressed_input, fasta_input, fasta_index_input, assembly_report, outputs);
           }
       }
 
-      bool process_vcf_ref(std::istream &vcf_input,
-                              std::istream &fasta_input,
-                              std::istream &fasta_index_input,
-                              std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+      bool process_vcf_ref(std::istream & vcf_input,
+                              std::istream & fasta_input,
+                              std::istream & fasta_index_input,
+                              const std::string & assembly_report,
+                              std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
 
       {
           std::vector<char> vector_line;
           vector_line.reserve(default_line_buffer_size);
 
+          // Create contig synonyms mapping from assembly report
+          ebi::assembly_report::SynonymsMap synonyms_map;
+          if (assembly_report != ebi::vcf::NO_MAPPING) {
+              std::ifstream assembly_report_file;
+              ebi::util::open_file(assembly_report_file, assembly_report);
+              synonyms_map.parse_assembly_report(assembly_report_file);
+          }
+
           // Reading FASTA index, and querying FASTA file
-          auto index = bioio::read_fasta_index(fasta_index_input);
+          auto fasta_index = bioio::read_fasta_index(fasta_index_input);
 
           bool is_valid = true;
           for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
               std::string line{vector_line.begin(), vector_line.end()};
 
               if (boost::starts_with(line, "#")) {
-                  for (auto &output : outputs ) {
+                  for (auto & output : outputs ) {
                       output->write_meta_info(line);
                   }
                   continue;
               }
 
-              RecordCore record_core = build_record_core(line,line_num);
-
-              if (index.count(record_core.chromosome) == 0) {
-                  report_missing_chromosome(line_num,record_core,outputs);
-                  continue;
-              }
+              RecordCore record_core = build_record_core(line, line_num);
 
               if (record_core.position == 0) {
                   report_telomere_position(line_num,outputs);
                   continue;
               }
 
+              std::string contig_name = record_core.chromosome;
+              if (assembly_report != ebi::vcf::NO_MAPPING) {
+                  std::vector<std::string> found_synonyms = get_matching_synonyms_list(synonyms_map,
+                                                               line_num, record_core, fasta_index, outputs);
+                  if (found_synonyms.size() > 1) {
+                      // found more than one synonyms matching in fasta index file
+                      is_valid = false;
+                      continue;
+                  }
+                  contig_name = found_synonyms[0];
+              } else {
+                  if (fasta_index.count(contig_name) == 0) {
+                      report_missing_chromosome(line_num, record_core, outputs);
+                      is_valid = false;
+                      continue;
+                  }
+              }
+
               auto fasta_sequence = bioio::read_fasta_contig(fasta_input,
-                                                             index.at(record_core.chromosome),
+                                                             fasta_index.at(contig_name),
                                                              record_core.position - 1,
                                                              record_core.reference_allele.length());
               auto reference_sequence = record_core.reference_allele;
-
               bool match_result = is_matching_sequence(fasta_sequence, reference_sequence);
 
-              for (auto &output : outputs ) {
+              for (auto & output : outputs ) {
                   if (match_result) {
                       output->match(line);
                   } else {
@@ -99,9 +121,57 @@ namespace ebi
           return is_valid;
       }
 
+      std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap & synonyms_map,
+                                  size_t line_num,
+                                  RecordCore & record_core,
+                                  bioio::FastaIndex & fasta_index,
+                                  std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
+      {
+          std::vector<std::string> found_synonyms;
+
+          bool is_contig_available = synonyms_map.is_contig_available(record_core.chromosome);
+          if (!is_contig_available) {
+              throw std::runtime_error("Contig '" + record_core.chromosome + "' not found in assembly report");
+          }
+
+          auto & contig_synonyms = synonyms_map.get_contig_synonyms(record_core.chromosome);
+          for (auto contig : contig_synonyms) {
+              if (fasta_index.count(contig) != 0) {
+                  found_synonyms.push_back(contig);
+              }
+          }
+
+          if (found_synonyms.size() == 0) {
+              report_missing_chromosome(line_num, record_core, outputs);
+          } else if (found_synonyms.size() > 1) {
+              report_multiple_synonym_match(line_num, record_core, found_synonyms, outputs);
+          }
+
+          return found_synonyms;
+      }
+
+      void report_multiple_synonym_match(size_t line_num,
+                                         RecordCore & record_core,
+                                         std::vector<std::string> found_synonyms,
+                                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
+      {
+          std::string multiple_synonym_match_warning = "Line " + std::to_string(line_num)
+                    + ": Multiple synonyms " + " found for contig '"
+                    + record_core.chromosome + "' in FASTA index file: ";
+
+          for (auto contig : found_synonyms) {
+              multiple_synonym_match_warning += contig + " ";
+          }
+
+          for (auto & output : outputs) {
+              output->write_warning(multiple_synonym_match_warning);
+          }
+
+      }
+
       void report_missing_chromosome(size_t line_num,
-                                     RecordCore &record_core,
-                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+                                     RecordCore & record_core,
+                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
       {
           std::string missing_warning = "Line " + std::to_string(line_num)
               + ": Chromosome " + record_core.chromosome + " is not present in FASTA file";
@@ -111,11 +181,11 @@ namespace ebi
       }
 
       void report_telomere_position(size_t line_num,
-                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> &outputs)
+                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
       {
           std::string position_0_warning = "Line " + std::to_string(line_num)
               + ": Position 0 should only be used for a telomere";
-          for (auto &output : outputs ) {
+          for (auto & output : outputs ) {
               output->write_warning(position_0_warning);
           }
       }

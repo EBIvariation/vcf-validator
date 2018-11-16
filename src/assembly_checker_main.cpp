@@ -19,9 +19,10 @@
 
 #include "cmake_config.hpp"
 #include "util/cli_utils.hpp"
+#include "util/file_utils.hpp"
 #include "util/logger.hpp"
 #include "vcf/assembly_checker.hpp"
-#include "vcf/assembly_report_writer.hpp"
+#include "vcf/assembly_check_report_writer.hpp"
 #include "vcf/string_constants.hpp"
 
 namespace
@@ -39,7 +40,8 @@ namespace
             (ebi::vcf::HELP_OPTION, "Display this help")
             (ebi::vcf::VERSION_OPTION, "Display version of the assembly checker")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
-            (ebi::vcf::FASTA_OPTION, po::value<std::string>(), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .idx extension")
+            (ebi::vcf::FASTA_OPTION, po::value<std::string>(), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .fai extension")
+            (ebi::vcf::ASSEMBLY_REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::NO_MAPPING), "Path to the input assembly report used for contig synonym mapping")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, valid)")
             (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Output directory")
         ;
@@ -74,7 +76,7 @@ namespace
         return 0;
     }
 
-    std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> get_outputs(std::string const &output_str,
+    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> get_outputs(std::string const &output_str,
                                                                              std::string const &input)
     {
         std::vector<std::string> outs;
@@ -87,7 +89,7 @@ namespace
             BOOST_LOG_TRIVIAL(warning) << "Duplicated outputs! Will write just once to each output specified by -r/--report";
         }
 
-        std::vector<std::unique_ptr<ebi::vcf::AssemblyReportWriter>> outputs;
+        std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> outputs;
 
         for (auto out : outs) {
             auto epoch = std::chrono::system_clock::now().time_since_epoch();
@@ -100,33 +102,22 @@ namespace
                 if (boost::filesystem::exists(file)) {
                     throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
-                outputs.emplace_back(new ebi::vcf::TextAssemblyReportWriter(filename));
+                outputs.emplace_back(new ebi::vcf::ValidAssemblyCheckReportWriter(filename));
             } else if (out == ebi::vcf::TEXT) {
                 std::string filename = input + ".text_assembly_report." + std::to_string(timestamp) + filetype;
                 boost::filesystem::path file{filename};
                 if (boost::filesystem::exists(file)) {
                     throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
                 }
-                outputs.emplace_back(new ebi::vcf::TextAssemblyReportWriter(filename));
+                outputs.emplace_back(new ebi::vcf::TextAssemblyCheckReportWriter(filename));
             } else if (out == ebi::vcf::SUMMARY) {
-                outputs.emplace_back(new ebi::vcf::SummaryAssemblyReportWriter());
+                outputs.emplace_back(new ebi::vcf::SummaryAssemblyCheckReportWriter());
             } else {
                 throw std::invalid_argument{"Please use only valid report types"};
             }
         }
 
         return outputs;
-    }
-
-    inline void open_file(std::ifstream & input,
-                          std::string path,
-                          std::ios_base::openmode mode = std::ios_base::in)
-    {
-        input.open(path,mode);
-        if (!input) {
-            std::string file_error_msg = "Couldn't open file " + path;
-            throw std::runtime_error{file_error_msg};
-        }
     }
 }
 
@@ -144,29 +135,30 @@ int main(int argc, char** argv)
     try {
         auto vcf_path = vm[ebi::vcf::INPUT].as<std::string>();
         auto fasta_path = vm[ebi::vcf::FASTA].as<std::string>();
-        auto fasta_index_path = fasta_path + ".fai";
+        auto assembly_report = vm[ebi::vcf::ASSEMBLY_REPORT].as<std::string>();
+        auto fasta_index_path = fasta_path + ebi::vcf::INDEX_EXT;
         auto outdir = ebi::util::get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), vcf_path);
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA file...";
         std::ifstream fasta_input;
-        open_file(fasta_input, fasta_path, std::ifstream::binary);
+        ebi::util::open_file(fasta_input, fasta_path, std::ifstream::binary);
 
         BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA index file...";
         std::ifstream fasta_index_input;
-        open_file(fasta_index_input, fasta_index_path, std::ifstream::binary);
+        ebi::util::open_file(fasta_index_input, fasta_index_path, std::ifstream::binary);
 
         bool is_valid;
         if (vcf_path == ebi::vcf::STDIN) {
             BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
-            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(std::cin, vcf_path, fasta_input, fasta_index_input,
-                                                                 outputs);
+            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(std::cin, vcf_path, fasta_input,
+                                                                    fasta_index_input, assembly_report, outputs);
         } else {
             BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
             std::ifstream vcf_input;
-            open_file(vcf_input, vcf_path);
-            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input, fasta_index_input,
-                                                                 outputs);
+            ebi::util::open_file(vcf_input, vcf_path);
+            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_input,
+                                                                    fasta_index_input, assembly_report, outputs);
         }
 
         return !is_valid; // A valid file returns an exit code 0
