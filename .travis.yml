@@ -12,8 +12,9 @@ cache:
 jobs:
   include:
 
+    - stage: "Compile and Test"
     # OS X Clang
-    - os: osx
+      os: osx
       osx_image: xcode9.3
       env: C_COMPILER=clang CXX_COMPILER=clang++
       before_install:
@@ -126,21 +127,31 @@ jobs:
             - libboost-log1.55-dev
             - ninja-build
 
-    - stage: "Linux release"
+    - stage: "Release Builds"
+      # OSX Release
+      os: osx
+      osx_image: xcode9.3
+      env: C_COMPILER=clang CXX_COMPILER=clang++
+      before_install:
+        - brew install ninja
+      if: tag IS present
       deploy:
         provider: releases
         api_key: $GITHUB_TOKEN
         file:
-            - bin/vcf_validator_linux
-            - bin/vcf_debugulator_linux
-            - bin/vcf_assembly_checker_linux
+            - bin/vcf_validator_macos
+            - bin/vcf_debugulator_macos
+            - bin/vcf_assembly_checker_macos
         skip_cleanup: true
         on:
             repo: EBIvariation/vcf-validator
             tags: true
-      os: linux
+
+      # Linux Release
+    - os: linux
       compiler: gcc
       env: C_COMPILER=gcc-6 CXX_COMPILER=g++-6
+      if: tag IS present
       addons:
         apt:
           sources:
@@ -156,23 +167,17 @@ jobs:
             - libboost-regex1.55-dev
             - libboost-log1.55-dev
             - ninja-build
-    - stage: "Mac release"
       deploy:
         provider: releases
         api_key: $GITHUB_TOKEN
         file:
-            - bin/vcf_validator_macos
-            - bin/vcf_debugulator_macos
-            - bin/vcf_assembly_checker_macos
+            - bin/vcf_validator_linux
+            - bin/vcf_debugulator_linux
+            - bin/vcf_assembly_checker_linux
         skip_cleanup: true
         on:
             repo: EBIvariation/vcf-validator
             tags: true
-      os: osx
-      osx_image: xcode9.3
-      env: C_COMPILER=clang CXX_COMPILER=clang++
-      before_install:
-        - brew install ninja
 
 
 before_script:
