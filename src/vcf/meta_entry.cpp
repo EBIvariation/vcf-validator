@@ -138,7 +138,8 @@ namespace ebi
                 && main_type != INS
                 && main_type != DUP
                 && main_type != INV
-                && main_type != CNV) {
+                && main_type != CNV
+                && main_type != BND) {
                 throw new MetaSectionError{entry.line, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV"};
             }
         }

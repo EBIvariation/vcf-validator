@@ -205,7 +205,8 @@ namespace ebi
                     && main_type != INS
                     && main_type != DUP
                     && main_type != INV
-                    && main_type != CNV) {
+                    && main_type != CNV
+                    && main_type != BND) {
                     throw new AlternateAllelesBodyError{line,
                                                         "Alternate ID is not prefixed by DEL/INS/DUP/INV/CNV and "
                                                         "suffixed by ':' and a text sequence"};

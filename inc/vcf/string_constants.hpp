@@ -106,6 +106,7 @@ namespace ebi
     const std::string PASS = "PASS";
 
     // ALT for structural variants
+    const std::string BND = "BND";
     const std::string CNV = "CNV";
     const std::string DEL = "DEL";
     const std::string DUP = "DUP";
