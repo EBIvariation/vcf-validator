@@ -159,7 +159,7 @@ namespace ebi
         }
         std::string complete_message = message.str();
         complete_message.pop_back();
-        complete_message[complete_message.size() - 1] = '.';
+        complete_message.pop_back();
         return complete_message;
     }
 

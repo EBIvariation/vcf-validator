@@ -129,17 +129,19 @@ namespace ebi
 
     void MetaEntryVisitor::check_alt_id(std::string const & id_field) const
     {
-        // Check ID prefix is "DEL" | "INS" | "DUP" | "INV" | "CNV"
-        size_t pos = id_field.find(':');
-        // If a colon was not found, check whole string
-        // Otherwise, check substring before colon
-        std::string prefix = (pos == std::string::npos) ? id_field : id_field.substr(0, pos);
-        if (prefix != DEL && 
-            prefix != INS && 
-            prefix != DUP && 
-            prefix != INV && 
-            prefix != CNV) {
-            throw new MetaSectionError{entry.line, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV"};
+        // Check ID main type (prefix before ':') is "DEL" | "INS" | "DUP" | "INV" | "CNV"
+        auto main_type_position_end = id_field.find(':');
+        bool colon_present = main_type_position_end != std::string::npos;
+        if (colon_present) {
+            auto main_type = id_field.substr(0, main_type_position_end);
+            if (main_type != DEL
+                && main_type != INS
+                && main_type != DUP
+                && main_type != INV
+                && main_type != CNV
+                && main_type != BND) {
+                throw new MetaSectionError{entry.line, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV"};
+            }
         }
     }
 

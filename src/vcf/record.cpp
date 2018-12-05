@@ -191,18 +191,26 @@ namespace ebi
 
     void Record::check_alternate_allele_symbolic_prefix(std::string const & alternate) const
     {
-        static boost::regex square_brackets_regex("<([a-zA-Z0-9:_]+)>");
+        static boost::regex angle_brackets_regex("<([^>]+)>");
         boost::cmatch pieces_match;
 
-        if (alternate[0] == '<' && boost::regex_match(alternate.c_str(), pieces_match, square_brackets_regex)) {
+        if (alternate[0] == '<' && boost::regex_match(alternate.c_str(), pieces_match, angle_brackets_regex)) {
             std::string alt_id = pieces_match[1];
-            if (!boost::starts_with(alt_id, DEL) &&
-                !boost::starts_with(alt_id, INS) &&
-                !boost::starts_with(alt_id, DUP) &&
-                !boost::starts_with(alt_id, INV) &&
-                !boost::starts_with(alt_id, CNV)) {
-                throw new AlternateAllelesBodyError{line,
-                        "Alternate ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"};
+            // Check ID prefix is "DEL" | "INS" | "DUP" | "INV" | "CNV"
+            auto main_type_position_end = alt_id.find(':');
+            bool colon_present = main_type_position_end != std::string::npos;
+            if (colon_present) {
+                auto main_type = alt_id.substr(0, main_type_position_end);
+                if (main_type != DEL
+                    && main_type != INS
+                    && main_type != DUP
+                    && main_type != INV
+                    && main_type != CNV
+                    && main_type != BND) {
+                    throw new AlternateAllelesBodyError{line,
+                                                        "Alternate ID is not prefixed by DEL/INS/DUP/INV/CNV and "
+                                                        "suffixed by ':' and a text sequence"};
+                }
             }
         }
     }

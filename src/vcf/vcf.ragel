@@ -514,10 +514,11 @@
     record_alt_snv  = bases ;
     
     ## Indel alternates can be represented by standardized prefixes or an asterisk
-    record_alt_indel= '<DEL>' | '<INS>' | '<DUP>' | '<INV>' | '<CNV>' | '<DUP:TANDEM>' | '<DEL:ME:' (alnum)+ '>' | '<INS:ME:' (alnum)+ '>' | '*';
+    record_alt_prefix = '<DEL>' | '<INS>' | '<DUP>' | '<INV>' | '<CNV>' | '<DUP:TANDEM>' | '<DEL:ME:' (alnum)+ '>' | '<INS:ME:' (alnum)+ '>';
+    record_alt_indel = record_alt_prefix | '*';
 
     ## Other alternates can be any identifier surrounded by < > symbols
-    record_alt_other= ('<' alt_id '>') - ('<DEL>' | '<INS>' | '<DUP>' | '<INV>' | '<CNV>' | '<DUP:TANDEM>' | '<DEL:ME:' (alnum)+ '>' | '<INS:ME:' (alnum)+ '>');
+    record_alt_other = ('<' alt_id '>') - record_alt_prefix;
 
     record_fil_value= ((alnum | punct - ';')+ - (punct)+) >token_begin @token_middle %token_end ;
 
