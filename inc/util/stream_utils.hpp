@@ -109,7 +109,7 @@ namespace ebi
      * This is a generic method that prints a collection if it has the operations ".begin()" and ".end()"
      * defined and they provide iterators, and the inner type has an overloaded "operator<<"
      *
-     * provides the default open/close/separator tags to print collections like this: [2,4]
+     * provides the default open/close/separator tags to print collections like this: [2, 4]
      */
     template <typename T>
     std::ostream &print_container(std::ostream &os, const T &container) {

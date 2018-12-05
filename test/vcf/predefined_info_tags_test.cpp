@@ -694,6 +694,20 @@ namespace ebi
                             { "0|1" },
                             source}),
                         vcf::InfoBodyError*);
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVTYPE, "UNK"} },
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
 
             CHECK_THROWS_AS( (vcf::Record{
                             1,
