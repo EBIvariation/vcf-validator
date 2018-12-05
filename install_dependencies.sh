@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 
 help_install_dependencies="Usage:
 ./install_dependencies.sh [os_name]         default OS is linux
@@ -15,6 +16,7 @@ it installs the given dependencies:
   - odb sqlite runtime library              libodb-sqlite-2.4.0
   - bzip library                            bzip2-1.0.6
   - zlib library                            zlib-1.2.11
+  - curl library                            curl-7.62.0
 
 for linux:
 ./install_dependencies.sh linux
@@ -86,6 +88,22 @@ wget http://prdownloads.sourceforge.net/libpng/zlib-1.2.11.tar.gz?download -O /t
 tar zxvf /tmp/libz.tar.gz
 cd zlib-1.2.11 && cmake . && make && cd ..
 
+echo "installing libcurl"
+dependencies_dir_abs_path=`pwd`
+mkdir openssl
+wget https://www.openssl.org/source/openssl-1.0.2p.tar.gz -O /tmp/openssl-1.0.2p.tar.gz
+tar xzf /tmp/openssl-1.0.2p.tar.gz
+cd openssl-1.0.2p
+export KERNEL_BITS=64
+./config shared no-ssl2 no-ssl3 enable-ec_nistp_64_gcc_128 --prefix=$dependencies_dir_abs_path/openssl --openssldir=$dependencies_dir_abs_path/openssl
+make depend && make && make install && cd ..
+
+mkdir curl
+wget https://curl.haxx.se/download/curl-7.62.0.tar.gz -O /tmp/curl-7.62.0.tar.gz
+tar zxvf /tmp/curl-7.62.0.tar.gz
+cd curl-7.62.0
+./configure --enable-shared --with-ssl=$dependencies_dir_abs_path/openssl --prefix=$dependencies_dir_abs_path/curl
+make && make install && cd ..
 
 # Make easier to find the static libraries
 cp libodb-2.4.0/odb/.libs/libodb.a .

@@ -138,11 +138,13 @@ add_library (mod_odb STATIC ${MOD_ODB_SOURCES})
 target_link_libraries (mod_odb ${THIRD_PARTY_LIBRARIES})
 
 set (MOD_VCF_SOURCES
+  inc/util/curl_easy.hpp
   inc/vcf/assembly_checker.hpp
   inc/vcf/assembly_check_report_writer.hpp
   inc/vcf/compression.hpp
   inc/vcf/debugulator.hpp
   inc/vcf/error_policy.hpp
+  inc/vcf/fasta.hpp
   inc/vcf/file_structure.hpp
   inc/vcf/fixer.hpp
   inc/vcf/meta_entry_visitor.hpp
@@ -162,10 +164,12 @@ set (MOD_VCF_SOURCES
   inc/vcf/validator_detail_v43.hpp
   inc/vcf/validator.hpp
 
+  src/util/curl_easy.cpp
   src/vcf/abort_error_policy.cpp
   src/vcf/assembly_checker.cpp
   src/vcf/compression.cpp
   src/vcf/debugulator.cpp
+  src/vcf/fasta.cpp
   src/vcf/fixer.cpp
   src/vcf/meta_entry.cpp
   src/vcf/normalizer.cpp
@@ -188,6 +192,7 @@ if (LINUX OR OSX)
   set (LIBRARIES_TO_LINK
     mod_vcf
     mod_odb
+    ${EXT_LIB_PATH}/curl/lib/libcurl.dylib
     ${Boost_LIBRARIES}
     ${EXT_LIB_PATH}/libbz2.a
     ${EXT_LIB_PATH}/libz.a

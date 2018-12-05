@@ -19,6 +19,7 @@
 
 #include <chrono>
 #include <fstream>
+#include <memory>
 #include <set>
 #include <vector>
 
@@ -30,6 +31,7 @@
 
 #include "bioio/bioio.hpp"
 
+#include "fasta.hpp"
 #include "util/file_utils.hpp"
 #include "util/logger.hpp"
 #include "util/stream_utils.hpp"
@@ -53,16 +55,14 @@ namespace ebi
 
       bool check_vcf_ref(std::istream & vcf_input,
                          const std::string & sourceName,
-                         std::istream & fasta_input,
-                         std::istream & fasta_index_input,
+                         std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
                          const std::string & assembly_report,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
       bool process_vcf_ref(std::istream & vcf_input,
-                         std::istream & fasta_input,
-                         std::istream & fasta_index_input,
-                         const std::string & assembly_report,
-                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
+                          std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
+                          const std::string & assembly_report,
+                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
       bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence);
 
@@ -72,7 +72,7 @@ namespace ebi
       std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap & synonyms_map,
                                   size_t line_num,
                                   RecordCore & record_core,
-                                  bioio::FastaIndex & fasta_index,
+                                  const std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
                                   std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
       void report_multiple_synonym_match(size_t line_num,

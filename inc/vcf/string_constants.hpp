@@ -183,6 +183,7 @@ namespace ebi
     // File extensions
     const std::string VCF_EXT = ".vcf";
     const std::string FASTA_EXT = ".fa";
+    const std::string FASTA_GZ_EXT = ".fa.gz";
     const std::string INDEX_EXT = ".fai";
     const std::string VCF_GZ_EXT = ".vcf.gz";
     const std::string VCF_BZ2_EXT = ".vcf.bz2";
@@ -198,6 +199,15 @@ namespace ebi
     const std::string ZIP = ".zip";
     const std::string ZLIB = ".z";
 
+    // Network protocols
+    const std::string HTTP = "http://";
+    const std::string HTTPS = "https://";
+    const std::string FTP = "ftp://";
+    const std::string FTPS = "ftps://";
+
+    // ENA REST API for remote fasta access
+    const std::string ENA_API_URL = "https://www.ebi.ac.uk/ena/data/view/";
+    const std::string ENA_API_FASTA_FORMAT = "display=fasta";
   }
 }
 
