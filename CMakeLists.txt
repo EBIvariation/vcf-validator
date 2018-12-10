@@ -53,6 +53,8 @@ else ()
   endif()
 endif ()
 
+include_directories (${EXT_LIB_PATH}/curl/include)
+include_directories (${EXT_LIB_PATH}/openssl/include)
 
 # Compiler and linkers flags
 if (LINUX)
