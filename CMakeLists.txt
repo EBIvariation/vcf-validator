@@ -192,13 +192,16 @@ if (LINUX OR OSX)
   set (LIBRARIES_TO_LINK
     mod_vcf
     mod_odb
-    ${EXT_LIB_PATH}/curl/lib/libcurl.dylib
+    ${EXT_LIB_PATH}/curl/lib/libcurl.a
+    ${EXT_LIB_PATH}/openssl/lib/libssl.a
+    ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
     ${Boost_LIBRARIES}
     ${EXT_LIB_PATH}/libbz2.a
     ${EXT_LIB_PATH}/libz.a
     ${EXT_LIB_PATH}/libodb-sqlite.a
     ${EXT_LIB_PATH}/libodb.a
     mod_sqlite3
+    dl
     ${CMAKE_THREAD_LIBS_INIT}
   )
 elseif (WINDOWS)

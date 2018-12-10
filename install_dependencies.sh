@@ -17,6 +17,7 @@ it installs the given dependencies:
   - bzip library                            bzip2-1.0.6
   - zlib library                            zlib-1.2.11
   - curl library                            curl-7.62.0
+  - openssl library                         openssl-1.1.1a
 
 for linux:
 ./install_dependencies.sh linux
@@ -91,18 +92,17 @@ cd zlib-1.2.11 && cmake . && make && cd ..
 echo "installing libcurl"
 dependencies_dir_abs_path=`pwd`
 mkdir openssl
-wget https://www.openssl.org/source/openssl-1.0.2p.tar.gz -O /tmp/openssl-1.0.2p.tar.gz
-tar xzf /tmp/openssl-1.0.2p.tar.gz
-cd openssl-1.0.2p
-export KERNEL_BITS=64
-./config shared no-ssl2 no-ssl3 enable-ec_nistp_64_gcc_128 --prefix=$dependencies_dir_abs_path/openssl --openssldir=$dependencies_dir_abs_path/openssl
-make depend && make && make install && cd ..
+wget https://www.openssl.org/source/openssl-1.1.1a.tar.gz -O /tmp/openssl-1.1.1a.tar.gz
+tar xzf /tmp/openssl-1.1.1a.tar.gz
+cd openssl-1.1.1a
+LIBS="-lcrypto -ldl" ./config -fPIC no-shared no-threads --prefix=$dependencies_dir_abs_path/openssl --openssldir=$dependencies_dir_abs_path/openssl
+make && make install_sw && cd ..
 
 mkdir curl
 wget https://curl.haxx.se/download/curl-7.62.0.tar.gz -O /tmp/curl-7.62.0.tar.gz
 tar zxvf /tmp/curl-7.62.0.tar.gz
 cd curl-7.62.0
-./configure --enable-shared --with-ssl=$dependencies_dir_abs_path/openssl --prefix=$dependencies_dir_abs_path/curl
+LDFLAGS="-L$dependencies_dir_abs_path/openssl/lib" CPPFLAGS="-I$dependencies_dir_abs_path/openssl/include" LIBS="-lssl -lcrypto -ldl" ./configure --disable-shared --enable-static --without-librtmp --without-ca-bundle --disable-ldap --without-zlib --disable-pthreads --disable-threaded-resolver --with-ssl=$dependencies_dir_abs_path/openssl --prefix=$dependencies_dir_abs_path/curl
 make && make install && cd ..
 
 # Make easier to find the static libraries
