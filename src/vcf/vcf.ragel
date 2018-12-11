@@ -262,7 +262,7 @@
 
     action meta_alt_id_err {
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines,
-            "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV and suffixed by ':' and a text sequence"});
+            "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV/BND and suffixed by ':' and a text sequence"});
         fhold; fgoto meta_section_skip;
     }
     
@@ -514,7 +514,7 @@
     record_alt_snv  = bases ;
     
     ## Indel alternates can be represented by standardized prefixes or an asterisk
-    record_alt_prefix = '<DEL>' | '<INS>' | '<DUP>' | '<INV>' | '<CNV>' | '<DUP:TANDEM>' | '<DEL:ME:' (alnum)+ '>' | '<INS:ME:' (alnum)+ '>';
+    record_alt_prefix = '<DEL>' | '<INS>' | '<DUP>' | '<INV>' | '<CNV>' | '<BND>' | '<DUP:TANDEM>' | '<DEL:ME:' (alnum)+ '>' | '<INS:ME:' (alnum)+ '>';
     record_alt_indel = record_alt_prefix | '*';
 
     ## Other alternates can be any identifier surrounded by < > symbols

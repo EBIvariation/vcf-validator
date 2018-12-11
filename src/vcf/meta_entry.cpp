@@ -129,18 +129,17 @@ namespace ebi
 
     void MetaEntryVisitor::check_alt_id(std::string const & id_field) const
     {
-        // Check ID main type (prefix before ':') is "DEL" | "INS" | "DUP" | "INV" | "CNV"
+        // Check ID main type (prefix before ':') is one of the predefined ones
         auto main_type_position_end = id_field.find(':');
         bool colon_present = main_type_position_end != std::string::npos;
         if (colon_present) {
             auto main_type = id_field.substr(0, main_type_position_end);
-            if (main_type != DEL
-                && main_type != INS
-                && main_type != DUP
-                && main_type != INV
-                && main_type != CNV
-                && main_type != BND) {
-                throw new MetaSectionError{entry.line, "ALT metadata ID does not begin with DEL/INS/DUP/INV/CNV"};
+            if (!ebi::util::contains(PREDEFINED_INFO_SVTYPES, main_type)) {
+                std::stringstream message;
+                message << "In ALT metadata IDs containing colon-separated type and subtypes, the top level type "
+                            "must be one of: ";
+                ebi::util::print_container(message, PREDEFINED_INFO_SVTYPES, "", ", ", "");
+                throw new MetaSectionError{entry.line, message.str(), "Found ID was '" + id_field + "'"};
             }
         }
     }

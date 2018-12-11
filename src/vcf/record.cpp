@@ -19,6 +19,7 @@
 #include <iostream>
 
 #include "util/algo_utils.hpp"
+#include "util/stream_utils.hpp"
 #include "util/logger.hpp"
 #include "vcf/file_structure.hpp"
 #include "vcf/record.hpp"
@@ -201,15 +202,12 @@ namespace ebi
             bool colon_present = main_type_position_end != std::string::npos;
             if (colon_present) {
                 auto main_type = alt_id.substr(0, main_type_position_end);
-                if (main_type != DEL
-                    && main_type != INS
-                    && main_type != DUP
-                    && main_type != INV
-                    && main_type != CNV
-                    && main_type != BND) {
-                    throw new AlternateAllelesBodyError{line,
-                                                        "Alternate ID is not prefixed by DEL/INS/DUP/INV/CNV and "
-                                                        "suffixed by ':' and a text sequence"};
+                if (!ebi::util::contains(PREDEFINED_INFO_SVTYPES, main_type)) {
+                    std::stringstream message;
+                    message << "In ALT metadata IDs containing colon-separated type and subtypes, the top level type "
+                               "must be one of: ";
+                    ebi::util::print_container(message, PREDEFINED_INFO_SVTYPES, "", ", ", "");
+                    throw new AlternateAllelesBodyError{line, message.str(), "Found ID was '" + alt_id + "'"};
                 }
             }
         }
@@ -432,6 +430,13 @@ namespace ebi
                         }
                     }
                 }
+            }
+        } else if (field_key == SVTYPE) {
+            if (!ebi::util::contains(PREDEFINED_INFO_SVTYPES, field_value)) {
+                std::stringstream message;
+                message << "INFO " << SVTYPE << " must be one of: ";
+                ebi::util::print_container(message, PREDEFINED_INFO_SVTYPES, "", ", ", "");
+                throw new InfoBodyError{line, message.str(), "Found " + SVTYPE + " was '" + field_value + "'"};
             }
         }
     }

@@ -26,6 +26,7 @@
 #include <vector>
 
 #include <boost/variant.hpp>
+#include <set>
 
 #include "util/stream_utils.hpp"
 #include "vcf/error.hpp"
@@ -203,6 +204,15 @@ namespace ebi
             { PL, { INTEGER, G } },
             { PQ, { INTEGER, "1" } },
             { PS, { INTEGER, "1" } }
+    };
+
+    const std::set<std::string> PREDEFINED_INFO_SVTYPES{
+            DEL,
+            INS,
+            DUP,
+            INV,
+            CNV,
+            BND,
     };
 
     inline std::string const &get_predefined_type(

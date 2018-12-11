@@ -150,9 +150,20 @@ namespace ebi
                          ErrorFix error_fix = ErrorFix::IRRECOVERABLE_VALUE,
                          const std::string &value = "",
                          const std::string &expected_value = "")
-                : Error{line, message}, error_fix{error_fix}, value{value}, expected_value{expected_value} {
+                : MetaSectionError{line, message, "", error_fix, value, expected_value} { }
+
+        MetaSectionError(size_t line,
+                         const std::string &message,
+                         const std::string &detailed_message,
+                         ErrorFix error_fix = ErrorFix::IRRECOVERABLE_VALUE,
+                         const std::string &value = "",
+                         const std::string &expected_value = "")
+                : Error{line, message, detailed_message},
+                error_fix{error_fix},
+                value{value},
+                expected_value{expected_value} {
                     if (error_fix == ErrorFix::RECOVERABLE_VALUE && (value.empty() || expected_value.empty())) {
-                        throw std::invalid_argument("An error with recoverable meta defintion must provide non-empty field and expected values");
+                        throw std::invalid_argument("An internal error occurred: Errors with recoverable meta definition must provide non-empty field and expected values");
                     }
                 }
         virtual ~MetaSectionError() override { }
@@ -290,9 +301,12 @@ namespace ebi
                       ErrorFix error_fix = ErrorFix::IRRECOVERABLE_VALUE,
                       const std::string &field = "",
                       const std::string &expected_value = "")
-                : BodySectionError{line, message}, error_fix{error_fix}, field{field}, expected_value{expected_value} {
+                : BodySectionError{line, message, detailed_message},
+                error_fix{error_fix},
+                field{field},
+                expected_value{expected_value} {
                     if (error_fix == ErrorFix::RECOVERABLE_VALUE && expected_value.empty()) {
-                        throw std::invalid_argument{"The program had an internal error: An error with recoverable value must provide a non-empty expected value"};
+                        throw std::invalid_argument{"An internal error occurred: Errors with recoverable value must provide a non-empty expected value"};
                     }
                 }
         virtual ~InfoBodyError() override { }
