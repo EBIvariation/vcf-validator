@@ -136,8 +136,8 @@ namespace ebi
             auto main_type = id_field.substr(0, main_type_position_end);
             if (!ebi::util::contains(PREDEFINED_INFO_SVTYPES, main_type)) {
                 std::stringstream message;
-                message << "ALT metadata ID containing type and subtype (separated by colon) should have as "
-                           "first level type one of: ";
+                message << "In ALT metadata IDs containing colon-separated type and subtypes, the top level type "
+                            "must be one of: ";
                 ebi::util::print_container(message, PREDEFINED_INFO_SVTYPES, "", ", ", "");
                 throw new MetaSectionError{entry.line, message.str(), "Found ID was '" + id_field + "'"};
             }

@@ -163,7 +163,7 @@ namespace ebi
                 value{value},
                 expected_value{expected_value} {
                     if (error_fix == ErrorFix::RECOVERABLE_VALUE && (value.empty() || expected_value.empty())) {
-                        throw std::invalid_argument("An error with recoverable meta defintion must provide non-empty field and expected values");
+                        throw std::invalid_argument("An internal error occurred: Errors with recoverable meta definition must provide non-empty field and expected values");
                     }
                 }
         virtual ~MetaSectionError() override { }
@@ -306,7 +306,7 @@ namespace ebi
                 field{field},
                 expected_value{expected_value} {
                     if (error_fix == ErrorFix::RECOVERABLE_VALUE && expected_value.empty()) {
-                        throw std::invalid_argument{"The program had an internal error: An error with recoverable value must provide a non-empty expected value"};
+                        throw std::invalid_argument{"An internal error occurred: Errors with recoverable value must provide a non-empty expected value"};
                     }
                 }
         virtual ~InfoBodyError() override { }
