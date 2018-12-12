@@ -32,6 +32,7 @@ ebi::util::curl::Easy::Easy() {
   curl_global_init(CURL_GLOBAL_DEFAULT);
   curlHandle = curl_easy_init();
   if ( curlHandle ) {
+    curl_easy_setopt(curlHandle, CURLOPT_VERBOSE, 1L); // TODO: remove this
     curl_easy_setopt(curlHandle, CURLOPT_SSL_VERIFYPEER, 0L);
     curl_easy_setopt(curlHandle, CURLOPT_SSL_VERIFYHOST, 0L);
     curl_easy_setopt(curlHandle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
