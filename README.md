@@ -1,23 +1,18 @@
-# vcf-validator
+# vcf-validator | [![Build Status](https://travis-ci.com/EBIvariation/vcf-validator.svg?branch=master)](https://travis-ci.com/EBIvariation/vcf-validator) [![Build status](https://ci.appveyor.com/api/projects/status/vt4ldlwhm91e3n49/branch/master?svg=true)](https://ci.appveyor.com/project/ebivariation-bot/vcf-validator/branch/master)
 
-Branch | Linux / macOS | Windows
-:----: | :-----------: | :-----:
-Master | [![Build Status](https://travis-ci.org/EBIvariation/vcf-validator.svg?branch=master)](https://travis-ci.org/EBIvariation/vcf-validator) | [![Build status](https://ci.appveyor.com/api/projects/status/vt4ldlwhm91e3n49/branch/master?svg=true)](https://ci.appveyor.com/project/ebivariation-bot/vcf-validator/branch/master)
-Develop | [![Build Status](https://travis-ci.org/EBIvariation/vcf-validator.svg?branch=develop)](https://travis-ci.org/EBIvariation/vcf-validator) | [![Build status](https://ci.appveyor.com/api/projects/status/vt4ldlwhm91e3n49/branch/develop?svg=true)](https://ci.appveyor.com/project/ebivariation-bot/vcf-validator/branch/develop)
+Validation suite for Variant Call Format (VCF) files. Please find below instructions on how to download and run, or read the wiki for more details about checks already implemented.
 
-Validator for the Variant Call Format (VCF) implemented using C++11.
-
-It includes all the checks from the vcftools suite as well as additional lexical, syntactic and semantic analysis of the VCF input. If any inconsistencies are found, they are classified in one of the following categories:
+This suite includes all the checks from the vcftools suite as well as additional lexical, syntactic and semantic analysis of the VCF input. If any inconsistencies are found, they are classified in one of the following categories:
 
 * Errors: Violations of the VCF specification
-* Warnings: An indication that something weird happened (commas were used instead of colons to split ids) or a recommendation is not followed (missing meta-data)
+* Warnings: A recommendation is not followed or potentially wrong information appears in the file
 
-Please read the wiki for more details about checks already implemented.
+These tools have been implemented using C++11.
 
 
 ## Download
 
-We recommend using the [latest release](https://github.com/EBIvariation/vcf-validator/releases) for the most stable experience using vcf-validator. Along with the release notes, you will find the executables `vcf_validator` and `vcf_debugulator`, which allow to validate and fix VCF files. Executables for Linux, macOS and Windows are available.
+We recommend using the [latest release](https://github.com/EBIvariation/vcf-validator/releases) for the most stable experience using vcf-validator. Along with the release notes, you will find the executables `vcf_validator`, `vcf_assembly_checker` and `vcf_debugulator` for Linux, macOS and Windows.
 
 
 ## Run
