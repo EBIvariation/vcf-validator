@@ -584,7 +584,7 @@ namespace ebi
                                                           std::vector<std::string> const & values) const
     {
         std::string message = "Sample #" + std::to_string(i + 1) + ", " + field_key + "=" + field_value + " value";
-        if ((field_key == GP || field_key == CNP) && source->version == Version::v43)) {
+        if ((field_key == GP || field_key == CNP) && source->version == Version::v43) {
             for (auto & value : values) {
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
                     throw new SamplesFieldBodyError{line, message + " does not lie in the interval [0,1]", "", field_key};
