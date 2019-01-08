@@ -56,7 +56,6 @@ namespace ebi
         vector_line.reserve(default_line_buffer_size);
 
         if (!(fasta.get())) { // No local/remote fasta file provided
-          std::string reference_remote_location;
           std::string reference_accession;
           std::vector<std::string> contigs;
 
@@ -75,11 +74,10 @@ namespace ebi
               if (metadata.size() >= 2) {
                 std::string reference_value = metadata[1];
                 ebi::util::remove_end_of_line(reference_value);
-                if (ebi::util::is_remote_url(reference_value)) {
-                  reference_remote_location = reference_value;
-                } else if (!boost::ends_with(reference_value, ebi::vcf::GZ) &&
-                           !boost::ends_with(reference_value, ebi::vcf::FASTA) &&
-                           !boost::ends_with(reference_value, ebi::vcf::FASTA_EXT)) {
+                if (!ebi::util::is_remote_url(reference_value) &&
+                    !boost::ends_with(reference_value, ebi::vcf::GZ) &&
+                    !boost::ends_with(reference_value, ebi::vcf::FASTA) &&
+                    !boost::ends_with(reference_value, ebi::vcf::FASTA_EXT)) {
                   //does not look like a fasta file name, try it as an accession.
                   reference_accession = reference_value;
                 }
@@ -102,13 +100,6 @@ namespace ebi
                 }
               }
             }
-          }
-
-          // Now try first with remote file location
-          if ( !reference_remote_location.empty() ) {
-            std::string reference_index_remote_location = reference_remote_location + ebi::vcf::INDEX_EXT;
-            fasta.reset(new ebi::vcf::fasta::FileBasedFasta(reference_remote_location, reference_index_remote_location));
-            return process_vcf_records(vcf_input, fasta, assembly_report, outputs);
           }
 
           fasta.reset(new ebi::vcf::fasta::RemoteContig());

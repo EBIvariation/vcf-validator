@@ -29,41 +29,10 @@
 #include "vcf/fasta.hpp"
 #include "vcf/string_constants.hpp"
 
-std::shared_ptr<std::istream> create_gunzipped_stream(std::shared_ptr<std::istream> stream) {
-  std::shared_ptr<std::stringstream> ss(new std::stringstream());
-  try {
-    boost::iostreams::filtering_istream decompressedStream;
-    ebi::vcf::create_uncompressed_stream(*stream, ebi::vcf::GZ, decompressedStream);
-    boost::iostreams::copy(decompressedStream, *ss);
-  } catch (std::exception const &ex) {
-    BOOST_LOG_TRIVIAL(error) << ex.what();
-  }
-
-  return std::static_pointer_cast<std::istream>(ss);
-}
-
-std::shared_ptr<std::istream> create_decompressed_stream(std::shared_ptr<std::istream> stream) {
-  std::vector<char> line;
-  ebi::vcf::get_magic_num(*stream, line);
-  std::string file_extension = ebi::vcf::get_compression("", line);
-
-  if ( file_extension == ebi::vcf::GZ ) {
-    return create_gunzipped_stream(stream);
-  }
-
-  return stream;
-}
-
 std::shared_ptr<std::istream> create_input_stream(const std::string &path) {
-  if ( !ebi::util::is_remote_url(path) ) {
-    std::shared_ptr<std::ifstream> fstream(new std::ifstream());
-    ebi::util::open_local(*fstream, path, std::ifstream::binary);
-    return create_decompressed_stream(std::static_pointer_cast<std::istream>(fstream));
-  }
-
-  std::shared_ptr<std::stringstream> sstream(new std::stringstream());
-  ebi::util::open_remote(*sstream, path);
-  return create_decompressed_stream(std::static_pointer_cast<std::istream>(sstream));
+  std::shared_ptr<std::ifstream> fstream(new std::ifstream());
+  ebi::util::open_local(*fstream, path, std::ifstream::binary);
+  return std::static_pointer_cast<std::istream>(fstream);
 }
 
 ebi::vcf::fasta::FileBasedFasta::FileBasedFasta(const std::string& fasta_path, const std::string& fasta_index_path)
