@@ -63,6 +63,38 @@ namespace ebi
         return container;
     }
 
+    /**
+     * Read n characters from the input stream and returns the string read.
+     *
+     * @tparam Container any container type that implements clear() and push_back(char) methods
+     * @param stream input stream that will be consumed
+     * @param container will be cleared and filled with the string from the offset stream position from the beginning
+     * until n characters are read or the end of stream is reached
+     * @param n the number of characters to be read. Note the returned container may contain less than n characters
+     * @param off the offset value, relative to the way parameter
+     * @param way the position the offset is relative to
+     * @return
+     */
+    template <typename Container>
+    Container &read_n(std::istream & stream, Container & container, const std::streamsize n,
+            const std::streamoff off = 0, std::ios_base::seekdir way = std::ios::beg)
+    {
+        char c;
+        container.clear();
+
+        stream.seekg(off, way);
+        std::streamsize count = 0;
+
+        // using operator bool: http://www.cplusplus.com/reference/ios/ios/fail/
+        // `stream.get()` sets failbit as well on eof
+        while (count < n && stream && stream.get(c)) {
+            container.push_back(c);
+            ++count;
+        }
+
+        return container;
+    }
+
     template <typename Container>
     std::ostream & writeline(std::ostream & stream, const Container & container)
     {

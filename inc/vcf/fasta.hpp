@@ -54,6 +54,8 @@ namespace ebi
         bioio::FastaIndex mFastaIndex;
       };
 
+      class ContigFromENA;
+
       class RemoteContig : public IFasta
       {
       public:
@@ -65,7 +67,7 @@ namespace ebi
 
       private:
         std::unique_ptr<ebi::util::curl::Easy> mCurl;
-        std::unordered_map<std::string, std::string> mContig;
+        std::unordered_map<std::string, std::shared_ptr<ContigFromENA>> mContig;
       };
     }
   }

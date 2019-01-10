@@ -17,6 +17,7 @@
 #include <memory>
 
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/filesystem/operations.hpp>
 #include <boost/iostreams/copy.hpp>
 
 #include "bioio/bioio.hpp"
@@ -58,10 +59,48 @@ ebi::vcf::fasta::RemoteContig::RemoteContig()
         : mCurl(new ebi::util::curl::Easy())
 {}
 
+class ebi::vcf::fasta::ContigFromENA {
+public:
+  ContigFromENA(const std::string& contigName) {
+    mContigName = contigName;
+    mFastaOutput.reset(new std::ofstream(mContigName));
+  }
+
+  ~ContigFromENA() {
+    mFastaOutput->close();
+    mFastaInput->close();
+    boost::filesystem::remove(mContigName);
+  }
+
+  size_t size() const {
+    return mLength;
+  }
+
+  void write(const char* buffer, const size_t length) {
+    mFastaOutput->write(buffer, length);
+    mLength += length;
+  }
+
+  std::string read(const size_t pos, const size_t length) {
+    if ( !mFastaInput.get() ) {
+      mFastaInput.reset(new std::ifstream(mContigName, std::ios_base::in));
+    }
+
+    std::string result;
+    return ebi::util::read_n(*mFastaInput, result, length, pos);
+  }
+
+private:
+  size_t mLength;
+  std::string mContigName;
+  std::unique_ptr<std::ifstream> mFastaInput;
+  std::unique_ptr<std::ofstream> mFastaOutput;
+};
+
 std::string
 ebi::vcf::fasta::RemoteContig::sequence(const std::string& contig, const size_t pos, const size_t length) {
   if ( mContig.count(contig) == 0 ) {
-    mContig[contig] = "";
+    mContig[contig].reset(new ebi::vcf::fasta::ContigFromENA(contig));
 
     // This contig is not downloaded, try download it from ENA.
     if (contig.size() < 6) { // don't trust short contig names.
@@ -73,25 +112,23 @@ ebi::vcf::fasta::RemoteContig::sequence(const std::string& contig, const size_t 
     std::stringstream ss;
     ebi::util::open_remote(ss, url);
 
-    std::vector<char> vector_line;
-    vector_line.reserve(1024);
-    if (ebi::util::readline(ss, vector_line).size() != 0) {
-      std::string line{vector_line.begin(), vector_line.end()};
+    std::string line;
+    line.reserve(1024);
+    if (ebi::util::readline(ss, line).size() != 0) {
       if (boost::starts_with(line, ">")) {
-        std::string seq;
-        while (ebi::util::readline(ss, vector_line).size() != 0) {
-          seq.append(vector_line.data(), vector_line.size() - 1); // ignore linebreak at the end of line
+        while (ebi::util::readline(ss, line).size() != 0) {
+          ebi::util::remove_end_of_line(line); // ignore linebreak at the end of line
+          mContig[contig]->write(line.c_str(), line.size());
         }
-        mContig[contig] = seq;
       }
     }
   }
 
-  if ( pos >= mContig[contig].size() ) {
+  if ( pos >= mContig[contig]->size() ) {
     return "";
   }
 
-  return mContig[contig].substr(pos, length);
+  return mContig[contig]->read(pos, length);
 }
 
 size_t
