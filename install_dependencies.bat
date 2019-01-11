@@ -28,6 +28,9 @@ move sqlite-amalgamation-3240000\sqlite3.h .\sqlite\
 xcopy /e/i libodb-2.4.0\odb .\odb\
 xcopy /e/i libodb-sqlite-2.4.0\odb\sqlite odb\sqlite\
 
+:: Rename libcurl static library
+ren curl-7.62.0-win64-mingw\lib\libcurl.a libcurl.lib
+
 :: Delete useless files
 del libodb-2.4.0.zip
 del libodb-sqlite-2.4.0.zip

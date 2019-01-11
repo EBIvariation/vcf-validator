@@ -120,7 +120,7 @@ elseif (WINDOWS)
     ${EXT_LIB_PATH}/odb-sqlite.lib
     ${EXT_LIB_PATH}/odb.lib
     mod_sqlite3
-    windows_dependencies/curl-7.62.0-win64-mingw/lib/libcurl.a
+    windows_dependencies/curl-7.62.0-win64-mingw/lib/libcurl.lib
     ${CMAKE_THREAD_LIBS_INIT}
   )
 endif ()
@@ -221,7 +221,7 @@ elseif (WINDOWS)
     ${EXT_LIB_PATH}/odb-sqlite.lib
     ${EXT_LIB_PATH}/odb.lib
     mod_sqlite3
-    windows_dependencies/curl-7.62.0-win64-mingw/lib/libcurl.a
+    windows_dependencies/curl-7.62.0-win64-mingw/lib/libcurl.lib
     ${CMAKE_THREAD_LIBS_INIT}
   )
 endif ()
