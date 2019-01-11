@@ -43,6 +43,7 @@ elseif (OSX AND EXISTS "${PROJECT_SOURCE_DIR}/osx_dependencies")
 elseif (WINDOWS AND EXISTS "${PROJECT_SOURCE_DIR}/windows_dependencies")
   include_directories (lib/sqlite)            # Windows specific
   include_directories (windows_dependencies)
+  include_directories (windows_dependencies/curl-7.62.0-win64-mingw/include)
   set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows_specific" CACHE STRING "Absolute path to libraries")
 else ()
   set (EXT_LIB_PATH "/usr/local/bin" CACHE STRING "Absolute path to libraries")
@@ -86,13 +87,14 @@ endif ()
 message(STATUS "Build type is ${CMAKE_BUILD_TYPE}")
 find_package (Threads REQUIRED)
 
-# Flags specific to Unix
+# Flags
 if (LINUX OR OSX)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas") # no unknows pragmas warnings
   set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION") # Needed to statically link ODB
   find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
   include_directories (${Boost_INCLUDE_DIR} )
-endif ()
+endif (WINDOWS)
+  set (CMAKE_C_FLAGS " -DCURL_STATICLIB") # Needed to statically link libcurl
 
 
 # Application modules
@@ -117,6 +119,7 @@ elseif (WINDOWS)
     ${EXT_LIB_PATH}/odb-sqlite.lib
     ${EXT_LIB_PATH}/odb.lib
     mod_sqlite3
+    windows_dependencies/curl-7.62.0-win64-mingw/lib/libcurl.a
     ${CMAKE_THREAD_LIBS_INIT}
   )
 endif ()
@@ -217,6 +220,7 @@ elseif (WINDOWS)
     ${EXT_LIB_PATH}/odb-sqlite.lib
     ${EXT_LIB_PATH}/odb.lib
     mod_sqlite3
+    windows_dependencies/curl-7.62.0-win64-mingw/lib/libcurl.a
     ${CMAKE_THREAD_LIBS_INIT}
   )
 endif ()
