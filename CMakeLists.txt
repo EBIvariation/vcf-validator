@@ -93,8 +93,9 @@ if (LINUX OR OSX)
   set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION") # Needed to statically link ODB
   find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
   include_directories (${Boost_INCLUDE_DIR} )
-endif (WINDOWS)
+elseif (WINDOWS)
   set (CMAKE_C_FLAGS " -DCURL_STATICLIB") # Needed to statically link libcurl
+endif ()
 
 
 # Application modules
