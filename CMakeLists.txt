@@ -43,7 +43,7 @@ elseif (OSX AND EXISTS "${PROJECT_SOURCE_DIR}/osx_dependencies")
 elseif (WINDOWS AND EXISTS "${PROJECT_SOURCE_DIR}/windows_dependencies")
   include_directories (lib/sqlite)            # Windows specific
   include_directories (windows_dependencies)
-  include_directories (windows_dependencies/curl-7.62.0-win64-mingw/include)
+  include_directories (windows_dependencies/curl-7.62.0-win32-mingw/include)
   set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows_specific" CACHE STRING "Absolute path to libraries")
 else ()
   set (EXT_LIB_PATH "/usr/local/bin" CACHE STRING "Absolute path to libraries")
@@ -120,7 +120,7 @@ elseif (WINDOWS)
     ${EXT_LIB_PATH}/odb-sqlite.lib
     ${EXT_LIB_PATH}/odb.lib
     mod_sqlite3
-    windows_dependencies/curl-7.62.0-win64-mingw/lib/libcurl
+    windows_dependencies/curl-7.62.0-win32-mingw/lib/libcurl
     ${CMAKE_THREAD_LIBS_INIT}
   )
 endif ()
@@ -221,7 +221,7 @@ elseif (WINDOWS)
     ${EXT_LIB_PATH}/odb-sqlite.lib
     ${EXT_LIB_PATH}/odb.lib
     mod_sqlite3
-    windows_dependencies/curl-7.62.0-win64-mingw/lib/libcurl
+    windows_dependencies/curl-7.62.0-win32-mingw/lib/libcurl
     ${CMAKE_THREAD_LIBS_INIT}
   )
 endif ()

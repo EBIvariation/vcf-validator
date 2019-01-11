@@ -9,7 +9,7 @@ powershell -command "(new-object System.Net.WebClient).DownloadFile('https://www
 powershell -command "(new-object System.Net.WebClient).DownloadFile('https://www.codesynthesis.com/download/odb/2.4/libodb-sqlite-2.4.0.zip','.\libodb-sqlite-2.4.0.zip')"
 powershell -command "(new-object System.Net.WebClient).DownloadFile('https://www.sqlite.org/2018/sqlite-dll-win32-x86-3240000.zip','.\sqlite-dll.zip')"
 powershell -command "(new-object System.Net.WebClient).DownloadFile('https://www.sqlite.org/2018/sqlite-amalgamation-3240000.zip','sqlite-amalgamation.zip')"
-powershell -command "(new-object System.Net.WebClient).DownloadFile('https://curl.haxx.se/windows/dl-7.62.0/curl-7.62.0-win64-mingw.zip','curl-7.62.0.zip')"
+powershell -command "(new-object System.Net.WebClient).DownloadFile('https://curl.haxx.se/windows/dl-7.62.0/curl-7.62.0-win32-mingw.zip','curl-7.62.0.zip')"
 
 :: Unzip zip files
 powershell -command "Expand-Archive libodb-2.4.0.zip ."
@@ -29,7 +29,7 @@ xcopy /e/i libodb-2.4.0\odb .\odb\
 xcopy /e/i libodb-sqlite-2.4.0\odb\sqlite odb\sqlite\
 
 :: Rename libcurl static library
-ren curl-7.62.0-win64-mingw\lib\libcurl.a libcurl.lib
+ren curl-7.62.0-win32-mingw\lib\libcurl.a libcurl.lib
 
 :: Delete useless files
 del libodb-2.4.0.zip
