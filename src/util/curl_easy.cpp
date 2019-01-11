@@ -17,13 +17,13 @@
 #include "util/curl_easy.hpp"
 
 size_t
-StringWriterCallback(void *contents, size_t size, size_t nmemb, void *buffer) {
+stringWriterCallback(void *contents, size_t size, size_t nmemb, void *buffer) {
   ((std::string*)buffer)->append((const char*)contents, size * nmemb);
   return size * nmemb;
 }
 
 size_t
-StreamWriterCallback(void *contents, size_t size, size_t nmemb, void *stream) {
+streamWriterCallback(void *contents, size_t size, size_t nmemb, void *stream) {
   ((std::ostream*)stream)->write((const char*)contents, static_cast<std::streamsize>(size * nmemb));
   return size * nmemb;
 }
@@ -50,7 +50,7 @@ ebi::util::curl::Easy::request(const std::string &url) {
   std::string buffer;
   if ( curlHandle ) {
     curl_easy_setopt(curlHandle, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curlHandle, CURLOPT_WRITEFUNCTION, StringWriterCallback);
+    curl_easy_setopt(curlHandle, CURLOPT_WRITEFUNCTION, stringWriterCallback);
     curl_easy_setopt(curlHandle, CURLOPT_WRITEDATA, &buffer);
     CURLcode res = curl_easy_perform(curlHandle);
     if (res != CURLE_OK) {
@@ -65,7 +65,7 @@ std::ostream&
 ebi::util::curl::Easy::request(std::ostream& stream, const std::string& url) {
   if ( curlHandle ) {
     curl_easy_setopt(curlHandle, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curlHandle, CURLOPT_WRITEFUNCTION, StreamWriterCallback);
+    curl_easy_setopt(curlHandle, CURLOPT_WRITEFUNCTION, streamWriterCallback);
     curl_easy_setopt(curlHandle, CURLOPT_WRITEDATA, &stream);
     CURLcode res = curl_easy_perform(curlHandle);
     if (res != CURLE_OK) {

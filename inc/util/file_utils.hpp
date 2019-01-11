@@ -43,13 +43,6 @@ namespace ebi
         }
     }
 
-    inline void open_local(std::ifstream & input,
-                           const std::string & path,
-                           const std::ios_base::openmode mode = std::ios_base::in)
-    {
-      open_file(input, path, mode);
-    }
-
     inline std::ostream & open_remote(std::ostream & stream, const std::string & url)
     {
       if ( !is_remote_url(url) ) {

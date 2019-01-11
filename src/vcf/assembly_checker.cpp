@@ -27,6 +27,9 @@ namespace ebi
                                const std::string & assembly_report,
                                std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
+      std::string get_reference_accession(const std::string& referenceTaggedLine);
+      std::string get_contig_accession(const std::string& contigTaggedLine);
+
       bool check_vcf_ref(std::istream & vcf_input,
                          const std::string & sourceName,
                          std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
@@ -58,47 +61,21 @@ namespace ebi
         if (!(fasta.get())) { // No local/remote fasta file provided
           std::string reference_accession;
           std::vector<std::string> contigs;
+          std::streampos vcfInputStreamPosCache = vcf_input.tellg();
 
           for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
             std::string line{vector_line.begin(), vector_line.end()};
             if (!boost::starts_with(line, "##")) {
               break;
             }
-            for (auto &output : outputs) {
-              output->write_meta_info(line);
-            }
 
             if (boost::starts_with(line, "##reference")) {
-              std::vector<std::string> metadata;
-              ebi::util::string_split(line, "=", metadata);
-              if (metadata.size() >= 2) {
-                std::string reference_value = metadata[1];
-                ebi::util::remove_end_of_line(reference_value);
-                if (!ebi::util::is_remote_url(reference_value) &&
-                    !boost::ends_with(reference_value, ebi::vcf::GZ) &&
-                    !boost::ends_with(reference_value, ebi::vcf::FASTA) &&
-                    !boost::ends_with(reference_value, ebi::vcf::FASTA_EXT)) {
-                  //does not look like a fasta file name, try it as an accession.
-                  reference_accession = reference_value;
-                }
-              }
+              reference_accession = get_reference_accession(line);
               continue;
             }
 
             if (boost::starts_with(line, "##contig")) {
-              size_t pos = line.find("=<");
-              if ( pos != std::string::npos ) {
-                std::string contig_value = line.substr(pos+2);
-                ebi::util::remove_end_of_line(contig_value);
-                contig_value.erase(contig_value.size() - 1, 1);
-                std::vector<std::string> metadata;
-                ebi::util::string_split(contig_value, ",", metadata);
-                for (std::string s :  metadata) {
-                  if (boost::starts_with(s, "ID=")) {
-                    contigs.push_back(s.substr(3));
-                  }
-                }
-              }
+              contigs.push_back(get_contig_accession(line));
             }
           }
 
@@ -110,6 +87,9 @@ namespace ebi
           for ( auto contig : contigs ) {
             fasta->sequence(contig, 0, 1);
           }
+
+          // Rewind to where it was
+          vcf_input.seekg(vcfInputStreamPosCache, std::ios_base::beg);
         }
 
         return process_vcf_records(vcf_input, fasta, assembly_report, outputs);
@@ -290,6 +270,47 @@ namespace ebi
           std::transform(reference_sequence.begin(), reference_sequence.end(), reference_sequence.begin(), ::tolower);
 
           return fasta_sequence == reference_sequence;
+      }
+
+      std::string get_reference_accession(const std::string& referenceTaggedLine) {
+          std::vector<std::string> metadata;
+          ebi::util::string_split(referenceTaggedLine, "=", metadata);
+
+          if (metadata.size() >= 2) {
+              std::string reference_value = metadata[1];
+              ebi::util::remove_end_of_line(reference_value);
+
+              if (!ebi::util::is_remote_url(reference_value) &&
+                  !boost::ends_with(reference_value, ebi::vcf::GZ) &&
+                  !boost::ends_with(reference_value, ebi::vcf::FASTA) &&
+                  !boost::ends_with(reference_value, ebi::vcf::FASTA_EXT)) {
+                  //does not look like a fasta file name, try it as an accession.
+                  return reference_value;
+              }
+          }
+
+          return "";
+      }
+
+      std::string get_contig_accession(const std::string& contigTaggedLine) {
+          size_t pos = contigTaggedLine.find("=<");
+
+          if ( pos != std::string::npos ) {
+              std::string contig_value = contigTaggedLine.substr(pos+2);
+              ebi::util::remove_end_of_line(contig_value);
+              contig_value.erase(contig_value.size() - 1, 1);
+
+              std::vector<std::string> metadata;
+              ebi::util::string_split(contig_value, ",", metadata);
+
+              for (std::string s :  metadata) {
+                  if (boost::starts_with(s, "ID=")) {
+                      return s.substr(3);
+                  }
+              }
+          }
+
+          return "";
       }
 
     }

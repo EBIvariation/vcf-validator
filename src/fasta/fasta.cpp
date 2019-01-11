@@ -27,12 +27,12 @@
 #include "util/stream_utils.hpp"
 #include "util/string_utils.hpp"
 #include "vcf/compression.hpp"
-#include "vcf/fasta.hpp"
+#include "fasta/fasta.hpp"
 #include "vcf/string_constants.hpp"
 
 std::shared_ptr<std::istream> create_input_stream(const std::string &path) {
   std::shared_ptr<std::ifstream> fstream(new std::ifstream());
-  ebi::util::open_local(*fstream, path, std::ifstream::binary);
+  ebi::util::open_file(*fstream, path, std::ifstream::binary);
   return std::static_pointer_cast<std::istream>(fstream);
 }
 

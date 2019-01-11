@@ -31,7 +31,7 @@
 
 #include "bioio/bioio.hpp"
 
-#include "fasta.hpp"
+#include "fasta/fasta.hpp"
 #include "util/file_utils.hpp"
 #include "util/logger.hpp"
 #include "util/stream_utils.hpp"

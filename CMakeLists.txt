@@ -149,7 +149,7 @@ set (MOD_VCF_SOURCES
   inc/vcf/compression.hpp
   inc/vcf/debugulator.hpp
   inc/vcf/error_policy.hpp
-  inc/vcf/fasta.hpp
+  inc/fasta/fasta.hpp
   inc/vcf/file_structure.hpp
   inc/vcf/fixer.hpp
   inc/vcf/meta_entry_visitor.hpp
@@ -174,7 +174,7 @@ set (MOD_VCF_SOURCES
   src/vcf/assembly_checker.cpp
   src/vcf/compression.cpp
   src/vcf/debugulator.cpp
-  src/vcf/fasta.cpp
+  src/fasta/fasta.cpp
   src/vcf/fixer.cpp
   src/vcf/meta_entry.cpp
   src/vcf/normalizer.cpp
