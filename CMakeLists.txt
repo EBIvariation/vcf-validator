@@ -95,6 +95,7 @@ if (LINUX OR OSX)
   include_directories (${Boost_INCLUDE_DIR} )
 elseif (WINDOWS)
   add_definitions(-DCURL_STATICLIB) # Needed to statically link libcurl
+  add_definitions(-DNOMINMAX) # Needed to suppress min and max definitions by Windows
 endif ()
 
 
