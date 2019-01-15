@@ -61,10 +61,15 @@ namespace ebi
         if (!(fasta.get())) { // No local/remote fasta file provided
           std::string reference_accession;
           std::vector<std::string> contigs;
-          std::streampos vcfInputStreamPosCache = vcf_input.tellg();
 
           for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
             std::string line{vector_line.begin(), vector_line.end()};
+            if (boost::starts_with(line, "#")) {
+              for (auto & output : outputs ) {
+                output->write_meta_info(line);
+              }
+            }
+
             if (!boost::starts_with(line, "##")) {
               break;
             }
@@ -87,9 +92,6 @@ namespace ebi
           for ( auto contig : contigs ) {
             fasta->sequence(contig, 0, 1);
           }
-
-          // Rewind to where it was
-          vcf_input.seekg(vcfInputStreamPosCache, std::ios_base::beg);
         }
 
         return process_vcf_records(vcf_input, fasta, assembly_report, outputs);
