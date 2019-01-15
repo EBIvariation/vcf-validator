@@ -36,6 +36,8 @@ namespace ebi
       public:
         virtual std::string sequence(const std::string& contig, const size_t pos, const size_t length) = 0;
         virtual size_t count(const std::string& contig) const = 0;
+
+        virtual ~IFasta(){}
       };
 
       class FileBasedFasta : public IFasta
