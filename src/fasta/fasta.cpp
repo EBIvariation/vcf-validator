@@ -72,8 +72,10 @@ public:
 
   ~ContigFromENA()
   {
+      if (fasta_input.get()) {
+          fasta_input->close();
+      }
       fasta_output->close();
-      fasta_input->close();
       boost::filesystem::remove(contig_name);
   }
 

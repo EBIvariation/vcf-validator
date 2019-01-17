@@ -172,6 +172,16 @@ namespace ebi
             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
         }
 
+        SECTION("no fasta provided, using ENA API to retrieve fasta for contigs, but got no sequence, fail")
+        {
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/failed/failed_ena_api/");
+            std::string file_prefix = folder.parent_path().filename().string();
+            std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
+            std::ifstream vcf_input{vcf_path};
+            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta;
+            CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
+        }
+
         SECTION("Bad assembly_report , throws exception")
         {
             auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/failed/failed_to_parse_assembly_report/");
