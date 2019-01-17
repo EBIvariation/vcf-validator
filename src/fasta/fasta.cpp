@@ -79,11 +79,6 @@ public:
       boost::filesystem::remove(contig_name);
   }
 
-  size_t size() const
-  {
-      return contig_length;
-  }
-
   void write(const char* buffer, const size_t length)
   {
       fasta_output->write(buffer, length);
@@ -94,6 +89,10 @@ public:
   {
       if (!fasta_input.get()) {
           fasta_input.reset(new std::ifstream(contig_name, std::ios_base::in));
+      }
+
+      if (pos >= contig_length) {
+        return "";
       }
 
       std::string result;
@@ -120,8 +119,10 @@ ebi::vcf::fasta::RemoteContig::sequence(const std::string& contig, const size_t 
 
         // Download this contig
         std::string url = ebi::vcf::ENA_API_URL + contig + "&" + ebi::vcf::ENA_API_FASTA_FORMAT;
-        std::stringstream response_stream;
+        std::fstream response_stream;
+        response_stream.open(contig+".tmp", std::ios::in | std::ios::out | std::ios::app);
         ebi::util::open_remote(response_stream, url);
+        response_stream.seekg(0, std::ios::beg);
 
         std::string line;
         line.reserve(1024);
@@ -133,10 +134,9 @@ ebi::vcf::fasta::RemoteContig::sequence(const std::string& contig, const size_t 
                 }
             }
         }
-    }
 
-    if (pos >= contigs[contig]->size()) {
-        return "";
+        response_stream.close();
+        boost::filesystem::remove(contig+".tmp");
     }
 
     return contigs[contig]->read(pos, length);
