@@ -52,8 +52,8 @@ namespace ebi
       private:
         FileBasedFasta(){}
 
-        std::shared_ptr<std::istream> mFastaInput;
-        bioio::FastaIndex mFastaIndex;
+        std::shared_ptr<std::istream> fasta_input;
+        bioio::FastaIndex fasta_index;
       };
 
       class ContigFromENA;
@@ -68,8 +68,8 @@ namespace ebi
         size_t count(const std::string& contig) const;
 
       private:
-        std::unique_ptr<ebi::util::curl::Easy> mCurl;
-        std::unordered_map<std::string, std::shared_ptr<ContigFromENA>> mContig;
+        std::unique_ptr<ebi::util::curl::Easy> curl_easy;
+        std::unordered_map<std::string, std::shared_ptr<ContigFromENA>> contigs;
       };
     }
   }

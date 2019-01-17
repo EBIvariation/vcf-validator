@@ -27,8 +27,8 @@ namespace ebi
                                const std::string & assembly_report,
                                std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
-      std::string get_reference_accession(const std::string& referenceTaggedLine);
-      std::string get_contig_accession(const std::string& contigTaggedLine);
+      std::string get_reference_accession(const std::string& reference_tagged_line);
+      std::string get_contig_accession(const std::string& contig_tagged_line);
 
       bool check_vcf_ref(std::istream & vcf_input,
                          const std::string & sourceName,
@@ -54,53 +54,57 @@ namespace ebi
       bool process_vcf_ref(std::istream & vcf_input,
                            std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
                            const std::string & assembly_report,
-                           std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs) {
-        std::vector<char> vector_line;
-        vector_line.reserve(default_line_buffer_size);
+                           std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
+      {
+          std::vector<char> vector_line;
+          vector_line.reserve(default_line_buffer_size);
 
-        if (!(fasta.get())) { // No local/remote fasta file provided
-          std::string reference_accession;
-          std::vector<std::string> contigs;
+          if (!fasta.get()) { // No local/remote fasta file provided
+              std::string reference_accession;
+              std::vector<std::string> contigs;
 
-          for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
-            std::string line{vector_line.begin(), vector_line.end()};
-            if (boost::starts_with(line, "#")) {
-              for (auto & output : outputs ) {
-                output->write_meta_info(line);
-              }
-            }
+              for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
+                  std::string line{vector_line.begin(), vector_line.end()};
+                  if (boost::starts_with(line, "#")) {
+                      for (auto & output : outputs) {
+                          output->write_meta_info(line);
+                      }
+                  }
 
-            if (!boost::starts_with(line, "##")) {
-              break;
-            }
+                  if (!boost::starts_with(line, "##")) {
+                      break;
+                  }
 
-            if (boost::starts_with(line, "##reference")) {
-              reference_accession = get_reference_accession(line);
-              continue;
-            }
+                  if (boost::starts_with(line, "##reference")) {
+                      // trying to get the reference sequence accession
+                      reference_accession = get_reference_accession(line);
+                      continue;
+                  }
 
-            if (boost::starts_with(line, "##contig")) {
-              contigs.push_back(get_contig_accession(line));
-            }
+                  if (boost::starts_with(line, "##contig")) {
+                      // trying to get the contig accession
+                      contigs.push_back(get_contig_accession(line));
+                  }
+                }
+
+                fasta.reset(new ebi::vcf::fasta::RemoteContig());
+                if (!reference_accession.empty()) { // second, try with the reference accession with ENA API
+                    fasta->sequence(reference_accession, 0, 1); // trigger download
+                }
+
+                for (auto contig : contigs) {
+                    fasta->sequence(contig, 0, 1);
+                }
           }
 
-          fasta.reset(new ebi::vcf::fasta::RemoteContig());
-          if ( !reference_accession.empty() ) { // second, try with the reference accession with ENA API
-            fasta->sequence(reference_accession, 0, 1); // trigger download
-          }
-
-          for ( auto contig : contigs ) {
-            fasta->sequence(contig, 0, 1);
-          }
-        }
-
-        return process_vcf_records(vcf_input, fasta, assembly_report, outputs);
+          return process_vcf_records(vcf_input, fasta, assembly_report, outputs);
       }
 
       bool process_vcf_records(std::istream & vcf_input,
-                           std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
-                           const std::string & assembly_report,
-                           std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs) {
+                               std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
+                               const std::string & assembly_report,
+                               std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
+      {
           std::vector<char> vector_line;
           vector_line.reserve(default_line_buffer_size);
 
@@ -112,10 +116,10 @@ namespace ebi
               synonyms_map.parse_assembly_report(assembly_report_file);
           }
 
-          bool fetchContigOnDemand = false;
+          bool fetch_contig_on_demand = false;
           std::shared_ptr<ebi::vcf::fasta::RemoteContig> rc = std::dynamic_pointer_cast<ebi::vcf::fasta::RemoteContig>(fasta);
-          if ( rc.get() ) {
-            fetchContigOnDemand = true;
+          if (rc.get()) {
+              fetch_contig_on_demand = true;
           }
 
           bool is_valid = true;
@@ -146,7 +150,7 @@ namespace ebi
                       continue;
                   }
                   contig_name = found_synonyms[0];
-              } else if (!fetchContigOnDemand) {
+              } else if (!fetch_contig_on_demand) {
                   if (fasta->count(contig_name) == 0) {
                       report_missing_chromosome(line_num, record_core, outputs);
                       is_valid = false;
@@ -155,8 +159,8 @@ namespace ebi
               }
 
               auto fasta_sequence = fasta->sequence(contig_name,
-                      record_core.position - 1,
-                      record_core.reference_allele.length());
+                                                    record_core.position - 1,
+                                                    record_core.reference_allele.length());
               auto reference_sequence = record_core.reference_allele;
               bool match_result = is_matching_sequence(fasta_sequence, reference_sequence);
 
@@ -274,11 +278,12 @@ namespace ebi
           return fasta_sequence == reference_sequence;
       }
 
-      std::string get_reference_accession(const std::string& referenceTaggedLine) {
+      std::string get_reference_accession(const std::string& reference_tagged_line)
+      {
           std::vector<std::string> metadata;
-          ebi::util::string_split(referenceTaggedLine, "=", metadata);
+          ebi::util::string_split(reference_tagged_line, "=", metadata);
 
-          if (metadata.size() >= 2) {
+          if (metadata.size() > 1) {
               std::string reference_value = metadata[1];
               ebi::util::remove_end_of_line(reference_value);
 
@@ -294,11 +299,12 @@ namespace ebi
           return "";
       }
 
-      std::string get_contig_accession(const std::string& contigTaggedLine) {
-          size_t pos = contigTaggedLine.find("=<");
+      std::string get_contig_accession(const std::string& contig_tagged_line)
+      {
+          size_t pos = contig_tagged_line.find("=<");
 
-          if ( pos != std::string::npos ) {
-              std::string contig_value = contigTaggedLine.substr(pos+2);
+          if (pos != std::string::npos) {
+              std::string contig_value = contig_tagged_line.substr(pos+2);
               ebi::util::remove_end_of_line(contig_value);
               contig_value.erase(contig_value.size() - 1, 1);
 

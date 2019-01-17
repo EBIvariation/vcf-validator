@@ -71,7 +71,7 @@ namespace ebi
      * @param container will be cleared and filled with the string from the offset stream position from the beginning
      * until n characters are read or the end of stream is reached
      * @param n the number of characters to be read. Note the returned container may contain less than n characters
-     * @param off the offset value, relative to the way parameter
+     * @param off the offset value, relative to the 'way' parameter
      * @param way the position the offset is relative to
      * @return
      */

@@ -135,7 +135,7 @@ int main(int argc, char** argv)
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
         std::shared_ptr<ebi::vcf::fasta::IFasta> fasta;
-        if ( !fasta_path.empty() ) {
+        if (!fasta_path.empty()) {
             fasta.reset(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
         }
 

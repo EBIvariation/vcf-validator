@@ -100,10 +100,10 @@ namespace ebi
 
     inline bool is_remote_url(const std::string& input)
     {
-      return boost::starts_with(input, ebi::vcf::HTTP) ||
-             boost::starts_with(input, ebi::vcf::HTTPS) ||
-             boost::starts_with(input, ebi::vcf::FTP) ||
-             boost::starts_with(input, ebi::vcf::FTPS);
+        return boost::starts_with(input, ebi::vcf::HTTP) ||
+               boost::starts_with(input, ebi::vcf::HTTPS) ||
+               boost::starts_with(input, ebi::vcf::FTP) ||
+               boost::starts_with(input, ebi::vcf::FTPS);
     }
 
   }

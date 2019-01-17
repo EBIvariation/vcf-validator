@@ -30,108 +30,118 @@
 #include "fasta/fasta.hpp"
 #include "vcf/string_constants.hpp"
 
-std::shared_ptr<std::istream> create_input_stream(const std::string &path) {
-  std::shared_ptr<std::ifstream> fstream(new std::ifstream());
-  ebi::util::open_file(*fstream, path, std::ifstream::binary);
-  return std::static_pointer_cast<std::istream>(fstream);
+std::shared_ptr<std::istream> create_input_stream(const std::string &path)
+{
+    std::shared_ptr<std::ifstream> fstream(new std::ifstream());
+    ebi::util::open_file(*fstream, path, std::ifstream::binary);
+    return std::static_pointer_cast<std::istream>(fstream);
 }
 
 ebi::vcf::fasta::FileBasedFasta::FileBasedFasta(const std::string& fasta_path, const std::string& fasta_index_path)
 {
-  BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA file...";
-  mFastaInput = create_input_stream(fasta_path);
+    BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA file...";
+    fasta_input = create_input_stream(fasta_path);
 
-  BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA index file...";
-  mFastaIndex = bioio::read_fasta_index(*(create_input_stream(fasta_index_path)));
+    BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA index file...";
+    fasta_index = bioio::read_fasta_index(*(create_input_stream(fasta_index_path)));
 }
 
 std::string
-ebi::vcf::fasta::FileBasedFasta::sequence(const std::string& contig, const size_t pos, const size_t length) {
-  return bioio::read_fasta_contig(*mFastaInput, mFastaIndex.at(contig), pos, length);
+ebi::vcf::fasta::FileBasedFasta::sequence(const std::string& contig, const size_t pos, const size_t length)
+{
+    return bioio::read_fasta_contig(*fasta_input, fasta_index.at(contig), pos, length);
 }
 
 size_t
-ebi::vcf::fasta::FileBasedFasta::count(const std::string &contig) const {
-  return mFastaIndex.count(contig);
+ebi::vcf::fasta::FileBasedFasta::count(const std::string &contig) const
+{
+    return fasta_index.count(contig);
 }
 
 ebi::vcf::fasta::RemoteContig::RemoteContig()
-        : mCurl(new ebi::util::curl::Easy())
+        : curl_easy(new ebi::util::curl::Easy())
 {}
 
 class ebi::vcf::fasta::ContigFromENA {
 public:
-  ContigFromENA(const std::string& contigName) {
-    mContigName = contigName;
-    mFastaOutput.reset(new std::ofstream(mContigName));
+  ContigFromENA(const std::string& contigName)
+  {
+      contig_name = contigName;
+      fasta_output.reset(new std::ofstream(contig_name));
   }
 
-  ~ContigFromENA() {
-    mFastaOutput->close();
-    mFastaInput->close();
-    boost::filesystem::remove(mContigName);
+  ~ContigFromENA()
+  {
+      fasta_output->close();
+      fasta_input->close();
+      boost::filesystem::remove(contig_name);
   }
 
-  size_t size() const {
-    return mLength;
+  size_t size() const
+  {
+      return contig_length;
   }
 
-  void write(const char* buffer, const size_t length) {
-    mFastaOutput->write(buffer, length);
-    mLength += length;
+  void write(const char* buffer, const size_t length)
+  {
+      fasta_output->write(buffer, length);
+      contig_length += length;
   }
 
-  std::string read(const size_t pos, const size_t length) {
-    if ( !mFastaInput.get() ) {
-      mFastaInput.reset(new std::ifstream(mContigName, std::ios_base::in));
-    }
+  std::string read(const size_t pos, const size_t length)
+  {
+      if (!fasta_input.get()) {
+          fasta_input.reset(new std::ifstream(contig_name, std::ios_base::in));
+      }
 
-    std::string result;
-    return ebi::util::read_n(*mFastaInput, result, length, pos);
+      std::string result;
+      return ebi::util::read_n(*fasta_input, result, length, pos);
   }
 
 private:
-  size_t mLength;
-  std::string mContigName;
-  std::unique_ptr<std::ifstream> mFastaInput;
-  std::unique_ptr<std::ofstream> mFastaOutput;
+  size_t contig_length;
+  std::string contig_name;
+  std::unique_ptr<std::ifstream> fasta_input;
+  std::unique_ptr<std::ofstream> fasta_output;
 };
 
 std::string
-ebi::vcf::fasta::RemoteContig::sequence(const std::string& contig, const size_t pos, const size_t length) {
-  if ( mContig.count(contig) == 0 ) {
-    mContig[contig].reset(new ebi::vcf::fasta::ContigFromENA(contig));
+ebi::vcf::fasta::RemoteContig::sequence(const std::string& contig, const size_t pos, const size_t length)
+{
+    if (contigs.count(contig) == 0) {
+        contigs[contig].reset(new ebi::vcf::fasta::ContigFromENA(contig));
 
-    // This contig is not downloaded, try download it from ENA.
-    if (contig.size() < 6) { // don't trust short contig names.
-      return "";
-    }
-
-    // Download this contig
-    std::string url = ebi::vcf::ENA_API_URL + contig + "&" + ebi::vcf::ENA_API_FASTA_FORMAT;
-    std::stringstream ss;
-    ebi::util::open_remote(ss, url);
-
-    std::string line;
-    line.reserve(1024);
-    if (ebi::util::readline(ss, line).size() != 0) {
-      if (boost::starts_with(line, ">")) {
-        while (ebi::util::readline(ss, line).size() != 0) {
-          ebi::util::remove_end_of_line(line); // ignore linebreak at the end of line
-          mContig[contig]->write(line.c_str(), line.size());
+        // This contig is not downloaded, try download it from ENA.
+        if (contig.size() < 6) { // don't trust short contig names.
+            return "";
         }
-      }
+
+        // Download this contig
+        std::string url = ebi::vcf::ENA_API_URL + contig + "&" + ebi::vcf::ENA_API_FASTA_FORMAT;
+        std::stringstream response_stream;
+        ebi::util::open_remote(response_stream, url);
+
+        std::string line;
+        line.reserve(1024);
+        if (ebi::util::readline(response_stream, line).size() != 0) {
+            if (boost::starts_with(line, ">")) {
+                while (ebi::util::readline(response_stream, line).size() != 0) {
+                    ebi::util::remove_end_of_line(line); // ignore linebreak at the end of line
+                    contigs[contig]->write(line.c_str(), line.size());
+                }
+            }
+        }
     }
-  }
 
-  if ( pos >= mContig[contig]->size() ) {
-    return "";
-  }
+    if (pos >= contigs[contig]->size()) {
+        return "";
+    }
 
-  return mContig[contig]->read(pos, length);
+    return contigs[contig]->read(pos, length);
 }
 
 size_t
-ebi::vcf::fasta::RemoteContig::count(const std::string &contig) const {
-  return mContig.count(contig);
+ebi::vcf::fasta::RemoteContig::count(const std::string &contig) const
+{
+    return contigs.count(contig);
 }

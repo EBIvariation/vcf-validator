@@ -39,9 +39,9 @@ namespace ebi
             std::string file_prefix = folder.parent_path().filename().string();
             std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
             std::ifstream vcf_input{vcf_path};
-            std::string fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-            std::string fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_input, fasta_index_input));
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::string fasta_index_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
             CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
         }
 
@@ -51,9 +51,9 @@ namespace ebi
             std::string file_prefix = folder.parent_path().filename().string();
             std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
             std::ifstream vcf_input{vcf_path};
-            std::string fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-            std::string fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_input, fasta_index_input));
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::string fasta_index_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
             CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
         }
 
@@ -63,9 +63,9 @@ namespace ebi
             std::string file_prefix = folder.parent_path().filename().string();
             std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
             std::ifstream vcf_input{vcf_path};
-            std::string fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-            std::string fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_input, fasta_index_input));
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::string fasta_index_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
             CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
         }
 
@@ -75,10 +75,10 @@ namespace ebi
             std::string file_prefix = folder.parent_path().filename().string();
             std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
             std::ifstream vcf_input{vcf_path};
-            std::string fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-            std::string fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::string fasta_index_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
             std::string assembly_report_path = folder.string() + "assembly_report.txt";
-            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_input, fasta_index_input));
+            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
             CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report_path, outputs));
         }
 
@@ -89,9 +89,9 @@ namespace ebi
             std::string file_prefix = folder.parent_path().filename().string();
             std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_GZ_EXT;
             std::ifstream vcf_input{vcf_path};
-            std::string fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-            std::string fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_input, fasta_index_input));
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::string fasta_index_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
             CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
         }
 
@@ -118,9 +118,9 @@ namespace ebi
             std::string file_prefix = folder.parent_path().filename().string();
             std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
             std::ifstream vcf_input{vcf_path};
-            std::string fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-            std::string fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_input, fasta_index_input));
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::string fasta_index_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
         }
 
@@ -130,9 +130,9 @@ namespace ebi
             std::string file_prefix = folder.parent_path().filename().string();
             std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
             std::ifstream vcf_input{vcf_path};
-            std::string fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-            std::string fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_input, fasta_index_input));
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::string fasta_index_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
         }
 
@@ -142,9 +142,9 @@ namespace ebi
             std::string file_prefix = folder.parent_path().filename().string();
             std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
             std::ifstream vcf_input{vcf_path};
-            std::string fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-            std::string fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_input, fasta_index_input));
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::string fasta_index_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
         }
 
@@ -154,9 +154,9 @@ namespace ebi
             std::string file_prefix = folder.parent_path().filename().string();
             std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
             std::ifstream vcf_input{vcf_path};
-            std::string fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-            std::string fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_input, fasta_index_input));
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::string fasta_index_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
         }
 
@@ -166,9 +166,9 @@ namespace ebi
             std::string file_prefix = folder.parent_path().filename().string();
             std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
             std::ifstream vcf_input{vcf_path};
-            std::string fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-            std::string fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_input, fasta_index_input));
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::string fasta_index_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
         }
 
@@ -178,10 +178,10 @@ namespace ebi
             std::string file_prefix = folder.parent_path().filename().string();
             std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
             std::ifstream vcf_input{vcf_path};
-            std::string fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-            std::string fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::string fasta_index_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
             std::string assembly_report_path = folder.string() + "assembly_report.txt";
-            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_input, fasta_index_input));
+            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
             CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report_path, outputs), std::runtime_error);
         }
 
@@ -196,9 +196,9 @@ namespace ebi
              std::string file_prefix = folder.parent_path().filename().string();
              std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_BZ2_EXT;
              std::ifstream vcf_input{vcf_path};
-             std::string fasta_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
-             std::string fasta_index_input{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
-             std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_input, fasta_index_input));
+             std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+             std::string fasta_index_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT + ebi::vcf::INDEX_EXT};
+             std::shared_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
              CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
          }
 #endif

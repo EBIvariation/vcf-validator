@@ -45,14 +45,14 @@ namespace ebi
 
     inline std::ostream & open_remote(std::ostream & stream, const std::string & url)
     {
-      if ( !is_remote_url(url) ) {
-        std::string msg = "The URL is incorrect or the protocol is not supported: ";
-        msg += url;
-        throw std::invalid_argument{msg};
-      }
+        if (!is_remote_url(url)) {
+            std::string msg = "The URL is incorrect or the protocol is not supported: ";
+            msg += url;
+            throw std::invalid_argument{msg};
+        }
 
-      ebi::util::curl::Easy curl;
-      return curl.request(stream, url);
+        ebi::util::curl::Easy curl;
+        return curl.request(stream, url);
     }
 
   }
