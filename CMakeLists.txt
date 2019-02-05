@@ -43,6 +43,7 @@ elseif (OSX AND EXISTS "${PROJECT_SOURCE_DIR}/osx_dependencies")
 elseif (WINDOWS AND EXISTS "${PROJECT_SOURCE_DIR}/windows_dependencies")
   include_directories (lib/sqlite)            # Windows specific
   include_directories (windows_dependencies)
+  include_directories (windows_dependencies/curl/include)
   set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows_specific" CACHE STRING "Absolute path to libraries")
 else ()
   set (EXT_LIB_PATH "/usr/local/bin" CACHE STRING "Absolute path to libraries")
@@ -53,6 +54,7 @@ else ()
   endif()
 endif ()
 
+include_directories (${EXT_LIB_PATH}/curl/include)
 
 # Compiler and linkers flags
 if (LINUX)
@@ -85,12 +87,15 @@ endif ()
 message(STATUS "Build type is ${CMAKE_BUILD_TYPE}")
 find_package (Threads REQUIRED)
 
-# Flags specific to Unix
+# Flags
 if (LINUX OR OSX)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas") # no unknows pragmas warnings
   set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION") # Needed to statically link ODB
   find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
   include_directories (${Boost_INCLUDE_DIR} )
+elseif (WINDOWS)
+  add_definitions(-DCURL_STATICLIB) # Needed to statically link libcurl
+  add_definitions(-DNOMINMAX) # Needed to suppress min and max definitions by Windows
 endif ()
 
 
@@ -100,6 +105,10 @@ add_library (mod_sqlite3 STATIC lib/sqlite/sqlite3.c)
 if (LINUX OR OSX)
   set (THIRD_PARTY_LIBRARIES
     ${Boost_LIBRARIES}
+    ${EXT_LIB_PATH}/curl/lib/libcurl.a
+    ${EXT_LIB_PATH}/c-ares/lib/libcares.a
+    ${EXT_LIB_PATH}/openssl/lib/libssl.a
+    ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
     ${EXT_LIB_PATH}/libbz2.a
     ${EXT_LIB_PATH}/libz.a
     ${EXT_LIB_PATH}/libodb-sqlite.a
@@ -112,6 +121,7 @@ elseif (WINDOWS)
     ${EXT_LIB_PATH}/odb-sqlite.lib
     ${EXT_LIB_PATH}/odb.lib
     mod_sqlite3
+    windows_dependencies/curl/lib/libcurl
     ${CMAKE_THREAD_LIBS_INIT}
   )
 endif ()
@@ -138,6 +148,8 @@ add_library (mod_odb STATIC ${MOD_ODB_SOURCES})
 target_link_libraries (mod_odb ${THIRD_PARTY_LIBRARIES})
 
 set (MOD_VCF_SOURCES
+  inc/fasta/fasta.hpp
+  inc/util/curl_easy.hpp
   inc/vcf/assembly_checker.hpp
   inc/vcf/assembly_check_report_writer.hpp
   inc/vcf/compression.hpp
@@ -162,6 +174,8 @@ set (MOD_VCF_SOURCES
   inc/vcf/validator_detail_v43.hpp
   inc/vcf/validator.hpp
 
+  src/fasta/fasta.cpp
+  src/util/curl_easy.cpp
   src/vcf/abort_error_policy.cpp
   src/vcf/assembly_checker.cpp
   src/vcf/compression.cpp
@@ -188,12 +202,17 @@ if (LINUX OR OSX)
   set (LIBRARIES_TO_LINK
     mod_vcf
     mod_odb
+    ${EXT_LIB_PATH}/curl/lib/libcurl.a
+    ${EXT_LIB_PATH}/c-ares/lib/libcares.a
+    ${EXT_LIB_PATH}/openssl/lib/libssl.a
+    ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
     ${Boost_LIBRARIES}
     ${EXT_LIB_PATH}/libbz2.a
     ${EXT_LIB_PATH}/libz.a
     ${EXT_LIB_PATH}/libodb-sqlite.a
     ${EXT_LIB_PATH}/libodb.a
     mod_sqlite3
+    dl
     ${CMAKE_THREAD_LIBS_INIT}
   )
 elseif (WINDOWS)
@@ -203,6 +222,11 @@ elseif (WINDOWS)
     ${EXT_LIB_PATH}/odb-sqlite.lib
     ${EXT_LIB_PATH}/odb.lib
     mod_sqlite3
+    windows_dependencies/curl/lib/libcurl
+    ws2_32
+    crypt32
+    Wldap32
+    Normaliz
     ${CMAKE_THREAD_LIBS_INIT}
   )
 endif ()

@@ -22,10 +22,17 @@ namespace ebi
   {
     namespace assembly_checker
     {
+      bool process_vcf_records(std::istream & vcf_input,
+                               std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
+                               const std::string & assembly_report,
+                               std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
+
+      std::string get_reference_accession(const std::string& reference_tagged_line);
+      std::string get_contig_accession(const std::string& contig_tagged_line);
+
       bool check_vcf_ref(std::istream & vcf_input,
                          const std::string & sourceName,
-                         std::istream & fasta_input,
-                         std::istream & fasta_index_input,
+                         std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
                          const std::string & assembly_report,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
 
@@ -36,20 +43,67 @@ namespace ebi
           ebi::vcf::check_readability_of_file(file_extension);
 
           if (file_extension == NO_EXT) {
-              return process_vcf_ref(vcf_input, fasta_input, fasta_index_input, assembly_report, outputs);
+              return process_vcf_ref(vcf_input, fasta, assembly_report, outputs);
           } else {
               boost::iostreams::filtering_istream uncompressed_input;
               ebi::vcf::create_uncompressed_stream(vcf_input, file_extension, uncompressed_input);
-              return process_vcf_ref(uncompressed_input, fasta_input, fasta_index_input, assembly_report, outputs);
+              return process_vcf_ref(uncompressed_input, fasta, assembly_report, outputs);
           }
       }
 
       bool process_vcf_ref(std::istream & vcf_input,
-                              std::istream & fasta_input,
-                              std::istream & fasta_index_input,
-                              const std::string & assembly_report,
-                              std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
+                           std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
+                           const std::string & assembly_report,
+                           std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
+      {
+          std::vector<char> vector_line;
+          vector_line.reserve(default_line_buffer_size);
 
+          if (!fasta.get()) { // No local/remote fasta file provided
+              std::string reference_accession;
+              std::vector<std::string> contigs;
+
+              for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
+                  std::string line{vector_line.begin(), vector_line.end()};
+                  if (boost::starts_with(line, "#")) {
+                      for (auto & output : outputs) {
+                          output->write_meta_info(line);
+                      }
+                  }
+
+                  if (!boost::starts_with(line, "##")) {
+                      break;
+                  }
+
+                  if (boost::starts_with(line, "##reference")) {
+                      // trying to get the reference sequence accession
+                      reference_accession = get_reference_accession(line);
+                      continue;
+                  }
+
+                  if (boost::starts_with(line, "##contig")) {
+                      // trying to get the contig accession
+                      contigs.push_back(get_contig_accession(line));
+                  }
+                }
+
+                fasta.reset(new ebi::vcf::fasta::RemoteContig());
+                if (!reference_accession.empty()) { // second, try with the reference accession with ENA API
+                    fasta->sequence(reference_accession, 0, 1); // trigger download
+                }
+
+                for (auto contig : contigs) {
+                    fasta->sequence(contig, 0, 1);
+                }
+          }
+
+          return process_vcf_records(vcf_input, fasta, assembly_report, outputs);
+      }
+
+      bool process_vcf_records(std::istream & vcf_input,
+                               std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
+                               const std::string & assembly_report,
+                               std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
       {
           std::vector<char> vector_line;
           vector_line.reserve(default_line_buffer_size);
@@ -62,8 +116,11 @@ namespace ebi
               synonyms_map.parse_assembly_report(assembly_report_file);
           }
 
-          // Reading FASTA index, and querying FASTA file
-          auto fasta_index = bioio::read_fasta_index(fasta_index_input);
+          bool fetch_contig_on_demand = false;
+          std::shared_ptr<ebi::vcf::fasta::RemoteContig> rc = std::dynamic_pointer_cast<ebi::vcf::fasta::RemoteContig>(fasta);
+          if (rc.get()) {
+              fetch_contig_on_demand = true;
+          }
 
           bool is_valid = true;
           for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
@@ -86,25 +143,24 @@ namespace ebi
               std::string contig_name = record_core.chromosome;
               if (assembly_report != ebi::vcf::NO_MAPPING) {
                   std::vector<std::string> found_synonyms = get_matching_synonyms_list(synonyms_map,
-                                                               line_num, record_core, fasta_index, outputs);
+                                                               line_num, record_core, fasta, outputs);
                   if (found_synonyms.size() > 1) {
                       // found more than one synonyms matching in fasta index file
                       is_valid = false;
                       continue;
                   }
                   contig_name = found_synonyms[0];
-              } else {
-                  if (fasta_index.count(contig_name) == 0) {
+              } else if (!fetch_contig_on_demand) {
+                  if (fasta->count(contig_name) == 0) {
                       report_missing_chromosome(line_num, record_core, outputs);
                       is_valid = false;
                       continue;
                   }
               }
 
-              auto fasta_sequence = bioio::read_fasta_contig(fasta_input,
-                                                             fasta_index.at(contig_name),
-                                                             record_core.position - 1,
-                                                             record_core.reference_allele.length());
+              auto fasta_sequence = fasta->sequence(contig_name,
+                                                    record_core.position - 1,
+                                                    record_core.reference_allele.length());
               auto reference_sequence = record_core.reference_allele;
               bool match_result = is_matching_sequence(fasta_sequence, reference_sequence);
 
@@ -124,7 +180,7 @@ namespace ebi
       std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap & synonyms_map,
                                   size_t line_num,
                                   RecordCore & record_core,
-                                  bioio::FastaIndex & fasta_index,
+                                  const std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
                                   std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
       {
           std::vector<std::string> found_synonyms;
@@ -136,7 +192,7 @@ namespace ebi
 
           auto & contig_synonyms = synonyms_map.get_contig_synonyms(record_core.chromosome);
           for (auto contig : contig_synonyms) {
-              if (fasta_index.count(contig) != 0) {
+              if (fasta->count(contig) != 0) {
                   found_synonyms.push_back(contig);
               }
           }
@@ -220,6 +276,49 @@ namespace ebi
           std::transform(reference_sequence.begin(), reference_sequence.end(), reference_sequence.begin(), ::tolower);
 
           return fasta_sequence == reference_sequence;
+      }
+
+      std::string get_reference_accession(const std::string& reference_tagged_line)
+      {
+          std::vector<std::string> metadata;
+          ebi::util::string_split(reference_tagged_line, "=", metadata);
+
+          if (metadata.size() > 1) {
+              std::string reference_value = metadata[1];
+              ebi::util::remove_end_of_line(reference_value);
+
+              if (!ebi::util::is_remote_url(reference_value) &&
+                  !boost::ends_with(reference_value, ebi::vcf::GZ) &&
+                  !boost::ends_with(reference_value, ebi::vcf::FASTA) &&
+                  !boost::ends_with(reference_value, ebi::vcf::FASTA_EXT)) {
+                  //does not look like a fasta file name, try it as an accession.
+                  return reference_value;
+              }
+          }
+
+          return "";
+      }
+
+      std::string get_contig_accession(const std::string& contig_tagged_line)
+      {
+          size_t pos = contig_tagged_line.find("=<");
+
+          if (pos != std::string::npos) {
+              std::string contig_value = contig_tagged_line.substr(pos+2);
+              ebi::util::remove_end_of_line(contig_value);
+              contig_value.erase(contig_value.size() - 1, 1);
+
+              std::vector<std::string> metadata;
+              ebi::util::string_split(contig_value, ",", metadata);
+
+              for (std::string s :  metadata) {
+                  if (boost::starts_with(s, "ID=")) {
+                      return s.substr(3);
+                  }
+              }
+          }
+
+          return "";
       }
 
     }

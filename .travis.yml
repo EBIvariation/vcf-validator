@@ -193,7 +193,7 @@ before_script:
 script:
   - cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER} ./ -GNinja
   - ninja -v -j2
-  - ninja test
+  - CTEST_OUTPUT_ON_FAILURE=1 ninja test
   - |
       if [[ $TRAVIS_OS_NAME == "osx" ]]; then
         otool -L bin/vcf_validator
