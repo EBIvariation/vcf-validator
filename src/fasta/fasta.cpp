@@ -113,7 +113,7 @@ ebi::vcf::fasta::RemoteContig::sequence(const std::string& contig, const size_t 
         contigs[contig].reset(new ebi::vcf::fasta::ContigFromENA(contig));
 
         // This contig is not downloaded, try download it from ENA.
-        std::string url = ebi::vcf::ENA_API_URL + ebi::vcf::ENA_API_FASTA_FORMAT + "/"+ contig;
+        std::string url = ebi::vcf::ENA_API_FASTA_URL + contig;
         std::fstream response_stream;
         response_stream.open(contig+".tmp", std::ios::in | std::ios::out | std::ios::app);
         ebi::util::open_remote(response_stream, url);

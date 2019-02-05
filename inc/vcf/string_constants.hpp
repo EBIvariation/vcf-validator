@@ -206,8 +206,7 @@ namespace ebi
     const std::string FTPS = "ftps://";
 
     // ENA REST API for remote fasta access
-    const std::string ENA_API_URL = "https://www.ebi.ac.uk/ena/browser/api/";
-    const std::string ENA_API_FASTA_FORMAT = "fasta";
+    const std::string ENA_API_FASTA_URL = "https://www.ebi.ac.uk/ena/browser/api/fasta/";
   }
 }
 
