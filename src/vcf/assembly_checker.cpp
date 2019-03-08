@@ -144,8 +144,8 @@ namespace ebi
               if (assembly_report != ebi::vcf::NO_MAPPING) {
                   std::vector<std::string> found_synonyms = get_matching_synonyms_list(synonyms_map,
                                                                line_num, record_core, fasta, outputs);
-                  if (found_synonyms.size() > 1) {
-                      // found more than one synonyms matching in fasta index file
+                  if (found_synonyms.size() != 1) {
+                      // found zero or more than one synonyms matching in fasta index file
                       is_valid = false;
                       continue;
                   }
