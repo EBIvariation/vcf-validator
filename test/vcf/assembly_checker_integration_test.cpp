@@ -31,7 +31,7 @@ namespace ebi
     {
         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> outputs;
         outputs.emplace_back(new ebi::vcf::SummaryAssemblyCheckReportWriter());
-            std::string assembly_report = ebi::vcf::NO_MAPPING;
+        std::string assembly_report = ebi::vcf::NO_MAPPING;
 
         SECTION("Empty VCF File")
         {
