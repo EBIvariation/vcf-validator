@@ -134,20 +134,15 @@ int main(int argc, char** argv)
         auto outdir = ebi::util::get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), vcf_path);
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 
-        std::shared_ptr<ebi::vcf::fasta::IFasta> fasta;
-        if (!fasta_path.empty()) {
-            fasta.reset(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
-        }
-
         bool is_valid;
         if (vcf_path == ebi::vcf::STDIN) {
             BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
-            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(std::cin, vcf_path, fasta, assembly_report, outputs);
+            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(std::cin, vcf_path, fasta_path, assembly_report, outputs);
         } else {
             BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
             std::ifstream vcf_input;
             ebi::util::open_file(vcf_input, vcf_path);
-            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs);
+            is_valid = ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report, outputs);
         }
 
         return !is_valid; // A valid file returns an exit code 0
