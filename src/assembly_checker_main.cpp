@@ -155,7 +155,7 @@ int main(int argc, char** argv)
         BOOST_LOG_TRIVIAL(error) << ex.what();
         return 1;
     } catch (std::runtime_error const & ex) {
-        BOOST_LOG_TRIVIAL(error) << "The validation could not be completed: " << ex.what();
+        BOOST_LOG_TRIVIAL(error) << "The assembly checking could not be completed: " << ex.what();
         return 1;
     } catch (std::exception const &ex) {
         BOOST_LOG_TRIVIAL(error) << ex.what();

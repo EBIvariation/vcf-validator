@@ -121,7 +121,7 @@ namespace ebi
           if (rc.get()) {
               fetch_contig_on_demand = true;
           }
-
+          std::unordered_set<std::string> downloadedContigs;
           bool is_valid = true;
           for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
               std::string line{vector_line.begin(), vector_line.end()};
@@ -150,12 +150,17 @@ namespace ebi
                       continue;
                   }
                   contig_name = found_synonyms[0];
-              } else if (!fetch_contig_on_demand) {
-                  if (fasta->count(contig_name) == 0) {
-                      report_missing_chromosome(line_num, record_core, outputs);
-                      is_valid = false;
-                      continue;
-                  }
+              }
+
+              if (fetch_contig_on_demand && downloadedContigs.find(contig_name)==downloadedContigs.cend()) {
+                  fasta->sequence(contig_name, 0, 1); // trigger download
+                  downloadedContigs.insert(contig_name);
+              }
+
+              if (fasta->count(contig_name)==0 || fasta->len(contig_name)==0) { // no such contig or fail to download
+                  report_missing_chromosome(line_num, record_core, outputs);
+                  is_valid = false;
+                  continue;
               }
 
               auto fasta_sequence = fasta->sequence(contig_name,
