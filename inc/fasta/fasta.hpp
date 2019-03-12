@@ -34,8 +34,28 @@ namespace ebi
       class IFasta
       {
       public:
+        /**
+         * Extract n base pairs from the contig starting from an offset
+         * @param contig - the name of the contig to extract the sequence from
+         * @param pos - the starting offset position
+         * @param length - the number of base pairs to be extracted
+         * @return the sequence string, empty if nothing can be extracted.
+         */
         virtual std::string sequence(const std::string& contig, const size_t pos, const size_t length) = 0;
-        virtual size_t count(const std::string& contig) const = 0;
+
+        /**
+         * Get the occurrences of sequences for a contig
+         * @param contig - the name of the contig
+         * @return the occurrences of sequences for the contig. 0 if the contig is not found.
+         */
+        virtual size_t count(const std::string &contig) const = 0;
+
+        /**
+         * Get the length of the sequence for a contig
+         * @param contig - the name of the contig
+         * @return the length of the sequence for the contig. 0 if the contig is not found.
+         */
+        virtual size_t len(const std::string &contig) const = 0;
 
         virtual ~IFasta(){}
       };
@@ -47,7 +67,8 @@ namespace ebi
         virtual ~FileBasedFasta(){}
 
         std::string sequence(const std::string& contig, const size_t pos, const size_t length);
-        size_t count(const std::string& contig) const;
+        size_t count(const std::string &contig) const;
+        size_t len(const std::string &contig) const;
 
       private:
         FileBasedFasta(){}
@@ -65,7 +86,8 @@ namespace ebi
         virtual ~RemoteContig(){}
 
         std::string sequence(const std::string& contig, const size_t pos, const size_t length);
-        size_t count(const std::string& contig) const;
+        size_t count(const std::string &contig) const;
+        size_t len(const std::string &contig) const;
 
       private:
         std::unique_ptr<ebi::util::curl::Easy> curl_easy;

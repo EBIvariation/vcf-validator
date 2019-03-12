@@ -49,6 +49,9 @@ ebi::vcf::fasta::FileBasedFasta::FileBasedFasta(const std::string& fasta_path, c
 std::string
 ebi::vcf::fasta::FileBasedFasta::sequence(const std::string& contig, const size_t pos, const size_t length)
 {
+    if (fasta_index.find(contig) == fasta_index.cend()) {
+        return "";
+    }
     return bioio::read_fasta_contig(*fasta_input, fasta_index.at(contig), pos, length);
 }
 
@@ -56,6 +59,16 @@ size_t
 ebi::vcf::fasta::FileBasedFasta::count(const std::string &contig) const
 {
     return fasta_index.count(contig);
+}
+
+size_t
+ebi::vcf::fasta::FileBasedFasta::len(const std::string &contig) const
+{
+    auto iter = fasta_index.find(contig);
+    if (iter == fasta_index.cend()) {
+      return 0;
+    }
+    return (iter->second).length;
 }
 
 ebi::vcf::fasta::RemoteContig::RemoteContig()
@@ -66,6 +79,7 @@ class ebi::vcf::fasta::ContigFromENA {
 public:
   ContigFromENA(const std::string& contigName)
   {
+      contig_length = 0;
       contig_name = contigName;
       fasta_output.reset(new std::ofstream(contig_name));
   }
@@ -88,6 +102,7 @@ public:
   std::string read(const size_t pos, const size_t length)
   {
       if (!fasta_input.get()) {
+          fasta_output->flush();
           fasta_input.reset(new std::ifstream(contig_name, std::ios_base::in));
       }
 
@@ -97,6 +112,10 @@ public:
 
       std::string result;
       return ebi::util::read_n(*fasta_input, result, length, pos);
+  }
+
+  size_t length() const {
+      return contig_length;
   }
 
 private:
@@ -140,5 +159,20 @@ ebi::vcf::fasta::RemoteContig::sequence(const std::string& contig, const size_t 
 size_t
 ebi::vcf::fasta::RemoteContig::count(const std::string &contig) const
 {
-    return contigs.count(contig);
+  if (contigs.find(contig) == contigs.cend()) {
+    return 0;
+  }
+
+  return 1;
+}
+
+size_t
+ebi::vcf::fasta::RemoteContig::len(const std::string &contig) const
+{
+    auto iter = contigs.find(contig);
+    if (iter == contigs.cend()) {
+      return 0;
+    }
+
+    return iter->second->length();
 }
