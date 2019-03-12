@@ -46,7 +46,7 @@ namespace ebi
           CHECK(fasta->count("I") == 1);
           CHECK(fasta->count("II") == 1);
           CHECK(fasta->count("III") == 1);
-          CHECK(fasta->count("Unexisted") == 0);
+          CHECK(fasta->count("Non-existing") == 0);
       }
 
       SECTION("Check if contigs exist, single chromosome")
@@ -55,7 +55,7 @@ namespace ebi
                   new ebi::vcf::fasta::FileBasedFasta(SINGLE_CHROMOSOME_FASTA, SINGLE_CHROMOSOME_FASTA_INDEX));
 
           CHECK(fasta->count("III") == 1);
-          CHECK(fasta->count("Unexisted") == 0);
+          CHECK(fasta->count("Non-existing") == 0);
       }
 
       SECTION("Check the contigs' length, whole genome")
@@ -66,7 +66,7 @@ namespace ebi
           CHECK(fasta->len("I") == 200);
           CHECK(fasta->len("II") == 172);
           CHECK(fasta->len("III") == 78);
-          CHECK(fasta->len("Unexisted") == 0);
+          CHECK(fasta->len("Non-existing") == 0);
       }
 
       SECTION("Check the contigs' length, single chromosome")
@@ -75,7 +75,7 @@ namespace ebi
                   new ebi::vcf::fasta::FileBasedFasta(SINGLE_CHROMOSOME_FASTA, SINGLE_CHROMOSOME_FASTA_INDEX));
 
           CHECK(fasta->len("III") == 78);
-          CHECK(fasta->len("Unexisted") == 0);
+          CHECK(fasta->len("Non-existing") == 0);
       }
 
       SECTION("Check the contigs' sequence, whole genome")
@@ -87,7 +87,7 @@ namespace ebi
           CHECK(fasta->sequence("I", 199, 31) == "T");
           CHECK(fasta->sequence("I", 200, 31) == "");
           CHECK(fasta->sequence("I", 0, 0) == "");
-          CHECK(fasta->sequence("Unexisted", 0, 31) == "");
+          CHECK(fasta->sequence("Non-existing", 0, 31) == "");
       }
 
       SECTION("Check the contigs' sequence, single chromosome")
@@ -99,7 +99,7 @@ namespace ebi
           CHECK(fasta->sequence("III", 77, 31) == "T");
           CHECK(fasta->sequence("III", 78, 31) == "");
           CHECK(fasta->sequence("III", 0, 0) == "");
-          CHECK(fasta->sequence("Unexisted", 0, 31) == "");
+          CHECK(fasta->sequence("Non-existing", 0, 31) == "");
       }
   }
 
@@ -114,14 +114,14 @@ namespace ebi
       {
           std::unique_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::RemoteContig());
           CHECK_NOTHROW(fasta->sequence("DQ083950", 0, 1));
-          CHECK_NOTHROW(fasta->sequence("Unexisted", 0, 1));
+          CHECK_NOTHROW(fasta->sequence("Non-existing", 0, 1));
 
           CHECK(fasta->count("DQ083950") == 1);
-          CHECK(fasta->count("Unexisted") == 1);
+          CHECK(fasta->count("Non-existing") == 1);
           CHECK(fasta->count("Undownloaded") == 0);
 
           CHECK(fasta->len("DQ083950") == 174);
-          CHECK(fasta->len("Unexisted") == 0);
+          CHECK(fasta->len("Non-existing") == 0);
           CHECK(fasta->len("Undownloaded") == 0);
 
           CHECK(fasta->sequence("DQ083950", 0, 31) == "GCCTCTGGTATGCTTCCCTGCTTGATGATTG");
@@ -129,7 +129,7 @@ namespace ebi
           CHECK(fasta->sequence("DQ083950", 170, 31) == "GGTG");
           CHECK(fasta->sequence("DQ083950", 174, 31) == "");
           CHECK(fasta->sequence("DQ083950", 0, 0) == "");
-          CHECK(fasta->sequence("Unexisted", 0, 31) == "");
+          CHECK(fasta->sequence("Non-existing", 0, 31) == "");
       }
   }
 }

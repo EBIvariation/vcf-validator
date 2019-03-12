@@ -121,7 +121,7 @@ namespace ebi
           if (rc.get()) {
               fetch_contig_on_demand = true;
           }
-          std::unordered_set<std::string> downloadedContigs;
+          std::unordered_set<std::string> downloaded_contigs;
           bool is_valid = true;
           for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
               std::string line{vector_line.begin(), vector_line.end()};
@@ -152,9 +152,9 @@ namespace ebi
                   contig_name = found_synonyms[0];
               }
 
-              if (fetch_contig_on_demand && downloadedContigs.find(contig_name)==downloadedContigs.cend()) {
+              if (fetch_contig_on_demand && downloaded_contigs.find(contig_name) == downloaded_contigs.cend()) {
                   fasta->sequence(contig_name, 0, 1); // trigger download
-                  downloadedContigs.insert(contig_name);
+                  downloaded_contigs.insert(contig_name);
               }
 
               if (fasta->count(contig_name)==0 || fasta->len(contig_name)==0) { // no such contig or fail to download

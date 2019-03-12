@@ -44,9 +44,9 @@ namespace ebi
         virtual std::string sequence(const std::string& contig, const size_t pos, const size_t length) = 0;
 
         /**
-         * Get the occurrences of sequences for a contig
+         * Get the number of times a contig appears in a FASTA.
          * @param contig - the name of the contig
-         * @return the occurrences of sequences for the contig. 0 if the contig is not found.
+         * @return the number of times a contig appears in a FASTA. 0 if the contig is not found.
          */
         virtual size_t count(const std::string &contig) const = 0;
 
