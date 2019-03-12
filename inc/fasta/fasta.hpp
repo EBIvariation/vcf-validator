@@ -23,7 +23,6 @@
 
 #include <boost/iostreams/filtering_stream.hpp>
 #include "bioio/bioio.hpp"
-#include "util/curl_easy.hpp"
 
 namespace ebi
 {
@@ -73,7 +72,7 @@ namespace ebi
       private:
         FileBasedFasta(){}
 
-        std::shared_ptr<std::istream> fasta_input;
+        std::ifstream fasta_input;
         bioio::FastaIndex fasta_index;
       };
 
@@ -82,7 +81,7 @@ namespace ebi
       class RemoteContig : public IFasta
       {
       public:
-        RemoteContig();
+        RemoteContig(){}
         virtual ~RemoteContig(){}
 
         std::string sequence(const std::string& contig, const size_t pos, const size_t length);
@@ -90,7 +89,6 @@ namespace ebi
         size_t len(const std::string &contig) const;
 
       private:
-        std::unique_ptr<ebi::util::curl::Easy> curl_easy;
         std::unordered_map<std::string, std::shared_ptr<ContigFromENA>> contigs;
       };
     }
