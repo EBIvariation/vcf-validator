@@ -172,7 +172,7 @@ namespace ebi
             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
         }
 
-        SECTION("no fasta provided, using ENA API to retrieve fasta for contigs, but got no sequence, fail")
+        SECTION("No fasta provided, using ENA API to retrieve fasta for contigs, but got no sequence, fail")
         {
             auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/failed/failed_ena_api/");
             std::string file_prefix = folder.parent_path().filename().string();
@@ -180,6 +180,17 @@ namespace ebi
             std::ifstream vcf_input{vcf_path};
             std::shared_ptr<ebi::vcf::fasta::IFasta> fasta;
             CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report, outputs));
+        }
+
+        SECTION("With a valid assembly report, but a synonym could not be found for chromosome, can't use ENA API to download fasta, fail")
+        {
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/failed/failed_ena_api_with_mapping/");
+            std::string file_prefix = folder.parent_path().filename().string();
+            std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
+            std::ifstream vcf_input{vcf_path};
+            std::string assembly_report_path = folder.string() + "assembly_report.txt";
+            std::shared_ptr<ebi::vcf::fasta::IFasta> fasta;
+            CHECK_FALSE(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta, assembly_report_path, outputs));
         }
 
         SECTION("Bad assembly_report , throws exception")
