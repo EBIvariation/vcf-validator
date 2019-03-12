@@ -72,7 +72,7 @@ public:
   {
       contig_length = 0;
       contig_name = contigName;
-      fasta_file.open(contig_name.c_str(), std::fstream::in | std::fstream::out | std::fstream::trunc);
+      fasta_file.open(contig_name.c_str(), std::fstream::binary | std::fstream::in | std::fstream::out | std::fstream::trunc);
   }
 
   ~ContigFromENA()
