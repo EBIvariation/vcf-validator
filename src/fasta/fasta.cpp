@@ -27,6 +27,7 @@
 #include "util/stream_utils.hpp"
 #include "util/string_utils.hpp"
 #include "vcf/compression.hpp"
+#include "fasta/faidx.hpp"
 #include "fasta/fasta.hpp"
 #include "vcf/string_constants.hpp"
 
@@ -36,9 +37,19 @@ ebi::vcf::fasta::FileBasedFasta::FileBasedFasta(const std::string& fasta_path, c
     ebi::util::open_file(fasta_input, fasta_path, std::ifstream::binary);
 
     BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA index file...";
-    std::ifstream fs;
-    ebi::util::open_file(fs, fasta_index_path, std::ifstream::binary);
-    fasta_index = bioio::read_fasta_index(fs);
+    try {
+        std::ifstream fs;
+        ebi::util::open_file(fs, fasta_index_path, std::ifstream::binary);
+        fasta_index = bioio::read_fasta_index(fs);
+    } catch (const std::runtime_error& error) {
+        // Fasta index file does not exist. Create index on-the-fly.
+        BOOST_LOG_TRIVIAL(info) << "Creating index from input FASTA file...";
+        std::stringstream faidx_index;
+        ebi::vcf::faidx::index_fasta(fasta_input, faidx_index);
+        fasta_input.clear();
+        fasta_input.seekg(0, std::ios::beg);
+        fasta_index = bioio::read_fasta_index(faidx_index);
+    }
 }
 
 std::string

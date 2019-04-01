@@ -130,7 +130,6 @@ int main(int argc, char** argv)
         auto vcf_path = vm[ebi::vcf::INPUT].as<std::string>();
         auto fasta_path = vm[ebi::vcf::FASTA].as<std::string>();
         auto assembly_report = vm[ebi::vcf::ASSEMBLY_REPORT].as<std::string>();
-        auto fasta_index_path = fasta_path + ebi::vcf::INDEX_EXT;
         auto outdir = ebi::util::get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), vcf_path);
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
 

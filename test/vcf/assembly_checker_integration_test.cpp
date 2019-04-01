@@ -93,6 +93,16 @@ namespace ebi
             std::ifstream vcf_input{vcf_path};
             CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, "", assembly_report, outputs));
         }
+
+        SECTION("no fasta index provided, creating index from fasta file on-the-fly")
+        {
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/passed/passed_missing_index/");
+            std::string file_prefix = folder.parent_path().filename().string();
+            std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_GZ_EXT;
+            std::ifstream vcf_input{vcf_path};
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report, outputs));
+        }
     }
 
     TEST_CASE("Not fully matching VCF and Fasta combination", "[assembly_checker]")
