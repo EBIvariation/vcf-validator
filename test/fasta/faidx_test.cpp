@@ -29,10 +29,10 @@ namespace ebi {
 
   void test_index_fasta(const std::string fasta_input, const std::string expected_fasta_index) {
       std::ostringstream output;
-      std::ifstream input(fasta_input.c_str());
+      std::ifstream input(fasta_input.c_str(), std::ifstream::binary);
       CHECK_NOTHROW(ebi::vcf::faidx::index_fasta(input, output));
 
-      std::ifstream index(expected_fasta_index.c_str());
+      std::ifstream index(expected_fasta_index.c_str(), std::ifstream::binary);
       std::stringstream index_stringstream;
       index_stringstream << index.rdbuf();
       CHECK(output.str() == index_stringstream.str());
