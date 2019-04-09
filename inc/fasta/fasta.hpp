@@ -23,7 +23,6 @@
 
 #include <boost/iostreams/filtering_stream.hpp>
 #include "bioio/bioio.hpp"
-#include "util/curl_easy.hpp"
 
 namespace ebi
 {
@@ -34,8 +33,28 @@ namespace ebi
       class IFasta
       {
       public:
+        /**
+         * Extract n base pairs from the contig starting from an offset
+         * @param contig - the name of the contig to extract the sequence from
+         * @param pos - the starting offset position
+         * @param length - the number of base pairs to be extracted
+         * @return the sequence string, empty if nothing can be extracted.
+         */
         virtual std::string sequence(const std::string& contig, const size_t pos, const size_t length) = 0;
-        virtual size_t count(const std::string& contig) const = 0;
+
+        /**
+         * Check if a contig exists in a FASTA.
+         * @param contig - the name of the contig
+         * @return true if the contig exists in the FASTA, false if the contig is not found.
+         */
+        virtual bool sequence_exists(const std::string &contig) const = 0;
+
+        /**
+         * Get the length of the sequence for a contig
+         * @param contig - the name of the contig
+         * @return the length of the sequence for the contig. 0 if the contig is not found.
+         */
+        virtual size_t sequence_length(const std::string &contig) const = 0;
 
         virtual ~IFasta(){}
       };
@@ -47,12 +66,13 @@ namespace ebi
         virtual ~FileBasedFasta(){}
 
         std::string sequence(const std::string& contig, const size_t pos, const size_t length);
-        size_t count(const std::string& contig) const;
+        bool sequence_exists(const std::string &contig) const;
+        size_t sequence_length(const std::string &contig) const;
 
       private:
         FileBasedFasta(){}
 
-        std::shared_ptr<std::istream> fasta_input;
+        std::ifstream fasta_input;
         bioio::FastaIndex fasta_index;
       };
 
@@ -61,14 +81,14 @@ namespace ebi
       class RemoteContig : public IFasta
       {
       public:
-        RemoteContig();
+        RemoteContig(){}
         virtual ~RemoteContig(){}
 
         std::string sequence(const std::string& contig, const size_t pos, const size_t length);
-        size_t count(const std::string& contig) const;
+        bool sequence_exists(const std::string &contig) const;
+        size_t sequence_length(const std::string &contig) const;
 
       private:
-        std::unique_ptr<ebi::util::curl::Easy> curl_easy;
         std::unordered_map<std::string, std::shared_ptr<ContigFromENA>> contigs;
       };
     }

@@ -30,80 +30,81 @@
 #include "fasta/fasta.hpp"
 #include "vcf/string_constants.hpp"
 
-std::shared_ptr<std::istream> create_input_stream(const std::string &path)
-{
-    std::shared_ptr<std::ifstream> fstream(new std::ifstream());
-    ebi::util::open_file(*fstream, path, std::ifstream::binary);
-    return std::static_pointer_cast<std::istream>(fstream);
-}
-
 ebi::vcf::fasta::FileBasedFasta::FileBasedFasta(const std::string& fasta_path, const std::string& fasta_index_path)
 {
     BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA file...";
-    fasta_input = create_input_stream(fasta_path);
+    ebi::util::open_file(fasta_input, fasta_path, std::ifstream::binary);
 
     BOOST_LOG_TRIVIAL(info) << "Reading from input FASTA index file...";
-    fasta_index = bioio::read_fasta_index(*(create_input_stream(fasta_index_path)));
+    std::ifstream fs;
+    ebi::util::open_file(fs, fasta_index_path, std::ifstream::binary);
+    fasta_index = bioio::read_fasta_index(fs);
 }
 
 std::string
 ebi::vcf::fasta::FileBasedFasta::sequence(const std::string& contig, const size_t pos, const size_t length)
 {
-    return bioio::read_fasta_contig(*fasta_input, fasta_index.at(contig), pos, length);
+    if (fasta_index.find(contig) == fasta_index.cend()) {
+        return "";
+    }
+    return bioio::read_fasta_contig(fasta_input, fasta_index.at(contig), pos, length);
+}
+
+bool
+ebi::vcf::fasta::FileBasedFasta::sequence_exists(const std::string &contig) const
+{
+    return fasta_index.count(contig) > 0;
 }
 
 size_t
-ebi::vcf::fasta::FileBasedFasta::count(const std::string &contig) const
+ebi::vcf::fasta::FileBasedFasta::sequence_length(const std::string &contig) const
 {
-    return fasta_index.count(contig);
+    auto iter = fasta_index.find(contig);
+    if (iter == fasta_index.cend()) {
+      return 0;
+    }
+    return (iter->second).length;
 }
-
-ebi::vcf::fasta::RemoteContig::RemoteContig()
-        : curl_easy(new ebi::util::curl::Easy())
-{}
 
 class ebi::vcf::fasta::ContigFromENA {
 public:
   ContigFromENA(const std::string& contigName)
   {
+      contig_length = 0;
       contig_name = contigName;
-      fasta_output.reset(new std::ofstream(contig_name));
+      fasta_file.open(contig_name.c_str(), std::fstream::binary | std::fstream::in | std::fstream::out | std::fstream::trunc);
   }
 
   ~ContigFromENA()
   {
-      if (fasta_input.get()) {
-          fasta_input->close();
-      }
-      fasta_output->close();
+      fasta_file.close();
       boost::filesystem::remove(contig_name);
   }
 
   void write(const char* buffer, const size_t length)
   {
-      fasta_output->write(buffer, length);
+      fasta_file.write(buffer, length);
       contig_length += length;
   }
 
   std::string read(const size_t pos, const size_t length)
   {
-      if (!fasta_input.get()) {
-          fasta_input.reset(new std::ifstream(contig_name, std::ios_base::in));
-      }
-
       if (pos >= contig_length) {
         return "";
       }
 
       std::string result;
-      return ebi::util::read_n(*fasta_input, result, length, pos);
+      return ebi::util::read_n(fasta_file, result, length, pos);
+  }
+
+  size_t length() const {
+      return contig_length;
   }
 
 private:
   size_t contig_length;
   std::string contig_name;
-  std::unique_ptr<std::ifstream> fasta_input;
-  std::unique_ptr<std::ofstream> fasta_output;
+  std::fstream fasta_file;
 };
 
 std::string
@@ -137,8 +138,19 @@ ebi::vcf::fasta::RemoteContig::sequence(const std::string& contig, const size_t 
     return contigs[contig]->read(pos, length);
 }
 
-size_t
-ebi::vcf::fasta::RemoteContig::count(const std::string &contig) const
+bool
+ebi::vcf::fasta::RemoteContig::sequence_exists(const std::string &contig) const
 {
-    return contigs.count(contig);
+  return contigs.find(contig) != contigs.cend();
+}
+
+size_t
+ebi::vcf::fasta::RemoteContig::sequence_length(const std::string &contig) const
+{
+    auto iter = contigs.find(contig);
+    if (iter == contigs.cend()) {
+      return 0;
+    }
+
+    return iter->second->length();
 }
