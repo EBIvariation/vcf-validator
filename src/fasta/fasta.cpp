@@ -50,14 +50,14 @@ ebi::vcf::fasta::FileBasedFasta::sequence(const std::string& contig, const size_
     return bioio::read_fasta_contig(fasta_input, fasta_index.at(contig), pos, length);
 }
 
-size_t
-ebi::vcf::fasta::FileBasedFasta::count(const std::string &contig) const
+bool
+ebi::vcf::fasta::FileBasedFasta::sequence_exists(const std::string &contig) const
 {
-    return fasta_index.count(contig);
+    return fasta_index.count(contig) > 0;
 }
 
 size_t
-ebi::vcf::fasta::FileBasedFasta::len(const std::string &contig) const
+ebi::vcf::fasta::FileBasedFasta::sequence_length(const std::string &contig) const
 {
     auto iter = fasta_index.find(contig);
     if (iter == fasta_index.cend()) {
@@ -138,18 +138,14 @@ ebi::vcf::fasta::RemoteContig::sequence(const std::string& contig, const size_t 
     return contigs[contig]->read(pos, length);
 }
 
-size_t
-ebi::vcf::fasta::RemoteContig::count(const std::string &contig) const
+bool
+ebi::vcf::fasta::RemoteContig::sequence_exists(const std::string &contig) const
 {
-  if (contigs.find(contig) == contigs.cend()) {
-    return 0;
-  }
-
-  return 1;
+  return contigs.find(contig) != contigs.cend();
 }
 
 size_t
-ebi::vcf::fasta::RemoteContig::len(const std::string &contig) const
+ebi::vcf::fasta::RemoteContig::sequence_length(const std::string &contig) const
 {
     auto iter = contigs.find(contig);
     if (iter == contigs.cend()) {

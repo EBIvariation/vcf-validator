@@ -43,18 +43,18 @@ namespace ebi
         virtual std::string sequence(const std::string& contig, const size_t pos, const size_t length) = 0;
 
         /**
-         * Get the number of times a contig appears in a FASTA.
+         * Check if a contig exists in a FASTA.
          * @param contig - the name of the contig
-         * @return the number of times a contig appears in a FASTA. 0 if the contig is not found.
+         * @return true if the contig exists in the FASTA, false if the contig is not found.
          */
-        virtual size_t count(const std::string &contig) const = 0;
+        virtual bool sequence_exists(const std::string &contig) const = 0;
 
         /**
          * Get the length of the sequence for a contig
          * @param contig - the name of the contig
          * @return the length of the sequence for the contig. 0 if the contig is not found.
          */
-        virtual size_t len(const std::string &contig) const = 0;
+        virtual size_t sequence_length(const std::string &contig) const = 0;
 
         virtual ~IFasta(){}
       };
@@ -66,8 +66,8 @@ namespace ebi
         virtual ~FileBasedFasta(){}
 
         std::string sequence(const std::string& contig, const size_t pos, const size_t length);
-        size_t count(const std::string &contig) const;
-        size_t len(const std::string &contig) const;
+        bool sequence_exists(const std::string &contig) const;
+        size_t sequence_length(const std::string &contig) const;
 
       private:
         FileBasedFasta(){}
@@ -85,8 +85,8 @@ namespace ebi
         virtual ~RemoteContig(){}
 
         std::string sequence(const std::string& contig, const size_t pos, const size_t length);
-        size_t count(const std::string &contig) const;
-        size_t len(const std::string &contig) const;
+        bool sequence_exists(const std::string &contig) const;
+        size_t sequence_length(const std::string &contig) const;
 
       private:
         std::unordered_map<std::string, std::shared_ptr<ContigFromENA>> contigs;

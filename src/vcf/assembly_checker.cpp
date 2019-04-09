@@ -155,11 +155,11 @@ namespace ebi
                   contig_name = found_synonyms[0];
               }
 
-              if (use_fasta_from_ena && fasta->count(contig_name) == 0) {
+              if (use_fasta_from_ena && fasta->sequence_exists(contig_name) == 0) {
                   fasta->sequence(contig_name, 0, 1); // trigger download
               }
 
-              if (fasta->count(contig_name)==0 || fasta->len(contig_name)==0) { // no such contig or fail to download
+              if (fasta->sequence_exists(contig_name)==0 || fasta->sequence_length(contig_name)==0) { // no such contig or fail to download
                   report_missing_chromosome(line_num, record_core, outputs);
                   is_valid = false;
                   continue;
@@ -199,7 +199,7 @@ namespace ebi
 
           auto & contig_synonyms = synonyms_map.get_contig_synonyms(record_core.chromosome);
           for (auto contig : contig_synonyms) {
-              if (fasta->count(contig) != 0) {
+              if (fasta->sequence_exists(contig) != 0) {
                   found_synonyms.push_back(contig);
               }
           }
