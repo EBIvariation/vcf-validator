@@ -41,7 +41,6 @@ private:
     friend class ContigDescriptionState;
     friend class ContigSeqState;
 
-    void process(std::istream & input);
     void set_state(FastaIndexerState* state);
 
     std::unique_ptr<FastaIndexerState> current_state;
@@ -83,7 +82,9 @@ FastaIndexer::index(std::istream &input, std::ostream &output) {
     if (input && input.get(c)) {
         if (c == '>') {
             set_state(new NewContigState());
-            process(input);
+            while (current_state.get()) {
+                current_state->process(this, input);
+            }
         }
     }
 
@@ -100,11 +101,6 @@ FastaIndexer::index(std::istream &input, std::ostream &output) {
 }
 
 void
-FastaIndexer::process(std::istream &input) {
-    current_state->process(this, input);
-}
-
-void
 FastaIndexer::set_state(FastaIndexerState *state) {
     current_state.reset(state);
 }
@@ -113,7 +109,6 @@ void
 NewContigState::process(FastaIndexer *fastaIndexer, std::istream & input) {
     fastaIndexer->fastaIndex.push_back({"", 0, 0, 0, 0});
     fastaIndexer->set_state(new ContigNameState());
-    fastaIndexer->process(input);
 }
 
 void
@@ -123,18 +118,18 @@ ContigNameState::process(FastaIndexer *fastaIndexer, std::istream & input) {
     while (input && input.get(c)) {
         if (c == ' ') {
             fastaIndexer->set_state(new ContigDescriptionState());
-            break;
+            return;
         }
         else if (c == '\n') {
             fastaIndexer->set_state(new ContigSeqState());
-            break;
+            return;
         }
         else {
             contigIndex.name.push_back(c);
         }
     }
 
-    fastaIndexer->process(input);
+    fastaIndexer->set_state(nullptr);
 }
 
 void
@@ -143,11 +138,11 @@ ContigDescriptionState::process(FastaIndexer *fastaIndexer, std::istream & input
     while (input && input.get(c)) {
         if (c == '\n') {
             fastaIndexer->set_state(new ContigSeqState());
-            break;
+            return;
         }
     }
 
-    fastaIndexer->process(input);
+    fastaIndexer->set_state(nullptr);
 }
 
 void
@@ -159,7 +154,6 @@ ContigSeqState::process(FastaIndexer *fastaIndexer, std::istream & input) {
     uint32_t line_length = 0;
     uint32_t line_bytes = 0;
     char c;
-    bool newState = false;
     bool firstLine = true;
     while (input && input.get(c)) {
         if (c == '\n') {
@@ -171,9 +165,9 @@ ContigSeqState::process(FastaIndexer *fastaIndexer, std::istream & input) {
             }
         }
         else if (c == '>') {
+            contigIndex.seq_length = seq_length;
             fastaIndexer->set_state(new NewContigState());
-            newState = true;
-            break;
+            return;
         }
         else {
             if (firstLine) {
@@ -185,10 +179,7 @@ ContigSeqState::process(FastaIndexer *fastaIndexer, std::istream & input) {
     }
 
     contigIndex.seq_length = seq_length;
-
-    if (newState) {
-        fastaIndexer->process(input);
-    }
+    fastaIndexer->set_state(nullptr);
 }
 
 std::ostream &
