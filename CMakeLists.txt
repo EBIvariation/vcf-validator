@@ -148,6 +148,7 @@ add_library (mod_odb STATIC ${MOD_ODB_SOURCES})
 target_link_libraries (mod_odb ${THIRD_PARTY_LIBRARIES})
 
 set (MOD_VCF_SOURCES
+  inc/fasta/faidx.hpp
   inc/fasta/fasta.hpp
   inc/util/curl_easy.hpp
   inc/vcf/assembly_checker.hpp
@@ -174,6 +175,7 @@ set (MOD_VCF_SOURCES
   inc/vcf/validator_detail_v43.hpp
   inc/vcf/validator.hpp
 
+  src/fasta/faidx.cpp
   src/fasta/fasta.cpp
   src/util/curl_easy.cpp
   src/vcf/abort_error_policy.cpp
@@ -238,6 +240,7 @@ set (V42_TESTS test/vcf/parser_v42_test.cpp)
 set (V43_TESTS test/vcf/parser_v43_test.cpp)
 set (ALL_TESTS
   test/assembly_report/assembly_report_test.cpp
+  test/fasta/faidx_test.cpp
   test/fasta/fasta_test.cpp
   test/vcf/assembly_checker_integration_test.cpp
   test/vcf/assembly_checker_test.cpp
