@@ -49,28 +49,28 @@ private:
 
 class FastaIndexerState {
 public:
-    virtual void process(FastaIndexer * fastaIndexer, std::istream & input) = 0;
+    virtual void process(FastaIndexer * fasta_indexer, std::istream & input) = 0;
     virtual ~FastaIndexerState(){}
 };
 
 class NewContigState : public FastaIndexerState {
 public:
-    void process(FastaIndexer * fastaIndexer, std::istream & input);
+    void process(FastaIndexer * fasta_indexer, std::istream & input);
 };
 
 class ContigNameState : public FastaIndexerState {
 public:
-    void process(FastaIndexer * fastaIndexer, std::istream & input);
+    void process(FastaIndexer * fasta_indexer, std::istream & input);
 };
 
 class ContigDescriptionState : public FastaIndexerState {
 public:
-    void process(FastaIndexer * fastaIndexer, std::istream & input);
+    void process(FastaIndexer * fasta_indexer, std::istream & input);
 };
 
 class ContigSequenceState : public FastaIndexerState {
 public:
-    void process(FastaIndexer * fastaIndexer, std::istream & input);
+    void process(FastaIndexer * fasta_indexer, std::istream & input);
 };
 
 std::ostream &
@@ -90,12 +90,12 @@ FastaIndexer::index(std::istream &input, std::ostream &output)
     }
 
     output.clear();
-    for (ContigIndex contigIndex : fasta_index) {
-        output << contigIndex.name << "\t"
-            << contigIndex.seq_length << "\t"
-            << contigIndex.seq_offset << "\t"
-            << contigIndex.line_length << "\t"
-            << contigIndex.line_bytes << "\n";
+    for (ContigIndex contig_index : fasta_index) {
+        output << contig_index.name << "\t"
+            << contig_index.seq_length << "\t"
+            << contig_index.seq_offset << "\t"
+            << contig_index.line_length << "\t"
+            << contig_index.line_bytes << "\n";
     }
 
     return output;
@@ -108,75 +108,75 @@ FastaIndexer::set_state(FastaIndexerState *state)
 }
 
 void
-NewContigState::process(FastaIndexer *fastaIndexer, std::istream & input)
+NewContigState::process(FastaIndexer *fasta_indexer, std::istream & input)
 {
-    fastaIndexer->fasta_index.push_back({"", 0, 0, 0, 0});
-    fastaIndexer->set_state(new ContigNameState());
+    fasta_indexer->fasta_index.push_back({"", 0, 0, 0, 0});
+    fasta_indexer->set_state(new ContigNameState());
 }
 
 void
-ContigNameState::process(FastaIndexer *fastaIndexer, std::istream & input)
+ContigNameState::process(FastaIndexer *fasta_indexer, std::istream & input)
 {
     char c;
-    ContigIndex & contigIndex = fastaIndexer->fasta_index[fastaIndexer->fasta_index.size()-1];
+    ContigIndex & contig_index = fasta_indexer->fasta_index[fasta_indexer->fasta_index.size()-1];
     while (input && input.get(c)) {
         if (c == ' ') {
-            fastaIndexer->set_state(new ContigDescriptionState());
+            fasta_indexer->set_state(new ContigDescriptionState());
             return;
         }
         else if (c == '\n') {
-            fastaIndexer->set_state(new ContigSequenceState());
+            fasta_indexer->set_state(new ContigSequenceState());
             return;
         }
         else {
-            contigIndex.name.push_back(c);
+            contig_index.name.push_back(c);
         }
     }
 
-    fastaIndexer->set_state(nullptr);
+    fasta_indexer->set_state(nullptr);
 }
 
 void
-ContigDescriptionState::process(FastaIndexer *fastaIndexer, std::istream & input)
+ContigDescriptionState::process(FastaIndexer *fasta_indexer, std::istream & input)
 {
     char c;
     while (input && input.get(c)) {
         if (c == '\n') {
-            fastaIndexer->set_state(new ContigSequenceState());
+            fasta_indexer->set_state(new ContigSequenceState());
             return;
         }
     }
 
-    fastaIndexer->set_state(nullptr);
+    fasta_indexer->set_state(nullptr);
 }
 
 void
-ContigSequenceState::process(FastaIndexer *fastaIndexer, std::istream & input)
+ContigSequenceState::process(FastaIndexer *fasta_indexer, std::istream & input)
 {
-    ContigIndex & contigIndex = fastaIndexer->fasta_index[fastaIndexer->fasta_index.size()-1];
-    contigIndex.seq_offset = input.tellg();
+    ContigIndex & contig_index = fasta_indexer->fasta_index[fasta_indexer->fasta_index.size()-1];
+    contig_index.seq_offset = input.tellg();
 
     uint64_t seq_length = 0;
     uint32_t line_length = 0;
     uint32_t line_bytes = 0;
     char c;
-    bool firstLine = true;
+    bool is_first_line = true;
     while (input && input.get(c)) {
         if (c == '\n') {
-            if (firstLine) {
+            if (is_first_line) {
                 ++line_bytes;
-                contigIndex.line_length = line_length;
-                contigIndex.line_bytes = line_bytes;
-                firstLine = false;
+                contig_index.line_length = line_length;
+                contig_index.line_bytes = line_bytes;
+                is_first_line = false;
             }
         }
         else if (c == '>') {
-            contigIndex.seq_length = seq_length;
-            fastaIndexer->set_state(new NewContigState());
+            contig_index.seq_length = seq_length;
+            fasta_indexer->set_state(new NewContigState());
             return;
         }
         else {
-            if (firstLine) {
+            if (is_first_line) {
                 ++line_length;
                 ++line_bytes;
             }
@@ -184,14 +184,14 @@ ContigSequenceState::process(FastaIndexer *fastaIndexer, std::istream & input)
         }
     }
 
-    contigIndex.seq_length = seq_length;
-    fastaIndexer->set_state(nullptr);
+    contig_index.seq_length = seq_length;
+    fasta_indexer->set_state(nullptr);
 }
 
 std::ostream &
 ebi::vcf::faidx::index_fasta(std::istream & input, std::ostream & output)
 {
-    FastaIndexer fastaIndexer;
-    fastaIndexer.index(input, output);
+    FastaIndexer fasta_indexer;
+    fasta_indexer.index(input, output);
     return output;
 }
