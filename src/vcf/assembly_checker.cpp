@@ -31,6 +31,31 @@ namespace ebi
       std::string get_reference_accession(const std::string& reference_tagged_line);
       std::string get_contig_accession(const std::string& contig_tagged_line);
 
+      bool process_vcf_ref(std::istream & vcf_input,
+                           const std::string & fasta,
+                           const std::string & assembly_report,
+                           std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
+
+      RecordCore build_record_core(std::string const & line, size_t line_num);
+
+      std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap & synonyms_map,
+                                                          size_t line_num,
+                                                          RecordCore & record_core,
+                                                          const std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
+                                                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
+
+      void report_multiple_synonym_match(size_t line_num,
+                                         RecordCore & record_core,
+                                         std::vector<std::string> found_synonyms,
+                                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
+
+      void report_missing_chromosome(size_t line_num,
+                                     RecordCore & record_core,
+                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
+
+      void report_telomere_position(size_t line_num,
+                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
+
       bool check_vcf_ref(std::istream & vcf_input,
                          const std::string & sourceName,
                          const std::string & fasta_path,
