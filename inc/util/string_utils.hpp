@@ -106,6 +106,14 @@ namespace ebi
                boost::starts_with(input, ebi::vcf::FTPS);
     }
 
+    inline bool is_matching_sequence(std::string sequence1, std::string sequence2)
+    {
+        std::transform(sequence1.begin(), sequence1.end(), sequence1.begin(), ::tolower);
+        std::transform(sequence2.begin(), sequence2.end(), sequence2.begin(), ::tolower);
+
+        return sequence1 == sequence2;
+    }
+
   }
 
 }

@@ -51,41 +51,11 @@ namespace ebi
     namespace assembly_checker
     {
 
-      size_t const default_line_buffer_size = 64 * 1024;
-
       bool check_vcf_ref(std::istream & vcf_input,
                          const std::string & sourceName,
                          const std::string & fasta,
                          const std::string & assembly_report,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
-
-      bool process_vcf_ref(std::istream & vcf_input,
-                           const std::string & fasta,
-                           const std::string & assembly_report,
-                           std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
-
-      bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence);
-
-      RecordCore build_record_core(std::string const & line, size_t line_num);
-
-
-      std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap & synonyms_map,
-                                  size_t line_num,
-                                  RecordCore & record_core,
-                                  const std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
-                                  std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
-
-      void report_multiple_synonym_match(size_t line_num,
-                                         RecordCore & record_core,
-                                         std::vector<std::string> found_synonyms,
-                                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
-
-      void report_missing_chromosome(size_t line_num,
-                                     RecordCore & record_core,
-                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
-
-      void report_telomere_position(size_t line_num,
-                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
     }
   }
