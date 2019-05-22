@@ -22,21 +22,27 @@ namespace ebi
   {
     namespace assembly_checker
     {
-      bool process_vcf_records(std::istream & vcf_input,
-                               std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
-                               const std::string & assembly_report,
-                               std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
-                               bool use_fasta_from_ena);
-
-      std::string get_reference_accession(const std::string& reference_tagged_line);
-      std::string get_contig_accession(const std::string& contig_tagged_line);
+      size_t const DEFAULT_LINE_BUFFER_SIZE = 64 * 1024;
 
       bool process_vcf_ref(std::istream & vcf_input,
                            const std::string & fasta,
                            const std::string & assembly_report,
                            std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
+      std::string get_reference_accession(const std::string& reference_tagged_line);
+
+      std::string get_contig_accession(const std::string& contig_tagged_line);
+
+      bool process_vcf_records(std::istream & vcf_input,
+                               std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
+                               const std::string & assembly_report,
+                               std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
+                               bool use_fasta_from_ena);
+
       RecordCore build_record_core(std::string const & line, size_t line_num);
+
+      void report_telomere_position(size_t line_num,
+                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
       std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap & synonyms_map,
                                                           size_t line_num,
@@ -44,24 +50,20 @@ namespace ebi
                                                           const std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
                                                           std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
-      void report_multiple_synonym_match(size_t line_num,
-                                         RecordCore & record_core,
-                                         std::vector<std::string> found_synonyms,
-                                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
-
       void report_missing_chromosome(size_t line_num,
                                      RecordCore & record_core,
                                      std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
-      void report_telomere_position(size_t line_num,
-                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
+      void report_multiple_synonym_match(size_t line_num,
+                                         RecordCore & record_core,
+                                         std::vector<std::string> found_synonyms,
+                                         std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
       bool check_vcf_ref(std::istream & vcf_input,
                          const std::string & sourceName,
                          const std::string & fasta_path,
                          const std::string & assembly_report,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
-
       {
           std::vector<char> line;
           ebi::vcf::get_magic_num(vcf_input, line);
@@ -88,7 +90,7 @@ namespace ebi
               std::string reference_accession;
               std::vector<std::string> contigs;
               std::vector<char> vector_line;
-              vector_line.reserve(default_line_buffer_size);
+              vector_line.reserve(DEFAULT_LINE_BUFFER_SIZE);
 
               for (size_t line_num = 1; util::readline(vcf_input, vector_line).size() != 0; ++line_num) {
                   std::string line{vector_line.begin(), vector_line.end()};
@@ -133,6 +135,49 @@ namespace ebi
           return process_vcf_records(vcf_input, fasta, assembly_report, outputs, use_fasta_from_ena);
       }
 
+      std::string get_reference_accession(const std::string& reference_tagged_line)
+      {
+          std::vector<std::string> metadata;
+          ebi::util::string_split(reference_tagged_line, "=", metadata);
+
+          if (metadata.size() > 1) {
+              std::string reference_value = metadata[1];
+              ebi::util::remove_end_of_line(reference_value);
+
+              if (!ebi::util::is_remote_url(reference_value) &&
+                  !boost::ends_with(reference_value, ebi::vcf::GZ) &&
+                  !boost::ends_with(reference_value, ebi::vcf::FASTA) &&
+                  !boost::ends_with(reference_value, ebi::vcf::FASTA_EXT)) {
+                  //does not look like a fasta file name, try it as an accession.
+                  return reference_value;
+              }
+          }
+
+          return "";
+      }
+
+      std::string get_contig_accession(const std::string& contig_tagged_line)
+      {
+          size_t pos = contig_tagged_line.find("=<");
+
+          if (pos != std::string::npos) {
+              std::string contig_value = contig_tagged_line.substr(pos+2);
+              ebi::util::remove_end_of_line(contig_value);
+              contig_value.erase(contig_value.size() - 1, 1);
+
+              std::vector<std::string> metadata;
+              ebi::util::string_split(contig_value, ",", metadata);
+
+              for (std::string s :  metadata) {
+                  if (boost::starts_with(s, "ID=")) {
+                      return s.substr(3);
+                  }
+              }
+            }
+
+          return "";
+      }
+
       bool process_vcf_records(std::istream & vcf_input,
                                std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
                                const std::string & assembly_report,
@@ -140,7 +185,7 @@ namespace ebi
                                bool use_fasta_from_ena)
       {
           std::vector<char> vector_line;
-          vector_line.reserve(default_line_buffer_size);
+          vector_line.reserve(DEFAULT_LINE_BUFFER_SIZE);
 
           // Create contig synonyms mapping from assembly report
           ebi::assembly_report::SynonymsMap synonyms_map;
@@ -194,7 +239,7 @@ namespace ebi
                                                     record_core.position - 1,
                                                     record_core.reference_allele.length());
               auto reference_sequence = record_core.reference_allele;
-              bool match_result = is_matching_sequence(fasta_sequence, reference_sequence);
+              bool match_result = ebi::util::is_matching_sequence(fasta_sequence, reference_sequence);
 
               for (auto & output : outputs ) {
                   if (match_result) {
@@ -207,6 +252,40 @@ namespace ebi
           }
 
           return is_valid;
+      }
+
+      RecordCore build_record_core(std::string const & line, size_t line_num)
+      {
+          std::vector<std::string> record_columns;
+          util::string_split(line, "\t", record_columns);
+
+          std::string chromosome = record_columns[0];
+          size_t position = static_cast<size_t>(std::stoi(record_columns[1]));
+          std::string reference_allele = record_columns[3];
+          std::string alternate_alleles = record_columns[4];
+
+          /*
+           * Here the last parameter which is having type `RecordType` is kept `NO_VARIATION`
+           *
+           * Till now the behaviour of assemblychecker is independent from this parameter.
+           * In future this can be modified if needed.
+           */
+          return RecordCore{line_num,
+                            chromosome,
+                            position,
+                            reference_allele,
+                            alternate_alleles,
+                            vcf::RecordType::NO_VARIATION};
+      }
+
+      void report_telomere_position(size_t line_num,
+                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
+      {
+          std::string position_0_warning = "Line " + std::to_string(line_num)
+                                           + ": Position 0 should only be used for a telomere";
+          for (auto & output : outputs ) {
+              output->write_warning(position_0_warning);
+          }
       }
 
       std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap & synonyms_map,
@@ -238,6 +317,17 @@ namespace ebi
           return found_synonyms;
       }
 
+      void report_missing_chromosome(size_t line_num,
+                                     RecordCore & record_core,
+                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
+      {
+          std::string missing_warning = "Line " + std::to_string(line_num)
+                                        + ": Chromosome " + record_core.chromosome + " is not present in FASTA file";
+          for (auto &output : outputs ) {
+              output->write_warning(missing_warning);
+          }
+      }
+
       void report_multiple_synonym_match(size_t line_num,
                                          RecordCore & record_core,
                                          std::vector<std::string> found_synonyms,
@@ -255,102 +345,6 @@ namespace ebi
               output->write_warning(multiple_synonym_match_warning);
           }
 
-      }
-
-      void report_missing_chromosome(size_t line_num,
-                                     RecordCore & record_core,
-                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
-      {
-          std::string missing_warning = "Line " + std::to_string(line_num)
-              + ": Chromosome " + record_core.chromosome + " is not present in FASTA file";
-          for (auto &output : outputs ) {
-              output->write_warning(missing_warning);
-          }
-      }
-
-      void report_telomere_position(size_t line_num,
-                                    std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
-      {
-          std::string position_0_warning = "Line " + std::to_string(line_num)
-              + ": Position 0 should only be used for a telomere";
-          for (auto & output : outputs ) {
-              output->write_warning(position_0_warning);
-          }
-      }
-
-      RecordCore build_record_core(std::string const & line, size_t line_num)
-      {
-          std::vector<std::string> record_columns;
-          util::string_split(line, "\t", record_columns);
-
-          std::string chromosome = record_columns[0];
-          size_t position = static_cast<size_t>(std::stoi(record_columns[1]));
-          std::string reference_allele = record_columns[3];
-          std::string alternate_alleles = record_columns[4];
-
-          /*
-           * Here the last parameter which is having type `RecordType` is kept `NO_VARIATION`
-           *
-           * Till now the behaviour of assemblychecker is independent from this parameter.
-           * In future this can be modified if needed.
-           */
-          return RecordCore{line_num,
-                            chromosome,
-                            position,
-                            reference_allele,
-                            alternate_alleles,
-                            vcf::RecordType::NO_VARIATION};
-      }
-
-      bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence)
-      {
-          std::transform(fasta_sequence.begin(), fasta_sequence.end(), fasta_sequence.begin(), ::tolower);
-          std::transform(reference_sequence.begin(), reference_sequence.end(), reference_sequence.begin(), ::tolower);
-
-          return fasta_sequence == reference_sequence;
-      }
-
-      std::string get_reference_accession(const std::string& reference_tagged_line)
-      {
-          std::vector<std::string> metadata;
-          ebi::util::string_split(reference_tagged_line, "=", metadata);
-
-          if (metadata.size() > 1) {
-              std::string reference_value = metadata[1];
-              ebi::util::remove_end_of_line(reference_value);
-
-              if (!ebi::util::is_remote_url(reference_value) &&
-                  !boost::ends_with(reference_value, ebi::vcf::GZ) &&
-                  !boost::ends_with(reference_value, ebi::vcf::FASTA) &&
-                  !boost::ends_with(reference_value, ebi::vcf::FASTA_EXT)) {
-                  //does not look like a fasta file name, try it as an accession.
-                  return reference_value;
-              }
-          }
-
-          return "";
-      }
-
-      std::string get_contig_accession(const std::string& contig_tagged_line)
-      {
-          size_t pos = contig_tagged_line.find("=<");
-
-          if (pos != std::string::npos) {
-              std::string contig_value = contig_tagged_line.substr(pos+2);
-              ebi::util::remove_end_of_line(contig_value);
-              contig_value.erase(contig_value.size() - 1, 1);
-
-              std::vector<std::string> metadata;
-              ebi::util::string_split(contig_value, ",", metadata);
-
-              for (std::string s :  metadata) {
-                  if (boost::starts_with(s, "ID=")) {
-                      return s.substr(3);
-                  }
-              }
-          }
-
-          return "";
       }
 
     }

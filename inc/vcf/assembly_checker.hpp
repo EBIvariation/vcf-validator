@@ -51,15 +51,11 @@ namespace ebi
     namespace assembly_checker
     {
 
-      size_t const default_line_buffer_size = 64 * 1024;
-
       bool check_vcf_ref(std::istream & vcf_input,
                          const std::string & sourceName,
                          const std::string & fasta,
                          const std::string & assembly_report,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
-
-      bool is_matching_sequence(std::string fasta_sequence, std::string reference_sequence);
 
     }
   }
