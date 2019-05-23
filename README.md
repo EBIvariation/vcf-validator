@@ -129,7 +129,7 @@ The build has been tested on the following compilers:
 
 #### Dependencies
 
-We strongly recommend to install most of the dependencies using the command `./install_dependencies.sh linux`, and help can be obtained with `./install_dependencies.sh --help`. Please install SQLite3 before running the script.
+We strongly recommend to install most of the dependencies using the command `./install_dependencies.sh linux`, and help can be obtained with `./install_dependencies.sh --help`. Please install SQLite3 and cmake before running the script.
 
 The following dependencies are managed by the installation script:
 
@@ -146,7 +146,7 @@ A subfolder named `linux_dependencies` will be created, with all the required li
 ##### Boost
 
 The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system.
-If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-iostreams`, `libboost-program-options-dev`, `libboost-regex-dev` and `libboost-log-dev`.
+If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-iostreams-dev`, `libboost-program-options-dev`, `libboost-regex-dev` and `libboost-log-dev`.
 
 ##### ODB
 
