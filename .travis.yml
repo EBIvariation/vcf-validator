@@ -39,12 +39,12 @@ jobs:
             - llvm-toolchain-trusty-4.0
           packages:
             - clang-4.0
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
+            - libboost-dev
+            - libboost-filesystem-dev
+            - libboost-iostreams-dev
+            - libboost-program-options-dev
+            - libboost-regex-dev
+            - libboost-log-dev
             - ninja-build
 
     # Clang 5.0
@@ -59,12 +59,12 @@ jobs:
             - llvm-toolchain-trusty-5.0
           packages:
             - clang-5.0
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
+            - libboost-dev
+            - libboost-filesystem-dev
+            - libboost-iostreams-dev
+            - libboost-program-options-dev
+            - libboost-regex-dev
+            - libboost-log-dev
             - ninja-build
 
     # GCC 4.8
@@ -79,12 +79,12 @@ jobs:
           packages:
             - gcc-4.8
             - g++-4.8
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
+            - libboost-dev
+            - libboost-filesystem-dev
+            - libboost-iostreams-dev
+            - libboost-program-options-dev
+            - libboost-regex-dev
+            - libboost-log-dev
             - ninja-build
 
     # GCC 5
@@ -99,12 +99,12 @@ jobs:
           packages:
             - gcc-5
             - g++-5
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
+            - libboost-dev
+            - libboost-filesystem-dev
+            - libboost-iostreams-dev
+            - libboost-program-options-dev
+            - libboost-regex-dev
+            - libboost-log-dev
             - ninja-build
 
     # GCC 6
@@ -119,12 +119,12 @@ jobs:
           packages:
             - gcc-6
             - g++-6
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
+            - libboost-dev
+            - libboost-filesystem-dev
+            - libboost-iostreams-dev
+            - libboost-program-options-dev
+            - libboost-regex-dev
+            - libboost-log-dev
             - ninja-build
 
     - stage: "Release Builds"
@@ -160,12 +160,12 @@ jobs:
           packages:
             - gcc-6
             - g++-6
-            - libboost1.55-dev
-            - libboost-filesystem1.55-dev
-            - libboost-iostreams1.55-dev
-            - libboost-program-options1.55-dev
-            - libboost-regex1.55-dev
-            - libboost-log1.55-dev
+            - libboost-dev
+            - libboost-filesystem-dev
+            - libboost-iostreams-dev
+            - libboost-program-options-dev
+            - libboost-regex-dev
+            - libboost-log-dev
             - ninja-build
       deploy:
         provider: releases
