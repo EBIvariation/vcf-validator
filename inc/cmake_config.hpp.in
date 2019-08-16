@@ -1,2 +1,3 @@
 #define VERSION_MAJOR @vcf-validator_VERSION_MAJOR@
 #define VERSION_MINOR @vcf-validator_VERSION_MINOR@
+#define VERSION_PATCH @vcf-validator_VERSION_PATCH@

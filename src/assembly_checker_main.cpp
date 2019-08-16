@@ -30,7 +30,7 @@ namespace
     namespace po = boost::program_options;
 
     const std::string version_info = "vcf-assembly-checker version " + std::to_string(VERSION_MAJOR) + "."
-                                       + std::to_string(VERSION_MINOR);
+                                       + std::to_string(VERSION_MINOR) + "." + std::to_string(VERSION_PATCH);
 
     po::options_description build_command_line_options()
     {
