@@ -17,6 +17,14 @@ We recommend using the [latest release](https://github.com/EBIvariation/vcf-vali
 
 ## Run
 
+#### Note: Core dumped in Ubuntu 18
+We recently noticed that the current version 0.9.1 fails to execute in Ubuntu 18 with the next message:
+
+> vcf_validator: loadlocale.c:129: _nl_intern_locale_data: Assertion `cnt < (sizeof (_nl_value_type_LC_TIME) / sizeof (_nl_value_type_LC_TIME[0]))' failed.
+> Aborted (core dumped)
+
+This seems to be related to locales. A workaround is to execute `export LC_ALL=C` in the terminal before running the validator. We will fix this issue and remove this notice as soon as possible.
+
 ### Validator
 
 vcf-validator accepts both compressed and non-compressed input VCF files. Supported compression formats are .gz and .bz2. For other formats such as .zip, the `zcat` command and a pipe can be used (see below).
