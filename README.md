@@ -113,7 +113,7 @@ vcf_assembly_checker -i /path/to/file.vcf -f /path/to/fasta_file.fa -r valid -a 
 
 ## Build
 
-If you would like to use an unreleased version of vcf-validator, you can build it under 4 platforms: Docker (generates Linux binary without installing dependencies), Linux, macOS and Windows. A statically linked executable will be generated, which means you won't need to install any dependencies to run it.
+If you would like to use an unreleased version of vcf-validator, you can clone the repository and build it under 4 platforms: Docker (generates Linux binary without installing dependencies), Linux, macOS and Windows. A statically linked executable will be generated, which means you won't need to install any dependencies to run it.
 
 ### Docker
 
@@ -137,24 +137,30 @@ The build has been tested on the following compilers:
 
 #### Dependencies
 
-We strongly recommend to install most of the dependencies using the command `./install_dependencies.sh linux`, and help can be obtained with `./install_dependencies.sh --help`. Please install SQLite3 and cmake before running the script.
+Some dependencies have to be installed manually and others can be installed automatically. We recommend using the automatic install when possible.
 
-The following dependencies are managed by the installation script:
+Dependency | Version | Instalation method
+:--------: | :-----: | :----:
+Cmake | \>=2.8 | manual
+Sqlite3 | \>=3 | manual
+ODB compiler | 2.4.0 | manual or automatic
+ODB common runtime | 2.4.0 | manual or automatic
+ODB SQLite runtime | 2.4.0 | manual or automatic
+bzip2 | 1.0.6 | manual or automatic
+zlib | 1.2.11 | manual or automatic
+Boost* | \>=1.65 | manual
 
-Dependency | Version
-:--------: | :-----:
-ODB compiler | 2.4.0
-ODB common runtime | 2.4.0
-ODB SQLite runtime | 2.4.0
-bzip2 | 1.0.6
-zlib | 1.2.11
+*: See below the exact subset of Boost packages required.
+
+##### SQLite, CMake and automatic installation
+The automatic install **requires** CMake, SQLite3 and wget to be installed before running the script (as ODB and zlib require them to be installed). Also, the script will compile some dependencies so a compilation environment is needed. If you are using Ubuntu, you can install all that with the command `sudo apt-get install libsqlite3-0 libsqlite3-dev cmake wget build-essential`. After installing that, use the command `./install_dependencies.sh linux`.
 
 A subfolder named `linux_dependencies` will be created, with all the required libraries copied into it. You will also have to install Boost packages as described in the following section.
 
 ##### Boost
 
 The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system.
-If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-iostreams-dev`, `libboost-program-options-dev`, `libboost-regex-dev` and `libboost-log-dev`.
+If you are using Ubuntu, you can install them with the command `sudo apt-get install libboost-dev libboost-filesystem-dev libboost-iostreams-dev libboost-program-options-dev libboost-regex-dev libboost-log-dev`.
 
 ##### ODB
 
@@ -170,7 +176,7 @@ If you don't have root permissions, please run `./configure --prefix=/path/to/od
 
 #### Compile
 
-In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles" /path/to/CMakeLists.txt` will create Makefiles, and to build the binaries, you will need to run `make`.
+In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `mkdir build && cd build && cmake -G "Unix Makefiles" ..` will create Makefiles, and to build the binaries, you will need to run `make`.
 
 If the ODB libraries were not found during the build, please run `sudo updatedb && sudo ldconfig`. Also, if ODB has been installed in a non-default location, the option `-DEXT_LIB_PATH=/path/to/external/libraries/folder` must be also provided to the `cmake` command.
 
