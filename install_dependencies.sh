@@ -68,29 +68,29 @@ mkdir -p $dependencies_dir && cd $dependencies_dir
 
 echo "installing libodb"
 wget http://codesynthesis.com/download/odb/2.4/libodb-2.4.0.tar.bz2 -O /tmp/libodb.tar.bz2
-tar jxvf /tmp/libodb.tar.bz2
+tar jxf /tmp/libodb.tar.bz2
 cd libodb-2.4.0 && ./configure && make
 cd ..
 
 echo "installing libodb-sqlite"
 wget http://codesynthesis.com/download/odb/2.4/libodb-sqlite-2.4.0.tar.bz2 -O /tmp/libodb-sqlite.tar.bz2
-tar jxvf /tmp/libodb-sqlite.tar.bz2
+tar jxf /tmp/libodb-sqlite.tar.bz2
 cd libodb-sqlite-2.4.0 && ./configure --with-libodb=../libodb-2.4.0 && make
 cd ..
 
 echo "installing libbz2"
 # This is commented till the bzip.org site is recovered.
 # wget http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz -O /tmp/libbz2.tar.gz
-# tar zxvf /tmp/libbz2.tar.gz
+# tar zxf /tmp/libbz2.tar.gz
 # Till then we can trust ubuntu archives.
 wget http://archive.ubuntu.com/ubuntu/pool/main/b/bzip2/bzip2_1.0.6.orig.tar.bz2 -O /tmp/libbz2.tar.bz2
-tar jxvf /tmp/libbz2.tar.bz2
+tar jxf /tmp/libbz2.tar.bz2
 cd bzip2-1.0.6 && make
 cd ..
 
 echo "installing libz"
 wget http://prdownloads.sourceforge.net/libpng/zlib-1.2.11.tar.gz?download -O /tmp/libz.tar.gz
-tar zxvf /tmp/libz.tar.gz
+tar zxf /tmp/libz.tar.gz
 cd zlib-1.2.11 && cmake . && make
 cd ..
 
@@ -152,11 +152,11 @@ cp -r libodb-sqlite-2.4.0/odb/sqlite ./odb/
 if [[ "$OS_NAME" == "linux" ]]
 then
   wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-x86_64-linux-gnu.tar.bz2 -O /tmp/odb.tar.bz2
-  tar jxvf /tmp/odb.tar.bz2
+  tar jxf /tmp/odb.tar.bz2
 elif [[ "$OS_NAME" == "osx" ]]
 then
   wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-i686-macosx.tar.bz2 -O /tmp/odb.tar.bz2
-  tar jxvf /tmp/odb.tar.bz2
+  tar jxf /tmp/odb.tar.bz2
 else
   echo "Invalid OS name"
   echo "$help_install_dependencies"
