@@ -88,7 +88,26 @@ message(STATUS "Build type is ${CMAKE_BUILD_TYPE}")
 find_package (Threads REQUIRED)
 
 # Flags
-if (LINUX OR OSX)
+if (LINUX)
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas") # no unknows pragmas warnings
+  set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION") # Needed to statically link ODB
+  set (BOOST_CUSTOM_INCLUDE_DIR ${EXT_LIB_PATH}/boost)
+  include_directories (${BOOST_CUSTOM_INCLUDE_DIR} )
+  set (BOOST_LIBS_DIR ${BOOST_CUSTOM_INCLUDE_DIR}/stage/lib)
+  set (Boost_LIBRARIES
+    ${BOOST_LIBS_DIR}/libboost_atomic.a
+    ${BOOST_LIBS_DIR}/libboost_chrono.a
+    ${BOOST_LIBS_DIR}/libboost_date_time.a
+    ${BOOST_LIBS_DIR}/libboost_filesystem.a
+    ${BOOST_LIBS_DIR}/libboost_iostreams.a
+    ${BOOST_LIBS_DIR}/libboost_log.a
+    ${BOOST_LIBS_DIR}/libboost_log_setup.a
+    ${BOOST_LIBS_DIR}/libboost_program_options.a
+    ${BOOST_LIBS_DIR}/libboost_regex.a
+    ${BOOST_LIBS_DIR}/libboost_system.a
+    ${BOOST_LIBS_DIR}/libboost_thread.a
+  )
+elseif (OSX)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas") # no unknows pragmas warnings
   set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION") # Needed to statically link ODB
   find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )

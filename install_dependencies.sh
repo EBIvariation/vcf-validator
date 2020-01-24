@@ -27,6 +27,8 @@ for mac os:
 ./install_dependencies.sh osx
 "
 
+INSTALL_FAILED=0
+
 if [ "$#" -eq 0 ]
 then
     OS_NAME="linux"
@@ -70,12 +72,16 @@ echo "installing libodb"
 wget http://codesynthesis.com/download/odb/2.4/libodb-2.4.0.tar.bz2 -O /tmp/libodb.tar.bz2
 tar jxf /tmp/libodb.tar.bz2
 cd libodb-2.4.0 && ./configure && make
+RESULT=$?
+INSTALL_FAILED=$(( $INSTALL_FAILED + $RESULT ))
 cd ..
 
 echo "installing libodb-sqlite"
 wget http://codesynthesis.com/download/odb/2.4/libodb-sqlite-2.4.0.tar.bz2 -O /tmp/libodb-sqlite.tar.bz2
 tar jxf /tmp/libodb-sqlite.tar.bz2
 cd libodb-sqlite-2.4.0 && ./configure --with-libodb=../libodb-2.4.0 && make
+RESULT=$?
+INSTALL_FAILED=$(( $INSTALL_FAILED + $RESULT ))
 cd ..
 
 echo "installing libbz2"
@@ -86,12 +92,16 @@ echo "installing libbz2"
 wget http://archive.ubuntu.com/ubuntu/pool/main/b/bzip2/bzip2_1.0.6.orig.tar.bz2 -O /tmp/libbz2.tar.bz2
 tar jxf /tmp/libbz2.tar.bz2
 cd bzip2-1.0.6 && make
+RESULT=$?
+INSTALL_FAILED=$(( $INSTALL_FAILED + $RESULT ))
 cd ..
 
 echo "installing libz"
 wget http://prdownloads.sourceforge.net/libpng/zlib-1.2.11.tar.gz?download -O /tmp/libz.tar.gz
 tar zxf /tmp/libz.tar.gz
 cd zlib-1.2.11 && cmake . && make
+RESULT=$?
+INSTALL_FAILED=$(( $INSTALL_FAILED + $RESULT ))
 cd ..
 
 dependencies_dir_abs_path=`pwd`
@@ -106,6 +116,8 @@ LIBS="-lcrypto -ldl" \
         --prefix=$dependencies_dir_abs_path/openssl \
         --openssldir=$dependencies_dir_abs_path/openssl
 make && make install_sw
+RESULT=$?
+INSTALL_FAILED=$(( $INSTALL_FAILED + $RESULT ))
 cd ..
 
 echo "installing c-ares"
@@ -115,6 +127,8 @@ tar xzf /tmp/c-ares-1.15.0.tar.gz
 cd c-ares-1.15.0
 ./configure --prefix=$dependencies_dir_abs_path/c-ares
 make && make install
+RESULT=$?
+INSTALL_FAILED=$(( $INSTALL_FAILED + $RESULT ))
 cd ..
 
 echo "installing libcurl"
@@ -136,7 +150,26 @@ CPPFLAGS="-I$dependencies_dir_abs_path/openssl/include -I$dependencies_dir_abs_p
             --with-ssl=$dependencies_dir_abs_path/openssl \
             --prefix=$dependencies_dir_abs_path/curl
 make && make install
+RESULT=$?
+INSTALL_FAILED=$(( $INSTALL_FAILED + $RESULT ))
 cd ..
+
+if [[ "$OS_NAME" == "linux" ]]
+then
+  echo "installing  boost"
+  wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz -O /tmp/boost.tar.gz
+  tar zxf /tmp/boost.tar.gz
+  mv boost_1_65_1 boost && cd boost
+  echo "
+using zlib : 1.2.11 : <include>${dependencies_dir_abs_path}/zlib-1.2.11 <search>${dependencies_dir_abs_path}/ ;
+using bzip2 : 1.0.6 : <include>${dependencies_dir_abs_path}/bzip2-1.0.6 <search>${dependencies_dir_abs_path}/ ;
+" > tools/build/src/user-config.jam
+  ./bootstrap.sh --with-libraries=filesystem,iostreams,log,program_options,regex && ./b2 link=static
+  RESULT=$?
+  INSTALL_FAILED=$(( $INSTALL_FAILED + $RESULT ))
+  cd ..
+fi
+
 
 # Make easier to find the static libraries
 cp libodb-2.4.0/odb/.libs/libodb.a .
@@ -163,7 +196,14 @@ else
   exit
 fi
 
-
 cd ..
-echo "downloaded odb:"
+
+echo "Dependencies folder:"
 ls $dependencies_dir
+
+if [ $INSTALL_FAILED -gt 0 ]
+then
+  echo "ERROR: Automatic installation failed, see above logs."
+else
+  echo "Automatic installation completed successfully."
+fi
