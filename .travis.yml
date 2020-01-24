@@ -33,17 +33,10 @@ jobs:
       addons:
         apt:
           sources:
-            - boost-latest
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-4.0
           packages:
             - clang-4.0
-            - libboost-dev
-            - libboost-filesystem-dev
-            - libboost-iostreams-dev
-            - libboost-program-options-dev
-            - libboost-regex-dev
-            - libboost-log-dev
             - ninja-build
 
     # Clang 5.0
@@ -53,17 +46,10 @@ jobs:
       addons:
         apt:
           sources:
-            - boost-latest
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-5.0
           packages:
             - clang-5.0
-            - libboost-dev
-            - libboost-filesystem-dev
-            - libboost-iostreams-dev
-            - libboost-program-options-dev
-            - libboost-regex-dev
-            - libboost-log-dev
             - ninja-build
 
     # GCC 4.8
@@ -73,17 +59,10 @@ jobs:
       addons:
         apt:
           sources:
-            - boost-latest
             - ubuntu-toolchain-r-test
           packages:
             - gcc-4.8
             - g++-4.8
-            - libboost-dev
-            - libboost-filesystem-dev
-            - libboost-iostreams-dev
-            - libboost-program-options-dev
-            - libboost-regex-dev
-            - libboost-log-dev
             - ninja-build
 
     # GCC 5
@@ -93,17 +72,10 @@ jobs:
       addons:
         apt:
           sources:
-            - boost-latest
             - ubuntu-toolchain-r-test
           packages:
             - gcc-5
             - g++-5
-            - libboost-dev
-            - libboost-filesystem-dev
-            - libboost-iostreams-dev
-            - libboost-program-options-dev
-            - libboost-regex-dev
-            - libboost-log-dev
             - ninja-build
 
     # GCC 6
@@ -113,17 +85,10 @@ jobs:
       addons:
         apt:
           sources:
-            - boost-latest
             - ubuntu-toolchain-r-test
           packages:
             - gcc-6
             - g++-6
-            - libboost-dev
-            - libboost-filesystem-dev
-            - libboost-iostreams-dev
-            - libboost-program-options-dev
-            - libboost-regex-dev
-            - libboost-log-dev
             - ninja-build
 
     - stage: "Release Builds"
@@ -154,17 +119,10 @@ jobs:
       addons:
         apt:
           sources:
-            - boost-latest
             - ubuntu-toolchain-r-test
           packages:
             - gcc-6
             - g++-6
-            - libboost-dev
-            - libboost-filesystem-dev
-            - libboost-iostreams-dev
-            - libboost-program-options-dev
-            - libboost-regex-dev
-            - libboost-log-dev
             - ninja-build
       deploy:
         provider: releases
