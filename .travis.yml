@@ -26,30 +26,30 @@ jobs:
       before_install:
         - brew install ninja
 
-    # Clang 4.0
+    # Clang 9.0
     - os: linux
       compiler: clang
-      env: C_COMPILER=clang-4.0 CXX_COMPILER=clang++-4.0
+      env: C_COMPILER=clang-9 CXX_COMPILER=clang++-9
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
+            - llvm-toolchain-xenial-9
           packages:
-            - clang-4.0
+            - clang-9
             - ninja-build
 
-    # Clang 5.0
+    # Clang 10.0
     - os: linux
       compiler: clang
-      env: C_COMPILER=clang-5.0 CXX_COMPILER=clang++-5.0
+      env: C_COMPILER=clang-10 CXX_COMPILER=clang++-10
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
+            - llvm-toolchain-xenial-10
           packages:
-            - clang-5.0
+            - clang-10
             - ninja-build
 
     # GCC 4.8

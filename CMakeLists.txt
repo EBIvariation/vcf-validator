@@ -104,7 +104,6 @@ if (LINUX)
     ${BOOST_LIBS_DIR}/libboost_log_setup.a
     ${BOOST_LIBS_DIR}/libboost_program_options.a
     ${BOOST_LIBS_DIR}/libboost_regex.a
-    ${BOOST_LIBS_DIR}/libboost_system.a
     ${BOOST_LIBS_DIR}/libboost_thread.a
   )
 elseif (OSX)
