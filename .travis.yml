@@ -28,9 +28,9 @@ jobs:
       before_install:
         - brew install ninja
 
-    # Linux Clang
+    # Linux Clang 7
     - os: linux
-      compiler: clang
+      compiler: clang-7
       env: C_COMPILER=clang CXX_COMPILER=clang++
       addons:
         apt:
