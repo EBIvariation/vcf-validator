@@ -157,14 +157,14 @@ cd ..
 if [[ "$OS_NAME" == "linux" ]]
 then
   echo "installing  boost"
-  wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz -O /tmp/boost.tar.gz
+  wget https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.gz -O /tmp/boost.tar.gz
   tar zxf /tmp/boost.tar.gz
-  mv boost_1_65_1 boost && cd boost
-  echo "
-using zlib : 1.2.11 : <include>${dependencies_dir_abs_path}/zlib-1.2.11 <search>${dependencies_dir_abs_path}/ ;
-using bzip2 : 1.0.6 : <include>${dependencies_dir_abs_path}/bzip2-1.0.6 <search>${dependencies_dir_abs_path}/ ;
-" > tools/build/src/user-config.jam
-  ./bootstrap.sh --with-libraries=filesystem,iostreams,log,program_options,regex && ./b2 link=static
+  mv boost_1_70_0 boost && cd boost
+  ./bootstrap.sh --with-libraries=filesystem,iostreams,log,program_options,regex && \
+    ./b2 link=static \
+    -sBZIP2_LIBRARY_PATH=${dependencies_dir_abs_path}/bzip2-1.0.6   -sBZIP2_NAME=bz2   -sBZIP2_INCLUDE=${dependencies_dir_abs_path}/bzip2-1.0.6 \
+    -sZLIB_LIBRARY_PATH=${dependencies_dir_abs_path}/zlib-1.2.11   -sZLIB_NAME=z   -sBZIP2_INCLUDE=${dependencies_dir_abs_path}/zlib-1.2.11
+
   RESULT=$?
   INSTALL_FAILED=$(( $INSTALL_FAILED + $RESULT ))
   cd ..
