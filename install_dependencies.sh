@@ -160,10 +160,17 @@ then
   wget https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz -O /tmp/boost.tar.gz
   tar zxf /tmp/boost.tar.gz
   mv boost_1_72_0 boost && cd boost
+
+  # If there's some error like "undefined reference to bzip2_base", then boost didn't compile everything for iostreams.
+  # The boost iostreams compilation was ok if this command finds some lines "nm libboost_iostreams.a | grep bzip2_base".
+  # The next user-config.jam should fix that.
+  # Documentation on building iostreams: https://www.boost.org/doc/libs/1_72_0/libs/iostreams/doc/index.html
+  # Documentation on specifying zlib and bzip2: https://boostorg.github.io/build/manual/master/index.html#bbv2.reference.tools.libraries.zlib
   echo "
 using zlib : 1.2.11 : <include>${dependencies_dir_abs_path}/zlib-1.2.11 <search>${dependencies_dir_abs_path}/ ;
 using bzip2 : 1.0.6 : <include>${dependencies_dir_abs_path}/bzip2-1.0.6 <search>${dependencies_dir_abs_path}/ ;
 " > tools/build/src/user-config.jam
+
   ./bootstrap.sh --with-libraries=filesystem,iostreams,log,program_options,regex && ./b2 link=static
   RESULT=$?
   INSTALL_FAILED=$(( $INSTALL_FAILED + $RESULT ))
