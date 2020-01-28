@@ -37,19 +37,6 @@ jobs:
           packages:
             - ninja-build
 
-    # Linux GCC 4.8
-    - os: linux
-      compiler: gcc
-      env: C_COMPILER=gcc-4.8 CXX_COMPILER=g++-4.8
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-4.8
-            - g++-4.8
-            - ninja-build
-
     # Linux GCC 5
     - os: linux
       compiler: gcc
@@ -61,19 +48,6 @@ jobs:
           packages:
             - gcc-5
             - g++-5
-            - ninja-build
-
-    # Linux GCC 6
-    - os: linux
-      compiler: gcc
-      env: C_COMPILER=gcc-6 CXX_COMPILER=g++-6
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-6
-            - g++-6
             - ninja-build
 
     - stage: "Release Builds"
