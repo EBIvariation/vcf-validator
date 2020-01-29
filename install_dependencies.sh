@@ -19,6 +19,7 @@ it installs the given dependencies:
   - curl library                            curl-7.62.0
   - openssl library                         openssl-1.1.1a
   - c-ares library                          c-ares-1.15.0
+  - boost library                           boost-1.72.0
 
 for linux:
 ./install_dependencies.sh linux
@@ -211,6 +212,7 @@ ls $dependencies_dir
 if [ $INSTALL_FAILED -gt 0 ]
 then
   echo "ERROR: Automatic installation failed, see above logs."
+  exit 1
 else
   echo "Automatic installation completed successfully."
 fi
