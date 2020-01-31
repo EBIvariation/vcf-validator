@@ -105,21 +105,7 @@ vcf_assembly_checker -i /path/to/file.vcf -f /path/to/fasta_file.fa -r valid -a 
 
 ## Build
 
-If you would like to use an unreleased version of vcf-validator, you can clone the repository and build it under 4 platforms: Docker (generates Linux binary without installing dependencies), Linux, macOS and Windows. A statically linked executable will be generated, which means you won't need to install any dependencies to run it.
-
-### Docker
-
-The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create an executable that can be run on any Linux machine.
-
-1. Install and configure Docker following [their tutorial](https://docs.docker.com/engine/getstarted/).
-2. Create the Docker image:
-    1. Clone this Git repository: `git clone https://github.com/EBIvariation/vcf-validator.git`
-    2. Move to the folder the code was downloaded to: `cd vcf-validator`
-    3. Build the image: `docker build -t ebivariation/vcf-validator docker/`. Please replace `ebivariation` with your user account if you plan to push this image to [Docker Hub](https://hub.docker.com).
-3. Build the executable running `docker run -v ${PWD}:/tmp ebivariation/vcf-validator`. Again, replace `ebivariation` with your user name if necessary.
-
-Executables will be created in the `build/bin` subfolder.
-
+If you would like to use an unreleased version of vcf-validator, you can clone the repository and build it under 3 platforms: Linux, macOS and Windows. A statically linked executable will be generated, which means you won't need to install any dependencies in the machine that will run it; only install the dependencies in the machine that will build it.
 
 ### Linux
 
