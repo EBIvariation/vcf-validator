@@ -17,14 +17,6 @@ We recommend using the [latest release](https://github.com/EBIvariation/vcf-vali
 
 ## Run
 
-#### Note: Core dumped in Ubuntu 18
-We recently noticed that the current version 0.9.1 fails to execute in Ubuntu 18 with the next message:
-
-> vcf_validator: loadlocale.c:129: _nl_intern_locale_data: Assertion `cnt < (sizeof (_nl_value_type_LC_TIME) / sizeof (_nl_value_type_LC_TIME[0]))' failed.
-> Aborted (core dumped)
-
-This seems to be related to locales. A workaround is to execute `export LC_ALL=C` in the terminal before running the validator. We will fix this issue and remove this notice as soon as possible.
-
 ### Validator
 
 vcf-validator accepts both compressed and non-compressed input VCF files. Supported compression formats are .gz and .bz2. For other formats such as .zip, the `zcat` command and a pipe can be used (see below).
@@ -135,6 +127,8 @@ The build has been tested on the following compilers:
 * Clang 7
 * GCC 5
 
+NOTE: Currently the Linux compilation doesn't work in Ubuntu 18 or newer. We are working on fixing this. The Linux compilation is tested and working in Ubuntu 16.04.
+
 #### Dependencies
 
 Some dependencies have to be installed manually and others can be installed automatically. We recommend using the automatic install when possible.
@@ -152,7 +146,7 @@ Boost* | \>=1.65 | manual or automatic
 
 *: See below the exact subset of Boost packages required.
 
-If you are using Ubuntu, you can prepare all dependencies and compile the Validation Suite with these commands:
+If you are using Ubuntu 16, you can prepare all dependencies and compile the Validation Suite with these commands:
 ```
 sudo apt-get install libsqlite3-0 libsqlite3-dev cmake wget build-essential
 ./install_dependencies.sh linux
