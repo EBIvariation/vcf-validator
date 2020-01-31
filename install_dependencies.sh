@@ -6,7 +6,7 @@ set -e
 # keep track of the last executed command
 trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 # echo an error message before exiting
-trap 'echo "******ERROR******: \"${last_command}\" command failed with exit code $?." && echo "Installation of dependencies failed!"' EXIT
+trap 'if [ $? -ne 0 ]; then echo "******ERROR******: \"${last_command}\" command failed with exit code $?." && echo "Installation of dependencies failed!"; fi' EXIT
 
 help_install_dependencies="Usage:
 ./install_dependencies.sh [os_name]         default OS is linux
@@ -66,7 +66,7 @@ dependencies_dir=$OS_NAME"_dependencies"
 if [ -d "$dependencies_dir" ]; then
   echo "ERROR: Found directory of a previous installation: \"$dependencies_dir\". Please remove the folder before running this script. Current contents:"
   ls $dependencies_dir
-  exit
+  exit 0
 fi
 
 
