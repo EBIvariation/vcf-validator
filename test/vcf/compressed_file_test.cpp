@@ -39,7 +39,10 @@ namespace ebi
 
           for (auto path : v)
           {
-              CHECK(vcf::get_compression_from_extension(path.string()) != vcf::NO_EXT);
+              SECTION(path.string())
+              {
+                  CHECK(vcf::get_compression_from_extension(path.string()) != vcf::NO_EXT);
+              }
           }
       }
 
@@ -75,7 +78,10 @@ namespace ebi
 
           for (auto path : v)
           {
-              CHECK(is_valid(path.string()));
+              SECTION(path.string())
+              {
+                  CHECK(is_valid(path.string()));
+              }
           }
       }
 #endif // _WIN32
@@ -88,7 +94,10 @@ namespace ebi
 
           for (auto path : v)
           {
-              CHECK_FALSE(is_valid(path.string()));
+              SECTION(path.string())
+              {
+                  CHECK_FALSE(is_valid(path.string()));
+              }
           }
       }
   }
@@ -105,7 +114,10 @@ namespace ebi
 
           for (auto path : v)
           {
-              CHECK(vcf::get_compression_from_extension(path.string()) == vcf::NO_EXT);
+              SECTION(path.string())
+              {
+                  CHECK(vcf::get_compression_from_extension(path.string()) == vcf::NO_EXT);
+              }
           }
       }
 

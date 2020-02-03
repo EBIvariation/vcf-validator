@@ -17,14 +17,6 @@ We recommend using the [latest release](https://github.com/EBIvariation/vcf-vali
 
 ## Run
 
-#### Note: Core dumped in Ubuntu 18
-We recently noticed that the current version 0.9.1 fails to execute in Ubuntu 18 with the next message:
-
-> vcf_validator: loadlocale.c:129: _nl_intern_locale_data: Assertion `cnt < (sizeof (_nl_value_type_LC_TIME) / sizeof (_nl_value_type_LC_TIME[0]))' failed.
-> Aborted (core dumped)
-
-This seems to be related to locales. A workaround is to execute `export LC_ALL=C` in the terminal before running the validator. We will fix this issue and remove this notice as soon as possible.
-
 ### Validator
 
 vcf-validator accepts both compressed and non-compressed input VCF files. Supported compression formats are .gz and .bz2. For other formats such as .zip, the `zcat` command and a pipe can be used (see below).
@@ -113,48 +105,54 @@ vcf_assembly_checker -i /path/to/file.vcf -f /path/to/fasta_file.fa -r valid -a 
 
 ## Build
 
-If you would like to use an unreleased version of vcf-validator, you can build it under 4 platforms: Docker (generates Linux binary without installing dependencies), Linux, macOS and Windows. A statically linked executable will be generated, which means you won't need to install any dependencies to run it.
-
-### Docker
-
-The easiest way to build vcf-validator is using the Docker image provided with the source code. This will create an executable that can be run on any Linux machine.
-
-1. Install and configure Docker following [their tutorial](https://docs.docker.com/engine/getstarted/).
-2. Create the Docker image:
-    1. Clone this Git repository: `git clone https://github.com/EBIvariation/vcf-validator.git`
-    2. Move to the folder the code was downloaded to: `cd vcf-validator`
-    3. Build the image: `docker build -t ebivariation/vcf-validator docker/`. Please replace `ebivariation` with your user account if you plan to push this image to [Docker Hub](https://hub.docker.com).
-3. Build the executable running `docker run -v ${PWD}:/tmp ebivariation/vcf-validator`. Again, replace `ebivariation` with your user name if necessary.
-
-Executables will be created in the `build/bin` subfolder.
-
+If you would like to use an unreleased version of vcf-validator, you can clone the repository and build it under 3 platforms: Linux, macOS and Windows. A statically linked executable will be generated, which means you won't need to install any dependencies in the machine that will run it; only install the dependencies in the machine that will build it.
 
 ### Linux
 
 The build has been tested on the following compilers:
-* Clang 3.9 to 5.0
-* GCC 4.8 to 6.0
+* Clang 7
+* GCC 5
+
+NOTE: Currently the Linux compilation doesn't work in Ubuntu 18 or newer. We are working on fixing this. The Linux compilation is tested and working in Ubuntu 16.04.
 
 #### Dependencies
 
-We strongly recommend to install most of the dependencies using the command `./install_dependencies.sh linux`, and help can be obtained with `./install_dependencies.sh --help`. Please install SQLite3 and cmake before running the script.
+Some dependencies have to be installed manually and others can be installed automatically. We recommend using the automatic install when possible.
 
-The following dependencies are managed by the installation script:
+Dependency | Version | Instalation method
+:--------: | :-----: | :----:
+Cmake | \>=2.8 | manual
+Sqlite3 | \>=3 | manual
+ODB compiler | 2.4.0 | manual or automatic
+ODB common runtime | 2.4.0 | manual or automatic
+ODB SQLite runtime | 2.4.0 | manual or automatic
+bzip2 | 1.0.6 | manual or automatic
+zlib | 1.2.11 | manual or automatic
+Boost* | \>=1.65 | manual or automatic
 
-Dependency | Version
-:--------: | :-----:
-ODB compiler | 2.4.0
-ODB common runtime | 2.4.0
-ODB SQLite runtime | 2.4.0
-bzip2 | 1.0.6
-zlib | 1.2.11
+*: See below the exact subset of Boost packages required.
 
-A subfolder named `linux_dependencies` will be created, with all the required libraries copied into it. You will also have to install Boost packages as described in the following section.
+If you are using Ubuntu 16, you can prepare all dependencies and compile the Validation Suite with these commands:
+```
+sudo apt-get install libsqlite3-0 libsqlite3-dev cmake wget build-essential
+./install_dependencies.sh linux
+mkdir build && cd build && cmake -G "Unix Makefiles" ..
+make
+```
+
+The VCF Validation Suite binaries will be created in the `build/bin` subfolder. Optionally, read below for the explanation of the previous commands.
+
+##### SQLite, CMake and automatic installation
+The automatic install **requires** CMake, SQLite3 and wget to be installed before running the script (as ODB and zlib require them to be installed). Also, the script will compile some dependencies so a compilation environment is needed. If you are using Ubuntu, you can install all that with the command `sudo apt-get install libsqlite3-0 libsqlite3-dev cmake wget build-essential`. After installing that, use the command `./install_dependencies.sh linux`.
+
+A subfolder named `linux_dependencies` will be created, with all the required libraries copied into it. 
 
 ##### Boost
 
+**Note**: You can ignore this section if you are using the `install_dependencies.sh` script.
+
 The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system.
-If you are using Ubuntu, the required packages' names will be `libboost-dev`, `libboost-filesystem-dev`, `libboost-iostreams-dev`, `libboost-program-options-dev`, `libboost-regex-dev` and `libboost-log-dev`.
+If you are using Ubuntu, you can install them with the command `sudo apt-get install libboost-dev libboost-filesystem-dev libboost-iostreams-dev libboost-program-options-dev libboost-regex-dev libboost-log-dev`.
 
 ##### ODB
 
@@ -170,11 +168,11 @@ If you don't have root permissions, please run `./configure --prefix=/path/to/od
 
 #### Compile
 
-In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles" /path/to/CMakeLists.txt` will create Makefiles, and to build the binaries, you will need to run `make`.
+In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `mkdir build && cd build && cmake -G "Unix Makefiles" ..` will create Makefiles, and to build the binaries, you will need to run `make`.
 
 If the ODB libraries were not found during the build, please run `sudo updatedb && sudo ldconfig`. Also, if ODB has been installed in a non-default location, the option `-DEXT_LIB_PATH=/path/to/external/libraries/folder` must be also provided to the `cmake` command.
 
-Binaries will be created in the `bin` subfolder.
+The VCF Validation Suite binaries will be created in the `build/bin` subfolder.
 
 
 ### macOS
@@ -183,28 +181,42 @@ On macOS the binaries obtained will only have system libraries dynamically linke
 
 #### Dependencies
 
-In order to set up the environment to compile the dependencies, first you need to run `brew install cmake ninja boost sqlite3`. We strongly recommend to install most of the dependencies using the command `./install_dependencies.sh osx`, and help can be obtained with `./install_dependencies.sh --help`.
+Some dependencies have to be installed manually and others can be installed automatically. We recommend using the automatic install when possible.
 
-The following dependencies are managed by the installation script:
+Dependency | Version | Instalation method
+:--------: | :-----: | :----:
+Cmake | \>=2.8 | manual
+Sqlite3 | \>=3 | manual
+ODB compiler | 2.4.0 | manual or automatic
+ODB common runtime | 2.4.0 | manual or automatic
+ODB SQLite runtime | 2.4.0 | manual or automatic
+bzip2 | 1.0.6 | manual or automatic
+zlib | 1.2.11 | manual or automatic
+Boost | \>=1.65 | manual
 
-Dependency | Version
-:--------: | :-----:
-ODB compiler | 2.4.0
-ODB common runtime | 2.4.0
-ODB SQLite runtime | 2.4.0
-bzip2 | 1.0.6
-zlib | 1.2.11
+You can prepare all dependencies and compile the Validation Suite with these commands:
+```
+brew install cmake ninja boost sqlite3
+./install_dependencies.sh osx
+mkdir build && cd build && cmake -G "Unix Makefiles" ..
+make
+```
 
-A subfolder named `osx_dependencies` will be created, with all the required libraries copied into it.
+The VCF Validation Suite binaries will be created in the `build/bin` subfolder. Optionally, read below for the explanation of the previous commands.
+
+##### SQLite, CMake and automatic installation
+
+The automatic install requires CMake, SQLite3 and wget to be installed before running the script (as ODB and zlib require them to be installed). In order to set up the environment to compile the dependencies, first you need to run `brew install cmake ninja boost sqlite3`.
 
 Now you can easily install the ODB ORM and compression libraries just by running `./install_dependencies.sh osx`. You may run `./install_dependencies.sh --help` for usage instructions.
 
+A subfolder named `osx_dependencies` will be created, with all the required libraries copied into it.
+
 #### Compile
 
-In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `cmake -G "Unix Makefiles" /path/to/CMakeLists.txt` will create Makefiles, and to build the binaries, you will need to run `make`.
+In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `mkdir build && cd build && cmake -G "Unix Makefiles" ..` will create Makefiles, and to build the binaries, you will need to run `make`.
 
-Binaries will be created in the `bin` subfolder.
-
+The VCF Validation Suite binaries will be created in the `bin` subfolder.
 
 ### Windows
 
@@ -247,7 +259,6 @@ nmake
 Binaries will be created in the `bin` subfolder.
 
 In order to run those binaries, you will need to add the `lib/windows_specific` directory to the `PATH`. This will allow the dll files inside that directory to be found.
-
 
 
 ## Deliverables

@@ -32,29 +32,42 @@ endif ()
 include_directories (inc)
 include_directories (lib)
 
-if (LINUX AND EXISTS "${PROJECT_SOURCE_DIR}/linux_dependencies")
-  include_directories (linux_dependencies)
-  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/linux_dependencies" CACHE STRING "Absolute path to libraries")
-  set (ODB_PATH "${EXT_LIB_PATH}/odb-2.4.0-x86_64-linux-gnu/bin/" CACHE STRING "Path to odb binaries")
-elseif (OSX AND EXISTS "${PROJECT_SOURCE_DIR}/osx_dependencies")
-  include_directories (osx_dependencies)
+if (DEFINED EXT_LIB_PATH AND NOT EXISTS "${EXT_LIB_PATH}")
+  message (FATAL_ERROR "The provided folder for dependencies (EXT_LIB_PATH=${EXT_LIB_PATH}) doesn't exist. Please, either provide a correct folder or don't provide it (and remove cmake cache) to search in default folders.")
+endif()
+
+# default folder for dependencies (written by install_dependencies.sh), unless provided by the user
+if (LINUX)
+  set (DEFAULT_EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/linux_dependencies")
+  if (NOT EXISTS "${DEFAULT_EXT_LIB_PATH}")
+    set (EXT_LIB_PATH "/usr/local/bin" CACHE STRING "Absolute path to libraries")
+  else()
+    set (EXT_LIB_PATH "${DEFAULT_EXT_LIB_PATH}" CACHE STRING "Absolute path to libraries") # cached: this instruction is ignored if the user provided the variable
+    set (ODB_PATH "${EXT_LIB_PATH}/odb-2.4.0-x86_64-linux-gnu/bin/" CACHE STRING "Path to odb binaries")
+    if (EXISTS "${EXT_LIB_PATH}/boost")
+      set (SELF_COMPILED_BOOST TRUE)
+    else ()
+      set (SELF_COMPILED_BOOST FALSE)
+    endif()
+  endif()
+elseif (OSX)
   set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/osx_dependencies" CACHE STRING "Absolute path to libraries")
   set (ODB_PATH "${EXT_LIB_PATH}/odb-2.4.0-i686-macosx/bin/" CACHE STRING "Path to odb binaries")
-elseif (WINDOWS AND EXISTS "${PROJECT_SOURCE_DIR}/windows_dependencies")
+  if (NOT EXISTS "${EXT_LIB_PATH}")
+    message(FATAL_ERROR "Please run first install_dependencies.sh osx")
+  endif()
+elseif (WINDOWS)
   include_directories (lib/sqlite)            # Windows specific
+  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows_specific" CACHE STRING "Absolute path to libraries")
+  if (NOT EXISTS "${PROJECT_SOURCE_DIR}/windows_dependencies")
+    message(FATAL_ERROR "Please run first install_dependencies.bat")
+  endif ()
   include_directories (windows_dependencies)
   include_directories (windows_dependencies/curl/include)
-  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows_specific" CACHE STRING "Absolute path to libraries")
-else ()
-  set (EXT_LIB_PATH "/usr/local/bin" CACHE STRING "Absolute path to libraries")
-  if (OSX)
-    message(ERROR "Please run first install_dependencies.sh osx")
-  elseif (WINDOWS)
-    message(ERROR "Please run first install_dependencies.bat")
-  endif()
 endif ()
 
-include_directories (${EXT_LIB_PATH}/curl/include)
+include_directories ("${EXT_LIB_PATH}")
+include_directories ("${EXT_LIB_PATH}/curl/include")
 
 # Compiler and linkers flags
 if (LINUX)
@@ -88,11 +101,30 @@ message(STATUS "Build type is ${CMAKE_BUILD_TYPE}")
 find_package (Threads REQUIRED)
 
 # Flags
+
 if (LINUX OR OSX)
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas") # no unknows pragmas warnings
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas") # No unknown pragmas: it's ok that gcc doesn't know about ODB's pragmas
   set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION") # Needed to statically link ODB
-  find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
-  include_directories (${Boost_INCLUDE_DIR} )
+  if (LINUX AND SELF_COMPILED_BOOST)
+    set (BOOST_CUSTOM_INCLUDE_DIR ${EXT_LIB_PATH}/boost)
+    include_directories (${BOOST_CUSTOM_INCLUDE_DIR} )
+    set (BOOST_LIBS_DIR ${BOOST_CUSTOM_INCLUDE_DIR}/stage/lib)
+    set (Boost_LIBRARIES
+            ${BOOST_LIBS_DIR}/libboost_atomic.a
+            ${BOOST_LIBS_DIR}/libboost_chrono.a
+            ${BOOST_LIBS_DIR}/libboost_date_time.a
+            ${BOOST_LIBS_DIR}/libboost_filesystem.a
+            ${BOOST_LIBS_DIR}/libboost_iostreams.a
+            ${BOOST_LIBS_DIR}/libboost_log.a
+            ${BOOST_LIBS_DIR}/libboost_log_setup.a
+            ${BOOST_LIBS_DIR}/libboost_program_options.a
+            ${BOOST_LIBS_DIR}/libboost_regex.a
+            ${BOOST_LIBS_DIR}/libboost_thread.a
+            )
+  else ()
+    find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
+    include_directories (${Boost_INCLUDE_DIR} )
+  endif()
 elseif (WINDOWS)
   add_definitions(-DCURL_STATICLIB) # Needed to statically link libcurl
   add_definitions(-DNOMINMAX) # Needed to suppress min and max definitions by Windows
