@@ -6,6 +6,11 @@ dist: xenial
 language:
   - cpp
 
+cache:
+  directories:
+    - linux_dependencies
+    - osx_dependencies
+
 jobs:
   include:
 
