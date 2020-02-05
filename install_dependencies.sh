@@ -63,8 +63,8 @@ fi
 dependencies_dir=$OS_NAME"_dependencies"
 
 #check for already downloaded files
-if [ -d "$dependencies_dir" ]; then
-  echo "ERROR: Found directory of a previous installation: \"$dependencies_dir\". Please remove the folder before running this script. Current contents:"
+if [ "$(ls -A $dependencies_dir)" ]; then
+  echo "ERROR: Found non-empty directory of a previous installation: \"$dependencies_dir\". Please remove the folder before running this script. Current contents:"
   ls $dependencies_dir
   exit 0
 fi
