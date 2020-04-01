@@ -581,8 +581,8 @@ namespace ebi
                 },
                 source
         });
-	
-	source->meta_entries.emplace(vcf::FORMAT,
+
+        source->meta_entries.emplace(vcf::FORMAT,
             vcf::MetaEntry{
                 1,
                 vcf::FORMAT,
@@ -593,7 +593,7 @@ namespace ebi
                     { vcf::DESCRIPTION, "Copy Number Genotype" }
                 },
                 source
-        });
+            });
            
         source->meta_entries.emplace(vcf::FORMAT,
             vcf::MetaEntry{
@@ -857,8 +857,9 @@ namespace ebi
                             { "0|1:tags" },
                             source}),
                         vcf::SamplesFieldBodyError*);
-	    
-	    CHECK_THROWS_AS( (vcf::Record{
+
+            // Copy number genotypes should have a genotype representation with just an Integer
+            CHECK_THROWS_AS((vcf::Record{
                             1,
                             "chr1",
                             123456,
@@ -869,9 +870,10 @@ namespace ebi
                             { vcf::PASS },
                             { {vcf::AN, "12"}, { vcf::AF, "0.5,0.3"} },
                             { vcf::CN },
-                            { "0" },
-                            source}),
-                        vcf::SamplesFieldBodyError*);
+                            { "0|0" },
+                            source }),
+                            vcf::SamplesFieldBodyError*);
+	  
 
             CHECK_THROWS_AS( (vcf::Record{
                             1,
