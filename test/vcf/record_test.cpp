@@ -46,7 +46,7 @@ namespace ebi
                 },
                 source
         });
-	
+
         source->meta_entries.emplace(vcf::FORMAT,
             vcf::MetaEntry{
                 1,
@@ -873,7 +873,7 @@ namespace ebi
                             { "0|0" },
                             source }),
                             vcf::SamplesFieldBodyError*);
-	  
+
 
             CHECK_THROWS_AS( (vcf::Record{
                             1,
