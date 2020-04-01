@@ -417,13 +417,17 @@ namespace ebi
                 } else {
                     std::string first_field = alternate_alleles[i].substr(0, 4);
                     if (first_field == "<" + INS || first_field == "<" + DUP) {
-                        if (std::stoi(values[i]) < 0) {
+			size_t scanned_value_length;
+			int value = std::stoi(values[i], &scanned_value_length);
+                        if (value < 0 || scanned_value_length != values[i].size()) {
                             throw new InfoBodyError{line, "INFO SVLEN must be a positive integer for longer ALT alleles", "SVLEN="
                                     + field_value + ", ALT allele=" + first_field.substr(1, 3),
                                     ErrorFix::IRRECOVERABLE_VALUE, field_key};
                         }
                     } else if (first_field == "<" + DEL) {
-                        if (std::stoi(values[i]) > 0) {
+			size_t scanned_value_length;
+			int value = std::stoi(values[i], &scanned_value_length);
+                        if (value > 0 || scanned_value_length != values[i].size()) {
                             throw new InfoBodyError{line, "INFO SVLEN must be a negative integer for shorter ALT alleles"
                                     + first_field.substr(1,3), "SVLEN=" + field_value + ", ALT allele=" + first_field.substr(1, 3),
                                     ErrorFix::IRRECOVERABLE_VALUE, field_key};
@@ -661,8 +665,9 @@ namespace ebi
         } else {
             // ...specified as a number in range [0, +MAX_LONG)
             try {
-                expected_cardinality = stoi(number);
-                if (expected_cardinality < 0) {
+		size_t scanned_number_length;
+                expected_cardinality = stoi(number, &scanned_number_length);
+                if (expected_cardinality < 0 || number.size() != scanned_number_length) {
                     expected_cardinality = -1;
                     valid = false;
                 }
@@ -722,10 +727,15 @@ namespace ebi
     void Record::check_value_type(std::string const & type, std::string const & value, std::string & message) const {
         if (type == INTEGER) {
             // ...try to cast to int
-            std::stoi(value);
+	    std::size_t scanned_value_length;
+            std::stoi(value, &scanned_value_length);
+	    if (value.size() != scanned_value_length) {
+                message = " (not in integer format)";
+                throw std::invalid_argument(message);
+            }
             // ...and also check it's not a float
             if (std::fmod(std::stof(value), 1) != 0) {
-                message = " (an integer must not contain decimal digits)";
+                message = " (an integer must not contain a decimal point)";
                 throw std::invalid_argument(message);
             }
         } else if (type == FLOAT) {
@@ -737,8 +747,9 @@ namespace ebi
                 std::stold(value);
             }
         } else if (type == FLAG) {
-            int numeric_value = std::stoi(value);
-            if (value.size() > 1 || (numeric_value != 0 && numeric_value != 1)) {
+	    size_t scanned_value_length;
+            int numeric_value = std::stoi(value, &scanned_value_length);
+            if (value.size() != scanned_value_length || value.size() > 1 || (numeric_value != 0 && numeric_value != 1)) {
                 message = " (a flag value must be \"0, 1 or none\")";
                 throw std::invalid_argument(message);
             }
@@ -777,8 +788,9 @@ namespace ebi
         }
         for (auto & value : values) {
             if (value == MISSING_VALUE) { continue; }
-
-            if (std::stoi(value) < 0) {
+	    size_t scanned_value_length;
+	    int numeric_value = std::stoi(value, &scanned_value_length);
+            if (value.size() != scanned_value_length || numeric_value < 0) {
                 raise(std::make_shared<Error>(line, field + " value must be a non-negative integer number"));
             }
         }

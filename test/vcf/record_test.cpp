@@ -46,7 +46,7 @@ namespace ebi
                 },
                 source
         });
-           
+	
         source->meta_entries.emplace(vcf::FORMAT,
             vcf::MetaEntry{
                 1,
@@ -581,6 +581,19 @@ namespace ebi
                 },
                 source
         });
+	
+	source->meta_entries.emplace(vcf::FORMAT,
+            vcf::MetaEntry{
+                1,
+                vcf::FORMAT,
+                {
+                    { vcf::ID, vcf::CN },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::DESCRIPTION, "Copy Number Genotype" }
+                },
+                source
+        });
            
         source->meta_entries.emplace(vcf::FORMAT,
             vcf::MetaEntry{
@@ -842,6 +855,21 @@ namespace ebi
                             { {vcf::AN, "12"}, { vcf::AF, "0.5,0.3"} },
                             { vcf::GT, vcf::DP },
                             { "0|1:tags" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+	    
+	    CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AN, "12"}, { vcf::AF, "0.5,0.3"} },
+                            { vcf::CN },
+                            { "0" },
                             source}),
                         vcf::SamplesFieldBodyError*);
 
