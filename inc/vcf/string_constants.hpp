@@ -23,7 +23,6 @@ namespace ebi
 {
   namespace vcf
   {
-
     // VCF versions
     const std::string VCF_V41 = "VCFv4.1";
     const std::string VCF_V42 = "VCFv4.2";
@@ -63,6 +62,7 @@ namespace ebi
     const char REPORT_OPTION[] = "report,r";
     const char OUTDIR_OPTION[] = "outdir,o";
     const char OUTPUT_OPTION[] = "output,o";
+    const char CHECK_EVIDENCE[] = "require-evidence";
 
     // fields
     const std::string ID = "ID";

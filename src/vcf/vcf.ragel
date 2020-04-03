@@ -236,6 +236,7 @@
                 for(auto &error_ptr : symbolic_duplicates) {
                     ErrorPolicy::handle_warning(*this, error_ptr.release());
                 }
+                validate_additional_checks();
             }
 
             try {

@@ -96,7 +96,7 @@ namespace ebi
       public ParsingState
     {
       public:
-        ParserImpl(std::shared_ptr<Source> source);
+        ParserImpl(std::shared_ptr<Source> source, AdditionalChecks additionalChecks);
         virtual ~ParserImpl() = default;
 
         void parse(std::string const & text) override;
@@ -130,7 +130,7 @@ namespace ebi
         using ErrorPolicy = typename Configuration::ErrorPolicy;
         using OptionalPolicy = typename Configuration::OptionalPolicy;
 
-        ParserImpl_v41(std::shared_ptr<Source> source);
+        ParserImpl_v41(std::shared_ptr<Source> source, AdditionalChecks additionalChecks);
 
       private:
         void parse_buffer(char const * p, char const * pe, char const * eof);
@@ -148,7 +148,7 @@ namespace ebi
         using ErrorPolicy = typename Configuration::ErrorPolicy;
         using OptionalPolicy = typename Configuration::OptionalPolicy;
 
-        ParserImpl_v42(std::shared_ptr<Source> source);
+        ParserImpl_v42(std::shared_ptr<Source> source, AdditionalChecks additionalChecks);
 
       private:
         void parse_buffer(char const * p, char const * pe, char const * eof);
@@ -166,7 +166,7 @@ namespace ebi
         using ErrorPolicy = typename Configuration::ErrorPolicy;
         using OptionalPolicy = typename Configuration::OptionalPolicy;
 
-        ParserImpl_v43(std::shared_ptr<Source> source);
+        ParserImpl_v43(std::shared_ptr<Source> source, AdditionalChecks additionalChecks);
 
       private:
         void parse_buffer(char const * p, char const * pe, char const * eof);
@@ -185,15 +185,16 @@ namespace ebi
     using FullValidator_v43 = ParserImpl_v43<FullValidatorCfg>;
     using Reader_v43 = ParserImpl_v43<ReaderCfg>;
 
-    bool is_valid_vcf_file(std::istream &input,
-                           const std::string &sourceName,
+    bool is_valid_vcf_file(std::istream &input, const std::string &sourceName,
                            ValidationLevel validationLevel,
-                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
+                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs,
+                           AdditionalChecks checks);
 
     bool process_vcf_stream(std::istream &input,
-                          const std::string &sourceName,
-                          ValidationLevel validationLevel,
-                          std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs);
+                            const std::string &sourceName,
+                            ValidationLevel validationLevel,
+                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs,
+                            AdditionalChecks additionalChecks);
 
     std::string get_compression_from_extension(std::string const & source);
 

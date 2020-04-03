@@ -81,5 +81,42 @@ namespace ebi
       }
   }
 
+  TEST_CASE("Files to validate evidence flag under specification v4.3", "[evidence]")
+  {
+      SECTION("Without genotypes or frequencies") {
+          auto folder = boost::filesystem::path("test/input_files/v4.3/evidence/failed");
+          std::vector<boost::filesystem::path> v;
+          copy(boost::filesystem::directory_iterator(folder),
+               boost::filesystem::directory_iterator(),
+               back_inserter(v));
+
+          for (auto path : v) {
+              SECTION((path.string() + " Validate evidence")) {
+                  CHECK_FALSE(is_valid(path.string(), {true}));
+              }
+              SECTION(path.string() + " Don't validate evidence") {
+                  CHECK(is_valid(path.string(), {false}));
+              }
+          }
+      }
+
+      SECTION("With genotypes or frequencies") {
+          auto folder = boost::filesystem::path("test/input_files/v4.3/evidence/passed");
+          std::vector<boost::filesystem::path> v;
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+
+          for (auto path : v)
+          {
+              SECTION(path.string() + " Validate evidence")
+              {
+                  CHECK(is_valid(path.string(), {true}));
+              }
+              SECTION(path.string() + " Don't validate evidence") {
+                  CHECK(is_valid(path.string(), {false}));
+              }
+
+          }
+      }
+  }
 }
 

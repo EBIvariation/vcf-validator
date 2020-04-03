@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <util/algo_utils.hpp>
 #include "vcf/parsing_state.hpp"
 
 namespace ebi
@@ -21,11 +22,14 @@ namespace ebi
   namespace vcf
   {
 
-    ParsingState::ParsingState(std::shared_ptr<Source> source)
+    void valida();
+
+    ParsingState::ParsingState(std::shared_ptr<Source> source, AdditionalChecks additionalChecks)
     : n_lines{1}, n_columns{1}, n_batches{0}, cs{0}, m_is_valid{true}, 
       source{source}, record{},
       errors{}, warnings{},
-      defined_metadata{}
+      defined_metadata{},
+      additionalChecks{additionalChecks}
     {
     }
 
@@ -86,6 +90,30 @@ namespace ebi
     void ParsingState::add_well_defined_meta(std::string const & meta_type, std::string const & id)
     {
         defined_metadata.emplace(meta_type, id);
+    }
+
+    void ParsingState::validate_additional_checks()
+    {
+
+        if (additionalChecks.checkEvidence) {
+            //Check genotypes
+            auto format = record->format;
+            if (!format.empty() && util::contains(format, GT)) {
+                return;
+            }
+            //Check allele frequencies
+            auto info = record->info;
+            for (auto &in : info) {
+                if (in.first == vcf::AF) {
+                    return;
+                }
+            }
+            throw new InfoBodyError{record->line, "Genotypes or Allele frequencies are required"};
+        }
+    }
+
+    void valida(){
+
     }
   }
 }
