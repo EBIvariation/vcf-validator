@@ -23,7 +23,7 @@ it installs the given dependencies:
   - bzip library                            bzip2-1.0.6
   - zlib library                            zlib-1.2.11
   - curl library                            curl-7.62.0
-  - openssl library                         openssl-1.1.1a
+  - openssl library                         openssl-1.1.1f
   - c-ares library                          c-ares-1.15.0
   - boost library                           boost-1.72.0
 
@@ -106,9 +106,9 @@ dependencies_dir_abs_path=`pwd`
 
 echo "installing openssl"
 mkdir openssl
-wget https://www.openssl.org/source/openssl-1.1.1a.tar.gz -O ./openssl-1.1.1a.tar.gz
-tar xzf ./openssl-1.1.1a.tar.gz
-cd openssl-1.1.1a
+wget https://www.openssl.org/source/openssl-1.1.1f.tar.gz -O ./openssl-1.1.1f.tar.gz
+tar xzf ./openssl-1.1.1f.tar.gz
+cd openssl-1.1.1f
 LIBS="-lcrypto -ldl" \
 ./config -fPIC no-shared no-threads \
         --prefix=$dependencies_dir_abs_path/openssl \
