@@ -189,7 +189,11 @@ namespace ebi
             if (it != record.info.end()) {
                 std::vector<std::string> values;
                 util::string_split(it->second, ",", values);
-                if (std::stoi(values[0]) > 0 || std::stoi(values[1]) < 0) {
+                size_t scanned_first_value_length, scanned_second_value_length;
+                int first_numeric_value = std::stoi(values[0], &scanned_first_value_length);
+                int second_numeric_value = std::stoi(values[1], &scanned_second_value_length);
+                if (first_numeric_value > 0 || second_numeric_value < 0 
+                    || values[0].size() != scanned_first_value_length || values[1].size() != scanned_second_value_length) {
                     throw new InfoBodyError{state.n_lines,
                             "INFO " + confidence_interval_tag +
                             " is a confidence interval tag, which should have first value <= 0 and second value >= 0"};
