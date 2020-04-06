@@ -45,7 +45,7 @@ Different types of validation reports can be written with the `-r` / `--report` 
 
 Each report is written into its own file and it is named after the input file, followed by a timestamp. The default output directory is the same as the input file's if provided using `-i`, or the current directory if using the standard input; it can be changed with the `-o` / `--outdir` option.
 
-A flag for validating evidence can be passed with `--require-evidence`. This will validate the VCF includes either Genotypes or Allele Frequencies, by default this flag will be false.
+A flag for validating evidence can be passed with `--require-evidence`. This will validate whether the VCF includes either Genotypes or Allele Frequencies. This flag will be **false** by default.
 
 ### Debugulator
 
