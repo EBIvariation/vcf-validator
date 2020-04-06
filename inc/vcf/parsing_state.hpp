@@ -72,6 +72,10 @@ namespace ebi
         void add_well_defined_meta(std::string const & meta_type, std::string const & id);
 
         void validate_additional_checks();
+
+        bool genotypes_present();
+
+        bool allele_frequencies_present();
     };
   }
 }

@@ -94,26 +94,28 @@ namespace ebi
 
     void ParsingState::validate_additional_checks()
     {
-
         if (additionalChecks.checkEvidence) {
-            //Check genotypes
-            auto format = record->format;
-            if (!format.empty() && util::contains(format, GT)) {
+            if (genotypes_present() || allele_frequencies_present()) {
                 return;
-            }
-            //Check allele frequencies
-            auto info = record->info;
-            for (auto &in : info) {
-                if (in.first == vcf::AF) {
-                    return;
-                }
             }
             throw new InfoBodyError{record->line, "Genotypes or Allele frequencies are required"};
         }
     }
 
-    void valida(){
+    bool ParsingState::genotypes_present() {
+        auto format = record->format;
+        return !format.empty() && util::contains(format, GT);
+    }
 
+    bool ParsingState::allele_frequencies_present()
+    {
+        auto info = record->info;
+        for (auto &in : info) {
+            if (in.first == vcf::AF) {
+                return true;
+            }
+        }
+        return false;
     }
   }
 }

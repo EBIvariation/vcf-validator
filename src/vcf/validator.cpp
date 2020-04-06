@@ -22,7 +22,7 @@ namespace ebi
   {
     Version detect_version(const std::vector<char> &line);
 
-    std::unique_ptr<Parser> build_parser(const std::string &path,
+    std::unique_ptr<Parser> build_parser(std::string const &path,
                                          ValidationLevel level,
                                          Version version,
                                          AdditionalChecks additionalChecks);
