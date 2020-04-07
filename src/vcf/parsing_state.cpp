@@ -102,16 +102,16 @@ namespace ebi
         }
     }
 
-    bool ParsingState::genotypes_present() {
+    bool ParsingState::genotypes_present()
+    {
         auto format = record->format;
         return !format.empty() && util::contains(format, GT);
     }
 
     bool ParsingState::allele_frequencies_present()
     {
-        auto info = record->info;
-        for (auto &in : info) {
-            if (in.first == vcf::AF) {
+        for (const auto &info_key_value : record->info) {
+            if (info_key_value.first == vcf::AF) {
                 return true;
             }
         }

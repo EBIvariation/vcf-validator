@@ -154,7 +154,7 @@ int main(int argc, char** argv)
         ebi::vcf::ValidationLevel validationLevel = get_validation_level(level);
         auto outdir = ebi::util::get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), path);
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
-        bool checkEvidence = vm.count(ebi::vcf::CHECK_EVIDENCE);
+        bool checkEvidence = vm.count(ebi::vcf::CHECK_EVIDENCE) >= 1;
         ebi::vcf::AdditionalChecks additionalChecks { checkEvidence };
 
         if (path == ebi::vcf::STDIN) {
