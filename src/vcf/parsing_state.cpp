@@ -95,10 +95,13 @@ namespace ebi
     void ParsingState::validate_additional_checks()
     {
         if (additionalChecks.checkEvidence) {
-            if (genotypes_present() || allele_frequencies_present()) {
+            if (genotypes_present() || allele_frequencies_present() || allele_count_present()) {
                 return;
             }
-            throw new InfoBodyError{record->line, "Genotypes or Allele frequencies are required"};
+            throw new BodySectionError{record->line, "Requested evidence presence with --require-evidence. "
+                                                     "Please provide genotypes (GT field in FORMAT and samples), "
+                                                     "or allele frequencies (AF field in INFO), "
+                                                     "or allele counts (AC and AN fields in INFO)."};
         }
     }
 
@@ -113,6 +116,27 @@ namespace ebi
         for (const auto &info_key_value : record->info) {
             if (info_key_value.first == vcf::AF) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    bool ParsingState::allele_count_present()
+    {
+        bool allele_count_present = false;
+        bool allele_total_number_present = false;
+        for (const auto &info_key_value : record->info) {
+            if (info_key_value.first == vcf::AC) {
+                if (allele_total_number_present) {
+                    return true;
+                }
+                allele_count_present = true;
+            }
+            if (info_key_value.first == vcf::AN) {
+                if (allele_count_present) {
+                    return true;
+                }
+                allele_total_number_present = true;
             }
         }
         return false;

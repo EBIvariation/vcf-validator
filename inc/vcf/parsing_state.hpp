@@ -76,6 +76,8 @@ namespace ebi
         bool genotypes_present();
 
         bool allele_frequencies_present();
+
+        bool allele_count_present();
     };
   }
 }
