@@ -3,7 +3,7 @@ project (vcf-validator CXX C)
 
 set (vcf-validator_VERSION_MAJOR 0)
 set (vcf-validator_VERSION_MINOR 9)
-set (vcf-validator_VERSION_PATCH 3)
+set (vcf-validator_VERSION_PATCH 4)
 
 configure_file (
   "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp.in"
