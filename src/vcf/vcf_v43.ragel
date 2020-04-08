@@ -275,8 +275,8 @@ namespace ebi
   {
     
     template <typename Configuration>
-    ParserImpl_v43<Configuration>::ParserImpl_v43(std::shared_ptr<Source> source)
-    : ParserImpl{source}
+    ParserImpl_v43<Configuration>::ParserImpl_v43(std::shared_ptr<Source> source, AdditionalChecks additionalChecks)
+    : ParserImpl{source, additionalChecks}
     {
       %%{
       write init;

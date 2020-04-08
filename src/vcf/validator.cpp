@@ -24,7 +24,8 @@ namespace ebi
 
     std::unique_ptr<Parser> build_parser(std::string const &path,
                                          ValidationLevel level,
-                                         Version version);
+                                         Version version,
+                                         AdditionalChecks additionalChecks);
 
     bool validate(const std::vector<char> &firstLine,
                   std::istream &input,
@@ -33,8 +34,8 @@ namespace ebi
 
     void write_errors(const Parser &validator, const std::vector<std::unique_ptr<ReportWriter>> &outputs);
 
-    ParserImpl::ParserImpl(std::shared_ptr<Source> source)
-            : ParsingState{source}
+    ParserImpl::ParserImpl(std::shared_ptr<Source> source, AdditionalChecks additionalChecks)
+            : ParsingState{source, additionalChecks}
     {
 
     }
@@ -81,7 +82,10 @@ namespace ebi
         return ParsingState::warnings;
     }
 
-    std::unique_ptr<Parser> build_parser(std::string const & path, ValidationLevel level, Version version)
+    std::unique_ptr<Parser> build_parser(const std::string &path,
+                                         ValidationLevel level,
+                                         Version version,
+                                         AdditionalChecks additionalChecks)
     {
         std::shared_ptr<Source> source = std::make_shared<Source>(path, InputFormat::VCF_FILE_VCF, version);
         auto records = std::vector<Record>{};
@@ -90,11 +94,11 @@ namespace ebi
         case ValidationLevel::error:
             switch (version) {
             case ebi::vcf::Version::v41:
-                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::QuickValidator_v41(source));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::QuickValidator_v41(source, additionalChecks));
             case ebi::vcf::Version::v42:
-                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::QuickValidator_v42(source));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::QuickValidator_v42(source, additionalChecks));
             case ebi::vcf::Version::v43:
-                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::QuickValidator_v43(source));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::QuickValidator_v43(source, additionalChecks));
             default:
                 throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
             }
@@ -102,11 +106,11 @@ namespace ebi
         case ValidationLevel::warning:
             switch (version) {
             case ebi::vcf::Version::v41:
-                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::FullValidator_v41(source));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::FullValidator_v41(source, additionalChecks));
             case ebi::vcf::Version::v42:
-                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::FullValidator_v42(source));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::FullValidator_v42(source, additionalChecks));
             case ebi::vcf::Version::v43:
-                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::FullValidator_v43(source));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::FullValidator_v43(source, additionalChecks));
             default:
                 throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
             }
@@ -114,11 +118,11 @@ namespace ebi
         case ValidationLevel::stop:
             switch (version) {
             case ebi::vcf::Version::v41:
-                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::Reader_v41(source));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::Reader_v41(source, additionalChecks));
             case ebi::vcf::Version::v42:
-                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::Reader_v42(source));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::Reader_v42(source, additionalChecks));
             case ebi::vcf::Version::v43:
-                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::Reader_v43(source));
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::Reader_v43(source, additionalChecks));
             default:
                 throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
             }
@@ -131,26 +135,27 @@ namespace ebi
     bool is_valid_vcf_file(std::istream &input,
                            const std::string &sourceName,
                            ValidationLevel validationLevel,
-                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
-    {
+                           std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs,
+                           AdditionalChecks additionalChecks) {
         std::vector<char> line;
         get_magic_num(input, line);
         std::string file_extension = get_compression(sourceName, line);
         check_readability_of_file(file_extension);
 
         if (file_extension == NO_EXT) {
-            return process_vcf_stream(input, sourceName, validationLevel, outputs);
+            return process_vcf_stream(input, sourceName, validationLevel, outputs, additionalChecks);
         } else {
             boost::iostreams::filtering_istream uncompressed_input;
             create_uncompressed_stream(input, file_extension, uncompressed_input);
-            return process_vcf_stream(uncompressed_input, sourceName, validationLevel, outputs);
+            return process_vcf_stream(uncompressed_input, sourceName, validationLevel, outputs, additionalChecks);
         }
     }
 
     bool process_vcf_stream(std::istream &input,
-                          const std::string &sourceName,
-                          ValidationLevel validationLevel,
-                          std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs)
+                            const std::string &sourceName,
+                            ValidationLevel validationLevel,
+                            std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> &outputs,
+                            AdditionalChecks additionalChecks)
     {
         std::vector<char> firstline;
         ebi::util::readline(input, firstline);
@@ -165,7 +170,7 @@ namespace ebi
             }
             return false;
         }
-        std::unique_ptr<Parser> validator = build_parser(sourceName, validationLevel, version);
+        std::unique_ptr<Parser> validator = build_parser(sourceName, validationLevel, version, additionalChecks);
         return validate(firstline, input, *validator, outputs);
     }
 

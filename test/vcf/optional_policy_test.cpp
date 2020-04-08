@@ -61,7 +61,7 @@ namespace ebi
                 source
         });
 
-        vcf::ParsingState parsing_state{source};
+        vcf::ParsingState parsing_state{source, vcf::AdditionalChecks()};
 
         vcf::ValidateOptionalPolicy optional_policy;
 
@@ -277,9 +277,9 @@ namespace ebi
             });
         }
 
-        vcf::ParsingState parsing_state1{sources[0]};
-        vcf::ParsingState parsing_state2{sources[1]};
-        vcf::ParsingState parsing_state3{sources[2]};
+        vcf::ParsingState parsing_state1{sources[0], vcf::AdditionalChecks()};
+        vcf::ParsingState parsing_state2{sources[1], vcf::AdditionalChecks()};
+        vcf::ParsingState parsing_state3{sources[2], vcf::AdditionalChecks()};
 
         vcf::ValidateOptionalPolicy optional_policy;
 

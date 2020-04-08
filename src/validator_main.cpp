@@ -53,6 +53,7 @@ namespace
             (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING_LEVEL), "Validation level (error, warning, stop)")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, database)")
             (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Output directory")
+            (ebi::vcf::CHECK_EVIDENCE, "Flag to check genotypes or allele frequencies are present")
         ;
 
         return description;
@@ -153,17 +154,19 @@ int main(int argc, char** argv)
         ebi::vcf::ValidationLevel validationLevel = get_validation_level(level);
         auto outdir = ebi::util::get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), path);
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
+        bool checkEvidence = vm.count(ebi::vcf::CHECK_EVIDENCE) >= 1;
+        ebi::vcf::AdditionalChecks additionalChecks { checkEvidence };
 
         if (path == ebi::vcf::STDIN) {
             BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
-            is_valid = ebi::vcf::is_valid_vcf_file(std::cin, path, validationLevel, outputs);
+            is_valid = ebi::vcf::is_valid_vcf_file(std::cin, path, validationLevel, outputs, additionalChecks);
         } else {
             BOOST_LOG_TRIVIAL(info) << "Reading from input file...";
             std::ifstream input{path};
             if (!input) {
                 throw std::runtime_error{"Couldn't open file " + path};
             } else {
-                is_valid = ebi::vcf::is_valid_vcf_file(input, path, validationLevel, outputs);
+                is_valid = ebi::vcf::is_valid_vcf_file(input, path, validationLevel, outputs, additionalChecks);
             }
         }
 

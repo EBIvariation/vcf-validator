@@ -30,7 +30,10 @@ namespace ebi
 {
   namespace vcf
   {
-    
+    struct AdditionalChecks {
+        bool checkEvidence;
+    };
+
     struct ParsingState
     {
         size_t n_lines;
@@ -46,8 +49,9 @@ namespace ebi
         std::vector<std::unique_ptr<Error>> warnings;
 
         std::multimap<std::string, std::string> defined_metadata;
+        AdditionalChecks additionalChecks;
 
-        ParsingState(std::shared_ptr<Source> source);
+        ParsingState(std::shared_ptr<Source> source, AdditionalChecks additionalChecks);
         virtual ~ParsingState() = default;
 
         void set_version(Version version);
@@ -66,6 +70,14 @@ namespace ebi
         bool is_well_defined_meta(std::string const & meta_type, std::string const & id) const;
         
         void add_well_defined_meta(std::string const & meta_type, std::string const & id);
+
+        void validate_additional_checks();
+
+        bool genotypes_present();
+
+        bool allele_frequencies_present();
+
+        bool allele_count_present();
     };
   }
 }

@@ -38,7 +38,7 @@ namespace ebi
       std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> reports;
       reports.emplace_back(report);
 
-      return vcf::is_valid_vcf_file(file, path.string(), vcf::ValidationLevel::warning, reports);
+      return vcf::is_valid_vcf_file(file, path.string(), vcf::ValidationLevel::warning, reports, vcf::AdditionalChecks());
   }
 
   std::tuple<std::unique_ptr<std::stringstream>, long> fix(const boost::filesystem::path &path, std::string report_tag)
