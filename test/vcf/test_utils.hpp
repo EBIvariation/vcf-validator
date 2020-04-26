@@ -40,7 +40,7 @@ namespace ebi
       std::string normalized_alternate;
   };
 
-  inline vcf::Record build_mock_record(TestMultiRecord summary)
+  inline vcf::Record build_mock_record(TestMultiRecord summary, std::string chromosome = "1")
   {
 
 //      std::shared_ptr<vcf::Source> source{std::make_shared<Source>(
@@ -63,7 +63,7 @@ namespace ebi
                                            source
                                    });
 
-      return vcf::Record{1, "1", summary.normalized_pos, {vcf::MISSING_VALUE}, summary.normalized_reference, summary.normalized_alternate,
+      return vcf::Record{1, chromosome, summary.normalized_pos, {vcf::MISSING_VALUE}, summary.normalized_reference, summary.normalized_alternate,
                          0, {vcf::MISSING_VALUE}, {{vcf::MISSING_VALUE, ""}}, {vcf::GT}, {"0/0", "0/1", "0/1", "1/1"}, source};
   }
 

@@ -24,10 +24,10 @@
 
 namespace ebi
 {
-    size_t count_duplicates(vcf::RecordCache &cache, TestMultiRecord summary)
+    size_t count_duplicates(vcf::RecordCache &cache, TestMultiRecord summary, std::string chromosome = "1")
     {
         try {
-            cache.check_duplicates(build_mock_record(summary));
+            cache.check_duplicates(build_mock_record(summary, chromosome));
             return cache.get_duplicates().size();
         } catch (vcf::BodySectionError * e) {
           // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
@@ -75,7 +75,7 @@ namespace ebi
         SECTION("Symbolic Duplicates")
         {
             CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
-            // Not a duplicate, hence not detected 
+            // Not a duplicate, hence not detected
             CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
         }
     }
@@ -114,7 +114,7 @@ namespace ebi
         SECTION("Symbolic Duplicates")
         {
             CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
-            // Not a duplicate, hence not detected 
+            // Not a duplicate, hence not detected
             CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
         }
     }
@@ -153,7 +153,7 @@ namespace ebi
         SECTION("Symbolic Duplicates")
         {
             CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
-            // Not a duplicate, hence not detected 
+            // Not a duplicate, hence not detected
             CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
         }
     }
@@ -186,6 +186,22 @@ namespace ebi
             CHECK( count_symbolic_duplicates(cache, {107, "C", {"<INS>"}}) == 2 );
             // the first occurrence of symbolic duplicate should not be reported again
             CHECK( count_symbolic_duplicates(cache, {107, "C", {"<INS>"}}) == 1 );
+        }
+    }
+
+    TEST_CASE("RecordCache tests: across chromosomes")
+    {
+        vcf::RecordCache cache{2};
+
+        cache.check_duplicates(build_mock_record({102, "A", {"T"}}, "2"));
+        cache.check_duplicates(build_mock_record({103, "A", {"T"}}, "2"));
+
+        SECTION("One duplicate in another chromsome")
+        {
+            // bug EVA-1950
+            // the chromosome "10" is likely to appear *after* "2" in a VCF, but "10" is lexicographically lower
+            CHECK( count_duplicates(cache, {107, "C", {"T"}}, "10") == 0);
+            CHECK( count_duplicates(cache, {107, "C", {"T"}}, "10") == 2);  // duplicate, undetected before EVA-1950
         }
     }
 }
