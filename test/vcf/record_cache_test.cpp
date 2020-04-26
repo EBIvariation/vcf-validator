@@ -24,10 +24,10 @@
 
 namespace ebi
 {
-    size_t count_duplicates(vcf::RecordCache &cache, TestMultiRecord summary, std::string chromosome = "1")
+    size_t count_duplicates(vcf::RecordCache &cache, TestMultiRecord summary)
     {
         try {
-            cache.check_duplicates(build_mock_record(summary, chromosome));
+            cache.check_duplicates(build_mock_record(summary));
             return cache.get_duplicates().size();
         } catch (vcf::BodySectionError * e) {
           // Catch doesn't seem to understand an exception thrown by a pointer. workaround to see the message: rethrow by value
@@ -193,15 +193,15 @@ namespace ebi
     {
         vcf::RecordCache cache{2};
 
-        cache.check_duplicates(build_mock_record({102, "A", {"T"}}, "2"));
-        cache.check_duplicates(build_mock_record({103, "A", {"T"}}, "2"));
+        cache.check_duplicates(build_mock_record({"2", 102, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({"2", 103, "A", {"T"}}));
 
         SECTION("One duplicate in another chromsome")
         {
             // bug EVA-1950
             // the chromosome "10" is likely to appear *after* "2" in a VCF, but "10" is lexicographically lower
-            CHECK( count_duplicates(cache, {107, "C", {"T"}}, "10") == 0);
-            CHECK( count_duplicates(cache, {107, "C", {"T"}}, "10") == 2);  // duplicate, undetected before EVA-1950
+            CHECK( count_duplicates(cache, {"10", 107, "C", {"T"}}) == 0);
+            CHECK( count_duplicates(cache, {"10", 107, "C", {"T"}}) == 2);  // duplicate, undetected before EVA-1950
         }
     }
 }

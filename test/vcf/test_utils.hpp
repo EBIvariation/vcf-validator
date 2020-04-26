@@ -29,9 +29,26 @@ namespace ebi
   // Note: This two structures are different from RecordCore used by the normalization. This is only for test purposes
   struct TestMultiRecord
   {
+      std::string chromosome;
       size_t normalized_pos;
       std::string normalized_reference;
       std::vector <std::string> normalized_alternate;
+
+      TestMultiRecord(size_t normalizedPos, const std::string &normalizedReference,
+              const std::vector<std::string> &normalizedAlternate)
+              : chromosome("1"),
+                normalized_pos(normalizedPos),
+                normalized_reference(normalizedReference),
+                normalized_alternate(normalizedAlternate) {
+      }
+
+      TestMultiRecord(const std::string &chromosome, size_t normalizedPos, const std::string &normalizedReference,
+                      const std::vector<std::string> &normalizedAlternate)
+              : chromosome(chromosome),
+                normalized_pos(normalizedPos),
+                normalized_reference(normalizedReference),
+                normalized_alternate(normalizedAlternate) {
+      }
   };
   struct TestRecord
   {
@@ -40,7 +57,7 @@ namespace ebi
       std::string normalized_alternate;
   };
 
-  inline vcf::Record build_mock_record(TestMultiRecord summary, std::string chromosome = "1")
+  inline vcf::Record build_mock_record(TestMultiRecord summary)
   {
 
 //      std::shared_ptr<vcf::Source> source{std::make_shared<Source>(
@@ -63,8 +80,9 @@ namespace ebi
                                            source
                                    });
 
-      return vcf::Record{1, chromosome, summary.normalized_pos, {vcf::MISSING_VALUE}, summary.normalized_reference, summary.normalized_alternate,
-                         0, {vcf::MISSING_VALUE}, {{vcf::MISSING_VALUE, ""}}, {vcf::GT}, {"0/0", "0/1", "0/1", "1/1"}, source};
+      return vcf::Record{1, summary.chromosome, summary.normalized_pos, {vcf::MISSING_VALUE},
+                         summary.normalized_reference, summary.normalized_alternate, 0, {vcf::MISSING_VALUE},
+                         {{vcf::MISSING_VALUE, ""}}, {vcf::GT}, {"0/0", "0/1", "0/1", "1/1"}, source};
   }
 
   /** simple count for small tests, no need to optimize further */
