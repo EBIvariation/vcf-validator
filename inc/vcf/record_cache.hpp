@@ -85,7 +85,8 @@ namespace ebi
 
 
         /**
-         * This function serves as the data generator to be used before utilizing get_duplicates() and get_symbolic_duplicates() functions.
+         * This function serves as the data generator to be used before utilizing get_duplicates() and
+         * get_symbolic_duplicates() functions.
          *
          * For a given Record, populates the list_duplicates and list_symbolic_duplicates vectors with
          * non symbolic and symbolic duplicates respectively
@@ -105,24 +106,7 @@ namespace ebi
             list_duplicates.clear();
             list_symbolic_duplicates.clear();
 
-            if (current_chromosome != record.chromosome) {
-                // EVA-1950: the cache removes "lexicographically lower" chromosomes when the cache is full, but with
-                // that sorting, "chr10" is lower than "chr2", so new variants in "chr10" get deleted to keep the ones
-                // in "chr2", and duplicates in "chr10" will go undetected. Possible solutions (better first):
-                // 1. The chosen simple solution is to keep in the cache variants from only one chromosome.
-                // 2. Another solution could be using the line number (Record::line) as sorting criteria, but that can
-                // get very surprising and unintuitive if used for other purposes outside of this class, so a custom
-                // comparator could be provided to the cache multiset constructor.
-                // 3. A third solution could be making a Least Recently Used cache, but will require using esoteric data
-                // structures and/or dependencies, or keeping several simpler structures in sync, like a map and a
-                // queue that point to each other's contents.
-                // 4. A poor solution could be changing the ordering to "numerically lower", but that will be very tricky
-                // to get right with weird chrs like (versioned) accessions. e.g.: NC_01.1 is a chr, which is likely to
-                // appear before a contig GK_01.1, and we would need a sorting method that evaluates NC_01.1 < GK_01.1.
-                cache_duplicates.clear();
-                cache_symbolic_duplicates.clear();
-                current_chromosome = record.chromosome;
-            }
+            clear_cache_if_we_moved_to_the_next_chromosome(record.chromosome);
 
             for (RecordCore &record_core: record_cores) {
 
@@ -157,6 +141,32 @@ namespace ebi
 
             shrink_to_fit(cache_symbolic_duplicates);
             shrink_to_fit(cache_duplicates);
+        }
+
+        /**
+         * EVA-1950: the cache removes "lexicographically lower" chromosomes when the cache is full, but with
+         * that sorting, "chr10" is lower than "chr2", so new variants in "chr10" get deleted to keep the ones
+         * in "chr2", and duplicates in "chr10" will go undetected.
+         *
+         * **The chosen solution was to keep in the cache variants from only one chromosome at a time.**
+         *
+         * The next solutions were considered and **DISCARDED**:
+         *
+         * 1. Using Least Recently Used cache. This would require using esoteric data structures and/or dependencies,
+         * or keeping several simpler structures in sync, like a map and a queue that point to each other's contents.
+         * 2. A poor solution could be changing the ordering to "numerically lower", but that will be very tricky
+         * to get right with weird chrs like (versioned) accessions. e.g.: NC_01.1 is a chr, which is likely to
+         * appear before a contig GK_01.1, and we would need a sorting method that evaluates NC_01.1 < GK_01.1.
+         * 3. Using the line number (Record::line) as sorting criteria. This wouldn't work because we need to group the
+         * same conceptual variants together to detect duplicates, and the multiset uses the comparator function to
+         * group the variants, which would never be grouped because the lines would be different.
+         */
+        void clear_cache_if_we_moved_to_the_next_chromosome(const std::string &chromosome) {
+            if (current_chromosome != chromosome) {
+                cache_duplicates.clear();
+                cache_symbolic_duplicates.clear();
+                current_chromosome = chromosome;
+            }
         }
 
         /**
