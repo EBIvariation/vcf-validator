@@ -75,7 +75,7 @@ namespace ebi
         SECTION("Symbolic Duplicates")
         {
             CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
-            // Not a duplicate, hence not detected 
+            // Not a duplicate, hence not detected
             CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
         }
     }
@@ -114,7 +114,7 @@ namespace ebi
         SECTION("Symbolic Duplicates")
         {
             CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
-            // Not a duplicate, hence not detected 
+            // Not a duplicate, hence not detected
             CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
         }
     }
@@ -153,7 +153,7 @@ namespace ebi
         SECTION("Symbolic Duplicates")
         {
             CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
-            // Not a duplicate, hence not detected 
+            // Not a duplicate, hence not detected
             CHECK( count_duplicates(cache, {107, "C", {"<INS>"}}) == 0 );
         }
     }
@@ -186,6 +186,22 @@ namespace ebi
             CHECK( count_symbolic_duplicates(cache, {107, "C", {"<INS>"}}) == 2 );
             // the first occurrence of symbolic duplicate should not be reported again
             CHECK( count_symbolic_duplicates(cache, {107, "C", {"<INS>"}}) == 1 );
+        }
+    }
+
+    TEST_CASE("RecordCache tests: across chromosomes")
+    {
+        vcf::RecordCache cache{2};
+
+        cache.check_duplicates(build_mock_record({"2", 102, "A", {"T"}}));
+        cache.check_duplicates(build_mock_record({"2", 103, "A", {"T"}}));
+
+        SECTION("One duplicate in another chromsome")
+        {
+            // bug EVA-1950
+            // the chromosome "10" is likely to appear *after* "2" in a VCF, but "10" is lexicographically lower
+            CHECK( count_duplicates(cache, {"10", 107, "C", {"T"}}) == 0);
+            CHECK( count_duplicates(cache, {"10", 107, "C", {"T"}}) == 2);  // duplicate, undetected before EVA-1950
         }
     }
 }
