@@ -85,7 +85,7 @@ namespace ebi
 
     void compressed_file_warning(std::string const & file_extension)
     {
-        BOOST_LOG_TRIVIAL(warning) << "Detected " << file_extension
+        BOOST_LOG_TRIVIAL(debug) << "Detected " << file_extension
             << " compression";
     }
 
