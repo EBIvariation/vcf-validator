@@ -233,7 +233,7 @@ namespace ebi
                   try {
                       fasta->sequence(contig_name, 0, 1); // trigger download
                   }
-                  catch(ebi::util::ContigNotFoundInENAException ex) {
+                  catch(ebi::util::URLRetrievalException ex) {
                       report_missing_chromosome_in_ENA(line_num, ex.what(), record_core, outputs);
                       is_valid = false;
                       continue;

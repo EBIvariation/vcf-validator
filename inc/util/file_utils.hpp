@@ -31,11 +31,11 @@ namespace ebi
 {
   namespace util
   {
-    class ContigNotFoundInENAException : public std::exception {
+    class URLRetrievalException : public std::exception {
           private:
               std::string message = " ";
           public:
-              ContigNotFoundInENAException(const std::string& url, long& httpReturnCode)
+              URLRetrievalException(const std::string& url, long& httpReturnCode)
               {
                   message = "HTTP " + std::to_string(httpReturnCode) + " returned when downloading: " + url;
               }
@@ -67,7 +67,7 @@ namespace ebi
         long httpReturnCode;
         curl.request(stream, url, httpReturnCode);
         if (httpReturnCode != 200) {
-            throw ebi::util::ContigNotFoundInENAException(url, httpReturnCode);
+            throw ebi::util::URLRetrievalException(url, httpReturnCode);
         }
         return stream;
     }
