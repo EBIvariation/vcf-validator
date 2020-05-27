@@ -36,11 +36,12 @@ namespace ebi
         Easy& operator=(const Easy&) = delete;
         ~Easy();
 
-        std::string request(const std::string& url);
-        std::ostream& request(std::ostream& stream, const std::string& url);
+        std::string request(const std::string& url, long& httpReturnCode);
+        std::ostream& request(std::ostream& stream, const std::string& url, long& httpReturnCode);
 
       private:
         CURL* curlHandle;
+        void processCurlRequest(const std::string &basicString, long &code);
       };
     }
   }

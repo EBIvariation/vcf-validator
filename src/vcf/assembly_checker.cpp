@@ -50,7 +50,11 @@ namespace ebi
                                                           const std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
                                                           std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
-      void report_missing_chromosome(size_t line_num,
+      void report_missing_chromosome_in_FASTA(size_t line_num,
+                                     RecordCore & record_core,
+                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
+
+      void report_missing_chromosome_in_ENA(size_t line_num, std::string exceptionMessage,
                                      RecordCore & record_core,
                                      std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
@@ -226,11 +230,18 @@ namespace ebi
               }
 
               if (use_fasta_from_ena && fasta->sequence_exists(contig_name) == 0) {
-                  fasta->sequence(contig_name, 0, 1); // trigger download
+                  try {
+                      fasta->sequence(contig_name, 0, 1); // trigger download
+                  }
+                  catch(ebi::util::ContigNotFoundInENAException ex) {
+                      report_missing_chromosome_in_ENA(line_num, ex.what(), record_core, outputs);
+                      is_valid = false;
+                      continue;
+                  }
               }
 
-              if (fasta->sequence_exists(contig_name)==0 || fasta->sequence_length(contig_name)==0) { // no such contig or fail to download
-                  report_missing_chromosome(line_num, record_core, outputs);
+              if (fasta->sequence_exists(contig_name)==0 || fasta->sequence_length(contig_name)==0) {
+                  report_missing_chromosome_in_FASTA(line_num, record_core, outputs);
                   is_valid = false;
                   continue;
               }
@@ -309,7 +320,7 @@ namespace ebi
           }
 
           if (found_synonyms.size() == 0) {
-              report_missing_chromosome(line_num, record_core, outputs);
+              report_missing_chromosome_in_FASTA(line_num, record_core, outputs);
           } else if (found_synonyms.size() > 1) {
               report_multiple_synonym_match(line_num, record_core, found_synonyms, outputs);
           }
@@ -317,7 +328,18 @@ namespace ebi
           return found_synonyms;
       }
 
-      void report_missing_chromosome(size_t line_num,
+      void report_missing_chromosome_in_ENA(size_t line_num, const std::string exceptionMessage,
+              RecordCore & record_core, std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
+      {
+          std::string missing_warning = "Line " + std::to_string(line_num)
+                                        + ": Chromosome/Contig " + record_core.chromosome
+                                        + " could not be retrieved from ENA because: " + exceptionMessage;
+          for (auto &output : outputs ) {
+              output->write_warning(missing_warning);
+          }
+      }
+
+      void report_missing_chromosome_in_FASTA(size_t line_num,
                                      RecordCore & record_core,
                                      std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
       {
