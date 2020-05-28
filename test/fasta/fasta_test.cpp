@@ -18,7 +18,7 @@
 #include <string>
 
 #include "catch/catch.hpp"
-
+#include "util/curl_easy.hpp"
 #include "fasta/fasta.hpp"
 
 namespace ebi
@@ -114,7 +114,7 @@ namespace ebi
       {
           std::unique_ptr<ebi::vcf::fasta::IFasta> fasta(new ebi::vcf::fasta::RemoteContig());
           CHECK_NOTHROW(fasta->sequence("DQ083950", 0, 1));
-          CHECK_NOTHROW(fasta->sequence("Non-existing", 0, 1));
+          CHECK_THROWS_AS(fasta->sequence("Non-existing", 0, 1), ebi::util::curl::URLRetrievalException);
 
           CHECK(fasta->sequence_exists("DQ083950"));
           CHECK(fasta->sequence_exists("Non-existing"));

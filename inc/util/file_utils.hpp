@@ -31,19 +31,6 @@ namespace ebi
 {
   namespace util
   {
-    class URLRetrievalException : public std::exception {
-          private:
-              std::string message = " ";
-          public:
-              URLRetrievalException(const std::string& url, long& httpReturnCode)
-              {
-                  message = "HTTP " + std::to_string(httpReturnCode) + " returned when downloading: " + url;
-              }
-              const char* what() const noexcept override
-              {
-                  return message.c_str();
-              }
-    };
     inline void open_file(std::ifstream & input,
                           std::string path,
                           std::ios_base::openmode mode = std::ios_base::in)
@@ -67,7 +54,7 @@ namespace ebi
         long httpReturnCode;
         curl.request(stream, url, httpReturnCode);
         if (httpReturnCode != 200) {
-            throw ebi::util::URLRetrievalException(url, httpReturnCode);
+            throw ebi::util::curl::URLRetrievalException(url, httpReturnCode);
         }
         return stream;
     }

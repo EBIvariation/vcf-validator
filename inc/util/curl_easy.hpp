@@ -43,6 +43,19 @@ namespace ebi
         CURL* curlHandle;
         void processCurlRequest(const std::string &basicString, long &code);
       };
+
+      class URLRetrievalException : public std::exception {
+      private:
+        std::string message = " ";
+      public:
+        URLRetrievalException(const std::string &url, long &httpReturnCode) {
+            message = "HTTP " + std::to_string(httpReturnCode) + " returned when downloading: " + url;
+        }
+
+        const char *what() const noexcept override {
+            return message.c_str();
+        }
+      };
     }
   }
 }

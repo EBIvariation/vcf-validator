@@ -63,6 +63,9 @@ namespace ebi
                                          std::vector<std::string> found_synonyms,
                                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
+      void write_warning_output(std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
+                                std::string warningMessage);
+
       bool check_vcf_ref(std::istream & vcf_input,
                          const std::string & sourceName,
                          const std::string & fasta_path,
@@ -126,7 +129,14 @@ namespace ebi
               }
 
               for (auto contig : contigs) {
-                  fasta->sequence(contig, 0, 1);
+                  try {
+                      fasta->sequence(contig, 0, 1);
+                  }
+                  catch(ebi::util::curl::URLRetrievalException ex) {
+                      std::string warningMessage = "Could not download sequence for contig/chromosome "
+                                                   + contig + " because: " + ex.what();
+                      write_warning_output(outputs, warningMessage);
+                  }
               }
 
               use_fasta_from_ena = true;
@@ -233,7 +243,7 @@ namespace ebi
                   try {
                       fasta->sequence(contig_name, 0, 1); // trigger download
                   }
-                  catch(ebi::util::URLRetrievalException ex) {
+                  catch(ebi::util::curl::URLRetrievalException ex) {
                       report_missing_chromosome_in_ENA(line_num, ex.what(), record_core, outputs);
                       is_valid = false;
                       continue;
@@ -294,9 +304,7 @@ namespace ebi
       {
           std::string position_0_warning = "Line " + std::to_string(line_num)
                                            + ": Position 0 should only be used for a telomere";
-          for (auto & output : outputs ) {
-              output->write_warning(position_0_warning);
-          }
+          write_warning_output(outputs, position_0_warning);
       }
 
       std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap & synonyms_map,
@@ -334,9 +342,7 @@ namespace ebi
           std::string missing_warning = "Line " + std::to_string(line_num)
                                         + ": Chromosome/Contig " + record_core.chromosome
                                         + " could not be retrieved from ENA because: " + exceptionMessage;
-          for (auto &output : outputs ) {
-              output->write_warning(missing_warning);
-          }
+          write_warning_output(outputs, missing_warning);
       }
 
       void report_missing_chromosome_in_FASTA(size_t line_num,
@@ -345,9 +351,7 @@ namespace ebi
       {
           std::string missing_warning = "Line " + std::to_string(line_num)
                                         + ": Chromosome " + record_core.chromosome + " is not present in FASTA file";
-          for (auto &output : outputs ) {
-              output->write_warning(missing_warning);
-          }
+          write_warning_output(outputs, missing_warning);
       }
 
       void report_multiple_synonym_match(size_t line_num,
@@ -363,10 +367,14 @@ namespace ebi
               multiple_synonym_match_warning += contig + " ";
           }
 
-          for (auto & output : outputs) {
-              output->write_warning(multiple_synonym_match_warning);
-          }
+          write_warning_output(outputs, multiple_synonym_match_warning);
+      }
 
+      void write_warning_output(std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
+                                std::string warningMessage) {
+          for (auto & output : outputs) {
+              output->write_warning(warningMessage);
+          }
       }
 
     }
