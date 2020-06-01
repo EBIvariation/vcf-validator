@@ -23,6 +23,7 @@
 #include "util/logger.hpp"
 #include "vcf/assembly_checker.hpp"
 #include "vcf/assembly_check_report_writer.hpp"
+#include "vcf/compression.hpp"
 #include "vcf/string_constants.hpp"
 
 namespace
@@ -49,6 +50,11 @@ namespace
         return description;
     }
 
+    bool check_compressed_file(const std::string filePath) {
+        std::string fileExtension = ebi::vcf::get_compression_from_extension(filePath);
+        return fileExtension != ebi::vcf::NO_EXT;
+    }
+
     int check_command_line_options(po::variables_map const & vm, po::options_description const & desc)
     {
         if (vm.count(ebi::vcf::HELP)) {
@@ -65,6 +71,24 @@ namespace
             std::cout << desc << std::endl;
             BOOST_LOG_TRIVIAL(error) << "Please specify the path to the VCF file (--vcf)";
             return 1;
+        }
+
+        if (vm.count(ebi::vcf::FASTA) > 0) {
+            std::string fastaFileName = vm[ebi::vcf::FASTA].as<std::string>();
+            if (check_compressed_file(fastaFileName)) {
+                throw std::invalid_argument("Only uncompressed FASTA files are supported! Cannot use FASTA file: "
+                                            + fastaFileName);
+                return 1;
+            }
+        }
+
+        if (vm.count(ebi::vcf::ASSEMBLY_REPORT) > 0) {
+            std::string assemblyReportFileName = vm[ebi::vcf::ASSEMBLY_REPORT].as<std::string>();
+            if (check_compressed_file(assemblyReportFileName)) {
+                throw std::invalid_argument("Only uncompressed assembly report files are supported! "
+                                            "Cannot use assembly report file: " + assemblyReportFileName);
+                return 1;
+            }
         }
 
         return 0;
