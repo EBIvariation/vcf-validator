@@ -50,34 +50,38 @@ ebi::util::curl::Easy::~Easy()
 }
 
 std::string
-ebi::util::curl::Easy::request(const std::string &url)
+ebi::util::curl::Easy::request(const std::string &url, long& httpReturnCode)
 {
     std::string buffer;
     if (curlHandle) {
         curl_easy_setopt(curlHandle, CURLOPT_URL, url.c_str());
         curl_easy_setopt(curlHandle, CURLOPT_WRITEFUNCTION, stringWriterCallback);
         curl_easy_setopt(curlHandle, CURLOPT_WRITEDATA, &buffer);
-        CURLcode res = curl_easy_perform(curlHandle);
-        if (res != CURLE_OK) {
-            std::cerr << "ebi::util::curl::Easy::request failed: " << url << std::endl;
-            std::cerr << "Reason: " << curl_easy_strerror(res) << std::endl;
-        }
+        curl_easy_setopt(curlHandle, CURLOPT_FAILONERROR, 1);
+        processCurlRequest(url, httpReturnCode);
     }
     return buffer;
 }
 
 std::ostream&
-ebi::util::curl::Easy::request(std::ostream& stream, const std::string& url)
+ebi::util::curl::Easy::request(std::ostream& stream, const std::string& url, long& httpReturnCode)
 {
     if (curlHandle) {
         curl_easy_setopt(curlHandle, CURLOPT_URL, url.c_str());
         curl_easy_setopt(curlHandle, CURLOPT_WRITEFUNCTION, streamWriterCallback);
         curl_easy_setopt(curlHandle, CURLOPT_WRITEDATA, &stream);
-        CURLcode res = curl_easy_perform(curlHandle);
-        if (res != CURLE_OK) {
-            std::cerr << "ebi::util::curl::Easy::request failed: " << url << std::endl;
-            std::cerr << "Reason: " << curl_easy_strerror(res) << std::endl;
-        }
+        curl_easy_setopt(curlHandle, CURLOPT_FAILONERROR, 1);
+        processCurlRequest(url, httpReturnCode);
     }
     return stream;
+}
+
+void ebi::util::curl::Easy::processCurlRequest(const std::string& url, long& httpReturnCode) {
+    CURLcode res = curl_easy_perform(curlHandle);
+    if (res != CURLE_OK) {
+        std::string reason = "ebi::util::curl::Easy::request failed: " + url + "\n";
+        reason += curl_easy_strerror(res);
+        std::cerr << reason << std::endl;
+    }
+    curl_easy_getinfo(curlHandle, CURLINFO_RESPONSE_CODE, &httpReturnCode);
 }

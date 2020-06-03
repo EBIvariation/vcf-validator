@@ -36,11 +36,25 @@ namespace ebi
         Easy& operator=(const Easy&) = delete;
         ~Easy();
 
-        std::string request(const std::string& url);
-        std::ostream& request(std::ostream& stream, const std::string& url);
+        std::string request(const std::string& url, long& httpReturnCode);
+        std::ostream& request(std::ostream& stream, const std::string& url, long& httpReturnCode);
 
       private:
         CURL* curlHandle;
+        void processCurlRequest(const std::string &basicString, long &code);
+      };
+
+      class URLRetrievalException : public std::exception {
+      private:
+        std::string message = " ";
+      public:
+        URLRetrievalException(const std::string &url, long &httpReturnCode) {
+            message = "HTTP " + std::to_string(httpReturnCode) + " returned when downloading: " + url;
+        }
+
+        const char *what() const noexcept override {
+            return message.c_str();
+        }
       };
     }
   }

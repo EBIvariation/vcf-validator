@@ -31,7 +31,6 @@ namespace ebi
 {
   namespace util
   {
-
     inline void open_file(std::ifstream & input,
                           std::string path,
                           std::ios_base::openmode mode = std::ios_base::in)
@@ -52,7 +51,12 @@ namespace ebi
         }
 
         ebi::util::curl::Easy curl;
-        return curl.request(stream, url);
+        long httpReturnCode;
+        curl.request(stream, url, httpReturnCode);
+        if (httpReturnCode != 200) {
+            throw ebi::util::curl::URLRetrievalException(url, httpReturnCode);
+        }
+        return stream;
     }
 
   }

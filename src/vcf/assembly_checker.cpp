@@ -50,7 +50,11 @@ namespace ebi
                                                           const std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
                                                           std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
-      void report_missing_chromosome(size_t line_num,
+      void report_missing_chromosome_in_FASTA(size_t line_num,
+                                     RecordCore & record_core,
+                                     std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
+
+      void report_missing_chromosome_in_ENA(size_t line_num, std::string exceptionMessage,
                                      RecordCore & record_core,
                                      std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
 
@@ -58,6 +62,9 @@ namespace ebi
                                          RecordCore & record_core,
                                          std::vector<std::string> found_synonyms,
                                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs);
+
+      void write_warning_output(std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
+                                std::string warningMessage);
 
       bool check_vcf_ref(std::istream & vcf_input,
                          const std::string & sourceName,
@@ -122,7 +129,14 @@ namespace ebi
               }
 
               for (auto contig : contigs) {
-                  fasta->sequence(contig, 0, 1);
+                  try {
+                      fasta->sequence(contig, 0, 1);
+                  }
+                  catch(ebi::util::curl::URLRetrievalException ex) {
+                      std::string warningMessage = "Could not download sequence for contig/chromosome "
+                                                   + contig + " because: " + ex.what();
+                      write_warning_output(outputs, warningMessage);
+                  }
               }
 
               use_fasta_from_ena = true;
@@ -226,11 +240,18 @@ namespace ebi
               }
 
               if (use_fasta_from_ena && fasta->sequence_exists(contig_name) == 0) {
-                  fasta->sequence(contig_name, 0, 1); // trigger download
+                  try {
+                      fasta->sequence(contig_name, 0, 1); // trigger download
+                  }
+                  catch(ebi::util::curl::URLRetrievalException ex) {
+                      report_missing_chromosome_in_ENA(line_num, ex.what(), record_core, outputs);
+                      is_valid = false;
+                      continue;
+                  }
               }
 
-              if (fasta->sequence_exists(contig_name)==0 || fasta->sequence_length(contig_name)==0) { // no such contig or fail to download
-                  report_missing_chromosome(line_num, record_core, outputs);
+              if (fasta->sequence_exists(contig_name)==0 || fasta->sequence_length(contig_name)==0) {
+                  report_missing_chromosome_in_FASTA(line_num, record_core, outputs);
                   is_valid = false;
                   continue;
               }
@@ -283,9 +304,7 @@ namespace ebi
       {
           std::string position_0_warning = "Line " + std::to_string(line_num)
                                            + ": Position 0 should only be used for a telomere";
-          for (auto & output : outputs ) {
-              output->write_warning(position_0_warning);
-          }
+          write_warning_output(outputs, position_0_warning);
       }
 
       std::vector<std::string> get_matching_synonyms_list(ebi::assembly_report::SynonymsMap & synonyms_map,
@@ -309,7 +328,7 @@ namespace ebi
           }
 
           if (found_synonyms.size() == 0) {
-              report_missing_chromosome(line_num, record_core, outputs);
+              report_missing_chromosome_in_FASTA(line_num, record_core, outputs);
           } else if (found_synonyms.size() > 1) {
               report_multiple_synonym_match(line_num, record_core, found_synonyms, outputs);
           }
@@ -317,15 +336,22 @@ namespace ebi
           return found_synonyms;
       }
 
-      void report_missing_chromosome(size_t line_num,
+      void report_missing_chromosome_in_ENA(size_t line_num, const std::string exceptionMessage,
+              RecordCore & record_core, std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
+      {
+          std::string missing_warning = "Line " + std::to_string(line_num)
+                                        + ": Chromosome/Contig " + record_core.chromosome
+                                        + " could not be retrieved from ENA because: " + exceptionMessage;
+          write_warning_output(outputs, missing_warning);
+      }
+
+      void report_missing_chromosome_in_FASTA(size_t line_num,
                                      RecordCore & record_core,
                                      std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs)
       {
           std::string missing_warning = "Line " + std::to_string(line_num)
                                         + ": Chromosome " + record_core.chromosome + " is not present in FASTA file";
-          for (auto &output : outputs ) {
-              output->write_warning(missing_warning);
-          }
+          write_warning_output(outputs, missing_warning);
       }
 
       void report_multiple_synonym_match(size_t line_num,
@@ -341,10 +367,14 @@ namespace ebi
               multiple_synonym_match_warning += contig + " ";
           }
 
-          for (auto & output : outputs) {
-              output->write_warning(multiple_synonym_match_warning);
-          }
+          write_warning_output(outputs, multiple_synonym_match_warning);
+      }
 
+      void write_warning_output(std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
+                                std::string warningMessage) {
+          for (auto & output : outputs) {
+              output->write_warning(warningMessage);
+          }
       }
 
     }
