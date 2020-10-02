@@ -109,6 +109,8 @@ vcf_assembly_checker -i /path/to/file.vcf -f /path/to/fasta_file.fa -r valid -a 
 
 If you would like to use an unreleased version of vcf-validator, you can clone the repository and build it under 3 platforms: Linux, macOS and Windows. A statically linked executable will be generated, which means you won't need to install any dependencies in the machine that will run it; only install the dependencies in the machine that will build it.
 
+If you plan to make changes, make sure to check the [docs/developer-guide.md](docs/developer-guide.md).
+
 ### Linux
 
 The build has been tested on the following compilers:
