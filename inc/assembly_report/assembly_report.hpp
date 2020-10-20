@@ -164,7 +164,7 @@ namespace ebi
 
         ContigSynonyms extract_synonyms(std::vector<std::string> & synonyms)
         {
-            std::vector<int> synonym_indices{0, 4, 6, 9};
+            std::vector<int> synonym_indices{0, 2, 4, 6, 9};
             ContigSynonyms contig_synonyms;
             for (auto index : synonym_indices) {
                 if (ignore_contig.find(synonyms[index]) != ignore_contig.end()) {
