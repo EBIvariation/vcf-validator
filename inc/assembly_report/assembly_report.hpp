@@ -17,6 +17,7 @@
 #ifndef ASSEMBLY_REPORT_HPP
 #define ASSEMBLY_REPORT_HPP
 
+#include <boost/regex.hpp>
 #include <map>
 #include <set>
 #include <sstream>
@@ -77,6 +78,19 @@ namespace ebi
     class SynonymsMap
     {
       public:
+        /**
+         * Check if a contig synonym is in a genbank accession format
+         * @see <a href="https://www.ncbi.nlm.nih.gov/Sequin/acc.html">Genbank accession format</a>
+        */
+        static bool is_a_genbank_accession(const std::basic_string<char>& synonym) {
+            static const boost::regex genbank_accession("[A-Z][0-9]{5}\.[0-9]+|"
+                                                        "[A-Z]{2}[0-9]{6}\.[0-9]+|"
+                                                        "[A-Z]{2}[0-9]{8}\.[0-9]+|"
+                                                        "[A-Z]{4}[0-9]{8}\.[0-9]+|[A-Z]{6}[0-9]{9}\.[0-9]+" //WGS sequences
+            );
+            return boost::regex_match(synonym, genbank_accession);
+        }
+
         bool is_contig_available(std::string contig) const
         {
             return index_map.find(contig) != index_map.end();

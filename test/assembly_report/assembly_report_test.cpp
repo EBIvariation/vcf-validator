@@ -57,6 +57,28 @@ namespace ebi
             std::ifstream input{assembly_report_path};
             CHECK_THROWS_AS(synonyms_map.parse_assembly_report(input), std::runtime_error);
         }
+
+        SECTION("Correct Genbank equivalents in the assembly report")
+        {
+            // Check Genbank accession formats - see https://www.ncbi.nlm.nih.gov/Sequin/acc.html
+            //1 letter + 5 numerals + accession revision number
+            CHECK(ebi::assembly_report::SynonymsMap::is_a_genbank_accession("F00387.1"));
+            //2 letters + 6 numerals + accession revision number
+            CHECK(ebi::assembly_report::SynonymsMap::is_a_genbank_accession("CM000072.5"));
+            //2 letters + 8 numerals + accession revision number
+            CHECK(ebi::assembly_report::SynonymsMap::is_a_genbank_accession("CM00456701.2"));
+            //WGS contigs - 4 letters + 8 numerals + accession revision number
+            CHECK(ebi::assembly_report::SynonymsMap::is_a_genbank_accession("AAWR02042940.1"));
+            //WGS contigs - 6 letters + 9 numerals + accession revision number
+            CHECK(ebi::assembly_report::SynonymsMap::is_a_genbank_accession("AAWRAB020429401.2"));
+        }
+
+        SECTION("Incorrect Genbank equivalents in the assembly report")
+        {
+            CHECK_FALSE(ebi::assembly_report::SynonymsMap::is_a_genbank_accession("chr1"));
+            CHECK_FALSE(ebi::assembly_report::SynonymsMap::is_a_genbank_accession("scaffold123"));
+            CHECK_FALSE(ebi::assembly_report::SynonymsMap::is_a_genbank_accession("NC_000123.1"));
+        }
     }
 
     TEST_CASE("Tests for fetching synonyms list", "[assembly report]")

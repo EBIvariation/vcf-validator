@@ -327,6 +327,12 @@ namespace ebi
               }
           }
 
+          auto atleast_one_genbank_synonym = std::find_if(contig_synonyms.begin(), contig_synonyms.end(),
+                                                          ebi::assembly_report::SynonymsMap::is_a_genbank_accession);
+          if(atleast_one_genbank_synonym == contig_synonyms.end()) {
+              throw std::runtime_error("No Genbank synonyms found for '" + record_core.chromosome + "' in the assembly report");
+          }
+
           if (found_synonyms.size() == 0) {
               report_missing_chromosome_in_FASTA(line_num, record_core, outputs);
           } else if (found_synonyms.size() > 1) {
