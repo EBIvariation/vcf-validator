@@ -180,6 +180,12 @@ namespace ebi
         {
             std::vector<int> synonym_indices{0, 4, 6, 9};
             ContigSynonyms contig_synonyms;
+            //For unequal entries in the assembly report, discard the Genbank contig since it is not useful anyway
+            //ex: Pltd	assembled-molecule	Pltd	Chloroplast	na	<>	NC_001320.1	non-nuclear	134525	na
+            if (boost::trim_copy(synonyms[5]) == "<>") {
+                contig_synonyms.add_synonym(synonyms[0]);
+                return contig_synonyms;
+            }
             for (auto index : synonym_indices) {
                 if (ignore_contig.find(synonyms[index]) != ignore_contig.end()) {
                     continue;
