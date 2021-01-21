@@ -200,7 +200,7 @@ namespace ebi
             std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
             std::string assembly_report_path = folder.string() + "assembly_report.txt";
             std::cout << fasta_path << vcf_path;
-            CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report_path, outputs), std::runtime_error);
+            CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report_path, outputs, true), std::runtime_error);
         }
 
 // TODO test non-equivalent synonyms (Genbank <> RefSeq)
