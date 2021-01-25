@@ -45,7 +45,7 @@ namespace
             (ebi::vcf::ASSEMBLY_REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::NO_MAPPING), "Path to the input assembly report used for contig synonym mapping")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, valid)")
             (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Output directory")
-            (ebi::vcf::REQUIRE_GENBANK, "Flag to indicate that VCF should be checked for EVA submission criteria")
+            (ebi::vcf::REQUIRE_GENBANK, "Flag to indicate that VCF should be checked for Genbank accessions")
         ;
 
         return description;
