@@ -28,7 +28,7 @@ namespace ebi
                            const std::string & fasta,
                            const std::string & assembly_report,
                            std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
-                           bool checkEVACriteria = false);
+                           bool requireGenbank = false);
 
       std::string get_reference_accession(const std::string& reference_tagged_line);
 
@@ -38,7 +38,7 @@ namespace ebi
                                std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
                                const std::string & assembly_report,
                                std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
-                               bool use_fasta_from_ena, bool checkEVACriteria = false);
+                               bool use_fasta_from_ena, bool requireGenbank = false);
 
       RecordCore build_record_core(std::string const & line, size_t line_num);
 
@@ -50,7 +50,7 @@ namespace ebi
                                                           RecordCore & record_core,
                                                           const std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
                                                           std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
-                                                          bool checkEVACriteria = false);
+                                                          bool requireGenbank = false);
 
       void check_if_genbank_synonym_present(std::basic_string<char> &chromosome,
                                             const std::vector<std::basic_string<char>> &contig_synonyms);
@@ -76,7 +76,7 @@ namespace ebi
                          const std::string & fasta_path,
                          const std::string & assembly_report,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
-                         bool checkEVACriteria)
+                         bool requireGenbank)
       {
           std::vector<char> line;
           ebi::vcf::get_magic_num(vcf_input, line);
@@ -84,11 +84,11 @@ namespace ebi
           ebi::vcf::check_readability_of_file(file_extension);
 
           if (file_extension == NO_EXT) {
-              return process_vcf_ref(vcf_input, fasta_path, assembly_report, outputs, checkEVACriteria);
+              return process_vcf_ref(vcf_input, fasta_path, assembly_report, outputs, requireGenbank);
           } else {
               boost::iostreams::filtering_istream uncompressed_input;
               ebi::vcf::create_uncompressed_stream(vcf_input, file_extension, uncompressed_input);
-              return process_vcf_ref(uncompressed_input, fasta_path, assembly_report, outputs, checkEVACriteria);
+              return process_vcf_ref(uncompressed_input, fasta_path, assembly_report, outputs, requireGenbank);
           }
       }
 
@@ -96,7 +96,7 @@ namespace ebi
                            const std::string & fasta_path,
                            const std::string & assembly_report,
                            std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
-                           bool checkEVACriteria)
+                           bool requireGenbank)
       {
           std::shared_ptr<ebi::vcf::fasta::IFasta> fasta;
           bool use_fasta_from_ena = false;
@@ -153,7 +153,7 @@ namespace ebi
               fasta.reset(new ebi::vcf::fasta::FileBasedFasta(fasta_path, fasta_index_path));
           }
 
-          return process_vcf_records(vcf_input, fasta, assembly_report, outputs, use_fasta_from_ena, checkEVACriteria);
+          return process_vcf_records(vcf_input, fasta, assembly_report, outputs, use_fasta_from_ena, requireGenbank);
       }
 
       std::string get_reference_accession(const std::string& reference_tagged_line)
@@ -203,7 +203,7 @@ namespace ebi
                                std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
                                const std::string & assembly_report,
                                std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
-                               bool use_fasta_from_ena, bool checkEVACriteria)
+                               bool use_fasta_from_ena, bool requireGenbank)
       {
           std::vector<char> vector_line;
           vector_line.reserve(DEFAULT_LINE_BUFFER_SIZE);
@@ -237,7 +237,7 @@ namespace ebi
               std::string contig_name = record_core.chromosome;
               if (assembly_report != ebi::vcf::NO_MAPPING) {
                   std::vector<std::string> found_synonyms = get_matching_synonyms_list(synonyms_map,
-                                                               line_num, record_core, fasta, outputs, checkEVACriteria);
+                                                               line_num, record_core, fasta, outputs, requireGenbank);
                   if (found_synonyms.size() != 1) {
                       // found zero or more than one synonyms matching in fasta index file
                       is_valid = false;
@@ -319,7 +319,7 @@ namespace ebi
                                   RecordCore & record_core,
                                   const std::shared_ptr<ebi::vcf::fasta::IFasta> & fasta,
                                   std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
-                                  bool checkEVACriteria)
+                                  bool requireGenbank)
       {
           std::vector<std::string> found_synonyms;
 
@@ -329,7 +329,7 @@ namespace ebi
           }
 
           auto & contig_synonyms = synonyms_map.get_contig_synonyms(record_core.chromosome);
-          if (checkEVACriteria) {
+          if (requireGenbank) {
               // EVA mandates INSDC accessions - see https://www.ebi.ac.uk/eva/?Submit-Data
               check_if_genbank_synonym_present(record_core.chromosome, contig_synonyms);
           }

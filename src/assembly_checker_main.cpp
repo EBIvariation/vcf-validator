@@ -45,7 +45,7 @@ namespace
             (ebi::vcf::ASSEMBLY_REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::NO_MAPPING), "Path to the input assembly report used for contig synonym mapping")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, valid)")
             (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Output directory")
-            (ebi::vcf::EVA_SUBMISSION, "Flag to indicate that VCF should be checked for EVA submission criteria")
+            (ebi::vcf::REQUIRE_GENBANK, "Flag to indicate that VCF should be checked for EVA submission criteria")
         ;
 
         return description;
@@ -157,19 +157,19 @@ int main(int argc, char** argv)
         auto assembly_report = vm[ebi::vcf::ASSEMBLY_REPORT].as<std::string>();
         auto outdir = ebi::util::get_output_path(vm[ebi::vcf::OUTDIR].as<std::string>(), vcf_path);
         auto outputs = get_outputs(vm[ebi::vcf::REPORT].as<std::string>(), outdir);
-        bool checkEVACriteria = vm.count(ebi::vcf::EVA_SUBMISSION) >= 1;
+        bool requireGenbank = vm.count(ebi::vcf::REQUIRE_GENBANK) >= 1;
 
         bool is_valid;
         if (vcf_path == ebi::vcf::STDIN) {
             BOOST_LOG_TRIVIAL(info) << "Reading from standard input...";
             is_valid = ebi::vcf::assembly_checker::check_vcf_ref(std::cin, vcf_path, fasta_path, assembly_report,
-                                                                 outputs, checkEVACriteria);
+                                                                 outputs, requireGenbank);
         } else {
             BOOST_LOG_TRIVIAL(info) << "Reading from input VCF file...";
             std::ifstream vcf_input;
             ebi::util::open_file(vcf_input, vcf_path);
             is_valid = ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report,
-                                                                 outputs, checkEVACriteria);
+                                                                 outputs, requireGenbank);
         }
 
         return !is_valid; // A valid file returns an exit code 0

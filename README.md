@@ -108,9 +108,9 @@ vcf_assembly_checker -f /path/to/fasta.fa -r text < /path/to/file.vcf
 
 # Pass input (-i), FASTA (-f) and assembly report (-a) paths
 # Report output required (-r)
-# Check for EVA submission criteria as well (--eva-submission)
+# If submitting to EVA, check if contigs have Genbank accessions (--require-genbank)
    # see https://www.ebi.ac.uk/eva/?Submit-Data  
-vcf_assembly_checker -i /path/to/file.vcf -f /path/to/fasta_file.fa -r valid -a /path/to/assembly_report --eva-submission
+vcf_assembly_checker -i /path/to/file.vcf -f /path/to/fasta_file.fa -r valid -a /path/to/assembly_report --require-genbank
 ```
 
 

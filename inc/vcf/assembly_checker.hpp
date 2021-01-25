@@ -56,7 +56,7 @@ namespace ebi
                          const std::string & fasta,
                          const std::string & assembly_report,
                          std::vector<std::unique_ptr<ebi::vcf::AssemblyCheckReportWriter>> & outputs,
-                         bool checkEVACriteria = false);
+                         bool requireGenbank = false);
 
     }
   }
