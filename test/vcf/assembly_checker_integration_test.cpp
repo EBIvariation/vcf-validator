@@ -191,6 +191,18 @@ namespace ebi
             CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report_path, outputs), std::runtime_error);
         }
 
+        SECTION("No Genbank equivalents for the contigs found in VCF, throws exception")
+        {
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/failed/failed_no_genbank_contigs/");
+            std::string file_prefix = folder.parent_path().filename().string();
+            std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
+            std::ifstream vcf_input{vcf_path};
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::string assembly_report_path = folder.string() + "assembly_report.txt";
+            std::cout << fasta_path << vcf_path;
+            CHECK_THROWS_AS(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report_path, outputs, true), std::runtime_error);
+        }
+
 // TODO test non-equivalent synonyms (Genbank <> RefSeq)
 
 // TODO: make the next work in windows as well

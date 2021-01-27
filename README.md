@@ -99,9 +99,18 @@ vcf_debugulator -i /path/to/file.vcf -e /path/to/write/report/vcf.errors.timesta
 Assembly Checker example:
 
 ```
+# Pass input (-i) and FASTA file (-f) paths 
 vcf_assembly_checker -i /path/to/file.vcf -f /path/to/fasta_file.fa
+
+# Pass input (-i) paths but read VCF input from command line (<)
+# Report output required (-r)
 vcf_assembly_checker -f /path/to/fasta.fa -r text < /path/to/file.vcf
-vcf_assembly_checker -i /path/to/file.vcf -f /path/to/fasta_file.fa -r valid -a /path/to/assembly_report
+
+# Pass input (-i), FASTA (-f) and assembly report (-a) paths
+# Report output required (-r)
+# If submitting to EVA, check if contigs have Genbank accessions (--require-genbank)
+   # see https://www.ebi.ac.uk/eva/?Submit-Data  
+vcf_assembly_checker -i /path/to/file.vcf -f /path/to/fasta_file.fa -r valid -a /path/to/assembly_report --require-genbank
 ```
 
 

@@ -63,6 +63,7 @@ namespace ebi
     const char OUTDIR_OPTION[] = "outdir,o";
     const char OUTPUT_OPTION[] = "output,o";
     const char CHECK_EVIDENCE[] = "require-evidence";
+    const char REQUIRE_GENBANK[] = "require-genbank";
 
     // fields
     const std::string ID = "ID";
