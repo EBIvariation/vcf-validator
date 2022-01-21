@@ -149,7 +149,7 @@ cd ..
 if [[ "$OS_NAME" == "linux" ]]
 then
   echo "installing  boost"
-  wget https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz -O ./boost.tar.gz
+  wget https://boostorg.jfrog.io/artifactory/main/release/1.72.0/source/boost_1_72_0.tar.gz -O ./boost.tar.gz
   tar zxf ./boost.tar.gz
   mv boost_1_72_0 boost && cd boost
 
