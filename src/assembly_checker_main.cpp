@@ -41,7 +41,7 @@ namespace
             (ebi::vcf::HELP_OPTION, "Display this help")
             (ebi::vcf::VERSION_OPTION, "Display version of the assembly checker")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
-            (ebi::vcf::FASTA_OPTION, po::value<std::string>()->default_value(""), "Path to the input FASTA file; please note that the index file must have the same name as the FASTA file and saved with a .fai extension")
+            (ebi::vcf::FASTA_OPTION, po::value<std::string>()->default_value(""), "Path to the input FASTA file; please note that the index file (from samtools faidx) must have the same name as the FASTA file and saved with a .fai extension")
             (ebi::vcf::ASSEMBLY_REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::NO_MAPPING), "Path to the input assembly report used for contig synonym mapping")
             (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, valid)")
             (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Output directory")
