@@ -20,7 +20,6 @@ jobs:
       osx_image: xcode9.3
       env: C_COMPILER=clang CXX_COMPILER=clang++
       before_install:
-        - brew update
         - brew install ninja
 
     # OS X GCC
@@ -28,7 +27,6 @@ jobs:
       osx_image: xcode9.3
       env: C_COMPILER=gcc CXX_COMPILER=g++
       before_install:
-        - brew update
         - brew install ninja
 
     # Linux Clang 7
@@ -59,7 +57,6 @@ jobs:
       osx_image: xcode9.3
       env: C_COMPILER=clang CXX_COMPILER=clang++
       before_install:
-        - brew update
         - brew install ninja
       if: tag IS present
       deploy:
