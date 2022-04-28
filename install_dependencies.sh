@@ -125,23 +125,26 @@ cd c-ares-1.15.0
 make && make install
 cd ..
 
-echo "installing nghttp2"
-mkdir nghttp2
-wget https://github.com/nghttp2/nghttp2/releases/download/v1.47.0/nghttp2-1.47.0.tar.gz -O ./nghttp2-1.47.0.tar.gz
-tar xzf ./nghttp2-1.47.0.tar.gz
-cd nghttp2-1.47.0
-./configure --prefix=$dependencies_dir_abs_path/nghttp2
-make && make install
-cd ..
+if [[ "$OS_NAME" == "osx" ]]
+then
+  echo "installing nghttp2"
+  mkdir nghttp2
+  wget https://github.com/nghttp2/nghttp2/releases/download/v1.47.0/nghttp2-1.47.0.tar.gz -O ./nghttp2-1.47.0.tar.gz
+  tar xzf ./nghttp2-1.47.0.tar.gz
+  cd nghttp2-1.47.0
+  ./configure --prefix=$dependencies_dir_abs_path/nghttp2
+  make && make install
+  cd ..
 
-echo "installing brotli"
-mkdir brotli
-wget https://github.com/google/brotli/archive/refs/tags/v1.0.9.tar.gz -O ./brotli-1.0.9.tar.gz
-tar xzf ./brotli-1.0.9.tar.gz
-cd brotli-1.0.9
-./configure-cmake --prefix=$dependencies_dir_abs_path/brotli
-make && make install
-cd ..
+  echo "installing brotli"
+  mkdir brotli
+  wget https://github.com/google/brotli/archive/refs/tags/v1.0.9.tar.gz -O ./brotli-1.0.9.tar.gz
+  tar xzf ./brotli-1.0.9.tar.gz
+  cd brotli-1.0.9
+  ./configure-cmake --prefix=$dependencies_dir_abs_path/brotli
+  make && make install
+  cd ..
+fi
 
 echo "installing libcurl"
 mkdir curl
