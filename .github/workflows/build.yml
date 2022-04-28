@@ -62,7 +62,7 @@ jobs:
 
   ### Mac OS build
   macos_build:
-    runs-on: macos-10.15
+    runs-on: macos-latest
     strategy:
       matrix:
         config:
