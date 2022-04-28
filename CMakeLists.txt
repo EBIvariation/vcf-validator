@@ -141,6 +141,10 @@ if (LINUX OR OSX)
     ${EXT_LIB_PATH}/c-ares/lib/libcares.a
     ${EXT_LIB_PATH}/openssl/lib/libssl.a
     ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
+    ${EXT_LIB_PATH}/nghttp2/lib/libnghttp2.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlicommon-static.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlidec-static.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlienc-static.a
     ${EXT_LIB_PATH}/libbz2.a
     ${EXT_LIB_PATH}/libz.a
     ${EXT_LIB_PATH}/libodb-sqlite.a
@@ -240,6 +244,10 @@ if (LINUX OR OSX)
     ${EXT_LIB_PATH}/c-ares/lib/libcares.a
     ${EXT_LIB_PATH}/openssl/lib/libssl.a
     ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
+    ${EXT_LIB_PATH}/nghttp2/lib/libnghttp2.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlicommon-static.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlidec-static.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlienc-static.a
     ${Boost_LIBRARIES}
     ${EXT_LIB_PATH}/libbz2.a
     ${EXT_LIB_PATH}/libz.a
