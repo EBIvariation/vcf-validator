@@ -123,10 +123,10 @@ If you plan to make changes, make sure to check the [docs/developer-guide.md](do
 ### Linux
 
 The build has been tested on the following compilers:
-* Clang 7
-* GCC 5
+* Clang 10
+* GCC 9
 
-NOTE: Currently the Linux compilation doesn't work in Ubuntu 18 or newer. We are working on fixing this. The Linux compilation is tested and working in Ubuntu 16.04.
+NOTE: Currently the Linux compilation doesn't work in Ubuntu 18. We are working on fixing this. The Linux compilation is tested and working in Ubuntu 16.04 and 20.04.
 
 #### Dependencies
 
@@ -209,7 +209,7 @@ Boost | \>=1.65 | manual
 
 You can prepare all dependencies and compile the Validation Suite with these commands:
 ```
-brew install cmake ninja boost sqlite3
+brew install cmake boost sqlite3
 ./install_dependencies.sh osx
 mkdir build && cd build && cmake -G "Unix Makefiles" ..
 make
@@ -219,7 +219,7 @@ The VCF Validation Suite binaries will be created in the `build/bin` subfolder. 
 
 ##### SQLite, CMake and automatic installation
 
-The automatic install requires CMake, SQLite3 and wget to be installed before running the script (as ODB and zlib require them to be installed). In order to set up the environment to compile the dependencies, first you need to run `brew install cmake ninja boost sqlite3`.
+The automatic install requires CMake, SQLite3 and wget to be installed before running the script (as ODB and zlib require them to be installed). In order to set up the environment to compile the dependencies, first you need to run `brew install cmake boost sqlite3`.
 
 Now you can easily install the ODB ORM and compression libraries just by running `./install_dependencies.sh osx`. You may run `./install_dependencies.sh --help` for usage instructions.
 
