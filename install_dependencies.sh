@@ -26,6 +26,8 @@ it installs the given dependencies:
   - openssl library                         openssl-1.1.1f
   - c-ares library                          c-ares-1.15.0
   - boost library                           boost-1.72.0
+  - nghttp2 library (osx only)              nghttp2-1.47.0
+  - brotli library (osx only)               brotli-1.0.9
 
 for linux:
 ./install_dependencies.sh linux
