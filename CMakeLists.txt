@@ -134,13 +134,31 @@ endif ()
 # Application modules
 add_library (mod_sqlite3 STATIC lib/sqlite/sqlite3.c)
 
-if (LINUX OR OSX)
+if (LINUX)
   set (THIRD_PARTY_LIBRARIES
     ${Boost_LIBRARIES}
     ${EXT_LIB_PATH}/curl/lib/libcurl.a
     ${EXT_LIB_PATH}/c-ares/lib/libcares.a
     ${EXT_LIB_PATH}/openssl/lib/libssl.a
     ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
+    ${EXT_LIB_PATH}/libbz2.a
+    ${EXT_LIB_PATH}/libz.a
+    ${EXT_LIB_PATH}/libodb-sqlite.a
+    ${EXT_LIB_PATH}/libodb.a
+    mod_sqlite3
+    ${CMAKE_THREAD_LIBS_INIT}
+  )
+elseif (OSX)
+  set (THIRD_PARTY_LIBRARIES
+    ${Boost_LIBRARIES}
+    ${EXT_LIB_PATH}/curl/lib/libcurl.a
+    ${EXT_LIB_PATH}/c-ares/lib/libcares.a
+    ${EXT_LIB_PATH}/openssl/lib/libssl.a
+    ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
+    ${EXT_LIB_PATH}/nghttp2/lib/libnghttp2.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlicommon-static.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlidec-static.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlienc-static.a
     ${EXT_LIB_PATH}/libbz2.a
     ${EXT_LIB_PATH}/libz.a
     ${EXT_LIB_PATH}/libodb-sqlite.a
@@ -232,7 +250,7 @@ target_link_libraries (mod_vcf ${THIRD_PARTY_LIBRARIES} mod_odb)
 
 
 # Libraries to link with executables
-if (LINUX OR OSX)
+if (LINUX)
   set (LIBRARIES_TO_LINK
     mod_vcf
     mod_odb
@@ -240,6 +258,27 @@ if (LINUX OR OSX)
     ${EXT_LIB_PATH}/c-ares/lib/libcares.a
     ${EXT_LIB_PATH}/openssl/lib/libssl.a
     ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
+    ${Boost_LIBRARIES}
+    ${EXT_LIB_PATH}/libbz2.a
+    ${EXT_LIB_PATH}/libz.a
+    ${EXT_LIB_PATH}/libodb-sqlite.a
+    ${EXT_LIB_PATH}/libodb.a
+    mod_sqlite3
+    dl
+    ${CMAKE_THREAD_LIBS_INIT}
+  )
+elseif (OSX)
+  set (LIBRARIES_TO_LINK
+    mod_vcf
+    mod_odb
+    ${EXT_LIB_PATH}/curl/lib/libcurl.a
+    ${EXT_LIB_PATH}/c-ares/lib/libcares.a
+    ${EXT_LIB_PATH}/openssl/lib/libssl.a
+    ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
+    ${EXT_LIB_PATH}/nghttp2/lib/libnghttp2.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlicommon-static.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlidec-static.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlienc-static.a
     ${Boost_LIBRARIES}
     ${EXT_LIB_PATH}/libbz2.a
     ${EXT_LIB_PATH}/libz.a

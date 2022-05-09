@@ -26,6 +26,8 @@ it installs the given dependencies:
   - openssl library                         openssl-1.1.1f
   - c-ares library                          c-ares-1.15.0
   - boost library                           boost-1.72.0
+  - nghttp2 library (osx only)              nghttp2-1.47.0
+  - brotli library (osx only)               brotli-1.0.9
 
 for linux:
 ./install_dependencies.sh linux
@@ -125,13 +127,34 @@ cd c-ares-1.15.0
 make && make install
 cd ..
 
+if [[ "$OS_NAME" == "osx" ]]
+then
+  echo "installing nghttp2"
+  mkdir nghttp2
+  wget https://github.com/nghttp2/nghttp2/releases/download/v1.47.0/nghttp2-1.47.0.tar.gz -O ./nghttp2-1.47.0.tar.gz
+  tar xzf ./nghttp2-1.47.0.tar.gz
+  cd nghttp2-1.47.0
+  ./configure --prefix=$dependencies_dir_abs_path/nghttp2
+  make && make install
+  cd ..
+
+  echo "installing brotli"
+  mkdir brotli
+  wget https://github.com/google/brotli/archive/refs/tags/v1.0.9.tar.gz -O ./brotli-1.0.9.tar.gz
+  tar xzf ./brotli-1.0.9.tar.gz
+  cd brotli-1.0.9
+  ./configure-cmake --prefix=$dependencies_dir_abs_path/brotli
+  make && make install
+  cd ..
+fi
+
 echo "installing libcurl"
 mkdir curl
 wget https://curl.haxx.se/download/curl-7.62.0.tar.gz -O ./curl-7.62.0.tar.gz
 tar zxf ./curl-7.62.0.tar.gz
 cd curl-7.62.0
-LDFLAGS="-L$dependencies_dir_abs_path/openssl/lib -L$dependencies_dir_abs_path/c-ares/lib" \
-CPPFLAGS="-I$dependencies_dir_abs_path/openssl/include -I$dependencies_dir_abs_path/c-ares/include" \
+LDFLAGS="-L$dependencies_dir_abs_path/openssl/lib -L$dependencies_dir_abs_path/c-ares/lib -L$dependencies_dir_abs_path/nghttp2/lib -L$dependencies_dir_abs_path/brotli/lib" \
+CPPFLAGS="-I$dependencies_dir_abs_path/openssl/include -I$dependencies_dir_abs_path/c-ares/include -I$dependencies_dir_abs_path/nghttp2/include -I$dependencies_dir_abs_path/brotli/include" \
 ./configure --disable-shared \
             --enable-static \
             --without-librtmp \
@@ -149,7 +172,7 @@ cd ..
 if [[ "$OS_NAME" == "linux" ]]
 then
   echo "installing  boost"
-  wget https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz -O ./boost.tar.gz
+  wget https://boostorg.jfrog.io/artifactory/main/release/1.72.0/source/boost_1_72_0.tar.gz -O ./boost.tar.gz
   tar zxf ./boost.tar.gz
   mv boost_1_72_0 boost && cd boost
 
