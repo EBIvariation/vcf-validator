@@ -3,7 +3,7 @@
 #
 # Notable changes from simply using install_dependencie.sh:
 #
-#   + using odb v2.6.0-b.23 as that has adjustments so can compile on arm64
+#   + using odb v2.5.0-b.23 as that has adjustments so can compile on arm64
 #   + building odb via build2
 #   + had to add '-Wno-narrowing' to compilation step to avoid errors (doesn't appear to break anything; test pass)
 #   + libz, libbz2, libboost-* installed via apt
@@ -106,7 +106,7 @@ RUN cd /build && \
 
 # copy + run our modified install-dependencies-docker.sh script
 COPY docker/install-dependencies-docker.sh /build/vcf-validator/install-dependencies-docker.sh
-RUN cd /build/vcf-validator &&  ./install-dependencies-docker.sh
+RUN cd /build/vcf-validator && ./install-dependencies-docker.sh
 
 # Fix path to odb, add -Wno-narrowing to enable build to work
 # we put everything in the root of EXT_LIB_PATH (linux_dependencies)
