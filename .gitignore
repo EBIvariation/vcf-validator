@@ -29,7 +29,6 @@ bin/
 *.app
 
 # Construction
-Makefile
 .ninja_*
 *.ninja
 

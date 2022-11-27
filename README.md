@@ -126,7 +126,9 @@ The build has been tested on the following compilers:
 * Clang 10
 * GCC 9
 
-NOTE: Currently the Linux compilation doesn't work in Ubuntu 18. We are working on fixing this. The Linux compilation is tested and working in Ubuntu 16.04 and 20.04.
+**NOTE**: Currently the Linux compilation doesn't work in Ubuntu 18. We are working on fixing this. The Linux compilation is tested and working in Ubuntu 16.04 and 20.04.
+
+**NOTE**: See _Docker_ section below for a Dockerized version of the Linux build for `amd64` and `arm64`.
 
 #### Dependencies
 
@@ -273,7 +275,6 @@ Binaries will be created in the `bin` subfolder.
 
 In order to run those binaries, you will need to add the `lib/windows_specific` directory to the `PATH`. This will allow the dll files inside that directory to be found.
 
-
 ## Deliverables
 
 The following binaries are be created after successful build:
@@ -305,6 +306,63 @@ And the full ODB-based code from the classes definitions using:
 ```
 odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp --output-dir inc/vcf/ inc/vcf/error.hpp
 mv inc/vcf/error-odb.cpp src/vcf/error-odb.cpp
+```
+
+## Docker
+
+It might be easier to use Docker to do the build, because getting all the dependencies to
+build properly is difficult.  Luckily, Doug Donohoe found the magic recipe, at least for
+`amd64` and `arm64` architectures, which allows the images to be used on Intel and Apple
+Silicon (M1/M2) Macs.
+
+To build for you current architecture, you need to define `REPO_NAME` which is used as the
+tag name.
+
+```shell
+REPO_NAME=my-repo make build
+```
+
+To create an image supporting multiple architectures, one needs to use `docker buildx` command,
+as defined in the Makefile.  You need to define `REPO_NAME` to specify where the image will be pushed:
+
+```shell
+REPO_NAME=my-repo make buildx-publish
+```
+
+To build and publish for a single platform (e.g., `arm64`):
+
+```shell
+PLATFORMS=linux/arm64 make buildx-publish
+```
+
+#### Running VCF Validator via Docker
+
+This alias is helpful when running docker images:
+
+```shell
+alias docker-run-here='docker run -it --rm --workdir "$PWD" --volume "$PWD:$PWD"'
+```
+
+Example usage of Docker image:
+
+```shell
+# get help
+docker-run-here my-repo/vcf-validator:0.9.4 --help
+
+# example using test files
+cd test/input_files/v4.1/passed
+docker-run-here my-repo/vcf-validator:0.9.4 -i passed_meta_sample.vcf -r summary
+
+// use --entrypoint to use other executables
+docker-run-here --entrypoint "/vcf_debugulator" my-repo/vcf-validator:0.9.4 --help
+docker-run-here --entrypoint "/vcf_assembly_checker" my-repo/vcf-validator:0.9.4 --help
+docker-run-here --entrypoint "/test_validation_suite" my-repo/vcf-validator:0.9.4 --help
+```
+
+**NOTE**: Doug DOnohoe has pushed an image using this `Dockerfile` that you can pull:
+
+```shell
+ docker pull dougdonohoe/vcf-validator:0.9.4
 ```
 
 ## Miscellaneous
