@@ -359,7 +359,7 @@ docker-run-here --entrypoint "/vcf_assembly_checker" my-repo/vcf-validator:0.9.4
 docker-run-here --entrypoint "/test_validation_suite" my-repo/vcf-validator:0.9.4 --help
 ```
 
-**NOTE**: Doug DOnohoe has pushed an image using this `Dockerfile` that you can pull:
+**NOTE**: Doug Donohoe has pushed an image using this `Dockerfile` that you can pull:
 
 ```shell
  docker pull dougdonohoe/vcf-validator:0.9.4
