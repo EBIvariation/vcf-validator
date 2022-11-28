@@ -329,6 +329,10 @@ as defined in the Makefile.  You need to define `REPO_NAME` to specify where the
 REPO_NAME=my-repo make buildx-publish
 ```
 
+**NOTE**: This build can take over an hour due to the slowness of building the non-native half of the
+build (e.g., `arm64` is slow on `amd64` and vice-versa).
+
+
 To build and publish for a single platform (e.g., `arm64`):
 
 ```shell
@@ -337,32 +341,32 @@ PLATFORMS=linux/arm64 make buildx-publish
 
 #### Running VCF Validator via Docker
 
+Doug Donohoe has pushed an image using this `Dockerfile` that you can pull:
+
+```shell
+ docker pull dougdonohoe/vcf-validator:0.9.4
+```
+
 This alias is helpful when running docker images:
 
 ```shell
 alias docker-run-here='docker run -it --rm --workdir "$PWD" --volume "$PWD:$PWD"'
 ```
 
-Example usage of Docker image:
+Example usage of Docker image (if you built your own, replace `dougdonohoe` with `my-repo`):
 
 ```shell
 # get help
-docker-run-here my-repo/vcf-validator:0.9.4 --help
+docker-run-here dougdonohoe/vcf-validator:0.9.4 --help
 
 # example using test files
 cd test/input_files/v4.1/passed
-docker-run-here my-repo/vcf-validator:0.9.4 -i passed_meta_sample.vcf -r summary
+docker-run-here dougdonohoe/vcf-validator:0.9.4 -i passed_meta_sample.vcf -r summary
 
 // use --entrypoint to use other executables
-docker-run-here --entrypoint "/vcf_debugulator" my-repo/vcf-validator:0.9.4 --help
-docker-run-here --entrypoint "/vcf_assembly_checker" my-repo/vcf-validator:0.9.4 --help
-docker-run-here --entrypoint "/test_validation_suite" my-repo/vcf-validator:0.9.4 --help
-```
-
-**NOTE**: Doug Donohoe has pushed an image using this `Dockerfile` that you can pull:
-
-```shell
- docker pull dougdonohoe/vcf-validator:0.9.4
+docker-run-here --entrypoint "/vcf_debugulator" dougdonohoe/vcf-validator:0.9.4 --help
+docker-run-here --entrypoint "/vcf_assembly_checker" dougdonohoe/vcf-validator:0.9.4 --help
+docker-run-here --entrypoint "/test_validation_suite" dougdonohoe/vcf-validator:0.9.4 --help
 ```
 
 ## Miscellaneous

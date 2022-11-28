@@ -57,7 +57,7 @@ RUN if [ "$(uname -m)" = "x86_64" ] ; then \
        cd / && patch -p1 < /gcc-x86.patch && rm /gcc-x86.patch; \
     fi
 
-# build2 https://build2.org/install.xhtml#unix
+# build2 fetch https://build2.org/install.xhtml#unix
 # This is required to build the latest version of odb, which has multi-arch support
 RUN set -eux; \
     url="https://download.build2.org/${BUILD2_VERSION}/build2-install-${BUILD2_VERSION}.sh"; \
@@ -65,8 +65,10 @@ RUN set -eux; \
     mkdir -p /build/build2; \
     cd /build/build2; \
     curl -sSfO "$url"; \
-    echo "$sha256  build2-install-${BUILD2_VERSION}.sh" | sha256sum -cw -; \
-    sh build2-install-${BUILD2_VERSION}.sh --local --yes
+    echo "$sha256  build2-install-${BUILD2_VERSION}.sh" | sha256sum -cw -;
+
+# build2 compilation
+RUN cd /build/build2 && sh build2-install-${BUILD2_VERSION}.sh --local --yes
 
 # odb binary https://codesynthesis.com/products/odb/doc/install-build2.xhtml
 RUN set -eux; \

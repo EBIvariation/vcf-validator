@@ -35,7 +35,7 @@ build: require_repo_name
 		--pull --tag $(TAG) .
 
 # common setup for buildx tasks
-buildx-setup: require_repo_name
+buildx-setup:
 	@echo "Current buildx builders:"
 	$(DOCKER) buildx ls
 	@if ! $(DOCKER) buildx inspect --builder $(BUILDER) > /dev/null 2>&1; then \
@@ -48,9 +48,12 @@ buildx-setup: require_repo_name
 ## buildx-publish: build and publish the multi-architecture image (amd64|arm64)
 buildx-publish: require_repo_name buildx-setup
 	@echo '=> Build and publish multi-arch image $(TAG)...'
+	# cache is used to make re-building faster on same machine (useful during development)
 	$(DOCKER) buildx build --file Dockerfile \
 		--platform $(PLATFORMS) \
 		--builder $(BUILDER) \
 		--build-arg VCF_VALIDATOR_VERSION=$(VCF_VALIDATOR_VERSION) \
 		--progress plain \
+		--cache-from type=local,src=/tmp/vcf-validator-docker-cache,mode=max \
+		--cache-to type=local,dest=/tmp/vcf-validator-docker-cache,mode=max \
 		--pull --push --tag $(TAG) .
