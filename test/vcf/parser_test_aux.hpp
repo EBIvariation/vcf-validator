@@ -34,14 +34,11 @@ namespace ebi
   inline bool is_valid(std::string path, vcf::AdditionalChecks additionalChecks) {
       std::ifstream input{path};
       std::vector<std::unique_ptr<ebi::vcf::ReportWriter>> outputs;
-      std::cout << "Path is:" <<  path << std::endl;
-
 
       return vcf::is_valid_vcf_file(input, path, vcf::ValidationLevel::warning, outputs, additionalChecks);
   }
 
   inline bool is_valid(std::string path) {
-      std::cout << "Path is:" <<  path << std::endl;
       return is_valid(path, {false});
   }
 }
