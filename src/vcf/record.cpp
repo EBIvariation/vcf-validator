@@ -699,7 +699,8 @@ namespace ebi
                     + " is not one of [A, R, G, ., <non-negative number>]"));
         }
 
-        bool number_matches = true;
+        if (values.front() == MISSING_VALUE) { return; }
+	bool number_matches = true;
         if (expected_cardinality > 0) {
             // The number of values must match the expected cardinality
             number_matches = (values.size() == static_cast<size_t>(expected_cardinality));

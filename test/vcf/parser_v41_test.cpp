@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <iostream>
 #include "parser_test_aux.hpp"
 
 namespace ebi
@@ -42,7 +43,7 @@ namespace ebi
 
       for (auto path : v)
       {
-          SECTION(path.string())
+          SECTION(path.generic_string())
           {
               CHECK(is_valid(path.string()));
           }
