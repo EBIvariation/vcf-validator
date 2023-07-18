@@ -1,5 +1,4 @@
-# vcf-validator | [![Build Status](https://travis-ci.com/EBIvariation/vcf-validator.svg?branch=master)](https://travis-ci.com/EBIvariation/vcf-validator) [![Build status](https://ci.appveyor.com/api/projects/status/vt4ldlwhm91e3n49/branch/master?svg=true)](https://ci.appveyor.com/project/ebivariation-bot/vcf-validator/branch/master)
-
+# vcf-validator | [![Build Status](https://github.com/EBIvariation/vcf-validator/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/EBIvariation/vcf-validator/actions/workflows/build.yml/badge.svg?branch=master) [![Build status](https://ci.appveyor.com/api/projects/status/vt4ldlwhm91e3n49/branch/master?svg=true)](https://ci.appveyor.com/project/ebivariation-bot/vcf-validator/branch/master)
 Validation suite for Variant Call Format (VCF) files. Please find below instructions on how to download and run, or read the wiki for more details about checks already implemented.
 
 This suite includes all the checks from the vcftools suite as well as additional lexical, syntactic and semantic analysis of the VCF input. If any inconsistencies are found, they are classified in one of the following categories:
