@@ -698,6 +698,9 @@ namespace ebi
             raise(std::make_shared<Error>(line, " meta specification Number=" + number
                     + " is not one of [A, R, G, ., <non-negative number>]"));
         }
+        if(!values.empty()) {
+            if (values.front() == MISSING_VALUE) { return; } // No need to check missing data
+        }
 
         bool number_matches = true;
         if (expected_cardinality > 0) {
