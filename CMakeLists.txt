@@ -156,9 +156,9 @@ elseif (OSX)
     ${EXT_LIB_PATH}/openssl/lib/libssl.a
     ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
     ${EXT_LIB_PATH}/nghttp2/lib/libnghttp2.a
-    ${EXT_LIB_PATH}/brotli/lib/libbrotlicommon-static.a
-    ${EXT_LIB_PATH}/brotli/lib/libbrotlidec-static.a
-    ${EXT_LIB_PATH}/brotli/lib/libbrotlienc-static.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlicommon.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlidec.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlienc.a
     ${EXT_LIB_PATH}/libbz2.a
     ${EXT_LIB_PATH}/libz.a
     ${EXT_LIB_PATH}/libodb-sqlite.a
@@ -276,9 +276,9 @@ elseif (OSX)
     ${EXT_LIB_PATH}/openssl/lib/libssl.a
     ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
     ${EXT_LIB_PATH}/nghttp2/lib/libnghttp2.a
-    ${EXT_LIB_PATH}/brotli/lib/libbrotlicommon-static.a
-    ${EXT_LIB_PATH}/brotli/lib/libbrotlidec-static.a
-    ${EXT_LIB_PATH}/brotli/lib/libbrotlienc-static.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlicommon.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlidec.a
+    ${EXT_LIB_PATH}/brotli/lib/libbrotlienc.a
     ${Boost_LIBRARIES}
     ${EXT_LIB_PATH}/libbz2.a
     ${EXT_LIB_PATH}/libz.a
