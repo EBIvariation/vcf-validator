@@ -79,11 +79,11 @@ namespace ebi
     inline std::string remove_end_of_line(std::string &line)
     {
         bool has_r = false, has_n = false;
-        if (line.back() == '\n') {
+        if (!line.empty() && line.back() == '\n') {
             has_n = true;
             line.pop_back();
         }
-        if (line.back() == '\r') {
+        if (!line.empty() && line.back() == '\r') {
             has_r = true;
             line.pop_back();
         }

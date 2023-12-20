@@ -278,7 +278,7 @@ namespace ebi
         // check contigs are contiguous
         auto iterator = finished_contigs.find(m_line_tokens[CHROM][0]);
         bool contig_not_found = iterator == finished_contigs.end();
-        bool contig_already_finished = iterator->second;
+        bool contig_already_finished = contig_not_found ? false : iterator->second;
         if (contig_not_found) {
             // contig not found in the map: finishing the previous contig, and starting a new one
             if (finished_contigs.size() != 0) {
