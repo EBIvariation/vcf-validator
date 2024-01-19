@@ -177,21 +177,39 @@ mkdir curl
 wget https://curl.haxx.se/download/curl-7.62.0.tar.gz -O ./curl-7.62.0.tar.gz
 tar zxf ./curl-7.62.0.tar.gz
 cd curl-7.62.0
-#set min mac version as 12.0 as all other dependencies have it, to avoid warning during link
-LDFLAGS="-L$dependencies_dir_abs_path/openssl/lib -L$dependencies_dir_abs_path/c-ares/lib -L$dependencies_dir_abs_path/nghttp2/lib -L$dependencies_dir_abs_path/brotli/lib" \
-CPPFLAGS="-I$dependencies_dir_abs_path/openssl/include -I$dependencies_dir_abs_path/c-ares/include -I$dependencies_dir_abs_path/nghttp2/include -I$dependencies_dir_abs_path/brotli/include" \
-CFLAGS="-mmacosx-version-min=12.0" \
-./configure --disable-shared \
-            --enable-static \
-            --without-librtmp \
-            --without-ca-bundle \
-            --disable-ldap \
-            --without-zlib \
-            --without-libidn2 \
-            --without-nss \
-            --enable-ares=$dependencies_dir_abs_path/c-ares \
-            --with-ssl=$dependencies_dir_abs_path/openssl \
-            --prefix=$dependencies_dir_abs_path/curl
+if [[ "$OS_NAME" == "osx" ]]
+then
+  #set min mac version as 12.0 as all other dependencies have it, to avoid warning during link
+  LDFLAGS="-L$dependencies_dir_abs_path/openssl/lib -L$dependencies_dir_abs_path/c-ares/lib -L$dependencies_dir_abs_path/nghttp2/lib -L$dependencies_dir_abs_path/brotli/lib" \
+  CPPFLAGS="-I$dependencies_dir_abs_path/openssl/include -I$dependencies_dir_abs_path/c-ares/include -I$dependencies_dir_abs_path/nghttp2/include -I$dependencies_dir_abs_path/brotli/include" \
+  CFLAGS="-mmacosx-version-min=12.0" \
+  ./configure --disable-shared \
+              --enable-static \
+              --without-librtmp \
+              --without-ca-bundle \
+              --disable-ldap \
+              --without-zlib \
+              --without-libidn2 \
+              --without-nss \
+              --enable-ares=$dependencies_dir_abs_path/c-ares \
+              --with-ssl=$dependencies_dir_abs_path/openssl \
+              --prefix=$dependencies_dir_abs_path/curl
+else
+  #linux
+  LDFLAGS="-L$dependencies_dir_abs_path/openssl/lib -L$dependencies_dir_abs_path/c-ares/lib -L$dependencies_dir_abs_path/nghttp2/lib -L$dependencies_dir_abs_path/brotli/lib" \
+  CPPFLAGS="-I$dependencies_dir_abs_path/openssl/include -I$dependencies_dir_abs_path/c-ares/include -I$dependencies_dir_abs_path/nghttp2/include -I$dependencies_dir_abs_path/brotli/include" \
+  ./configure --disable-shared \
+              --enable-static \
+              --without-librtmp \
+              --without-ca-bundle \
+              --disable-ldap \
+              --without-zlib \
+              --without-libidn2 \
+              --without-nss \
+              --enable-ares=$dependencies_dir_abs_path/c-ares \
+              --with-ssl=$dependencies_dir_abs_path/openssl \
+              --prefix=$dependencies_dir_abs_path/curl
+fi
 make && make install
 cd ..
 
