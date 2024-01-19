@@ -23,11 +23,11 @@ it installs the given dependencies:
   - bzip library                            bzip2-1.0.6
   - zlib library                            zlib-1.2.11
   - curl library                            curl-7.62.0
-  - openssl library                         openssl-1.1.1f
+  - openssl library                         openssl-1.1.1w
   - c-ares library                          c-ares-1.15.0
   - boost library                           boost-1.72.0
   - nghttp2 library (osx only)              nghttp2-1.47.0
-  - brotli library (osx only)               brotli-1.0.9
+  - brotli library (osx only)               brotli-1.1.0
 
 for linux:
 ./install_dependencies.sh linux
@@ -79,13 +79,31 @@ mkdir -p $dependencies_dir && cd $dependencies_dir
 echo "installing libodb"
 wget http://codesynthesis.com/download/odb/2.4/libodb-2.4.0.tar.bz2 -O ./libodb.tar.bz2
 tar jxf ./libodb.tar.bz2
-cd libodb-2.4.0 && ./configure && make
+cd libodb-2.4.0
+if [[ "$OS_NAME" == "osx" ]]
+then
+  #change name of file to avoid build issues in mac
+  mv version version_odb
+  sed 's/^dist_doc_DATA = GPLv2 LICENSE README NEWS version$/dist_doc_DATA = GPLv2 LICENSE README NEWS version_odb/' Makefile.am > Makefile.tmp
+  mv Makefile.tmp Makefile.am
+  ./bootstrap
+fi
+./configure && make
 cd ..
 
 echo "installing libodb-sqlite"
 wget http://codesynthesis.com/download/odb/2.4/libodb-sqlite-2.4.0.tar.bz2 -O ./libodb-sqlite.tar.bz2
 tar jxf ./libodb-sqlite.tar.bz2
-cd libodb-sqlite-2.4.0 && ./configure --with-libodb=../libodb-2.4.0 && make
+cd libodb-sqlite-2.4.0
+if [[ "$OS_NAME" == "osx" ]]
+then
+  #change name of file to avoid build issues in mac
+  mv version version_sqlite
+  sed 's/^dist_doc_DATA = GPLv2 LICENSE README NEWS version$/dist_doc_DATA = GPLv2 LICENSE README NEWS version_sqlite/' Makefile.am > Makefile.tmp
+  mv Makefile.tmp Makefile.am
+  ./bootstrap
+fi
+./configure --with-libodb=../libodb-2.4.0 && make
 cd ..
 
 echo "installing libbz2"
@@ -108,9 +126,10 @@ dependencies_dir_abs_path=`pwd`
 
 echo "installing openssl"
 mkdir openssl
-wget https://www.openssl.org/source/openssl-1.1.1f.tar.gz -O ./openssl-1.1.1f.tar.gz
-tar xzf ./openssl-1.1.1f.tar.gz
-cd openssl-1.1.1f
+#using latest openssl which supports mac arm as well
+wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz -O ./openssl-1.1.1w.tar.gz
+tar xzf ./openssl-1.1.1w.tar.gz
+cd openssl-1.1.1w
 LIBS="-lcrypto -ldl" \
 ./config -fPIC no-shared no-threads \
         --prefix=$dependencies_dir_abs_path/openssl \
@@ -140,10 +159,15 @@ then
 
   echo "installing brotli"
   mkdir brotli
-  wget https://github.com/google/brotli/archive/refs/tags/v1.0.9.tar.gz -O ./brotli-1.0.9.tar.gz
-  tar xzf ./brotli-1.0.9.tar.gz
-  cd brotli-1.0.9
-  ./configure-cmake --prefix=$dependencies_dir_abs_path/brotli
+  #using brotli 1.1.0
+  wget https://github.com/google/brotli/archive/refs/tags/v1.1.0.tar.gz -O ./brotli-1.1.0.tar.gz
+  tar xzf ./brotli-1.1.0.tar.gz
+  cd brotli-1.1.0
+  #for curl build, which uses dylib
+  cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$dependencies_dir_abs_path/brotli -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DBUILD_SHARED_LIBS=ON
+  make && make install
+  #for validator, which uses static lib
+  cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$dependencies_dir_abs_path/brotli -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DBUILD_SHARED_LIBS=OFF
   make && make install
   cd ..
 fi
@@ -153,8 +177,10 @@ mkdir curl
 wget https://curl.haxx.se/download/curl-7.62.0.tar.gz -O ./curl-7.62.0.tar.gz
 tar zxf ./curl-7.62.0.tar.gz
 cd curl-7.62.0
+#set min mac version as 12.0 as all other dependencies have it, to avoid warning during link
 LDFLAGS="-L$dependencies_dir_abs_path/openssl/lib -L$dependencies_dir_abs_path/c-ares/lib -L$dependencies_dir_abs_path/nghttp2/lib -L$dependencies_dir_abs_path/brotli/lib" \
 CPPFLAGS="-I$dependencies_dir_abs_path/openssl/include -I$dependencies_dir_abs_path/c-ares/include -I$dependencies_dir_abs_path/nghttp2/include -I$dependencies_dir_abs_path/brotli/include" \
+CFLAGS="-mmacosx-version-min=12.0" \
 ./configure --disable-shared \
             --enable-static \
             --without-librtmp \
