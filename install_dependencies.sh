@@ -20,14 +20,12 @@ it installs the given dependencies:
   - odb compiler                            odb-2.4.0
   - odb common runtime library              libodb-2.4.0
   - odb sqlite runtime library              libodb-sqlite-2.4.0
-  - bzip library                            bzip2-1.0.6
-  - zlib library                            zlib-1.2.11
-  - curl library                            curl-7.62.0
-  - openssl library                         openssl-1.1.1w
-  - c-ares library                          c-ares-1.15.0
-  - boost library                           boost-1.72.0
-  - nghttp2 library (osx only)              nghttp2-1.47.0
-  - brotli library (osx only)               brotli-1.1.0
+  - bzip library (linux only)               bzip2-1.0.6
+  - zlib library (linux only)               zlib-1.2.11
+  - curl library (linux only)               curl-7.62.0
+  - openssl library (linux only)            openssl-1.1.1w
+  - c-ares library (linux only)             c-ares-1.15.0
+  - boost library (linux only)              boost-1.72.0
 
 for linux:
 ./install_dependencies.sh linux
@@ -106,83 +104,56 @@ fi
 ./configure --with-libodb=../libodb-2.4.0 && make
 cd ..
 
-echo "installing libbz2"
-# This is commented till the bzip.org site is recovered.
-# wget http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz -O ./libbz2.tar.gz
-# tar zxf ./libbz2.tar.gz
-# Till then we can trust ubuntu archives.
-wget http://archive.ubuntu.com/ubuntu/pool/main/b/bzip2/bzip2_1.0.6.orig.tar.bz2 -O ./libbz2.tar.bz2
-tar jxf ./libbz2.tar.bz2
-cd bzip2-1.0.6 && make
-cd ..
-
-echo "installing libz"
-wget http://prdownloads.sourceforge.net/libpng/zlib-1.2.11.tar.gz?download -O ./libz.tar.gz
-tar zxf ./libz.tar.gz
-cd zlib-1.2.11 && cmake . && make
-cd ..
-
-dependencies_dir_abs_path=`pwd`
-
-echo "installing openssl"
-mkdir openssl
-#using latest openssl which supports mac arm as well
-wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz -O ./openssl-1.1.1w.tar.gz
-tar xzf ./openssl-1.1.1w.tar.gz
-cd openssl-1.1.1w
-LIBS="-lcrypto -ldl" \
-./config -fPIC no-shared no-threads \
-        --prefix=$dependencies_dir_abs_path/openssl \
-        --openssldir=$dependencies_dir_abs_path/openssl
-make && make install_sw
-cd ..
-
-echo "installing c-ares"
-mkdir c-ares
-wget https://c-ares.haxx.se/download/c-ares-1.15.0.tar.gz -O ./c-ares-1.15.0.tar.gz
-tar xzf ./c-ares-1.15.0.tar.gz
-cd c-ares-1.15.0
-./configure --prefix=$dependencies_dir_abs_path/c-ares
-make && make install
-cd ..
-
-if [[ "$OS_NAME" == "osx" ]]
+if [[ "$OS_NAME" != "osx" ]]
 then
-  echo "installing nghttp2"
-  mkdir nghttp2
-  wget https://github.com/nghttp2/nghttp2/releases/download/v1.47.0/nghttp2-1.47.0.tar.gz -O ./nghttp2-1.47.0.tar.gz
-  tar xzf ./nghttp2-1.47.0.tar.gz
-  cd nghttp2-1.47.0
-  ./configure --prefix=$dependencies_dir_abs_path/nghttp2
+  #linux 
+  echo "installing libbz2"
+  # This is commented till the bzip.org site is recovered.
+  # wget http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz -O ./libbz2.tar.gz
+  # tar zxf ./libbz2.tar.gz
+  # Till then we can trust ubuntu archives.
+  wget http://archive.ubuntu.com/ubuntu/pool/main/b/bzip2/bzip2_1.0.6.orig.tar.bz2 -O ./libbz2.tar.bz2
+  tar jxf ./libbz2.tar.bz2
+  cd bzip2-1.0.6 && make
+  cd ..
+
+  echo "installing libz"
+  wget http://prdownloads.sourceforge.net/libpng/zlib-1.2.11.tar.gz?download -O ./libz.tar.gz
+  tar zxf ./libz.tar.gz
+  cd zlib-1.2.11 && cmake . && make
+  cd ..
+
+  dependencies_dir_abs_path=`pwd`
+
+  echo "installing openssl"
+  mkdir openssl
+  #using latest openssl which supports mac arm as well
+  wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz -O ./openssl-1.1.1w.tar.gz
+  tar xzf ./openssl-1.1.1w.tar.gz
+  cd openssl-1.1.1w
+  LIBS="-lcrypto -ldl" \
+  ./config -fPIC no-shared no-threads \
+          --prefix=$dependencies_dir_abs_path/openssl \
+          --openssldir=$dependencies_dir_abs_path/openssl
+  make && make install_sw
+  cd ..
+
+  echo "installing c-ares"
+  mkdir c-ares
+  wget https://c-ares.haxx.se/download/c-ares-1.15.0.tar.gz -O ./c-ares-1.15.0.tar.gz
+  tar xzf ./c-ares-1.15.0.tar.gz
+  cd c-ares-1.15.0
+  ./configure --prefix=$dependencies_dir_abs_path/c-ares
   make && make install
   cd ..
 
-  echo "installing brotli"
-  mkdir brotli
-  #using brotli 1.1.0
-  wget https://github.com/google/brotli/archive/refs/tags/v1.1.0.tar.gz -O ./brotli-1.1.0.tar.gz
-  tar xzf ./brotli-1.1.0.tar.gz
-  cd brotli-1.1.0
-  #for curl build, which uses dylib
-  cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$dependencies_dir_abs_path/brotli -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DBUILD_SHARED_LIBS=ON
-  make && make install
-  #for validator, which uses static lib
-  cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$dependencies_dir_abs_path/brotli -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DBUILD_SHARED_LIBS=OFF
-  make && make install
-  cd ..
-fi
-
-echo "installing libcurl"
-mkdir curl
-wget https://curl.haxx.se/download/curl-7.62.0.tar.gz -O ./curl-7.62.0.tar.gz
-tar zxf ./curl-7.62.0.tar.gz
-cd curl-7.62.0
-if [[ "$OS_NAME" == "osx" ]]
-then
-  #set min mac version as 12.0 as all other dependencies have it, to avoid warning during link
-  LDFLAGS="-L$dependencies_dir_abs_path/openssl/lib -L$dependencies_dir_abs_path/c-ares/lib -L$dependencies_dir_abs_path/nghttp2/lib -L$dependencies_dir_abs_path/brotli/lib" \
-  CPPFLAGS="-I$dependencies_dir_abs_path/openssl/include -I$dependencies_dir_abs_path/c-ares/include -I$dependencies_dir_abs_path/nghttp2/include -I$dependencies_dir_abs_path/brotli/include" \
-  CFLAGS="-mmacosx-version-min=12.0" \
+  echo "installing libcurl"
+  mkdir curl
+  wget https://curl.haxx.se/download/curl-7.62.0.tar.gz -O ./curl-7.62.0.tar.gz
+  tar zxf ./curl-7.62.0.tar.gz
+  cd curl-7.62.0
+  LDFLAGS="-L$dependencies_dir_abs_path/openssl/lib -L$dependencies_dir_abs_path/c-ares/lib" \
+  CPPFLAGS="-I$dependencies_dir_abs_path/openssl/include -I$dependencies_dir_abs_path/c-ares/include" \
   ./configure --disable-shared \
               --enable-static \
               --without-librtmp \
@@ -194,27 +165,9 @@ then
               --enable-ares=$dependencies_dir_abs_path/c-ares \
               --with-ssl=$dependencies_dir_abs_path/openssl \
               --prefix=$dependencies_dir_abs_path/curl
-else
-  #linux
-  LDFLAGS="-L$dependencies_dir_abs_path/openssl/lib -L$dependencies_dir_abs_path/c-ares/lib -L$dependencies_dir_abs_path/nghttp2/lib -L$dependencies_dir_abs_path/brotli/lib" \
-  CPPFLAGS="-I$dependencies_dir_abs_path/openssl/include -I$dependencies_dir_abs_path/c-ares/include -I$dependencies_dir_abs_path/nghttp2/include -I$dependencies_dir_abs_path/brotli/include" \
-  ./configure --disable-shared \
-              --enable-static \
-              --without-librtmp \
-              --without-ca-bundle \
-              --disable-ldap \
-              --without-zlib \
-              --without-libidn2 \
-              --without-nss \
-              --enable-ares=$dependencies_dir_abs_path/c-ares \
-              --with-ssl=$dependencies_dir_abs_path/openssl \
-              --prefix=$dependencies_dir_abs_path/curl
-fi
-make && make install
-cd ..
+  make && make install
+  cd ..
 
-if [[ "$OS_NAME" == "linux" ]]
-then
   echo "installing  boost"
   wget https://boostorg.jfrog.io/artifactory/main/release/1.72.0/source/boost_1_72_0.tar.gz -O ./boost.tar.gz
   tar zxf ./boost.tar.gz
@@ -238,8 +191,13 @@ fi
 # Make easier to find the static libraries
 cp libodb-2.4.0/odb/.libs/libodb.a .
 cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.a .
-cp bzip2-1.0.6/libbz2.a .
-cp zlib-1.2.11/libz.a .
+
+if [[ "$OS_NAME" != "osx" ]]
+then
+  #linux
+  cp bzip2-1.0.6/libbz2.a .
+  cp zlib-1.2.11/libz.a .
+fi
 
 # copy headers
 cp -r libodb-2.4.0/odb ./
@@ -266,4 +224,3 @@ echo "Dependencies folder:"
 ls $dependencies_dir
 
 echo -e "\nAutomatic installation completed successfully."
-

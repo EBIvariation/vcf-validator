@@ -67,7 +67,9 @@ elseif (WINDOWS)
 endif ()
 
 include_directories ("${EXT_LIB_PATH}")
-include_directories ("${EXT_LIB_PATH}/curl/include")
+if (NOT OSX)
+  include_directories ("${EXT_LIB_PATH}/curl/include")
+endif ()
 
 # Compiler and linkers flags
 if (LINUX)
@@ -151,16 +153,7 @@ if (LINUX)
 elseif (OSX)
   set (THIRD_PARTY_LIBRARIES
     ${Boost_LIBRARIES}
-    ${EXT_LIB_PATH}/curl/lib/libcurl.a
-    ${EXT_LIB_PATH}/c-ares/lib/libcares.a
-    ${EXT_LIB_PATH}/openssl/lib/libssl.a
-    ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
-    ${EXT_LIB_PATH}/nghttp2/lib/libnghttp2.a
-    ${EXT_LIB_PATH}/brotli/lib/libbrotlicommon.a
-    ${EXT_LIB_PATH}/brotli/lib/libbrotlidec.a
-    ${EXT_LIB_PATH}/brotli/lib/libbrotlienc.a
-    ${EXT_LIB_PATH}/libbz2.a
-    ${EXT_LIB_PATH}/libz.a
+    libcurl.a
     ${EXT_LIB_PATH}/libodb-sqlite.a
     ${EXT_LIB_PATH}/libodb.a
     mod_sqlite3
@@ -271,17 +264,8 @@ elseif (OSX)
   set (LIBRARIES_TO_LINK
     mod_vcf
     mod_odb
-    ${EXT_LIB_PATH}/curl/lib/libcurl.a
-    ${EXT_LIB_PATH}/c-ares/lib/libcares.a
-    ${EXT_LIB_PATH}/openssl/lib/libssl.a
-    ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
-    ${EXT_LIB_PATH}/nghttp2/lib/libnghttp2.a
-    ${EXT_LIB_PATH}/brotli/lib/libbrotlicommon.a
-    ${EXT_LIB_PATH}/brotli/lib/libbrotlidec.a
-    ${EXT_LIB_PATH}/brotli/lib/libbrotlienc.a
+    libcurl.a
     ${Boost_LIBRARIES}
-    ${EXT_LIB_PATH}/libbz2.a
-    ${EXT_LIB_PATH}/libz.a
     ${EXT_LIB_PATH}/libodb-sqlite.a
     ${EXT_LIB_PATH}/libodb.a
     mod_sqlite3
