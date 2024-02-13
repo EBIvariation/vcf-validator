@@ -60,57 +60,57 @@ jobs:
 
 
   ### Mac OS build
-#  macos_build:
-#    runs-on: macos-11
-#    strategy:
-#      matrix:
-#        config:
-#          - {cc: "gcc", cxx: "g++"}
-#          - {cc: "clang", cxx: "clang++"}
-#
-#    steps:
-#    - uses: actions/checkout@v2
-#    - name: Install dependencies
-#      run: |
-#        brew update
-#        brew install boost sqlite3
-#        ./install_dependencies.sh osx
-#    - name: Compile and test
-#      run: |
-#        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} ..
-#        export LIBRARY_PATH=${LIBRARY_PATH}:/usr/local/opt/icu4c/lib
-#        make -j2
-#        cd .. && ./build/bin/test_validation_suite
-#    - name: Rename release files
-#      if: ${{ matrix.config.cc == 'clang' }}
-#      run: |
-#        mv build/bin/vcf_validator vcf_validator_macos
-#        mv build/bin/vcf_debugulator vcf_debugulator_macos
-#        mv build/bin/vcf_assembly_checker vcf_assembly_checker_macos
-#    - name: Upload vcf-validator
-#      uses: actions/upload-artifact@v3
-#      if: ${{ matrix.config.cc == 'clang' }}
-#      with:
-#        name: vcf_validator_macos
-#        path: vcf_validator_macos
-#    - name: Upload vcf-debugulator
-#      uses: actions/upload-artifact@v3
-#      if: ${{ matrix.config.cc == 'clang' }}
-#      with:
-#        name: vcf_debugulator_macos
-#        path: vcf_debugulator_macos
-#    - name: Upload vcf-assembly-checker
-#      uses: actions/upload-artifact@v3
-#      if: ${{ matrix.config.cc == 'clang' }}
-#      with:
-#        name: vcf_assembly_checker_macos
-#        path: vcf_assembly_checker_macos
+  macos_build:
+    runs-on: macos-12
+    strategy:
+      matrix:
+        config:
+          - {cc: "gcc", cxx: "g++"}
+          - {cc: "clang", cxx: "clang++"}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        #brew update
+        HOMEBREW_NO_AUTO_UPDATE=1 brew install boost sqlite3 automake
+        ./install_dependencies.sh osx
+    - name: Compile and test
+      run: |
+        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} ..
+        export LIBRARY_PATH=${LIBRARY_PATH}:/usr/local/opt/icu4c/lib:/usr/local/lib
+        make -j2
+        cd .. && ./build/bin/test_validation_suite
+    - name: Rename release files
+      if: ${{ matrix.config.cc == 'clang' }}
+      run: |
+        mv build/bin/vcf_validator vcf_validator_macos
+        mv build/bin/vcf_debugulator vcf_debugulator_macos
+        mv build/bin/vcf_assembly_checker vcf_assembly_checker_macos
+    - name: Upload vcf-validator
+      uses: actions/upload-artifact@v3
+      if: ${{ matrix.config.cc == 'clang' }}
+      with:
+        name: vcf_validator_macos
+        path: vcf_validator_macos
+    - name: Upload vcf-debugulator
+      uses: actions/upload-artifact@v3
+      if: ${{ matrix.config.cc == 'clang' }}
+      with:
+        name: vcf_debugulator_macos
+        path: vcf_debugulator_macos
+    - name: Upload vcf-assembly-checker
+      uses: actions/upload-artifact@v3
+      if: ${{ matrix.config.cc == 'clang' }}
+      with:
+        name: vcf_assembly_checker_macos
+        path: vcf_assembly_checker_macos
 
 
   ### Release job (tags only)
   create_release:
     if: startsWith(github.ref, 'refs/tags/')
-    needs: [ linux_build ]
+    needs: [ linux_build, macos_build ]
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
