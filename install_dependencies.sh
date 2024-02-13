@@ -127,7 +127,7 @@ then
 
   echo "installing openssl"
   mkdir openssl
-  #using latest openssl which supports mac arm as well
+  #using openssl v1.1.1w which supports mac arm as well
   wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz -O ./openssl-1.1.1w.tar.gz
   tar xzf ./openssl-1.1.1w.tar.gz
   cd openssl-1.1.1w
