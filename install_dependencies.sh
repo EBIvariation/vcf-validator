@@ -108,10 +108,6 @@ if [[ "$OS_NAME" != "osx" ]]
 then
   #linux 
   echo "installing libbz2"
-  # This is commented till the bzip.org site is recovered.
-  # wget http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz -O ./libbz2.tar.gz
-  # tar zxf ./libbz2.tar.gz
-  # Till then we can trust ubuntu archives.
   wget http://archive.ubuntu.com/ubuntu/pool/main/b/bzip2/bzip2_1.0.6.orig.tar.bz2 -O ./libbz2.tar.bz2
   tar jxf ./libbz2.tar.bz2
   cd bzip2-1.0.6 && make
