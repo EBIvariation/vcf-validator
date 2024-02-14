@@ -9,9 +9,9 @@ This suite includes all the checks from the vcftools suite as well as additional
 These tools have been implemented using C++11.
 
 
-## Download
+## Installation
 
-We recommend using the [latest release](https://github.com/EBIvariation/vcf-validator/releases) for the most stable experience using vcf-validator. Along with the release notes, you will find the executables `vcf_validator`, `vcf_assembly_checker` and `vcf_debugulator` for Linux, macOS and Windows. For Windows, please also download the libraries in the [lib/windows_specific/](https://github.com/EBIvariation/vcf-validator/tree/master/lib/windows_specific/) folder.
+The vcf-validator is built with all the dependencies included. It can be downloaded directly from the [latest release](https://github.com/EBIvariation/vcf-validator/releases) for the most stable experience using vcf-validator. Along with the release notes, you will find the executables `vcf_validator`, `vcf_assembly_checker` and `vcf_debugulator` for Linux, macOS and Windows. For Windows, please also download the libraries in the [lib/windows_specific/](https://github.com/EBIvariation/vcf-validator/tree/master/lib/windows_specific/) folder.
 
 
 ## Run
