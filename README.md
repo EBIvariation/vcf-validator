@@ -11,8 +11,17 @@ These tools have been implemented using C++11.
 
 ## Installation
 
+### From Binaries
+
 The vcf-validator is built with all the dependencies included. It can be downloaded directly from the [latest release](https://github.com/EBIvariation/vcf-validator/releases) for the most stable experience using vcf-validator. Along with the release notes, you will find the executables `vcf_validator`, `vcf_assembly_checker` and `vcf_debugulator` for Linux, macOS and Windows. For Windows, please also download the libraries in the [lib/windows_specific/](https://github.com/EBIvariation/vcf-validator/tree/master/lib/windows_specific/) folder.
 
+### From conda
+
+from [v0.9.6](https://github.com/EBIvariation/vcf-validator/releases/tag/v0.9.6), You can install vcf-validator via conda using 
+
+```
+conda install -c bioconda vcf-validator
+```
 
 ## Run
 
@@ -124,8 +133,6 @@ If you plan to make changes, make sure to check the [docs/developer-guide.md](do
 The build has been tested on the following compilers:
 * Clang 10
 * GCC 9
-
-NOTE: Currently the Linux compilation doesn't work in Ubuntu 18. We are working on fixing this. The Linux compilation is tested and working in Ubuntu 16.04 and 20.04.
 
 #### Dependencies
 
