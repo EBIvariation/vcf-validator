@@ -17,7 +17,7 @@ The vcf-validator is built with all the dependencies included. It can be downloa
 
 ### From conda
 
-from [v0.9.6](https://github.com/EBIvariation/vcf-validator/releases/tag/v0.9.6), You can install vcf-validator via conda using 
+Starting from [v0.9.6](https://github.com/EBIvariation/vcf-validator/releases/tag/v0.9.6), you can install vcf-validator via conda using 
 
 ```
 conda install -c bioconda vcf-validator
