@@ -27,6 +27,7 @@ namespace ebi
     const std::string VCF_V41 = "VCFv4.1";
     const std::string VCF_V42 = "VCFv4.2";
     const std::string VCF_V43 = "VCFv4.3";
+    const std::string VCF_V44 = "VCFv4.4";
 
     // validator, debugulator and assembly_checker command line arguments
     const char STDIN[] = "stdin";

@@ -55,7 +55,8 @@ namespace ebi
     {
         v41,
         v42,
-        v43
+        v43,
+        v44
     };
 
     enum class RecordType
@@ -159,6 +160,53 @@ namespace ebi
             { THOUSAND_G, { FLAG, "0" } }
     };
 
+    const std::map<std::string, std::pair<std::string, std::string>> info_v44 = {
+            { AA, { STRING, "1" } },
+            { AC, { INTEGER, A } },
+            { AD, { INTEGER, R } },
+            { ADF, { INTEGER, R } },
+            { ADR, { INTEGER, R } },
+            { AF, { FLOAT, A } },
+            { AN, { INTEGER, "1" } },
+            { BKPTID, { STRING, UNKNOWN_CARDINALITY } },
+            { BQ, { FLOAT, "1" } },
+            { CICN, { INTEGER, "2" } },
+            { CICNADJ, { INTEGER, UNKNOWN_CARDINALITY } },
+            { CIEND, { INTEGER, "2" } },
+            { CIGAR, { STRING, A } },
+            { CILEN, { INTEGER, "2" } },
+            { CIPOS, { INTEGER, "2" } },
+            { CN, { INTEGER, "1" } },
+            { CNADJ, { INTEGER, UNKNOWN_CARDINALITY } },
+            { DB, { FLAG, "0" } },
+            { DBRIPID, { STRING, "1" } },
+            { DBVARID, { STRING, "1" } },
+            { DGVID, { STRING, "1" } },
+            { DP, { INTEGER, "1" } },
+            { DPADJ, { INTEGER, UNKNOWN_CARDINALITY } },
+            { END, { INTEGER, "1" } },
+            { EVENT, { STRING, "1" } },
+            { HOMLEN, { INTEGER, UNKNOWN_CARDINALITY } },
+            { HOMSEQ, { STRING, UNKNOWN_CARDINALITY } },
+            { H2, { FLAG, "0" } },
+            { H3, { FLAG, "0" } },
+            { IMPRECISE, { FLAG, "0" } },
+            { MATEID, { STRING, UNKNOWN_CARDINALITY } },
+            { MEINFO, { STRING, "4" } },
+            { METRANS, { STRING, "4" } },
+            { MQ, { MISSING_VALUE, "1" } },
+            { MQ0, { INTEGER, "1" } },
+            { NOVEL, { FLAG, "0" } },
+            { NS, { INTEGER, "1" } },
+            { PARID, { STRING, "1" } },
+            // TODO : SB metadata Type and Number is "."
+            { SOMATIC, { FLAG, "0" } },
+            { SVLEN, { INTEGER, UNKNOWN_CARDINALITY } },
+            { SVTYPE, { STRING, "1" } },
+            { VALIDATED, { FLAG, "0" } },
+            { THOUSAND_G, { FLAG, "0" } }
+    };
+
     const std::map<std::string, std::pair<std::string, std::string>> format_v41_v42 = {
             { AHAP, { INTEGER, "1" } },
             { CN, { INTEGER, "1" } },
@@ -182,6 +230,31 @@ namespace ebi
     };
 
     const std::map<std::string, std::pair<std::string, std::string>> format_v43 = {
+            { AD, { INTEGER, R } },
+            { ADF, { INTEGER, R } },
+            { ADR, { INTEGER, R } },
+            { AHAP, { INTEGER, "1" } },
+            { CN, { INTEGER, "1" } },
+            { CNL, { FLOAT, G } },
+            { CNP, { FLOAT, G } },
+            { CNQ, { FLOAT, "1" } },
+            { DP, { INTEGER, "1" } },
+            { EC, { INTEGER, A } },
+            { FT, { STRING, "1" } },
+            { GL, { FLOAT, G } },
+            { GP, { FLOAT, G } },
+            { GQ, { INTEGER, "1" } },
+            { GT, { STRING, "1" } },
+            { HAP, { INTEGER, "1" } },
+            { HQ, { INTEGER, "2" } },
+            { MQ, { INTEGER, "1" } },
+            { NQ, { INTEGER, "1" } },
+            { PL, { INTEGER, G } },
+            { PQ, { INTEGER, "1" } },
+            { PS, { INTEGER, "1" } }
+    };
+
+    const std::map<std::string, std::pair<std::string, std::string>> format_v44 = {
             { AD, { INTEGER, R } },
             { ADF, { INTEGER, R } },
             { ADR, { INTEGER, R } },

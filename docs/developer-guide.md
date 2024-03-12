@@ -41,6 +41,10 @@ executable binaries:
 
 ![architecture image](img/VCF-validator-architecture.png)
 
+In case of dependent libraries being installed in non-standard paths,
+update LIBRARY_PATH as shown below
+  'export LIBRARY_PATH=$LIBRARY_PATH:<path to required library's libpath>'
+
 The role of Ragel and ODB in this project is explained further below.
 
 ## Code structure

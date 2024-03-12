@@ -97,7 +97,7 @@ namespace ebi
       std::unique_ptr<std::stringstream> fixed_vcf;
       long lines;
 
-      for (size_t i = 1; i <= 3; ++i) {
+      for (size_t i = 1; i <= 4; ++i) {
           auto path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_duplicated_001.vcf");
           SECTION(path.string()) {
               std::ifstream file{path.c_str()};
@@ -121,7 +121,7 @@ namespace ebi
       std::unique_ptr<std::stringstream> fixed_vcf;
       long lines;
 
-      for (size_t i = 1; i <= 3; ++i) {
+      for (size_t i = 1; i <= 4; ++i) {
           // syntax error, AC must be a positive integer
           path = boost::filesystem::path(
                   "test/input_files/v4." + std::to_string(i) + "/failed/failed_body_info_036.vcf");
@@ -162,7 +162,7 @@ namespace ebi
       std::unique_ptr<std::stringstream> fixed_vcf;
       long lines;
 
-      for (size_t i = 1; i <= 3; ++i) {
+      for (size_t i = 1; i <= 4; ++i) {
           // syntax error, alleles are not digits
           path = boost::filesystem::path("test/input_files/v4." + std::to_string(i) + "/failed/failed_body_sample_000.vcf");
           SECTION(path.string()) {
