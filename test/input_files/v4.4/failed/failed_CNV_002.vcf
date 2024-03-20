@@ -1,0 +1,11 @@
+##fileformat=VCFv4.4
+##CauseOfFailure=Only one SVCLAIM where there should be two
+##ALT=<ID=CNV,Description="Copy number variable region">
+##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the longest variant described in this record">
+##INFO=<ID=SVLEN,Number=A,Type=Integer,Description="Length of structural variant">
+##INFO=<ID=CN,Number=A,Type=Float,Description="Copy number of CNV/breakpoint">
+##INFO=<ID=SVCLAIM,Number=A,Type=String,Description="Claim made by the structural variant call. Valid values are D, J, DJ for abundance, adjacency and both respectively">
+##contig=<ID=1,length=1000000>
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00096
+1	1100	.	T	<CNV>,<CNV>	100	PASS	CN=2,4;END=1300;SVLEN=100,50;SVCLAIM=D	GT	1|2

@@ -1,0 +1,10 @@
+##fileformat=VCFv4.4
+##CauseOfFailure=SVCLAIM is missing for a DEL symbolic allele
+##ALT=<ID=CNV,Description="Copy number variable region">
+##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the longest variant described in this record">
+##INFO=<ID=SVLEN,Number=A,Type=Integer,Description="Length of structural variant">
+##INFO=<ID=CN,Number=A,Type=Float,Description="Copy number of CNV/breakpoint">
+##contig=<ID=1,length=1000000>
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00096
+1	1100	.	T	<DEL>	100	PASS	CN=0;END=1200;SVLEN=100	GT	0/1
