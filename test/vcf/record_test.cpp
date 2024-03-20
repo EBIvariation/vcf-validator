@@ -891,4 +891,338 @@ namespace ebi
                         vcf::InfoBodyError*);
         }
     }
+
+    TEST_CASE("Record constructor v44", "[constructor]")
+    {
+        std::shared_ptr<vcf::Source> source{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v44,
+                {},
+                { "Sample1" }}};
+
+        source->meta_entries.emplace(vcf::FORMAT,
+            vcf::MetaEntry{
+                1,
+                vcf::FORMAT,
+                {
+                    { vcf::ID, vcf::GT },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::STRING },
+                    { vcf::DESCRIPTION, "Genotype" }
+                },
+                source
+        });
+
+        source->meta_entries.emplace(vcf::FORMAT,
+            vcf::MetaEntry{
+                1,
+                vcf::FORMAT,
+                {
+                    { vcf::ID, vcf::CN },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::DESCRIPTION, "Copy Number Genotype" }
+                },
+                source
+            });
+
+        source->meta_entries.emplace(vcf::FORMAT,
+            vcf::MetaEntry{
+                1,
+                vcf::FORMAT,
+                {
+                    { vcf::ID, vcf::DP },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::DESCRIPTION, "Read depth" }
+                },
+                source
+        });
+
+        source->meta_entries.emplace(vcf::FORMAT,
+            vcf::MetaEntry{
+                1,
+                vcf::FORMAT,
+                {
+                    { vcf::ID, "FormatTag" },
+                    { vcf::NUMBER, "2" },
+                    { vcf::TYPE, vcf::FLOAT },
+                    { vcf::DESCRIPTION, "A custom format tag" }
+                },
+                source
+        });
+
+       source->meta_entries.emplace(vcf::INFO,
+            vcf::MetaEntry{
+                1,
+                vcf::INFO,
+                {
+                    { vcf::ID, vcf::AN },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::DESCRIPTION, "Allele number" }
+                },
+                source
+        });
+
+        source->meta_entries.emplace(vcf::INFO,
+            vcf::MetaEntry{
+                1,
+                vcf::INFO,
+                {
+                    { vcf::ID, vcf::AF },
+                    { vcf::NUMBER, vcf::A },
+                    { vcf::TYPE, vcf::FLOAT },
+                    { vcf::DESCRIPTION, "Allele frequency" }
+                },
+                source
+        });
+
+        source->meta_entries.emplace(vcf::INFO,
+            vcf::MetaEntry{
+                1,
+                vcf::INFO,
+                {
+                    { vcf::ID, "InfoTag" },
+                    { vcf::NUMBER, "1" },
+                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::DESCRIPTION, "A custom info tag" }
+                },
+                source
+        });
+
+        SECTION("gVCF allowed in v4.4")
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id456" },
+                                "A",
+                                { vcf:: GVCF_NON_VARIANT_ALLELE },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::AN, "12"} },
+                                { "XY" },
+                                { "11" },
+                                source}) );
+
+            CHECK_NOTHROW( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id456" },
+                                "A",
+                                { vcf::GVCF_NON_VARIANT_ALLELE, "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::AN, "12"} },
+                                { "XY" },
+                                { "12" },
+                                source}) );
+       }
+
+        SECTION("Duplicate IDs")
+        {
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id123" },
+                                "A",
+                                { "AC", "AT" },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} },
+                                { vcf::GT, vcf::DP },
+                                { "0|1" },
+                                source}),
+                            vcf::IdBodyError*);
+        }
+
+        SECTION("Duplicate FILTERs")
+        {
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { "q10", "q10" },
+                                { {vcf::AN, "12"} },
+                                { vcf::GT },
+                                { "0|1" },
+                                source}),
+                            vcf::FilterBodyError*);
+        }
+
+        SECTION("FILTER with value 0")
+        {
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { "q1", "0" },
+                                { {vcf::AN, "12"} },
+                                { vcf::GT },
+                                { "0|1" },
+                                source}),
+                            vcf::FilterBodyError*);
+        }
+
+        SECTION("Duplicate INFOs")
+        {
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id456" },
+                                "A",
+                                { "T", "C" },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::AN, "12"}, {vcf::AN, "15"} },
+                                { vcf::DP },
+                                { "12" },
+                                source}),
+                            vcf::InfoBodyError*);
+        }
+
+        SECTION("Duplicate FORMATs")
+        {
+            CHECK_THROWS_AS( (vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123", "id456" },
+                                "A",
+                                { "T", "C" },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} },
+                                { vcf::DP, vcf::DP },
+                                { "12:13" },
+                                source}),
+                            vcf::FormatBodyError*);
+        }
+
+        SECTION("Conflicting data line values and meta header definition")
+        {
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {"InfoTag", "1.89"}, { vcf::AF, "0.5,0.3"} },
+                            { vcf::GT, vcf::DP },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {"InfoTag", "1,2,3"}, { vcf::AF, "0.5,0.3"} },
+                            { vcf::GT, vcf::DP },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AN, "12"}, { vcf::AF, "0.5,0.3"} },
+                            { vcf::GT, "FormatTag" },
+                            { "0|1:ta,gs" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AN, "12"}, { vcf::AF, "0.5,0.3"} },
+                            { vcf::GT, "FormatTag" },
+                            { "0|1:1.5" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AN, "12"}, { vcf::AF, "0.5,0.3"} },
+                            { vcf::GT, vcf::DP },
+                            { "0|1:tags" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            // Copy number genotypes should have a genotype representation with just an Integer
+            CHECK_THROWS_AS((vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AN, "12"}, { vcf::AF, "0.5,0.3"} },
+                            { vcf::CN },
+                            { "0|0" },
+                            source }),
+                            vcf::SamplesFieldBodyError*);
+
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123", "id456" },
+                            "A",
+                            { "AC", "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AN, "12"}, { vcf::AF, "0.5"} },
+                            { vcf::GT, vcf::DP },
+                            { "0|1:1" },
+                            source}),
+                        vcf::InfoBodyError*);
+        }
+    }
+
 }

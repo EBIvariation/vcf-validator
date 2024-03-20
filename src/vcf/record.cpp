@@ -144,7 +144,7 @@ namespace ebi
 
     void Record::check_ids_no_duplicates() const
     {
-        if (source->version == Version::v43) {
+        if (source->version == Version::v43 || source->version == Version::v44) {
             try {
                 check_no_duplicates(ids);
             } catch (const std::invalid_argument &ex) {
@@ -227,7 +227,7 @@ namespace ebi
 
     void Record::check_filter_no_duplicates() const
     {
-        if (source->version == Version::v43) {
+        if (source->version == Version::v43 || source->version == Version::v44) {
             try {
                 check_no_duplicates(filters);
             } catch (const std::invalid_argument &ex) {
@@ -281,8 +281,10 @@ namespace ebi
                 try {
                     if (source->version == Version::v41 || source->version == Version::v42) {
                         check_predefined_tag_info(field.first, values, info_v41_v42);
-                    } else {
+                    } else if (source->version == Version::v43) {
                         check_predefined_tag_info(field.first, values, info_v43);
+                    } else {
+                        check_predefined_tag_info(field.first, values, info_v44);
                     }
                 } catch (std::shared_ptr<Error> ex) {
                     throw new InfoBodyError{line, "INFO " + ex->message, field.first + "=" + field.second, ErrorFix::IRRECOVERABLE_VALUE, field.first};
@@ -295,7 +297,7 @@ namespace ebi
 
     void Record::check_info_no_duplicates() const
     {
-        if (source->version == Version::v43 && info.size() > 1) {
+        if ((source->version == Version::v43 || source->version == Version::v44) && info.size() > 1) {
             for (auto & in : info) {
                 if (info.count(in.first) > 1) {
                     throw new InfoBodyError{line, "INFO must not have duplicate keys", "", ErrorFix::DUPLICATE_VALUES};
@@ -323,7 +325,7 @@ namespace ebi
 
     void Record::check_format_no_duplicates() const
     {
-        if (source->version == Version::v43) {
+        if (source->version == Version::v43 || source->version == Version::v44) {
             try {
                 check_no_duplicates(format);
             } catch (const std::invalid_argument &ex) {
@@ -571,8 +573,10 @@ namespace ebi
                 try {
                     if (source->version == Version::v41 || source->version == Version::v42) {
                         check_predefined_tag_format(format[j], values, format_v41_v42, ploidy);
-                    } else {
+                    } else if (source->version == Version::v43) {
                         check_predefined_tag_format(format[j], values, format_v43, ploidy);
+                    } else {
+                        check_predefined_tag_format(format[j], values, format_v44, ploidy);
                     }
                 } catch (std::shared_ptr<Error> ex) {
                     throw new SamplesFieldBodyError{line, "Sample #" + std::to_string(i + 1) + ", " + ex->message,
@@ -588,7 +592,7 @@ namespace ebi
                                                           std::vector<std::string> const & values) const
     {
         std::string message = "Sample #" + std::to_string(i + 1) + ", " + field_key + "=" + field_value + " value";
-        if (field_key == GP || (field_key == CNP && source->version == Version::v43)) {
+        if (field_key == GP || (field_key == CNP && (source->version == Version::v43 || source->version == Version::v44))) {
             for (auto & value : values) {
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
                     throw new SamplesFieldBodyError{line, message + " does not lie in the interval [0,1]", "", field_key};

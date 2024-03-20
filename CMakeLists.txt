@@ -216,6 +216,7 @@ set (MOD_VCF_SOURCES
   inc/vcf/validator_detail_v41.hpp
   inc/vcf/validator_detail_v42.hpp
   inc/vcf/validator_detail_v43.hpp
+  inc/vcf/validator_detail_v44.hpp
   inc/vcf/validator.hpp
 
   src/fasta/faidx.cpp
@@ -293,6 +294,7 @@ endif ()
 set (V41_TESTS test/vcf/parser_v41_test.cpp)
 set (V42_TESTS test/vcf/parser_v42_test.cpp)
 set (V43_TESTS test/vcf/parser_v43_test.cpp)
+set (V44_TESTS test/vcf/parser_v44_test.cpp)
 set (ALL_TESTS
   test/assembly_report/assembly_report_test.cpp
   test/fasta/faidx_test.cpp
@@ -309,6 +311,7 @@ set (ALL_TESTS
   test/vcf/parser_v41_test.cpp
   test/vcf/parser_v42_test.cpp
   test/vcf/parser_v43_test.cpp
+  test/vcf/parser_v44_test.cpp
   test/vcf/predefined_info_tags_test.cpp
   test/vcf/predefined_format_tags_test.cpp
   test/vcf/record_cache_test.cpp
@@ -331,6 +334,11 @@ add_executable (test_validator_v43 test/main_test.cpp ${V43_TESTS})
 target_link_libraries (test_validator_v43 ${LIBRARIES_TO_LINK})
 enable_testing ()
 add_test (NAME ValidatorTests_v43 COMMAND test_validator_v43)
+
+add_executable (test_validator_v44 test/main_test.cpp ${V44_TESTS})
+target_link_libraries (test_validator_v44 ${LIBRARIES_TO_LINK})
+enable_testing ()
+add_test (NAME ValidatorTests_v44 COMMAND test_validator_v44)
 
 add_executable (test_validation_suite test/main_test.cpp ${ALL_TESTS})
 target_link_libraries (test_validation_suite ${LIBRARIES_TO_LINK})

@@ -783,4 +783,765 @@ namespace ebi
                         vcf::SamplesFieldBodyError*);
         }
     }
+
+    TEST_CASE("Record predefined SV tags checks v4.4", "[record][keyvalue]")
+    {
+        std::shared_ptr<vcf::Source> source{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v44,
+                {},
+                { "Sample1" }}};
+
+        SECTION("Predefined FORMAT tags not in meta header")
+        {
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::AD },
+                            { "0.98" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::AD },
+                            { "0,9,8" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::ADF },
+                            { "val1" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::ADF },
+                            { "9,1,8" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::ADR },
+                            { "val" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::ADR },
+                            { "1,2,1" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::DP },
+                            { "9.18" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::DP },
+                            { "9,8" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::EC },
+                            { "0.498" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::EC },
+                            { "4,8" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::FT },
+                            { "8,9" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GL },
+                            { "val" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GL },
+                            { "1.3,2.4" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::GL },
+                            { "1/0:1.3,2.4" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::GL },
+                            { "1:1.3,2.4" },
+                            source}));
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GL },
+                            { "1.3,2.4,2.3" },
+                            source}));
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GP },
+                            { "val12s" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GP },
+                            { "0.98,0.87,0.57,1.0" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GP },
+                            { "1.98" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+           CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GQ },
+                            { "2.38" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GQ },
+                            { "2,38" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT },
+                            { "va,lue" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::HQ },
+                            { "9.08" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::HQ },
+                            { "9,8,1" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::MQ },
+                            { "0.76" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::MQ },
+                            { "0,8" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::PL },
+                            { "0.76" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::PL },
+                            { "7,5" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PL },
+                            { "1/0:1,2" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PL },
+                            { "1:1,2" },
+                            source}));
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::PL },
+                            { "1,2,5" },
+                            source}));
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::PQ },
+                            { "tag" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::PQ },
+                            { "5,6,9" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::PS },
+                            { "set" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::PS },
+                            { "4,5,6" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CN },
+                            { "4.56" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CN },
+                            { "4,5,6" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CNQ },
+                            { "tag" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CNQ },
+                            { "4,5,6" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CNL },
+                            { "ta,g" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CNL },
+                            { "4.5" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CNP },
+                            { "val,ue" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CNP },
+                            { "4,5,6" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CNP },
+                            { "1.34" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::NQ },
+                            { "45.6" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::NQ },
+                            { "4,5,6" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::HAP },
+                            { "val" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::HAP },
+                            { "1,2" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::AHAP },
+                            { "val" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::AHAP },
+                            { "3,4,5" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+        }
+    }
+
 }

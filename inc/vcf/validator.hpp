@@ -172,6 +172,24 @@ namespace ebi
         void parse_buffer(char const * p, char const * pe, char const * eof);
     };
 
+    template <typename Configuration>
+    class ParserImpl_v44
+    : public ParserImpl,
+      Configuration::ParsePolicy,
+      Configuration::ErrorPolicy,
+      Configuration::OptionalPolicy
+    {
+      public:
+        using ParsePolicy = typename Configuration::ParsePolicy;
+        using ErrorPolicy = typename Configuration::ErrorPolicy;
+        using OptionalPolicy = typename Configuration::OptionalPolicy;
+
+        ParserImpl_v44(std::shared_ptr<Source> source, AdditionalChecks additionalChecks);
+
+      private:
+        void parse_buffer(char const * p, char const * pe, char const * eof);
+    };
+
     // Predefined aliases for common uses of the parser
     using QuickValidator_v41 = ParserImpl_v41<QuickValidatorCfg>;
     using FullValidator_v41 = ParserImpl_v41<FullValidatorCfg>;
@@ -184,6 +202,10 @@ namespace ebi
     using QuickValidator_v43 = ParserImpl_v43<QuickValidatorCfg>;
     using FullValidator_v43 = ParserImpl_v43<FullValidatorCfg>;
     using Reader_v43 = ParserImpl_v43<ReaderCfg>;
+
+    using QuickValidator_v44 = ParserImpl_v44<QuickValidatorCfg>;
+    using FullValidator_v44 = ParserImpl_v44<FullValidatorCfg>;
+    using Reader_v44 = ParserImpl_v44<ReaderCfg>;
 
     bool is_valid_vcf_file(std::istream &input, const std::string &sourceName,
                            ValidationLevel validationLevel,
@@ -210,5 +232,6 @@ namespace ebi
 #include "validator_detail_v41.hpp"
 #include "validator_detail_v42.hpp"
 #include "validator_detail_v43.hpp"
+#include "validator_detail_v44.hpp"
 
 #endif // VCF_VALIDATOR_HPP

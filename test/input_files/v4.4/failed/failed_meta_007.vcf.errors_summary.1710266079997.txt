@@ -1,0 +1,4 @@
+According to the VCF specification, the input file is not valid
+Error: Error in FORMAT metadata. This occurs 1 time(s), first time in line 3.
+Warning: A valid 'reference' entry is not listed in the meta section. This occurs 1 time(s), first time in line 5.
+Warning: Chromosome/contig '1' is not described in a 'contig' meta description. This occurs 1 time(s), first time in line 5.

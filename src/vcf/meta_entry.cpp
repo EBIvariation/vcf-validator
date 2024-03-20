@@ -180,9 +180,12 @@ namespace ebi
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
             check_predefined_tag(FORMAT, NUMBER, value, format_v41_v42);
             check_predefined_tag(FORMAT, TYPE, value, format_v41_v42);
-        } else {
+        } else if (entry.source->version == Version::v43 ) {
             check_predefined_tag(FORMAT, NUMBER, value, format_v43);
             check_predefined_tag(FORMAT, TYPE, value, format_v43);
+        } else {
+            check_predefined_tag(FORMAT, NUMBER, value, format_v44);
+            check_predefined_tag(FORMAT, TYPE, value, format_v44);
         }
     }
 
@@ -221,9 +224,12 @@ namespace ebi
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
             check_predefined_tag(INFO, NUMBER, value, info_v41_v42);
             check_predefined_tag(INFO, TYPE, value, info_v41_v42);
-        } else {
+        } else if (entry.source->version == Version::v43) {
             check_predefined_tag(INFO, NUMBER, value, info_v43);
             check_predefined_tag(INFO, TYPE, value, info_v43);
+        } else {
+            check_predefined_tag(INFO, NUMBER, value, info_v44);
+            check_predefined_tag(INFO, TYPE, value, info_v44);
         }
     }
 

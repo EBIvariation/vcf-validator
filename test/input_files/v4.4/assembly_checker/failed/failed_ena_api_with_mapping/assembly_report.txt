@@ -1,0 +1,3 @@
+# Sequence-Name	Sequence-Role	Assigned-Molecule	Assigned-Molecule-Location/Type	GenBank-Accn	Relationship	RefSeq-Accn	Assembly-Unit	Sequence-Length	UCSC-style-name
+chr1	assembled-molecule	1	Chromosome	CM000072.5	=	NC_005100.4	Primary Assembly	282763074	1
+chr2	assembled-molecule	1	Chromosome	CM000082.5	=	NC_005300.4	Primary Assembly	282763044	2
