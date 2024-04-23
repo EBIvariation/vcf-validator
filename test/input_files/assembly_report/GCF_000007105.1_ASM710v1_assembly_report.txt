@@ -1,0 +1,27 @@
+# Assembly name:  ASM710v1
+# Organism name:  Zymomonas mobilis subsp. mobilis ZM4 = ATCC 31821 (a-proteobacteria)
+# Infraspecific name:  strain=ZM4
+# Taxid:          264203
+# BioSample:      SAMN02603579
+# BioProject:     PRJNA12354
+# Submitter:      Macrogen Inc.
+# Date:           2010-01-12
+# Assembly type:  na
+# Release type:   major
+# Assembly level: Complete Genome
+# Genome representation: full
+# GenBank assembly accession: GCA_000007105.1
+# RefSeq assembly accession: GCF_000007105.1
+# RefSeq assembly and GenBank assemblies identical: yes
+#
+## Assembly-Units:
+## GenBank Unit Accession	RefSeq Unit Accession	Assembly-Unit name
+## GCA_000007115.1	GCF_000007115.1	Primary Assembly
+#
+# Ordered by chromosome/plasmid; the chromosomes/plasmids are followed by
+# unlocalized scaffolds.
+# Unplaced scaffolds are listed at the end.
+# RefSeq is equal or derived from GenBank object.
+#
+# Sequence-Name	Sequence-Role	Assigned-Molecule	Assigned-Molecule-Location/Type	GenBank-Accn	Relationship	RefSeq-Accn	Assembly-Unit	Sequence-Length	UCSC-style-name
+AE008692.2	assembled-molecule	na	Chromosome	AE008692.2	=	NC_006526.2	Primary Assembly	2056363	na
