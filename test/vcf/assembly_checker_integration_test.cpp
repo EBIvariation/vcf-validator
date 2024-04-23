@@ -65,7 +65,7 @@ namespace ebi
 
         SECTION("Mapping contigs , all match")
         {
-            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/passed/passed_with_mapping_/");
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/passed/passed_with_mapping/");
             std::string file_prefix = folder.parent_path().filename().string();
             std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
             std::ifstream vcf_input{vcf_path};
