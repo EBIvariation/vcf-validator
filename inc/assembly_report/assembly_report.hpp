@@ -61,7 +61,10 @@ namespace ebi
 
         void add_synonym(std::string synonym)
         {
-            synonyms.push_back(synonym);
+            if (std::find(synonyms.begin(), synonyms.end(), synonym) == synonyms.end())
+            {
+                synonyms.push_back(synonym);
+            }
         }
 
       private:
