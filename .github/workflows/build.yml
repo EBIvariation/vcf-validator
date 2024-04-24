@@ -6,9 +6,9 @@ on:
       - master
   push:
     branches:
-      #- master
-    #tags:
-    #  - '*'
+      - master
+    tags:
+      - '*'
 
 jobs:
 
