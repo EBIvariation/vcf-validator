@@ -2796,7 +2796,7 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::SVLEN}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Difference in length between REF and ALT alleles"} },
+                                { {vcf::ID, vcf::SVLEN}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Difference in length between REF and ALT alleles"} },
                                 source
                             } ) );
 
@@ -3116,7 +3116,7 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number of segment containing breakend"} },
+                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "A"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number of segment containing breakend"} },
                                 source
                             } ) );
 

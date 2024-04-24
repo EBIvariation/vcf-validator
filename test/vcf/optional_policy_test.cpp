@@ -304,7 +304,7 @@ namespace ebi
                     vcf::INFO,
                     {
                         { vcf::ID, vcf::SVLEN },
-                        { vcf::NUMBER, "2" },
+                        { vcf::NUMBER, "A" },
                         { vcf::TYPE, vcf::INTEGER },
                         { vcf::DESCRIPTION, "Difference in length between REF and ALT alleles" }
                     },

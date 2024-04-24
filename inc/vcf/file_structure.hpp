@@ -176,7 +176,7 @@ namespace ebi
             { CIGAR, { STRING, A } },
             { CILEN, { INTEGER, "2" } },
             { CIPOS, { INTEGER, "2" } },
-            { CN, { INTEGER, "1" } },
+            { CN, { FLOAT, "A" } },
             { CNADJ, { INTEGER, UNKNOWN_CARDINALITY } },
             { DB, { FLAG, "0" } },
             { DBRIPID, { STRING, "1" } },
@@ -201,10 +201,11 @@ namespace ebi
             { PARID, { STRING, "1" } },
             // TODO : SB metadata Type and Number is "."
             { SOMATIC, { FLAG, "0" } },
-            { SVLEN, { INTEGER, UNKNOWN_CARDINALITY } },
+            { SVLEN, { INTEGER, "A" } },
             { SVTYPE, { STRING, "1" } },
             { VALIDATED, { FLAG, "0" } },
-            { THOUSAND_G, { FLAG, "0" } }
+            { THOUSAND_G, { FLAG, "0" } },
+            { SVCLAIM, { STRING, "A" } }
     };
 
     const std::map<std::string, std::pair<std::string, std::string>> format_v41_v42 = {
@@ -259,7 +260,7 @@ namespace ebi
             { ADF, { INTEGER, R } },
             { ADR, { INTEGER, R } },
             { AHAP, { INTEGER, "1" } },
-            { CN, { INTEGER, "1" } },
+            { CN, { FLOAT, "1" } },
             { CNL, { FLOAT, G } },
             { CNP, { FLOAT, G } },
             { CNQ, { FLOAT, "1" } },
@@ -286,6 +287,16 @@ namespace ebi
             INV,
             CNV,
             BND,
+    };
+
+    const std::map<std::string, const std::set<std::string>> PREDEFINED_INFO_ALLELE_SVCLAIM{
+            { DEL, { D, J, DJ } },
+            { DUP, { D, J, DJ } },
+            { CNV, { D, MISSING_VALUE } },
+            { INV, { J, DJ, MISSING_VALUE } },
+            { INS, { J, DJ, MISSING_VALUE } },
+            { BND, { J, MISSING_VALUE } },
+            { MISSING_VALUE, { MISSING_VALUE } }
     };
 
     inline std::string const &get_predefined_type(
@@ -698,6 +709,13 @@ namespace ebi
          * @throw std::invalid_argument
          */
         void check_field_integer_range(std::string const & field, std::vector<std::string> const & value) const;
+
+        /**
+         * Checks that INFO contains required mandatory fields when applicable
+         *
+         * @throw InfoBodyError
+         */
+        void check_info_have_mandatory() const;
     };
 
     std::ostream &operator<<(std::ostream &os, const Record &record);
