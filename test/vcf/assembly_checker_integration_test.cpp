@@ -74,6 +74,16 @@ namespace ebi
             CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report_path, outputs));
         }
 
+        SECTION("Mapping contigs but contig has same synonym on the same line, all match")
+        {
+            auto folder = boost::filesystem::path("test/input_files/v4.3/assembly_checker/passed/passed_with_mapping_multi_synonyms/");
+            std::string file_prefix = folder.parent_path().filename().string();
+            std::string vcf_path = folder.string() + file_prefix + ebi::vcf::VCF_EXT;
+            std::ifstream vcf_input{vcf_path};
+            std::string fasta_path{folder.string() + file_prefix + ebi::vcf::FASTA_EXT};
+            std::string assembly_report_path = folder.string() + "assembly_report.txt";
+            CHECK(ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report_path, outputs));
+        }
 
         SECTION("compressed VCF, gz compression")
         {
