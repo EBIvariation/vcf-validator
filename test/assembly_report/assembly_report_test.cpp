@@ -44,10 +44,10 @@ namespace ebi
 
         SECTION("Parsing assembly report with same value in one line")
         {
-        ebi::assembly_report::SynonymsMap synonyms_map;
-        std::string assembly_report_path = "test/input_files/assembly_report/full_assembly_report/passed_with_same_synonym_on_same_line.txt";
-        std::ifstream input{assembly_report_path};
-        CHECK_NOTHROW(synonyms_map.parse_assembly_report(input));
+            ebi::assembly_report::SynonymsMap synonyms_map;
+            std::string assembly_report_path = "test/input_files/assembly_report/full_assembly_report/passed_with_same_synonym_on_same_line.txt";
+            std::ifstream input{assembly_report_path};
+            CHECK_NOTHROW(synonyms_map.parse_assembly_report(input));
         }
 
         SECTION("Failing to parse assembly report due to incorrect column size")
