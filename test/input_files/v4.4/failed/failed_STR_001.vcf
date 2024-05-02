@@ -12,4 +12,4 @@
 ##FORMAT=<ID=PS,Number=1,Type=Integer,Description="Phase set">
 ##ALT=<ID=CNV:TR,Description="Tandem repeat determined based on DNA abundance">
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	sample
-chr1	130	.	G	<CNV:TR>	.	END=130;SVLEN=1;CN=20;RUS=CAG,CA;RN=1;RB=60	.	GT:PS	1|0:100
+chr1	130	.	G	<CNV:TR>	.	.	END=130;SVLEN=1;CN=20;RUS=CAG,CA;RN=1;RB=60	GT:PS	1|0:100
