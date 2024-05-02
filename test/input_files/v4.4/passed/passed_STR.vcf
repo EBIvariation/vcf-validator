@@ -11,6 +11,6 @@
 ##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
 ##FORMAT=<ID=PS,Number=1,Type=Integer,Description="Phase set">
 ##ALT=<ID=CNV:TR,Description="Tandem repeat determined based on DNA abundance">
-#CHROM POS ID REF ALT QUAL FILTER INFO FORMAT sample
-chr1 100 cnv_notation T <CNV:TR>,<CNV:TR> . . END=130;SVLEN=30,30;CN=3,.5;RUS=CAG,CAG;RB=90,15 GT:PS:CN 1|2:100:3.9666
-chr1 130 . G <CNV:TR> END=130;SVLEN=1;CN=20;RUS=CAG;RN=1;RB=60 . GT:PS 1|0:100
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	sample
+chr1	100	cnv_notation	T	<CNV:TR>,<CNV:TR>	.	.	END=130;SVLEN=30,30;CN=3,.5;RUS=CAG,CAG;RB=90,15	GT:PS:CN	1|2:100:3.9666
+chr1	130	.	G	<CNV:TR>	.	END=130;SVLEN=1;CN=20;RUS=CAG;RN=1;RB=60	.	GT:PS	1|0:100
