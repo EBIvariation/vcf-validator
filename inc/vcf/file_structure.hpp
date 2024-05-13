@@ -295,6 +295,7 @@ namespace ebi
             { CNV, { D, MISSING_VALUE } },
             { INV, { J, DJ, MISSING_VALUE } },
             { INS, { J, DJ, MISSING_VALUE } },
+            //using BND as placeholder for breakends SVs and "." for MISSING_VALUE
             { BND, { J, MISSING_VALUE } },
             { MISSING_VALUE, { MISSING_VALUE } }
     };

@@ -201,12 +201,16 @@ namespace ebi
             auto main_type_position_end = alt_id.find(':');
             bool colon_present = main_type_position_end != std::string::npos;
             if (colon_present) {
+                std::set<std::string> validAlt = PREDEFINED_INFO_SVTYPES;
+                if (source->version >= Version::v44) {
+                    validAlt.erase(BND);            //BND not allowed since v4.4
+                }
                 auto main_type = alt_id.substr(0, main_type_position_end);
-                if (!ebi::util::contains(PREDEFINED_INFO_SVTYPES, main_type)) {
+                if (!ebi::util::contains(validAlt, main_type)) {
                     std::stringstream message;
                     message << "In ALT metadata IDs containing colon-separated type and subtypes, the top level type "
                                "must be one of: ";
-                    ebi::util::print_container(message, PREDEFINED_INFO_SVTYPES, "", ", ", "");
+                    ebi::util::print_container(message, validAlt, "", ", ", "");
                     throw new AlternateAllelesBodyError{line, message.str(), "Found ID was '" + alt_id + "'"};
                 }
             }
@@ -310,16 +314,15 @@ namespace ebi
     void Record::check_info_have_mandatory() const
     {
         static boost::regex deldup_regex("(<(DUP|DEL)(:[^>]+)*>)+");
-        //boost::cmatch pieces_match;
 
-        if (source->version == Version::v44) {              //not applicable for 4.1/2/3
+        if (source->version > Version::v43) {              //not applicable for 4.1/2/3
             for (size_t i = 0; i < alternate_alleles.size(); ++i ) {
-                //SVLEN must for all SV
+                //SVLEN must for symbolic SV
                 auto & alternate = alternate_alleles[i];
-                if (types[i] == RecordType::STRUCTURAL || types[i] == RecordType::STRUCTURAL_BREAKEND) {
+                if (types[i] == RecordType::STRUCTURAL) {
                     if (info.find(SVLEN) == info.end()) {
                         std::stringstream message;
-                        message << "INFO " << SVLEN << " must be present for structural variants";
+                        message << "INFO " << SVLEN << " must be present for symbolic structural variants";
                         throw new InfoBodyError{line, message.str()};
                     }
                     if (types[i] == RecordType::STRUCTURAL && boost::regex_match(alternate, deldup_regex)) {
@@ -437,43 +440,46 @@ namespace ebi
                 }
             }
         } else if (field_key == SVLEN && values.size() == alternate_alleles.size()) {
-            //are spec page 21 samples correct? svlen not found for BND TODO
             for (size_t i = 0; i < alternate_alleles.size(); i++) {
-                if (check_alt_not_symbolic(i)) {
-                    std::string expected = std::to_string(static_cast<long>(alternate_alleles[i].size()) - static_cast<long>(reference_allele.size()));
-                    if (values[i] != expected) {
-                        throw new InfoBodyError{line, "INFO SVLEN must be equal to \"length of ALT - length of REF\" for "
-                                "non-symbolic alternate alleles", "SVLEN=" + field_value + ", expected value=" + expected,
-                                ErrorFix::RECOVERABLE_VALUE, field_key, expected};
-                    }
-                } else if (source->version < Version::v44) {
-                    std::string first_field = alternate_alleles[i].substr(0, 4);
-                    if (first_field == "<" + INS || first_field == "<" + DUP) {
-                        size_t scanned_value_length;
-                        int value = std::stoi(values[i], &scanned_value_length);
-                        if (value < 0 || scanned_value_length != values[i].size()) {
-                            throw new InfoBodyError{line, "INFO SVLEN must be a positive integer for longer ALT alleles", "SVLEN="
-                                    + field_value + ", ALT allele=" + first_field.substr(1, 3),
-                                    ErrorFix::IRRECOVERABLE_VALUE, field_key};
+                if (source->version < Version::v44) {
+                    if (check_alt_not_symbolic(i)) {
+                        std::string expected = std::to_string(static_cast<long>(alternate_alleles[i].size()) - static_cast<long>(reference_allele.size()));
+                        if (values[i] != expected) {
+                            throw new InfoBodyError{line, "INFO SVLEN must be equal to \"length of ALT - length of REF\" for "
+                                    "non-symbolic alternate alleles", "SVLEN=" + field_value + ", expected value=" + expected,
+                                    ErrorFix::RECOVERABLE_VALUE, field_key, expected};
                         }
-                    } else if (first_field == "<" + DEL) {
-                        size_t scanned_value_length;
-                        int value = std::stoi(values[i], &scanned_value_length);
-                        if (value > 0 || scanned_value_length != values[i].size()) {
-                            throw new InfoBodyError{line, "INFO SVLEN must be a negative integer for shorter ALT alleles "
-                                    + first_field.substr(1,3), "SVLEN=" + field_value + ", ALT allele=" + first_field.substr(1, 3),
-                                    ErrorFix::IRRECOVERABLE_VALUE, field_key};
+                    } else {
+                        std::string first_field = alternate_alleles[i].substr(0, 4);
+                        if (first_field == "<" + INS || first_field == "<" + DUP) {
+                            size_t scanned_value_length;
+                            int value = std::stoi(values[i], &scanned_value_length);
+                            if (value < 0 || scanned_value_length != values[i].size()) {
+                                throw new InfoBodyError{line, "INFO SVLEN must be a positive integer for longer ALT alleles", "SVLEN="
+                                        + field_value + ", ALT allele=" + first_field.substr(1, 3),
+                                        ErrorFix::IRRECOVERABLE_VALUE, field_key};
+                            }
+                        } else if (first_field == "<" + DEL) {
+                            size_t scanned_value_length;
+                            int value = std::stoi(values[i], &scanned_value_length);
+                            if (value > 0 || scanned_value_length != values[i].size()) {
+                                throw new InfoBodyError{line, "INFO SVLEN must be a negative integer for shorter ALT alleles "
+                                        + first_field.substr(1,3), "SVLEN=" + field_value + ", ALT allele=" + first_field.substr(1, 3),
+                                        ErrorFix::IRRECOVERABLE_VALUE, field_key};
+                            }
                         }
                     }
                 }
                 else {
-                    //v44 symbolic alleles
-                    //TODO anything to do with CNV:TR novel TR 1 case? pg34
-
-                    //for alleles other than SV, value should be '.' 
-                    if (types[i] != RecordType::STRUCTURAL && values[i] != MISSING_VALUE) {
-                        throw new InfoBodyError{line, "INFO SVLEN should be " + MISSING_VALUE + " for SV other than INS/INV/DUP/DEL/CNV"};
+                    //>= v44
+                    static boost::regex sv_regex("(<(INS|DUP|INV|DEL|CNV)(:[^>]+)*>)+");
+                    if (check_alt_not_symbolic(i) || !boost::regex_match(alternate_alleles[i], sv_regex)) {
+                        //for alleles other than those in sv_regex, value should be '.'
+                        if (values[i] != MISSING_VALUE) {
+                            throw new InfoBodyError{line, "INFO SVLEN should be " + MISSING_VALUE + " for alleles other than structural variant INS/INV/DUP/DEL/CNV"};
+                        }
                     }
+                    //no validation for sv_regex sv, value can be +/- and abs val to be used
                 }
             }
         } else if (field_key == SVTYPE) {
@@ -483,7 +489,7 @@ namespace ebi
                 ebi::util::print_container(message, PREDEFINED_INFO_SVTYPES, "", ", ", "");
                 throw new InfoBodyError{line, message.str(), "Found " + SVTYPE + " was '" + field_value + "'"};
             }
-        } else if (source->version == Version::v44 && field_key == SVCLAIM && values.size() == alternate_alleles.size()) {
+        } else if (source->version >= Version::v44 && field_key == SVCLAIM && values.size() == alternate_alleles.size()) {
             //not applicable for anything < v4.4
             static boost::regex allele_regex("<(DUP|DEL|INS|INV|CNV)(:[^>]+)*>");
             boost::cmatch pieces_match;
@@ -493,7 +499,7 @@ namespace ebi
                 auto & allele = alternate_alleles[i];
                 if (types[i] == RecordType::STRUCTURAL) {
                     if (boost::regex_match(allele.c_str(), pieces_match, allele_regex)) {
-                        key = pieces_match[1];      //one of the tokens from allle_regex
+                        key = pieces_match[1];      //one of the tokens from allele_regex
                     } else {
                         key = MISSING_VALUE;        //unknown SV, accept only '.'
                     }
@@ -776,7 +782,7 @@ namespace ebi
         }
         if(!values.empty()) {
             if (values.front() == MISSING_VALUE) { return; } // No need to check missing data
-        } //TODO, if the 1st one is . then check stops; is that correct? svclaim=.,DJ worked!
+        } //TODO, if the 1st one is . then check stops; svclaim=.,DJ worked!
 
         bool number_matches = true;
         if (expected_cardinality > 0) {
