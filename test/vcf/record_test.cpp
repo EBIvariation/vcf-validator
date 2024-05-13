@@ -922,7 +922,7 @@ namespace ebi
                 {
                     { vcf::ID, vcf::CN },
                     { vcf::NUMBER, "1" },
-                    { vcf::TYPE, vcf::INTEGER },
+                    { vcf::TYPE, vcf::FLOAT },
                     { vcf::DESCRIPTION, "Copy Number Genotype" }
                 },
                 source
@@ -1191,8 +1191,8 @@ namespace ebi
                             source}),
                         vcf::SamplesFieldBodyError*);
 
-            // Copy number genotypes should have a genotype representation with just an Integer
-            CHECK_THROWS_AS((vcf::Record{
+            // Copy number genotypes should have a genotype representation with valid float
+            CHECK_THROWS_AS( (vcf::Record{
                             1,
                             "chr1",
                             123456,
@@ -1203,9 +1203,9 @@ namespace ebi
                             { vcf::PASS },
                             { {vcf::AN, "12"}, { vcf::AF, "0.5,0.3"} },
                             { vcf::CN },
-                            { "0|0" },
+                            { "?0|0" },
                             source }),
-                            vcf::SamplesFieldBodyError*);
+                        vcf::SamplesFieldBodyError*);
 
 
             CHECK_THROWS_AS( (vcf::Record{

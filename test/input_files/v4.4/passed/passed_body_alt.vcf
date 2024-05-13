@@ -25,4 +25,4 @@
 1	4389	.	C	<*>,<DEL>	.	.	END=4388;SVLEN=.,1;SVCLAIM=.,D	GT:DP:GQ	0/0:25:45	0/1:23:99
 1	4390	.	C	*,<*>	.	.	END=4390	GT:DP:GQ	0/0:26:0	0/0:25:60
 1	4391	.	C	<UNK>	.	.	END=4390;SVLEN=.	GT:DP:GQ	0/0:26:0	0/0:25:60
-1	4391	.	C	<validIdWithSymbols!"#$%&'()*+-./;=?@[\]^_`{|}~>	.	.	END=4390;SVLEN=1	GT:DP:GQ	0/0:26:0	0/0:25:60
+1	4391	.	C	<validIdWithSymbols!"#$%&'()*+-./;=?@[\]^_`{|}~>	.	.	END=4390;SVLEN=.	GT:DP:GQ	0/0:26:0	0/0:25:60

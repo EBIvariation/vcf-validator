@@ -1830,7 +1830,7 @@ namespace ebi
                             source}),
                         vcf::InfoBodyError*);
 
-            CHECK_THROWS_AS( (vcf::Record{
+            CHECK_THROWS_AS( (vcf::Record{  //invalid, svlen float type
                             1,
                             "chr1",
                             123456,
@@ -1854,7 +1854,7 @@ namespace ebi
                             { "ATCTTGG" },
                             1.0,
                             { vcf::PASS },
-                            { {vcf::SVLEN, "4"} },
+                            { {vcf::SVLEN, "."} },
                             { vcf::GT },
                             { "0|1" },
                             source} ) );
@@ -1883,7 +1883,7 @@ namespace ebi
                             { "ATC" },
                             1.0,
                             { vcf::PASS },
-                            { {vcf::SVLEN, "-5"} },
+                            { {vcf::SVLEN, "."} },
                             { vcf::GT },
                             { "0|1" },
                             source} ) );
@@ -1903,7 +1903,7 @@ namespace ebi
                             source}),
                         vcf::InfoBodyError*);
 
-            CHECK_THROWS_AS( (vcf::Record{
+            CHECK_NOTHROW( (vcf::Record{    //svlen -ve is valid for backward compatibility
                             1,
                             "chr1",
                             123456,
@@ -1915,8 +1915,7 @@ namespace ebi
                             { {vcf::SVLEN, "-1"} },
                             { vcf::GT },
                             { "0|1" },
-                            source}),
-                        vcf::InfoBodyError*);
+                            source}) );
 
             CHECK_THROWS_AS( (vcf::Record{
                             1,
@@ -1948,6 +1947,63 @@ namespace ebi
                             source}),
                         vcf::InfoBodyError*);
 
+            CHECK_THROWS_AS( (vcf::Record{  //non-sv alt allele should have svlen as .
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<UNK>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "-5"} },
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{  //breakend alt allele should have svlen as .
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "G]chr1:198982]" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "-5"} },
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{  //non-sv alt allele should have svlen as .
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<UNK>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "."} },
+                            { vcf::GT },
+                            { "0|1" },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{  //breakend alt allele should have svlen as .
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "G]chr1:198982]" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "."} },
+                            { vcf::GT },
+                            { "0|1" },
+                            source}) );
 
             CHECK_THROWS_AS( (vcf::Record{
                             1,
@@ -2174,7 +2230,7 @@ namespace ebi
                             source}),
                         vcf::InfoBodyError*);
 
-            CHECK_THROWS_AS( (vcf::Record{
+            CHECK_THROWS_AS( (vcf::Record{  //should be valid float
                             1,
                             "chr1",
                             123456,
@@ -2183,13 +2239,13 @@ namespace ebi
                             { "AT" },
                             1.0,
                             { vcf::PASS },
-                            { {vcf::CN, "1.10"} },
+                            { {vcf::CN, "/1.10"} },
                             { vcf::GT },
                             { "0|1" },
                             source}),
                         vcf::InfoBodyError*);
 
-            CHECK_THROWS_AS( (vcf::Record{
+            CHECK_THROWS_AS( (vcf::Record{  //invalid cardinality
                             1,
                             "chr1",
                             123456,
@@ -2198,7 +2254,7 @@ namespace ebi
                             { "AT" },
                             1.0,
                             { vcf::PASS },
-                            { {vcf::CN, "2,4,5"} },
+                            { {vcf::CN, "2.0,4.0,5.0"} },
                             { vcf::GT },
                             { "0|1" },
                             source}),
@@ -2259,6 +2315,77 @@ namespace ebi
                             1.0,
                             { vcf::PASS },
                             { {vcf::CICNADJ, "9.99"} },
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{  //valid DEL/DUP can have D/J/DJ
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<DEL>","<DUP>","<DEL>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1,1,1"}, {vcf::SVCLAIM, "D,J,DJ"} },
+                            { vcf::GT },
+                            { "0|1" },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{  //valid CNV can have D,. and nonSV to be .
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV>","<CNV>","AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1,1,."}, {vcf::SVCLAIM, "D,.,."} },
+                            { vcf::GT },
+                            { "0|1" },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{  //valid INS/INV can have J,DJ,.
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<INS>","<INV>","<INS>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1,1,1"}, {vcf::SVCLAIM, "J,DJ,."} },
+                            { vcf::GT },
+                            { "0|1" },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{  //valid breakends with J, .
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "G]chr1:198982]" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVCLAIM, "J"} },
+                            { vcf::GT },
+                            { "0|1" },
+                            source}) );
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid missing svclaim
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<DEL>","<DUP>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1,1"} },
                             { vcf::GT },
                             { "0|1" },
                             source}),

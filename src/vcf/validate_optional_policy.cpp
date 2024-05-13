@@ -169,6 +169,9 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_info_svlen(ParsingState & state, Record const & record) const
     {
+        static boost::regex svchk_regex("(<(CNV|DUP|DEL)(:[^>]+)*>)+");
+        std::string svlenval;
+
         auto it = record.info.find(SVLEN);
         if (it != record.info.end()) {
             std::vector<std::string> values;
@@ -177,6 +180,29 @@ namespace ebi
                 throw new InfoBodyError{state.n_lines,
                         "INFO SVLEN should have same number of values as ALT", "Expected " + std::to_string(record.alternate_alleles.size())
                         + ", found " + std::to_string(values.size())};
+            }
+
+            if (record.source->version < Version::v44) {
+                return;
+            }
+            //with CN in format, CNV/DEL/DUP should have the same SVLEN value, v4.4 onwards
+            auto itcn = std::find(record.format.begin(), record.format.end(), CN);
+            if (itcn != record.format.end()) {
+                for (auto i = 0; i < record.alternate_alleles.size(); ++i) {
+                    if (record.types[i] != RecordType::STRUCTURAL || !boost::regex_match(record.alternate_alleles[i], svchk_regex)) {
+                        continue;
+                    }
+                    if (!svlenval.size()) {
+                        svlenval = values[i];   //first
+                        continue;
+                    }
+                    //CNV/DEL/DUP, should have the same SVLEN
+                    if (svlenval != values[i]) {
+                        throw new InfoBodyError{state.n_lines,
+                        "INFO SVLEN should have same values for SV CNV/DEL/DUP", "Expected " + svlenval
+                        + ", found " + values[i]};
+                    }
+                }
             }
         }
     }

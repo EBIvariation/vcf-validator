@@ -194,7 +194,6 @@ namespace ebi
                 break;
             case 9:
                 m_line_tokens[FORMAT] = m_grouped_tokens;
-                //TODO: is this OK? format is optional field or not?
                 break;
             default:
                 // Collection of samples
