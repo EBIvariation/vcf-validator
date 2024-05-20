@@ -216,6 +216,10 @@ namespace ebi
     const std::string D = "D";
     const std::string J = "J";
     const std::string DJ = "DJ";
+
+    //internal keys - with invalid chars to differentiate from valid IDs
+    const std::string _BRKEND = "BRK<END,";
+    const std::string _OTHER = "OTHER<,";
   }
 }
 

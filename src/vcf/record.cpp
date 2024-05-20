@@ -201,10 +201,7 @@ namespace ebi
             auto main_type_position_end = alt_id.find(':');
             bool colon_present = main_type_position_end != std::string::npos;
             if (colon_present) {
-                std::set<std::string> validAlt = PREDEFINED_INFO_SVTYPES;
-                if (source->version >= Version::v44) {
-                    validAlt.erase(BND);            //BND not allowed since v4.4
-                }
+                const std::set<std::string> &validAlt = (source->version < Version::v44) ? PREDEFINED_INFO_SVTYPES : PREDEFINED_INFO_SV_v44;
                 auto main_type = alt_id.substr(0, main_type_position_end);
                 if (!ebi::util::contains(validAlt, main_type)) {
                     std::stringstream message;
@@ -440,46 +437,36 @@ namespace ebi
                 }
             }
         } else if (field_key == SVLEN && values.size() == alternate_alleles.size()) {
+            if (source->version >= Version::v44) {
+               return;         //no strict validation as val can be +/- ve and abs val is in use
+            }
             for (size_t i = 0; i < alternate_alleles.size(); i++) {
-                if (source->version < Version::v44) {
-                    if (check_alt_not_symbolic(i)) {
-                        std::string expected = std::to_string(static_cast<long>(alternate_alleles[i].size()) - static_cast<long>(reference_allele.size()));
-                        if (values[i] != expected) {
-                            throw new InfoBodyError{line, "INFO SVLEN must be equal to \"length of ALT - length of REF\" for "
-                                    "non-symbolic alternate alleles", "SVLEN=" + field_value + ", expected value=" + expected,
-                                    ErrorFix::RECOVERABLE_VALUE, field_key, expected};
+                if (check_alt_not_symbolic(i)) {
+                    std::string expected = std::to_string(static_cast<long>(alternate_alleles[i].size()) - static_cast<long>(reference_allele.size()));
+                    if (values[i] != expected) {
+                        throw new InfoBodyError{line, "INFO SVLEN must be equal to \"length of ALT - length of REF\" for "
+                                "non-symbolic alternate alleles", "SVLEN=" + field_value + ", expected value=" + expected,
+                                ErrorFix::RECOVERABLE_VALUE, field_key, expected};
+                    }
+                } else {
+                    std::string first_field = alternate_alleles[i].substr(0, 4);
+                    if (first_field == "<" + INS || first_field == "<" + DUP) {
+                        size_t scanned_value_length;
+                        int value = std::stoi(values[i], &scanned_value_length);
+                        if (value < 0 || scanned_value_length != values[i].size()) {
+                            throw new InfoBodyError{line, "INFO SVLEN must be a positive integer for longer ALT alleles", "SVLEN="
+                                    + field_value + ", ALT allele=" + first_field.substr(1, 3),
+                                    ErrorFix::IRRECOVERABLE_VALUE, field_key};
                         }
-                    } else {
-                        std::string first_field = alternate_alleles[i].substr(0, 4);
-                        if (first_field == "<" + INS || first_field == "<" + DUP) {
-                            size_t scanned_value_length;
-                            int value = std::stoi(values[i], &scanned_value_length);
-                            if (value < 0 || scanned_value_length != values[i].size()) {
-                                throw new InfoBodyError{line, "INFO SVLEN must be a positive integer for longer ALT alleles", "SVLEN="
-                                        + field_value + ", ALT allele=" + first_field.substr(1, 3),
-                                        ErrorFix::IRRECOVERABLE_VALUE, field_key};
-                            }
-                        } else if (first_field == "<" + DEL) {
-                            size_t scanned_value_length;
-                            int value = std::stoi(values[i], &scanned_value_length);
-                            if (value > 0 || scanned_value_length != values[i].size()) {
-                                throw new InfoBodyError{line, "INFO SVLEN must be a negative integer for shorter ALT alleles "
-                                        + first_field.substr(1,3), "SVLEN=" + field_value + ", ALT allele=" + first_field.substr(1, 3),
-                                        ErrorFix::IRRECOVERABLE_VALUE, field_key};
-                            }
+                    } else if (first_field == "<" + DEL) {
+                        size_t scanned_value_length;
+                        int value = std::stoi(values[i], &scanned_value_length);
+                        if (value > 0 || scanned_value_length != values[i].size()) {
+                            throw new InfoBodyError{line, "INFO SVLEN must be a negative integer for shorter ALT alleles "
+                                    + first_field.substr(1,3), "SVLEN=" + field_value + ", ALT allele=" + first_field.substr(1, 3),
+                                    ErrorFix::IRRECOVERABLE_VALUE, field_key};
                         }
                     }
-                }
-                else {
-                    //>= v44
-                    static boost::regex sv_regex("(<(INS|DUP|INV|DEL|CNV)(:[^>]+)*>)+");
-                    if (check_alt_not_symbolic(i) || !boost::regex_match(alternate_alleles[i], sv_regex)) {
-                        //for alleles other than those in sv_regex, value should be '.'
-                        if (values[i] != MISSING_VALUE) {
-                            throw new InfoBodyError{line, "INFO SVLEN should be " + MISSING_VALUE + " for alleles other than structural variant INS/INV/DUP/DEL/CNV"};
-                        }
-                    }
-                    //no validation for sv_regex sv, value can be +/- and abs val to be used
                 }
             }
         } else if (field_key == SVTYPE) {
@@ -495,25 +482,24 @@ namespace ebi
             boost::cmatch pieces_match;
         
             for (size_t i = 0; i < alternate_alleles.size(); ++i) {
-                std::string key;
+                std::string key = _OTHER;
                 auto & allele = alternate_alleles[i];
                 if (types[i] == RecordType::STRUCTURAL) {
                     if (boost::regex_match(allele.c_str(), pieces_match, allele_regex)) {
                         key = pieces_match[1];      //one of the tokens from allele_regex
-                    } else {
-                        key = MISSING_VALUE;        //unknown SV, accept only '.'
                     }
                 } else if (types[i] == RecordType::STRUCTURAL_BREAKEND) {
-                    key = BND;
+                    key = _BRKEND;
                 } else {
-                    key = MISSING_VALUE;            //anything other than SV, svclaim can be '.'
+                    //others should have '.', checked at optional checks
+                    continue;
                 }
                 const auto & iter = PREDEFINED_INFO_ALLELE_SVCLAIM.find(key);
                 if (iter != PREDEFINED_INFO_ALLELE_SVCLAIM.end()) {
                     auto & validvals = iter->second;
                     if (!ebi::util::contains(validvals, values[i])) {
                         std::stringstream message;
-                        message << "INFO " << SVCLAIM << " must be one of: ";
+                        message << "INFO " << SVCLAIM << " for allele " << alternate_alleles[i] << " must be one of: ";
                         ebi::util::print_container(message, validvals, "", ", ", "");
                         throw new InfoBodyError{line, message.str(), "Found " + SVCLAIM + " was '" + values[i] + "'"};
                     }

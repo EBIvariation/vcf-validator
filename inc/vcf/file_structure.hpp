@@ -288,16 +288,23 @@ namespace ebi
             CNV,
             BND,
     };
-
+    // symbolic structural variants as per v44
+    const std::set<std::string> PREDEFINED_INFO_SV_v44{
+            DEL,
+            INS,
+            DUP,
+            INV,
+            CNV,
+    };
+    // mapping of allele to svclaim values
     const std::map<std::string, const std::set<std::string>> PREDEFINED_INFO_ALLELE_SVCLAIM{
             { DEL, { D, J, DJ } },
             { DUP, { D, J, DJ } },
             { CNV, { D, MISSING_VALUE } },
             { INV, { J, DJ, MISSING_VALUE } },
             { INS, { J, DJ, MISSING_VALUE } },
-            //using BND as placeholder for breakends SVs and "." for MISSING_VALUE
-            { BND, { J, MISSING_VALUE } },
-            { MISSING_VALUE, { MISSING_VALUE } }
+            { _BRKEND, { J, MISSING_VALUE } },          //breakends
+            { _OTHER, { MISSING_VALUE } }               //anything else - including seq alleles
     };
 
     inline std::string const &get_predefined_type(

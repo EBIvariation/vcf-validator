@@ -1859,7 +1859,7 @@ namespace ebi
                             { "0|1" },
                             source} ) );
 
-            CHECK_THROWS_AS( (vcf::Record{
+            CHECK_NOTHROW( (vcf::Record{  //valid as no svlen validation made on obj creation on v44
                             1,
                             "chr1",
                             123456,
@@ -1871,8 +1871,7 @@ namespace ebi
                             { {vcf::SVLEN, "3"} },
                             { vcf::GT },
                             { "0|1" },
-                            source}),
-                        vcf::InfoBodyError*);
+                            source}) );
 
             CHECK_NOTHROW( (vcf::Record{
                             1,
@@ -1888,7 +1887,7 @@ namespace ebi
                             { "0|1" },
                             source} ) );
 
-            CHECK_THROWS_AS( (vcf::Record{
+            CHECK_NOTHROW( (vcf::Record{    //no svlen validation made on obj creation on v44
                             1,
                             "chr1",
                             123456,
@@ -1900,8 +1899,7 @@ namespace ebi
                             { {vcf::SVLEN, "-4"} },
                             { vcf::GT },
                             { "0|1" },
-                            source}),
-                        vcf::InfoBodyError*);
+                            source}) );
 
             CHECK_NOTHROW( (vcf::Record{    //svlen -ve is valid for backward compatibility
                             1,
@@ -1942,36 +1940,6 @@ namespace ebi
                             1.0,
                             { vcf::PASS },
                             { {vcf::SVLEN, "10"} },
-                            { vcf::GT },
-                            { "0|1" },
-                            source}),
-                        vcf::InfoBodyError*);
-
-            CHECK_THROWS_AS( (vcf::Record{  //non-sv alt allele should have svlen as .
-                            1,
-                            "chr1",
-                            123456,
-                            { "id123" },
-                            "A",
-                            { "<UNK>" },
-                            1.0,
-                            { vcf::PASS },
-                            { {vcf::SVLEN, "-5"} },
-                            { vcf::GT },
-                            { "0|1" },
-                            source}),
-                        vcf::InfoBodyError*);
-
-            CHECK_THROWS_AS( (vcf::Record{  //breakend alt allele should have svlen as .
-                            1,
-                            "chr1",
-                            123456,
-                            { "id123" },
-                            "A",
-                            { "G]chr1:198982]" },
-                            1.0,
-                            { vcf::PASS },
-                            { {vcf::SVLEN, "-5"} },
                             { vcf::GT },
                             { "0|1" },
                             source}),
