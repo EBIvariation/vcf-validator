@@ -314,7 +314,7 @@ namespace ebi
 
         if (source->version > Version::v43) {              //not applicable for 4.1/2/3
             for (size_t i = 0; i < alternate_alleles.size(); ++i ) {
-                //SVLEN must for symbolic SV
+                //SVLEN must be present for symbolic SV
                 auto & alternate = alternate_alleles[i];
                 if (types[i] == RecordType::STRUCTURAL) {
                     if (info.find(SVLEN) == info.end()) {
