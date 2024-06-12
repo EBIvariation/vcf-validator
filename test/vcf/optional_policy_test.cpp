@@ -389,4 +389,352 @@ namespace ebi
                             vcf::AlternateAllelesBodyError*);
         }
     }
+
+    TEST_CASE("Meta-data warnings", "[warnings]")
+    {
+        SECTION("Reference not in meta section")
+        {
+            std::shared_ptr<vcf::Source> source{
+                new vcf::Source{
+                    "Example VCF source",
+                    vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                    vcf::Version::v43}};
+
+            vcf::ParsingState parsing_state{source};
+
+            vcf::ValidateOptionalPolicy optional_policy;
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_meta_section(parsing_state)), vcf::MetaSectionError*);
+        }
+
+        SECTION("Contig not in meta section")
+        {
+            std::shared_ptr<vcf::Source> source{
+                new vcf::Source{
+                    "Example VCF source",
+                    vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                    vcf::Version::v43}};
+
+            source->meta_entries.emplace(vcf::REFERENCE,
+                vcf::MetaEntry{
+                    1,
+                    vcf::REFERENCE,
+                    "file",
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::CONTIG,
+                vcf::MetaEntry{
+                    1,
+                    vcf::CONTIG,
+                    { { vcf::ID, "chr1" } },
+                    source
+            });
+
+            vcf::ParsingState parsing_state{source};
+
+            vcf::ValidateOptionalPolicy optional_policy;
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::MISSING_VALUE, "" } },
+                                { },
+                                { },
+                                source})) );
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr2",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::MISSING_VALUE, "" } },
+                                { },
+                                { },
+                                source})),
+                            vcf::NoMetaDefinitionError*); 
+        }
+
+        SECTION("Alternate Allele not in meta section")
+        {
+            std::shared_ptr<vcf::Source> source{
+                new vcf::Source{
+                    "Example VCF source",
+                    vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                    vcf::Version::v43}};
+
+            source->meta_entries.emplace(vcf::REFERENCE,
+                vcf::MetaEntry{
+                    1,
+                    vcf::REFERENCE,
+                    "file",
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::CONTIG,
+                vcf::MetaEntry{
+                    1,
+                    vcf::CONTIG,
+                    { { vcf::ID, "chr1" } },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::ALT,
+                vcf::MetaEntry{
+                    1,
+                    vcf::ALT,
+                    {
+                        { vcf::ID, "DEL" },
+                        { vcf::DESCRIPTION, "Random alt tag" }
+                    }, 
+                    source
+            });
+
+            vcf::ParsingState parsing_state{source};
+
+            vcf::ValidateOptionalPolicy optional_policy;
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::MISSING_VALUE, "" } },
+                                { },
+                                { },
+                                source})) );
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "<DEL>" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::MISSING_VALUE, "" } },
+                                { },
+                                { },
+                                source})) );
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "<INS>" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::MISSING_VALUE, "" } },
+                                { },
+                                { },
+                                source})),
+                            vcf::NoMetaDefinitionError*);
+        }
+
+        SECTION("FILTER not in meta section") 
+        {
+            std::shared_ptr<vcf::Source> source{
+                new vcf::Source{
+                    "Example VCF source",
+                    vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                    vcf::Version::v43}};
+
+            source->meta_entries.emplace(vcf::REFERENCE,
+                vcf::MetaEntry{
+                    1,
+                    vcf::REFERENCE,
+                    "file",
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::CONTIG,
+                vcf::MetaEntry{
+                    1,
+                    vcf::CONTIG,
+                    { { vcf::ID, "chr1" } },
+                    source
+            });
+
+            vcf::ParsingState parsing_state{source};
+
+            vcf::ValidateOptionalPolicy optional_policy;
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::MISSING_VALUE, "" } },
+                                { },
+                                { },
+                                source})) );
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::MISSING_VALUE },
+                                { { vcf::MISSING_VALUE, "" } },
+                                { },
+                                { },
+                                source})) );
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { "q10" },
+                                { { vcf::MISSING_VALUE, "" } },
+                                { },
+                                { },
+                                source})),
+                            vcf::NoMetaDefinitionError*);
+        }
+ 
+        SECTION("INFO not in meta section") 
+        {
+            std::shared_ptr<vcf::Source> source{
+                new vcf::Source{
+                    "Example VCF source",
+                    vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                    vcf::Version::v43}};
+
+            source->meta_entries.emplace(vcf::REFERENCE,
+                vcf::MetaEntry{
+                    1,
+                    vcf::REFERENCE,
+                    "file",
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::CONTIG,
+                vcf::MetaEntry{
+                    1,
+                    vcf::CONTIG,
+                    { { vcf::ID, "chr1" } },
+                    source
+            });
+
+            vcf::ParsingState parsing_state{source};
+
+            vcf::ValidateOptionalPolicy optional_policy;
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::MISSING_VALUE, "" } },
+                                { },
+                                { },
+                                source})) );
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { "ABC", "1" } },
+                                { },
+                                { },
+                                source})),
+                            vcf::NoMetaDefinitionError*);
+        }
+        
+        SECTION("FORMAT not in meta section") 
+        {
+            std::shared_ptr<vcf::Source> source{
+                new vcf::Source{
+                    "Example VCF source",
+                    vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                    vcf::Version::v43,
+                    {},
+                    { "Sample1" }}};
+
+            source->meta_entries.emplace(vcf::REFERENCE,
+                vcf::MetaEntry{
+                    1,
+                    vcf::REFERENCE,
+                    "file",
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::CONTIG,
+                vcf::MetaEntry{
+                    1,
+                    vcf::CONTIG,
+                    { { vcf::ID, "chr1" } },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, "XYZ" },
+                        { vcf::NUMBER, "1" },
+                        { vcf::TYPE, vcf::INTEGER },
+                        { vcf::DESCRIPTION, "Random info tag" }
+                    },
+                    source
+            });
+
+            vcf::ParsingState parsing_state{source};
+
+            vcf::ValidateOptionalPolicy optional_policy;
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { vcf::MISSING_VALUE },
+                                "A",
+                                { "AC" },
+                                1.0,
+                                { vcf::PASS },
+                                { { "XYZ", "1" } },
+                                { vcf::GT },
+                                { "0|1" },
+                                source})),
+                            vcf::NoMetaDefinitionError*);
+        }
+    }
 }
