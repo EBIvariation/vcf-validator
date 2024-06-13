@@ -1,0 +1,15 @@
+##fileformat=VCFv4.4
+##CauseOfFailure=cardinality is inconsistent between RN and RUS
+##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the longest variant described in this record">
+##INFO=<ID=SVLEN,Number=A,Type=Integer,Description="Length of structural variant">
+##INFO=<ID=CN,Number=A,Type=Float,Description="Copy number of allele">
+##INFO=<ID=RN,Number=A,Type=Integer,Description="Total number of repeat sequences in this allele">
+##INFO=<ID=RUS,Number=.,Type=String,Description="Repeat unit sequence of the corresponding repeat sequence">
+##INFO=<ID=RUC,Number=.,Type=Float,Description="Repeat unit count of corresponding repeat sequence">
+##INFO=<ID=RB,Number=.,Type=Integer,Description="Total number of bases in the corresponding repeat sequence">
+##INFO=<ID=RUB,Number=.,Type=Integer,Description="Number of bases in each individual repeat unit">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=PS,Number=1,Type=Integer,Description="Phase set">
+##ALT=<ID=CNV:TR,Description="Tandem repeat determined based on DNA abundance">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	sample
+chr1	130	.	G	<CNV:TR>	.	.	END=130;SVLEN=1;CN=20;RUS=CAG,CA;RN=1;RB=60	GT:PS	1|0:100
