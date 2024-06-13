@@ -136,7 +136,7 @@ then
 
   echo "installing c-ares"
   mkdir c-ares
-  wget https://c-ares.haxx.se/download/c-ares-1.15.0.tar.gz -O ./c-ares-1.15.0.tar.gz
+  wget https://github.com/c-ares/c-ares/releases/download/cares-1_15_0/c-ares-1.15.0.tar.gz -O ./c-ares-1.15.0.tar.gz
   tar xzf ./c-ares-1.15.0.tar.gz
   cd c-ares-1.15.0
   ./configure --prefix=$dependencies_dir_abs_path/c-ares
