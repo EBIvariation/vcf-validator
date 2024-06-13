@@ -1057,6 +1057,29 @@ namespace ebi
                                 source_v44
                             }),
                             vcf::MetaSectionError* );
+            //v4.4 updates
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number"} },
+                                source_v44
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "5"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number"} },
+                                source_v44
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number"} },
+                                source_v44
+                            }),
+                            vcf::MetaSectionError* );
         }
     }
 
@@ -2793,14 +2816,14 @@ namespace ebi
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_NOTHROW( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::SVLEN}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Difference in length between REF and ALT alleles"} },
+                                { {vcf::ID, vcf::SVLEN}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Difference in length between REF and ALT alleles"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
                                 1,
                                 vcf::INFO,
                                 { {vcf::ID, vcf::SVLEN}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Difference in length between REF and ALT alleles"} },
@@ -3113,25 +3136,25 @@ namespace ebi
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_NOTHROW( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number of segment containing breakend"} },
+                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "A"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number of CNV/breakpoint"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number of segment containing breakend"} },
+                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number of CNV/breakpoint"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Copy number of segment containing breakend"} },
+                                { {vcf::ID, vcf::CN}, {vcf::NUMBER, "A"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number of CNV/breakpoint"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -3185,6 +3208,29 @@ namespace ebi
                                 1,
                                 vcf::INFO,
                                 { {vcf::ID, vcf::CICNADJ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::CHARACTER}, {vcf::DESCRIPTION, "Confidence interval around copy number for the adjacency"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::SVCLAIM}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Claim by SV call. Valid are D,J,D,."} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::SVCLAIM}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Claim by SV call. Valid are D,J,D,."} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::SVCLAIM}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Claim by SV call. Valid are D,J,D,."} },
                                 source
                             }),
                             vcf::MetaSectionError* );

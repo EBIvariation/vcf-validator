@@ -163,6 +163,7 @@ namespace ebi
     const std::string SVTYPE = "SVTYPE";
     const std::string VALIDATED = "VALIDATED";
     const std::string THOUSAND_G = "1000G";
+    const std::string SVCLAIM = "SVCLAIM";
 
     // FORMAT predefined tags
     const std::string AHAP = "AHAP";
@@ -210,6 +211,15 @@ namespace ebi
 
     // ENA REST API for remote fasta access
     const std::string ENA_API_FASTA_URL = "https://www.ebi.ac.uk/ena/browser/api/fasta/";
+
+    //SVCLAIM types
+    const std::string D = "D";
+    const std::string J = "J";
+    const std::string DJ = "DJ";
+
+    //internal keys - with invalid chars to differentiate from valid IDs
+    const std::string _BRKEND = "BRK<END,";
+    const std::string _OTHER = "OTHER<,";
   }
 }
 

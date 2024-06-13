@@ -1317,7 +1317,7 @@ namespace ebi
                             source}),
                         vcf::SamplesFieldBodyError*);
 
-            CHECK_THROWS_AS( (vcf::Record{
+            CHECK_NOTHROW( (vcf::Record{    //float CN is valid
                             1,
                             "chr1",
                             123456,
@@ -1329,10 +1329,24 @@ namespace ebi
                             { {vcf::AA, "243"} },
                             { vcf::CN },
                             { "4.56" },
-                            source}),
-                        vcf::SamplesFieldBodyError*);
+                            source}) );
 
-            CHECK_THROWS_AS( (vcf::Record{
+            CHECK_THROWS_AS( (vcf::Record{  //with invalid value
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CN },
+                            { "/4.56" },
+                            source}),
+                            vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{  //with invalid cardinality
                             1,
                             "chr1",
                             123456,

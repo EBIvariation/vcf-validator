@@ -49,8 +49,11 @@ namespace ebi
         // If a variant is flagged as precise, then it should not contain imprecise variant fields like CIPOS or CIEND
         check_body_entry_info_imprecise(state, record);
 
-        // The number of values in SVLEN should match the number of alternate alleles
+        // The number of values in SVLEN should match the number of alternate alleles and value checks
         check_body_entry_info_svlen(state, record);
+
+        // SVCLAIM check
+        check_body_entry_info_svclaim(state, record);
 
         // Confidence interval tags should have first value <=0 and second value >= 0
         check_body_entry_info_confidence_interval(state, record);
@@ -169,6 +172,11 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_info_svlen(ParsingState & state, Record const & record) const
     {
+        static boost::regex cnchk_regex("(<(CNV|DUP|DEL)(:[^>]+)*>)+");
+        static boost::regex svchk_regex("(<(INS|DUP|INV|DEL|CNV)(:[^>]+)*>)+");
+        static boost::regex non_symbolic_alt_regex("[ACGTN]+", boost::regex::icase);
+        std::string svlenval;
+
         auto it = record.info.find(SVLEN);
         if (it != record.info.end()) {
             std::vector<std::string> values;
@@ -177,6 +185,66 @@ namespace ebi
                 throw new InfoBodyError{state.n_lines,
                         "INFO SVLEN should have same number of values as ALT", "Expected " + std::to_string(record.alternate_alleles.size())
                         + ", found " + std::to_string(values.size())};
+            }
+
+            if (record.source->version < Version::v44) {
+                return;
+            }
+            auto itcn = std::find(record.format.begin(), record.format.end(), CN);
+            for (auto i = 0; i < record.alternate_alleles.size(); ++i) {
+                //SVLEN should be '.' for non SV alleles
+                if (boost::regex_match(record.alternate_alleles[i], non_symbolic_alt_regex) || 
+                    !boost::regex_match(record.alternate_alleles[i], svchk_regex)) {
+                    //for alleles other than those in svchk_regex, value should be '.'
+                    if (values[i] != MISSING_VALUE) {
+                        throw new InfoBodyError{state.n_lines, "INFO SVLEN should be " + MISSING_VALUE + " for alleles other than structural variant INS/INV/DUP/DEL/CNV"};
+                    }
+                }
+                if (itcn != record.format.end()) {
+                    //with CN in format, CNV/DEL/DUP should have the same SVLEN value, v4.4 onwards
+                    if (record.types[i] != RecordType::STRUCTURAL || !boost::regex_match(record.alternate_alleles[i], svchk_regex)) {
+                        continue;
+                    }
+                    if (!svlenval.size()) {
+                        svlenval = values[i];   //first
+                        continue;
+                    }
+                    //CNV/DEL/DUP, should have the same SVLEN
+                    if (svlenval != values[i]) {
+                        throw new InfoBodyError{state.n_lines,
+                        "INFO SVLEN should have same values for SV CNV/DEL/DUP", "Expected " + svlenval
+                        + ", found " + values[i]};
+                    }
+                }
+            }
+        }
+    }
+
+    void ValidateOptionalPolicy::check_body_entry_info_svclaim(ParsingState & state, Record const & record) const
+    {
+        std::vector<std::string> values;
+
+        if (record.source->version < Version::v44) {
+            return;     //svclaim not present for version < v43
+        }
+        auto it = record.info.find(SVCLAIM);
+        if (it == record.info.end()) {
+            return;     //no svclaim
+        }
+        util::string_split(it->second, ",", values);
+        if (values.size() != record.alternate_alleles.size()) {
+            return;     //already checked in records
+        }
+
+        for (size_t i = 0; i < record.alternate_alleles.size(); ++i) {
+            if (record.types[i] == RecordType::STRUCTURAL ||
+                record.types[i] == RecordType::STRUCTURAL_BREAKEND) {
+                continue;   //already taken care in records!
+            }
+            if (values[i] != MISSING_VALUE) {
+                std::stringstream message;
+                message << "INFO " << SVCLAIM << " should be " << MISSING_VALUE << " for allele " << record.alternate_alleles[i];
+                throw new InfoBodyError{record.line, message.str(), "Found " + SVCLAIM + " was '" + values[i] + "'"};
             }
         }
     }

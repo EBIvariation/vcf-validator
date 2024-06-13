@@ -134,11 +134,12 @@ namespace ebi
         bool colon_present = main_type_position_end != std::string::npos;
         if (colon_present) {
             auto main_type = id_field.substr(0, main_type_position_end);
-            if (!ebi::util::contains(PREDEFINED_INFO_SVTYPES, main_type)) {
+            const std::set<std::string> &validAlt = (entry.source->version < Version::v44) ? PREDEFINED_INFO_SVTYPES : PREDEFINED_INFO_SV_v44;
+            if (!ebi::util::contains(validAlt, main_type)) {
                 std::stringstream message;
                 message << "In ALT metadata IDs containing colon-separated type and subtypes, the top level type "
                             "must be one of: ";
-                ebi::util::print_container(message, PREDEFINED_INFO_SVTYPES, "", ", ", "");
+                ebi::util::print_container(message, validAlt, "", ", ", "");
                 throw new MetaSectionError{entry.line, message.str(), "Found ID was '" + id_field + "'"};
             }
         }

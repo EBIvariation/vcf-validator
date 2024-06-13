@@ -221,6 +221,27 @@ namespace ebi
                 source
         });
 
+        source->meta_entries.emplace(vcf::ALT,
+            vcf::MetaEntry{
+                1,
+                vcf::ALT,
+                {
+                    { vcf::ID, vcf::DEL },
+                    { vcf::DESCRIPTION, "Deletion" }
+                },
+                source
+            });
+        source->meta_entries.emplace(vcf::ALT,
+            vcf::MetaEntry{
+                1,
+                vcf::ALT,
+                {
+                    { vcf::ID, vcf::DUP },
+                    { vcf::DESCRIPTION, "Duplication" }
+                },
+                source
+            });
+
         vcf::ParsingState parsing_state{source, vcf::AdditionalChecks()};
 
         vcf::ValidateOptionalPolicy optional_policy;
@@ -304,14 +325,40 @@ namespace ebi
                     vcf::INFO,
                     {
                         { vcf::ID, vcf::SVLEN },
-                        { vcf::NUMBER, "2" },
+                        { vcf::NUMBER, "A" },
                         { vcf::TYPE, vcf::INTEGER },
                         { vcf::DESCRIPTION, "Difference in length between REF and ALT alleles" }
                     },
                     source
             });
 
-            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::SVCLAIM },
+                        { vcf::NUMBER, "A" },
+                        { vcf::TYPE, vcf::STRING },
+                        { vcf::DESCRIPTION, "svclaim" }
+                    },
+                    source
+            });
+            source->meta_entries.emplace(vcf::FORMAT,
+                vcf::MetaEntry{
+                    1,
+                    vcf::FORMAT,
+                    {
+                        { vcf::ID, vcf::CN },
+                        { vcf::NUMBER, "1" },
+                        { vcf::TYPE, vcf::FLOAT },
+                        { vcf::DESCRIPTION, "fmt cn" }
+                    },
+                    source
+            });
+
+            //fail as svlen is not . for non-symbolic alleles
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
                                 1,
                                 "chr1",
                                 123456,
@@ -323,8 +370,23 @@ namespace ebi
                                 { { vcf::SVLEN, "1,2" } },
                                 { vcf::GT },
                                 { "1|0" },
+                                source})),
+                            vcf::InfoBodyError*);
+            //valid
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC", "ACT" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::SVLEN, ".,." } },
+                                { vcf::GT },
+                                { "0|1" },
                                 source})) );
-
+            //fail as cardinality is different
             CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
                                 1,
                                 "chr1",
@@ -337,6 +399,35 @@ namespace ebi
                                 { { vcf::SVLEN, "1,2" } },
                                 { vcf::GT },
                                 { "0|1" },
+                                source})),
+                            vcf::InfoBodyError*);
+            //vaild
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "<DEL>", "<DUP>", "AT" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::SVLEN, "2,2,." }, { vcf::SVCLAIM, "D,J,." } },
+                                { vcf::GT, vcf::CN },
+                                { "1|0:1" },
+                                source})) );
+            //invalid as svlen vals not matching for SVs
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{ //svlen not matching
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "<DEL>", "<DUP>", "AT" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::SVLEN, "1,2,." }, { vcf::SVCLAIM, "D,J,." } },
+                                { vcf::GT, vcf::CN },
+                                { "0|1:1" },
                                 source})),
                             vcf::InfoBodyError*);
         }
