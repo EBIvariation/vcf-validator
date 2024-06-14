@@ -225,7 +225,7 @@ namespace ebi
         using BodySectionError::BodySectionError;
         ChromosomeBodyError() : ChromosomeBodyError{0} {}
         ChromosomeBodyError(size_t line) : ChromosomeBodyError{line,
-            "Chromosome is not a string without colons or whitespaces, optionally wrapped with angle brackets (<>)"} { }
+            "Chromosome is not a string without whitespaces, optionally wrapped with angle brackets (<>)"} { }
         virtual ~ChromosomeBodyError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };

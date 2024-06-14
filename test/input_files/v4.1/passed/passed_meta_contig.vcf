@@ -4,6 +4,7 @@
 ##contig=<ID=1AC,length=123456>
 ##contig=<ID=1.*,length=123456>
 ##contig=<ID=ABcd123,length=123456>
+##contig=<ID=ABcd:123,length=123456>
 ##contig=<ID=contig_url,length=123456,URL=ftp://somewhere.org/assembly.fa>
 ##contig=<ID=contig_accession,species="Homo sapiens",accession=GCA_000001405.1>
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO

@@ -105,15 +105,7 @@ namespace ebi
 
     void Record::check_chromosome() const
     {
-        check_chromosome_no_colons();
         check_chromosome_no_whitespaces();
-    }
-
-    void Record::check_chromosome_no_colons() const
-    {
-        if (chromosome.find(':') != std::string::npos) {
-            throw new ChromosomeBodyError{line, "Chromosome must not contain colons"};
-        }
     }
 
     void Record::check_chromosome_no_whitespaces() const
