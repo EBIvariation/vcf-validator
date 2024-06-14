@@ -1052,7 +1052,7 @@ namespace odb
     typedef
     sqlite::query_column<
       sqlite::value_traits<
-        ::size_t,
+        long unsigned int,
         sqlite::id_integer >::query_type,
       sqlite::id_integer >
     line_type_;

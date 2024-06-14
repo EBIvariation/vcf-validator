@@ -9,4 +9,3 @@
 ##contig=<ID=contig_accession,species="Homo sapiens",accession=GCA_000001405.1>
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
 1	123	.	TC	T	.	.	.
-ABcd:123	123	.	TC	T	.	.	.
