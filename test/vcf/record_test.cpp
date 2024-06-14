@@ -165,8 +165,7 @@ namespace ebi
                                 { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
                                 { vcf::GT, vcf::DP }, 
                                 { "0|1" },
-                                source}),
-                            vcf::ChromosomeBodyError*);
+                                source}) );
         }
 
         SECTION("ID with whitespaces") 
