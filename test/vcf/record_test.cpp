@@ -150,9 +150,10 @@ namespace ebi
                             vcf::ChromosomeBodyError*);
         }
 
-        SECTION("Chromosome with colons") 
+        // Chromosome with colons are allowed
+        SECTION("Chromosome with colons")
         {
-            CHECK_THROWS_AS( (vcf::Record{
+             CHECK_NOTHROW( (vcf::Record{
                                 1,
                                 "chr:1", 
                                 123456, 
