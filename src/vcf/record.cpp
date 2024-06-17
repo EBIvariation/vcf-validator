@@ -311,25 +311,42 @@ namespace ebi
     void Record::check_info_have_mandatory() const
     {
         static boost::regex deldup_regex("(<(DUP|DEL)(:[^>]+)*>)+");
+        static boost::regex cnvtr_regex("(<CNV:TR>)");
+        bool svlencheck = false;
+        bool svclaimcheck = false;
+        bool cnvtrcheck = false;
 
-        if (source->version > Version::v43) {              //not applicable for 4.1/2/3
-            for (size_t i = 0; i < alternate_alleles.size(); ++i ) {
-                //SVLEN must be present for symbolic SV
-                auto & alternate = alternate_alleles[i];
-                if (types[i] == RecordType::STRUCTURAL) {
-                    if (info.find(SVLEN) == info.end()) {
+        if (source->version < Version::v44) {              //not applicable for 4.1/2/3
+            return;
+        }
+        for (size_t i = 0; i < alternate_alleles.size(); ++i ) {
+            //SVLEN must be present for symbolic SV
+            auto & alternate = alternate_alleles[i];
+            if (types[i] == RecordType::STRUCTURAL) {
+                if (!svlencheck && info.find(SVLEN) == info.end()) {
+                    std::stringstream message;
+                    message << "INFO " << SVLEN << " must be present for symbolic structural variants";
+                    throw new InfoBodyError{line, message.str()};
+                }
+                svlencheck = true;
+
+                if (!svclaimcheck && boost::regex_match(alternate, deldup_regex)) {
+                    //del/dup tags must have svclaim
+                    if (info.find(SVCLAIM) == info.end()) {
                         std::stringstream message;
-                        message << "INFO " << SVLEN << " must be present for symbolic structural variants";
+                        message << "INFO " << SVCLAIM << " must be present for DEL/DUP";
                         throw new InfoBodyError{line, message.str()};
                     }
-                    if (types[i] == RecordType::STRUCTURAL && boost::regex_match(alternate, deldup_regex)) {
-                        //del/dup tags must have svclaim
-                        if (info.find(SVCLAIM) == info.end()) {
-                            std::stringstream message;
-                            message << "INFO " << SVCLAIM << " must be present for DEL/DUP";
-                            throw new InfoBodyError{line, message.str()};
-                        }
+                    svclaimcheck = true;
+                }
+                if (!cnvtrcheck && boost::regex_match(alternate, cnvtr_regex)) {
+                    //cnv:tr must have either RUS/RUL
+                    if (info.find(RUS) == info.end() && info.find(RUL) == info.end()) {
+                        std::stringstream message;
+                        message << "INFO " << RUS << " or " << RUL << " must be present for CNV:TR";
+                        throw new InfoBodyError{line, message.str()};
                     }
+                    cnvtrcheck = true;
                 }
             }
         }
@@ -436,9 +453,12 @@ namespace ebi
                             ErrorFix::RECOVERABLE_VALUE, field_key, expected};
                 }
             }
-        } else if (field_key == SVLEN && values.size() == alternate_alleles.size()) {
+        } else if (field_key == SVLEN) {
             if (source->version >= Version::v44) {
-               return;         //no strict validation as val can be +/- ve and abs val is in use
+               return;         //nothing to do as val can be +/- ve and abs val is in use
+            }
+            if (values.size() != alternate_alleles.size()) {    //has unknown cardinality, not matching to allele count - nothing to do
+                return;
             }
             for (size_t i = 0; i < alternate_alleles.size(); i++) {
                 if (check_alt_not_symbolic(i)) {
@@ -476,11 +496,14 @@ namespace ebi
                 ebi::util::print_container(message, PREDEFINED_INFO_SVTYPES, "", ", ", "");
                 throw new InfoBodyError{line, message.str(), "Found " + SVTYPE + " was '" + field_value + "'"};
             }
-        } else if (source->version >= Version::v44 && field_key == SVCLAIM && values.size() == alternate_alleles.size()) {
-            //not applicable for anything < v4.4
+        } else if (field_key == SVCLAIM) {
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
             static boost::regex allele_regex("<(DUP|DEL|INS|INV|CNV)(:[^>]+)*>");
             boost::cmatch pieces_match;
-        
+
+            //number is A and will have matching number of entries as alleles
             for (size_t i = 0; i < alternate_alleles.size(); ++i) {
                 std::string key = _OTHER;
                 auto & allele = alternate_alleles[i];
@@ -507,6 +530,162 @@ namespace ebi
                 else {
                     BOOST_LOG_TRIVIAL(error) << "Invalid symbolic allele" << key << std::endl;
                 }
+            }
+        } else if (field_key == RUS) {  //repeat unit sequence
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            int rnCount = getRNvalue();             //get repeat no, it must match to RUS count
+            if (rnCount != values.size()) {
+                std::stringstream message;
+                message << "INFO " << RUS << " for record at " << line << " must have " << rnCount << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+            }
+            //RUL - RUS matching check made below with RUL
+        }
+        else if (field_key == RUL) {    //repeat unit length
+            if (source->version < Version::v44) {                       //not applicable for anything < v4.4
+                return;
+            }
+            int rnCount = getRNvalue();                                 //get repeat no, it must match to RUL count
+            if (rnCount != values.size()) {
+                std::stringstream message;
+                message << "INFO " << RUL << " for record at " << line << " must have " << rnCount << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+            }
+            auto itRUS = info.find(RUS);
+            if (itRUS != info.end() && itRUS->second != MISSING_VALUE) {    //both RUL and RUS present, must match in count
+                std::vector<std::string> RUSval;
+                util::string_split(itRUS->second, ",", RUSval);
+                if (values.size() != RUSval.size()) {
+                    std::stringstream message;
+                    message << "INFO " << RUL << " and " << RUS << " for record at " << line << " count must match";
+                    throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " and " +
+                     std::to_string(RUSval.size()) + " value(s)"};
+                }
+                for (int i = 0; i < values.size(); ++i) {
+                    if (std::stoi(values[i]) != RUSval[i].length()) {       //must match to RUS length
+                        std::stringstream message;
+                        message << "INFO " << RUL << " not matching to " << RUS << " for record at " << line;
+                    throw new InfoBodyError{line, message.str(), "Found length " + values[i] + " for " + RUSval[i]};
+                    }
+                }
+            }
+        }
+        else if (field_key == RUC) {    //repeat unit count
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            int rnCount = getRNvalue();                                 //get repeat no, it must match to RUC count
+            if (rnCount != values.size()) {
+                std::stringstream message;
+                message << "INFO " << RUC << " for record at " << line << " must have " << rnCount << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+            }
+        }
+        else if (field_key == RB) {     //repeat bases
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            int rnCount = getRNvalue();                                 //get repeat no, it must match to RB count
+            if (rnCount != values.size()) {
+                std::stringstream message;
+                message << "INFO " << RB << " for record at " << line << " must have " << rnCount << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+            }
+        }
+        else if (field_key == CIRUC) {  //conf.interval repeat unit count
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            auto it = info.find(RUC);
+            if (it != info.end()) {
+                std::vector<std::string> RUCval;
+                util::string_split(it->second, ",", RUCval);
+                if (values.size() != 2 * RUCval.size()) {                //ciruc count must be 2 * RUC count
+                    std::stringstream message;
+                    message << "INFO " << CIRUC << " for record at " << line << " must have " << 2 * RUCval.size() << " value(s)";
+                    throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+                }
+                for (int i = 0; i < values.size(); ++i) {
+                    if (RUCval[i / 2] == MISSING_VALUE) {
+                        if (values[i] != MISSING_VALUE) {               //ciruc must be missing with ruc missing
+                            std::stringstream message;
+                            message << "INFO " << CIRUC << " for record at " << line << " pos " << i+1 << " must be \'" << MISSING_VALUE << "\'";
+                            throw new InfoBodyError{line, message.str(), "Found " + values[i]};
+                        }
+                    }
+                }
+            } else if (values.size()) {
+                //CIRUC values without RUC!
+                std::stringstream message;
+                message << "INFO " << CIRUC << " at " << line << " can not have values without " << RUC;
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + "value(s)"};
+            }
+        }
+        else if (field_key == CIRB) {
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            auto it = info.find(RB);
+            if (it != info.end()) {
+                std::vector<std::string> RBval;
+                util::string_split(it->second, ",", RBval);
+                if (values.size() != 2 * RBval.size()) {                //cirb count must be 2 * RB count
+                    std::stringstream message;
+                    message << "INFO " << CIRB << " for record at " << line << " must have " << 2 * RBval.size() << " value(s)";
+                    throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+                }
+                for (int i = 0; i < values.size(); ++i) {
+                    if (RBval[i / 2] == MISSING_VALUE) {
+                        if (values[i] != MISSING_VALUE) {               //cirb must be missing with RB missing
+                            std::stringstream message;
+                            message << "INFO " << CIRB << " for record at " << line << " pos " << i+1 << " must be \'" << MISSING_VALUE << "\'";
+                            throw new InfoBodyError{line, message.str(), "Found " + values[i]};
+                        }
+                    }
+                }
+            } else if (values.size()) {
+                //CIRB values without RB!
+                std::stringstream message;
+                message << "INFO " << CIRB << " at " << line << " can not have values without " << RB;
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + "value(s)"};
+            }
+        }
+        else if (field_key == RUB) {
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            auto it = info.find(RUC);
+            if (it != info.end()) {
+                std::string message;
+                std::vector<std::string> RUCval;
+                util::string_split(it->second, ",", RUCval);
+                int cnt = 0;
+                for (int i = 0; i < RUCval.size(); ++i) {   //RUC must be integer with RUB
+                    if (RUCval[i] == MISSING_VALUE) {
+                        continue;
+                    }
+                    try {
+                        check_value_type(INTEGER, RUCval[i], message);
+                    } catch (const std::exception &typeError) {
+                        std::stringstream message;
+                        message << "INFO " << RUC << " for record at " << line << " must be integer with " + RUB;
+                        throw new InfoBodyError{line, message.str()};
+                    }
+                    cnt += std::stoi(RUCval[i]);
+                }
+                if (cnt != values.size()) {                 //RUB size must be sum(RUC[i])
+                    std::stringstream message;
+                    message << "INFO " << RUB << " for record at " << line << " must have " << cnt << " value(s)";
+                    throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+                }
+            }
+            else {
+                //must be present
+                std::stringstream message;
+                message << "INFO " << RUB << " for record at " << line << " must have " + RUC;
+                throw new InfoBodyError{line, message.str()};
             }
         }
     }
@@ -575,6 +754,14 @@ namespace ebi
             if (pos != std::string::npos) {
                 GT_subfield = sample.substr(0, pos);
             }
+            //with v44, there can be optional leading phasing info, remove it and use
+            bool checkprefix = source->version < Version::v44? false : true;
+            if (checkprefix && !GT_subfield.empty()) {
+                if (GT_subfield.at(0) == '/' || GT_subfield.at(0) == '|') {
+                    GT_subfield.erase(0,1);
+                }
+            }
+
             return 1 + count_if(GT_subfield.begin(), GT_subfield.end(), [](char c) { return c == '/' || c == '|'; });
         } else {
             BOOST_LOG_TRIVIAL(error) << "Cannot fetch ploidy from GT as GT is not present in the FORMAT";
@@ -591,6 +778,15 @@ namespace ebi
 
         // If the first format field is not a GT, then no alleles need to be checked
         if (format[0] == GT) {
+            //with v44, there can be optional leading phasing info, remove it and use
+            bool checkprefix = source->version < Version::v44? false : true;
+            if (checkprefix && !subfields.empty()) {
+                if (!subfields[0].empty()) {
+                    if (subfields[0].at(0) == '/' || subfields[0].at(0) == '|') {
+                        subfields[0].erase(0,1);
+                    }
+                }
+            }
             check_sample_alleles(subfields);
         }
 
@@ -853,7 +1049,8 @@ namespace ebi
     }
 
     void Record::check_field_integer_range(std::string const & field, std::vector<std::string> const & values) const {
-        if (field == SVLEN || field == CIPOS || field == CIEND || field == CILEN || field == CICN || field == CICNADJ) {
+        if (field == SVLEN || field == CIPOS || field == CIEND || field == CILEN || field == CICN || field == CICNADJ ||
+            field == CIRB) {
             // to ignore predefined tag fields which permit negative integral values
             return;
         }
@@ -865,6 +1062,27 @@ namespace ebi
                 raise(std::make_shared<Error>(line, field + " value must be a non-negative integer number"));
             }
         }
+    }
+
+    int Record::getRNvalue() const {
+        static boost::regex cnvtr_regex("<CNV:TR>");
+        auto it = info.find(RN);
+        int rnCnt = 0;
+        std::vector<std::string> values;
+
+        if (it != info.end()) {                     //spilt RN field
+            util::string_split(it->second, ",", values);
+        }
+
+        for (int i = 0; i < alternate_alleles.size(); ++i) {
+            if (values.size()) {                   //RN present
+                rnCnt += (values[i] == MISSING_VALUE) ? 0 : std::stoi(values[i]);
+            } else if (types[i] == RecordType::STRUCTURAL && boost::regex_match(alternate_alleles[i], cnvtr_regex)) {
+                //CNV:TR with no RN, consider as 1
+                rnCnt++;
+            }
+        }
+        return rnCnt;
     }
 
     bool is_record_subfield_in_header(std::string const & field_value,

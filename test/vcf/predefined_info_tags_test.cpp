@@ -2358,6 +2358,212 @@ namespace ebi
                             { "0|1" },
                             source}),
                         vcf::InfoBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{  //valid
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RN, "1"}, {vcf::RUS, "AT"}, {vcf::RUC, "2.0"}, {vcf::RB, "4"}, {vcf::CIRUC, "-1,1"}, {vcf::CIRB, "-1,1"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{  //valid with non-cnv:tr as well
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "T" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::RN, "1"}, {vcf::RUS, "AT"}, {vcf::RUC, "2.0"}, {vcf::RB, "4"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}) );
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid as RUS not matching to assumed RN = 1
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RUS, "AT,CG"}, {vcf::RUC, "2.0"}, {vcf::RB, "4"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid as RUS not matching to RUL
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RUS, "AT"}, {vcf::RUC, "2.0"}, {vcf::RB, "4"}, {vcf::RUL, "3"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid as RUS and RUL missing
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RUC, "2.0"}, {vcf::RB, "4"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid as CIRB not matching to RB
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RUC, "2.0"}, {vcf::RB, "4"}, {vcf::RUL, "2"}, {vcf::CIRB, "-1,0,-1,1"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid as CIRUC not matching to RUC
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RUC, "2.0"}, {vcf::RUL, "2"}, {vcf::CIRUC, "-1,0,-1,1"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid as RUC has missing val and not so in CIRUC
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RN, "3"}, {vcf::RUC, "2.0,.,1.5"}, {vcf::RUL, "2,10,2"}, {vcf::CIRUC, "-1,1,-1,0,-1,."}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid as RB has missing val and not so in CIRRB
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RN, "3"}, {vcf::RUC, "2.0,.,2.05"}, {vcf::RUL, "2,10,2"}, {vcf::RB, "4,.,4"}, {vcf::CIRB, "-1,1,-1,.,-1,."}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{  //valid with RUB, RUC
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RN, "3"}, {vcf::RUS, "AT,TTG,CA"}, {vcf::RUC, "2,3,2"}, {vcf::RUB, "2,2,3,3,3,2,2"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}) );
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid as RUC is missing with RUB
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RN, "3"}, {vcf::RUL, "2,3,2"}, {vcf::RUB, "2,2,3,3,3,2,2"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid as RUC unmatched to RUB
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RN, "3"}, {vcf::RUL, "2,3,2"}, {vcf::RUB, "2,3,3,3,2,2"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid as RUC is not integer
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RN, "3"}, {vcf::RUS, "AT,TTG,CA"}, {vcf::RUC, "2.2,3,2"}, {vcf::RUB, "2,2,3,3,3,2,2"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{  //RN with missing data
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<DEL>","T","<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1,.,1"}, {vcf::SVCLAIM, "D,.,D"}, {vcf::RN, ".,3,1"}, {vcf::RUS, "AT,TTG,CA,TAC"}, {vcf::RUC, "2,3,2,2"}, {vcf::RUB, "2,2,3,3,3,2,2,3,3"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source}) );
         }
     }
 

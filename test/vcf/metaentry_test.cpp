@@ -3234,7 +3234,136 @@ namespace ebi
                                 source
                             }),
                             vcf::MetaSectionError* );
-        }
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::RN}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Total num. of repeat seq. in this allele."} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::RN}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Total num. of repeat seq. in this allele."} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::RN}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Total num. of repeat seq. in this allele."} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::RUS}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "A Repeat unit sequence"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::RUS}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "A Repeat unit sequence"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::RUL}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Length of repeating unit"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::RUL}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Length of repeating unit"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::RUC}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Count of repeating unit"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::RUC}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Count of repeating unit"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::RB}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Total num. of bases in repeat seq."} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::RB}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Total num. of bases in repeat seq."} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CIRUC}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Confidence interval for RUC"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CIRUC}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval for RUC"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CIRB}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval for RB"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::CIRB}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Confidence interval for RB"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::RUB}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Number of bases in repeat unit"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::RUB}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Number of bases in repeat unit"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+       }
     }
 
     TEST_CASE("SAMPLE MetaEntry checks", "[checks][keyvalue]") 

@@ -1020,6 +1020,20 @@ namespace ebi
                             { "1:1.3,2.4" },
                             source}));
 
+            CHECK_NOTHROW( (vcf::Record{    //valid with leading phasing info
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT},
+                            { "/1" },
+                            source}));
+
             CHECK_NOTHROW( (vcf::Record{
                             1,
                             "chr1",

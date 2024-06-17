@@ -205,7 +205,15 @@ namespace ebi
             { SVTYPE, { STRING, "1" } },
             { VALIDATED, { FLAG, "0" } },
             { THOUSAND_G, { FLAG, "0" } },
-            { SVCLAIM, { STRING, "A" } }
+            { SVCLAIM, { STRING, "A" } },
+            { RN, { INTEGER, "A" } },
+            { RUS, { STRING, UNKNOWN_CARDINALITY } },
+            { RUL, { INTEGER, UNKNOWN_CARDINALITY } },
+            { RUC, { FLOAT, UNKNOWN_CARDINALITY } },
+            { RB, { INTEGER, UNKNOWN_CARDINALITY } },
+            { CIRUC, { FLOAT, UNKNOWN_CARDINALITY } },
+            { CIRB, { INTEGER, UNKNOWN_CARDINALITY } },
+            { RUB, { INTEGER, UNKNOWN_CARDINALITY } }
     };
 
     const std::map<std::string, std::pair<std::string, std::string>> format_v41_v42 = {
@@ -724,6 +732,11 @@ namespace ebi
          * @throw InfoBodyError
          */
         void check_info_have_mandatory() const;
+
+        /**
+         * gets total RN count
+         */
+        int getRNvalue() const;
     };
 
     std::ostream &operator<<(std::ostream &os, const Record &record);
