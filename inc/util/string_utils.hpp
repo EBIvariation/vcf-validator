@@ -32,6 +32,7 @@ namespace ebi
     /**
      * Splits `s` using `delims` as separator and fills the container `ret` with the parts.
      * An empty string results in an empty container `ret`.
+     * Expects a string without leading separators and when one is present, it would be part of 1st string.
      * @param s input string to split
      * @param delims any character here acts as a separator
      * @param ret return by reference the container filled with the string split.

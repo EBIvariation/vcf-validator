@@ -164,6 +164,14 @@ namespace ebi
     const std::string VALIDATED = "VALIDATED";
     const std::string THOUSAND_G = "1000G";
     const std::string SVCLAIM = "SVCLAIM";
+    const std::string RN = "RN";
+    const std::string RUS = "RUS";
+    const std::string RUL = "RUL";
+    const std::string RUC = "RUC";
+    const std::string RB = "RB";
+    const std::string CIRUC = "CIRUC";
+    const std::string CIRB = "CIRB";
+    const std::string RUB = "RUB";
 
     // FORMAT predefined tags
     const std::string AHAP = "AHAP";

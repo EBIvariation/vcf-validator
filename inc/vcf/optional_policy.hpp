@@ -61,6 +61,8 @@ namespace ebi
         void check_body_entry_info_svlen(ParsingState & state, Record const & record) const;
         void check_body_entry_info_svclaim(ParsingState & state, Record const & record) const;
         void check_body_entry_info_confidence_interval(ParsingState & state, Record const & record) const;
+        void check_body_entry_info_rb_ruc(ParsingState & state, Record const & record) const;
+        void check_body_entry_info_rul_rus(ParsingState & state, Record const & record) const;
         void check_contig_meta(ParsingState & state, Record const & record) const;
         void check_alternate_allele_meta(ParsingState & state, Record const & record) const;
         void check_filter_meta(ParsingState & state, Record const & record) const;
