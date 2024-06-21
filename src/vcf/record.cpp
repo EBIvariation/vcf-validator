@@ -534,8 +534,7 @@ namespace ebi
                 throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
             }
             //RUL - RUS matching check made below with RUL
-        }
-        else if (field_key == RUL) {    //repeat unit length
+        } else if (field_key == RUL) {    //repeat unit length
             if (source->version < Version::v44) {                       //not applicable for anything < v4.4
                 return;
             }
@@ -563,8 +562,7 @@ namespace ebi
                     }
                 }
             }
-        }
-        else if (field_key == RUC) {    //repeat unit count
+        } else if (field_key == RUC) {    //repeat unit count
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
@@ -574,8 +572,7 @@ namespace ebi
                 message << "INFO " << RUC << " for record at " << line << " must have " << rnCount << " value(s)";
                 throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
             }
-        }
-        else if (field_key == RB) {     //repeat bases
+        } else if (field_key == RB) {     //repeat bases
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
@@ -585,8 +582,7 @@ namespace ebi
                 message << "INFO " << RB << " for record at " << line << " must have " << rnCount << " value(s)";
                 throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
             }
-        }
-        else if (field_key == CIRUC) {  //conf.interval repeat unit count
+        } else if (field_key == CIRUC) {  //conf.interval repeat unit count
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
@@ -614,8 +610,7 @@ namespace ebi
                 message << "INFO " << CIRUC << " at " << line << " can not have values without " << RUC;
                 throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + "value(s)"};
             }
-        }
-        else if (field_key == CIRB) {
+        } else if (field_key == CIRB) {
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
@@ -643,8 +638,7 @@ namespace ebi
                 message << "INFO " << CIRB << " at " << line << " can not have values without " << RB;
                 throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + "value(s)"};
             }
-        }
-        else if (field_key == RUB) {
+        } else if (field_key == RUB) {
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
@@ -678,6 +672,60 @@ namespace ebi
                 std::stringstream message;
                 message << "INFO " << RUB << " for record at " << line << " must have " + RUC;
                 throw new InfoBodyError{line, message.str()};
+            }
+        } else if (field_key == MEINFO) {
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            if (values.size() != 4 * alternate_alleles.size()) {            //MEINFO must be 4 * ALT allele count
+                std::stringstream message;
+                message << "INFO " << MEINFO << " for record at " << line << " must have " << 4 * alternate_alleles.size() << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+            }
+        } else if (field_key == METRANS) {
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            if (values.size() != 4 * alternate_alleles.size()) {            //METRANS must be 4 * ALT allele count
+                std::stringstream message;
+                message << "INFO " << METRANS << " for record at " << line << " must have " << 4 * alternate_alleles.size() << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+            }
+        } else if (field_key == CICN) {
+            if (source->version < Version::v44) {   //fixed size and already checked when < v44
+                return;
+            }
+            if (values.size() != 2 * alternate_alleles.size()) {            //CICN must be 2 * ALT allele count
+                std::stringstream message;
+                message << "INFO " << CICN << " for record at " << line << " must have " << 2 * alternate_alleles.size() << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+            }
+        } else if (field_key == CIPOS) {
+            if (source->version < Version::v44) {   //fixed size and already checked when < v44
+                return;
+            }
+            if (values.size() != 2 * alternate_alleles.size()) {            //CIPOS must be 2 * ALT allele count
+                std::stringstream message;
+                message << "INFO " << CIPOS << " for record at " << line << " must have " << 2 * alternate_alleles.size() << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+            }
+        } else if (field_key == CIEND) {
+            if (source->version < Version::v44) {   //fixed size and already checked when < v44
+                return;
+            }
+            if (values.size() != 2 * alternate_alleles.size()) {            //CIEND must be 2 * ALT allele count
+                std::stringstream message;
+                message << "INFO " << CIEND << " for record at " << line << " must have " << 2 * alternate_alleles.size() << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+            }
+        } else if (field_key == CILEN) {
+            if (source->version < Version::v44) {   //fixed size and already checked when < v44
+                return;
+            }
+            if (values.size() != 2 * alternate_alleles.size()) {            //CILEN must be 2 * ALT allele count
+                std::stringstream message;
+                message << "INFO " << CILEN << " for record at " << line << " must have " << 2 * alternate_alleles.size() << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
             }
         }
     }
@@ -1041,8 +1089,8 @@ namespace ebi
     }
 
     void Record::check_field_integer_range(std::string const & field, std::vector<std::string> const & values) const {
-        if (field == SVLEN || field == CIPOS || field == CIEND || field == CILEN || field == CICN || field == CICNADJ ||
-            field == CIRB) {
+        if (field == SVLEN || field == CIPOS || field == CIEND || field == CILEN || field == CIRB ||
+            (field == CICNADJ && source->version < Version::v44)) {
             // to ignore predefined tag fields which permit negative integral values
             return;
         }
