@@ -261,7 +261,7 @@ namespace odb
     //
     if (sk == statement_insert)
     {
-        ::size_t const& v =
+      ::size_t const& v =
         o.line;
 
       bool is_null (false);
@@ -381,7 +381,7 @@ namespace odb
     // line
     //
     {
-        ::size_t& v =
+      ::size_t& v =
         const_cast< ::size_t& > (
         o.line);
 
