@@ -261,12 +261,12 @@ namespace odb
     //
     if (sk == statement_insert)
     {
-      long unsigned int const& v =
+        ::size_t const& v =
         o.line;
 
       bool is_null (false);
       sqlite::value_traits<
-          long unsigned int,
+          ::size_t,
           sqlite::id_integer >::set_image (
         i.line_value,
         is_null,
@@ -381,12 +381,12 @@ namespace odb
     // line
     //
     {
-      long unsigned int& v =
-        const_cast< long unsigned int& > (
+        ::size_t& v =
+        const_cast< ::size_t& > (
         o.line);
 
       sqlite::value_traits<
-          long unsigned int,
+          ::size_t,
           sqlite::id_integer >::set_value (
         v,
         i.line_value,
