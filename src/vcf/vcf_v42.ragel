@@ -57,7 +57,7 @@
     #################################################
 
 
-    ## A chromosome must be a string with no white-spaces or colons, and may be surrounded by < > symbols (for contigs)
+    ## A chromosome must be a string with no white-spaces, and may be surrounded by < > symbols (for contigs)
     chrom_basic     = alnum ( alnum | punct - ( '<' | '>' | ',' ) )* ;
     chrom_contig    = '<' chrom_basic '>' ;
     chromosome      = chrom_basic | chrom_contig ;
