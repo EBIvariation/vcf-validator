@@ -168,20 +168,21 @@ static const short _vcf_v44_eof_actions[] = {
 	158, 158, 158, 158, 158, 158, 158, 158, 
 	158, 158, 158, 158, 158, 158, 158, 158, 
 	158, 158, 158, 158, 158, 158, 158, 158, 
+	158, 158, 158, 158, 158, 158, 158, 158, 
 	158, 17, 11, 0, 0, 15, 0, 363, 
 	363, 0, 433, 433, 433, 363, 363, 363, 
 	0, 0
 };
 
 static const int vcf_v44_start = 1;
-static const int vcf_v44_first_final = 661;
+static const int vcf_v44_first_final = 669;
 static const int vcf_v44_error = 0;
 
 static const int vcf_v44_en_main = 1;
 static const int vcf_v44_en_main_meta_section = 28;
-static const int vcf_v44_en_main_body_section = 665;
-static const int vcf_v44_en_meta_section_skip = 659;
-static const int vcf_v44_en_body_section_skip = 660;
+static const int vcf_v44_en_main_body_section = 673;
+static const int vcf_v44_en_meta_section_skip = 667;
+static const int vcf_v44_en_body_section_skip = 668;
 
 
 #line 269 "src/vcf/vcf_v44.ragel"
@@ -198,7 +199,7 @@ namespace ebi
     : ParserImpl{source, additionalChecks}
     {
       
-#line 202 "inc/vcf/validator_detail_v44.hpp"
+#line 203 "inc/vcf/validator_detail_v44.hpp"
 	{
 	cs = vcf_v44_start;
 	}
@@ -211,7 +212,7 @@ namespace ebi
     void ParserImpl_v44<Configuration>::parse_buffer(char const * p, char const * pe, char const * eof)
     {
       
-#line 215 "inc/vcf/validator_detail_v44.hpp"
+#line 216 "inc/vcf/validator_detail_v44.hpp"
 	{
 	const char *_acts;
 	unsigned int _nacts;
@@ -4483,7 +4484,6 @@ case 477:
 case 478:
 	switch( (*p) ) {
 		case 43: goto tr662;
-		case 59: goto tr662;
 		case 92: goto tr662;
 	}
 	if ( (*p) < 45 ) {
@@ -4492,7 +4492,7 @@ case 478:
 				goto tr662;
 		} else if ( (*p) >= 33 )
 			goto tr662;
-	} else if ( (*p) > 57 ) {
+	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
 				goto tr662;
@@ -4504,14 +4504,13 @@ case 478:
 case 479:
 	switch( (*p) ) {
 		case 44: goto tr664;
-		case 59: goto tr663;
 		case 62: goto tr665;
 		case 92: goto tr663;
 	}
 	if ( (*p) < 43 ) {
 		if ( 33 <= (*p) && (*p) <= 41 )
 			goto tr663;
-	} else if ( (*p) > 57 ) {
+	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
 				goto tr663;
@@ -5177,34 +5176,33 @@ case 576:
 	if ( 32 <= (*p) && (*p) <= 126 )
 		goto tr786;
 	goto tr774;
-case 661:
+case 669:
 	switch( (*p) ) {
-		case 10: goto tr909;
-		case 13: goto tr910;
-		case 43: goto tr911;
-		case 59: goto tr911;
-		case 60: goto tr912;
-		case 92: goto tr911;
+		case 10: goto tr917;
+		case 13: goto tr918;
+		case 43: goto tr919;
+		case 60: goto tr920;
+		case 92: goto tr919;
 	}
 	if ( (*p) < 45 ) {
 		if ( (*p) > 34 ) {
 			if ( 36 <= (*p) && (*p) <= 41 )
-				goto tr911;
+				goto tr919;
 		} else if ( (*p) >= 33 )
-			goto tr911;
-	} else if ( (*p) > 57 ) {
+			goto tr919;
+	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
-				goto tr911;
+				goto tr919;
 		} else if ( (*p) >= 63 )
-			goto tr911;
+			goto tr919;
 	} else
-		goto tr911;
-	goto tr908;
-case 662:
+		goto tr919;
+	goto tr916;
+case 670:
 	switch( (*p) ) {
-		case 10: goto tr913;
-		case 13: goto tr914;
+		case 10: goto tr921;
+		case 13: goto tr922;
 	}
 	goto tr788;
 case 577:
@@ -5215,13 +5213,12 @@ case 578:
 	switch( (*p) ) {
 		case 9: goto tr790;
 		case 43: goto tr791;
-		case 59: goto tr791;
 		case 92: goto tr791;
 	}
 	if ( (*p) < 45 ) {
 		if ( 33 <= (*p) && (*p) <= 41 )
 			goto tr791;
-	} else if ( (*p) > 57 ) {
+	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
 				goto tr791;
@@ -5406,13 +5403,13 @@ case 593:
 	} else if ( (*p) >= 65 )
 		goto tr836;
 	goto tr833;
-case 663:
+case 671:
 	switch( (*p) ) {
-		case 9: goto tr916;
-		case 10: goto tr917;
-		case 13: goto tr918;
+		case 9: goto tr924;
+		case 10: goto tr925;
+		case 13: goto tr926;
 	}
-	goto tr915;
+	goto tr923;
 case 594:
 	if ( (*p) == 95 )
 		goto tr838;
@@ -5451,44 +5448,42 @@ case 596:
 	} else
 		goto tr845;
 	goto tr842;
-case 664:
+case 672:
 	switch( (*p) ) {
 		case 9: goto tr839;
-		case 10: goto tr917;
-		case 13: goto tr918;
-		case 58: goto tr919;
+		case 10: goto tr925;
+		case 13: goto tr926;
+		case 58: goto tr927;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto tr853;
 	goto tr852;
-case 665:
+case 673:
 	switch( (*p) ) {
-		case 10: goto tr913;
-		case 13: goto tr914;
-		case 43: goto tr920;
-		case 59: goto tr920;
-		case 60: goto tr921;
-		case 92: goto tr920;
+		case 10: goto tr921;
+		case 13: goto tr922;
+		case 43: goto tr928;
+		case 60: goto tr929;
+		case 92: goto tr928;
 	}
 	if ( (*p) < 45 ) {
 		if ( (*p) > 34 ) {
 			if ( 36 <= (*p) && (*p) <= 41 )
-				goto tr920;
+				goto tr928;
 		} else if ( (*p) >= 33 )
-			goto tr920;
-	} else if ( (*p) > 57 ) {
+			goto tr928;
+	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
-				goto tr920;
+				goto tr928;
 		} else if ( (*p) >= 63 )
-			goto tr920;
+			goto tr928;
 	} else
-		goto tr920;
+		goto tr928;
 	goto tr789;
 case 597:
 	switch( (*p) ) {
 		case 43: goto tr846;
-		case 59: goto tr846;
 		case 92: goto tr846;
 	}
 	if ( (*p) < 45 ) {
@@ -5497,7 +5492,7 @@ case 597:
 				goto tr846;
 		} else if ( (*p) >= 33 )
 			goto tr846;
-	} else if ( (*p) > 57 ) {
+	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
 				goto tr846;
@@ -5509,14 +5504,13 @@ case 597:
 case 598:
 	switch( (*p) ) {
 		case 43: goto tr847;
-		case 59: goto tr847;
 		case 62: goto tr848;
 		case 92: goto tr847;
 	}
 	if ( (*p) < 45 ) {
 		if ( 33 <= (*p) && (*p) <= 41 )
 			goto tr847;
-	} else if ( (*p) > 57 ) {
+	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
 				goto tr847;
@@ -5540,25 +5534,25 @@ case 601:
 	} else if ( (*p) >= 33 )
 		goto tr853;
 	goto tr852;
-case 666:
+case 674:
 	switch( (*p) ) {
 		case 9: goto tr839;
-		case 10: goto tr917;
-		case 13: goto tr918;
-		case 47: goto tr922;
-		case 58: goto tr919;
-		case 124: goto tr922;
+		case 10: goto tr925;
+		case 13: goto tr926;
+		case 47: goto tr930;
+		case 58: goto tr927;
+		case 124: goto tr930;
 	}
 	if ( 33 <= (*p) && (*p) <= 126 )
 		goto tr853;
 	goto tr842;
-case 667:
+case 675:
 	switch( (*p) ) {
 		case 9: goto tr839;
-		case 10: goto tr917;
-		case 13: goto tr918;
-		case 46: goto tr923;
-		case 58: goto tr919;
+		case 10: goto tr925;
+		case 13: goto tr926;
+		case 46: goto tr931;
+		case 58: goto tr927;
 	}
 	if ( (*p) < 48 ) {
 		if ( 33 <= (*p) && (*p) <= 47 )
@@ -5567,16 +5561,16 @@ case 667:
 		if ( 59 <= (*p) && (*p) <= 126 )
 			goto tr853;
 	} else
-		goto tr924;
+		goto tr932;
 	goto tr842;
-case 668:
+case 676:
 	switch( (*p) ) {
 		case 9: goto tr839;
-		case 10: goto tr917;
-		case 13: goto tr918;
-		case 47: goto tr922;
-		case 58: goto tr919;
-		case 124: goto tr922;
+		case 10: goto tr925;
+		case 13: goto tr926;
+		case 47: goto tr930;
+		case 58: goto tr927;
+		case 124: goto tr930;
 	}
 	if ( (*p) < 48 ) {
 		if ( 33 <= (*p) && (*p) <= 46 )
@@ -5585,7 +5579,7 @@ case 668:
 		if ( 59 <= (*p) && (*p) <= 126 )
 			goto tr853;
 	} else
-		goto tr924;
+		goto tr932;
 	goto tr842;
 case 602:
 	if ( (*p) == 48 )
@@ -5603,13 +5597,13 @@ case 605:
 	if ( (*p) == 71 )
 		goto tr857;
 	goto tr833;
-case 669:
+case 677:
 	switch( (*p) ) {
-		case 9: goto tr916;
-		case 10: goto tr917;
-		case 13: goto tr918;
-		case 59: goto tr925;
-		case 61: goto tr926;
+		case 9: goto tr924;
+		case 10: goto tr925;
+		case 13: goto tr926;
+		case 59: goto tr933;
+		case 61: goto tr934;
 	}
 	goto tr833;
 case 606:
@@ -5623,24 +5617,24 @@ case 606:
 	} else if ( (*p) >= 65 )
 		goto tr836;
 	goto tr833;
-case 670:
+case 678:
 	switch( (*p) ) {
-		case 9: goto tr916;
-		case 10: goto tr917;
-		case 13: goto tr918;
-		case 46: goto tr927;
-		case 59: goto tr925;
-		case 61: goto tr926;
-		case 95: goto tr927;
+		case 9: goto tr924;
+		case 10: goto tr925;
+		case 13: goto tr926;
+		case 46: goto tr935;
+		case 59: goto tr933;
+		case 61: goto tr934;
+		case 95: goto tr935;
 	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto tr927;
+			goto tr935;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto tr927;
+			goto tr935;
 	} else
-		goto tr927;
+		goto tr935;
 	goto tr833;
 case 607:
 	if ( (*p) > 58 ) {
@@ -5649,12 +5643,12 @@ case 607:
 	} else if ( (*p) >= 32 )
 		goto tr859;
 	goto tr858;
-case 671:
+case 679:
 	switch( (*p) ) {
-		case 9: goto tr916;
-		case 10: goto tr917;
-		case 13: goto tr918;
-		case 59: goto tr925;
+		case 9: goto tr924;
+		case 10: goto tr925;
+		case 13: goto tr926;
+		case 59: goto tr933;
 	}
 	if ( 32 <= (*p) && (*p) <= 126 )
 		goto tr859;
@@ -5935,7 +5929,6 @@ case 627:
 case 628:
 	switch( (*p) ) {
 		case 43: goto tr875;
-		case 59: goto tr875;
 		case 60: goto tr876;
 		case 92: goto tr875;
 	}
@@ -5945,7 +5938,7 @@ case 628:
 				goto tr875;
 		} else if ( (*p) >= 33 )
 			goto tr875;
-	} else if ( (*p) > 57 ) {
+	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
 				goto tr875;
@@ -5973,19 +5966,52 @@ case 629:
 		goto tr875;
 	goto tr805;
 case 630:
-	if ( 48 <= (*p) && (*p) <= 57 )
+	switch( (*p) ) {
+		case 43: goto tr875;
+		case 58: goto tr877;
+		case 59: goto tr875;
+		case 92: goto tr875;
+	}
+	if ( (*p) < 48 ) {
+		if ( (*p) > 41 ) {
+			if ( 45 <= (*p) && (*p) <= 47 )
+				goto tr875;
+		} else if ( (*p) >= 33 )
+			goto tr875;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 94 <= (*p) && (*p) <= 126 )
+				goto tr875;
+		} else if ( (*p) >= 63 )
+			goto tr875;
+	} else
 		goto tr878;
 	goto tr805;
 case 631:
-	if ( (*p) == 91 )
-		goto tr871;
-	if ( 48 <= (*p) && (*p) <= 57 )
+	switch( (*p) ) {
+		case 43: goto tr875;
+		case 58: goto tr877;
+		case 59: goto tr875;
+		case 91: goto tr871;
+	}
+	if ( (*p) < 48 ) {
+		if ( (*p) > 41 ) {
+			if ( 45 <= (*p) && (*p) <= 47 )
+				goto tr875;
+		} else if ( (*p) >= 33 )
+			goto tr875;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 92 ) {
+			if ( 94 <= (*p) && (*p) <= 126 )
+				goto tr875;
+		} else if ( (*p) >= 63 )
+			goto tr875;
+	} else
 		goto tr878;
 	goto tr805;
 case 632:
 	switch( (*p) ) {
 		case 43: goto tr879;
-		case 59: goto tr879;
 		case 92: goto tr879;
 	}
 	if ( (*p) < 45 ) {
@@ -5994,7 +6020,7 @@ case 632:
 				goto tr879;
 		} else if ( (*p) >= 33 )
 			goto tr879;
-	} else if ( (*p) > 57 ) {
+	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
 				goto tr879;
@@ -6006,14 +6032,13 @@ case 632:
 case 633:
 	switch( (*p) ) {
 		case 43: goto tr879;
-		case 59: goto tr879;
 		case 62: goto tr880;
 		case 92: goto tr879;
 	}
 	if ( (*p) < 45 ) {
 		if ( 33 <= (*p) && (*p) <= 41 )
 			goto tr879;
-	} else if ( (*p) > 57 ) {
+	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
 				goto tr879;
@@ -6024,107 +6049,104 @@ case 633:
 	goto tr805;
 case 634:
 	if ( (*p) == 58 )
-		goto tr877;
+		goto tr881;
 	goto tr805;
 case 635:
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto tr882;
+	goto tr805;
+case 636:
+	if ( (*p) == 91 )
+		goto tr871;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto tr882;
+	goto tr805;
+case 637:
 	switch( (*p) ) {
-		case 43: goto tr881;
-		case 59: goto tr881;
-		case 60: goto tr882;
-		case 92: goto tr881;
+		case 43: goto tr883;
+		case 60: goto tr884;
+		case 92: goto tr883;
 	}
 	if ( (*p) < 45 ) {
 		if ( (*p) > 34 ) {
 			if ( 36 <= (*p) && (*p) <= 41 )
-				goto tr881;
+				goto tr883;
 		} else if ( (*p) >= 33 )
-			goto tr881;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 94 <= (*p) && (*p) <= 126 )
-				goto tr881;
-		} else if ( (*p) >= 63 )
-			goto tr881;
-	} else
-		goto tr881;
-	goto tr805;
-case 636:
-	switch( (*p) ) {
-		case 43: goto tr881;
-		case 58: goto tr883;
-		case 92: goto tr881;
-	}
-	if ( (*p) < 45 ) {
-		if ( 33 <= (*p) && (*p) <= 41 )
-			goto tr881;
+			goto tr883;
 	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
-				goto tr881;
+				goto tr883;
 		} else if ( (*p) >= 63 )
-			goto tr881;
+			goto tr883;
 	} else
-		goto tr881;
-	goto tr805;
-case 637:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto tr884;
+		goto tr883;
 	goto tr805;
 case 638:
-	if ( (*p) == 93 )
-		goto tr871;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto tr884;
-	goto tr805;
-case 639:
 	switch( (*p) ) {
-		case 43: goto tr885;
-		case 59: goto tr885;
-		case 92: goto tr885;
-	}
-	if ( (*p) < 45 ) {
-		if ( (*p) > 34 ) {
-			if ( 36 <= (*p) && (*p) <= 41 )
-				goto tr885;
-		} else if ( (*p) >= 33 )
-			goto tr885;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 94 <= (*p) && (*p) <= 126 )
-				goto tr885;
-		} else if ( (*p) >= 63 )
-			goto tr885;
-	} else
-		goto tr885;
-	goto tr805;
-case 640:
-	switch( (*p) ) {
-		case 43: goto tr885;
-		case 59: goto tr885;
-		case 62: goto tr886;
-		case 92: goto tr885;
+		case 43: goto tr883;
+		case 58: goto tr885;
+		case 92: goto tr883;
 	}
 	if ( (*p) < 45 ) {
 		if ( 33 <= (*p) && (*p) <= 41 )
-			goto tr885;
+			goto tr883;
+	} else if ( (*p) > 59 ) {
+		if ( (*p) > 90 ) {
+			if ( 94 <= (*p) && (*p) <= 126 )
+				goto tr883;
+		} else if ( (*p) >= 63 )
+			goto tr883;
+	} else
+		goto tr883;
+	goto tr805;
+case 639:
+	switch( (*p) ) {
+		case 43: goto tr883;
+		case 58: goto tr885;
+		case 59: goto tr883;
+		case 92: goto tr883;
+	}
+	if ( (*p) < 48 ) {
+		if ( (*p) > 41 ) {
+			if ( 45 <= (*p) && (*p) <= 47 )
+				goto tr883;
+		} else if ( (*p) >= 33 )
+			goto tr883;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
-				goto tr885;
+				goto tr883;
 		} else if ( (*p) >= 63 )
-			goto tr885;
+			goto tr883;
 	} else
-		goto tr885;
+		goto tr886;
+	goto tr805;
+case 640:
+	switch( (*p) ) {
+		case 43: goto tr883;
+		case 58: goto tr885;
+		case 59: goto tr883;
+		case 93: goto tr871;
+	}
+	if ( (*p) < 48 ) {
+		if ( (*p) > 41 ) {
+			if ( 45 <= (*p) && (*p) <= 47 )
+				goto tr883;
+		} else if ( (*p) >= 33 )
+			goto tr883;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 92 <= (*p) && (*p) <= 126 )
+				goto tr883;
+		} else if ( (*p) >= 63 )
+			goto tr883;
+	} else
+		goto tr886;
 	goto tr805;
 case 641:
-	if ( (*p) == 58 )
-		goto tr883;
-	goto tr805;
-case 642:
 	switch( (*p) ) {
 		case 43: goto tr887;
-		case 59: goto tr887;
-		case 60: goto tr888;
 		case 92: goto tr887;
 	}
 	if ( (*p) < 45 ) {
@@ -6133,7 +6155,25 @@ case 642:
 				goto tr887;
 		} else if ( (*p) >= 33 )
 			goto tr887;
-	} else if ( (*p) > 57 ) {
+	} else if ( (*p) > 59 ) {
+		if ( (*p) > 90 ) {
+			if ( 94 <= (*p) && (*p) <= 126 )
+				goto tr887;
+		} else if ( (*p) >= 63 )
+			goto tr887;
+	} else
+		goto tr887;
+	goto tr805;
+case 642:
+	switch( (*p) ) {
+		case 43: goto tr887;
+		case 62: goto tr888;
+		case 92: goto tr887;
+	}
+	if ( (*p) < 45 ) {
+		if ( 33 <= (*p) && (*p) <= 41 )
+			goto tr887;
+	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
 				goto tr887;
@@ -6143,172 +6183,290 @@ case 642:
 		goto tr887;
 	goto tr805;
 case 643:
-	switch( (*p) ) {
-		case 43: goto tr887;
-		case 58: goto tr889;
-		case 92: goto tr887;
-	}
-	if ( (*p) < 45 ) {
-		if ( 33 <= (*p) && (*p) <= 41 )
-			goto tr887;
-	} else if ( (*p) > 59 ) {
-		if ( (*p) > 90 ) {
-			if ( 94 <= (*p) && (*p) <= 126 )
-				goto tr887;
-		} else if ( (*p) >= 63 )
-			goto tr887;
-	} else
-		goto tr887;
+	if ( (*p) == 58 )
+		goto tr889;
 	goto tr805;
 case 644:
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr890;
 	goto tr805;
 case 645:
-	if ( (*p) == 91 )
-		goto tr891;
+	if ( (*p) == 93 )
+		goto tr871;
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr890;
 	goto tr805;
 case 646:
 	switch( (*p) ) {
-		case 43: goto tr892;
-		case 59: goto tr892;
-		case 92: goto tr892;
+		case 43: goto tr891;
+		case 60: goto tr892;
+		case 92: goto tr891;
 	}
 	if ( (*p) < 45 ) {
 		if ( (*p) > 34 ) {
 			if ( 36 <= (*p) && (*p) <= 41 )
-				goto tr892;
+				goto tr891;
 		} else if ( (*p) >= 33 )
-			goto tr892;
-	} else if ( (*p) > 57 ) {
+			goto tr891;
+	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
-				goto tr892;
+				goto tr891;
 		} else if ( (*p) >= 63 )
-			goto tr892;
+			goto tr891;
 	} else
-		goto tr892;
+		goto tr891;
 	goto tr805;
 case 647:
 	switch( (*p) ) {
-		case 43: goto tr892;
-		case 59: goto tr892;
-		case 62: goto tr893;
-		case 92: goto tr892;
+		case 43: goto tr891;
+		case 58: goto tr893;
+		case 92: goto tr891;
 	}
 	if ( (*p) < 45 ) {
 		if ( 33 <= (*p) && (*p) <= 41 )
-			goto tr892;
+			goto tr891;
+	} else if ( (*p) > 59 ) {
+		if ( (*p) > 90 ) {
+			if ( 94 <= (*p) && (*p) <= 126 )
+				goto tr891;
+		} else if ( (*p) >= 63 )
+			goto tr891;
+	} else
+		goto tr891;
+	goto tr805;
+case 648:
+	switch( (*p) ) {
+		case 43: goto tr891;
+		case 58: goto tr893;
+		case 59: goto tr891;
+		case 92: goto tr891;
+	}
+	if ( (*p) < 48 ) {
+		if ( (*p) > 41 ) {
+			if ( 45 <= (*p) && (*p) <= 47 )
+				goto tr891;
+		} else if ( (*p) >= 33 )
+			goto tr891;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
-				goto tr892;
+				goto tr891;
 		} else if ( (*p) >= 63 )
-			goto tr892;
+			goto tr891;
 	} else
-		goto tr892;
-	goto tr805;
-case 648:
-	if ( (*p) == 58 )
-		goto tr889;
+		goto tr894;
 	goto tr805;
 case 649:
 	switch( (*p) ) {
-		case 43: goto tr894;
-		case 59: goto tr894;
-		case 60: goto tr895;
-		case 92: goto tr894;
+		case 43: goto tr891;
+		case 58: goto tr893;
+		case 59: goto tr891;
+		case 91: goto tr895;
 	}
-	if ( (*p) < 45 ) {
-		if ( (*p) > 34 ) {
-			if ( 36 <= (*p) && (*p) <= 41 )
-				goto tr894;
+	if ( (*p) < 48 ) {
+		if ( (*p) > 41 ) {
+			if ( 45 <= (*p) && (*p) <= 47 )
+				goto tr891;
 		} else if ( (*p) >= 33 )
-			goto tr894;
+			goto tr891;
 	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
+		if ( (*p) > 92 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
-				goto tr894;
+				goto tr891;
 		} else if ( (*p) >= 63 )
-			goto tr894;
+			goto tr891;
 	} else
 		goto tr894;
 	goto tr805;
 case 650:
 	switch( (*p) ) {
-		case 43: goto tr894;
-		case 58: goto tr896;
-		case 92: goto tr894;
-	}
-	if ( (*p) < 45 ) {
-		if ( 33 <= (*p) && (*p) <= 41 )
-			goto tr894;
-	} else if ( (*p) > 59 ) {
-		if ( (*p) > 90 ) {
-			if ( 94 <= (*p) && (*p) <= 126 )
-				goto tr894;
-		} else if ( (*p) >= 63 )
-			goto tr894;
-	} else
-		goto tr894;
-	goto tr805;
-case 651:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto tr897;
-	goto tr805;
-case 652:
-	if ( (*p) == 93 )
-		goto tr891;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto tr897;
-	goto tr805;
-case 653:
-	switch( (*p) ) {
-		case 43: goto tr898;
-		case 59: goto tr898;
-		case 92: goto tr898;
+		case 43: goto tr896;
+		case 92: goto tr896;
 	}
 	if ( (*p) < 45 ) {
 		if ( (*p) > 34 ) {
 			if ( 36 <= (*p) && (*p) <= 41 )
-				goto tr898;
+				goto tr896;
 		} else if ( (*p) >= 33 )
-			goto tr898;
-	} else if ( (*p) > 57 ) {
+			goto tr896;
+	} else if ( (*p) > 59 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
-				goto tr898;
+				goto tr896;
 		} else if ( (*p) >= 63 )
-			goto tr898;
+			goto tr896;
 	} else
-		goto tr898;
+		goto tr896;
 	goto tr805;
-case 654:
+case 651:
 	switch( (*p) ) {
-		case 43: goto tr898;
-		case 59: goto tr898;
-		case 62: goto tr899;
-		case 92: goto tr898;
+		case 43: goto tr896;
+		case 62: goto tr897;
+		case 92: goto tr896;
 	}
 	if ( (*p) < 45 ) {
 		if ( 33 <= (*p) && (*p) <= 41 )
-			goto tr898;
+			goto tr896;
+	} else if ( (*p) > 59 ) {
+		if ( (*p) > 90 ) {
+			if ( 94 <= (*p) && (*p) <= 126 )
+				goto tr896;
+		} else if ( (*p) >= 63 )
+			goto tr896;
+	} else
+		goto tr896;
+	goto tr805;
+case 652:
+	if ( (*p) == 58 )
+		goto tr898;
+	goto tr805;
+case 653:
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto tr899;
+	goto tr805;
+case 654:
+	if ( (*p) == 91 )
+		goto tr895;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto tr899;
+	goto tr805;
+case 655:
+	switch( (*p) ) {
+		case 43: goto tr900;
+		case 60: goto tr901;
+		case 92: goto tr900;
+	}
+	if ( (*p) < 45 ) {
+		if ( (*p) > 34 ) {
+			if ( 36 <= (*p) && (*p) <= 41 )
+				goto tr900;
+		} else if ( (*p) >= 33 )
+			goto tr900;
+	} else if ( (*p) > 59 ) {
+		if ( (*p) > 90 ) {
+			if ( 94 <= (*p) && (*p) <= 126 )
+				goto tr900;
+		} else if ( (*p) >= 63 )
+			goto tr900;
+	} else
+		goto tr900;
+	goto tr805;
+case 656:
+	switch( (*p) ) {
+		case 43: goto tr900;
+		case 58: goto tr902;
+		case 92: goto tr900;
+	}
+	if ( (*p) < 45 ) {
+		if ( 33 <= (*p) && (*p) <= 41 )
+			goto tr900;
+	} else if ( (*p) > 59 ) {
+		if ( (*p) > 90 ) {
+			if ( 94 <= (*p) && (*p) <= 126 )
+				goto tr900;
+		} else if ( (*p) >= 63 )
+			goto tr900;
+	} else
+		goto tr900;
+	goto tr805;
+case 657:
+	switch( (*p) ) {
+		case 43: goto tr900;
+		case 58: goto tr902;
+		case 59: goto tr900;
+		case 92: goto tr900;
+	}
+	if ( (*p) < 48 ) {
+		if ( (*p) > 41 ) {
+			if ( 45 <= (*p) && (*p) <= 47 )
+				goto tr900;
+		} else if ( (*p) >= 33 )
+			goto tr900;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
 			if ( 94 <= (*p) && (*p) <= 126 )
-				goto tr898;
+				goto tr900;
 		} else if ( (*p) >= 63 )
-			goto tr898;
+			goto tr900;
 	} else
-		goto tr898;
+		goto tr903;
 	goto tr805;
-case 655:
+case 658:
+	switch( (*p) ) {
+		case 43: goto tr900;
+		case 58: goto tr902;
+		case 59: goto tr900;
+		case 93: goto tr895;
+	}
+	if ( (*p) < 48 ) {
+		if ( (*p) > 41 ) {
+			if ( 45 <= (*p) && (*p) <= 47 )
+				goto tr900;
+		} else if ( (*p) >= 33 )
+			goto tr900;
+	} else if ( (*p) > 57 ) {
+		if ( (*p) > 90 ) {
+			if ( 92 <= (*p) && (*p) <= 126 )
+				goto tr900;
+		} else if ( (*p) >= 63 )
+			goto tr900;
+	} else
+		goto tr903;
+	goto tr805;
+case 659:
+	switch( (*p) ) {
+		case 43: goto tr904;
+		case 92: goto tr904;
+	}
+	if ( (*p) < 45 ) {
+		if ( (*p) > 34 ) {
+			if ( 36 <= (*p) && (*p) <= 41 )
+				goto tr904;
+		} else if ( (*p) >= 33 )
+			goto tr904;
+	} else if ( (*p) > 59 ) {
+		if ( (*p) > 90 ) {
+			if ( 94 <= (*p) && (*p) <= 126 )
+				goto tr904;
+		} else if ( (*p) >= 63 )
+			goto tr904;
+	} else
+		goto tr904;
+	goto tr805;
+case 660:
+	switch( (*p) ) {
+		case 43: goto tr904;
+		case 62: goto tr905;
+		case 92: goto tr904;
+	}
+	if ( (*p) < 45 ) {
+		if ( 33 <= (*p) && (*p) <= 41 )
+			goto tr904;
+	} else if ( (*p) > 59 ) {
+		if ( (*p) > 90 ) {
+			if ( 94 <= (*p) && (*p) <= 126 )
+				goto tr904;
+		} else if ( (*p) >= 63 )
+			goto tr904;
+	} else
+		goto tr904;
+	goto tr805;
+case 661:
 	if ( (*p) == 58 )
-		goto tr896;
+		goto tr906;
 	goto tr805;
-case 656:
+case 662:
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto tr907;
+	goto tr805;
+case 663:
+	if ( (*p) == 93 )
+		goto tr895;
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto tr907;
+	goto tr805;
+case 664:
 	switch( (*p) ) {
 		case 9: goto tr812;
 		case 65: goto tr867;
@@ -6323,29 +6481,29 @@ case 656:
 		case 116: goto tr867;
 	}
 	goto tr805;
-case 657:
+case 665:
 	if ( (*p) == 10 )
-		goto tr900;
+		goto tr908;
 	goto tr774;
-case 658:
+case 666:
 	if ( (*p) == 10 )
-		goto tr901;
+		goto tr909;
 	goto tr0;
-case 659:
+case 667:
 	switch( (*p) ) {
-		case 10: goto tr903;
-		case 13: goto tr904;
+		case 10: goto tr911;
+		case 13: goto tr912;
 	}
-	goto tr902;
-case 672:
+	goto tr910;
+case 680:
 	goto tr788;
-case 660:
+case 668:
 	switch( (*p) ) {
-		case 10: goto tr906;
-		case 13: goto tr907;
+		case 10: goto tr914;
+		case 13: goto tr915;
 	}
-	goto tr905;
-case 673:
+	goto tr913;
+case 681:
 	goto tr788;
 	}
 
@@ -6415,8 +6573,8 @@ case 673:
 	tr850: cs = 0; goto f117;
 	tr852: cs = 0; goto f119;
 	tr858: cs = 0; goto f121;
-	tr908: cs = 0; goto f125;
-	tr915: cs = 0; goto f129;
+	tr916: cs = 0; goto f125;
+	tr923: cs = 0; goto f129;
 	tr1: cs = 2; goto _again;
 	tr2: cs = 3; goto _again;
 	tr3: cs = 4; goto _again;
@@ -6437,7 +6595,7 @@ case 673:
 	tr19: cs = 19; goto f3;
 	tr20: cs = 20; goto f3;
 	tr21: cs = 21; goto f3;
-	tr901: cs = 22; goto _again;
+	tr909: cs = 22; goto _again;
 	tr22: cs = 22; goto f4;
 	tr25: cs = 23; goto _again;
 	tr27: cs = 24; goto _again;
@@ -7148,11 +7306,11 @@ case 673:
 	tr783: cs = 575; goto f101;
 	tr782: cs = 576; goto f2;
 	tr786: cs = 576; goto f3;
-	tr914: cs = 577; goto f85;
-	tr910: cs = 577; goto f126;
-	tr920: cs = 578; goto f2;
+	tr922: cs = 577; goto f85;
+	tr918: cs = 577; goto f126;
+	tr928: cs = 578; goto f2;
 	tr791: cs = 578; goto f3;
-	tr911: cs = 578; goto f127;
+	tr919: cs = 578; goto f127;
 	tr790: cs = 579; goto f104;
 	tr849: cs = 579; goto f116;
 	tr793: cs = 580; goto f2;
@@ -7178,23 +7336,23 @@ case 673:
 	tr830: cs = 592; goto f3;
 	tr831: cs = 593; goto f104;
 	tr841: cs = 594; goto f14;
-	tr916: cs = 594; goto f104;
+	tr924: cs = 594; goto f104;
 	tr838: cs = 595; goto f2;
 	tr840: cs = 595; goto f3;
 	tr839: cs = 596; goto f104;
-	tr921: cs = 597; goto _again;
-	tr912: cs = 597; goto f124;
+	tr929: cs = 597; goto _again;
+	tr920: cs = 597; goto f124;
 	tr846: cs = 598; goto f2;
 	tr847: cs = 598; goto f3;
 	tr848: cs = 599; goto f14;
-	tr918: cs = 600; goto f130;
-	tr919: cs = 601; goto f3;
+	tr926: cs = 600; goto f130;
+	tr927: cs = 601; goto f3;
 	tr835: cs = 602; goto f2;
 	tr854: cs = 603; goto f3;
 	tr855: cs = 604; goto f3;
 	tr856: cs = 605; goto f3;
-	tr925: cs = 606; goto f14;
-	tr926: cs = 607; goto f3;
+	tr933: cs = 606; goto f14;
+	tr934: cs = 607; goto f3;
 	tr832: cs = 608; goto f14;
 	tr827: cs = 609; goto f2;
 	tr823: cs = 610; goto f3;
@@ -7211,7 +7369,7 @@ case 673:
 	tr865: cs = 619; goto f3;
 	tr813: cs = 620; goto f14;
 	tr866: cs = 621; goto f2;
-	tr891: cs = 621; goto f3;
+	tr895: cs = 621; goto f3;
 	tr867: cs = 622; goto f3;
 	tr808: cs = 623; goto f2;
 	tr868: cs = 624; goto f3;
@@ -7226,57 +7384,65 @@ case 673:
 	tr876: cs = 632; goto f3;
 	tr879: cs = 633; goto f3;
 	tr880: cs = 634; goto f3;
-	tr874: cs = 635; goto f3;
-	tr881: cs = 636; goto f3;
-	tr883: cs = 637; goto f3;
-	tr884: cs = 638; goto f3;
-	tr882: cs = 639; goto f3;
-	tr885: cs = 640; goto f3;
-	tr886: cs = 641; goto f3;
-	tr810: cs = 642; goto f2;
-	tr887: cs = 643; goto f3;
+	tr881: cs = 635; goto f3;
+	tr882: cs = 636; goto f3;
+	tr874: cs = 637; goto f3;
+	tr883: cs = 638; goto f3;
+	tr885: cs = 639; goto f3;
+	tr886: cs = 640; goto f3;
+	tr884: cs = 641; goto f3;
+	tr887: cs = 642; goto f3;
+	tr888: cs = 643; goto f3;
 	tr889: cs = 644; goto f3;
 	tr890: cs = 645; goto f3;
-	tr888: cs = 646; goto f3;
-	tr892: cs = 647; goto f3;
+	tr810: cs = 646; goto f2;
+	tr891: cs = 647; goto f3;
 	tr893: cs = 648; goto f3;
-	tr811: cs = 649; goto f2;
-	tr894: cs = 650; goto f3;
+	tr894: cs = 649; goto f3;
+	tr892: cs = 650; goto f3;
 	tr896: cs = 651; goto f3;
 	tr897: cs = 652; goto f3;
-	tr895: cs = 653; goto f3;
-	tr898: cs = 654; goto f3;
-	tr899: cs = 655; goto f3;
-	tr807: cs = 656; goto f2;
-	tr773: cs = 657; goto f98;
-	tr785: cs = 657; goto f102;
-	tr23: cs = 658; goto f4;
-	tr902: cs = 659; goto _again;
-	tr904: cs = 659; goto f85;
-	tr905: cs = 660; goto _again;
-	tr907: cs = 660; goto f85;
-	tr900: cs = 661; goto _again;
-	tr772: cs = 661; goto f98;
-	tr784: cs = 661; goto f102;
-	tr787: cs = 662; goto _again;
-	tr913: cs = 662; goto f85;
-	tr909: cs = 662; goto f126;
-	tr834: cs = 663; goto f2;
-	tr843: cs = 664; goto f2;
-	tr853: cs = 664; goto f3;
-	tr851: cs = 665; goto _again;
-	tr917: cs = 665; goto f130;
-	tr844: cs = 666; goto f2;
-	tr923: cs = 666; goto f3;
-	tr922: cs = 667; goto f3;
-	tr845: cs = 668; goto f2;
-	tr924: cs = 668; goto f3;
-	tr857: cs = 669; goto f3;
-	tr836: cs = 670; goto f2;
-	tr927: cs = 670; goto f3;
-	tr859: cs = 671; goto f3;
-	tr903: cs = 672; goto f122;
-	tr906: cs = 673; goto f123;
+	tr898: cs = 653; goto f3;
+	tr899: cs = 654; goto f3;
+	tr811: cs = 655; goto f2;
+	tr900: cs = 656; goto f3;
+	tr902: cs = 657; goto f3;
+	tr903: cs = 658; goto f3;
+	tr901: cs = 659; goto f3;
+	tr904: cs = 660; goto f3;
+	tr905: cs = 661; goto f3;
+	tr906: cs = 662; goto f3;
+	tr907: cs = 663; goto f3;
+	tr807: cs = 664; goto f2;
+	tr773: cs = 665; goto f98;
+	tr785: cs = 665; goto f102;
+	tr23: cs = 666; goto f4;
+	tr910: cs = 667; goto _again;
+	tr912: cs = 667; goto f85;
+	tr913: cs = 668; goto _again;
+	tr915: cs = 668; goto f85;
+	tr908: cs = 669; goto _again;
+	tr772: cs = 669; goto f98;
+	tr784: cs = 669; goto f102;
+	tr787: cs = 670; goto _again;
+	tr921: cs = 670; goto f85;
+	tr917: cs = 670; goto f126;
+	tr834: cs = 671; goto f2;
+	tr843: cs = 672; goto f2;
+	tr853: cs = 672; goto f3;
+	tr851: cs = 673; goto _again;
+	tr925: cs = 673; goto f130;
+	tr844: cs = 674; goto f2;
+	tr931: cs = 674; goto f3;
+	tr930: cs = 675; goto f3;
+	tr845: cs = 676; goto f2;
+	tr932: cs = 676; goto f3;
+	tr857: cs = 677; goto f3;
+	tr836: cs = 678; goto f2;
+	tr935: cs = 678; goto f3;
+	tr859: cs = 679; goto f3;
+	tr911: cs = 680; goto f122;
+	tr914: cs = 681; goto f123;
 
 	f17: _acts = _vcf_v44_actions + 1; goto execFuncs;
 	f3: _acts = _vcf_v44_actions + 3; goto execFuncs;
@@ -7445,14 +7611,14 @@ execFuncs:
 #line 60 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 6:
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 7:
@@ -7477,14 +7643,14 @@ execFuncs:
           ErrorPolicy::handle_warning(*this, warn);
         }
         
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 9:
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 10:
@@ -7494,7 +7660,7 @@ execFuncs:
           ParsePolicy::handle_fileformat(*this);
         } catch (Error *error) {
           ErrorPolicy::handle_error(*this, error);
-          p--; {cs = 659;goto _again;}
+          p--; {cs = 667;goto _again;}
         }
     }
 	break;
@@ -7689,7 +7855,7 @@ execFuncs:
 #line 259 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 37:
@@ -7697,140 +7863,140 @@ execFuncs:
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines,
                "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV" + (source->version < Version::v44 ? std::string("/BND") : std::string("")) + " and suffixed by ':' and a text sequence"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 38:
 #line 271 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 39:
 #line 277 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 40:
 #line 283 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 41:
 #line 289 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 42:
 #line 300 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 43:
 #line 305 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not Integer, Float, Flag, Character or String"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 44:
 #line 311 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 45:
 #line 316 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Original is not valid"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 46:
 #line 321 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Father or Mother is not valid"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 47:
 #line 326 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata sequence of Name_N is not valid"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 48:
 #line 332 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 49:
 #line 338 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 50:
 #line 343 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Number is not a dot"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 51:
 #line 348 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Type is not String"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 52:
 #line 353 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Values is not a square-bracket delimited list of values"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 53:
 #line 359 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 54:
 #line 375 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 55:
 #line 380 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 56:
 #line 385 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 57:
@@ -7846,77 +8012,77 @@ execFuncs:
           ErrorPolicy::handle_warning(*this, warn);
         }
         
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 58:
 #line 408 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new ChromosomeBodyError{n_lines});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 59:
 #line 414 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new PositionBodyError{n_lines});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 60:
 #line 420 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new IdBodyError{n_lines});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 61:
 #line 426 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new ReferenceAlleleBodyError{n_lines});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 62:
 #line 432 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new AlternateAllelesBodyError{n_lines});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 63:
 #line 438 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new QualityBodyError{n_lines});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 64:
 #line 444 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FilterBodyError{n_lines});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 65:
 #line 450 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 66:
 #line 455 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 67:
 #line 460 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 68:
@@ -7925,7 +8091,7 @@ execFuncs:
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
         ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 69:
@@ -7934,7 +8100,7 @@ execFuncs:
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
         ErrorPolicy::handle_error(*this, new SamplesFieldBodyError{n_lines, message_stream.str(), "", "GT"});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 70:
@@ -7942,28 +8108,28 @@ execFuncs:
 	{
         ErrorPolicy::handle_error(*this,
                 new FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.4'"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 71:
 #line 36 "src/vcf/vcf_v44.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G or dot"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 72:
 #line 42 "src/vcf/vcf_v44.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Number is not a number, A, R, G or dot"});
-        p--; {cs = 659;goto _again;}
+        p--; {cs = 667;goto _again;}
     }
 	break;
 	case 73:
 #line 50 "src/vcf/vcf_v44.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FormatBodyError{n_lines, "Format does not start with a letter/underscore followed by alphanumeric/underscore/dot characters"});
-        p--; {cs = 660;goto _again;}
+        p--; {cs = 668;goto _again;}
     }
 	break;
 	case 75:
@@ -7972,9 +8138,9 @@ execFuncs:
 	break;
 	case 76:
 #line 262 "src/vcf/vcf_v44.ragel"
-	{ {cs = 665;goto _again;} }
+	{ {cs = 673;goto _again;} }
 	break;
-#line 7978 "inc/vcf/validator_detail_v44.hpp"
+#line 8144 "inc/vcf/validator_detail_v44.hpp"
 		}
 	}
 	goto _again;
@@ -8001,7 +8167,7 @@ _again:
 #line 60 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FileformatError{n_lines});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8010,7 +8176,7 @@ goto _again;}
 #line 65 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8037,7 +8203,7 @@ goto _again;}
           ErrorPolicy::handle_warning(*this, warn);
         }
         
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8046,7 +8212,7 @@ goto _again;}
 #line 91 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8096,7 +8262,7 @@ goto _again;}
 #line 259 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in ALT metadata"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8106,7 +8272,7 @@ goto _again;}
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines,
                "ALT metadata ID is not prefixed by DEL/INS/DUP/INV/CNV" + (source->version < Version::v44 ? std::string("/BND") : std::string("")) + " and suffixed by ':' and a text sequence"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8115,7 +8281,7 @@ goto _again;}
 #line 271 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in assembly metadata"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8124,7 +8290,7 @@ goto _again;}
 #line 277 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in contig metadata"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8133,7 +8299,7 @@ goto _again;}
 #line 283 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FILTER metadata"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8142,7 +8308,7 @@ goto _again;}
 #line 289 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in FORMAT metadata"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8151,7 +8317,7 @@ goto _again;}
 #line 300 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in INFO metadata"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8160,7 +8326,7 @@ goto _again;}
 #line 305 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Type is not Integer, Float, Flag, Character or String"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8169,7 +8335,7 @@ goto _again;}
 #line 311 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in PEDIGREE metadata"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8178,7 +8344,7 @@ goto _again;}
 #line 316 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Original is not valid"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8187,7 +8353,7 @@ goto _again;}
 #line 321 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata Father or Mother is not valid"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8196,7 +8362,7 @@ goto _again;}
 #line 326 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "PEDIGREE metadata sequence of Name_N is not valid"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8205,7 +8371,7 @@ goto _again;}
 #line 332 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in pedigreeDB metadata"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8214,7 +8380,7 @@ goto _again;}
 #line 338 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in META metadata"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8223,7 +8389,7 @@ goto _again;}
 #line 343 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Number is not a dot"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8232,7 +8398,7 @@ goto _again;}
 #line 348 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Type is not String"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8241,7 +8407,7 @@ goto _again;}
 #line 353 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "META metadata Values is not a square-bracket delimited list of values"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8250,7 +8416,7 @@ goto _again;}
 #line 359 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Error in SAMPLE metadata"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8259,7 +8425,7 @@ goto _again;}
 #line 375 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8268,7 +8434,7 @@ goto _again;}
 #line 380 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata description string is not valid"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8277,7 +8443,7 @@ goto _again;}
 #line 385 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata URL is not valid"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8295,7 +8461,7 @@ goto _again;}
           ErrorPolicy::handle_warning(*this, warn);
         }
         
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8304,7 +8470,7 @@ goto _again;}
 #line 408 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new ChromosomeBodyError{n_lines});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8313,7 +8479,7 @@ goto _again;}
 #line 414 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new PositionBodyError{n_lines});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8322,7 +8488,7 @@ goto _again;}
 #line 420 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new IdBodyError{n_lines});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8331,7 +8497,7 @@ goto _again;}
 #line 426 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new ReferenceAlleleBodyError{n_lines});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8340,7 +8506,7 @@ goto _again;}
 #line 432 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new AlternateAllelesBodyError{n_lines});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8349,7 +8515,7 @@ goto _again;}
 #line 438 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new QualityBodyError{n_lines});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8358,7 +8524,7 @@ goto _again;}
 #line 444 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FilterBodyError{n_lines});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8367,7 +8533,7 @@ goto _again;}
 #line 450 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info is not a single dot or a semicolon-separated list of key-value pairs"});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8376,7 +8542,7 @@ goto _again;}
 #line 455 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info key is not a sequence of alphanumeric and/or punctuation characters"});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8385,7 +8551,7 @@ goto _again;}
 #line 460 "src/vcf/vcf.ragel"
 	{
         ErrorPolicy::handle_error(*this, new InfoBodyError{n_lines, "Info field value is not a comma-separated list of valid strings (maybe it contains whitespaces?)"});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8396,7 +8562,7 @@ goto _again;}
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " is not a valid string";
         ErrorPolicy::handle_error(*this, new SamplesBodyError{n_lines, message_stream.str()});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8407,7 +8573,7 @@ goto _again;}
         std::ostringstream message_stream;
         message_stream << "Sample #" << (n_columns - 9) << " does not start with a valid genotype";
         ErrorPolicy::handle_error(*this, new SamplesFieldBodyError{n_lines, message_stream.str(), "", "GT"});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8417,7 +8583,7 @@ goto _again;}
 	{
         ErrorPolicy::handle_error(*this,
                 new FileformatError{n_lines, "The fileformat declaration is not 'fileformat=VCFv4.4'"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8426,7 +8592,7 @@ goto _again;}
 #line 36 "src/vcf/vcf_v44.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G or dot"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8435,7 +8601,7 @@ goto _again;}
 #line 42 "src/vcf/vcf_v44.ragel"
 	{
         ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "INFO metadata Number is not a number, A, R, G or dot"});
-        p--; {cs = 659;	if ( p == pe )
+        p--; {cs = 667;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8444,7 +8610,7 @@ goto _again;}
 #line 50 "src/vcf/vcf_v44.ragel"
 	{
         ErrorPolicy::handle_error(*this, new FormatBodyError{n_lines, "Format does not start with a letter/underscore followed by alphanumeric/underscore/dot characters"});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
@@ -8453,12 +8619,12 @@ goto _again;}
 #line 55 "src/vcf/vcf_v44.ragel"
 	{
         ErrorPolicy::handle_error(*this, new BodySectionError{n_lines, "There is no newline at the end of the file"});
-        p--; {cs = 660;	if ( p == pe )
+        p--; {cs = 668;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
     }
 	break;
-#line 8462 "inc/vcf/validator_detail_v44.hpp"
+#line 8628 "inc/vcf/validator_detail_v44.hpp"
 		}
 	}
 	}
