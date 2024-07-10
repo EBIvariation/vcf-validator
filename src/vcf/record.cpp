@@ -1003,8 +1003,8 @@ namespace ebi
                     + " is not one of [A, R, G, ., <non-negative number>]"));
         }
         if(!values.empty()) {
-            if (values.front() == MISSING_VALUE) { return; } // No need to check missing data
-        } //TODO, if the 1st one is . then check stops; svclaim=.,DJ worked!
+            if (values.front() == MISSING_VALUE && values.size() == 1) { return; } // No need to check missing data
+        }
 
         bool number_matches = true;
         if (expected_cardinality > 0) {

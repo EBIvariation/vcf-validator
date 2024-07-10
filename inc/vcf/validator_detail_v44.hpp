@@ -17,7 +17,7 @@
  */
 
 
-#line 263 "src/vcf/vcf_v44.ragel"
+#line 268 "src/vcf/vcf_v44.ragel"
 
 
 namespace
@@ -185,7 +185,7 @@ static const int vcf_v44_en_meta_section_skip = 667;
 static const int vcf_v44_en_body_section_skip = 668;
 
 
-#line 269 "src/vcf/vcf_v44.ragel"
+#line 274 "src/vcf/vcf_v44.ragel"
 
 }
 
@@ -204,7 +204,7 @@ namespace ebi
 	cs = vcf_v44_start;
 	}
 
-#line 283 "src/vcf/vcf_v44.ragel"
+#line 288 "src/vcf/vcf_v44.ragel"
 
     }
 
@@ -8133,11 +8133,11 @@ execFuncs:
     }
 	break;
 	case 75:
-#line 261 "src/vcf/vcf_v44.ragel"
+#line 266 "src/vcf/vcf_v44.ragel"
 	{ {cs = 28;goto _again;} }
 	break;
 	case 76:
-#line 262 "src/vcf/vcf_v44.ragel"
+#line 267 "src/vcf/vcf_v44.ragel"
 	{ {cs = 673;goto _again;} }
 	break;
 #line 8144 "inc/vcf/validator_detail_v44.hpp"
@@ -8632,7 +8632,7 @@ goto _again;}
 	_out: {}
 	}
 
-#line 291 "src/vcf/vcf_v44.ragel"
+#line 296 "src/vcf/vcf_v44.ragel"
 
     }
     

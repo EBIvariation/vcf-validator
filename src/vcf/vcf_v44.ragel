@@ -222,7 +222,12 @@
     ## Accepting non-alphanumeric characters is an addition in v4.3, but widely used in already existing files
     format_value    = ( (alpha | '_') (alnum | '_' | '.' | '%')* ) >token_begin $token_middle %token_end ;
     record_format   = format_value (':' format_value)* ;
-    
+
+    ## NOTE: The genotype definition shows the format in which it is expected but won't get enforced from ragel
+    ## as sample_values is a super set of genotype and other chars. Invalid genotypes successfully passes through
+    ## ragel checks. The validation of genotype takes place in c++ code and not in ragel space.
+    ## Same is applicable for older version as well.
+
     ## In a sample, if a genotype is present it must be the first field
     record_sample   = (
                         genotype $eof(no_newline_at_eof_error) $err(genotype_error) (':' sample_values)? |
