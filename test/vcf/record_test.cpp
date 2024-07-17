@@ -150,9 +150,10 @@ namespace ebi
                             vcf::ChromosomeBodyError*);
         }
 
-        SECTION("Chromosome with colons") 
+        // Chromosome with colons are allowed
+        SECTION("Chromosome with colons")
         {
-            CHECK_THROWS_AS( (vcf::Record{
+             CHECK_NOTHROW( (vcf::Record{
                                 1,
                                 "chr:1", 
                                 123456, 
@@ -164,8 +165,7 @@ namespace ebi
                                 { {vcf::AN, "12"}, {vcf::AF, "0.5,0.3"} }, 
                                 { vcf::GT, vcf::DP }, 
                                 { "0|1" },
-                                source}),
-                            vcf::ChromosomeBodyError*);
+                                source}) );
         }
 
         SECTION("ID with whitespaces") 

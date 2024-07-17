@@ -430,18 +430,11 @@ namespace ebi
         void set_types();
 
         /**
-         * Checks that chromosome does not contain colons or white-spaces
+         * Checks that chromosome does not contain white-spaces
          *
          * @throw ChromosomeBodyError
          */
         void check_chromosome() const;
-
-        /**
-         * Checks that chromosome does not contain any colons
-         *
-         * @throw ChromosomeBodyError
-         */
-        void check_chromosome_no_colons() const;
 
         /**
          * Checks that chromosome does not contain any white-spaces

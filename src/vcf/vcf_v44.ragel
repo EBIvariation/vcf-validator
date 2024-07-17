@@ -63,8 +63,8 @@
 
 
     ## A contig must be a sequence name allowed by the SAM format ( regex [!-)+-<>-~][!-~]* ) excluding the characters <>[]:*
-    ## A chromosome must be a string with no white-spaces or colons, and may be surronded by < > symbols (for contigs)
-    meta_contig_char= alnum | ( punct - (':' | '<' | '>' | '[' | ']' | '*' | '=' | ',' ) ) ;
+    ## A chromosome must be a string with no white-spaces, and may be surrounded by < > symbols (for contigs)
+    meta_contig_char= alnum | ( punct - ( '<' | '>' | '[' | ']' | '*' | '=' | ',' ) ) ;
     chrom_basic     = (meta_contig_char - '#') (meta_contig_char)* ;
     chrom_contig    = '<' chrom_basic '>' ;
     chromosome      = chrom_basic | chrom_contig ;
