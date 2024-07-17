@@ -55,6 +55,12 @@ namespace ebi
         // SVCLAIM check
         check_body_entry_info_svclaim(state, record);
 
+        // RB RUC check
+        check_body_entry_info_rb_ruc(state, record);
+
+        // RUL RUS check
+        check_body_entry_info_rul_rus(state, record);
+
         // Confidence interval tags should have first value <=0 and second value >= 0
         check_body_entry_info_confidence_interval(state, record);
 
@@ -225,7 +231,7 @@ namespace ebi
         std::vector<std::string> values;
 
         if (record.source->version < Version::v44) {
-            return;     //svclaim not present for version < v43
+            return;     //svclaim not present for version < v44
         }
         auto it = record.info.find(SVCLAIM);
         if (it == record.info.end()) {
@@ -251,22 +257,87 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_info_confidence_interval(ParsingState & state, Record const & record) const
     {
-        std::vector<std::string> confidence_interval_tags = { CICN, CICNADJ, CIEND, CILEN, CIPOS };
+        std::vector<std::string> confidence_interval_tags = { CICN, CICNADJ, CIEND, CILEN, CIPOS, CIRB, CIRUC };
         for (auto & confidence_interval_tag : confidence_interval_tags) {
             auto it = record.info.find(confidence_interval_tag);
             if (it != record.info.end()) {
                 std::vector<std::string> values;
                 util::string_split(it->second, ",", values);
-                size_t scanned_first_value_length, scanned_second_value_length;
-                int first_numeric_value = std::stoi(values[0], &scanned_first_value_length);
-                int second_numeric_value = std::stoi(values[1], &scanned_second_value_length);
-                if (first_numeric_value > 0 || second_numeric_value < 0 
-                    || values[0].size() != scanned_first_value_length || values[1].size() != scanned_second_value_length) {
+                if (values.size() % 2 != 0) {           //CI should have even count
                     throw new InfoBodyError{state.n_lines,
                             "INFO " + confidence_interval_tag +
-                            " is a confidence interval tag, which should have first value <= 0 and second value >= 0"};
+                            " is a confidence interval tag, which should have even number entries"};
+                }
+                for (int i = 0; i < values.size(); i += 2) {
+                    size_t scanned_first_value_length = 1, scanned_second_value_length = 1;
+                    //considers missing value as 0 - valid value
+                    int first_numeric_value = std::stoi(values[i] != MISSING_VALUE ? values[i] : "0", &scanned_first_value_length);
+                    int second_numeric_value = std::stoi(values[i + 1] != MISSING_VALUE ? values[i + 1] : "0", &scanned_second_value_length);
+                     if (first_numeric_value > 0 || second_numeric_value < 0
+                        || values[i].size() != scanned_first_value_length || values[i + 1].size() != scanned_second_value_length) {
+                        throw new InfoBodyError{state.n_lines,
+                                "INFO " + confidence_interval_tag +
+                                " is a confidence interval tag, which should have first value <= 0 and second value >= 0"};
+                    }
                 }
             }
+        }
+    }
+
+    void ValidateOptionalPolicy::check_body_entry_info_rb_ruc(ParsingState & state, Record const & record) const
+    {
+        std::vector<std::string> valRB, valRUC, valLen;
+        int rb = 0, ruc = 0 , rul = 0;
+        const float limit = 0.05;   //5% variation
+
+        if (record.source->version < Version::v44) {
+            return;     //not valid for version < v44
+        }
+        auto itRB = record.info.find(RB);
+        auto itRUC = record.info.find(RUC);
+        auto itRUL = record.info.find(RUL);
+        auto itRUS = record.info.find(RUS);
+        if (itRB == record.info.end() || itRUC == record.info.end()) {
+            return;     //nothing to check
+        }
+        util::string_split(itRB->second, ",", valRB);
+        util::string_split(itRUC->second, ",", valRUC);
+        if (itRUL != record.info.end()) {
+            util::string_split(itRUL->second, ",", valLen);
+        } else {
+            util::string_split(itRUS->second, ",", valLen);
+        }
+        if (valRB.size() != valRUC.size() || valRB.size() != valLen.size()) {
+            return;     //already checked in records
+        }
+
+        for (size_t i = 0; i < valRB.size(); ++i) {
+            if (valRB[i] == MISSING_VALUE) {
+                continue;
+            }
+            rb = std::stoi(valRB[i]);
+            ruc = std::stoi(valRUC[i]);
+            rul = itRUL != record.info.end()? std::stoi(valLen[i]) : valLen[i].size();
+            //RB ~= RUL * RUC
+            if ( (abs(rb - rul * ruc) / (float)rb) > limit) {
+                std::stringstream message;
+                message << "INFO " << "RB should be approximately RUC * unit_length";
+                throw new InfoBodyError{record.line, message.str(), "Failed for position " + std::to_string(i)};
+            }
+        }
+    }
+
+    void ValidateOptionalPolicy::check_body_entry_info_rul_rus(ParsingState & state, Record const & record) const
+    {
+        if (record.source->version < Version::v44) {
+            return;     //not valid for version < v44
+        }
+        auto itRUL = record.info.find(RUL);
+        auto itRUS = record.info.find(RUS);
+        if (itRUS != record.info.end() && itRUL != record.info.end()) { //RUS, RUL together - redundant info
+            std::stringstream message;
+            message << "INFO " << "RUS and RUL present together, RUL can be avoided";
+            throw new InfoBodyError{record.line, message.str()};
         }
     }
     

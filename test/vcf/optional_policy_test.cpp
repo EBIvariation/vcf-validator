@@ -241,6 +241,16 @@ namespace ebi
                 },
                 source
             });
+        source->meta_entries.emplace(vcf::ALT,
+            vcf::MetaEntry{
+                1,
+                vcf::ALT,
+                {
+                    { vcf::ID, "CNV:TR" },
+                    { vcf::DESCRIPTION, "Cnv-TR" }
+                },
+                source
+            });
 
         vcf::ParsingState parsing_state{source, vcf::AdditionalChecks()};
 
@@ -331,7 +341,6 @@ namespace ebi
                     },
                     source
             });
-
             source->meta_entries.emplace(vcf::INFO,
                 vcf::MetaEntry{
                     1,
@@ -430,6 +439,166 @@ namespace ebi
                                 { "0|1:1" },
                                 source})),
                             vcf::InfoBodyError*);
+        }
+
+        SECTION("CNV:TR test")
+        {
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::SVLEN },
+                        { vcf::NUMBER, "A" },
+                        { vcf::TYPE, vcf::INTEGER },
+                        { vcf::DESCRIPTION, "Difference in length between REF and ALT alleles" }
+                    },
+                    source
+            });
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::RN }, { vcf::NUMBER, "A" }, { vcf::TYPE, vcf::INTEGER }, { vcf::DESCRIPTION, "RN" }
+                    },
+                    source
+            });
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::RUS }, { vcf::NUMBER, vcf::UNKNOWN_CARDINALITY }, { vcf::TYPE, vcf::STRING }, { vcf::DESCRIPTION, "RUS" }
+                    },
+                    source
+            });
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::RUC }, { vcf::NUMBER, vcf::UNKNOWN_CARDINALITY }, { vcf::TYPE, vcf::FLOAT }, { vcf::DESCRIPTION, "RUC" }
+                    },
+                    source
+            });
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::RUL }, { vcf::NUMBER, vcf::UNKNOWN_CARDINALITY }, { vcf::TYPE, vcf::INTEGER }, { vcf::DESCRIPTION, "RUL" }
+                    },
+                    source
+            });
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::CIRUC }, { vcf::NUMBER, vcf::UNKNOWN_CARDINALITY }, { vcf::TYPE, vcf::FLOAT }, { vcf::DESCRIPTION, "CIRUC" }
+                    },
+                    source
+            });
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::CIRB }, { vcf::NUMBER, vcf::UNKNOWN_CARDINALITY }, { vcf::TYPE, vcf::INTEGER }, { vcf::DESCRIPTION, "CIRB" }
+                    },
+                    source
+            });
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{  //warning as RUS RUL together is redundant
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RUS, "AT"}, {vcf::RUC, "2.0"}, {vcf::RB, "4"}, {vcf::RUL, "2"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source})),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{  //invalid CIRB
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RUC, "2.0"}, {vcf::RB, "4"}, {vcf::RUL, "2"}, {vcf::CIRB, "1,0"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source})),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{  //invalid CIRUC
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RUC, "2.0"}, {vcf::RUL, "2"}, {vcf::CIRUC, "-1,-1"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source})),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{  //invalid CIRUC 2
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RN, "2"}, {vcf::RUC, "2.0,2"}, {vcf::RUL, "2,2"}, {vcf::CIRUC, "-1,1,1,1"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source})),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{  //invalid CIRUC
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RN, "2"}, {vcf::RUL, "2,2"}, {vcf::CIRUC, "-1,1,1,1"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source})),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{  //invalid CIRB
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<CNV:TR>" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::SVLEN, "1"}, {vcf::RUC, "2.0"}, {vcf::RUL, "2"}, {vcf::CIRB, "1,0"}},
+                            { vcf::GT },
+                            { "0|1" },
+                            source})),
+                        vcf::InfoBodyError*);
         }
     }
 
