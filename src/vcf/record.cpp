@@ -590,11 +590,8 @@ namespace ebi
             if (it != info.end()) {
                 std::vector<std::string> RUCval;
                 util::string_split(it->second, ",", RUCval);
-                if (values.size() != 2 * RUCval.size()) {                //ciruc count must be 2 * RUC count
-                    std::stringstream message;
-                    message << "INFO " << CIRUC << " for record at " << line << " must have " << 2 * RUCval.size() << " value(s)";
-                    throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
-                }
+                //ciruc count must be 2 * RUC count
+                check_info_field_cardinality_explicit(values, 2 * RUCval.size(), CIRUC);
                 for (int i = 0; i < values.size(); ++i) {
                     if (RUCval[i / 2] == MISSING_VALUE) {
                         if (values[i] != MISSING_VALUE) {               //ciruc must be missing with ruc missing
@@ -618,11 +615,8 @@ namespace ebi
             if (it != info.end()) {
                 std::vector<std::string> RBval;
                 util::string_split(it->second, ",", RBval);
-                if (values.size() != 2 * RBval.size()) {                //cirb count must be 2 * RB count
-                    std::stringstream message;
-                    message << "INFO " << CIRB << " for record at " << line << " must have " << 2 * RBval.size() << " value(s)";
-                    throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
-                }
+                //cirb count must be 2 * RB count
+                check_info_field_cardinality_explicit(values, 2 * RBval.size(), CIRB);
                 for (int i = 0; i < values.size(); ++i) {
                     if (RBval[i / 2] == MISSING_VALUE) {
                         if (values[i] != MISSING_VALUE) {               //cirb must be missing with RB missing
@@ -661,11 +655,8 @@ namespace ebi
                     }
                     cnt += std::stoi(RUCval[i]);
                 }
-                if (cnt != values.size()) {                 //RUB size must be sum(RUC[i])
-                    std::stringstream message;
-                    message << "INFO " << RUB << " for record at " << line << " must have " << cnt << " value(s)";
-                    throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
-                }
+                //RUB size must be sum(RUC[i])
+                check_info_field_cardinality_explicit(values, cnt, RUB);
             }
             else {
                 //must be present
@@ -677,56 +668,38 @@ namespace ebi
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
-            if (values.size() != 4 * alternate_alleles.size()) {            //MEINFO must be 4 * ALT allele count
-                std::stringstream message;
-                message << "INFO " << MEINFO << " for record at " << line << " must have " << 4 * alternate_alleles.size() << " value(s)";
-                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
-            }
+            //MEINFO must be 4 * ALT allele count
+            check_info_field_cardinality_explicit(values, 4 * alternate_alleles.size(), MEINFO);
         } else if (field_key == METRANS) {
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
-            if (values.size() != 4 * alternate_alleles.size()) {            //METRANS must be 4 * ALT allele count
-                std::stringstream message;
-                message << "INFO " << METRANS << " for record at " << line << " must have " << 4 * alternate_alleles.size() << " value(s)";
-                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
-            }
+            //METRANS must be 4 * ALT allele count
+            check_info_field_cardinality_explicit(values, 4 * alternate_alleles.size(), METRANS);
         } else if (field_key == CICN) {
             if (source->version < Version::v44) {   //fixed size and already checked when < v44
                 return;
             }
-            if (values.size() != 2 * alternate_alleles.size()) {            //CICN must be 2 * ALT allele count
-                std::stringstream message;
-                message << "INFO " << CICN << " for record at " << line << " must have " << 2 * alternate_alleles.size() << " value(s)";
-                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
-            }
+            //CICN must be 2 * ALT allele count
+            check_info_field_cardinality_explicit(values, 2 * alternate_alleles.size(), CICN);
         } else if (field_key == CIPOS) {
             if (source->version < Version::v44) {   //fixed size and already checked when < v44
                 return;
             }
-            if (values.size() != 2 * alternate_alleles.size()) {            //CIPOS must be 2 * ALT allele count
-                std::stringstream message;
-                message << "INFO " << CIPOS << " for record at " << line << " must have " << 2 * alternate_alleles.size() << " value(s)";
-                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
-            }
+            //CIPOS must be 2 * ALT allele count
+            check_info_field_cardinality_explicit(values, 2 * alternate_alleles.size(), CIPOS);
         } else if (field_key == CIEND) {
             if (source->version < Version::v44) {   //fixed size and already checked when < v44
                 return;
             }
-            if (values.size() != 2 * alternate_alleles.size()) {            //CIEND must be 2 * ALT allele count
-                std::stringstream message;
-                message << "INFO " << CIEND << " for record at " << line << " must have " << 2 * alternate_alleles.size() << " value(s)";
-                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
-            }
+            //CIEND must be 2 * ALT allele count
+            check_info_field_cardinality_explicit(values, 2 * alternate_alleles.size(), CIEND);
         } else if (field_key == CILEN) {
             if (source->version < Version::v44) {   //fixed size and already checked when < v44
                 return;
             }
-            if (values.size() != 2 * alternate_alleles.size()) {            //CILEN must be 2 * ALT allele count
-                std::stringstream message;
-                message << "INFO " << CILEN << " for record at " << line << " must have " << 2 * alternate_alleles.size() << " value(s)";
-                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
-            }
+            //CILEN must be 2 * ALT allele count
+            check_info_field_cardinality_explicit(values, 2 * alternate_alleles.size(), CILEN);
         }
     }
 
@@ -1123,6 +1096,15 @@ namespace ebi
             }
         }
         return rnCnt;
+    }
+
+    int Record::check_info_field_cardinality_explicit(std::vector<std::string> const & values, size_t expected,
+                const std::string field) const {
+        if (values.size() != expected) {
+            std::stringstream message;
+            message << "INFO " << field << " for record at " << line << " must have " << expected << " value(s)";
+            throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+        }
     }
 
     bool is_record_subfield_in_header(std::string const & field_value,
