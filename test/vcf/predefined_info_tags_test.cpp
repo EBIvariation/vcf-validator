@@ -2519,6 +2519,50 @@ namespace ebi
                             { vcf::GT },
                             { "0|1" },
                             source}) );
+
+            CHECK_NOTHROW( (vcf::Record{    //valid without CN n different SVLEN
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<DEL>", "<DUP>", "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::SVLEN, "2,20,." }, { vcf::SVCLAIM, "D,J,." } },
+                            { vcf::GT},
+                           { "1|0" },
+                            source}));
+
+            CHECK_NOTHROW( (vcf::Record{    //valid with CN n same svlen
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<DEL>", "<DUP>", "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::SVLEN, "2,2,." }, { vcf::SVCLAIM, "D,J,." } },
+                            { vcf::GT, vcf::CN },
+                           { "1|0:1" },
+                            source}));
+
+            //invalid as svlen vals not matching for SVs
+            CHECK_THROWS_AS( (vcf::Record{  //svlen not matching
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<DEL>", "<DUP>", "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::SVLEN, "1,2,." }, { vcf::SVCLAIM, "D,J,." } },
+                            { { vcf::GT }, {vcf::CN} },
+                            { "0|1:1" },
+                            source}),
+                        vcf::InfoBodyError*);
         }
     }
 

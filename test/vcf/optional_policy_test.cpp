@@ -415,7 +415,7 @@ namespace ebi
                                 { "0|1" },
                                 source})),
                             vcf::InfoBodyError*);
-            //vaild
+            /* added as optional but it is a must case so chek in records/tests vaild
             CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
                                 1,
                                 "chr1",
@@ -443,7 +443,7 @@ namespace ebi
                                 { vcf::GT, vcf::CN },
                                 { "0|1:1" },
                                 source})),
-                            vcf::InfoBodyError*);
+                            vcf::InfoBodyError*); */
         }
 
         SECTION("CNV:TR test")

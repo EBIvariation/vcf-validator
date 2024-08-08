@@ -266,6 +266,7 @@ namespace ebi
             { ADF, { INTEGER, R } },
             { ADR, { INTEGER, R } },
             { AHAP, { INTEGER, "1" } },
+            { CICN, { FLOAT, "2" } },
             { CN, { FLOAT, "1" } },
             { CNL, { FLOAT, G } },
             { CNP, { FLOAT, G } },
@@ -283,7 +284,10 @@ namespace ebi
             { NQ, { INTEGER, "1" } },
             { PL, { INTEGER, G } },
             { PQ, { INTEGER, "1" } },
-            { PS, { INTEGER, "1" } }
+            { PS, { INTEGER, "1" } },
+            { PSL, { STRING, P } },
+            { PSO, { INTEGER, P } },
+            { PSQ, { INTEGER, P } },
     };
 
     const std::set<std::string> PREDEFINED_INFO_SVTYPES{
@@ -662,22 +666,24 @@ namespace ebi
 
         /**
          * returns the expected number of elements, given a string code
-         * @param number one of ["A", "R", "G", ".", number], where
+         * @param number one of ["A", "R", "G", ".", number, "P"], where
          *  - "A" is the amount of alleles,
          *  - "R" the amount of reference (1) plus alleles (A)
          *  - "G" is `ploidy`-combination with repetition: ((R + ploidy -1) choose ploidy)
          *  (e.g. with 1 reference, 2 alternate alleles (3 total alleles) and ploidy 2, it's 3 + 2 -1 choose 2, which is 6: 00, 01, 11, 02, 12, 22)
          *  - "." means unknown number of elements
          *  - number is a positive number [0, +inf)
+         *  - "P" is the allele in GT - TODO assumes tobe same as ploidy
          * @param alternate_allele_number the number of alternate alleles
          * @param ploidy is the number of copies of a chromosome in a sample, so a given genotype in said chromosome needs `ploidy` alleles to be completely specified
          * @param expected_cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number.
+         * @param isinfo indicates whether the check is for info field or not
          * @throw std::invalid_argument if it's not a number
          * @throw std::out_of_range if it's out of range.
          * @return bool: whether the number was valid or not
          */
         bool is_valid_cardinality(std::string const &number, size_t alternate_allele_number, size_t ploidy,
-                                  long &expected_cardinality) const;
+                                  long &expected_cardinality, bool isinfo) const;
 
         /**
          * Checks that the values match either their type specified in the meta or the VCF specification for predefined tags not in meta
@@ -699,7 +705,7 @@ namespace ebi
          * @throw std::invalid_argument
          */
         void check_sample_field_cardinality(std::vector<std::string> const &values, std::string const &number,
-                                            size_t ploidy, long &expected_cardinality) const;
+                                            size_t ploidy, long &expected_cardinality, bool isinfo = false) const;
 
         /**
          * Checks that every field in a column matches the Type specification in the meta
@@ -734,6 +740,16 @@ namespace ebi
          */
         int check_info_field_cardinality_explicit(std::vector<std::string> const & values, size_t expected,
                 const std::string field) const;
+
+        /**
+         * Checks CICN field is present along with CN field
+         */
+        void check_format_CICN() const;
+
+        /**
+         * Checks specific SV alleles have same SVLEN when format CN is present
+         */
+        void check_format_allele_SVLEN() const;
     };
 
     std::ostream &operator<<(std::ostream &os, const Record &record);

@@ -122,7 +122,9 @@ namespace ebi
     {
         // It must contain an ID and Description
         check_key_is_present(ALT, ID, value.count(ID));
-        check_key_is_present(ALT, DESCRIPTION, value.count(DESCRIPTION));
+        if (entry.source->version < Version::v44) {     //description optional since v44
+            check_key_is_present(ALT, DESCRIPTION, value.count(DESCRIPTION));
+        }
 
         check_alt_id(value[ID]);
     }
@@ -155,7 +157,9 @@ namespace ebi
     {
         // It must contain an ID and Description
         check_key_is_present(FILTER, ID, value.count(ID));
-        check_key_is_present(FILTER, DESCRIPTION, value.count(DESCRIPTION));
+        if (entry.source->version < Version::v44) {     //this is optional v44 onwards
+            check_key_is_present(FILTER, DESCRIPTION, value.count(DESCRIPTION));
+        }
 
         check_filter_id(value[ID]);
     }

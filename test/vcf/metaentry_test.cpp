@@ -123,43 +123,6 @@ namespace ebi
         
     }
 
-    TEST_CASE("MetaEntry constructor (key-value pairs) v4.4", "[constructor][keyvalue]")
-    {
-        std::shared_ptr<vcf::Source> source{
-            new vcf::Source{
-                "Example VCF source",
-                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-                vcf::Version::v44,
-                {},
-                { "Sample1", "Sample2", "Sample3" }}};
-
-        SECTION("Correct arguments")
-        {
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                            1,
-                            vcf::CONTIG,
-                            { {vcf::ID, "contig_1"} },
-                            source } ) );
-        }
-
-
-        SECTION("A key-pair map should be assigned")
-        {
-            auto meta = vcf::MetaEntry {
-                            1,
-                            vcf::CONTIG,
-                            { {vcf::ID, "contig_1"} },
-                            source } ;
-
-            CHECK( meta.id == vcf::CONTIG );
-            CHECK( meta.structure == vcf::MetaEntry::Structure::KeyValue );
-            CHECK_THROWS_AS( boost::get<std::string>(meta.value),
-                            boost::bad_get);
-            CHECK( (boost::get<std::map<std::string,std::string>>(meta.value)) == (std::map<std::string,std::string>{ {vcf::ID, "contig_1"} }) );
-        }
-
-    }
-    
     TEST_CASE("ALT MetaEntry checks", "[checks][keyvalue]") 
     {
         std::shared_ptr<vcf::Source> source{
@@ -169,31 +132,48 @@ namespace ebi
                 vcf::Version::v41,
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
+        std::shared_ptr<vcf::Source> source44{
+            new vcf::Source{
+                "Example VCF source v44",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v44,
+                {},
+                { "Sample1", "Sample2", "Sample3" }}};
             
         SECTION("ID and Description presence")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                                1,
-                                vcf::ALT,
-                                { {vcf::ID, vcf::INS}, {vcf::DESCRIPTION, "tag_description"} },
-                                source
-                            } ) );
-                                
-            CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::ALT,
-                                { {vcf::DESCRIPTION, "tag_description"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-                                
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            auto sources = {source, source44};
+            for (auto &src : sources) {
+                CHECK_NOTHROW( (vcf::MetaEntry {
+                                    1,
+                                    vcf::ALT,
+                                    { {vcf::ID, vcf::INS}, {vcf::DESCRIPTION, "tag_description"} },
+                                    src
+                                } ) );
+                                    
+                CHECK_THROWS_AS( (vcf::MetaEntry {
+                                    1,
+                                    vcf::ALT,
+                                    { {vcf::DESCRIPTION, "tag_description"} },
+                                    src
+                                }),
+                                vcf::MetaSectionError* );
+            }
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //description must upto v44
                                 1,
                                 vcf::ALT,
                                 { {vcf::ID, "TAG_ID"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //description optional since v44
+                                1,
+                                vcf::ALT,
+                                { {vcf::ID, vcf::INS} },
+                                source44
+                            } ) );
         }
         
         SECTION("ID prefixes")
@@ -323,37 +303,7 @@ namespace ebi
                 vcf::Version::v43,
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
-            
-        SECTION("ID and Description presence")
-        {
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                                1,
-                                vcf::FILTER,
-                                { {vcf::ID, "Filter1"}, {vcf::DESCRIPTION, "tag_description"} },
-                                source
-                            } ) );
-                                
-            CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::FILTER,
-                                { {vcf::DESCRIPTION, "tag_description"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-                                
-            CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::FILTER,
-                                { {vcf::ID, "TAG_ID"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-        }
-    }
-
-    TEST_CASE("FILTER MetaEntry checks v4.4", "[checks][keyvalue]")
-    {
-        std::shared_ptr<vcf::Source> source{
+        std::shared_ptr<vcf::Source> source44{
             new vcf::Source{
                 "Example VCF source",
                 vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
@@ -361,41 +311,54 @@ namespace ebi
                 {},
                 { "Sample1", "Sample2", "Sample3" }}};
 
+        auto sources = { source, source44 };
+
         SECTION("ID and Description presence")
         {
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                                1,
-                                vcf::FILTER,
-                                { {vcf::ID, "Filter1"}, {vcf::DESCRIPTION, "tag_description"} },
-                                source
-                            } ) );
+            for (auto & src : sources) {
+                CHECK_NOTHROW( (vcf::MetaEntry {
+                                    1,
+                                    vcf::FILTER,
+                                    { {vcf::ID, "Filter1"}, {vcf::DESCRIPTION, "tag_description"} },
+                                    src
+                                } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::FILTER,
-                                { {vcf::DESCRIPTION, "tag_description"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
+                CHECK_THROWS_AS( (vcf::MetaEntry {
+                                    1,
+                                    vcf::FILTER,
+                                    { {vcf::DESCRIPTION, "tag_description"} },
+                                    src
+                                }),
+                                vcf::MetaSectionError* );
+            }
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {      //description required upto v43
                                 1,
                                 vcf::FILTER,
                                 { {vcf::ID, "TAG_ID"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {        //description optional since v44
+                                1,
+                                vcf::FILTER,
+                                { {vcf::ID, "TAG_ID"} },
+                                source44
+                            } ) );
         }
 
         SECTION("Non zero ID")
         {
-             CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::FILTER,
-                                { {vcf::ID, "0"}, {vcf::DESCRIPTION, "tag with id 0"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );           
+            for (auto & src : sources) {
+                CHECK_THROWS_AS( (vcf::MetaEntry {
+                                    1,
+                                    vcf::FILTER,
+                                    { {vcf::ID, "0"}, {vcf::DESCRIPTION, "tag with id 0"} },
+                                    src
+                                }),
+                                vcf::MetaSectionError* );
+            }
         }
     }
 
@@ -1077,6 +1040,29 @@ namespace ebi
                                 1,
                                 vcf::FORMAT,
                                 { {vcf::ID, vcf::CN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number"} },
+                                source_v44
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CICN}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "CI Copy number"} },
+                                source_v44
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CICN}, {vcf::NUMBER, "5"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "CI Copy number"} },
+                                source_v44
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::CICN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "CI Copy number"} },
                                 source_v44
                             }),
                             vcf::MetaSectionError* );
@@ -3354,42 +3340,6 @@ namespace ebi
                                 source
                             } ) );
                                 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::SAMPLE,
-                                { {"Genomes", "genome_1,genome_2"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-        }
-    }
-
-    TEST_CASE("SAMPLE MetaEntry checks v4.4", "[checks][keyvalue]") 
-    {
-        std::shared_ptr<vcf::Source> source{
-            new vcf::Source{
-                "Example VCF source",
-                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
-                vcf::Version::v44,
-                {},
-                { "Sample1", "Sample2", "Sample3" }}};
-            
-        SECTION("ID presence")
-        {
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                                1,
-                                vcf::SAMPLE,
-                                { {vcf::ID, "Sample_1"} },
-                                source
-                            } ) );
-                                
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                                1,
-                                vcf::SAMPLE,
-                                { {vcf::ID, "Sample_2"}, {"Genomes", "genome_1,genome_2"}, {"Mixtures", "mixture_1"} },
-                                source
-                            } ) );
-
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 vcf::SAMPLE,

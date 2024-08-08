@@ -63,6 +63,7 @@ namespace ebi
 
         // Confidence interval tags should have first value <=0 and second value >= 0
         check_body_entry_info_confidence_interval(state, record);
+        check_body_entry_sample_confidence_interval(state, record);
 
         /*
          * Once some meta-data is marked as in/correct there is no need again, so all the following have been 
@@ -178,7 +179,7 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_info_svlen(ParsingState & state, Record const & record) const
     {
-        static boost::regex cnchk_regex("(<(CNV|DUP|DEL)(:[^>]+)*>)+");
+        //static boost::regex cnchk_regex("(<(CNV|DUP|DEL)(:[^>]+)*>)+");
         static boost::regex svchk_regex("(<(INS|DUP|INV|DEL|CNV)(:[^>]+)*>)+");
         static boost::regex non_symbolic_alt_regex("[ACGTN]+", boost::regex::icase);
         std::string svlenval;
@@ -196,7 +197,7 @@ namespace ebi
             if (record.source->version < Version::v44) {
                 return;
             }
-            auto itcn = std::find(record.format.begin(), record.format.end(), CN);
+            //auto itcn = std::find(record.format.begin(), record.format.end(), CN);
             for (auto i = 0; i < record.alternate_alleles.size(); ++i) {
                 //SVLEN should be '.' for non SV alleles
                 if (boost::regex_match(record.alternate_alleles[i], non_symbolic_alt_regex) || 
@@ -206,9 +207,9 @@ namespace ebi
                         throw new InfoBodyError{state.n_lines, "INFO SVLEN should be " + MISSING_VALUE + " for alleles other than structural variant INS/INV/DUP/DEL/CNV"};
                     }
                 }
-                if (itcn != record.format.end()) {
+                /*if (itcn != record.format.end()) {
                     //with CN in format, CNV/DEL/DUP should have the same SVLEN value, v4.4 onwards
-                    if (record.types[i] != RecordType::STRUCTURAL || !boost::regex_match(record.alternate_alleles[i], svchk_regex)) {
+                    if (record.types[i] != RecordType::STRUCTURAL || !boost::regex_match(record.alternate_alleles[i], cnchk_regex)) {
                         continue;
                     }
                     if (!svlenval.size()) {
@@ -221,7 +222,7 @@ namespace ebi
                         "INFO SVLEN should have same values for SV CNV/DEL/DUP", "Expected " + svlenval
                         + ", found " + values[i]};
                     }
-                }
+                }*/
             }
         }
     }
@@ -262,8 +263,23 @@ namespace ebi
             std::vector<std::string> confidence_interval_tags_v43 = { CICN, CICNADJ, CIEND, CILEN, CIPOS, CIRB, CIRUC };
             confidence_interval_tags = confidence_interval_tags_v43;
         }
+        std::map<Version, const std::map<std::string, std::pair<std::string, std::string>>&> infodata = {
+            {Version::v41, info_v41_v42},
+            {Version::v42, info_v41_v42},
+            {Version::v43, info_v43},
+            {Version::v44, info_v44}, }; //TODO: see whether to make this available for all or not.
+
         for (auto & confidence_interval_tag : confidence_interval_tags) {
             auto it = record.info.find(confidence_interval_tag);
+            //v44 onwards, CI can be float as well and parsed size check to be applied only on integer types
+            bool isfloat = false;
+            auto infoiterator = infodata.find(record.source->version);
+            if (infoiterator != infodata.end()) {
+                auto field = infoiterator->second.find(confidence_interval_tag);
+                if (field != infoiterator->second.end()) {
+                    isfloat = field->second.first == FLOAT ? true : false;
+                }
+            }
             if (it != record.info.end()) {
                 std::vector<std::string> values;
                 util::string_split(it->second, ",", values);
@@ -278,7 +294,7 @@ namespace ebi
                     int first_numeric_value = std::stoi(values[i] != MISSING_VALUE ? values[i] : "0", &scanned_first_value_length);
                     int second_numeric_value = std::stoi(values[i + 1] != MISSING_VALUE ? values[i + 1] : "0", &scanned_second_value_length);
                      if (first_numeric_value > 0 || second_numeric_value < 0
-                        || values[i].size() != scanned_first_value_length || values[i + 1].size() != scanned_second_value_length) {
+                        || (!isfloat && (values[i].size() != scanned_first_value_length || values[i + 1].size() != scanned_second_value_length))) {
                         throw new InfoBodyError{state.n_lines,
                                 "INFO " + confidence_interval_tag +
                                 " is a confidence interval tag, which should have first value <= 0 and second value >= 0"};
@@ -454,6 +470,65 @@ namespace ebi
                         state.n_lines,
                         "FORMAT '" + fm + "' is not listed in a valid meta-data FORMAT entry"
                 };
+            }
+        }
+    }
+
+    void ValidateOptionalPolicy::check_body_entry_sample_confidence_interval(ParsingState & state, Record const & record) const
+    {
+        //TODO see how this can be used along with info_conf_interval
+        std::vector<std::string> confidence_interval_tags = { CICN };
+        if (record.source->version < vcf::Version::v44) {
+            return;
+        }
+        std::map<Version, const std::map<std::string, std::pair<std::string, std::string>>&> formatdata = {
+            {Version::v41, format_v41_v42},
+            {Version::v42, format_v41_v42},
+            {Version::v43, format_v43},
+            {Version::v44, format_v44}, }; //TODO: see whether to make this available for all or not.
+
+        for (auto & confidence_interval_tag : confidence_interval_tags) {
+            auto it = std::find(record.format.begin(), record.format.end(), confidence_interval_tag);
+            if (it == record.format.end()) { //tag not present in record
+                continue;
+            }
+            //v44 onwards, CI can be float as well and parsed size check to be applied only on integer types
+            size_t offset = it - record.format.begin();
+            bool isfloat = false;
+            auto formatiterator = formatdata.find(record.source->version);
+            if (formatiterator != formatdata.end()) {
+                auto field = formatiterator->second.find(confidence_interval_tag);
+                if (field != formatiterator->second.end()) {
+                    isfloat = field->second.first == FLOAT ? true : false;
+                }
+            }
+
+            //check value on each sample
+            for (auto & sample : record.samples) {
+                std::vector<std::string> fields, values;
+                util::string_split(sample, ":", fields);
+                if (fields.size() < offset) {
+                    //field not found, error raised from on field count check
+                    continue;
+                }
+                util::string_split(fields[offset], ",", values);
+                if (values.size() % 2 != 0) {           //CI should have even count
+                    std::string message = "Sample #" + std::to_string(offset + 1) + ", field " + confidence_interval_tag +
+                        " does not have even count";
+                    throw new SamplesFieldBodyError{state.n_lines, message, "", confidence_interval_tag}; //TODO checl line is good or is it state.line
+                }
+                for (int i = 0; i < values.size(); i += 2) {
+                    size_t scanned_first_value_length = 1, scanned_second_value_length = 1;
+                    //considers missing value as 0 - valid value
+                    int first_numeric_value = std::stoi(values[i] != MISSING_VALUE ? values[i] : "0", &scanned_first_value_length);
+                    int second_numeric_value = std::stoi(values[i + 1] != MISSING_VALUE ? values[i + 1] : "0", &scanned_second_value_length);
+                    if (first_numeric_value > 0 || second_numeric_value < 0
+                    || (!isfloat && (values[i].size() != scanned_first_value_length || values[i + 1].size() != scanned_second_value_length))) {
+                        std::string message = "SAMPLE " + confidence_interval_tag +
+                            " is a confidence interval tag, which should have first value <= 0 and second value >= 0";
+                        throw new SamplesFieldBodyError{state.n_lines, message, "", confidence_interval_tag};
+                    }
+                }
             }
         }
     }
