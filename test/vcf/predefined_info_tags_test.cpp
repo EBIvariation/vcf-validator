@@ -2183,21 +2183,6 @@ namespace ebi
                             source}),
                         vcf::InfoBodyError*);
 
-            CHECK_THROWS_AS( (vcf::Record{
-                            1,
-                            "chr1",
-                            123456,
-                            { "id123" },
-                            "A",
-                            { "AT" },
-                            1.0,
-                            { vcf::PASS },
-                            { {vcf::DPADJ, "0.09"} },
-                            { vcf::GT },
-                            { "0|1" },
-                            source}),
-                        vcf::InfoBodyError*);
-
             CHECK_THROWS_AS( (vcf::Record{  //should be valid float
                             1,
                             "chr1",
@@ -2237,22 +2222,7 @@ namespace ebi
                             { "AT" },
                             1.0,
                             { vcf::PASS },
-                            { {vcf::CNADJ, "9.87"} },
-                            { vcf::GT },
-                            { "0|1" },
-                            source}),
-                        vcf::InfoBodyError*);
-
-            CHECK_THROWS_AS( (vcf::Record{
-                            1,
-                            "chr1",
-                            123456,
-                            { "id123" },
-                            "A",
-                            { "AT" },
-                            1.0,
-                            { vcf::PASS },
-                            { {vcf::CICN, "9.87,6.5"} },
+                            { {vcf::CICN, "QW,PQ"} },
                             { vcf::GT },
                             { "0|1" },
                             source}),
@@ -2268,21 +2238,6 @@ namespace ebi
                             1.0,
                             { vcf::PASS },
                             { {vcf::CICN, "1,3,5"} },
-                            { vcf::GT },
-                            { "0|1" },
-                            source}),
-                        vcf::InfoBodyError*);
-
-            CHECK_THROWS_AS( (vcf::Record{
-                            1,
-                            "chr1",
-                            123456,
-                            { "id123" },
-                            "A",
-                            { "AT" },
-                            1.0,
-                            { vcf::PASS },
-                            { {vcf::CICNADJ, "9.99"} },
                             { vcf::GT },
                             { "0|1" },
                             source}),

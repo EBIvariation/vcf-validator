@@ -260,22 +260,27 @@ namespace ebi
         {
             std::vector<std::string> confidence_interval_tags = {
                                                                     vcf::CICN,
-                                                                    vcf::CICNADJ,
                                                                     vcf::CIEND,
                                                                     vcf::CILEN,
                                                                     vcf::CIPOS
                                                                 };
+            std::vector<std::string> confidence_interval_types = {
+                                                                    vcf::FLOAT,
+                                                                    vcf::INTEGER,
+                                                                    vcf::INTEGER,
+                                                                    vcf::INTEGER
+                                                                };
 
-            for (auto & confidence_interval_tag : confidence_interval_tags) {
+            for (int i = 0; i < confidence_interval_tags.size() && i < confidence_interval_types.size(); ++i) {
 
                 source->meta_entries.emplace(vcf::INFO,
                     vcf::MetaEntry{
                         1,
                         vcf::INFO,
                         {
-                            { vcf::ID, confidence_interval_tag },
-                            { vcf::NUMBER, "2" },
-                            { vcf::TYPE, vcf::INTEGER },
+                            { vcf::ID, confidence_interval_tags[i] },
+                            { vcf::NUMBER, vcf::UNKNOWN_CARDINALITY },
+                            { vcf::TYPE, confidence_interval_types[i] },
                             { vcf::DESCRIPTION, "CI tag" }
                         },
                         source
@@ -290,7 +295,7 @@ namespace ebi
                                     { "AC" },
                                     1.0,
                                     { vcf::PASS },
-                                    { { confidence_interval_tag, "0,0" } },
+                                    { { confidence_interval_tags[i], "0,0" } },
                                     { vcf::GT },
                                     { "1|0" },
                                     source})) );
@@ -304,7 +309,7 @@ namespace ebi
                                     { "AC" },
                                     1.0,
                                     { vcf::PASS },
-                                    { { confidence_interval_tag, "1,2" } },
+                                    { { confidence_interval_tags[i], "1" } },
                                     { vcf::GT },
                                     { "0|1" },
                                     source})),
@@ -319,7 +324,7 @@ namespace ebi
                                     { "AC" },
                                     1.0,
                                     { vcf::PASS },
-                                    { { confidence_interval_tag, "-1,-2" } },
+                                    { { confidence_interval_tags[i], "-1,-2" } },
                                     { vcf::GT },
                                     { "0|1" },
                                     source})),

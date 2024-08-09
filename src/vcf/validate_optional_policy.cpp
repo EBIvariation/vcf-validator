@@ -257,7 +257,11 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_info_confidence_interval(ParsingState & state, Record const & record) const
     {
-        std::vector<std::string> confidence_interval_tags = { CICN, CICNADJ, CIEND, CILEN, CIPOS, CIRB, CIRUC };
+        std::vector<std::string> confidence_interval_tags = { CICN, CIEND, CILEN, CIPOS, CIRB, CIRUC };
+        if (record.source->version < vcf::Version::v44) {
+            std::vector<std::string> confidence_interval_tags_v43 = { CICN, CICNADJ, CIEND, CILEN, CIPOS, CIRB, CIRUC };
+            confidence_interval_tags = confidence_interval_tags_v43;
+        }
         for (auto & confidence_interval_tag : confidence_interval_tags) {
             auto it = record.info.find(confidence_interval_tag);
             if (it != record.info.end()) {

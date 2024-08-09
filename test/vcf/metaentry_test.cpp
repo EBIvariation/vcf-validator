@@ -2834,72 +2834,72 @@ namespace ebi
             CHECK_NOTHROW( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CIPOS}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around POS for imprecise variants"} },
+                                { {vcf::ID, vcf::CIPOS}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around POS for imprecise variants"} },
                                 source
                             } ) );
 
             CHECK_THROWS_AS( (vcf::MetaEntry {
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CIPOS}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around POS for imprecise variants"} },
+                                { {vcf::ID, vcf::CIPOS}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Confidence interval around POS for imprecise variants"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CIPOS}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Confidence interval around POS for imprecise variants"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                                1,
-                                vcf::INFO,
-                                { {vcf::ID, vcf::CIEND}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around END for imprecise variants"} },
+                                { {vcf::ID, vcf::CIEND}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around END for imprecise variants"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CIEND}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around END for imprecise variants"} },
+                                { {vcf::ID, vcf::CIEND}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::CHARACTER}, {vcf::DESCRIPTION, "Confidence interval around END for imprecise variants"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CIEND}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::CHARACTER}, {vcf::DESCRIPTION, "Confidence interval around END for imprecise variants"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                                1,
-                                vcf::INFO,
-                                { {vcf::ID, vcf::HOMLEN}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Length of base pair identical micro-homology at event breakpoints"} },
+                                { {vcf::ID, vcf::HOMLEN}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Length of base pair identical micro-homology at event breakpoints"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::HOMLEN}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Length of base pair identical micro-homology at event breakpoints"} },
+                                { {vcf::ID, vcf::HOMLEN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Length of base pair identical micro-homology at event breakpoints"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_NOTHROW( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::HOMSEQ}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Sequence of base pair identical micro-homology at event breakpoints"} },
+                                { {vcf::ID, vcf::HOMLEN}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Length of base pair identical micro-homology at event breakpoints"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::HOMSEQ}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Sequence of base pair identical micro-homology at event breakpoints"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::HOMSEQ}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Sequence of base pair identical micro-homology at event breakpoints"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
                                 1,
                                 vcf::INFO,
                                 { {vcf::ID, vcf::HOMSEQ}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Sequence of base pair identical micro-homology at event breakpoints"} },
@@ -2907,75 +2907,67 @@ namespace ebi
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_NOTHROW( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::BKPTID}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of the assembled alternate allele in the assembly file"} },
+                                { {vcf::ID, vcf::BKPTID}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of the assembled alternate allele in the assembly file"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::BKPTID}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::CHARACTER}, {vcf::DESCRIPTION, "ID of the assembled alternate allele in the assembly file"} },
+                                { {vcf::ID, vcf::BKPTID}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of the assembled alternate allele in the assembly file"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_NOTHROW( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::MEINFO}, {vcf::NUMBER, "4"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Mobile element info of the form NAME,START,END,POLARITY"} },
-                                source
-                            } ) );
-
-            CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::INFO,
-                                { {vcf::ID, vcf::MEINFO}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Mobile element info of the form NAME,START,END,POLARITY"} },
+                                { {vcf::ID, vcf::BKPTID}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of the assembled alternate allele in the assembly file"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::MEINFO}, {vcf::NUMBER, "4"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Mobile element info of the form NAME,START,END,POLARITY"} },
+                                { {vcf::ID, vcf::MEINFO}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Mobile element info of the form NAME,START,END,POLARITY"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::MEINFO}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Mobile element info of the form NAME,START,END,POLARITY"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
-            CHECK_NOTHROW( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::METRANS}, {vcf::NUMBER, "4"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
+                                { {vcf::ID, vcf::METRANS}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::METRANS}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
+                                { {vcf::ID, vcf::METRANS}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::METRANS}, {vcf::NUMBER, "4"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Mobile element transduction info of the form CHR,START,END,POLARITY"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                                1,
-                                vcf::INFO,
-                                { {vcf::ID, vcf::DGVID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in Database of Genomic Variation"} },
+                                { {vcf::ID, vcf::DGVID}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in Database of Genomic Variation"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
                                 1,
                                 vcf::INFO,
                                 { {vcf::ID, vcf::DGVID}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in Database of Genomic Variation"} },
@@ -2983,22 +2975,22 @@ namespace ebi
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::DGVID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of this element in Database of Genomic Variation"} },
+                                { {vcf::ID, vcf::DGVID}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of this element in Database of Genomic Variation"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_NOTHROW( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::DBVARID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in DBVAR"} },
+                                { {vcf::ID, vcf::DBVARID}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in DBVAR"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
                                 1,
                                 vcf::INFO,
                                 { {vcf::ID, vcf::DBVARID}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in DBVAR"} },
@@ -3006,22 +2998,22 @@ namespace ebi
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::DBVARID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of this element in DBVAR"} },
+                                { {vcf::ID, vcf::DBVARID}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of this element in DBVAR"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_NOTHROW( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::DBRIPID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in DBRIP"} },
+                                { {vcf::ID, vcf::DBRIPID}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in DBRIP"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
                                 1,
                                 vcf::INFO,
                                 { {vcf::ID, vcf::DBRIPID}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of this element in DBRIP"} },
@@ -3029,37 +3021,45 @@ namespace ebi
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::DBRIPID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of this element in DBRIP"} },
+                                { {vcf::ID, vcf::DBRIPID}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of this element in DBRIP"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_NOTHROW( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::MATEID}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of mate breakends"} },
+                                { {vcf::ID, vcf::MATEID}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of mate breakends"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::MATEID}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of mate breakends"} },
+                                { {vcf::ID, vcf::MATEID}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of mate breakends"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_NOTHROW( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::PARID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of partner breakend"} },
+                                { {vcf::ID, vcf::MATEID}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of mate breakends"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::PARID}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of partner breakend"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
                                 1,
                                 vcf::INFO,
                                 { {vcf::ID, vcf::PARID}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of partner breakend"} },
@@ -3067,71 +3067,48 @@ namespace ebi
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::PARID}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of partner breakend"} },
+                                { {vcf::ID, vcf::PARID}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of partner breakend"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
   
-            CHECK_NOTHROW( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::EVENT}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of event associated to breakend"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
                                 1,
                                 vcf::INFO,
                                 { {vcf::ID, vcf::EVENT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of event associated to breakend"} },
                                 source
-                            } ) );
+                            }),
+                            vcf::MetaSectionError* );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid tpye
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::EVENT}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "ID of event associated to breakend"} },
+                                { {vcf::ID, vcf::EVENT}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of event associated to breakend"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::EVENT}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "ID of event associated to breakend"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                                1,
-                                vcf::INFO,
-                                { {vcf::ID, vcf::CILEN}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around the inserted material between breakends"} },
+                                { {vcf::ID, vcf::CILEN}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around the inserted material between breakends"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CILEN}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around the inserted material between breakends"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-
-            CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::INFO,
-                                { {vcf::ID, vcf::CILEN}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Confidence interval around the inserted material between breakends"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                                1,
-                                vcf::INFO,
-                                { {vcf::ID, vcf::DPADJ}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Read Depth of adjacency"} },
-                                source
-                            } ) );
-
-            CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::INFO,
-                                { {vcf::ID, vcf::DPADJ}, {vcf::NUMBER, "3"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Read Depth of adjacency"} },
+                                { {vcf::ID, vcf::CILEN}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Confidence interval around the inserted material between breakends"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -3159,55 +3136,17 @@ namespace ebi
                             }),
                             vcf::MetaSectionError* );
 
-            CHECK_NOTHROW( (vcf::MetaEntry {
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CNADJ}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Copy number of adjacency"} },
+                                { {vcf::ID, vcf::CICN}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Confidence interval around copy number for the segment"} },
                                 source
                             } ) );
 
-            CHECK_THROWS_AS( (vcf::MetaEntry {
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
                                 1,
                                 vcf::INFO,
-                                { {vcf::ID, vcf::CNADJ}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Copy number of adjacency"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                                1,
-                                vcf::INFO,
-                                { {vcf::ID, vcf::CICN}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around copy number for the segment"} },
-                                source
-                            } ) );
-
-            CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::INFO,
-                                { {vcf::ID, vcf::CICN}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around copy number for the segment"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-
-            CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::INFO,
-                                { {vcf::ID, vcf::CICN}, {vcf::NUMBER, "2"}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Confidence interval around copy number for the segment"} },
-                                source
-                            }),
-                            vcf::MetaSectionError* );
-
-            CHECK_NOTHROW( (vcf::MetaEntry {
-                                1,
-                                vcf::INFO,
-                                { {vcf::ID, vcf::CICNADJ}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Confidence interval around copy number for the adjacency"} },
-                                source
-                            } ) );
-
-            CHECK_THROWS_AS( (vcf::MetaEntry {
-                                1,
-                                vcf::INFO,
-                                { {vcf::ID, vcf::CICNADJ}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::CHARACTER}, {vcf::DESCRIPTION, "Confidence interval around copy number for the adjacency"} },
+                                { {vcf::ID, vcf::CICN}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::FLAG}, {vcf::DESCRIPTION, "Confidence interval around copy number for the segment"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -3359,6 +3298,29 @@ namespace ebi
                                 1,
                                 vcf::INFO,
                                 { {vcf::ID, vcf::RUB}, {vcf::NUMBER, vcf::UNKNOWN_CARDINALITY}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "Number of bases in repeat unit"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::EVENTTYPE}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Type of associated event"} },
+                                source
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::EVENTTYPE}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Type of associated event"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, vcf::EVENTTYPE}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "Type of associated event"} },
                                 source
                             }),
                             vcf::MetaSectionError* );

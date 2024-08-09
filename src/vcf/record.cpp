@@ -534,8 +534,7 @@ namespace ebi
                 throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
             }
             //RUL - RUS matching check made below with RUL
-        }
-        else if (field_key == RUL) {    //repeat unit length
+        } else if (field_key == RUL) {    //repeat unit length
             if (source->version < Version::v44) {                       //not applicable for anything < v4.4
                 return;
             }
@@ -563,8 +562,7 @@ namespace ebi
                     }
                 }
             }
-        }
-        else if (field_key == RUC) {    //repeat unit count
+        } else if (field_key == RUC) {    //repeat unit count
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
@@ -574,8 +572,7 @@ namespace ebi
                 message << "INFO " << RUC << " for record at " << line << " must have " << rnCount << " value(s)";
                 throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
             }
-        }
-        else if (field_key == RB) {     //repeat bases
+        } else if (field_key == RB) {     //repeat bases
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
@@ -585,8 +582,7 @@ namespace ebi
                 message << "INFO " << RB << " for record at " << line << " must have " << rnCount << " value(s)";
                 throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
             }
-        }
-        else if (field_key == CIRUC) {  //conf.interval repeat unit count
+        } else if (field_key == CIRUC) {  //conf.interval repeat unit count
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
@@ -594,11 +590,8 @@ namespace ebi
             if (it != info.end()) {
                 std::vector<std::string> RUCval;
                 util::string_split(it->second, ",", RUCval);
-                if (values.size() != 2 * RUCval.size()) {                //ciruc count must be 2 * RUC count
-                    std::stringstream message;
-                    message << "INFO " << CIRUC << " for record at " << line << " must have " << 2 * RUCval.size() << " value(s)";
-                    throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
-                }
+                //ciruc count must be 2 * RUC count
+                check_info_field_cardinality_explicit(values, 2 * RUCval.size(), CIRUC);
                 for (int i = 0; i < values.size(); ++i) {
                     if (RUCval[i / 2] == MISSING_VALUE) {
                         if (values[i] != MISSING_VALUE) {               //ciruc must be missing with ruc missing
@@ -614,8 +607,7 @@ namespace ebi
                 message << "INFO " << CIRUC << " at " << line << " can not have values without " << RUC;
                 throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + "value(s)"};
             }
-        }
-        else if (field_key == CIRB) {
+        } else if (field_key == CIRB) {
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
@@ -623,11 +615,8 @@ namespace ebi
             if (it != info.end()) {
                 std::vector<std::string> RBval;
                 util::string_split(it->second, ",", RBval);
-                if (values.size() != 2 * RBval.size()) {                //cirb count must be 2 * RB count
-                    std::stringstream message;
-                    message << "INFO " << CIRB << " for record at " << line << " must have " << 2 * RBval.size() << " value(s)";
-                    throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
-                }
+                //cirb count must be 2 * RB count
+                check_info_field_cardinality_explicit(values, 2 * RBval.size(), CIRB);
                 for (int i = 0; i < values.size(); ++i) {
                     if (RBval[i / 2] == MISSING_VALUE) {
                         if (values[i] != MISSING_VALUE) {               //cirb must be missing with RB missing
@@ -643,8 +632,7 @@ namespace ebi
                 message << "INFO " << CIRB << " at " << line << " can not have values without " << RB;
                 throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + "value(s)"};
             }
-        }
-        else if (field_key == RUB) {
+        } else if (field_key == RUB) {
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
@@ -667,11 +655,8 @@ namespace ebi
                     }
                     cnt += std::stoi(RUCval[i]);
                 }
-                if (cnt != values.size()) {                 //RUB size must be sum(RUC[i])
-                    std::stringstream message;
-                    message << "INFO " << RUB << " for record at " << line << " must have " << cnt << " value(s)";
-                    throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
-                }
+                //RUB size must be sum(RUC[i])
+                check_info_field_cardinality_explicit(values, cnt, RUB);
             }
             else {
                 //must be present
@@ -679,6 +664,42 @@ namespace ebi
                 message << "INFO " << RUB << " for record at " << line << " must have " + RUC;
                 throw new InfoBodyError{line, message.str()};
             }
+        } else if (field_key == MEINFO) {
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            //MEINFO must be 4 * ALT allele count
+            check_info_field_cardinality_explicit(values, 4 * alternate_alleles.size(), MEINFO);
+        } else if (field_key == METRANS) {
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            //METRANS must be 4 * ALT allele count
+            check_info_field_cardinality_explicit(values, 4 * alternate_alleles.size(), METRANS);
+        } else if (field_key == CICN) {
+            if (source->version < Version::v44) {   //fixed size and already checked when < v44
+                return;
+            }
+            //CICN must be 2 * ALT allele count
+            check_info_field_cardinality_explicit(values, 2 * alternate_alleles.size(), CICN);
+        } else if (field_key == CIPOS) {
+            if (source->version < Version::v44) {   //fixed size and already checked when < v44
+                return;
+            }
+            //CIPOS must be 2 * ALT allele count
+            check_info_field_cardinality_explicit(values, 2 * alternate_alleles.size(), CIPOS);
+        } else if (field_key == CIEND) {
+            if (source->version < Version::v44) {   //fixed size and already checked when < v44
+                return;
+            }
+            //CIEND must be 2 * ALT allele count
+            check_info_field_cardinality_explicit(values, 2 * alternate_alleles.size(), CIEND);
+        } else if (field_key == CILEN) {
+            if (source->version < Version::v44) {   //fixed size and already checked when < v44
+                return;
+            }
+            //CILEN must be 2 * ALT allele count
+            check_info_field_cardinality_explicit(values, 2 * alternate_alleles.size(), CILEN);
         }
     }
 
@@ -955,8 +976,8 @@ namespace ebi
                     + " is not one of [A, R, G, ., <non-negative number>]"));
         }
         if(!values.empty()) {
-            if (values.front() == MISSING_VALUE) { return; } // No need to check missing data
-        } //TODO, if the 1st one is . then check stops; svclaim=.,DJ worked!
+            if (values.front() == MISSING_VALUE && values.size() == 1) { return; } // No need to check missing data
+        }
 
         bool number_matches = true;
         if (expected_cardinality > 0) {
@@ -1041,8 +1062,8 @@ namespace ebi
     }
 
     void Record::check_field_integer_range(std::string const & field, std::vector<std::string> const & values) const {
-        if (field == SVLEN || field == CIPOS || field == CIEND || field == CILEN || field == CICN || field == CICNADJ ||
-            field == CIRB) {
+        if (field == SVLEN || field == CIPOS || field == CIEND || field == CILEN || field == CIRB ||
+            (field == CICNADJ && source->version < Version::v44)) {
             // to ignore predefined tag fields which permit negative integral values
             return;
         }
@@ -1075,6 +1096,15 @@ namespace ebi
             }
         }
         return rnCnt;
+    }
+
+    int Record::check_info_field_cardinality_explicit(std::vector<std::string> const & values, size_t expected,
+                const std::string field) const {
+        if (values.size() != expected) {
+            std::stringstream message;
+            message << "INFO " << field << " for record at " << line << " must have " << expected << " value(s)";
+            throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+        }
     }
 
     bool is_record_subfield_in_header(std::string const & field_value,

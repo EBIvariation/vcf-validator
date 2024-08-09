@@ -134,6 +134,8 @@ namespace ebi
     const std::string CIGAR = "CIGAR";
     const std::string CILEN = "CILEN";
     const std::string CIPOS = "CIPOS";
+    const std::string CIRB = "CIRB";
+    const std::string CIRUC = "CIRUC";
     const std::string CN = "CN";
     const std::string CNADJ = "CNADJ";
     const std::string DB = "DB";
@@ -144,6 +146,7 @@ namespace ebi
     const std::string DPADJ = "DPADJ";
     const std::string END = "END";
     const std::string EVENT = "EVENT";
+    const std::string EVENTTYPE = "EVENTTYPE";
     const std::string HOMLEN = "HOMLEN";
     const std::string HOMSEQ = "HOMSEQ";
     const std::string H2 = "H2";
@@ -157,21 +160,19 @@ namespace ebi
     const std::string NOVEL = "NOVEL";
     const std::string NS = "NS";
     const std::string PARID = "PARID";
+    const std::string RB = "RB";
+    const std::string RN = "RN";
+    const std::string RUC = "RUC";
+    const std::string RUL = "RUL";
+    const std::string RUB = "RUB";
+    const std::string RUS = "RUS";
     const std::string SB = "SB";
     const std::string SOMATIC = "SOMATIC";
+    const std::string SVCLAIM = "SVCLAIM";
     const std::string SVLEN = "SVLEN";
     const std::string SVTYPE = "SVTYPE";
     const std::string VALIDATED = "VALIDATED";
     const std::string THOUSAND_G = "1000G";
-    const std::string SVCLAIM = "SVCLAIM";
-    const std::string RN = "RN";
-    const std::string RUS = "RUS";
-    const std::string RUL = "RUL";
-    const std::string RUC = "RUC";
-    const std::string RB = "RB";
-    const std::string CIRUC = "CIRUC";
-    const std::string CIRB = "CIRB";
-    const std::string RUB = "RUB";
 
     // FORMAT predefined tags
     const std::string AHAP = "AHAP";
