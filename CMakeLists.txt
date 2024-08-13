@@ -265,6 +265,11 @@ elseif (OSX)
     mod_vcf
     mod_odb
     libcurl.a
+    libbz2.a
+    libz.a
+    libssl.a
+    libcrypto.a
+    libcares.a
     ${Boost_LIBRARIES}
     ${EXT_LIB_PATH}/libodb-sqlite.a
     ${EXT_LIB_PATH}/libodb.a
