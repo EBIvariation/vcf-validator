@@ -150,7 +150,7 @@ namespace ebi
                                     { {vcf::ID, vcf::INS}, {vcf::DESCRIPTION, "tag_description"} },
                                     src
                                 } ) );
-                                    
+
                 CHECK_THROWS_AS( (vcf::MetaEntry {
                                     1,
                                     vcf::ALT,
@@ -482,6 +482,21 @@ namespace ebi
                                 source
                             }),
                             vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //P not valid for v43
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "test"}, {vcf::NUMBER, "P"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "test"} },
+                                source_v43
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //P valid for v44 onwards
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "test"}, {vcf::NUMBER, "P"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "test"} },
+                                source_v44
+                            } ) );
         }
 
         SECTION("Type field values")
@@ -1066,6 +1081,75 @@ namespace ebi
                                 source_v44
                             }),
                             vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PSL}, {vcf::NUMBER, vcf::P}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "PSL"} },
+                                source_v44
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PSL}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "PSL"} },
+                                source_v44
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PSL}, {vcf::NUMBER, vcf::P}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "PSL"} },
+                                source_v44
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PSO}, {vcf::NUMBER, vcf::P}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "PSO"} },
+                                source_v44
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PSO}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "PSO"} },
+                                source_v44
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PSO}, {vcf::NUMBER, vcf::P}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "PSO"} },
+                                source_v44
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {    //valid definition
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PSQ}, {vcf::NUMBER, vcf::P}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "PSQ"} },
+                                source_v44
+                            } ) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid number
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PSQ}, {vcf::NUMBER, vcf::A}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "PSQ"} },
+                                source_v44
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //invalid type
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::PSQ}, {vcf::NUMBER, vcf::P}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "PSQ"} },
+                                source_v44
+                            }),
+                            vcf::MetaSectionError* );
         }
     }
 
@@ -1170,6 +1254,14 @@ namespace ebi
                                 1,
                                 vcf::INFO,
                                 { {vcf::ID, vcf::GT}, {vcf::NUMBER, "D"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //type P is not valid for info
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, "Test"}, {vcf::NUMBER, "P"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "test"} },
                                 source
                             }),
                             vcf::MetaSectionError* );
@@ -2236,6 +2328,14 @@ namespace ebi
                                 1,
                                 vcf::INFO,
                                 { {vcf::ID, vcf::GT}, {vcf::NUMBER, "D"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "Genotype"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {  //type P is not valid for info
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, "Test"}, {vcf::NUMBER, "P"}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "test"} },
                                 source
                             }),
                             vcf::MetaSectionError* );

@@ -415,35 +415,6 @@ namespace ebi
                                 { "0|1" },
                                 source})),
                             vcf::InfoBodyError*);
-            /* added as optional but it is a must case so chek in records/tests vaild
-            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
-                                1,
-                                "chr1",
-                                123456,
-                                { "id123" },
-                                "A",
-                                { "<DEL>", "<DUP>", "AT" },
-                                1.0,
-                                { vcf::PASS },
-                                { { vcf::SVLEN, "2,2,." }, { vcf::SVCLAIM, "D,J,." } },
-                                { vcf::GT, vcf::CN },
-                                { "1|0:1" },
-                                source})) );
-            //invalid as svlen vals not matching for SVs
-            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{ //svlen not matching
-                                1,
-                                "chr1",
-                                123456,
-                                { "id123" },
-                                "A",
-                                { "<DEL>", "<DUP>", "AT" },
-                                1.0,
-                                { vcf::PASS },
-                                { { vcf::SVLEN, "1,2,." }, { vcf::SVCLAIM, "D,J,." } },
-                                { vcf::GT, vcf::CN },
-                                { "0|1:1" },
-                                source})),
-                            vcf::InfoBodyError*); */
         }
 
         SECTION("CNV:TR test")
@@ -1022,5 +993,178 @@ namespace ebi
                             vcf::AlternateAllelesBodyError*);
         }
     }
+
+    TEST_CASE("Sample value warnings v4.4", "[sample warnings]")
+    {
+        std::vector<std::shared_ptr<vcf::Source>> sources = {
+            std::shared_ptr<vcf::Source>{new vcf::Source{
+                "Example VCF source with ploidy 1",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v44,
+                {},
+                { "Sample1", "Sample2" }}},
+
+            std::shared_ptr<vcf::Source>{new vcf::Source{
+                "Example VCF source with ploidy 2",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v44,
+                {},
+                { "Sample1" }}},
+
+            std::shared_ptr<vcf::Source>{new vcf::Source{
+                "Example VCF source with ploidy 3",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v44,
+                {},
+                { "Sample1", "Sample2" }}}
+        };
+
+        for (auto & source : sources) {
+            source->meta_entries.emplace(vcf::REFERENCE,
+                vcf::MetaEntry{
+                    1,
+                    vcf::REFERENCE,
+                    "file",
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::CONTIG,
+                vcf::MetaEntry{
+                    1,
+                    vcf::CONTIG,
+                    { { vcf::ID, "chr1" } },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::END },
+                        { vcf::NUMBER, "1" },
+                        { vcf::TYPE, vcf::INTEGER },
+                        { vcf::DESCRIPTION, "End position" }
+                    },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, "SVLEN" },
+                        { vcf::NUMBER, "A" },
+                        { vcf::TYPE, vcf::INTEGER },
+                        { vcf::DESCRIPTION, "svlen" }
+                    },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::FORMAT,
+                vcf::MetaEntry{
+                    1,
+                    vcf::FORMAT,
+                    {
+                        { vcf::ID, vcf::GT },
+                        { vcf::NUMBER, "1" },
+                        { vcf::TYPE, vcf::STRING },
+                        { vcf::DESCRIPTION, "Genotype" }
+                    },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::FORMAT,
+                vcf::MetaEntry{
+                    1,
+                    vcf::FORMAT,
+                    {
+                        { vcf::ID, "CN" },
+                        { vcf::NUMBER, "1" },
+                        { vcf::TYPE, vcf::FLOAT },
+                        { vcf::DESCRIPTION, "CN" }
+                    },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::FORMAT,
+                vcf::MetaEntry{
+                    1,
+                    vcf::FORMAT,
+                    {
+                        { vcf::ID, "CICN" },
+                        { vcf::NUMBER, "2" },
+                        { vcf::TYPE, vcf::FLOAT },
+                        { vcf::DESCRIPTION, "CICN" }
+                    },
+                    source
+            });
+
+            source->meta_entries.emplace(vcf::ALT,
+            vcf::MetaEntry{
+                1,
+                vcf::ALT,
+                {
+                    { vcf::ID, "CNV" },
+                    { vcf::DESCRIPTION, "Cnv" }
+                },
+                source
+            });
+        }
+
+        vcf::ParsingState parsing_state1{sources[0], vcf::AdditionalChecks()};
+        vcf::ParsingState parsing_state2{sources[1], vcf::AdditionalChecks()};
+        vcf::ParsingState parsing_state3{sources[2], vcf::AdditionalChecks()};
+
+        vcf::ValidateOptionalPolicy optional_policy;
+
+        SECTION("confidence interval")
+        {
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state2, vcf::Record{  //valid cicn
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "<CNV>" },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::END, "2" }, {vcf::SVLEN, "100"} },
+                                { vcf::CN, vcf::CICN },
+                                { {"1.1:-1,2.2"} },
+                                sources[1]})) );
+
+             CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state2, vcf::Record{   //invalid cicn
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "<CNV>" },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::END, "2"}, {vcf::SVLEN, "100"} },
+                                { vcf::CN, vcf::CICN },
+                                { "1.1:2,-3" },
+                                sources[1]})),
+                            vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state2, vcf::Record{   //invalid cicn
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "<CNV>" },
+                                1.0,
+                                { vcf::PASS },
+                                { {vcf::END, "2"}, {vcf::SVLEN, "100"} },
+                                { vcf::CN, vcf::CICN },
+                                { "1.1:-2,3,4" },
+                                sources[1]})),
+                            vcf::SamplesFieldBodyError*);
+        }
+   }
 
 }

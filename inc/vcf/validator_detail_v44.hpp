@@ -17,7 +17,7 @@
  */
 
 
-#line 266 "src/vcf/vcf_v44.ragel"
+#line 267 "src/vcf/vcf_v44.ragel"
 
 
 namespace
@@ -178,7 +178,7 @@ static const int vcf_v44_en_meta_section_skip = 623;
 static const int vcf_v44_en_body_section_skip = 624;
 
 
-#line 272 "src/vcf/vcf_v44.ragel"
+#line 273 "src/vcf/vcf_v44.ragel"
 
 }
 
@@ -197,7 +197,7 @@ namespace ebi
 	cs = vcf_v44_start;
 	}
 
-#line 286 "src/vcf/vcf_v44.ragel"
+#line 287 "src/vcf/vcf_v44.ragel"
 
     }
 
@@ -1712,6 +1712,7 @@ case 148:
 		case 46: goto tr240;
 		case 65: goto tr240;
 		case 71: goto tr240;
+		case 80: goto tr240;
 		case 82: goto tr240;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -7666,7 +7667,7 @@ execFuncs:
 	case 71:
 #line 36 "src/vcf/vcf_v44.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G or dot"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G, P or dot"});
         p--; {cs = 623;goto _again;}
     }
 	break;
@@ -7685,14 +7686,14 @@ execFuncs:
     }
 	break;
 	case 75:
-#line 264 "src/vcf/vcf_v44.ragel"
+#line 265 "src/vcf/vcf_v44.ragel"
 	{ {cs = 28;goto _again;} }
 	break;
 	case 76:
-#line 265 "src/vcf/vcf_v44.ragel"
+#line 266 "src/vcf/vcf_v44.ragel"
 	{ {cs = 629;goto _again;} }
 	break;
-#line 7696 "inc/vcf/validator_detail_v44.hpp"
+#line 7697 "inc/vcf/validator_detail_v44.hpp"
 		}
 	}
 	goto _again;
@@ -8143,7 +8144,7 @@ goto _again;}
 	case 71:
 #line 36 "src/vcf/vcf_v44.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G or dot"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "FORMAT metadata Number is not a number, A, R, G, P or dot"});
         p--; {cs = 623;	if ( p == pe )
 		goto _test_eof;
 goto _again;}
@@ -8176,7 +8177,7 @@ goto _again;}
 goto _again;}
     }
 	break;
-#line 8180 "inc/vcf/validator_detail_v44.hpp"
+#line 8181 "inc/vcf/validator_detail_v44.hpp"
 		}
 	}
 	}
@@ -8184,7 +8185,7 @@ goto _again;}
 	_out: {}
 	}
 
-#line 294 "src/vcf/vcf_v44.ragel"
+#line 295 "src/vcf/vcf_v44.ragel"
 
     }
     

@@ -47,7 +47,7 @@ namespace ebi
         void check_filter(std::map<std::string, std::string> & value) const;
         void check_filter_id(std::string const & id_field) const;
         void check_format(std::map<std::string, std::string> & value) const;
-        void check_format_or_info_number(std::string const & number_field, std::string const & field) const;
+        void check_format_or_info_number(std::string const & number_field, std::string const & field, bool isinfo) const;
         void check_format_type(std::string const & type_field) const;
         void check_info(std::map<std::string, std::string> & value) const;
         void check_info_type(std::string const & type_field) const;
