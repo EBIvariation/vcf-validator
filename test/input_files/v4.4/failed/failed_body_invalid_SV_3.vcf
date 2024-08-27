@@ -1,0 +1,17 @@
+##fileformat=VCFv4.4
+##CauseOfFailure=invalid SV - SVCLAIM not present for DEL/DUP
+##reference=testval
+##contig=<ID=1,length=6243,assembly=B3,md5=f121111111618ff66beb2da,species="Homo sapiens",taxonomy=x>
+##INFO=<ID=SVCLAIM,Number=A,Type=String,Description="Claim made by the structural variant call. Valid values are D, J, DJ...">
+##INFO=<ID=SVLEN,Number=A,Type=Integer,Description="Length of structural variant">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##ALT=<ID=DEL,Description="Deletion">
+##ALT=<ID=DUP,Description="Duplication">
+##ALT=<ID=INV,Description="Inversion">
+##ALT=<ID=INS>
+##FILTER=<ID=F1,Description="Filter1">
+##FILTER=<ID=F2>
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00096
+1	700	rs180734498	C	<INV>	100	PASS	SVLEN=10	GT	0|0
+1	700	rs180734498	C	<DEL>	100	PASS	SVLEN=10	GT	0|0
+1	700	rs180734498	C	<DUP>	100	PASS	SVLEN=10	GT	0|0
