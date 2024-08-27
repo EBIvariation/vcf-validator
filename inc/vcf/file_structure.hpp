@@ -673,7 +673,7 @@ namespace ebi
          *  (e.g. with 1 reference, 2 alternate alleles (3 total alleles) and ploidy 2, it's 3 + 2 -1 choose 2, which is 6: 00, 01, 11, 02, 12, 22)
          *  - "." means unknown number of elements
          *  - number is a positive number [0, +inf)
-         *  - "P" is the alleles in GT
+         *  - "P" is the number of alleles in the corresponding GT
          * @param alternate_allele_number the number of alternate alleles
          * @param ploidy is the number of copies of a chromosome in a sample, so a given genotype in said chromosome needs `ploidy` alleles to be completely specified
          * @param expected_cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number.
