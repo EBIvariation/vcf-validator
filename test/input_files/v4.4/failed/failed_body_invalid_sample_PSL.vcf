@@ -1,0 +1,19 @@
+##fileformat=VCFv4.4
+##CauseOfFailure=invalid sample value, unphased allele must have PSL as '.'
+##reference=testval
+##contig=<ID=1,length=6243,assembly=B3,md5=f121111111618ff66beb2da,species="Homo sapiens",taxonomy=x>
+##INFO=<ID=SVCLAIM,Number=A,Type=String,Description="Claim made by the structural variant call. Valid values are D, J, DJ...">
+##INFO=<ID=SVLEN,Number=A,Type=Integer,Description="Length of structural variant">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##INFO=<ID=CN,Number=A,Type=Float,Description="Copy number of CNV/breakpoint">
+##ALT=<ID=CNV,Description="CNV">
+##ALT=<ID=DEL,Description="DEL">
+##ALT=<ID=DUP,Description="DUP">
+##FORMAT=<ID=PSL,Number=P,Type=String,Description="PSL">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00096
+1	700	rs180734498	C	<DEL>,T,<DUP>	100	PASS	SVLEN=1,.,2;SVCLAIM=D,.,D	GT:PSL	0|0:T1,T2
+1	800	rs180734498	C	<CNV>,T,<DEL>	100	PASS	SVLEN=2,.,1;SVCLAIM=D,.,DJ	GT:PSL	0/0:.,.
+1	900	rs180734498	C	<CNV>,T,<DUP>	100	PASS	SVLEN=1,.,21;SVCLAIM=D,.,J	GT:PSL	0/0|1:T1,.,T2
+1	1700	rs180734498	C	<DEL>,T,<DUP>	100	PASS	SVLEN=1,.,2;SVCLAIM=D,.,D	GT:PSL	0|0:.,.
+1	1800	rs180734498	C	<CNV>,T,<DEL>	100	PASS	SVLEN=2,.,1;SVCLAIM=D,.,DJ	GT:PSL	0/0:T1,T2
+1	1900	rs180734498	C	<CNV>,T,<DUP>	100	PASS	SVLEN=1,.,21;SVCLAIM=D,.,J	GT:PSL	0/0|1:T1,T2,T3

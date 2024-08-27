@@ -1,0 +1,10 @@
+##fileformat=VCFv4.4
+##CauseOfFailure=invalid SV - BND
+##reference=testval
+##contig=<ID=1,length=6243,assembly=B3,md5=f121111111618ff66beb2da,species="Homo sapiens",taxonomy=x>
+##INFO=<ID=SVLEN,Number=A,Type=Integer,Description="Length of structural variant">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##ALT=<ID=BND:Test,Description="Breakend SV acceptable in v4.3">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00096
+1	700	rs180734498	C	<BND:Test>	100	PASS	CN=100;SVLEN=1	GT	0|0
+

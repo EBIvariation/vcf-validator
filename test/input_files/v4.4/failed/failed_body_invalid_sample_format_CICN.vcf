@@ -1,0 +1,20 @@
+##fileformat=VCFv4.4
+##CauseOfFailure=invalid sample value, format CICN invalid
+##reference=testval
+##contig=<ID=1,length=6243,assembly=B3,md5=f121111111618ff66beb2da,species="Homo sapiens",taxonomy=x>
+##INFO=<ID=SVCLAIM,Number=A,Type=String,Description="Claim made by the structural variant call. Valid values are D, J, DJ...">
+##INFO=<ID=SVLEN,Number=A,Type=Integer,Description="Length of structural variant">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##INFO=<ID=CN,Number=A,Type=Float,Description="Copy number of CNV/breakpoint">
+##ALT=<ID=CNV,Description="CNV">
+##ALT=<ID=DEL,Description="DEL">
+##ALT=<ID=DUP,Description="DUP">
+##FORMAT=<ID=CN,Number=1,Type=Float,Description="Copy number">
+##FORMAT=<ID=CICN,Number=2,Type=Float,Description="CI Copy number">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00096
+1	800	rs180734498	C	<CNV>	100	PASS	SVLEN=2;SVCLAIM=D	GT:CN:CICN	0/0:1.2:-1
+1	900	rs180734498	C	<CNV>	100	PASS	SVLEN=1;SVCLAIM=D	GT:CN:CICN	0/0|:1.2:-1,1
+1	1000	rs180734498	C	<CNV>	100	PASS	SVLEN=1;SVCLAIM=D	GT:CN:CICN	0/0:1.2:-1,-1
+1	1100	rs180734498	C	<CNV>	100	PASS	SVLEN=1;SVCLAIM=D	GT:CN:CICN	0/0:1.2:1,-1
+1	1200	rs180734498	C	<CNV>	100	PASS	SVLEN=1;SVCLAIM=D	GT:CN:CICN	0/0:1.2:1,1
+1	1300	rs180734498	C	<CNV>	100	PASS	SVLEN=1;SVCLAIM=D	GT:CN:CICN	0/0:1.2:1,1,1
