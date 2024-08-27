@@ -1160,7 +1160,7 @@ namespace ebi
             return;
         }
         if (util::contains(format, CICN) && !util::contains(format, CN)) {
-            throw new FormatBodyError{line, "Format field CICN must be used only with CN field."};
+            throw new FormatBodyError{line, "Format field CICN must be used only with CN field"};
         }
     }
 
@@ -1196,7 +1196,7 @@ namespace ebi
                 if (svlen_val != values[i]) {
                     //must be same as earlier value
                     std::stringstream message;
-                    message << "INFO " << SVLEN << " must be same for all CNV, DEL, DUP alleles.";
+                    message << "INFO " << SVLEN << " must be same for all CNV, DEL, DUP alleles";
                     throw new InfoBodyError{line, message.str()};
                 }
             }
@@ -1238,7 +1238,6 @@ namespace ebi
                 //infer phasing based on other alleles phasing
                 allele->insert(0, anyphased ? "|" : "/");
             }
-            //alleles.insert(alleles.begin(), values.begin(), values.end());
             alleles.swap(values);
         }
     }
