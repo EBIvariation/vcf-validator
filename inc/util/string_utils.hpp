@@ -29,10 +29,14 @@ namespace ebi
 {
   namespace util
   {
+    template<typename C>
+    void string_split_ex(std::string const & s, char const * delims, C & ret, bool withdelim);
+
     /**
      * Splits `s` using `delims` as separator and fills the container `ret` with the parts.
      * An empty string results in an empty container `ret`.
      * Expects a string without leading separators and when one is present, it would be part of 1st string.
+     * updated to use string_split_ex with @withdelim false
      * @param s input string to split
      * @param delims any character here acts as a separator
      * @param ret return by reference the container filled with the string split.
@@ -40,26 +44,7 @@ namespace ebi
     template<typename C>
     void string_split(std::string const & s, char const * delims, C & ret)
     {
-        C output;
-
-        if (s.size() > 0) {
-            char const* p = s.c_str();
-            char const* q = strpbrk(p+1, delims);
-
-            // Insert first to last-1 elements
-            for( ; q != NULL; q = strpbrk(p, delims) )
-            {
-                output.push_back(typename C::value_type(p, q));
-                p = q + 1;
-            }
-
-            // Insert last element
-            if (p < &(s.back()) + 1) {
-                output.push_back(typename C::value_type(p));
-            }
-        }
-
-        output.swap(ret);
+        string_split_ex(s, delims, ret, false);
     }
 
     /** extended version of string_split
