@@ -29,10 +29,14 @@ namespace ebi
 {
   namespace util
   {
+    template<typename C>
+    void string_split_ex(std::string const & s, char const * delims, C & ret, bool withdelim);
+
     /**
      * Splits `s` using `delims` as separator and fills the container `ret` with the parts.
      * An empty string results in an empty container `ret`.
      * Expects a string without leading separators and when one is present, it would be part of 1st string.
+     * updated to use string_split_ex with @withdelim false
      * @param s input string to split
      * @param delims any character here acts as a separator
      * @param ret return by reference the container filled with the string split.
@@ -40,17 +44,33 @@ namespace ebi
     template<typename C>
     void string_split(std::string const & s, char const * delims, C & ret)
     {
+        string_split_ex(s, delims, ret, false);
+    }
+
+    /** extended version of string_split
+     * Splits `s` using `delims` as separator and fills the container `ret` with the parts.
+     * The delimiter can be retained based on parameter @withdelim
+     * An empty string results in an empty container `ret`.
+     * With false for withdelim, 1st leading delimiter will result in an empty string (/1 -> "", "1")
+     * @param s input string to split
+     * @param delims any character here acts as a separator
+     * @param withdelim - true to retain delimiter and false to split without delimiter
+     * @param ret return by reference the container filled with the string split.
+    */
+    template<typename C>
+    void string_split_ex(std::string const & s, char const * delims, C & ret, bool withdelim)
+    {
         C output;
 
         if (s.size() > 0) {
             char const* p = s.c_str();
-            char const* q = strpbrk(p+1, delims);
+            char const* q = strpbrk(p + (withdelim ? 1 : 0), delims);
 
             // Insert first to last-1 elements
-            for( ; q != NULL; q = strpbrk(p, delims) )
+            for( ; q != NULL; q = strpbrk(p + (withdelim ? 1 : 0), delims) )
             {
                 output.push_back(typename C::value_type(p, q));
-                p = q + 1;
+                p = q + (withdelim ? 0 : 1);
             }
 
             // Insert last element
@@ -61,7 +81,6 @@ namespace ebi
 
         output.swap(ret);
     }
-
     /**
      * Temporal implementation for mismatch with 2 starts and 2 ends. It is not in STL for c++11, but it will in c++14.
      *

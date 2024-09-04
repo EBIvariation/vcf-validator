@@ -68,6 +68,7 @@ namespace ebi
         void check_filter_meta(ParsingState & state, Record const & record) const;
         void check_info_meta(ParsingState & state, Record const & record) const;
         void check_format_meta(ParsingState & state, Record const & record) const;
+        void check_body_entry_sample_confidence_interval(ParsingState & state, Record const & record) const;
     };
     
   }

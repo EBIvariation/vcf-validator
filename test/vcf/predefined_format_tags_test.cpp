@@ -1569,6 +1569,195 @@ namespace ebi
                             { "3,4,5" },
                             source}),
                         vcf::SamplesFieldBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{    //valid CICN
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CN, vcf::CICN },
+                            { "1.2:-1.2,1.2" },
+                            source}));
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid cicn
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CICN },
+                            { "-3,4" },
+                            source}),
+                            vcf::FormatBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{    //valid PSL
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL },
+                            { "|0/1:chr1*123456*1,." },
+                            source}));
+
+            CHECK_NOTHROW( (vcf::Record{    //valid PSL
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL },
+                            { "0|1:chr1*123456*1,." },
+                            source}));
+
+            CHECK_NOTHROW( (vcf::Record{    //valid PSL
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL },
+                            { "0/1:.,." },
+                            source}));
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid psl
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL },
+                            { "/0:chr1*123456*1" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid psl
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL },
+                            { "|0:chr1*123456*1,." },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{    //valid PSO
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL, vcf::PSO },
+                            { "0/1:.,.:.,." },
+                            source}));
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid pso
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL, vcf::PSO },
+                            { "|0:chr1*123456*1:1,2" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid pso
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL, vcf::PSO },
+                            { "|0:.:1" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{    //valid PSQ
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL, vcf::PSQ },
+                            { "|0:chr1*123456*1:1" },
+                            source}));
+
+            CHECK_NOTHROW( (vcf::Record{    //valid PSQ
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL, vcf::PSQ },
+                            { ".:.:." },
+                            source}));
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid psq
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL, vcf::PSQ },
+                            { "|0:chr1*123456*1:1,2" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
         }
     }
 

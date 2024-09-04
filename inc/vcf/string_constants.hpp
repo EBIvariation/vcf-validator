@@ -103,6 +103,7 @@ namespace ebi
     const std::string G = "G";
     const std::string R = "R";
     const std::string UNKNOWN_CARDINALITY = ".";
+    const std::string P = "P";
 
     // Pass value for Filter
     const std::string PASS = "PASS";
@@ -192,6 +193,9 @@ namespace ebi
     const std::string PL = "PL";
     const std::string PQ = "PQ";
     const std::string PS = "PS";
+    const std::string PSL = "PSL";
+    const std::string PSO = "PSO";
+    const std::string PSQ = "PSQ";
 
     // File extensions
     const std::string VCF_EXT = ".vcf";

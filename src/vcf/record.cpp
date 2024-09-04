@@ -352,6 +352,8 @@ namespace ebi
 
         check_format_GT();
         check_format_no_duplicates();
+        check_format_allele_SVLEN();
+        check_format_CICN();    //TODO check and confirm from spec issue.
     }
 
     void Record::check_format_GT() const
@@ -872,6 +874,48 @@ namespace ebi
                 }
             }
         }
+        if (source->version < Version::v44) {   //not valid for < v44
+            return;
+        }
+        if (field_key == PSL) {
+            if (format[0] == GT) {
+                std::string::size_type pos = samples[i].find(':');
+                std::string GT_subfield = samples[i];
+                std::vector<std::string> alleles;
+                if (pos != std::string::npos) {
+                    GT_subfield = samples[i].substr(0, pos);
+                }
+                get_phased_alleles(GT_subfield, alleles);   //allele or unknown(.)
+                for (size_t i = 0; i < values.size(); ++i) {
+                    if (alleles[i].at(0) == '/' && values[i] != MISSING_VALUE) {
+                        //un-phased allele must have '.' in PSL
+                        throw new SamplesFieldBodyError{line, message + " at " +
+                            std::to_string(i+1) + " to be '.'", "", field_key};
+                    }
+                }
+            }
+        } else if (field_key == PSO) {
+            //needs caching of records for detailed validation, which is not efficient - skipped
+            std::vector<std::string> pslvals;
+            get_PSL_values(i, pslvals);
+            for (int i = 0; i < pslvals.size(); ++i) {
+                if (pslvals[i] == MISSING_VALUE && values[i] != MISSING_VALUE) {
+                    //when psl is missing val, pso has to be missing as well
+                    throw new SamplesFieldBodyError{line, message + " at " + std::to_string(i+1) +
+                    " to be '.' as corresponding PSL is missing", "", field_key};
+                }
+            }
+        } else if (field_key == PSQ) {
+            std::vector<std::string> pslvals;
+            get_PSL_values(i, pslvals);
+            for (int i = 0; i < pslvals.size(); ++i) {
+                if (pslvals[i] == MISSING_VALUE && values[i] != MISSING_VALUE) {
+                    //when psl is missing val, psq has to be missing as well
+                    throw new SamplesFieldBodyError{line, message + " at " + std::to_string(i+1) +
+                    " to be '.' as corresponding PSL is missing", "", field_key};
+                }
+            }
+        }
     }
 
     void Record::check_sample_alleles(std::vector<std::string> const & subfields) const
@@ -922,7 +966,7 @@ namespace ebi
     }
 
     bool Record::is_valid_cardinality(std::string const &number, size_t alternate_allele_number, size_t ploidy,
-                                      long &expected_cardinality) const
+                                      long &expected_cardinality, bool isinfo) const
     {
         bool valid = true;
 
@@ -939,6 +983,8 @@ namespace ebi
         } else if (number == UNKNOWN_CARDINALITY) {
             // ...it is unspecified
             expected_cardinality = -1;
+        } else if (number == P && !isinfo) {    //invalid for info data
+            expected_cardinality = ploidy;
         } else {
             // ...specified as a number in range [0, +MAX_LONG)
             try {
@@ -961,7 +1007,7 @@ namespace ebi
         if (number != G) {
             long cardinality;
             size_t ploidy = 0;
-            check_sample_field_cardinality(values, number, ploidy, cardinality);
+            check_sample_field_cardinality(values, number, ploidy, cardinality, true);
         } else {
             // this case is not well defined, we just skip this check and allow any cardinality
             // for further discussion see https://github.com/samtools/hts-specs/issues/272
@@ -969,11 +1015,12 @@ namespace ebi
     }
 
     void Record::check_sample_field_cardinality(std::vector<std::string> const &values, std::string const &number,
-                                                size_t ploidy, long &expected_cardinality) const
+                                                size_t ploidy, long &expected_cardinality, bool isinfo) const
     {
-        if (!is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected_cardinality)) {
+        if (!is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected_cardinality, isinfo)) {
+            //P is valid for format data and not for info
             raise(std::make_shared<Error>(line, " meta specification Number=" + number
-                    + " is not one of [A, R, G, ., <non-negative number>]"));
+                    + " is not one of [A, R, G, " + (isinfo ? "" : "P, ") + "., <non-negative number>]"));
         }
         if(!values.empty()) {
             if (values.front() == MISSING_VALUE && values.size() == 1) { return; } // No need to check missing data
@@ -1104,6 +1151,95 @@ namespace ebi
             std::stringstream message;
             message << "INFO " << field << " for record at " << line << " must have " << expected << " value(s)";
             throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+        }
+    }
+
+    void Record::check_format_CICN() const
+    { //TODO check and confirm from spec issue.
+        if (source->version < Version::v44) {
+            return;
+        }
+        if (util::contains(format, CICN) && !util::contains(format, CN)) {
+            throw new FormatBodyError{line, "Format field CICN must be used only with CN field."};
+        }
+    }
+
+    void Record::check_format_allele_SVLEN() const
+    {
+        std::vector<std::string> values;
+        std::string svlen_val;
+        const auto &svlen = info.find(SVLEN);
+
+        static boost::regex allele_regex("(<(DUP|DEL|CNV)(:[^>]+)*>)+");
+        if (source->version < Version::v44) {   //v44 onwards
+            return;
+        }
+        if (!util::contains(format, CN) || svlen == info.end()) {
+            //only when format CN is present and info svlen present (SVs will have SVLEN)
+            return;
+        }
+        util::string_split(svlen->second, ",", values);
+
+        for (size_t i = 0; i < alternate_alleles.size(); ++i ) {
+            //SVLEN must be present for symbolic SV
+            auto & alternate = alternate_alleles[i];
+            if (types[i] != RecordType::STRUCTURAL) {
+                //only SV needs check
+                continue;
+            }
+            if (boost::regex_match(alternate, allele_regex)) {
+                //del/dup/cnv + ; they must have same svlen
+                if (!svlen_val.size()) {
+                    svlen_val = values[i];
+                    continue;
+                }
+                if (svlen_val != values[i]) {
+                    //must be same as earlier value
+                    std::stringstream message;
+                    message << "INFO " << SVLEN << " must be same for all CNV, DEL, DUP alleles.";
+                    throw new InfoBodyError{line, message.str()};
+                }
+            }
+        }
+    }
+
+    void Record::get_PSL_values(size_t i, std::vector<std::string>& pslvalues) const
+    {
+        std::vector<std::string> samplevals;
+        const auto &psl = std::find(format.begin(), format.end(), PSL);
+        if (psl == format.end()) {
+            return;         //PSL not found
+        }
+        size_t offset = psl - format.begin();   //position of PSL
+        //already field count checked data
+        util::string_split(samples[i], ":", samplevals);
+        util::string_split(samplevals[offset], ",", pslvalues);
+    }
+    void Record::get_phased_alleles(std::string GT, std::vector<std::string>& alleles) const
+    {
+        std::string delims("|/");
+        bool anyphased = false;
+        bool first = true;
+        std::vector<std::string> values;
+
+        if (!GT.size()) {
+            return;
+        }
+
+        if (GT.find('|') != std::string::npos) {
+            anyphased = true;
+        }
+
+        util::string_split_ex(GT, delims.c_str(), values, true);
+        //check and assign phasing for 1st allele, if missing
+        auto allele = values.begin();
+        if (allele != values.end()) {
+            if (allele->at(0) != '/' && allele->at(0) != '|') {
+                //infer phasing based on other alleles phasing
+                allele->insert(0, anyphased ? "|" : "/");
+            }
+            //alleles.insert(alleles.begin(), values.begin(), values.end());
+            alleles.swap(values);
         }
     }
 

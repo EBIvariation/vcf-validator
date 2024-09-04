@@ -122,7 +122,9 @@ namespace ebi
     {
         // It must contain an ID and Description
         check_key_is_present(ALT, ID, value.count(ID));
-        check_key_is_present(ALT, DESCRIPTION, value.count(DESCRIPTION));
+        if (entry.source->version < Version::v44) {     //description optional since v44
+            check_key_is_present(ALT, DESCRIPTION, value.count(DESCRIPTION));
+        }
 
         check_alt_id(value[ID]);
     }
@@ -155,7 +157,9 @@ namespace ebi
     {
         // It must contain an ID and Description
         check_key_is_present(FILTER, ID, value.count(ID));
-        check_key_is_present(FILTER, DESCRIPTION, value.count(DESCRIPTION));
+        if (entry.source->version < Version::v44) {     //this is optional v44 onwards
+            check_key_is_present(FILTER, DESCRIPTION, value.count(DESCRIPTION));
+        }
 
         check_filter_id(value[ID]);
     }
@@ -175,7 +179,7 @@ namespace ebi
         check_key_is_present(FORMAT, TYPE, value.count(TYPE));
         check_key_is_present(FORMAT, DESCRIPTION, value.count(DESCRIPTION));
         
-        check_format_or_info_number(value[NUMBER], FORMAT);
+        check_format_or_info_number(value[NUMBER], FORMAT, false);
         check_format_type(value[TYPE]);
 
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
@@ -190,14 +194,17 @@ namespace ebi
         }
     }
 
-    void MetaEntryVisitor::check_format_or_info_number(std::string const & number_field, std::string const & field) const
+    void MetaEntryVisitor::check_format_or_info_number(std::string const & number_field, std::string const & field, bool isinfo) const
     {
+        bool checkP = entry.source->version >= Version::v44;
         if (util::contains_if(number_field, [](char c) { return !isdigit(c); }) &&
             number_field != A &&
             number_field != R &&
             number_field != G &&
-            number_field != UNKNOWN_CARDINALITY) {
-            throw new MetaSectionError{entry.line, field + " metadata Number is not a number, A, R, G or dot"};
+            number_field != UNKNOWN_CARDINALITY &&
+            (isinfo || !checkP || (number_field != P && !isinfo && checkP))) {
+            throw new MetaSectionError{entry.line, field + " metadata Number is not a number, A, R, G" +
+                ((!isinfo && checkP) ? ", P" : "") + " or dot"};
         }
     }
 
@@ -219,7 +226,7 @@ namespace ebi
         check_key_is_present(INFO, TYPE, value.count(TYPE));
         check_key_is_present(INFO, DESCRIPTION, value.count(DESCRIPTION));
 
-        check_format_or_info_number(value[NUMBER], INFO);
+        check_format_or_info_number(value[NUMBER], INFO, true);
         check_info_type(value[TYPE]);
 
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
