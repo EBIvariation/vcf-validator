@@ -122,6 +122,7 @@ int main(int argc, char **argv)
         }
 
         ebi::vcf::OdbReportRW errorDAO{errors};
+        throw std::runtime_error{"ODB support removed!"};
 
         auto &input_stream = input_path == ebi::vcf::STDIN ? std::cin : input_file;
         auto &output_stream = output_path == ebi::vcf::STDOUT ? std::cout : output_file;

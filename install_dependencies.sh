@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # stop the script if any command fails
 set -e
 
@@ -17,9 +16,6 @@ os_name can be:
   - osx
 
 it installs the given dependencies:
-  - odb compiler                            odb-2.4.0
-  - odb common runtime library              libodb-2.4.0
-  - odb sqlite runtime library              libodb-sqlite-2.4.0
   - bzip library (linux only)               bzip2-1.0.6
   - zlib library (linux only)               zlib-1.2.11
   - curl library (linux only)               curl-7.62.0
@@ -73,36 +69,6 @@ fi
 # Download ODB runtime library, sqlite DB plugin for ODB, libbz2 and libz.
 echo "creating directory $dependencies_dir"
 mkdir -p $dependencies_dir && cd $dependencies_dir
-
-echo "installing libodb"
-wget http://codesynthesis.com/download/odb/2.4/libodb-2.4.0.tar.bz2 -O ./libodb.tar.bz2
-tar jxf ./libodb.tar.bz2
-cd libodb-2.4.0
-if [[ "$OS_NAME" == "osx" ]]
-then
-  #change name of file to avoid build issues in mac
-  mv version version_odb
-  sed 's/^dist_doc_DATA = GPLv2 LICENSE README NEWS version$/dist_doc_DATA = GPLv2 LICENSE README NEWS version_odb/' Makefile.am > Makefile.tmp
-  mv Makefile.tmp Makefile.am
-  ./bootstrap
-fi
-./configure && make
-cd ..
-
-echo "installing libodb-sqlite"
-wget http://codesynthesis.com/download/odb/2.4/libodb-sqlite-2.4.0.tar.bz2 -O ./libodb-sqlite.tar.bz2
-tar jxf ./libodb-sqlite.tar.bz2
-cd libodb-sqlite-2.4.0
-if [[ "$OS_NAME" == "osx" ]]
-then
-  #change name of file to avoid build issues in mac
-  mv version version_sqlite
-  sed 's/^dist_doc_DATA = GPLv2 LICENSE README NEWS version$/dist_doc_DATA = GPLv2 LICENSE README NEWS version_sqlite/' Makefile.am > Makefile.tmp
-  mv Makefile.tmp Makefile.am
-  ./bootstrap
-fi
-./configure --with-libodb=../libodb-2.4.0 && make
-cd ..
 
 if [[ "$OS_NAME" != "osx" ]]
 then
@@ -185,8 +151,6 @@ fi
 
 
 # Make easier to find the static libraries
-cp libodb-2.4.0/odb/.libs/libodb.a .
-cp libodb-sqlite-2.4.0/odb/sqlite/.libs/libodb-sqlite.a .
 
 if [[ "$OS_NAME" != "osx" ]]
 then
@@ -196,23 +160,6 @@ then
 fi
 
 # copy headers
-cp -r libodb-2.4.0/odb ./
-cp -r libodb-sqlite-2.4.0/odb/sqlite ./odb/
-
-# Download odb compiler
-if [[ "$OS_NAME" == "linux" ]]
-then
-  wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-x86_64-linux-gnu.tar.bz2 -O ./odb.tar.bz2
-  tar jxf ./odb.tar.bz2
-elif [[ "$OS_NAME" == "osx" ]]
-then
-  wget http://codesynthesis.com/download/odb/2.4/odb-2.4.0-i686-macosx.tar.bz2 -O ./odb.tar.bz2
-  tar jxf ./odb.tar.bz2
-else
-  echo "Invalid OS name"
-  echo "$help_install_dependencies"
-  exit
-fi
 
 cd ..
 

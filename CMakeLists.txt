@@ -43,21 +43,13 @@ if (LINUX)
     set (EXT_LIB_PATH "/usr/local/bin" CACHE STRING "Absolute path to libraries")
   else()
     set (EXT_LIB_PATH "${DEFAULT_EXT_LIB_PATH}" CACHE STRING "Absolute path to libraries") # cached: this instruction is ignored if the user provided the variable
-    set (ODB_PATH "${EXT_LIB_PATH}/odb-2.4.0-x86_64-linux-gnu/bin/" CACHE STRING "Path to odb binaries")
     if (EXISTS "${EXT_LIB_PATH}/boost")
       set (SELF_COMPILED_BOOST TRUE)
     else ()
       set (SELF_COMPILED_BOOST FALSE)
     endif()
   endif()
-elseif (OSX)
-  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/osx_dependencies" CACHE STRING "Absolute path to libraries")
-  set (ODB_PATH "${EXT_LIB_PATH}/odb-2.4.0-i686-macosx/bin/" CACHE STRING "Path to odb binaries")
-  if (NOT EXISTS "${EXT_LIB_PATH}")
-    message(FATAL_ERROR "Please run first install_dependencies.sh osx")
-  endif()
 elseif (WINDOWS)
-  include_directories (lib/sqlite)            # Windows specific
   set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows_specific" CACHE STRING "Absolute path to libraries")
   if (NOT EXISTS "${PROJECT_SOURCE_DIR}/windows_dependencies")
     message(FATAL_ERROR "Please run first install_dependencies.bat")
@@ -66,8 +58,8 @@ elseif (WINDOWS)
   include_directories (windows_dependencies/curl/include)
 endif ()
 
-include_directories ("${EXT_LIB_PATH}")
 if (NOT OSX)
+  include_directories ("${EXT_LIB_PATH}")
   include_directories ("${EXT_LIB_PATH}/curl/include")
 endif ()
 
@@ -106,7 +98,6 @@ find_package (Threads REQUIRED)
 
 if (LINUX OR OSX)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas") # No unknown pragmas: it's ok that gcc doesn't know about ODB's pragmas
-  set (CMAKE_C_FLAGS " -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_OMIT_LOAD_EXTENSION") # Needed to statically link ODB
   if (LINUX AND SELF_COMPILED_BOOST)
     set (BOOST_CUSTOM_INCLUDE_DIR ${EXT_LIB_PATH}/boost)
     include_directories (${BOOST_CUSTOM_INCLUDE_DIR} )
@@ -134,7 +125,6 @@ endif ()
 
 
 # Application modules
-add_library (mod_sqlite3 STATIC lib/sqlite/sqlite3.c)
 
 if (LINUX)
   set (THIRD_PARTY_LIBRARIES
@@ -145,50 +135,20 @@ if (LINUX)
     ${EXT_LIB_PATH}/openssl/lib/libcrypto.a
     ${EXT_LIB_PATH}/libbz2.a
     ${EXT_LIB_PATH}/libz.a
-    ${EXT_LIB_PATH}/libodb-sqlite.a
-    ${EXT_LIB_PATH}/libodb.a
-    mod_sqlite3
     ${CMAKE_THREAD_LIBS_INIT}
   )
 elseif (OSX)
   set (THIRD_PARTY_LIBRARIES
     ${Boost_LIBRARIES}
     libcurl.a
-    ${EXT_LIB_PATH}/libodb-sqlite.a
-    ${EXT_LIB_PATH}/libodb.a
-    mod_sqlite3
     ${CMAKE_THREAD_LIBS_INIT}
   )
 elseif (WINDOWS)
   set (THIRD_PARTY_LIBRARIES
-    ${EXT_LIB_PATH}/odb-sqlite.lib
-    ${EXT_LIB_PATH}/odb.lib
-    mod_sqlite3
     windows_dependencies/curl/lib/libcurl
     ${CMAKE_THREAD_LIBS_INIT}
   )
 endif ()
-
-set (MOD_ODB_SOURCES)
-set (ODB_MAPPING_CLASSES inc/vcf/error.hpp)
-foreach (_file ${ODB_MAPPING_CLASSES})
-  string (REPLACE ".hpp" "-odb.cpp" gencppfile ${_file})
-  string (REPLACE "inc" "src" right_place_gencppfile ${gencppfile})
-  if (LINUX OR OSX)
-    add_custom_command (
-      OUTPUT ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
-      COMMAND cd ${CMAKE_HOME_DIRECTORY}/ && ${ODB_PATH}odb --include-prefix vcf --std c++11 -d sqlite --generate-query --generate-schema
-      --hxx-suffix .hpp --ixx-suffix .ipp --cxx-suffix .cpp
-      --output-dir ${CMAKE_HOME_DIRECTORY}/inc/vcf/ ${_file}
-      && mv ${CMAKE_HOME_DIRECTORY}/${gencppfile} ${CMAKE_HOME_DIRECTORY}/${right_place_gencppfile}
-      DEPENDS ${_file}
-      COMMENT "Building odb for ${_file}"
-    )
-  endif ()
-  list (APPEND MOD_ODB_SOURCES ${right_place_gencppfile})
-endforeach ()
-add_library (mod_odb STATIC ${MOD_ODB_SOURCES})
-target_link_libraries (mod_odb ${THIRD_PARTY_LIBRARIES})
 
 set (MOD_VCF_SOURCES
   inc/fasta/faidx.hpp
@@ -197,13 +157,11 @@ set (MOD_VCF_SOURCES
   inc/vcf/assembly_checker.hpp
   inc/vcf/assembly_check_report_writer.hpp
   inc/vcf/compression.hpp
-  inc/vcf/debugulator.hpp
   inc/vcf/error_policy.hpp
   inc/vcf/file_structure.hpp
   inc/vcf/fixer.hpp
   inc/vcf/meta_entry_visitor.hpp
   inc/vcf/normalizer.hpp
-  inc/vcf/odb_report.hpp
   inc/vcf/optional_policy.hpp
   inc/vcf/parse_policy.hpp
   inc/vcf/parsing_state.hpp
@@ -225,11 +183,9 @@ set (MOD_VCF_SOURCES
   src/vcf/abort_error_policy.cpp
   src/vcf/assembly_checker.cpp
   src/vcf/compression.cpp
-  src/vcf/debugulator.cpp
   src/vcf/fixer.cpp
   src/vcf/meta_entry.cpp
   src/vcf/normalizer.cpp
-  src/vcf/odb_report.cpp
   src/vcf/parsing_state.cpp
   src/vcf/record.cpp
   src/vcf/report_error_policy.cpp
@@ -239,15 +195,13 @@ set (MOD_VCF_SOURCES
   src/vcf/validator.cpp
 )
 add_library (mod_vcf STATIC ${MOD_VCF_SOURCES})
-add_dependencies (mod_vcf mod_odb) # works even without this if we add mod_vcf as target_link_libraries
-target_link_libraries (mod_vcf ${THIRD_PARTY_LIBRARIES} mod_odb)
+target_link_libraries (mod_vcf ${THIRD_PARTY_LIBRARIES})
 
 
 # Libraries to link with executables
 if (LINUX)
   set (LIBRARIES_TO_LINK
     mod_vcf
-    mod_odb
     ${EXT_LIB_PATH}/curl/lib/libcurl.a
     ${EXT_LIB_PATH}/c-ares/lib/libcares.a
     ${EXT_LIB_PATH}/openssl/lib/libssl.a
@@ -255,31 +209,19 @@ if (LINUX)
     ${Boost_LIBRARIES}
     ${EXT_LIB_PATH}/libbz2.a
     ${EXT_LIB_PATH}/libz.a
-    ${EXT_LIB_PATH}/libodb-sqlite.a
-    ${EXT_LIB_PATH}/libodb.a
-    mod_sqlite3
     dl
     ${CMAKE_THREAD_LIBS_INIT}
   )
 elseif (OSX)
   set (LIBRARIES_TO_LINK
     mod_vcf
-    mod_odb
     libcurl.a
     ${Boost_LIBRARIES}
-    ${EXT_LIB_PATH}/libodb-sqlite.a
-    ${EXT_LIB_PATH}/libodb.a
-    mod_sqlite3
     dl
     ${CMAKE_THREAD_LIBS_INIT}
   )
 elseif (WINDOWS)
   set (LIBRARIES_TO_LINK
-    mod_vcf
-    mod_odb
-    ${EXT_LIB_PATH}/odb-sqlite.lib
-    ${EXT_LIB_PATH}/odb.lib
-    mod_sqlite3
     windows_dependencies/curl/lib/libcurl
     ws2_32
     crypt32
@@ -302,8 +244,6 @@ set (ALL_TESTS
   test/vcf/assembly_checker_integration_test.cpp
   test/vcf/assembly_checker_test.cpp
   test/vcf/compressed_file_test.cpp
-  test/vcf/debugulator_integration_test.cpp
-  test/vcf/debugulator_test.cpp
   test/vcf/metaentry_test.cpp
   test/vcf/normalize_test.cpp
   test/vcf/optional_policy_test.cpp
@@ -349,9 +289,6 @@ add_test (NAME ValidatorTests COMMAND test_validation_suite)
 # Build application binaries
 add_executable (vcf_validator src/validator_main.cpp)
 target_link_libraries (vcf_validator ${LIBRARIES_TO_LINK})
-
-add_executable (vcf_debugulator src/debugulator_main.cpp)
-target_link_libraries (vcf_debugulator ${LIBRARIES_TO_LINK})
 
 add_executable (vcf_assembly_checker src/assembly_checker_main.cpp)
 target_link_libraries (vcf_assembly_checker ${LIBRARIES_TO_LINK})

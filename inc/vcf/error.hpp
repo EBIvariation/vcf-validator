@@ -22,7 +22,6 @@
 #include <stdexcept>
 #include <sstream>
 #include <memory>
-#include <odb/core.hxx>
 
 namespace ebi
 {
@@ -128,7 +127,6 @@ namespace ebi
         Severity severity;
 
       private:
-        friend class odb::access;
 
         #pragma db id auto
         unsigned long id_;
@@ -204,7 +202,6 @@ namespace ebi
         virtual ~NoMetaDefinitionError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
       private:
-        friend class odb::access;
         NoMetaDefinitionError() {}
     };
 
@@ -358,7 +355,6 @@ namespace ebi
         std::string field;
         long field_cardinality;    // [0, inf): valid number of values. -1: unknown amount of values
       private:
-        friend class odb::access;
         SamplesFieldBodyError() {}  // necessary for ODB
     };
     #pragma db object
@@ -414,7 +410,6 @@ namespace ebi
       private:
         int num_matches;
         int num_variants;
-        friend class odb::access;
         #pragma db id auto
         unsigned long id_;
     };
