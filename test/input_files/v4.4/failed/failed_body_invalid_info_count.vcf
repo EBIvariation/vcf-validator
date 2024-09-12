@@ -1,0 +1,21 @@
+##fileformat=VCFv4.4
+##CauseOfFailure=invalid info field count 
+##reference=testval
+##contig=<ID=1,length=6243,assembly=B3,md5=f121111111618ff66beb2da,species="Homo sapiens",taxonomy=x>
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##INFO=<ID=MEINFO,Number=.,Type=String,Description="Mobile element info of the form NAME,START,END,POLARITY">
+##INFO=<ID=METRANS,Number=.,Type=String,Description="Mobile element transduction info of the form CHR,START,END,POLARITY">
+##INFO=<ID=CICN,Number=.,Type=Float,Description="Confidence interval around copy number">
+##INFO=<ID=CIPOS,Number=.,Type=Integer,Description="Confidence interval around POS for symbolic structural variants">
+##INFO=<ID=CIEND,Number=.,Type=Integer,Description="Confidence interval around END for symbolic structural variants">
+##INFO=<ID=CILEN,Number=.,Type=Integer,Description="Confidence interval for the SVLEN field">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00096
+1	70	rs180734498	C	T	100	PASS	MEINFO=1	GT	0|0
+1	80	rs180734498	C	T	100	PASS	MEINFO=1,2,3,A	GT	0|0
+1	90	rs180734498	C	T	100	PASS	METRANS=1	GT	0|0
+1	100	rs180734498	C	T	100	PASS	METRANS=1,2,3,A	GT	0|0
+1	110	rs180734498	C	T	100	PASS	CICN=-1.2	GT	0|0
+1	120	rs180734498	C	T	100	PASS	CIPOS=-1	GT	0|0
+1	130	rs180734498	C	T	100	PASS	CIEND=-1	GT	0|0
+1	140	rs180734498	C	T	100	PASS	CILEN=-1	GT	0|0
+

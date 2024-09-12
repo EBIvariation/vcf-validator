@@ -289,7 +289,8 @@ namespace ebi
     void ValidateOptionalPolicy::check_body_entry_info_rb_ruc(ParsingState & state, Record const & record) const
     {
         std::vector<std::string> valRB, valRUC, valLen;
-        int rb = 0, ruc = 0 , rul = 0;
+        int rb = 0, rul = 0;
+        float ruc = 0;
         const float limit = 0.05;   //5% variation
 
         if (record.source->version < Version::v44) {
@@ -318,7 +319,7 @@ namespace ebi
                 continue;
             }
             rb = std::stoi(valRB[i]);
-            ruc = std::stoi(valRUC[i]);
+            ruc = std::stod(valRUC[i]);
             rul = itRUL != record.info.end()? std::stoi(valLen[i]) : valLen[i].size();
             //RB ~= RUL * RUC
             if ( (abs(rb - rul * ruc) / (float)rb) > limit) {
