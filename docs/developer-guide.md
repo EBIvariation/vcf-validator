@@ -45,7 +45,7 @@ In case of dependent libraries being installed in non-standard paths,
 update LIBRARY_PATH as shown below
   'export LIBRARY_PATH=$LIBRARY_PATH:<path to required library's libpath>'
 
-The role of Ragel and ODB in this project is explained further below.
+The role of Ragel in this project is explained further below.
 
 ## Code structure
 
@@ -61,9 +61,8 @@ different namespaces (and matching folders) for different topics: vcf, fasta,
 assembly_report, util.
 
 The programs' entry points (the `main()`s) are
-[src/validator_main.cpp](../src/validator_main.cpp),
-[src/assembly_checker_main.cpp](../src/assembly_checker_main.cpp) and
-[src/debugulator_main.cpp](../src/debugulator_main.cpp).
+[src/validator_main.cpp](../src/validator_main.cpp) and
+[src/assembly_checker_main.cpp](../src/assembly_checker_main.cpp).
 
 ## Features' location
 
@@ -82,7 +81,8 @@ possible errors.
 
 Based on those `Error`s, the program can produce human-readable reports and a
 machine-readable report that the VCF Debugulator can read to fix some basic
-errors.
+errors. Later, this machine-readable report and Debugulator support were removed
+to make build, packaging and installation simpler.
 
 The level of checks can be configured, from doing just a quick syntax check, to
 raise warnings of suspicious details.
@@ -103,8 +103,9 @@ The common and basic definitions are in
 [src/vcf/vcf.ragel](../src/vcf/vcf.ragel), and then the parts that differ
 between versions are defined in
 [src/vcf/vcf_v41.ragel](../src/vcf/vcf_v41.ragel),
-[src/vcf/vcf_v41.ragel](../src/vcf/vcf_v41.ragel) and
-[src/vcf/vcf_v41.ragel](../src/vcf/vcf_v41.ragel).
+[src/vcf/vcf_v42.ragel](../src/vcf/vcf_v42.ragel),
+[src/vcf/vcf_v43.ragel](../src/vcf/vcf_v43.ragel) and
+[src/vcf/vcf_v44.ragel](../src/vcf/vcf_v44.ragel).
 
 Those files not only describe the regex that define the syntax, they also define
 the points of the grammar where the semantic checks are injected.
@@ -114,6 +115,7 @@ Those files are transpiled with Ragel into C code with the next commands:
 ragel -G2 src/vcf/vcf_v41.ragel -o inc/vcf/validator_detail_v41.hpp
 ragel -G2 src/vcf/vcf_v42.ragel -o inc/vcf/validator_detail_v42.hpp
 ragel -G2 src/vcf/vcf_v43.ragel -o inc/vcf/validator_detail_v43.hpp
+ragel -G2 src/vcf/vcf_v44.ragel -o inc/vcf/validator_detail_v44.hpp
 ```
 
 #### VCF parsing, policies and file structure
@@ -191,6 +193,12 @@ outputs C++ code that serializes the class instance information into a SQL
 database. We chose Sqlite as database backend, which means that the DB reports
 can actually be opened with a Sqlite client.
 
+The debugulator had very minimal functionality and limited usage. To reduce the
+build, packaging and installation complexities, a few of the dependencies were
+removed and ODB is one among them. Along with ODB, debugulator was also removed
+from build as it is fully dependent on ODB. The sources and part of
+documentation retained for future reference.
+
 ### VCF assembly checker
 
 This program is much simpler than the validator. It's mostly about getting the
@@ -225,9 +233,20 @@ The fixes are implemented in [inc/vcf/fixer.hpp](../inc/vcf/fixer.hpp) and
 duplicate variants and dropping entire fields that are non-conforming with the
 spec.
 
+The debugulator had very minimal functionality and limited usage. To reduce the
+build, packaging and installation complexities, a few of the dependencies were
+removed and ODB is one among them. Along with ODB, debugulator was also removed
+from build as it is fully dependent on ODB. The sources and part of
+documentation retained for future reference.
+
 ## Testing
 
 Testing is performed with [Catch](https://github.com/catchorg/Catch2) in the
 [`test/`](../test/) folder. The folders test/vcf/, test/fasta/ and
 test/assembly_report/ contain test source code, and test/input_files contain a
 medium-sized set of correct and wrong VCFs that are used in the tests.
+
+## ODB dependency
+
+ODB was in use earlier and it has now been removed. Debugulator was also removed
+along with it as it depends on ODB.
