@@ -529,18 +529,18 @@ namespace ebi
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
-            int rnCount = getRNvalue();             //get repeat no, it must match to RUS count
+            unsigned int rnCount = getRNvalue();                        //get repeat no, it must match to RUS count
             if (rnCount != values.size()) {
                 std::stringstream message;
                 message << "INFO " << RUS << " for record at " << line << " must have " << rnCount << " value(s)";
                 throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
             }
             //RUL - RUS matching check made below with RUL
-        } else if (field_key == RUL) {    //repeat unit length
+        } else if (field_key == RUL) {              //repeat unit length
             if (source->version < Version::v44) {                       //not applicable for anything < v4.4
                 return;
             }
-            int rnCount = getRNvalue();                                 //get repeat no, it must match to RUL count
+            unsigned int rnCount = getRNvalue();                        //get repeat no, it must match to RUL count
             if (rnCount != values.size()) {
                 std::stringstream message;
                 message << "INFO " << RUL << " for record at " << line << " must have " << rnCount << " value(s)";
@@ -556,19 +556,19 @@ namespace ebi
                     throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " and " +
                      std::to_string(RUSval.size()) + " value(s)"};
                 }
-                for (int i = 0; i < values.size(); ++i) {
-                    if (std::stoi(values[i]) != RUSval[i].length()) {       //must match to RUS length
+                for (size_t i = 0; i < values.size(); ++i) {
+                    if (std::stoul(values[i]) != RUSval[i].length()) {      //must match to RUS length
                         std::stringstream message;
                         message << "INFO " << RUL << " not matching to " << RUS << " for record at " << line;
-                    throw new InfoBodyError{line, message.str(), "Found length " + values[i] + " for " + RUSval[i]};
+                        throw new InfoBodyError{line, message.str(), "Found length " + values[i] + " for " + RUSval[i]};
                     }
                 }
             }
-        } else if (field_key == RUC) {    //repeat unit count
+        } else if (field_key == RUC) {  //repeat unit count
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
-            int rnCount = getRNvalue();                                 //get repeat no, it must match to RUC count
+            unsigned int rnCount = getRNvalue();                            //get repeat no, it must match to RUC count
             if (rnCount != values.size()) {
                 std::stringstream message;
                 message << "INFO " << RUC << " for record at " << line << " must have " << rnCount << " value(s)";
@@ -578,7 +578,7 @@ namespace ebi
             if (source->version < Version::v44) {   //not applicable for anything < v4.4
                 return;
             }
-            int rnCount = getRNvalue();                                 //get repeat no, it must match to RB count
+            unsigned int rnCount = getRNvalue();                            //get repeat no, it must match to RB count
             if (rnCount != values.size()) {
                 std::stringstream message;
                 message << "INFO " << RB << " for record at " << line << " must have " << rnCount << " value(s)";
@@ -594,7 +594,7 @@ namespace ebi
                 util::string_split(it->second, ",", RUCval);
                 //ciruc count must be 2 * RUC count
                 check_info_field_cardinality_explicit(values, 2 * RUCval.size(), CIRUC);
-                for (int i = 0; i < values.size(); ++i) {
+                for (size_t i = 0; i < values.size(); ++i) {
                     if (RUCval[i / 2] == MISSING_VALUE) {
                         if (values[i] != MISSING_VALUE) {               //ciruc must be missing with ruc missing
                             std::stringstream message;
@@ -619,7 +619,7 @@ namespace ebi
                 util::string_split(it->second, ",", RBval);
                 //cirb count must be 2 * RB count
                 check_info_field_cardinality_explicit(values, 2 * RBval.size(), CIRB);
-                for (int i = 0; i < values.size(); ++i) {
+                for (size_t i = 0; i < values.size(); ++i) {
                     if (RBval[i / 2] == MISSING_VALUE) {
                         if (values[i] != MISSING_VALUE) {               //cirb must be missing with RB missing
                             std::stringstream message;
@@ -644,7 +644,7 @@ namespace ebi
                 std::vector<std::string> RUCval;
                 util::string_split(it->second, ",", RUCval);
                 int cnt = 0;
-                for (int i = 0; i < RUCval.size(); ++i) {   //RUC must be integer with RUB
+                for (size_t i = 0; i < RUCval.size(); ++i) {    //RUC must be integer with RUB
                     if (RUCval[i] == MISSING_VALUE) {
                         continue;
                     }
@@ -898,7 +898,7 @@ namespace ebi
             //needs caching of records for detailed validation, which is not efficient - skipped
             std::vector<std::string> pslvals;
             get_PSL_values(i, pslvals);
-            for (int i = 0; i < pslvals.size(); ++i) {
+            for (size_t i = 0; i < pslvals.size(); ++i) {
                 if (pslvals[i] == MISSING_VALUE && values[i] != MISSING_VALUE) {
                     //when psl is missing val, pso has to be missing as well
                     throw new SamplesFieldBodyError{line, message + " at " + std::to_string(i+1) +
@@ -908,7 +908,7 @@ namespace ebi
         } else if (field_key == PSQ) {
             std::vector<std::string> pslvals;
             get_PSL_values(i, pslvals);
-            for (int i = 0; i < pslvals.size(); ++i) {
+            for (size_t i = 0; i < pslvals.size(); ++i) {
                 if (pslvals[i] == MISSING_VALUE && values[i] != MISSING_VALUE) {
                     //when psl is missing val, psq has to be missing as well
                     throw new SamplesFieldBodyError{line, message + " at " + std::to_string(i+1) +
@@ -1124,19 +1124,19 @@ namespace ebi
         }
     }
 
-    int Record::getRNvalue() const {
+    unsigned int Record::getRNvalue() const {
         static boost::regex cnvtr_regex("<CNV:TR>");
         auto it = info.find(RN);
-        int rnCnt = 0;
+        unsigned int rnCnt = 0;
         std::vector<std::string> values;
 
         if (it != info.end()) {                     //spilt RN field
             util::string_split(it->second, ",", values);
         }
 
-        for (int i = 0; i < alternate_alleles.size(); ++i) {
+        for (size_t i = 0; i < alternate_alleles.size(); ++i) {
             if (values.size()) {                   //RN present
-                rnCnt += (values[i] == MISSING_VALUE) ? 0 : std::stoi(values[i]);
+                rnCnt += (values[i] == MISSING_VALUE) ? 0 : std::stoul(values[i]);
             } else if (types[i] == RecordType::STRUCTURAL && boost::regex_match(alternate_alleles[i], cnvtr_regex)) {
                 //CNV:TR with no RN, consider as 1
                 rnCnt++;
@@ -1145,7 +1145,7 @@ namespace ebi
         return rnCnt;
     }
 
-    int Record::check_info_field_cardinality_explicit(std::vector<std::string> const & values, size_t expected,
+    void Record::check_info_field_cardinality_explicit(std::vector<std::string> const & values, size_t expected,
                 const std::string field) const {
         if (values.size() != expected) {
             std::stringstream message;
@@ -1219,7 +1219,6 @@ namespace ebi
     {
         std::string delims("|/");
         bool anyphased = false;
-        bool first = true;
         std::vector<std::string> values;
 
         if (!GT.size()) {
