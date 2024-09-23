@@ -196,7 +196,7 @@ namespace ebi
             if (record.source->version < Version::v44) {
                 return;
             }
-            for (auto i = 0; i < record.alternate_alleles.size(); ++i) {
+            for (size_t i = 0; i < record.alternate_alleles.size(); ++i) {
                 //SVLEN should be '.' for non SV alleles
                 if (boost::regex_match(record.alternate_alleles[i], non_symbolic_alt_regex) || 
                     !boost::regex_match(record.alternate_alleles[i], svchk_regex)) {
@@ -270,7 +270,7 @@ namespace ebi
                             "INFO " + confidence_interval_tag +
                             " is a confidence interval tag, which should have even number entries"};
                 }
-                for (int i = 0; i < values.size(); i += 2) {
+                for (size_t i = 0; i < values.size(); i += 2) {
                     size_t scanned_first_value_length = 1, scanned_second_value_length = 1;
                     //considers missing value as 0 - valid value
                     int first_numeric_value = std::stoi(values[i] != MISSING_VALUE ? values[i] : "0", &scanned_first_value_length);
@@ -500,7 +500,7 @@ namespace ebi
                         " does not have even count";
                     throw new SamplesFieldBodyError{state.n_lines, message, "", confidence_interval_tag};
                 }
-                for (int i = 0; i < values.size(); i += 2) {
+                for (size_t i = 0; i < values.size(); i += 2) {
                     size_t scanned_first_value_length = 1, scanned_second_value_length = 1;
                     //considers missing value as 0 - valid value
                     int first_numeric_value = std::stoi(values[i] != MISSING_VALUE ? values[i] : "0", &scanned_first_value_length);

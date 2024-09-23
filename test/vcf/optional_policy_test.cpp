@@ -271,7 +271,7 @@ namespace ebi
                                                                     vcf::INTEGER
                                                                 };
 
-            for (int i = 0; i < confidence_interval_tags.size() && i < confidence_interval_types.size(); ++i) {
+            for (size_t i = 0; i < confidence_interval_tags.size() && i < confidence_interval_types.size(); ++i) {
 
                 source->meta_entries.emplace(vcf::INFO,
                     vcf::MetaEntry{
