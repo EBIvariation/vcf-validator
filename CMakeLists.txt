@@ -87,7 +87,7 @@ if (LINUX)
 elseif (OSX)
   # Mac build not fully static. include system libraries to be dynamic
   set (CMAKE_EXE_LINKER_FLAGS)
-  set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+  set (Boost_USE_STATIC_LIBS OFF)            # only find static libs
 elseif (WINDOWS)
   set (Boost_USE_STATIC_LIBS ON)             # only find static libs
   set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT") # also requires boost with runtime-link=static
@@ -265,11 +265,6 @@ elseif (OSX)
     mod_vcf
     mod_odb
     libcurl.a
-    libbz2.a
-    libz.a
-    libssl.a
-    libcrypto.a
-    libcares.a
     ${Boost_LIBRARIES}
     ${EXT_LIB_PATH}/libodb-sqlite.a
     ${EXT_LIB_PATH}/libodb.a
