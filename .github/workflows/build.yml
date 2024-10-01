@@ -125,7 +125,6 @@ jobs:
     - name: Compile and test
       run: |
         mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} ..
-        export LIBRARY_PATH=${LIBRARY_PATH}:/opt/homebrew/opt/icu4c/lib:/opt/homebrew/lib
         make -j2
         cd .. && ./build/bin/test_validation_suite
     - name: Rename release files
