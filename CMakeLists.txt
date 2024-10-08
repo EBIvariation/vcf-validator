@@ -52,46 +52,14 @@ if(CURL_FOUND)
   include_directories(${CURL_INCLUDE_DIRS})
 endif()
 
-find_package(c-ares REQUIRED)
-if(c-ares_FOUND)
-  message("c-ares_INCLUDE_DIRS: ${c-ares_INCLUDE_DIRS}")
-  include_directories(${c-ares_INCLUDE_DIRS})
-endif()
-
-find_package(OpenSSL REQUIRED)
-if(OPENSSL_FOUND)
-  message("OPENSSL_INCLUDE_DIR: ${OPENSSL_INCLUDE_DIR}")
-  include_directories(${OPENSSL_INCLUDE_DIR})
-endif()
-
-find_package(BZIP2 REQUIRED)
-if(BZIP2_FOUND)
-  message("BZIP2_INCLUDE_DIR: ${BZIP2_INCLUDE_DIR}")
-  include_directories(${BZIP2_INCLUDE_DIR})
-endif()
-
-find_package(ZLIB REQUIRED)
-if(ZLIB_FOUND)
-  message("BZIP2_INCLUDE_DIR: ${ZLIB_INCLUDE_DIR}")
-  include_directories(${ZLIB_INCLUDE_DIR})
-endif()
-
 message("Boost_LIBRARIES: ${Boost_LIBRARIES}")
 message("Boost_LIBRARY_DIRS: ${Boost_LIBRARY_DIRS}")
 message("CURL_LIBRARIES: ${CURL_LIBRARIES}")
-message("c-ares_LIBRARIES: ${c-ares_LIBRARIES}")
-message("OPENSSL_LIBRARIES: ${OPENSSL_LIBRARIES}")
-message("ZLIB_LIBRARIES: ${ZLIB_LIBRARIES}")
-message("BZIP2_LIBRARIES: ${BZIP2_LIBRARIES}")
 message("CMAKE_THREAD_LIBS_INIT: ${CMAKE_THREAD_LIBS_INIT}")
 
 set (THIRD_PARTY_LIBRARIES
         ${Boost_LIBRARIES}
         ${CURL_LIBRARIES}
-        ${c-ares_LIBRARIES}
-        ${OPENSSL_LIBRARIES}
-        ${ZLIB_LIBRARIES}
-        ${BZIP2_LIBRARIES}
         dl
         ${CMAKE_THREAD_LIBS_INIT}
         )
@@ -146,9 +114,6 @@ set (LIBRARIES_TO_LINK
         mod_vcf
         ${Boost_LIBRARIES}
         ${CURL_LIBRARIES}
-        ${ZLIB_LIBRARIES}
-        ${BZIP2_LIBRARIES}
-        ${OPENSSL_LIBRARIES}
         dl
         ${CMAKE_THREAD_LIBS_INIT}
         )
