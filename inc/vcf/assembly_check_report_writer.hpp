@@ -21,14 +21,7 @@
 
 #include <boost/filesystem/operations.hpp>
 
-#include <odb/database.hxx>
-#include <odb/sqlite/query.hxx>
-#include <odb/schema-catalog.hxx>
-#include <odb/sqlite/database.hxx>
-
-
 #include "vcf/error.hpp"
-#include "vcf/error-odb.hpp"
 #include "vcf/normalizer.hpp"
 #include "vcf/string_constants.hpp"
 #include "util/logger.hpp"
