@@ -27,17 +27,64 @@ else ()
   message (ERROR "Operating system not recognised. Expected Windows, Linux or Darwin, but found ${CMAKE_SYSTEM_NAME}")
 endif ()
 
-# Include directories
-message("include_directories (inc)")
-message("include_directories (lib)")
+if (DEFINED EXT_LIB_PATH AND NOT EXISTS "${EXT_LIB_PATH}")
+  message (FATAL_ERROR "The provided folder for dependencies (EXT_LIB_PATH=${EXT_LIB_PATH}) doesn't exist. Please, either provide a correct folder or don't provide it (and remove cmake cache) to search in default folders.")
+endif()
 
+# Include directories
 include_directories (inc)
 include_directories (lib)
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas") # No unknown pragmas: it's ok that gcc doesn't know about ODB's pragmas
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
 
-# Dynamic libraries for boost
-set (Boost_USE_STATIC_LIBS OFF)
+if (DEFINED STATIC_BUILD)
+  # dependencies from install_dependencies.sh should be in ${PROJECT_SOURCE_DIR}/dependencies/build/
+  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/dependencies/build")
+  message("EXT_LIB_PATH: ${EXT_LIB_PATH}")
+
+  # Set the CMAKE_PREFIX_PATH to search for libraries
+  set (CMAKE_PREFIX_PATH "${EXT_LIB_PATH}")
+  message("CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
+
+  # static libraries for boost
+  set (Boost_USE_STATIC_LIBS ON)
+#  set (BUILD_SHARED_LIBS OFF)
+#  set (CMAKE_EXE_LINKER_FLAGS "-static")
+#  set (CMAKE_FIND_LIBRARY_SUFFIXES .a)
+#  set (CMAKE_EXE_LINK_DYNAMIC_C_FLAGS)       # remove -Wl,-Bdynamic
+#  set (CMAKE_EXE_LINK_DYNAMIC_CXX_FLAGS)
+#  set (CMAKE_SHARED_LIBRARY_C_FLAGS)         # remove -fPIC
+#  set (CMAKE_SHARED_LIBRARY_CXX_FLAGS)
+#  set (CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
+#  set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
+  # Hard coded libraries
+  set (HARD_CODED_LIBRARIES
+          ${EXT_LIB_PATH}/lib/libbz2.a
+          ${EXT_LIB_PATH}/lib/libcares.a
+          ${EXT_LIB_PATH}/lib/libz.a
+  )
+  find_package(OpenSSL)
+  if(OPENSSL_FOUND)
+    message("OPENSSL_INCLUDE_DIR: ${OPENSSL_INCLUDE_DIR}")
+    include_directories(${OPENSSL_INCLUDE_DIR})
+    message("OPENSSL_LIBRARIES: ${OPENSSL_LIBRARIES}")
+    list (APPEND HARD_CODED_LIBRARIES
+            ${OPENSSL_LIBRARIES}
+            )
+  else()
+    list (APPEND HARD_CODED_LIBRARIES
+            ${EXT_LIB_PATH}/lib/libssl.a
+            ${EXT_LIB_PATH}/lib/libcrypto.a
+            )
+  endif()
+  if(NOT OpenSSL_FOUND)
+    message("CURL_INCLUDE_DIRS: ${CURL_INCLUDE_DIRS}/curl")
+    include_directories(${CURL_INCLUDE_DIRS}/curl)
+  endif()
+else()
+  # Dynamic libraries for boost
+  set (Boost_USE_STATIC_LIBS OFF)
+endif()
 
 find_package (Threads REQUIRED)
 find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
@@ -55,12 +102,13 @@ endif()
 message("Boost_LIBRARIES: ${Boost_LIBRARIES}")
 message("Boost_LIBRARY_DIRS: ${Boost_LIBRARY_DIRS}")
 message("CURL_LIBRARIES: ${CURL_LIBRARIES}")
+message("HARD_CODED_LIBRARIES: ${HARD_CODED_LIBRARIES}")
 message("CMAKE_THREAD_LIBS_INIT: ${CMAKE_THREAD_LIBS_INIT}")
 
 set (THIRD_PARTY_LIBRARIES
         ${Boost_LIBRARIES}
         ${CURL_LIBRARIES}
-        dl
+        ${HARD_CODED_LIBRARIES}
         ${CMAKE_THREAD_LIBS_INIT}
         )
 
@@ -118,7 +166,6 @@ set (LIBRARIES_TO_LINK
         ${CMAKE_THREAD_LIBS_INIT}
         )
 
-
 # Build tests
 set (V41_TESTS test/vcf/parser_v41_test.cpp)
 set (V42_TESTS test/vcf/parser_v42_test.cpp)
@@ -161,7 +208,6 @@ add_executable (test_validator_v43 test/main_test.cpp ${V43_TESTS})
 target_link_libraries (test_validator_v43 ${LIBRARIES_TO_LINK})
 enable_testing ()
 add_test (NAME ValidatorTests_v43 COMMAND test_validator_v43)
-
 
 add_executable (test_validator_v44 test/main_test.cpp ${V44_TESTS})
 target_link_libraries (test_validator_v44 ${LIBRARIES_TO_LINK})

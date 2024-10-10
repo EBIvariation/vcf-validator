@@ -57,66 +57,67 @@ else
   exit
 fi
 
-dependencies_dir=$OS_NAME"_dependencies"
+dependencies_dir="dependencies"
+
 
 #check for already downloaded files
 if [ "$(ls -A $dependencies_dir)" ]; then
   echo "ERROR: Found non-empty directory of a previous installation: \"$dependencies_dir\". Please remove the folder before running this script. Current contents:"
   ls $dependencies_dir
-  exit 0
+  exit 1
 fi
 
 
-# Download ODB runtime library, sqlite DB plugin for ODB, libbz2 and libz.
 echo "creating directory $dependencies_dir"
 mkdir -p $dependencies_dir && cd $dependencies_dir
 
+dependencies_dir_abs_path=`pwd`
+build_dir_abs_path=${dependencies_dir_abs_path}/build
+mkdir $build_dir_abs_path
+
 if [[ "$OS_NAME" != "osx" ]]
 then
-  #linux 
+  #linux
+
+  # Download libbz2 and libz.
   echo "installing libbz2"
   wget http://archive.ubuntu.com/ubuntu/pool/main/b/bzip2/bzip2_1.0.6.orig.tar.bz2 -O ./libbz2.tar.bz2
   tar jxf ./libbz2.tar.bz2
-  cd bzip2-1.0.6 && make
+  cd bzip2-1.0.6 && make && make install PREFIX=$build_dir_abs_path
   cd ..
 
   echo "installing libz"
   wget http://prdownloads.sourceforge.net/libpng/zlib-1.2.11.tar.gz?download -O ./libz.tar.gz
   tar zxf ./libz.tar.gz
-  cd zlib-1.2.11 && cmake . && make
+  cd zlib-1.2.11 && ./configure --prefix=$build_dir_abs_path && make install
   cd ..
 
-  dependencies_dir_abs_path=`pwd`
-
   echo "installing openssl"
-  mkdir openssl
   #using openssl v1.1.1w which supports mac arm as well
   wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz -O ./openssl-1.1.1w.tar.gz
   tar xzf ./openssl-1.1.1w.tar.gz
   cd openssl-1.1.1w
   LIBS="-lcrypto -ldl" \
-  ./config -fPIC no-shared no-threads \
-          --prefix=$dependencies_dir_abs_path/openssl \
-          --openssldir=$dependencies_dir_abs_path/openssl
+  ./config -static --static -fPIC no-shared no-threads \
+          --prefix=$build_dir_abs_path \
+          --openssldir=$build_dir_abs_path
   make && make install_sw
   cd ..
 
   echo "installing c-ares"
-  mkdir c-ares
   wget https://github.com/c-ares/c-ares/releases/download/cares-1_15_0/c-ares-1.15.0.tar.gz -O ./c-ares-1.15.0.tar.gz
   tar xzf ./c-ares-1.15.0.tar.gz
   cd c-ares-1.15.0
-  ./configure --prefix=$dependencies_dir_abs_path/c-ares
+  ./configure --prefix=$build_dir_abs_path
   make && make install
   cd ..
 
   echo "installing libcurl"
-  mkdir curl
   wget https://curl.haxx.se/download/curl-7.62.0.tar.gz -O ./curl-7.62.0.tar.gz
   tar zxf ./curl-7.62.0.tar.gz
   cd curl-7.62.0
-  LDFLAGS="-L$dependencies_dir_abs_path/openssl/lib -L$dependencies_dir_abs_path/c-ares/lib" \
-  CPPFLAGS="-I$dependencies_dir_abs_path/openssl/include -I$dependencies_dir_abs_path/c-ares/include" \
+  LDFLAGS="-L$build_dir_abs_path/lib" \
+  CPPFLAGS="-I$build_dir_abs_path/include" \
   ./configure --disable-shared \
               --enable-static \
               --without-librtmp \
@@ -125,9 +126,9 @@ then
               --without-zlib \
               --without-libidn2 \
               --without-nss \
-              --enable-ares=$dependencies_dir_abs_path/c-ares \
-              --with-ssl=$dependencies_dir_abs_path/openssl \
-              --prefix=$dependencies_dir_abs_path/curl
+              --enable-ares=$build_dir_abs_path \
+              --with-ssl=$build_dir_abs_path \
+              --prefix=$build_dir_abs_path
   make && make install
   cd ..
 
@@ -141,30 +142,22 @@ then
   # The next user-config.jam should fix that.
   # Documentation on building iostreams: https://www.boost.org/doc/libs/1_72_0/libs/iostreams/doc/index.html
   # Documentation on specifying zlib and bzip2: https://boostorg.github.io/build/manual/master/index.html#bbv2.reference.tools.libraries.zlib
+#  echo "
+#using zlib : 1.2.11 : <include>${build_dir_abs_path}/zlib-1.2.11 <search>${build_dir_abs_path}/ ;
+#using bzip2 : 1.0.6 : <include>${build_dir_abs_path}/bzip2-1.0.6 <search>${build_dir_abs_path}/ ;
+#" > tools/build/src/user-config.jam
   echo "
-using zlib : 1.2.11 : <include>${dependencies_dir_abs_path}/zlib-1.2.11 <search>${dependencies_dir_abs_path}/ ;
-using bzip2 : 1.0.6 : <include>${dependencies_dir_abs_path}/bzip2-1.0.6 <search>${dependencies_dir_abs_path}/ ;
+using zlib : 1.2.11 : <source>${dependencies_dir_abs_path}/zlib-1.2.11 ;
+using bzip2 : 1.0.6 : <source>${dependencies_dir_abs_path}/bzip2-1.0.6 ;
 " > tools/build/src/user-config.jam
 
-  ./bootstrap.sh --with-libraries=filesystem,iostreams,log,program_options,regex && ./b2 link=static
+  ./bootstrap.sh --prefix=${build_dir_abs_path}  --with-libraries=filesystem,iostreams,log,program_options,regex,system && ./b2 link=static --prefix=${build_dir_abs_path} install
   cd ..
 fi
-
-
-# Make easier to find the static libraries
-
-if [[ "$OS_NAME" != "osx" ]]
-then
-  #linux
-  cp bzip2-1.0.6/libbz2.a .
-  cp zlib-1.2.11/libz.a .
-fi
-
-# copy headers
 
 cd ..
 
 echo "Dependencies folder:"
-ls $dependencies_dir
+ls $build_dir_abs_path
 
 echo -e "\nAutomatic installation completed successfully."
