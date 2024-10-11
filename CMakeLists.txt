@@ -45,7 +45,7 @@ if (DEFINED STATIC_BUILD)
     set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd") # also requires boost with runtime-link=static
     add_definitions(-DCURL_STATICLIB) # Needed to statically link libcurl
     add_definitions(-DNOMINMAX) # Needed to suppress min and max definitions by Windows
-    set(CURL_INCLUDE_DIRS dependencies/curl/lib/include)
+    set(CURL_INCLUDE_DIRS dependencies/curl/include)
     include_directories(${CURL_INCLUDE_DIRS})
     set(CURL_LIBRARIES dependencies/curl/lib/libcurl)
   else()
