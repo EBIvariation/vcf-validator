@@ -1,0 +1,4 @@
+##fileformat=VCFv4.4
+##CauseOfFailure=No genotypes or allele frequencies
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+1	123	.	TC	T	.	.	.

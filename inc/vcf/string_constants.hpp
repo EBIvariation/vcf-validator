@@ -27,6 +27,7 @@ namespace ebi
     const std::string VCF_V41 = "VCFv4.1";
     const std::string VCF_V42 = "VCFv4.2";
     const std::string VCF_V43 = "VCFv4.3";
+    const std::string VCF_V44 = "VCFv4.4";
 
     // validator, debugulator and assembly_checker command line arguments
     const char STDIN[] = "stdin";
@@ -102,6 +103,7 @@ namespace ebi
     const std::string G = "G";
     const std::string R = "R";
     const std::string UNKNOWN_CARDINALITY = ".";
+    const std::string P = "P";
 
     // Pass value for Filter
     const std::string PASS = "PASS";
@@ -133,6 +135,8 @@ namespace ebi
     const std::string CIGAR = "CIGAR";
     const std::string CILEN = "CILEN";
     const std::string CIPOS = "CIPOS";
+    const std::string CIRB = "CIRB";
+    const std::string CIRUC = "CIRUC";
     const std::string CN = "CN";
     const std::string CNADJ = "CNADJ";
     const std::string DB = "DB";
@@ -143,6 +147,7 @@ namespace ebi
     const std::string DPADJ = "DPADJ";
     const std::string END = "END";
     const std::string EVENT = "EVENT";
+    const std::string EVENTTYPE = "EVENTTYPE";
     const std::string HOMLEN = "HOMLEN";
     const std::string HOMSEQ = "HOMSEQ";
     const std::string H2 = "H2";
@@ -156,8 +161,15 @@ namespace ebi
     const std::string NOVEL = "NOVEL";
     const std::string NS = "NS";
     const std::string PARID = "PARID";
+    const std::string RB = "RB";
+    const std::string RN = "RN";
+    const std::string RUC = "RUC";
+    const std::string RUL = "RUL";
+    const std::string RUB = "RUB";
+    const std::string RUS = "RUS";
     const std::string SB = "SB";
     const std::string SOMATIC = "SOMATIC";
+    const std::string SVCLAIM = "SVCLAIM";
     const std::string SVLEN = "SVLEN";
     const std::string SVTYPE = "SVTYPE";
     const std::string VALIDATED = "VALIDATED";
@@ -181,6 +193,9 @@ namespace ebi
     const std::string PL = "PL";
     const std::string PQ = "PQ";
     const std::string PS = "PS";
+    const std::string PSL = "PSL";
+    const std::string PSO = "PSO";
+    const std::string PSQ = "PSQ";
 
     // File extensions
     const std::string VCF_EXT = ".vcf";
@@ -209,6 +224,15 @@ namespace ebi
 
     // ENA REST API for remote fasta access
     const std::string ENA_API_FASTA_URL = "https://www.ebi.ac.uk/ena/browser/api/fasta/";
+
+    //SVCLAIM types
+    const std::string D = "D";
+    const std::string J = "J";
+    const std::string DJ = "DJ";
+
+    //internal keys - with invalid chars to differentiate from valid IDs
+    const std::string _BRKEND = "BRK<END,";
+    const std::string _OTHER = "OTHER<,";
   }
 }
 

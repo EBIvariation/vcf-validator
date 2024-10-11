@@ -59,12 +59,16 @@ namespace ebi
         void check_body_entry_info_other_tag(ParsingState & state, std::multimap<std::string, std::string> const & info,
                                              std::string const & tag) const;
         void check_body_entry_info_svlen(ParsingState & state, Record const & record) const;
+        void check_body_entry_info_svclaim(ParsingState & state, Record const & record) const;
         void check_body_entry_info_confidence_interval(ParsingState & state, Record const & record) const;
+        void check_body_entry_info_rb_ruc(ParsingState & state, Record const & record) const;
+        void check_body_entry_info_rul_rus(ParsingState & state, Record const & record) const;
         void check_contig_meta(ParsingState & state, Record const & record) const;
         void check_alternate_allele_meta(ParsingState & state, Record const & record) const;
         void check_filter_meta(ParsingState & state, Record const & record) const;
         void check_info_meta(ParsingState & state, Record const & record) const;
         void check_format_meta(ParsingState & state, Record const & record) const;
+        void check_body_entry_sample_confidence_interval(ParsingState & state, Record const & record) const;
     };
     
   }

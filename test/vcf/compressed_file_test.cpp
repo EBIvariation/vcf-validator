@@ -140,4 +140,121 @@ namespace ebi
           }
       }
   }
+
+  TEST_CASE("Tests for compressed files v4.4", "[compressed]")
+  {
+      SECTION("File with extensions of compressed files")
+      {
+          std::vector<boost::filesystem::path> v;
+
+          auto folder = boost::filesystem::path("test/input_files/v4.4/compressed_files/non_readable");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+          folder = boost::filesystem::path("test/input_files/v4.4/compressed_files/readable/passed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+          folder = boost::filesystem::path("test/input_files/v4.4/compressed_files/readable/failed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+
+          for (auto path : v)
+          {
+              SECTION(path.string())
+              {
+                  CHECK(vcf::get_compression_from_extension(path.string()) != vcf::NO_EXT);
+              }
+          }
+      }
+
+      SECTION("Compressed file streams")
+      {
+          std::vector<boost::filesystem::path> v;
+
+          auto folder = boost::filesystem::path("test/input_files/v4.4/compressed_files/non_readable");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+          folder = boost::filesystem::path("test/input_files/v4.4/compressed_files/readable/passed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+          folder = boost::filesystem::path("test/input_files/v4.4/compressed_files/readable/failed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+
+          std::vector<char> line;
+          line.reserve(ebi::vcf::default_line_buffer_size);
+
+          for (auto path : v)
+          {
+              std::ifstream input{path.string()};
+              ebi::util::readline(input, line);
+              CHECK(vcf::get_compression_from_magic_num(line) != vcf::NO_EXT);
+          }
+      }
+
+      // TODO: make this test work in windows
+#ifndef _WIN32
+      SECTION("Passed compressed files")
+      {
+          std::vector<boost::filesystem::path> v;
+          auto folder = boost::filesystem::path("test/input_files/v4.4/compressed_files/readable/passed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+
+          for (auto path : v)
+          {
+              SECTION(path.string())
+              {
+                  CHECK(is_valid(path.string()));
+              }
+          }
+      }
+#endif // _WIN32
+
+      SECTION("Failed compressed files")
+      {
+          std::vector<boost::filesystem::path> v;
+          auto folder = boost::filesystem::path("test/input_files/v4.4/compressed_files/readable/failed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+
+          for (auto path : v)
+          {
+              SECTION(path.string())
+              {
+                  CHECK_FALSE(is_valid(path.string()));
+              }
+          }
+      }
+  }
+
+  TEST_CASE("Tests for non-compressed files v4.4", "[non-compressed]")
+  {
+      SECTION("File without extensions of compressed files")
+      {
+          auto folder = boost::filesystem::path("test/input_files/v4.4/passed");
+          std::vector<boost::filesystem::path> v;
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+          folder = boost::filesystem::path("test/input_files/v4.4/failed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+
+          for (auto path : v)
+          {
+              SECTION(path.string())
+              {
+                  CHECK(vcf::get_compression_from_extension(path.string()) == vcf::NO_EXT);
+              }
+          }
+      }
+
+      SECTION("Non-Compressed file streams")
+      {
+          auto folder = boost::filesystem::path("test/input_files/v4.4/passed");
+          std::vector<boost::filesystem::path> v;
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+          folder = boost::filesystem::path("test/input_files/v4.4/failed");
+          copy(boost::filesystem::directory_iterator(folder), boost::filesystem::directory_iterator(), back_inserter(v));
+
+          std::vector<char> line;
+          line.reserve(ebi::vcf::default_line_buffer_size);
+
+          for (auto path : v)
+          {
+              std::ifstream input{path.string()};
+              ebi::util::readline(input, line);
+              CHECK(vcf::get_compression_from_magic_num(line) == vcf::NO_EXT);
+          }
+      }
+  }
 }

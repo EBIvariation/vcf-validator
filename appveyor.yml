@@ -18,6 +18,7 @@ test_script:
   - cmd: bin\test_validator_v41.exe
   - cmd: bin\test_validator_v42.exe
   - cmd: bin\test_validator_v43.exe
+  - cmd: bin\test_validator_v44.exe
   - cmd: bin\test_validation_suite.exe
 
 artifacts:

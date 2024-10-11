@@ -136,7 +136,7 @@ namespace ebi
 
     void Record::check_ids_no_duplicates() const
     {
-        if (source->version == Version::v43) {
+        if (source->version == Version::v43 || source->version == Version::v44) {
             try {
                 check_no_duplicates(ids);
             } catch (const std::invalid_argument &ex) {
@@ -193,12 +193,13 @@ namespace ebi
             auto main_type_position_end = alt_id.find(':');
             bool colon_present = main_type_position_end != std::string::npos;
             if (colon_present) {
+                const std::set<std::string> &validAlt = (source->version < Version::v44) ? PREDEFINED_INFO_SVTYPES : PREDEFINED_INFO_SV_v44;
                 auto main_type = alt_id.substr(0, main_type_position_end);
-                if (!ebi::util::contains(PREDEFINED_INFO_SVTYPES, main_type)) {
+                if (!ebi::util::contains(validAlt, main_type)) {
                     std::stringstream message;
                     message << "In ALT metadata IDs containing colon-separated type and subtypes, the top level type "
                                "must be one of: ";
-                    ebi::util::print_container(message, PREDEFINED_INFO_SVTYPES, "", ", ", "");
+                    ebi::util::print_container(message, validAlt, "", ", ", "");
                     throw new AlternateAllelesBodyError{line, message.str(), "Found ID was '" + alt_id + "'"};
                 }
             }
@@ -219,7 +220,7 @@ namespace ebi
 
     void Record::check_filter_no_duplicates() const
     {
-        if (source->version == Version::v43) {
+        if (source->version == Version::v43 || source->version == Version::v44) {
             try {
                 check_no_duplicates(filters);
             } catch (const std::invalid_argument &ex) {
@@ -240,6 +241,7 @@ namespace ebi
     void Record::check_info() const
     {
         check_info_no_duplicates();
+        check_info_have_mandatory();
 
         typedef std::multimap<std::string, MetaEntry>::iterator iter;
         std::pair<iter, iter> range = source->meta_entries.equal_range(INFO);
@@ -273,8 +275,10 @@ namespace ebi
                 try {
                     if (source->version == Version::v41 || source->version == Version::v42) {
                         check_predefined_tag_info(field.first, values, info_v41_v42);
-                    } else {
+                    } else if (source->version == Version::v43) {
                         check_predefined_tag_info(field.first, values, info_v43);
+                    } else {
+                        check_predefined_tag_info(field.first, values, info_v44);
                     }
                 } catch (std::shared_ptr<Error> ex) {
                     throw new InfoBodyError{line, "INFO " + ex->message, field.first + "=" + field.second, ErrorFix::IRRECOVERABLE_VALUE, field.first};
@@ -287,10 +291,54 @@ namespace ebi
 
     void Record::check_info_no_duplicates() const
     {
-        if (source->version == Version::v43 && info.size() > 1) {
+        if ((source->version == Version::v43 || source->version == Version::v44) && info.size() > 1) {
             for (auto & in : info) {
                 if (info.count(in.first) > 1) {
                     throw new InfoBodyError{line, "INFO must not have duplicate keys", "", ErrorFix::DUPLICATE_VALUES};
+                }
+            }
+        }
+    }
+
+    void Record::check_info_have_mandatory() const
+    {
+        static boost::regex deldup_regex("(<(DUP|DEL)(:[^>]+)*>)+");
+        static boost::regex cnvtr_regex("(<CNV:TR>)");
+        bool svlencheck = false;
+        bool svclaimcheck = false;
+        bool cnvtrcheck = false;
+
+        if (source->version < Version::v44) {              //not applicable for 4.1/2/3
+            return;
+        }
+        for (size_t i = 0; i < alternate_alleles.size(); ++i ) {
+            //SVLEN must be present for symbolic SV
+            auto & alternate = alternate_alleles[i];
+            if (types[i] == RecordType::STRUCTURAL) {
+                if (!svlencheck && info.find(SVLEN) == info.end()) {
+                    std::stringstream message;
+                    message << "INFO " << SVLEN << " must be present for symbolic structural variants";
+                    throw new InfoBodyError{line, message.str()};
+                }
+                svlencheck = true;
+
+                if (!svclaimcheck && boost::regex_match(alternate, deldup_regex)) {
+                    //del/dup tags must have svclaim
+                    if (info.find(SVCLAIM) == info.end()) {
+                        std::stringstream message;
+                        message << "INFO " << SVCLAIM << " must be present for DEL/DUP";
+                        throw new InfoBodyError{line, message.str()};
+                    }
+                    svclaimcheck = true;
+                }
+                if (!cnvtrcheck && boost::regex_match(alternate, cnvtr_regex)) {
+                    //cnv:tr must have either RUS/RUL
+                    if (info.find(RUS) == info.end() && info.find(RUL) == info.end()) {
+                        std::stringstream message;
+                        message << "INFO " << RUS << " or " << RUL << " must be present for CNV:TR";
+                        throw new InfoBodyError{line, message.str()};
+                    }
+                    cnvtrcheck = true;
                 }
             }
         }
@@ -304,6 +352,8 @@ namespace ebi
 
         check_format_GT();
         check_format_no_duplicates();
+        check_format_allele_SVLEN();
+        check_format_CICN();    //TODO check and confirm from spec issue.
     }
 
     void Record::check_format_GT() const
@@ -315,7 +365,7 @@ namespace ebi
 
     void Record::check_format_no_duplicates() const
     {
-        if (source->version == Version::v43) {
+        if (source->version == Version::v43 || source->version == Version::v44) {
             try {
                 check_no_duplicates(format);
             } catch (const std::invalid_argument &ex) {
@@ -397,7 +447,13 @@ namespace ebi
                             ErrorFix::RECOVERABLE_VALUE, field_key, expected};
                 }
             }
-        } else if (field_key == SVLEN && values.size() == alternate_alleles.size()) {
+        } else if (field_key == SVLEN) {
+            if (source->version >= Version::v44) {
+               return;         //nothing to do as val can be +/- ve and abs val is in use
+            }
+            if (values.size() != alternate_alleles.size()) {    //has unknown cardinality, not matching to allele count - nothing to do
+                return;
+            }
             for (size_t i = 0; i < alternate_alleles.size(); i++) {
                 if (check_alt_not_symbolic(i)) {
                     std::string expected = std::to_string(static_cast<long>(alternate_alleles[i].size()) - static_cast<long>(reference_allele.size()));
@@ -409,9 +465,9 @@ namespace ebi
                 } else {
                     std::string first_field = alternate_alleles[i].substr(0, 4);
                     if (first_field == "<" + INS || first_field == "<" + DUP) {
-                    size_t scanned_value_length;
-                    int value = std::stoi(values[i], &scanned_value_length);
-                                if (value < 0 || scanned_value_length != values[i].size()) {
+                        size_t scanned_value_length;
+                        int value = std::stoi(values[i], &scanned_value_length);
+                        if (value < 0 || scanned_value_length != values[i].size()) {
                             throw new InfoBodyError{line, "INFO SVLEN must be a positive integer for longer ALT alleles", "SVLEN="
                                     + field_value + ", ALT allele=" + first_field.substr(1, 3),
                                     ErrorFix::IRRECOVERABLE_VALUE, field_key};
@@ -420,7 +476,7 @@ namespace ebi
                         size_t scanned_value_length;
                         int value = std::stoi(values[i], &scanned_value_length);
                         if (value > 0 || scanned_value_length != values[i].size()) {
-                            throw new InfoBodyError{line, "INFO SVLEN must be a negative integer for shorter ALT alleles"
+                            throw new InfoBodyError{line, "INFO SVLEN must be a negative integer for shorter ALT alleles "
                                     + first_field.substr(1,3), "SVLEN=" + field_value + ", ALT allele=" + first_field.substr(1, 3),
                                     ErrorFix::IRRECOVERABLE_VALUE, field_key};
                         }
@@ -434,6 +490,218 @@ namespace ebi
                 ebi::util::print_container(message, PREDEFINED_INFO_SVTYPES, "", ", ", "");
                 throw new InfoBodyError{line, message.str(), "Found " + SVTYPE + " was '" + field_value + "'"};
             }
+        } else if (field_key == SVCLAIM) {
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            static boost::regex allele_regex("<(DUP|DEL|INS|INV|CNV)(:[^>]+)*>");
+            boost::cmatch pieces_match;
+
+            //number is A and will have matching number of entries as alleles
+            for (size_t i = 0; i < alternate_alleles.size(); ++i) {
+                std::string key = _OTHER;
+                auto & allele = alternate_alleles[i];
+                if (types[i] == RecordType::STRUCTURAL) {
+                    if (boost::regex_match(allele.c_str(), pieces_match, allele_regex)) {
+                        key = pieces_match[1];      //one of the tokens from allele_regex
+                    }
+                } else if (types[i] == RecordType::STRUCTURAL_BREAKEND) {
+                    key = _BRKEND;
+                } else {
+                    //others should have '.', checked at optional checks
+                    continue;
+                }
+                const auto & iter = PREDEFINED_INFO_ALLELE_SVCLAIM.find(key);
+                if (iter != PREDEFINED_INFO_ALLELE_SVCLAIM.end()) {
+                    auto & validvals = iter->second;
+                    if (!ebi::util::contains(validvals, values[i])) {
+                        std::stringstream message;
+                        message << "INFO " << SVCLAIM << " for allele " << alternate_alleles[i] << " must be one of: ";
+                        ebi::util::print_container(message, validvals, "", ", ", "");
+                        throw new InfoBodyError{line, message.str(), "Found " + SVCLAIM + " was '" + values[i] + "'"};
+                    }
+                }
+                else {
+                    BOOST_LOG_TRIVIAL(error) << "Invalid symbolic allele" << key << std::endl;
+                }
+            }
+        } else if (field_key == RUS) {  //repeat unit sequence
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            unsigned int rnCount = getRNvalue();                        //get repeat no, it must match to RUS count
+            if (rnCount != values.size()) {
+                std::stringstream message;
+                message << "INFO " << RUS << " for record at " << line << " must have " << rnCount << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+            }
+            //RUL - RUS matching check made below with RUL
+        } else if (field_key == RUL) {              //repeat unit length
+            if (source->version < Version::v44) {                       //not applicable for anything < v4.4
+                return;
+            }
+            unsigned int rnCount = getRNvalue();                        //get repeat no, it must match to RUL count
+            if (rnCount != values.size()) {
+                std::stringstream message;
+                message << "INFO " << RUL << " for record at " << line << " must have " << rnCount << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+            }
+            auto itRUS = info.find(RUS);
+            if (itRUS != info.end() && itRUS->second != MISSING_VALUE) {    //both RUL and RUS present, must match in count
+                std::vector<std::string> RUSval;
+                util::string_split(itRUS->second, ",", RUSval);
+                if (values.size() != RUSval.size()) {
+                    std::stringstream message;
+                    message << "INFO " << RUL << " and " << RUS << " for record at " << line << " count must match";
+                    throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " and " +
+                     std::to_string(RUSval.size()) + " value(s)"};
+                }
+                for (size_t i = 0; i < values.size(); ++i) {
+                    if (std::stoul(values[i]) != RUSval[i].length()) {      //must match to RUS length
+                        std::stringstream message;
+                        message << "INFO " << RUL << " not matching to " << RUS << " for record at " << line;
+                        throw new InfoBodyError{line, message.str(), "Found length " + values[i] + " for " + RUSval[i]};
+                    }
+                }
+            }
+        } else if (field_key == RUC) {  //repeat unit count
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            unsigned int rnCount = getRNvalue();                            //get repeat no, it must match to RUC count
+            if (rnCount != values.size()) {
+                std::stringstream message;
+                message << "INFO " << RUC << " for record at " << line << " must have " << rnCount << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+            }
+        } else if (field_key == RB) {     //repeat bases
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            unsigned int rnCount = getRNvalue();                            //get repeat no, it must match to RB count
+            if (rnCount != values.size()) {
+                std::stringstream message;
+                message << "INFO " << RB << " for record at " << line << " must have " << rnCount << " value(s)";
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+            }
+        } else if (field_key == CIRUC) {  //conf.interval repeat unit count
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            auto it = info.find(RUC);
+            if (it != info.end()) {
+                std::vector<std::string> RUCval;
+                util::string_split(it->second, ",", RUCval);
+                //ciruc count must be 2 * RUC count
+                check_info_field_cardinality_explicit(values, 2 * RUCval.size(), CIRUC);
+                for (size_t i = 0; i < values.size(); ++i) {
+                    if (RUCval[i / 2] == MISSING_VALUE) {
+                        if (values[i] != MISSING_VALUE) {               //ciruc must be missing with ruc missing
+                            std::stringstream message;
+                            message << "INFO " << CIRUC << " for record at " << line << " pos " << i+1 << " must be \'" << MISSING_VALUE << "\'";
+                            throw new InfoBodyError{line, message.str(), "Found " + values[i]};
+                        }
+                    }
+                }
+            } else if (values.size()) {
+                //CIRUC values without RUC!
+                std::stringstream message;
+                message << "INFO " << CIRUC << " at " << line << " can not have values without " << RUC;
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + "value(s)"};
+            }
+        } else if (field_key == CIRB) {
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            auto it = info.find(RB);
+            if (it != info.end()) {
+                std::vector<std::string> RBval;
+                util::string_split(it->second, ",", RBval);
+                //cirb count must be 2 * RB count
+                check_info_field_cardinality_explicit(values, 2 * RBval.size(), CIRB);
+                for (size_t i = 0; i < values.size(); ++i) {
+                    if (RBval[i / 2] == MISSING_VALUE) {
+                        if (values[i] != MISSING_VALUE) {               //cirb must be missing with RB missing
+                            std::stringstream message;
+                            message << "INFO " << CIRB << " for record at " << line << " pos " << i+1 << " must be \'" << MISSING_VALUE << "\'";
+                            throw new InfoBodyError{line, message.str(), "Found " + values[i]};
+                        }
+                    }
+                }
+            } else if (values.size()) {
+                //CIRB values without RB!
+                std::stringstream message;
+                message << "INFO " << CIRB << " at " << line << " can not have values without " << RB;
+                throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + "value(s)"};
+            }
+        } else if (field_key == RUB) {
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            auto it = info.find(RUC);
+            if (it != info.end()) {
+                std::string message;
+                std::vector<std::string> RUCval;
+                util::string_split(it->second, ",", RUCval);
+                int cnt = 0;
+                for (size_t i = 0; i < RUCval.size(); ++i) {    //RUC must be integer with RUB
+                    if (RUCval[i] == MISSING_VALUE) {
+                        continue;
+                    }
+                    try {
+                        check_value_type(INTEGER, RUCval[i], message);
+                    } catch (const std::exception &typeError) {
+                        std::stringstream message;
+                        message << "INFO " << RUC << " for record at " << line << " must be integer with " + RUB;
+                        throw new InfoBodyError{line, message.str()};
+                    }
+                    cnt += std::stoi(RUCval[i]);
+                }
+                //RUB size must be sum(RUC[i])
+                check_info_field_cardinality_explicit(values, cnt, RUB);
+            }
+            else {
+                //must be present
+                std::stringstream message;
+                message << "INFO " << RUB << " for record at " << line << " must have " + RUC;
+                throw new InfoBodyError{line, message.str()};
+            }
+        } else if (field_key == MEINFO) {
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            //MEINFO must be 4 * ALT allele count
+            check_info_field_cardinality_explicit(values, 4 * alternate_alleles.size(), MEINFO);
+        } else if (field_key == METRANS) {
+            if (source->version < Version::v44) {   //not applicable for anything < v4.4
+                return;
+            }
+            //METRANS must be 4 * ALT allele count
+            check_info_field_cardinality_explicit(values, 4 * alternate_alleles.size(), METRANS);
+        } else if (field_key == CICN) {
+            if (source->version < Version::v44) {   //fixed size and already checked when < v44
+                return;
+            }
+            //CICN must be 2 * ALT allele count
+            check_info_field_cardinality_explicit(values, 2 * alternate_alleles.size(), CICN);
+        } else if (field_key == CIPOS) {
+            if (source->version < Version::v44) {   //fixed size and already checked when < v44
+                return;
+            }
+            //CIPOS must be 2 * ALT allele count
+            check_info_field_cardinality_explicit(values, 2 * alternate_alleles.size(), CIPOS);
+        } else if (field_key == CIEND) {
+            if (source->version < Version::v44) {   //fixed size and already checked when < v44
+                return;
+            }
+            //CIEND must be 2 * ALT allele count
+            check_info_field_cardinality_explicit(values, 2 * alternate_alleles.size(), CIEND);
+        } else if (field_key == CILEN) {
+            if (source->version < Version::v44) {   //fixed size and already checked when < v44
+                return;
+            }
+            //CILEN must be 2 * ALT allele count
+            check_info_field_cardinality_explicit(values, 2 * alternate_alleles.size(), CILEN);
         }
     }
 
@@ -501,6 +769,14 @@ namespace ebi
             if (pos != std::string::npos) {
                 GT_subfield = sample.substr(0, pos);
             }
+            //with v44, there can be optional leading phasing info, remove it and use
+            bool checkprefix = source->version < Version::v44? false : true;
+            if (checkprefix && !GT_subfield.empty()) {
+                if (GT_subfield.at(0) == '/' || GT_subfield.at(0) == '|') {
+                    GT_subfield.erase(0,1);
+                }
+            }
+
             return 1 + count_if(GT_subfield.begin(), GT_subfield.end(), [](char c) { return c == '/' || c == '|'; });
         } else {
             BOOST_LOG_TRIVIAL(error) << "Cannot fetch ploidy from GT as GT is not present in the FORMAT";
@@ -517,6 +793,15 @@ namespace ebi
 
         // If the first format field is not a GT, then no alleles need to be checked
         if (format[0] == GT) {
+            //with v44, there can be optional leading phasing info, remove it and use
+            bool checkprefix = source->version < Version::v44? false : true;
+            if (checkprefix && !subfields.empty()) {
+                if (!subfields[0].empty()) {
+                    if (subfields[0].at(0) == '/' || subfields[0].at(0) == '|') {
+                        subfields[0].erase(0,1);
+                    }
+                }
+            }
             check_sample_alleles(subfields);
         }
 
@@ -563,8 +848,10 @@ namespace ebi
                 try {
                     if (source->version == Version::v41 || source->version == Version::v42) {
                         check_predefined_tag_format(format[j], values, format_v41_v42, ploidy);
-                    } else {
+                    } else if (source->version == Version::v43) {
                         check_predefined_tag_format(format[j], values, format_v43, ploidy);
+                    } else {
+                        check_predefined_tag_format(format[j], values, format_v44, ploidy);
                     }
                 } catch (std::shared_ptr<Error> ex) {
                     throw new SamplesFieldBodyError{line, "Sample #" + std::to_string(i + 1) + ", " + ex->message,
@@ -580,10 +867,52 @@ namespace ebi
                                                           std::vector<std::string> const & values) const
     {
         std::string message = "Sample #" + std::to_string(i + 1) + ", " + field_key + "=" + field_value + " value";
-        if (field_key == GP || (field_key == CNP && source->version == Version::v43)) {
+        if (field_key == GP || (field_key == CNP && (source->version == Version::v43 || source->version == Version::v44))) {
             for (auto & value : values) {
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
                     throw new SamplesFieldBodyError{line, message + " does not lie in the interval [0,1]", "", field_key};
+                }
+            }
+        }
+        if (source->version < Version::v44) {   //not valid for < v44
+            return;
+        }
+        if (field_key == PSL) {
+            if (format[0] == GT) {
+                std::string::size_type pos = samples[i].find(':');
+                std::string GT_subfield = samples[i];
+                std::vector<std::string> alleles;
+                if (pos != std::string::npos) {
+                    GT_subfield = samples[i].substr(0, pos);
+                }
+                get_phased_alleles(GT_subfield, alleles);   //allele or unknown(.)
+                for (size_t i = 0; i < values.size(); ++i) {
+                    if (alleles[i].at(0) == '/' && values[i] != MISSING_VALUE) {
+                        //un-phased allele must have '.' in PSL
+                        throw new SamplesFieldBodyError{line, message + " at " +
+                            std::to_string(i+1) + " to be '.'", "", field_key};
+                    }
+                }
+            }
+        } else if (field_key == PSO) {
+            //needs caching of records for detailed validation, which is not efficient - skipped
+            std::vector<std::string> pslvals;
+            get_PSL_values(i, pslvals);
+            for (size_t i = 0; i < pslvals.size(); ++i) {
+                if (pslvals[i] == MISSING_VALUE && values[i] != MISSING_VALUE) {
+                    //when psl is missing val, pso has to be missing as well
+                    throw new SamplesFieldBodyError{line, message + " at " + std::to_string(i+1) +
+                    " to be '.' as corresponding PSL is missing", "", field_key};
+                }
+            }
+        } else if (field_key == PSQ) {
+            std::vector<std::string> pslvals;
+            get_PSL_values(i, pslvals);
+            for (size_t i = 0; i < pslvals.size(); ++i) {
+                if (pslvals[i] == MISSING_VALUE && values[i] != MISSING_VALUE) {
+                    //when psl is missing val, psq has to be missing as well
+                    throw new SamplesFieldBodyError{line, message + " at " + std::to_string(i+1) +
+                    " to be '.' as corresponding PSL is missing", "", field_key};
                 }
             }
         }
@@ -637,7 +966,7 @@ namespace ebi
     }
 
     bool Record::is_valid_cardinality(std::string const &number, size_t alternate_allele_number, size_t ploidy,
-                                      long &expected_cardinality) const
+                                      long &expected_cardinality, bool isinfo) const
     {
         bool valid = true;
 
@@ -654,6 +983,8 @@ namespace ebi
         } else if (number == UNKNOWN_CARDINALITY) {
             // ...it is unspecified
             expected_cardinality = -1;
+        } else if (number == P && !isinfo) {    //invalid for info data
+            expected_cardinality = ploidy;
         } else {
             // ...specified as a number in range [0, +MAX_LONG)
             try {
@@ -676,7 +1007,7 @@ namespace ebi
         if (number != G) {
             long cardinality;
             size_t ploidy = 0;
-            check_sample_field_cardinality(values, number, ploidy, cardinality);
+            check_sample_field_cardinality(values, number, ploidy, cardinality, true);
         } else {
             // this case is not well defined, we just skip this check and allow any cardinality
             // for further discussion see https://github.com/samtools/hts-specs/issues/272
@@ -684,14 +1015,15 @@ namespace ebi
     }
 
     void Record::check_sample_field_cardinality(std::vector<std::string> const &values, std::string const &number,
-                                                size_t ploidy, long &expected_cardinality) const
+                                                size_t ploidy, long &expected_cardinality, bool isinfo) const
     {
-        if (!is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected_cardinality)) {
+        if (!is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected_cardinality, isinfo)) {
+            //P is valid for format data and not for info
             raise(std::make_shared<Error>(line, " meta specification Number=" + number
-                    + " is not one of [A, R, G, ., <non-negative number>]"));
+                    + " is not one of [A, R, G, " + (isinfo ? "" : "P, ") + "., <non-negative number>]"));
         }
         if(!values.empty()) {
-            if (values.front() == MISSING_VALUE) { return; } // No need to check missing data
+            if (values.front() == MISSING_VALUE && values.size() == 1) { return; } // No need to check missing data
         }
 
         bool number_matches = true;
@@ -777,7 +1109,8 @@ namespace ebi
     }
 
     void Record::check_field_integer_range(std::string const & field, std::vector<std::string> const & values) const {
-        if (field == SVLEN || field == CIPOS || field == CIEND || field == CILEN || field == CICN || field == CICNADJ) {
+        if (field == SVLEN || field == CIPOS || field == CIEND || field == CILEN || field == CIRB ||
+            (field == CICNADJ && source->version < Version::v44)) {
             // to ignore predefined tag fields which permit negative integral values
             return;
         }
@@ -788,6 +1121,123 @@ namespace ebi
             if (value.size() != scanned_value_length || numeric_value < 0) {
                 raise(std::make_shared<Error>(line, field + " value must be a non-negative integer number"));
             }
+        }
+    }
+
+    unsigned int Record::getRNvalue() const {
+        static boost::regex cnvtr_regex("<CNV:TR>");
+        auto it = info.find(RN);
+        unsigned int rnCnt = 0;
+        std::vector<std::string> values;
+
+        if (it != info.end()) {                     //spilt RN field
+            util::string_split(it->second, ",", values);
+        }
+
+        for (size_t i = 0; i < alternate_alleles.size(); ++i) {
+            if (values.size()) {                   //RN present
+                rnCnt += (values[i] == MISSING_VALUE) ? 0 : std::stoul(values[i]);
+            } else if (types[i] == RecordType::STRUCTURAL && boost::regex_match(alternate_alleles[i], cnvtr_regex)) {
+                //CNV:TR with no RN, consider as 1
+                rnCnt++;
+            }
+        }
+        return rnCnt;
+    }
+
+    void Record::check_info_field_cardinality_explicit(std::vector<std::string> const & values, size_t expected,
+                const std::string field) const {
+        if (values.size() != expected) {
+            std::stringstream message;
+            message << "INFO " << field << " for record at " << line << " must have " << expected << " value(s)";
+            throw new InfoBodyError{line, message.str(), "Found " + std::to_string(values.size()) + " value(s)"};
+        }
+    }
+
+    void Record::check_format_CICN() const
+    { //TODO check and confirm from spec issue.
+        if (source->version < Version::v44) {
+            return;
+        }
+        if (util::contains(format, CICN) && !util::contains(format, CN)) {
+            throw new FormatBodyError{line, "Format field CICN must be used only with CN field"};
+        }
+    }
+
+    void Record::check_format_allele_SVLEN() const
+    {
+        std::vector<std::string> values;
+        std::string svlen_val;
+        const auto &svlen = info.find(SVLEN);
+
+        static boost::regex allele_regex("(<(DUP|DEL|CNV)(:[^>]+)*>)+");
+        if (source->version < Version::v44) {   //v44 onwards
+            return;
+        }
+        if (!util::contains(format, CN) || svlen == info.end()) {
+            //only when format CN is present and info svlen present (SVs will have SVLEN)
+            return;
+        }
+        util::string_split(svlen->second, ",", values);
+
+        for (size_t i = 0; i < alternate_alleles.size(); ++i ) {
+            //SVLEN must be present for symbolic SV
+            auto & alternate = alternate_alleles[i];
+            if (types[i] != RecordType::STRUCTURAL) {
+                //only SV needs check
+                continue;
+            }
+            if (boost::regex_match(alternate, allele_regex)) {
+                //del/dup/cnv + ; they must have same svlen
+                if (!svlen_val.size()) {
+                    svlen_val = values[i];
+                    continue;
+                }
+                if (svlen_val != values[i]) {
+                    //must be same as earlier value
+                    std::stringstream message;
+                    message << "INFO " << SVLEN << " must be same for all CNV, DEL, DUP alleles";
+                    throw new InfoBodyError{line, message.str()};
+                }
+            }
+        }
+    }
+
+    void Record::get_PSL_values(size_t i, std::vector<std::string>& pslvalues) const
+    {
+        std::vector<std::string> samplevals;
+        const auto &psl = std::find(format.begin(), format.end(), PSL);
+        if (psl == format.end()) {
+            return;         //PSL not found
+        }
+        size_t offset = psl - format.begin();   //position of PSL
+        //already field count checked data
+        util::string_split(samples[i], ":", samplevals);
+        util::string_split(samplevals[offset], ",", pslvalues);
+    }
+    void Record::get_phased_alleles(std::string GT, std::vector<std::string>& alleles) const
+    {
+        std::string delims("|/");
+        bool anyphased = false;
+        std::vector<std::string> values;
+
+        if (!GT.size()) {
+            return;
+        }
+
+        if (GT.find('|') != std::string::npos) {
+            anyphased = true;
+        }
+
+        util::string_split_ex(GT, delims.c_str(), values, true);
+        //check and assign phasing for 1st allele, if missing
+        auto allele = values.begin();
+        if (allele != values.end()) {
+            if (allele->at(0) != '/' && allele->at(0) != '|') {
+                //infer phasing based on other alleles phasing
+                allele->insert(0, anyphased ? "|" : "/");
+            }
+            alleles.swap(values);
         }
     }
 

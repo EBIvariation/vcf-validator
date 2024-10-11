@@ -55,7 +55,8 @@ namespace ebi
     {
         v41,
         v42,
-        v43
+        v43,
+        v44
     };
 
     enum class RecordType
@@ -159,6 +160,60 @@ namespace ebi
             { THOUSAND_G, { FLAG, "0" } }
     };
 
+    const std::map<std::string, std::pair<std::string, std::string>> info_v44 = {
+            { AA, { STRING, "1" } },
+            { AC, { INTEGER, A } },
+            { AD, { INTEGER, R } },
+            { ADF, { INTEGER, R } },
+            { ADR, { INTEGER, R } },
+            { AF, { FLOAT, A } },
+            { AN, { INTEGER, "1" } },
+            { BKPTID, { STRING, A } },
+            { BQ, { FLOAT, "1" } },
+            { CICN, { FLOAT, UNKNOWN_CARDINALITY } },
+            { CIEND, { INTEGER, UNKNOWN_CARDINALITY } },
+            { CIGAR, { STRING, A } },
+            { CILEN, { INTEGER, UNKNOWN_CARDINALITY } },
+            { CIPOS, { INTEGER, UNKNOWN_CARDINALITY } },
+            { CIRB, { INTEGER, UNKNOWN_CARDINALITY } },
+            { CIRUC, { FLOAT, UNKNOWN_CARDINALITY } },
+            { CN, { FLOAT, "A" } },
+            { DB, { FLAG, "0" } },
+            { DBRIPID, { STRING, A } },
+            { DBVARID, { STRING, A } },
+            { DGVID, { STRING, A } },
+            { DP, { INTEGER, "1" } },
+            { END, { INTEGER, "1" } },
+            { EVENT, { STRING, A } },
+            { EVENTTYPE, { STRING, A } },
+            { HOMLEN, { INTEGER, A } },
+            { HOMSEQ, { STRING, A } },
+            { H2, { FLAG, "0" } },
+            { H3, { FLAG, "0" } },
+            { IMPRECISE, { FLAG, "0" } },
+            { MATEID, { STRING, A } },
+            { MEINFO, { STRING, UNKNOWN_CARDINALITY } },
+            { METRANS, { STRING, UNKNOWN_CARDINALITY } },
+            { MQ, { MISSING_VALUE, "1" } },
+            { MQ0, { INTEGER, "1" } },
+            { NOVEL, { FLAG, "0" } },
+            { NS, { INTEGER, "1" } },
+            { PARID, { STRING, A } },
+            // TODO : SB metadata Type and Number is "."
+            { RB, { INTEGER, UNKNOWN_CARDINALITY } },
+            { RN, { INTEGER, "A" } },
+            { RUB, { INTEGER, UNKNOWN_CARDINALITY } },
+            { RUC, { FLOAT, UNKNOWN_CARDINALITY } },
+            { RUL, { INTEGER, UNKNOWN_CARDINALITY } },
+            { RUS, { STRING, UNKNOWN_CARDINALITY } },
+            { SOMATIC, { FLAG, "0" } },
+            { SVCLAIM, { STRING, "A" } },
+            { SVLEN, { INTEGER, "A" } },
+            { SVTYPE, { STRING, "1" } },
+            { VALIDATED, { FLAG, "0" } },
+            { THOUSAND_G, { FLAG, "0" } },
+};
+
     const std::map<std::string, std::pair<std::string, std::string>> format_v41_v42 = {
             { AHAP, { INTEGER, "1" } },
             { CN, { INTEGER, "1" } },
@@ -206,6 +261,35 @@ namespace ebi
             { PS, { INTEGER, "1" } }
     };
 
+    const std::map<std::string, std::pair<std::string, std::string>> format_v44 = {
+            { AD, { INTEGER, R } },
+            { ADF, { INTEGER, R } },
+            { ADR, { INTEGER, R } },
+            { AHAP, { INTEGER, "1" } },
+            { CICN, { FLOAT, "2" } },
+            { CN, { FLOAT, "1" } },
+            { CNL, { FLOAT, G } },
+            { CNP, { FLOAT, G } },
+            { CNQ, { FLOAT, "1" } },
+            { DP, { INTEGER, "1" } },
+            { EC, { INTEGER, A } },
+            { FT, { STRING, "1" } },
+            { GL, { FLOAT, G } },
+            { GP, { FLOAT, G } },
+            { GQ, { INTEGER, "1" } },
+            { GT, { STRING, "1" } },
+            { HAP, { INTEGER, "1" } },
+            { HQ, { INTEGER, "2" } },
+            { MQ, { INTEGER, "1" } },
+            { NQ, { INTEGER, "1" } },
+            { PL, { INTEGER, G } },
+            { PQ, { INTEGER, "1" } },
+            { PS, { INTEGER, "1" } },
+            { PSL, { STRING, P } },
+            { PSO, { INTEGER, P } },
+            { PSQ, { INTEGER, P } },
+    };
+
     const std::set<std::string> PREDEFINED_INFO_SVTYPES{
             DEL,
             INS,
@@ -213,6 +297,24 @@ namespace ebi
             INV,
             CNV,
             BND,
+    };
+    // symbolic structural variants as per v44
+    const std::set<std::string> PREDEFINED_INFO_SV_v44{
+            DEL,
+            INS,
+            DUP,
+            INV,
+            CNV,
+    };
+    // mapping of allele to svclaim values
+    const std::map<std::string, const std::set<std::string>> PREDEFINED_INFO_ALLELE_SVCLAIM{
+            { DEL, { D, J, DJ } },
+            { DUP, { D, J, DJ } },
+            { CNV, { D, MISSING_VALUE } },
+            { INV, { J, DJ, MISSING_VALUE } },
+            { INS, { J, DJ, MISSING_VALUE } },
+            { _BRKEND, { J, MISSING_VALUE } },          //breakends
+            { _OTHER, { MISSING_VALUE } }               //anything else - including seq alleles
     };
 
     inline std::string const &get_predefined_type(
@@ -564,22 +666,24 @@ namespace ebi
 
         /**
          * returns the expected number of elements, given a string code
-         * @param number one of ["A", "R", "G", ".", number], where
+         * @param number one of ["A", "R", "G", ".", number, "P"], where
          *  - "A" is the amount of alleles,
          *  - "R" the amount of reference (1) plus alleles (A)
          *  - "G" is `ploidy`-combination with repetition: ((R + ploidy -1) choose ploidy)
          *  (e.g. with 1 reference, 2 alternate alleles (3 total alleles) and ploidy 2, it's 3 + 2 -1 choose 2, which is 6: 00, 01, 11, 02, 12, 22)
          *  - "." means unknown number of elements
          *  - number is a positive number [0, +inf)
+         *  - "P" is the number of alleles in the corresponding GT
          * @param alternate_allele_number the number of alternate alleles
          * @param ploidy is the number of copies of a chromosome in a sample, so a given genotype in said chromosome needs `ploidy` alleles to be completely specified
          * @param expected_cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number.
+         * @param isinfo indicates whether the check is for info field or not
          * @throw std::invalid_argument if it's not a number
          * @throw std::out_of_range if it's out of range.
          * @return bool: whether the number was valid or not
          */
         bool is_valid_cardinality(std::string const &number, size_t alternate_allele_number, size_t ploidy,
-                                  long &expected_cardinality) const;
+                                  long &expected_cardinality, bool isinfo) const;
 
         /**
          * Checks that the values match either their type specified in the meta or the VCF specification for predefined tags not in meta
@@ -601,7 +705,7 @@ namespace ebi
          * @throw std::invalid_argument
          */
         void check_sample_field_cardinality(std::vector<std::string> const &values, std::string const &number,
-                                            size_t ploidy, long &expected_cardinality) const;
+                                            size_t ploidy, long &expected_cardinality, bool isinfo = false) const;
 
         /**
          * Checks that every field in a column matches the Type specification in the meta
@@ -618,6 +722,44 @@ namespace ebi
          * @throw std::invalid_argument
          */
         void check_field_integer_range(std::string const & field, std::vector<std::string> const & value) const;
+
+        /**
+         * Checks that INFO contains required mandatory fields when applicable
+         *
+         * @throw InfoBodyError
+         */
+        void check_info_have_mandatory() const;
+
+        /**
+         * Gets total RN count
+         */
+        unsigned int getRNvalue() const;
+
+        /**
+         * Checks field cardinality, used in addition to check_info_field_cardinality for explicit checks
+         */
+        void check_info_field_cardinality_explicit(std::vector<std::string> const & values, size_t expected,
+                const std::string field) const;
+
+        /**
+         * Checks CICN field is present along with CN field
+         */
+        void check_format_CICN() const;
+
+        /**
+         * Checks specific SV alleles have same SVLEN when format CN is present
+         */
+        void check_format_allele_SVLEN() const;
+
+        /**
+         * Gets alleles from GT with phasing information
+         */
+        void get_phased_alleles(std::string GT, std::vector<std::string>& alleles) const;
+
+        /**
+         * Gets PSL values from samples
+         */
+        void get_PSL_values(size_t i, std::vector<std::string>& pslvalues) const;
     };
 
     std::ostream &operator<<(std::ostream &os, const Record &record);

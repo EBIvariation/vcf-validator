@@ -30,7 +30,6 @@
 #include "util/cli_utils.hpp"
 #include "util/logger.hpp"
 #include "vcf/file_structure.hpp"
-#include "vcf/odb_report.hpp"
 #include "vcf/report_writer.hpp"
 #include "vcf/summary_report_writer.hpp"
 #include "vcf/validator.hpp"
@@ -51,7 +50,7 @@ namespace
             (ebi::vcf::VERSION_OPTION, "Display version of the validator")
             (ebi::vcf::INPUT_OPTION, po::value<std::string>()->default_value(ebi::vcf::STDIN), "Path to the input VCF file, or stdin")
             (ebi::vcf::LEVEL_OPTION, po::value<std::string>()->default_value(ebi::vcf::WARNING_LEVEL), "Validation level (error, warning, stop)")
-            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text, database)")
+            (ebi::vcf::REPORT_OPTION, po::value<std::string>()->default_value(ebi::vcf::SUMMARY), "Comma separated values for types of reports (summary, text)")
             (ebi::vcf::OUTDIR_OPTION, po::value<std::string>()->default_value(""), "Output directory")
             (ebi::vcf::CHECK_EVIDENCE, "Flag to check genotypes or allele frequencies are present")
         ;
@@ -112,16 +111,13 @@ namespace
         auto epoch = std::chrono::system_clock::now().time_since_epoch();
         auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
         for (auto out : outs) {
-            if (out == ebi::vcf::DATABASE || out == ebi::vcf::TEXT || out == ebi::vcf::SUMMARY) {
-                std::string filetype = (out == ebi::vcf::DATABASE ? "db" : "txt");
+            if (out == ebi::vcf::TEXT || out == ebi::vcf::SUMMARY) {
+                std::string filetype = "txt";
                 std::string errortype = (out == ebi::vcf::SUMMARY) ? "errors_summary" : "errors";
                 std::string filename = input + "." + errortype + "." + std::to_string(timestamp) + "." + filetype;
                 boost::filesystem::path file{filename};
                 if (boost::filesystem::exists(file)) {
                     throw std::runtime_error{"Report file already exists on " + filename + ", please delete it or rename it"};
-                }
-                if (out == ebi::vcf::DATABASE) {
-                    outputs.emplace_back(new ebi::vcf::OdbReportRW(filename));
                 } else if (out == ebi::vcf::TEXT) {
                     outputs.emplace_back(new ebi::vcf::FileReportWriter(filename));
                 } else {

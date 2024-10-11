@@ -99,6 +99,8 @@ namespace ebi
                 return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::QuickValidator_v42(source, additionalChecks));
             case ebi::vcf::Version::v43:
                 return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::QuickValidator_v43(source, additionalChecks));
+            case ebi::vcf::Version::v44:
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::QuickValidator_v44(source, additionalChecks));
             default:
                 throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
             }
@@ -111,6 +113,8 @@ namespace ebi
                 return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::FullValidator_v42(source, additionalChecks));
             case ebi::vcf::Version::v43:
                 return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::FullValidator_v43(source, additionalChecks));
+            case ebi::vcf::Version::v44:
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::FullValidator_v44(source, additionalChecks));
             default:
                 throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
             }
@@ -123,6 +127,8 @@ namespace ebi
                 return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::Reader_v42(source, additionalChecks));
             case ebi::vcf::Version::v43:
                 return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::Reader_v43(source, additionalChecks));
+            case ebi::vcf::Version::v44:
+                return std::unique_ptr<ebi::vcf::Parser>(new ebi::vcf::Reader_v44(source, additionalChecks));
             default:
                 throw std::invalid_argument{"Please choose one of the accepted VCF fileformat versions"};
             }
@@ -189,10 +195,12 @@ namespace ebi
                 return Version::v42;
             } else if (provided_version == VCF_V43) {
                 return Version::v43;
+            } else if (provided_version == VCF_V44) {
+                return Version::v44;
             }
         }
         throw new FileformatError{1, "The fileformat declaration is not valid (the line must start with "
-                    + common_substring + " and the value must be one of 'VCFv4.1', 'VCFv4.2' or 'VCFv4.3')"};
+                    + common_substring + " and the value must be one of 'VCFv4.1', 'VCFv4.2', 'VCFv4.3' or 'VCFv4.4')"};
     }
 
     bool validate(const std::vector<char> &firstLine,

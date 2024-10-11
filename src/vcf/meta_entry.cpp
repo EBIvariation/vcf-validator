@@ -122,7 +122,9 @@ namespace ebi
     {
         // It must contain an ID and Description
         check_key_is_present(ALT, ID, value.count(ID));
-        check_key_is_present(ALT, DESCRIPTION, value.count(DESCRIPTION));
+        if (entry.source->version < Version::v44) {     //description optional since v44
+            check_key_is_present(ALT, DESCRIPTION, value.count(DESCRIPTION));
+        }
 
         check_alt_id(value[ID]);
     }
@@ -134,11 +136,12 @@ namespace ebi
         bool colon_present = main_type_position_end != std::string::npos;
         if (colon_present) {
             auto main_type = id_field.substr(0, main_type_position_end);
-            if (!ebi::util::contains(PREDEFINED_INFO_SVTYPES, main_type)) {
+            const std::set<std::string> &validAlt = (entry.source->version < Version::v44) ? PREDEFINED_INFO_SVTYPES : PREDEFINED_INFO_SV_v44;
+            if (!ebi::util::contains(validAlt, main_type)) {
                 std::stringstream message;
                 message << "In ALT metadata IDs containing colon-separated type and subtypes, the top level type "
                             "must be one of: ";
-                ebi::util::print_container(message, PREDEFINED_INFO_SVTYPES, "", ", ", "");
+                ebi::util::print_container(message, validAlt, "", ", ", "");
                 throw new MetaSectionError{entry.line, message.str(), "Found ID was '" + id_field + "'"};
             }
         }
@@ -154,7 +157,9 @@ namespace ebi
     {
         // It must contain an ID and Description
         check_key_is_present(FILTER, ID, value.count(ID));
-        check_key_is_present(FILTER, DESCRIPTION, value.count(DESCRIPTION));
+        if (entry.source->version < Version::v44) {     //this is optional v44 onwards
+            check_key_is_present(FILTER, DESCRIPTION, value.count(DESCRIPTION));
+        }
 
         check_filter_id(value[ID]);
     }
@@ -174,26 +179,32 @@ namespace ebi
         check_key_is_present(FORMAT, TYPE, value.count(TYPE));
         check_key_is_present(FORMAT, DESCRIPTION, value.count(DESCRIPTION));
         
-        check_format_or_info_number(value[NUMBER], FORMAT);
+        check_format_or_info_number(value[NUMBER], FORMAT, false);
         check_format_type(value[TYPE]);
 
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
             check_predefined_tag(FORMAT, NUMBER, value, format_v41_v42);
             check_predefined_tag(FORMAT, TYPE, value, format_v41_v42);
-        } else {
+        } else if (entry.source->version == Version::v43 ) {
             check_predefined_tag(FORMAT, NUMBER, value, format_v43);
             check_predefined_tag(FORMAT, TYPE, value, format_v43);
+        } else {
+            check_predefined_tag(FORMAT, NUMBER, value, format_v44);
+            check_predefined_tag(FORMAT, TYPE, value, format_v44);
         }
     }
 
-    void MetaEntryVisitor::check_format_or_info_number(std::string const & number_field, std::string const & field) const
+    void MetaEntryVisitor::check_format_or_info_number(std::string const & number_field, std::string const & field, bool isinfo) const
     {
+        bool checkP = entry.source->version >= Version::v44;
         if (util::contains_if(number_field, [](char c) { return !isdigit(c); }) &&
             number_field != A &&
             number_field != R &&
             number_field != G &&
-            number_field != UNKNOWN_CARDINALITY) {
-            throw new MetaSectionError{entry.line, field + " metadata Number is not a number, A, R, G or dot"};
+            number_field != UNKNOWN_CARDINALITY &&
+            (isinfo || !checkP || (number_field != P && !isinfo && checkP))) {
+            throw new MetaSectionError{entry.line, field + " metadata Number is not a number, A, R, G" +
+                ((!isinfo && checkP) ? ", P" : "") + " or dot"};
         }
     }
 
@@ -215,15 +226,18 @@ namespace ebi
         check_key_is_present(INFO, TYPE, value.count(TYPE));
         check_key_is_present(INFO, DESCRIPTION, value.count(DESCRIPTION));
 
-        check_format_or_info_number(value[NUMBER], INFO);
+        check_format_or_info_number(value[NUMBER], INFO, true);
         check_info_type(value[TYPE]);
 
         if (entry.source->version == Version::v41 || entry.source->version == Version::v42) {
             check_predefined_tag(INFO, NUMBER, value, info_v41_v42);
             check_predefined_tag(INFO, TYPE, value, info_v41_v42);
-        } else {
+        } else if (entry.source->version == Version::v43) {
             check_predefined_tag(INFO, NUMBER, value, info_v43);
             check_predefined_tag(INFO, TYPE, value, info_v43);
+        } else {
+            check_predefined_tag(INFO, NUMBER, value, info_v44);
+            check_predefined_tag(INFO, TYPE, value, info_v44);
         }
     }
 
