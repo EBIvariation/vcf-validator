@@ -69,17 +69,14 @@ if (DEFINED STATIC_BUILD)
     include_directories(${OPENSSL_INCLUDE_DIR})
     message("OPENSSL_LIBRARIES: ${OPENSSL_LIBRARIES}")
     list (APPEND HARD_CODED_LIBRARIES
-            ${OPENSSL_LIBRARIES}
+            ${OPENSSL_LIBRARIES} -ldl
             )
   else()
     list (APPEND HARD_CODED_LIBRARIES
             ${EXT_LIB_PATH}/lib/libssl.a
             ${EXT_LIB_PATH}/lib/libcrypto.a
+            -ldl
             )
-  endif()
-  if(NOT OpenSSL_FOUND)
-    message("CURL_INCLUDE_DIRS: ${CURL_INCLUDE_DIRS}/curl")
-    include_directories(${CURL_INCLUDE_DIRS}/curl)
   endif()
 else()
   # Dynamic libraries for boost
