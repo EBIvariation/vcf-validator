@@ -38,45 +38,49 @@ include_directories (lib)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
 
 if (DEFINED STATIC_BUILD)
-  # dependencies from install_dependencies.sh should be in ${PROJECT_SOURCE_DIR}/dependencies/build/
-  set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/dependencies/build")
-  message("EXT_LIB_PATH: ${EXT_LIB_PATH}")
+  if (WINDOWS)
+    set (Boost_USE_STATIC_LIBS ON)             # only find static libs
+    set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT") # also requires boost with runtime-link=static
+    set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd") # also requires boost with runtime-link=static
+    add_definitions(-DCURL_STATICLIB) # Needed to statically link libcurl
+    add_definitions(-DNOMINMAX) # Needed to suppress min and max definitions by Windows
 
-  # Set the CMAKE_PREFIX_PATH to search for libraries
-  set (CMAKE_PREFIX_PATH "${EXT_LIB_PATH}")
-  message("CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
-
-  # static libraries for boost
-  set (Boost_USE_STATIC_LIBS ON)
-#  set (BUILD_SHARED_LIBS OFF)
-#  set (CMAKE_EXE_LINKER_FLAGS "-static")
-#  set (CMAKE_FIND_LIBRARY_SUFFIXES .a)
-#  set (CMAKE_EXE_LINK_DYNAMIC_C_FLAGS)       # remove -Wl,-Bdynamic
-#  set (CMAKE_EXE_LINK_DYNAMIC_CXX_FLAGS)
-#  set (CMAKE_SHARED_LIBRARY_C_FLAGS)         # remove -fPIC
-#  set (CMAKE_SHARED_LIBRARY_CXX_FLAGS)
-#  set (CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)    # remove -rdynamic
-#  set (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
-  # Hard coded libraries
-  set (HARD_CODED_LIBRARIES
-          ${EXT_LIB_PATH}/lib/libbz2.a
-          ${EXT_LIB_PATH}/lib/libcares.a
-          ${EXT_LIB_PATH}/lib/libz.a
-  )
-  find_package(OpenSSL)
-  if(OPENSSL_FOUND)
-    message("OPENSSL_INCLUDE_DIR: ${OPENSSL_INCLUDE_DIR}")
-    include_directories(${OPENSSL_INCLUDE_DIR})
-    message("OPENSSL_LIBRARIES: ${OPENSSL_LIBRARIES}")
-    list (APPEND HARD_CODED_LIBRARIES
-            ${OPENSSL_LIBRARIES} -ldl
+    set (THIRD_PARTY_LIBRARIES
+            dependencies/curl/lib/libcurl
+            ${CMAKE_THREAD_LIBS_INIT}
             )
   else()
-    list (APPEND HARD_CODED_LIBRARIES
-            ${EXT_LIB_PATH}/lib/libssl.a
-            ${EXT_LIB_PATH}/lib/libcrypto.a
-            -ldl
-            )
+    # dependencies from install_dependencies.sh should be in ${PROJECT_SOURCE_DIR}/dependencies/build/
+    set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/dependencies/build")
+    message("EXT_LIB_PATH: ${EXT_LIB_PATH}")
+
+    # Set the CMAKE_PREFIX_PATH to search for libraries
+    set (CMAKE_PREFIX_PATH "${EXT_LIB_PATH}")
+    message("CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
+
+    # static libraries for boost
+    set (Boost_USE_STATIC_LIBS ON)
+    # Hard coded libraries
+    set (HARD_CODED_LIBRARIES
+            ${EXT_LIB_PATH}/lib/libbz2.a
+            ${EXT_LIB_PATH}/lib/libcares.a
+            ${EXT_LIB_PATH}/lib/libz.a
+    )
+    find_package(OpenSSL)
+    if(OPENSSL_FOUND)
+      message("OPENSSL_INCLUDE_DIR: ${OPENSSL_INCLUDE_DIR}")
+      include_directories(${OPENSSL_INCLUDE_DIR})
+      message("OPENSSL_LIBRARIES: ${OPENSSL_LIBRARIES}")
+      list (APPEND HARD_CODED_LIBRARIES
+              ${OPENSSL_LIBRARIES} -ldl
+              )
+    else()
+      list (APPEND HARD_CODED_LIBRARIES
+              ${EXT_LIB_PATH}/lib/libssl.a
+              ${EXT_LIB_PATH}/lib/libcrypto.a
+              -ldl
+              )
+    endif()
   endif()
 else()
   # Dynamic libraries for boost
@@ -102,12 +106,19 @@ message("CURL_LIBRARIES: ${CURL_LIBRARIES}")
 message("HARD_CODED_LIBRARIES: ${HARD_CODED_LIBRARIES}")
 message("CMAKE_THREAD_LIBS_INIT: ${CMAKE_THREAD_LIBS_INIT}")
 
-set (THIRD_PARTY_LIBRARIES
-        ${Boost_LIBRARIES}
-        ${CURL_LIBRARIES}
-        ${HARD_CODED_LIBRARIES}
-        ${CMAKE_THREAD_LIBS_INIT}
-        )
+if (WINDOWS)
+  set (THIRD_PARTY_LIBRARIES
+          dependencies/curl/lib/libcurl
+          ${CMAKE_THREAD_LIBS_INIT}
+          )
+else()
+  set (THIRD_PARTY_LIBRARIES
+          ${Boost_LIBRARIES}
+          ${CURL_LIBRARIES}
+          ${HARD_CODED_LIBRARIES}
+          ${CMAKE_THREAD_LIBS_INIT}
+          )
+endif ()
 
 
 set (MOD_VCF_SOURCES
@@ -155,13 +166,26 @@ set (MOD_VCF_SOURCES
 add_library (mod_vcf STATIC ${MOD_VCF_SOURCES})
 target_link_libraries (mod_vcf ${THIRD_PARTY_LIBRARIES})
 
-set (LIBRARIES_TO_LINK
-        mod_vcf
-        ${Boost_LIBRARIES}
-        ${CURL_LIBRARIES}
-        dl
-        ${CMAKE_THREAD_LIBS_INIT}
-        )
+if (WINDOWS)
+  set (LIBRARIES_TO_LINK
+          mod_vcf
+          dependencies/curl/lib/libcurl
+          ws2_32
+          crypt32
+          Wldap32
+          Normaliz
+          ${CMAKE_THREAD_LIBS_INIT}
+          )
+else()
+  set (LIBRARIES_TO_LINK
+          mod_vcf
+          ${Boost_LIBRARIES}
+          ${CURL_LIBRARIES}
+          dl
+          ${CMAKE_THREAD_LIBS_INIT}
+          )
+endif ()
+
 
 # Build tests
 set (V41_TESTS test/vcf/parser_v41_test.cpp)
