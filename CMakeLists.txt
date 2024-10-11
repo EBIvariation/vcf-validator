@@ -45,11 +45,9 @@ if (DEFINED STATIC_BUILD)
     set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd") # also requires boost with runtime-link=static
     add_definitions(-DCURL_STATICLIB) # Needed to statically link libcurl
     add_definitions(-DNOMINMAX) # Needed to suppress min and max definitions by Windows
-
-    set (THIRD_PARTY_LIBRARIES
-            dependencies/curl/lib/libcurl
-            ${CMAKE_THREAD_LIBS_INIT}
-            )
+    set(CURL_INCLUDE_DIRS dependencies/curl/lib/include)
+    include_directories(${CURL_INCLUDE_DIRS})
+    set(CURL_LIBRARIES dependencies/curl/lib/libcurl)
   else()
     # dependencies from install_dependencies.sh should be in ${PROJECT_SOURCE_DIR}/dependencies/build/
     set (EXT_LIB_PATH "${PROJECT_SOURCE_DIR}/dependencies/build")
@@ -109,19 +107,13 @@ message("CURL_LIBRARIES: ${CURL_LIBRARIES}")
 message("HARD_CODED_LIBRARIES: ${HARD_CODED_LIBRARIES}")
 message("CMAKE_THREAD_LIBS_INIT: ${CMAKE_THREAD_LIBS_INIT}")
 
-if (WINDOWS)
-  set (THIRD_PARTY_LIBRARIES
-          dependencies/curl/lib/libcurl
-          ${CMAKE_THREAD_LIBS_INIT}
-          )
-else()
-  set (THIRD_PARTY_LIBRARIES
-          ${Boost_LIBRARIES}
-          ${CURL_LIBRARIES}
-          ${HARD_CODED_LIBRARIES}
-          ${CMAKE_THREAD_LIBS_INIT}
-          )
-endif ()
+
+set (THIRD_PARTY_LIBRARIES
+        ${Boost_LIBRARIES}
+        ${CURL_LIBRARIES}
+        ${HARD_CODED_LIBRARIES}
+        ${CMAKE_THREAD_LIBS_INIT}
+        )
 
 
 set (MOD_VCF_SOURCES
@@ -172,7 +164,7 @@ target_link_libraries (mod_vcf ${THIRD_PARTY_LIBRARIES})
 if (WINDOWS)
   set (LIBRARIES_TO_LINK
           mod_vcf
-          dependencies/curl/lib/libcurl
+          ${CURL_LIBRARIES}
           ws2_32
           crypt32
           Wldap32
