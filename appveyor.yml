@@ -5,7 +5,6 @@ init:
   - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
   - cmd: set INCLUDE=C:\Libraries\boost_1_67_0;%INCLUDE%
   - cmd: set LIB=C:\Libraries\boost_1_67_0\lib32-msvc-14.1;%LIB%
-  - cmd: set PATH=C:\projects\vcf-validator\lib\windows_specific;%PATH%
 
 install:
   - cmd: install_dependencies.bat

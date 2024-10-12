@@ -88,13 +88,15 @@ else()
 endif()
 
 find_package (Threads REQUIRED)
-find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
-if(Boost_FOUND)
-  message("Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
-  include_directories(${Boost_INCLUDE_DIRS})
-endif()
+
 
 if (NOT WINDOWS)
+  find_package (Boost COMPONENTS filesystem iostreams program_options regex log thread system REQUIRED )
+  if(Boost_FOUND)
+    message("Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
+    include_directories(${Boost_INCLUDE_DIRS})
+  endif()
+
   find_package(CURL REQUIRED)
   if(CURL_FOUND)
     message("CURL_INCLUDE_DIRS: ${CURL_INCLUDE_DIRS}")
