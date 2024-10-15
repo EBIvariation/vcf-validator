@@ -1,7 +1,7 @@
 @echo off
 
-if not exist windows_dependencies mkdir windows_dependencies
-cd windows_dependencies
+if not exist dependencies mkdir dependencies
+cd dependencies
 
 :: Download zip files
 powershell -command "(new-object System.Net.WebClient).DownloadFile('https://curl.haxx.se/download/curl-7.62.0.zip','curl-7.62.0.zip')"
