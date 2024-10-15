@@ -142,10 +142,6 @@ then
   # The next user-config.jam should fix that.
   # Documentation on building iostreams: https://www.boost.org/doc/libs/1_72_0/libs/iostreams/doc/index.html
   # Documentation on specifying zlib and bzip2: https://boostorg.github.io/build/manual/master/index.html#bbv2.reference.tools.libraries.zlib
-#  echo "
-#using zlib : 1.2.11 : <include>${build_dir_abs_path}/zlib-1.2.11 <search>${build_dir_abs_path}/ ;
-#using bzip2 : 1.0.6 : <include>${build_dir_abs_path}/bzip2-1.0.6 <search>${build_dir_abs_path}/ ;
-#" > tools/build/src/user-config.jam
   echo "
 using zlib : 1.2.11 : <source>${dependencies_dir_abs_path}/zlib-1.2.11 ;
 using bzip2 : 1.0.6 : <source>${dependencies_dir_abs_path}/bzip2-1.0.6 ;
