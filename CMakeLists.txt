@@ -2,8 +2,8 @@ cmake_minimum_required (VERSION 2.8)
 project (vcf-validator CXX C)
 
 set (vcf-validator_VERSION_MAJOR 0)
-set (vcf-validator_VERSION_MINOR 9)
-set (vcf-validator_VERSION_PATCH 7)
+set (vcf-validator_VERSION_MINOR 10)
+set (vcf-validator_VERSION_PATCH 0)
 
 configure_file (
         "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp.in"

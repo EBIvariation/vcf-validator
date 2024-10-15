@@ -13,11 +13,11 @@ These tools have been implemented using C++11.
 
 ### From Binaries
 
-The vcf-validator is built with all the dependencies included. It can be downloaded directly from the [latest release](https://github.com/EBIvariation/vcf-validator/releases) for the most stable experience using vcf-validator. Along with the release notes, you will find the executables `vcf_validator` and `vcf_assembly_checker` for Linux, macOS and Windows. For Windows, please also download the libraries in the [lib/windows_specific/](https://github.com/EBIvariation/vcf-validator/tree/master/lib/windows_specific/) folder.
+The vcf-validator is built with all the dependencies included. It can be downloaded directly from the [latest release](https://github.com/EBIvariation/vcf-validator/releases) for the most stable experience using vcf-validator. Along with the release notes, you will find the executables `vcf_validator` and `vcf_assembly_checker` for Linux, macOS and Windows.
 
 ### From conda
 
-Starting from [v0.9.6](https://github.com/EBIvariation/vcf-validator/releases/tag/v0.9.6), you can install vcf-validator via conda using 
+Starting from [v0.9.6](https://github.com/EBIvariation/vcf-validator/releases/tag/v0.9.6), you can install vcf-validator on Linux and Mac via conda using. 
 
 ```
 conda install -c bioconda vcf-validator
@@ -53,10 +53,6 @@ Different types of validation reports can be written with the `-r` / `--report` 
 Each report is written into its own file and it is named after the input file, followed by a timestamp. The default output directory is the same as the input file's if provided using `-i`, or the current directory if using the standard input; it can be changed with the `-o` / `--outdir` option.
 
 A flag for validating evidence can be passed with `--require-evidence`. This will validate whether the VCF includes either Genotypes or Allele Frequencies. This flag will be **false** by default.
-
-### Debugulator
-
-Removed debugulator support and ODB dependency.
 
 ### Assembly Checker
 
@@ -139,7 +135,7 @@ If you are using Ubuntu 16, you can prepare all dependencies and compile the Val
 ```
 sudo apt-get install cmake wget build-essential
 ./install_dependencies.sh linux
-mkdir build && cd build && cmake -G "Unix Makefiles" ..
+mkdir build && cd build && cmake -G "Unix Makefiles" -DSTATIC_BUILD=1 ..
 make
 ```
 
@@ -148,7 +144,7 @@ The VCF Validation Suite binaries will be created in the `build/bin` subfolder. 
 ##### CMake and automatic installation
 The automatic install **requires** CMake and wget to be installed before running the script (as zlib require them to be installed). Also, the script will compile some dependencies so a compilation environment is needed. If you are using Ubuntu, you can install all that with the command `sudo apt-get install cmake wget build-essential`. After installing that, use the command `./install_dependencies.sh linux`.
 
-A subfolder named `linux_dependencies` will be created, with all the required libraries copied into it. 
+A subfolder named `dependencies` will be created, with all the required libraries copied into it. 
 
 ##### Boost
 
@@ -156,10 +152,6 @@ A subfolder named `linux_dependencies` will be created, with all the required li
 
 The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system.
 If you are using Ubuntu, you can install them with the command `sudo apt-get install libboost-dev libboost-filesystem-dev libboost-iostreams-dev libboost-program-options-dev libboost-regex-dev libboost-log-dev`.
-
-##### ODB
-
-ODB dependency is removed, ODB and debugulator are no longer in build.
 
 #### Compile
 
@@ -186,7 +178,6 @@ Boost | \>=1.65 | manual
 You can prepare all dependencies and compile the Validation Suite with these commands:
 ```
 brew install cmake boost sqlite3
-./install_dependencies.sh osx
 mkdir build && cd build && cmake -G "Unix Makefiles" ..
 make
 ```
@@ -225,10 +216,6 @@ bootstrap
 
 * Add boost_1_xx_x/stage/lib folder to the environment variable `LIB`
 * Add boost_1_xx_x folder to the environment variable `INCLUDE`
-
-##### ODB
-
-ODB dependency is removed, ODB and debugulator are no longer in build.
 
 #### Compile
 
