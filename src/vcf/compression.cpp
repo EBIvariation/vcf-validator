@@ -91,7 +91,7 @@ namespace ebi
 
     std::string get_compression_from_magic_num(const std::vector<char> &line)
     {
-        std::vector<std::pair<std::vector<char>, std::string>> types = {
+        std::vector<std::pair<std::vector<signed char>, std::string>> types = {
             { { 66, 90, 104 }, BZ2 },
             { { 31, -117 }, GZ },
             { { -3, 55, 122, 88, 90 }, XZ },
