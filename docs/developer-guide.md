@@ -11,11 +11,11 @@ into the programming technical details.
 
 ## Build process overview
 
-This is a C++ project that produces 3 binaries: vcf-validator,
-vcf-assembly-checker and vcf-debugulator. The build is done with CMake (file
+This is a C++ project that produces 2 binaries: vcf-validator and
+vcf-assembly-checker. The build is done with CMake (file
 [CMakeLists.txt](../CMakeLists.txt)) for Linux, Windows and macOS. There are
 scripts to help installing the dependencies
-([install_dependencies.sh](../install_dependencies.sh)) for Linux and macOS, and
+([install_dependencies.sh](../install_dependencies.sh)) for Linux and
 [install_dependencies.bat](../install_dependencies.bat) for Windows).
 
 We also use TravisCI ([.travis.yml](../.travis.yml)) and AppVeyor
@@ -79,11 +79,7 @@ VCF (including the metadata section), and `Error` classes (related among
 themselves by hierarchical inheritance) are used to represent different types of
 possible errors.
 
-Based on those `Error`s, the program can produce human-readable reports and a
-machine-readable report that the VCF Debugulator can read to fix some basic
-errors. Later, this machine-readable report and Debugulator support were removed
-to make build, packaging and installation simpler.
-
+Based on those `Error`s, the program can produce human-readable reports.
 The level of checks can be configured, from doing just a quick syntax check, to
 raise warnings of suspicious details.
 
@@ -179,25 +175,9 @@ of polymorphism when we catch those exceptions in vcf.ragel (again, search for
 
 If the policy to report the errors is in use, the parser has the list of
 report writers the user requested. These can be any combination of
-[simple report](../inc/vcf/record.hpp), [summary
-report](../inc/vcf/summary_report_writer.hpp), and [ODB
-report](../inc/vcf/odb_report.hpp).
+[simple report](../inc/vcf/record.hpp) and
+[summaryreport](../inc/vcf/summary_report_writer.hpp).
 
-ODB is a library for Object Relational Mapping. In other words, we use it to
-serialize the class data of errors, so that the debugulator can deserialize
-the error details directly into variables and classes without parsing.
-
-We use ODB mostly in [inc/vcf/Error.hpp](../inc/vcf/error.hpp), through some
-pragmas. The way ODB works is parsing the C++ classes that have ODB pragmas and
-outputs C++ code that serializes the class instance information into a SQL
-database. We chose Sqlite as database backend, which means that the DB reports
-can actually be opened with a Sqlite client.
-
-The debugulator had very minimal functionality and limited usage. To reduce the
-build, packaging and installation complexities, a few of the dependencies were
-removed and ODB is one among them. Along with ODB, debugulator was also removed
-from build as it is fully dependent on ODB. The sources and part of
-documentation retained for future reference.
 
 ### VCF assembly checker
 
@@ -222,31 +202,9 @@ There's also limited support to use assembly reports
 and translate between synonym contig names/accessions in case the nomenclature
 in the VCF and in the FASTA don't match.
 
-### VCF Debugulator
-
-At the beginning of the project we expected there would be interesting
-situations were we could use the ODB report to fix automatically wrong VCFs.
-Sadly, it turned out that there's not much an automated program can do, really.
-
-The fixes are implemented in [inc/vcf/fixer.hpp](../inc/vcf/fixer.hpp) and 
-[src/vcf/fixer.cpp](../src/vcf/fixer.cpp), and basically consist on removing
-duplicate variants and dropping entire fields that are non-conforming with the
-spec.
-
-The debugulator had very minimal functionality and limited usage. To reduce the
-build, packaging and installation complexities, a few of the dependencies were
-removed and ODB is one among them. Along with ODB, debugulator was also removed
-from build as it is fully dependent on ODB. The sources and part of
-documentation retained for future reference.
-
 ## Testing
 
 Testing is performed with [Catch](https://github.com/catchorg/Catch2) in the
 [`test/`](../test/) folder. The folders test/vcf/, test/fasta/ and
 test/assembly_report/ contain test source code, and test/input_files contain a
 medium-sized set of correct and wrong VCFs that are used in the tests.
-
-## ODB dependency
-
-ODB was in use earlier and it has now been removed. Debugulator was also removed
-along with it as it depends on ODB.

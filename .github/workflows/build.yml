@@ -27,7 +27,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install cmake wget build-essential
-        ./install_dependencies.sh linux
+        ./install_dependencies.sh
     - name: Compile and test
       run: |
         mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DSTATIC_BUILD=1 ..
@@ -67,7 +67,6 @@ jobs:
       run: |
         #brew update
         HOMEBREW_NO_AUTO_UPDATE=1 brew install boost automake
-        ./install_dependencies.sh osx
     - name: Compile and test
       run: |
         mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} ..
@@ -107,7 +106,6 @@ jobs:
       run: |
         #brew update
         HOMEBREW_NO_AUTO_UPDATE=1 brew install boost automake libtool
-        ./install_dependencies.sh osx
     - name: Compile and test
       run: |
         mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} ..
