@@ -102,7 +102,6 @@ namespace ebi
      * - change its name, its parent, its message and its error code
      * - add a new method visit in ErrorVisitor
      */
-    #pragma db object polymorphic
     struct Error : public std::runtime_error
     {
         Error() : Error{0} {}
@@ -119,28 +118,14 @@ namespace ebi
         virtual ~Error() override { }
 
         virtual void apply_visitor(ErrorVisitor &visitor) { visitor.visit(*this); }
-        unsigned long get_id() const { return id_; }
 
         const size_t line;
         const std::string message;
         const std::string detailed_message;
         Severity severity;
-
-      private:
-
-        #pragma db id auto
-        unsigned long id_;
-    };
-
-    #pragma db view object(Error)
-    struct ErrorCount
-    {
-        #pragma db column("COUNT(" + Error::id_ + ")")
-        std::size_t count;
     };
 
     // inheritance siblings depending on file location
-    #pragma db object
     struct MetaSectionError : public Error
     {
         MetaSectionError(size_t line = 0,
@@ -172,7 +157,6 @@ namespace ebi
         const std::string expected_value;
     };
 
-    #pragma db object
     struct HeaderSectionError : public Error
     {
         using Error::Error;
@@ -182,7 +166,6 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
 
-    #pragma db object
     struct BodySectionError : public Error
     {
         using Error::Error;
@@ -192,7 +175,6 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
 
-    #pragma db object
     struct NoMetaDefinitionError : public Error
     {
       public:
@@ -206,7 +188,6 @@ namespace ebi
     };
 
     // inheritance siblings about detailed errors
-    #pragma db object
     struct FileformatError : public MetaSectionError
     {
         using MetaSectionError::MetaSectionError;
@@ -216,7 +197,6 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
 
-    #pragma db object
     struct ChromosomeBodyError : public BodySectionError
     {
         using BodySectionError::BodySectionError;
@@ -227,7 +207,6 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
 
-    #pragma db object
     struct PositionBodyError : public BodySectionError
     {
         using BodySectionError::BodySectionError;
@@ -236,7 +215,7 @@ namespace ebi
         virtual ~PositionBodyError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
-    #pragma db object
+
     struct IdBodyError : public BodySectionError
     {
         IdBodyError(size_t line = 0,
@@ -248,7 +227,7 @@ namespace ebi
 
         ErrorFix error_fix;
     };
-    #pragma db object
+
     struct ReferenceAlleleBodyError : public BodySectionError
     {
         using BodySectionError::BodySectionError;
@@ -257,7 +236,7 @@ namespace ebi
         virtual ~ReferenceAlleleBodyError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
-    #pragma db object
+
     struct AlternateAllelesBodyError : public BodySectionError
     {
         using BodySectionError::BodySectionError;
@@ -266,7 +245,7 @@ namespace ebi
         virtual ~AlternateAllelesBodyError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
-    #pragma db object
+
     struct QualityBodyError : public BodySectionError
     {
         using BodySectionError::BodySectionError;
@@ -275,7 +254,7 @@ namespace ebi
         virtual ~QualityBodyError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
-    #pragma db object
+
     struct FilterBodyError : public BodySectionError
     {
         FilterBodyError(size_t line = 0,
@@ -289,7 +268,7 @@ namespace ebi
         ErrorFix error_fix;
         const std::string field;
     };
-    #pragma db object
+
     struct InfoBodyError : public BodySectionError
     {
         InfoBodyError(size_t line = 0,
@@ -313,7 +292,7 @@ namespace ebi
         const std::string field;
         const std::string expected_value;    // a few INFO fields expect exact values in a few cases, this would contain that value
     };
-    #pragma db object
+
     struct FormatBodyError : public BodySectionError
     {
         FormatBodyError(size_t line = 0,
@@ -325,7 +304,7 @@ namespace ebi
 
         ErrorFix error_fix;
     };
-    #pragma db object
+
     struct SamplesBodyError : public BodySectionError
     {
         using BodySectionError::BodySectionError;
@@ -334,7 +313,7 @@ namespace ebi
         virtual ~SamplesBodyError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
-    #pragma db object
+
     struct SamplesFieldBodyError : public BodySectionError
     {
       public:
@@ -357,7 +336,7 @@ namespace ebi
       private:
         SamplesFieldBodyError() {}  // necessary for ODB
     };
-    #pragma db object
+
     struct NormalizationError : public BodySectionError
     {
         using BodySectionError::BodySectionError;
@@ -366,7 +345,7 @@ namespace ebi
         virtual ~NormalizationError() override { }
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
-    #pragma db object
+
     struct DuplicationError : public BodySectionError
     {
         using BodySectionError::BodySectionError;
@@ -376,7 +355,6 @@ namespace ebi
         virtual void apply_visitor(ErrorVisitor &visitor) override { visitor.visit(*this); }
     };
 
-    #pragma db object
     class MatchStats
     {
       public:
@@ -410,8 +388,6 @@ namespace ebi
       private:
         int num_matches;
         int num_variants;
-        #pragma db id auto
-        unsigned long id_;
     };
   }
 }
