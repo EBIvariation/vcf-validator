@@ -134,7 +134,7 @@ Boost* | \>=1.65 | manual or automatic
 If you are using Ubuntu 16, you can prepare all dependencies and compile the Validation Suite with these commands:
 ```
 sudo apt-get install cmake wget build-essential
-./install_dependencies.sh linux
+./install_dependencies.sh
 mkdir build && cd build && cmake -G "Unix Makefiles" -DSTATIC_BUILD=1 ..
 make
 ```
@@ -142,7 +142,7 @@ make
 The VCF Validation Suite binaries will be created in the `build/bin` subfolder. Optionally, read below for the explanation of the previous commands.
 
 ##### CMake and automatic installation
-The automatic install **requires** CMake and wget to be installed before running the script (as zlib require them to be installed). Also, the script will compile some dependencies so a compilation environment is needed. If you are using Ubuntu, you can install all that with the command `sudo apt-get install cmake wget build-essential`. After installing that, use the command `./install_dependencies.sh linux`.
+The automatic install **requires** CMake and wget to be installed before running the script (as zlib require them to be installed). Also, the script will compile some dependencies so a compilation environment is needed. If you are using Ubuntu, you can install all that with the command `sudo apt-get install cmake wget build-essential`. After installing that, use the command `./install_dependencies.sh`.
 
 A subfolder named `dependencies` will be created, with all the required libraries copied into it. 
 
@@ -177,7 +177,7 @@ Boost | \>=1.65 | manual
 
 You can prepare all dependencies and compile the Validation Suite with these commands:
 ```
-brew install cmake boost sqlite3
+brew install cmake boost
 mkdir build && cd build && cmake -G "Unix Makefiles" ..
 make
 ```
@@ -187,8 +187,6 @@ The VCF Validation Suite binaries will be created in the `build/bin` subfolder. 
 ##### CMake and automatic installation
 
 The automatic install requires CMake and wget to be installed before running the script (as zlib require them to be installed). In order to set up the environment to compile the dependencies, first you need to run `brew install cmake boost`.
-
-A subfolder named `osx_dependencies` will be created, with all the required libraries copied into it.
 
 #### Compile
 
@@ -222,14 +220,11 @@ bootstrap
 In order to create the build scripts and compile vcf-validator, please run the following commands from the project root folder:
 
 ```
-cmake -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" /path/to/CMakeLists.txt
+cmake -DCMAKE_BUILD_TYPE=Release -DSTATIC_BUILD=1 -G "NMake Makefiles" /path/to/CMakeLists.txt
 nmake
 ```
 
 Binaries will be created in the `bin` subfolder.
-
-In order to run those binaries, you will need to add the `lib/windows_specific` directory to the `PATH`. This will allow the dll files inside that directory to be found.
-
 
 ## Deliverables
 
