@@ -124,7 +124,14 @@ namespace ebi
     void ValidateOptionalPolicy::check_body_entry_alt_gvcf_gt_value(ParsingState & state, Record const & record) const
     {
         if (util::contains(record.alternate_alleles, GVCF_NON_VARIANT_ALLELE) && record.format[0] == vcf::GT) {
-            for (auto & sample : record.samples) {
+            //with v44, there can be optional leading phasing info, remove it and use
+            bool checkprefix = state.source->version < Version::v44? false : true;
+            for (auto sample : record.samples) {
+                if (checkprefix && !sample.empty()) {
+                    if (sample.at(0) == '/' || sample.at(0) == '|') {
+                        sample.erase(0,1);
+                    }
+                }
                 if (sample_has_reference_in_all_alleles(sample)) {
                     return;
                 }

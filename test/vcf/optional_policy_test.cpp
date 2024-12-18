@@ -963,6 +963,20 @@ namespace ebi
                                 { "0/0" },
                                 sources[1]})) );
 
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state2, vcf::Record{  //gvcf with prefixed phasing
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { vcf::GVCF_NON_VARIANT_ALLELE },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::END, "0" } },
+                                { vcf::GT },
+                                { "|0/0" },
+                                sources[1]})) );
+
             CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state2, vcf::Record{
                                 1,
                                 "chr1",
@@ -989,6 +1003,21 @@ namespace ebi
                                 { { vcf::END, "0" } },
                                 { vcf::GT },
                                 { "0|1" },
+                                sources[1]})),
+                            vcf::AlternateAllelesBodyError*);
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state2, vcf::Record{    //gvcf with prefixed phasing
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { vcf::GVCF_NON_VARIANT_ALLELE },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::END, "0" } },
+                                { vcf::GT },
+                                { "/0|1" },
                                 sources[1]})),
                             vcf::AlternateAllelesBodyError*);
         }
