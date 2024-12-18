@@ -1218,15 +1218,16 @@ namespace ebi
     void Record::get_phased_alleles(std::string GT, std::vector<std::string>& alleles) const
     {
         std::string delims("|/");
-        bool anyphased = false;
+        bool anyunphased = false;
         std::vector<std::string> values;
 
         if (!GT.size()) {
             return;
         }
 
-        if (GT.find('|') != std::string::npos) {
-            anyphased = true;
+        //search for other unphased allele, other than 1st one
+        if (GT.find('/', 1) != std::string::npos) {
+            anyunphased = true;
         }
 
         util::string_split_ex(GT, delims.c_str(), values, true);
@@ -1235,7 +1236,7 @@ namespace ebi
         if (allele != values.end()) {
             if (allele->at(0) != '/' && allele->at(0) != '|') {
                 //infer phasing based on other alleles phasing
-                allele->insert(0, anyphased ? "|" : "/");
+                allele->insert(0, anyunphased ? "/" : "|");
             }
             alleles.swap(values);
         }
