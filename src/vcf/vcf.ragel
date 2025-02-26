@@ -373,7 +373,7 @@
 
     # Metadata generic errors (do not apply to a specific type)
     action meta_id_err {
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         fhold; fgoto meta_section_skip;
     }
     
@@ -495,7 +495,7 @@
     bases           = ('A' | 'C' | 'G' | 'T' | 'N' | 'a' | 'c' | 't' | 'g' | 'n' )+ ;
     # Identifiers may contain some symbols, but not only those 
     # TODO Could it accept more symbols? Comma won't be, for sure
-    identifier      = ( (alnum | '.' | '_' | '-' )+ - (punct)+ ) >token_begin @token_middle %token_end;
+    identifier      = ( (alnum | '.' | '_' | '-' | '+' )+ - (punct)+ ) >token_begin @token_middle %token_end;
     # ALT ID (can be used from meta entries or in the ALT column)
     alt_id          = ( alnum | (punct - (',' | '<' | '>')) )+ - (punct)+ ;
 
