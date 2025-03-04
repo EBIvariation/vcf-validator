@@ -39,13 +39,13 @@ jobs:
         mv build/bin/vcf_validator vcf_validator_linux
         mv build/bin/vcf_assembly_checker vcf_assembly_checker_linux
     - name: Upload vcf-validator
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: ${{ matrix.config.cc == 'gcc' }}
       with:
         name: vcf_validator_linux
         path: vcf_validator_linux
     - name: Upload vcf-assembly-checker
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: ${{ matrix.config.cc == 'gcc' }}
       with:
         name: vcf_assembly_checker_linux
