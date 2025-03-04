@@ -14,7 +14,7 @@ jobs:
 
   ### Linux build
   linux_build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         config:
@@ -79,13 +79,13 @@ jobs:
         mv build/bin/vcf_validator vcf_validator_macos_x64
         mv build/bin/vcf_assembly_checker vcf_assembly_checker_macos_x64
     - name: Upload vcf-validator
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: ${{ matrix.config.cc == 'clang' }}
       with:
         name: vcf_validator_macos_x64
         path: vcf_validator_macos_x64
     - name: Upload vcf-assembly-checker
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: ${{ matrix.config.cc == 'clang' }}
       with:
         name: vcf_assembly_checker_macos_x64
@@ -117,13 +117,13 @@ jobs:
         mv build/bin/vcf_validator vcf_validator_macos_arm64
         mv build/bin/vcf_assembly_checker vcf_assembly_checker_macos_arm64
     - name: Upload vcf-validator
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: ${{ matrix.config.cc == 'clang' }}
       with:
         name: vcf_validator_macos_arm64
         path: vcf_validator_macos_arm64
     - name: Upload vcf-assembly-checker
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: ${{ matrix.config.cc == 'clang' }}
       with:
         name: vcf_assembly_checker_macos_arm64
@@ -137,7 +137,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: bin
       - name: Draft release
