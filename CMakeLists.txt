@@ -37,9 +37,9 @@ endif()
 # Include directories
 include_directories (inc)
 include_directories (lib)
-if (NOT WINDOWS)
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas") # No unknown pragmas: it's ok that gcc doesn't know about ODB's pragmas
-endif()
+
+add_compile_options(-Wall -Wno-unknown-pragmas)
+
 
 if (DEFINED STATIC_BUILD)
   if (WINDOWS)
