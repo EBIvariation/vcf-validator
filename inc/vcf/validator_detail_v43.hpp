@@ -279,7 +279,7 @@ tr153:
 tr162:
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 259 "src/vcf/vcf.ragel"
@@ -296,7 +296,7 @@ tr162:
 tr176:
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 380 "src/vcf/vcf.ragel"
@@ -323,7 +323,7 @@ tr188:
     }
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 259 "src/vcf/vcf.ragel"
@@ -369,7 +369,7 @@ tr197:
 tr207:
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 283 "src/vcf/vcf.ragel"
@@ -403,7 +403,7 @@ tr226:
 tr248:
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 380 "src/vcf/vcf.ragel"
@@ -430,7 +430,7 @@ tr260:
     }
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 283 "src/vcf/vcf.ragel"
@@ -459,7 +459,7 @@ tr266:
 tr276:
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 289 "src/vcf/vcf.ragel"
@@ -527,7 +527,7 @@ tr315:
 tr337:
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 380 "src/vcf/vcf.ragel"
@@ -554,7 +554,7 @@ tr349:
     }
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 289 "src/vcf/vcf.ragel"
@@ -583,7 +583,7 @@ tr356:
 tr365:
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 300 "src/vcf/vcf.ragel"
@@ -651,7 +651,7 @@ tr404:
 tr426:
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 380 "src/vcf/vcf.ragel"
@@ -678,7 +678,7 @@ tr438:
     }
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 300 "src/vcf/vcf.ragel"
@@ -707,7 +707,7 @@ tr445:
 tr454:
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 338 "src/vcf/vcf.ragel"
@@ -787,7 +787,7 @@ tr498:
 tr511:
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 311 "src/vcf/vcf.ragel"
@@ -867,7 +867,7 @@ tr569:
 tr580:
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 359 "src/vcf/vcf.ragel"
@@ -925,7 +925,7 @@ tr650:
 tr661:
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {goto st667;}
     }
 #line 277 "src/vcf/vcf.ragel"
@@ -3298,8 +3298,10 @@ st100:
 	if ( ++p == pe )
 		goto _test_eof100;
 case 100:
-	if ( (*p) == 95 )
-		goto tr163;
+	switch( (*p) ) {
+		case 43: goto tr163;
+		case 95: goto tr163;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr163;
@@ -3322,9 +3324,11 @@ st101:
 	if ( ++p == pe )
 		goto _test_eof101;
 case 101:
-#line 3326 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st101;
+#line 3328 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st101;
+		case 95: goto st101;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st101;
@@ -3357,8 +3361,9 @@ st102:
 	if ( ++p == pe )
 		goto _test_eof102;
 case 102:
-#line 3361 "inc/vcf/validator_detail_v43.hpp"
+#line 3365 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
+		case 43: goto tr166;
 		case 61: goto tr167;
 		case 95: goto tr166;
 	}
@@ -3384,7 +3389,7 @@ st103:
 	if ( ++p == pe )
 		goto _test_eof103;
 case 103:
-#line 3388 "inc/vcf/validator_detail_v43.hpp"
+#line 3393 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st104;
 	goto tr126;
@@ -3419,7 +3424,7 @@ st105:
 	if ( ++p == pe )
 		goto _test_eof105;
 case 105:
-#line 3423 "inc/vcf/validator_detail_v43.hpp"
+#line 3428 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
 		case 92: goto tr172;
@@ -3447,7 +3452,7 @@ st106:
 	if ( ++p == pe )
 		goto _test_eof106;
 case 106:
-#line 3451 "inc/vcf/validator_detail_v43.hpp"
+#line 3456 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr173;
 		case 92: goto tr172;
@@ -3469,7 +3474,7 @@ st107:
 	if ( ++p == pe )
 		goto _test_eof107;
 case 107:
-#line 3473 "inc/vcf/validator_detail_v43.hpp"
+#line 3478 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
 		case 44: goto tr174;
@@ -3499,9 +3504,10 @@ st108:
 	if ( ++p == pe )
 		goto _test_eof108;
 case 108:
-#line 3503 "inc/vcf/validator_detail_v43.hpp"
+#line 3508 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
+		case 43: goto tr177;
 		case 47: goto tr171;
 		case 92: goto tr172;
 		case 95: goto tr177;
@@ -3550,9 +3556,10 @@ st109:
 	if ( ++p == pe )
 		goto _test_eof109;
 case 109:
-#line 3554 "inc/vcf/validator_detail_v43.hpp"
+#line 3560 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
+		case 43: goto tr179;
 		case 47: goto tr171;
 		case 92: goto tr172;
 		case 95: goto tr179;
@@ -3601,9 +3608,10 @@ st110:
 	if ( ++p == pe )
 		goto _test_eof110;
 case 110:
-#line 3605 "inc/vcf/validator_detail_v43.hpp"
+#line 3612 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
+		case 43: goto tr180;
 		case 47: goto tr171;
 		case 61: goto tr181;
 		case 92: goto tr172;
@@ -3644,7 +3652,7 @@ st111:
 	if ( ++p == pe )
 		goto _test_eof111;
 case 111:
-#line 3648 "inc/vcf/validator_detail_v43.hpp"
+#line 3656 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr182;
 		case 92: goto tr172;
@@ -3662,7 +3670,7 @@ st112:
 	if ( ++p == pe )
 		goto _test_eof112;
 case 112:
-#line 3666 "inc/vcf/validator_detail_v43.hpp"
+#line 3674 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr155;
 		case 44: goto tr183;
@@ -3692,7 +3700,7 @@ st113:
 	if ( ++p == pe )
 		goto _test_eof113;
 case 113:
-#line 3696 "inc/vcf/validator_detail_v43.hpp"
+#line 3704 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -3731,7 +3739,7 @@ st115:
 	if ( ++p == pe )
 		goto _test_eof115;
 case 115:
-#line 3735 "inc/vcf/validator_detail_v43.hpp"
+#line 3743 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr185;
 		case 92: goto tr159;
@@ -3753,7 +3761,7 @@ st116:
 	if ( ++p == pe )
 		goto _test_eof116;
 case 116:
-#line 3757 "inc/vcf/validator_detail_v43.hpp"
+#line 3765 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
 		case 44: goto tr186;
@@ -3773,9 +3781,10 @@ st117:
 	if ( ++p == pe )
 		goto _test_eof117;
 case 117:
-#line 3777 "inc/vcf/validator_detail_v43.hpp"
+#line 3785 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
+		case 43: goto tr189;
 		case 47: goto tr157;
 		case 92: goto tr159;
 		case 95: goto tr189;
@@ -3824,9 +3833,10 @@ st118:
 	if ( ++p == pe )
 		goto _test_eof118;
 case 118:
-#line 3828 "inc/vcf/validator_detail_v43.hpp"
+#line 3837 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
+		case 43: goto tr191;
 		case 47: goto tr157;
 		case 92: goto tr159;
 		case 95: goto tr191;
@@ -3875,9 +3885,10 @@ st119:
 	if ( ++p == pe )
 		goto _test_eof119;
 case 119:
-#line 3879 "inc/vcf/validator_detail_v43.hpp"
+#line 3889 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr158;
+		case 43: goto tr192;
 		case 47: goto tr157;
 		case 61: goto tr193;
 		case 92: goto tr159;
@@ -3918,7 +3929,7 @@ st120:
 	if ( ++p == pe )
 		goto _test_eof120;
 case 120:
-#line 3922 "inc/vcf/validator_detail_v43.hpp"
+#line 3933 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr182;
 		case 92: goto tr159;
@@ -3936,7 +3947,7 @@ st121:
 	if ( ++p == pe )
 		goto _test_eof121;
 case 121:
-#line 3940 "inc/vcf/validator_detail_v43.hpp"
+#line 3951 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -3960,7 +3971,7 @@ st122:
 	if ( ++p == pe )
 		goto _test_eof122;
 case 122:
-#line 3964 "inc/vcf/validator_detail_v43.hpp"
+#line 3975 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 73: goto tr195;
@@ -3979,7 +3990,7 @@ st123:
 	if ( ++p == pe )
 		goto _test_eof123;
 case 123:
-#line 3983 "inc/vcf/validator_detail_v43.hpp"
+#line 3994 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 76: goto tr198;
@@ -3997,7 +4008,7 @@ st124:
 	if ( ++p == pe )
 		goto _test_eof124;
 case 124:
-#line 4001 "inc/vcf/validator_detail_v43.hpp"
+#line 4012 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 84: goto tr199;
@@ -4015,7 +4026,7 @@ st125:
 	if ( ++p == pe )
 		goto _test_eof125;
 case 125:
-#line 4019 "inc/vcf/validator_detail_v43.hpp"
+#line 4030 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 69: goto tr200;
@@ -4033,7 +4044,7 @@ st126:
 	if ( ++p == pe )
 		goto _test_eof126;
 case 126:
-#line 4037 "inc/vcf/validator_detail_v43.hpp"
+#line 4048 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 82: goto st127;
@@ -4060,7 +4071,7 @@ st128:
 	if ( ++p == pe )
 		goto _test_eof128;
 case 128:
-#line 4064 "inc/vcf/validator_detail_v43.hpp"
+#line 4075 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st129;
 	goto tr197;
@@ -4089,8 +4100,10 @@ st132:
 	if ( ++p == pe )
 		goto _test_eof132;
 case 132:
-	if ( (*p) == 95 )
-		goto tr208;
+	switch( (*p) ) {
+		case 43: goto tr208;
+		case 95: goto tr208;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr208;
@@ -4117,9 +4130,11 @@ st133:
 	if ( ++p == pe )
 		goto _test_eof133;
 case 133:
-#line 4121 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st133;
+#line 4134 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st133;
+		case 95: goto st133;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st133;
@@ -4156,13 +4171,13 @@ st134:
 	if ( ++p == pe )
 		goto _test_eof134;
 case 134:
-#line 4160 "inc/vcf/validator_detail_v43.hpp"
+#line 4175 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr212;
 		case 95: goto tr211;
 	}
 	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
+		if ( 43 <= (*p) && (*p) <= 46 )
 			goto tr211;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
@@ -4183,7 +4198,7 @@ st135:
 	if ( ++p == pe )
 		goto _test_eof135;
 case 135:
-#line 4187 "inc/vcf/validator_detail_v43.hpp"
+#line 4202 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 68 )
 		goto st136;
 	goto tr197;
@@ -4281,7 +4296,7 @@ st148:
 	if ( ++p == pe )
 		goto _test_eof148;
 case 148:
-#line 4285 "inc/vcf/validator_detail_v43.hpp"
+#line 4300 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr228;
 		case 92: goto tr229;
@@ -4309,7 +4324,7 @@ st149:
 	if ( ++p == pe )
 		goto _test_eof149;
 case 149:
-#line 4313 "inc/vcf/validator_detail_v43.hpp"
+#line 4328 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 92: goto tr232;
@@ -4337,7 +4352,7 @@ st150:
 	if ( ++p == pe )
 		goto _test_eof150;
 case 150:
-#line 4341 "inc/vcf/validator_detail_v43.hpp"
+#line 4356 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto st151;
 		case 62: goto st165;
@@ -4347,8 +4362,10 @@ st151:
 	if ( ++p == pe )
 		goto _test_eof151;
 case 151:
-	if ( (*p) == 95 )
-		goto tr235;
+	switch( (*p) ) {
+		case 43: goto tr235;
+		case 95: goto tr235;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr235;
@@ -4371,9 +4388,11 @@ st152:
 	if ( ++p == pe )
 		goto _test_eof152;
 case 152:
-#line 4375 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st152;
+#line 4392 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st152;
+		case 95: goto st152;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st152;
@@ -4406,8 +4425,9 @@ st153:
 	if ( ++p == pe )
 		goto _test_eof153;
 case 153:
-#line 4410 "inc/vcf/validator_detail_v43.hpp"
+#line 4429 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
+		case 43: goto tr238;
 		case 61: goto tr239;
 		case 95: goto tr238;
 	}
@@ -4433,7 +4453,7 @@ st154:
 	if ( ++p == pe )
 		goto _test_eof154;
 case 154:
-#line 4437 "inc/vcf/validator_detail_v43.hpp"
+#line 4457 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st155;
 	goto tr197;
@@ -4468,7 +4488,7 @@ st156:
 	if ( ++p == pe )
 		goto _test_eof156;
 case 156:
-#line 4472 "inc/vcf/validator_detail_v43.hpp"
+#line 4492 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 92: goto tr244;
@@ -4496,7 +4516,7 @@ st157:
 	if ( ++p == pe )
 		goto _test_eof157;
 case 157:
-#line 4500 "inc/vcf/validator_detail_v43.hpp"
+#line 4520 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr245;
 		case 92: goto tr244;
@@ -4518,7 +4538,7 @@ st158:
 	if ( ++p == pe )
 		goto _test_eof158;
 case 158:
-#line 4522 "inc/vcf/validator_detail_v43.hpp"
+#line 4542 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 44: goto tr246;
@@ -4548,9 +4568,10 @@ st159:
 	if ( ++p == pe )
 		goto _test_eof159;
 case 159:
-#line 4552 "inc/vcf/validator_detail_v43.hpp"
+#line 4572 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
+		case 43: goto tr249;
 		case 47: goto tr243;
 		case 92: goto tr244;
 		case 95: goto tr249;
@@ -4599,9 +4620,10 @@ st160:
 	if ( ++p == pe )
 		goto _test_eof160;
 case 160:
-#line 4603 "inc/vcf/validator_detail_v43.hpp"
+#line 4624 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
+		case 43: goto tr251;
 		case 47: goto tr243;
 		case 92: goto tr244;
 		case 95: goto tr251;
@@ -4650,9 +4672,10 @@ st161:
 	if ( ++p == pe )
 		goto _test_eof161;
 case 161:
-#line 4654 "inc/vcf/validator_detail_v43.hpp"
+#line 4676 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
+		case 43: goto tr252;
 		case 47: goto tr243;
 		case 61: goto tr253;
 		case 92: goto tr244;
@@ -4693,7 +4716,7 @@ st162:
 	if ( ++p == pe )
 		goto _test_eof162;
 case 162:
-#line 4697 "inc/vcf/validator_detail_v43.hpp"
+#line 4720 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr254;
 		case 92: goto tr244;
@@ -4711,7 +4734,7 @@ st163:
 	if ( ++p == pe )
 		goto _test_eof163;
 case 163:
-#line 4715 "inc/vcf/validator_detail_v43.hpp"
+#line 4738 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr228;
 		case 44: goto tr255;
@@ -4741,7 +4764,7 @@ st164:
 	if ( ++p == pe )
 		goto _test_eof164;
 case 164:
-#line 4745 "inc/vcf/validator_detail_v43.hpp"
+#line 4768 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -4780,7 +4803,7 @@ st166:
 	if ( ++p == pe )
 		goto _test_eof166;
 case 166:
-#line 4784 "inc/vcf/validator_detail_v43.hpp"
+#line 4807 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr257;
 		case 92: goto tr232;
@@ -4802,7 +4825,7 @@ st167:
 	if ( ++p == pe )
 		goto _test_eof167;
 case 167:
-#line 4806 "inc/vcf/validator_detail_v43.hpp"
+#line 4829 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
 		case 44: goto tr258;
@@ -4822,9 +4845,10 @@ st168:
 	if ( ++p == pe )
 		goto _test_eof168;
 case 168:
-#line 4826 "inc/vcf/validator_detail_v43.hpp"
+#line 4849 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
+		case 43: goto tr261;
 		case 47: goto tr230;
 		case 92: goto tr232;
 		case 95: goto tr261;
@@ -4873,9 +4897,10 @@ st169:
 	if ( ++p == pe )
 		goto _test_eof169;
 case 169:
-#line 4877 "inc/vcf/validator_detail_v43.hpp"
+#line 4901 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
+		case 43: goto tr263;
 		case 47: goto tr230;
 		case 92: goto tr232;
 		case 95: goto tr263;
@@ -4924,9 +4949,10 @@ st170:
 	if ( ++p == pe )
 		goto _test_eof170;
 case 170:
-#line 4928 "inc/vcf/validator_detail_v43.hpp"
+#line 4953 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr231;
+		case 43: goto tr264;
 		case 47: goto tr230;
 		case 61: goto tr265;
 		case 92: goto tr232;
@@ -4967,7 +4993,7 @@ st171:
 	if ( ++p == pe )
 		goto _test_eof171;
 case 171:
-#line 4971 "inc/vcf/validator_detail_v43.hpp"
+#line 4997 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr254;
 		case 92: goto tr232;
@@ -4985,7 +5011,7 @@ st172:
 	if ( ++p == pe )
 		goto _test_eof172;
 case 172:
-#line 4989 "inc/vcf/validator_detail_v43.hpp"
+#line 5015 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -5005,7 +5031,7 @@ st173:
 	if ( ++p == pe )
 		goto _test_eof173;
 case 173:
-#line 5009 "inc/vcf/validator_detail_v43.hpp"
+#line 5035 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 82: goto tr267;
@@ -5023,7 +5049,7 @@ st174:
 	if ( ++p == pe )
 		goto _test_eof174;
 case 174:
-#line 5027 "inc/vcf/validator_detail_v43.hpp"
+#line 5053 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 77: goto tr268;
@@ -5041,7 +5067,7 @@ st175:
 	if ( ++p == pe )
 		goto _test_eof175;
 case 175:
-#line 5045 "inc/vcf/validator_detail_v43.hpp"
+#line 5071 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 65: goto tr269;
@@ -5059,7 +5085,7 @@ st176:
 	if ( ++p == pe )
 		goto _test_eof176;
 case 176:
-#line 5063 "inc/vcf/validator_detail_v43.hpp"
+#line 5089 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 84: goto st177;
@@ -5086,7 +5112,7 @@ st178:
 	if ( ++p == pe )
 		goto _test_eof178;
 case 178:
-#line 5090 "inc/vcf/validator_detail_v43.hpp"
+#line 5116 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st179;
 	goto tr266;
@@ -5115,8 +5141,10 @@ st182:
 	if ( ++p == pe )
 		goto _test_eof182;
 case 182:
-	if ( (*p) == 95 )
-		goto tr277;
+	switch( (*p) ) {
+		case 43: goto tr277;
+		case 95: goto tr277;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr277;
@@ -5143,9 +5171,11 @@ st183:
 	if ( ++p == pe )
 		goto _test_eof183;
 case 183:
-#line 5147 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st183;
+#line 5175 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st183;
+		case 95: goto st183;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st183;
@@ -5182,13 +5212,13 @@ st184:
 	if ( ++p == pe )
 		goto _test_eof184;
 case 184:
-#line 5186 "inc/vcf/validator_detail_v43.hpp"
+#line 5216 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr281;
 		case 95: goto tr280;
 	}
 	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
+		if ( 43 <= (*p) && (*p) <= 46 )
 			goto tr280;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
@@ -5209,7 +5239,7 @@ st185:
 	if ( ++p == pe )
 		goto _test_eof185;
 case 185:
-#line 5213 "inc/vcf/validator_detail_v43.hpp"
+#line 5243 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto st186;
 	goto tr266;
@@ -5286,7 +5316,7 @@ st193:
 	if ( ++p == pe )
 		goto _test_eof193;
 case 193:
-#line 5290 "inc/vcf/validator_detail_v43.hpp"
+#line 5320 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto tr292;
 	goto tr289;
@@ -5300,7 +5330,7 @@ st194:
 	if ( ++p == pe )
 		goto _test_eof194;
 case 194:
-#line 5304 "inc/vcf/validator_detail_v43.hpp"
+#line 5334 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 84 )
 		goto st195;
 	goto tr266;
@@ -5366,7 +5396,7 @@ st200:
 	if ( ++p == pe )
 		goto _test_eof200;
 case 200:
-#line 5370 "inc/vcf/validator_detail_v43.hpp"
+#line 5400 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto tr300;
 	if ( (*p) > 90 ) {
@@ -5385,7 +5415,7 @@ st201:
 	if ( ++p == pe )
 		goto _test_eof201;
 case 201:
-#line 5389 "inc/vcf/validator_detail_v43.hpp"
+#line 5419 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 68 )
 		goto st202;
 	goto tr266;
@@ -5483,7 +5513,7 @@ st214:
 	if ( ++p == pe )
 		goto _test_eof214;
 case 214:
-#line 5487 "inc/vcf/validator_detail_v43.hpp"
+#line 5517 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr317;
 		case 92: goto tr318;
@@ -5511,7 +5541,7 @@ st215:
 	if ( ++p == pe )
 		goto _test_eof215;
 case 215:
-#line 5515 "inc/vcf/validator_detail_v43.hpp"
+#line 5545 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 92: goto tr321;
@@ -5539,7 +5569,7 @@ st216:
 	if ( ++p == pe )
 		goto _test_eof216;
 case 216:
-#line 5543 "inc/vcf/validator_detail_v43.hpp"
+#line 5573 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto st217;
 		case 62: goto st231;
@@ -5549,8 +5579,10 @@ st217:
 	if ( ++p == pe )
 		goto _test_eof217;
 case 217:
-	if ( (*p) == 95 )
-		goto tr324;
+	switch( (*p) ) {
+		case 43: goto tr324;
+		case 95: goto tr324;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr324;
@@ -5573,9 +5605,11 @@ st218:
 	if ( ++p == pe )
 		goto _test_eof218;
 case 218:
-#line 5577 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st218;
+#line 5609 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st218;
+		case 95: goto st218;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st218;
@@ -5608,8 +5642,9 @@ st219:
 	if ( ++p == pe )
 		goto _test_eof219;
 case 219:
-#line 5612 "inc/vcf/validator_detail_v43.hpp"
+#line 5646 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
+		case 43: goto tr327;
 		case 61: goto tr328;
 		case 95: goto tr327;
 	}
@@ -5635,7 +5670,7 @@ st220:
 	if ( ++p == pe )
 		goto _test_eof220;
 case 220:
-#line 5639 "inc/vcf/validator_detail_v43.hpp"
+#line 5674 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st221;
 	goto tr266;
@@ -5670,7 +5705,7 @@ st222:
 	if ( ++p == pe )
 		goto _test_eof222;
 case 222:
-#line 5674 "inc/vcf/validator_detail_v43.hpp"
+#line 5709 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 92: goto tr333;
@@ -5698,7 +5733,7 @@ st223:
 	if ( ++p == pe )
 		goto _test_eof223;
 case 223:
-#line 5702 "inc/vcf/validator_detail_v43.hpp"
+#line 5737 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr334;
 		case 92: goto tr333;
@@ -5720,7 +5755,7 @@ st224:
 	if ( ++p == pe )
 		goto _test_eof224;
 case 224:
-#line 5724 "inc/vcf/validator_detail_v43.hpp"
+#line 5759 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 44: goto tr335;
@@ -5750,9 +5785,10 @@ st225:
 	if ( ++p == pe )
 		goto _test_eof225;
 case 225:
-#line 5754 "inc/vcf/validator_detail_v43.hpp"
+#line 5789 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
+		case 43: goto tr338;
 		case 47: goto tr332;
 		case 92: goto tr333;
 		case 95: goto tr338;
@@ -5801,9 +5837,10 @@ st226:
 	if ( ++p == pe )
 		goto _test_eof226;
 case 226:
-#line 5805 "inc/vcf/validator_detail_v43.hpp"
+#line 5841 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
+		case 43: goto tr340;
 		case 47: goto tr332;
 		case 92: goto tr333;
 		case 95: goto tr340;
@@ -5852,9 +5889,10 @@ st227:
 	if ( ++p == pe )
 		goto _test_eof227;
 case 227:
-#line 5856 "inc/vcf/validator_detail_v43.hpp"
+#line 5893 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
+		case 43: goto tr341;
 		case 47: goto tr332;
 		case 61: goto tr342;
 		case 92: goto tr333;
@@ -5895,7 +5933,7 @@ st228:
 	if ( ++p == pe )
 		goto _test_eof228;
 case 228:
-#line 5899 "inc/vcf/validator_detail_v43.hpp"
+#line 5937 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr343;
 		case 92: goto tr333;
@@ -5913,7 +5951,7 @@ st229:
 	if ( ++p == pe )
 		goto _test_eof229;
 case 229:
-#line 5917 "inc/vcf/validator_detail_v43.hpp"
+#line 5955 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr317;
 		case 44: goto tr344;
@@ -5943,7 +5981,7 @@ st230:
 	if ( ++p == pe )
 		goto _test_eof230;
 case 230:
-#line 5947 "inc/vcf/validator_detail_v43.hpp"
+#line 5985 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -5982,7 +6020,7 @@ st232:
 	if ( ++p == pe )
 		goto _test_eof232;
 case 232:
-#line 5986 "inc/vcf/validator_detail_v43.hpp"
+#line 6024 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr346;
 		case 92: goto tr321;
@@ -6004,7 +6042,7 @@ st233:
 	if ( ++p == pe )
 		goto _test_eof233;
 case 233:
-#line 6008 "inc/vcf/validator_detail_v43.hpp"
+#line 6046 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
 		case 44: goto tr347;
@@ -6024,9 +6062,10 @@ st234:
 	if ( ++p == pe )
 		goto _test_eof234;
 case 234:
-#line 6028 "inc/vcf/validator_detail_v43.hpp"
+#line 6066 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
+		case 43: goto tr350;
 		case 47: goto tr319;
 		case 92: goto tr321;
 		case 95: goto tr350;
@@ -6075,9 +6114,10 @@ st235:
 	if ( ++p == pe )
 		goto _test_eof235;
 case 235:
-#line 6079 "inc/vcf/validator_detail_v43.hpp"
+#line 6118 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
+		case 43: goto tr352;
 		case 47: goto tr319;
 		case 92: goto tr321;
 		case 95: goto tr352;
@@ -6126,9 +6166,10 @@ st236:
 	if ( ++p == pe )
 		goto _test_eof236;
 case 236:
-#line 6130 "inc/vcf/validator_detail_v43.hpp"
+#line 6170 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr320;
+		case 43: goto tr353;
 		case 47: goto tr319;
 		case 61: goto tr354;
 		case 92: goto tr321;
@@ -6169,7 +6210,7 @@ st237:
 	if ( ++p == pe )
 		goto _test_eof237;
 case 237:
-#line 6173 "inc/vcf/validator_detail_v43.hpp"
+#line 6214 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr343;
 		case 92: goto tr321;
@@ -6187,7 +6228,7 @@ st238:
 	if ( ++p == pe )
 		goto _test_eof238;
 case 238:
-#line 6191 "inc/vcf/validator_detail_v43.hpp"
+#line 6232 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -6221,7 +6262,7 @@ st239:
 	if ( ++p == pe )
 		goto _test_eof239;
 case 239:
-#line 6225 "inc/vcf/validator_detail_v43.hpp"
+#line 6266 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto tr292;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -6241,7 +6282,7 @@ st240:
 	if ( ++p == pe )
 		goto _test_eof240;
 case 240:
-#line 6245 "inc/vcf/validator_detail_v43.hpp"
+#line 6286 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 78: goto tr357;
@@ -6259,7 +6300,7 @@ st241:
 	if ( ++p == pe )
 		goto _test_eof241;
 case 241:
-#line 6263 "inc/vcf/validator_detail_v43.hpp"
+#line 6304 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 70: goto tr358;
@@ -6277,7 +6318,7 @@ st242:
 	if ( ++p == pe )
 		goto _test_eof242;
 case 242:
-#line 6281 "inc/vcf/validator_detail_v43.hpp"
+#line 6322 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 79: goto st243;
@@ -6304,7 +6345,7 @@ st244:
 	if ( ++p == pe )
 		goto _test_eof244;
 case 244:
-#line 6308 "inc/vcf/validator_detail_v43.hpp"
+#line 6349 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st245;
 	goto tr356;
@@ -6333,8 +6374,10 @@ st248:
 	if ( ++p == pe )
 		goto _test_eof248;
 case 248:
-	if ( (*p) == 95 )
-		goto tr366;
+	switch( (*p) ) {
+		case 43: goto tr366;
+		case 95: goto tr366;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr366;
@@ -6361,9 +6404,11 @@ st249:
 	if ( ++p == pe )
 		goto _test_eof249;
 case 249:
-#line 6365 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st249;
+#line 6408 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st249;
+		case 95: goto st249;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st249;
@@ -6400,13 +6445,13 @@ st250:
 	if ( ++p == pe )
 		goto _test_eof250;
 case 250:
-#line 6404 "inc/vcf/validator_detail_v43.hpp"
+#line 6449 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr370;
 		case 95: goto tr369;
 	}
 	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
+		if ( 43 <= (*p) && (*p) <= 46 )
 			goto tr369;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
@@ -6427,7 +6472,7 @@ st251:
 	if ( ++p == pe )
 		goto _test_eof251;
 case 251:
-#line 6431 "inc/vcf/validator_detail_v43.hpp"
+#line 6476 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto st252;
 	goto tr356;
@@ -6504,7 +6549,7 @@ st259:
 	if ( ++p == pe )
 		goto _test_eof259;
 case 259:
-#line 6508 "inc/vcf/validator_detail_v43.hpp"
+#line 6553 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto tr381;
 	goto tr378;
@@ -6518,7 +6563,7 @@ st260:
 	if ( ++p == pe )
 		goto _test_eof260;
 case 260:
-#line 6522 "inc/vcf/validator_detail_v43.hpp"
+#line 6567 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 84 )
 		goto st261;
 	goto tr356;
@@ -6584,7 +6629,7 @@ st266:
 	if ( ++p == pe )
 		goto _test_eof266;
 case 266:
-#line 6588 "inc/vcf/validator_detail_v43.hpp"
+#line 6633 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto tr389;
 	if ( (*p) > 90 ) {
@@ -6603,7 +6648,7 @@ st267:
 	if ( ++p == pe )
 		goto _test_eof267;
 case 267:
-#line 6607 "inc/vcf/validator_detail_v43.hpp"
+#line 6652 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 68 )
 		goto st268;
 	goto tr356;
@@ -6701,7 +6746,7 @@ st280:
 	if ( ++p == pe )
 		goto _test_eof280;
 case 280:
-#line 6705 "inc/vcf/validator_detail_v43.hpp"
+#line 6750 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr406;
 		case 92: goto tr407;
@@ -6729,7 +6774,7 @@ st281:
 	if ( ++p == pe )
 		goto _test_eof281;
 case 281:
-#line 6733 "inc/vcf/validator_detail_v43.hpp"
+#line 6778 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 92: goto tr410;
@@ -6757,7 +6802,7 @@ st282:
 	if ( ++p == pe )
 		goto _test_eof282;
 case 282:
-#line 6761 "inc/vcf/validator_detail_v43.hpp"
+#line 6806 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto st283;
 		case 62: goto st297;
@@ -6767,8 +6812,10 @@ st283:
 	if ( ++p == pe )
 		goto _test_eof283;
 case 283:
-	if ( (*p) == 95 )
-		goto tr413;
+	switch( (*p) ) {
+		case 43: goto tr413;
+		case 95: goto tr413;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr413;
@@ -6791,9 +6838,11 @@ st284:
 	if ( ++p == pe )
 		goto _test_eof284;
 case 284:
-#line 6795 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st284;
+#line 6842 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st284;
+		case 95: goto st284;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st284;
@@ -6826,8 +6875,9 @@ st285:
 	if ( ++p == pe )
 		goto _test_eof285;
 case 285:
-#line 6830 "inc/vcf/validator_detail_v43.hpp"
+#line 6879 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
+		case 43: goto tr416;
 		case 61: goto tr417;
 		case 95: goto tr416;
 	}
@@ -6853,7 +6903,7 @@ st286:
 	if ( ++p == pe )
 		goto _test_eof286;
 case 286:
-#line 6857 "inc/vcf/validator_detail_v43.hpp"
+#line 6907 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st287;
 	goto tr356;
@@ -6888,7 +6938,7 @@ st288:
 	if ( ++p == pe )
 		goto _test_eof288;
 case 288:
-#line 6892 "inc/vcf/validator_detail_v43.hpp"
+#line 6942 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 92: goto tr422;
@@ -6916,7 +6966,7 @@ st289:
 	if ( ++p == pe )
 		goto _test_eof289;
 case 289:
-#line 6920 "inc/vcf/validator_detail_v43.hpp"
+#line 6970 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr423;
 		case 92: goto tr422;
@@ -6938,7 +6988,7 @@ st290:
 	if ( ++p == pe )
 		goto _test_eof290;
 case 290:
-#line 6942 "inc/vcf/validator_detail_v43.hpp"
+#line 6992 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 44: goto tr424;
@@ -6968,9 +7018,10 @@ st291:
 	if ( ++p == pe )
 		goto _test_eof291;
 case 291:
-#line 6972 "inc/vcf/validator_detail_v43.hpp"
+#line 7022 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
+		case 43: goto tr427;
 		case 47: goto tr421;
 		case 92: goto tr422;
 		case 95: goto tr427;
@@ -7019,9 +7070,10 @@ st292:
 	if ( ++p == pe )
 		goto _test_eof292;
 case 292:
-#line 7023 "inc/vcf/validator_detail_v43.hpp"
+#line 7074 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
+		case 43: goto tr429;
 		case 47: goto tr421;
 		case 92: goto tr422;
 		case 95: goto tr429;
@@ -7070,9 +7122,10 @@ st293:
 	if ( ++p == pe )
 		goto _test_eof293;
 case 293:
-#line 7074 "inc/vcf/validator_detail_v43.hpp"
+#line 7126 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
+		case 43: goto tr430;
 		case 47: goto tr421;
 		case 61: goto tr431;
 		case 92: goto tr422;
@@ -7113,7 +7166,7 @@ st294:
 	if ( ++p == pe )
 		goto _test_eof294;
 case 294:
-#line 7117 "inc/vcf/validator_detail_v43.hpp"
+#line 7170 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr432;
 		case 92: goto tr422;
@@ -7131,7 +7184,7 @@ st295:
 	if ( ++p == pe )
 		goto _test_eof295;
 case 295:
-#line 7135 "inc/vcf/validator_detail_v43.hpp"
+#line 7188 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr406;
 		case 44: goto tr433;
@@ -7161,7 +7214,7 @@ st296:
 	if ( ++p == pe )
 		goto _test_eof296;
 case 296:
-#line 7165 "inc/vcf/validator_detail_v43.hpp"
+#line 7218 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -7200,7 +7253,7 @@ st298:
 	if ( ++p == pe )
 		goto _test_eof298;
 case 298:
-#line 7204 "inc/vcf/validator_detail_v43.hpp"
+#line 7257 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr435;
 		case 92: goto tr410;
@@ -7222,7 +7275,7 @@ st299:
 	if ( ++p == pe )
 		goto _test_eof299;
 case 299:
-#line 7226 "inc/vcf/validator_detail_v43.hpp"
+#line 7279 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
 		case 44: goto tr436;
@@ -7242,9 +7295,10 @@ st300:
 	if ( ++p == pe )
 		goto _test_eof300;
 case 300:
-#line 7246 "inc/vcf/validator_detail_v43.hpp"
+#line 7299 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
+		case 43: goto tr439;
 		case 47: goto tr408;
 		case 92: goto tr410;
 		case 95: goto tr439;
@@ -7293,9 +7347,10 @@ st301:
 	if ( ++p == pe )
 		goto _test_eof301;
 case 301:
-#line 7297 "inc/vcf/validator_detail_v43.hpp"
+#line 7351 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
+		case 43: goto tr441;
 		case 47: goto tr408;
 		case 92: goto tr410;
 		case 95: goto tr441;
@@ -7344,9 +7399,10 @@ st302:
 	if ( ++p == pe )
 		goto _test_eof302;
 case 302:
-#line 7348 "inc/vcf/validator_detail_v43.hpp"
+#line 7403 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr409;
+		case 43: goto tr442;
 		case 47: goto tr408;
 		case 61: goto tr443;
 		case 92: goto tr410;
@@ -7387,7 +7443,7 @@ st303:
 	if ( ++p == pe )
 		goto _test_eof303;
 case 303:
-#line 7391 "inc/vcf/validator_detail_v43.hpp"
+#line 7447 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr432;
 		case 92: goto tr410;
@@ -7405,7 +7461,7 @@ st304:
 	if ( ++p == pe )
 		goto _test_eof304;
 case 304:
-#line 7409 "inc/vcf/validator_detail_v43.hpp"
+#line 7465 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -7439,7 +7495,7 @@ st305:
 	if ( ++p == pe )
 		goto _test_eof305;
 case 305:
-#line 7443 "inc/vcf/validator_detail_v43.hpp"
+#line 7499 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto tr381;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -7459,7 +7515,7 @@ st306:
 	if ( ++p == pe )
 		goto _test_eof306;
 case 306:
-#line 7463 "inc/vcf/validator_detail_v43.hpp"
+#line 7519 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 69: goto tr446;
@@ -7477,7 +7533,7 @@ st307:
 	if ( ++p == pe )
 		goto _test_eof307;
 case 307:
-#line 7481 "inc/vcf/validator_detail_v43.hpp"
+#line 7537 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 84: goto tr447;
@@ -7495,7 +7551,7 @@ st308:
 	if ( ++p == pe )
 		goto _test_eof308;
 case 308:
-#line 7499 "inc/vcf/validator_detail_v43.hpp"
+#line 7555 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 65: goto st309;
@@ -7522,7 +7578,7 @@ st310:
 	if ( ++p == pe )
 		goto _test_eof310;
 case 310:
-#line 7526 "inc/vcf/validator_detail_v43.hpp"
+#line 7582 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st311;
 	goto tr445;
@@ -7551,8 +7607,10 @@ st314:
 	if ( ++p == pe )
 		goto _test_eof314;
 case 314:
-	if ( (*p) == 95 )
-		goto tr455;
+	switch( (*p) ) {
+		case 43: goto tr455;
+		case 95: goto tr455;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr455;
@@ -7579,9 +7637,11 @@ st315:
 	if ( ++p == pe )
 		goto _test_eof315;
 case 315:
-#line 7583 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st315;
+#line 7641 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st315;
+		case 95: goto st315;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st315;
@@ -7618,13 +7678,13 @@ st316:
 	if ( ++p == pe )
 		goto _test_eof316;
 case 316:
-#line 7622 "inc/vcf/validator_detail_v43.hpp"
+#line 7682 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr459;
 		case 95: goto tr458;
 	}
 	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
+		if ( 43 <= (*p) && (*p) <= 46 )
 			goto tr458;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
@@ -7645,7 +7705,7 @@ st317:
 	if ( ++p == pe )
 		goto _test_eof317;
 case 317:
-#line 7649 "inc/vcf/validator_detail_v43.hpp"
+#line 7709 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto st318;
 	goto tr445;
@@ -7708,7 +7768,7 @@ st325:
 	if ( ++p == pe )
 		goto _test_eof325;
 case 325:
-#line 7712 "inc/vcf/validator_detail_v43.hpp"
+#line 7772 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 44 )
 		goto st326;
 	goto tr467;
@@ -7764,7 +7824,7 @@ st332:
 	if ( ++p == pe )
 		goto _test_eof332;
 case 332:
-#line 7768 "inc/vcf/validator_detail_v43.hpp"
+#line 7828 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 116 )
 		goto st333;
 	goto tr475;
@@ -7869,7 +7929,7 @@ st346:
 	if ( ++p == pe )
 		goto _test_eof346;
 case 346:
-#line 7873 "inc/vcf/validator_detail_v43.hpp"
+#line 7933 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 61 )
 		goto tr491;
 	if ( (*p) < 45 ) {
@@ -7901,7 +7961,7 @@ st347:
 	if ( ++p == pe )
 		goto _test_eof347;
 case 347:
-#line 7905 "inc/vcf/validator_detail_v43.hpp"
+#line 7965 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr494;
 		case 61: goto tr493;
@@ -7923,7 +7983,7 @@ st348:
 	if ( ++p == pe )
 		goto _test_eof348;
 case 348:
-#line 7927 "inc/vcf/validator_detail_v43.hpp"
+#line 7987 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 32: goto tr496;
 		case 61: goto tr493;
@@ -7950,7 +8010,7 @@ st349:
 	if ( ++p == pe )
 		goto _test_eof349;
 case 349:
-#line 7954 "inc/vcf/validator_detail_v43.hpp"
+#line 8014 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 61 )
 		goto tr493;
 	if ( (*p) < 45 ) {
@@ -7976,7 +8036,7 @@ st350:
 	if ( ++p == pe )
 		goto _test_eof350;
 case 350:
-#line 7980 "inc/vcf/validator_detail_v43.hpp"
+#line 8040 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr494;
 		case 62: goto st351;
@@ -8011,7 +8071,7 @@ st352:
 	if ( ++p == pe )
 		goto _test_eof352;
 case 352:
-#line 8015 "inc/vcf/validator_detail_v43.hpp"
+#line 8075 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 69: goto tr499;
@@ -8029,7 +8089,7 @@ st353:
 	if ( ++p == pe )
 		goto _test_eof353;
 case 353:
-#line 8033 "inc/vcf/validator_detail_v43.hpp"
+#line 8093 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 68: goto tr500;
@@ -8047,7 +8107,7 @@ st354:
 	if ( ++p == pe )
 		goto _test_eof354;
 case 354:
-#line 8051 "inc/vcf/validator_detail_v43.hpp"
+#line 8111 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 73: goto tr501;
@@ -8065,7 +8125,7 @@ st355:
 	if ( ++p == pe )
 		goto _test_eof355;
 case 355:
-#line 8069 "inc/vcf/validator_detail_v43.hpp"
+#line 8129 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 71: goto tr502;
@@ -8083,7 +8143,7 @@ st356:
 	if ( ++p == pe )
 		goto _test_eof356;
 case 356:
-#line 8087 "inc/vcf/validator_detail_v43.hpp"
+#line 8147 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 82: goto tr503;
@@ -8101,7 +8161,7 @@ st357:
 	if ( ++p == pe )
 		goto _test_eof357;
 case 357:
-#line 8105 "inc/vcf/validator_detail_v43.hpp"
+#line 8165 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 69: goto tr504;
@@ -8119,7 +8179,7 @@ st358:
 	if ( ++p == pe )
 		goto _test_eof358;
 case 358:
-#line 8123 "inc/vcf/validator_detail_v43.hpp"
+#line 8183 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 69: goto st359;
@@ -8146,7 +8206,7 @@ st360:
 	if ( ++p == pe )
 		goto _test_eof360;
 case 360:
-#line 8150 "inc/vcf/validator_detail_v43.hpp"
+#line 8210 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st361;
 	goto tr498;
@@ -8175,8 +8235,10 @@ st364:
 	if ( ++p == pe )
 		goto _test_eof364;
 case 364:
-	if ( (*p) == 95 )
-		goto tr512;
+	switch( (*p) ) {
+		case 43: goto tr512;
+		case 95: goto tr512;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr512;
@@ -8203,9 +8265,11 @@ st365:
 	if ( ++p == pe )
 		goto _test_eof365;
 case 365:
-#line 8207 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st365;
+#line 8269 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st365;
+		case 95: goto st365;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st365;
@@ -8242,13 +8306,13 @@ st366:
 	if ( ++p == pe )
 		goto _test_eof366;
 case 366:
-#line 8246 "inc/vcf/validator_detail_v43.hpp"
+#line 8310 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr516;
 		case 95: goto tr515;
 	}
 	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
+		if ( 43 <= (*p) && (*p) <= 46 )
 			goto tr515;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
@@ -8269,7 +8333,7 @@ st367:
 	if ( ++p == pe )
 		goto _test_eof367;
 case 367:
-#line 8273 "inc/vcf/validator_detail_v43.hpp"
+#line 8337 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 70: goto st368;
 		case 78: goto tr519;
@@ -8322,8 +8386,10 @@ st374:
 	if ( ++p == pe )
 		goto _test_eof374;
 case 374:
-	if ( (*p) == 95 )
-		goto tr528;
+	switch( (*p) ) {
+		case 43: goto tr528;
+		case 95: goto tr528;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr528;
@@ -8350,9 +8416,11 @@ st375:
 	if ( ++p == pe )
 		goto _test_eof375;
 case 375:
-#line 8354 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st375;
+#line 8420 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st375;
+		case 95: goto st375;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st375;
@@ -8389,13 +8457,13 @@ st376:
 	if ( ++p == pe )
 		goto _test_eof376;
 case 376:
-#line 8393 "inc/vcf/validator_detail_v43.hpp"
+#line 8461 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr532;
 		case 95: goto tr531;
 	}
 	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
+		if ( 43 <= (*p) && (*p) <= 46 )
 			goto tr531;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
@@ -8416,7 +8484,7 @@ st377:
 	if ( ++p == pe )
 		goto _test_eof377;
 case 377:
-#line 8420 "inc/vcf/validator_detail_v43.hpp"
+#line 8488 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 77 )
 		goto st378;
 	goto tr498;
@@ -8466,8 +8534,10 @@ st384:
 	if ( ++p == pe )
 		goto _test_eof384;
 case 384:
-	if ( (*p) == 95 )
-		goto tr540;
+	switch( (*p) ) {
+		case 43: goto tr540;
+		case 95: goto tr540;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr540;
@@ -8494,9 +8564,11 @@ st385:
 	if ( ++p == pe )
 		goto _test_eof385;
 case 385:
-#line 8498 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st385;
+#line 8568 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st385;
+		case 95: goto st385;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st385;
@@ -8533,8 +8605,9 @@ st386:
 	if ( ++p == pe )
 		goto _test_eof386;
 case 386:
-#line 8537 "inc/vcf/validator_detail_v43.hpp"
+#line 8609 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
+		case 43: goto tr543;
 		case 62: goto tr544;
 		case 95: goto tr543;
 	}
@@ -8560,7 +8633,7 @@ st387:
 	if ( ++p == pe )
 		goto _test_eof387;
 case 387:
-#line 8564 "inc/vcf/validator_detail_v43.hpp"
+#line 8637 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -8580,7 +8653,7 @@ st388:
 	if ( ++p == pe )
 		goto _test_eof388;
 case 388:
-#line 8584 "inc/vcf/validator_detail_v43.hpp"
+#line 8657 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 97 )
 		goto tr545;
 	goto tr517;
@@ -8594,7 +8667,7 @@ st389:
 	if ( ++p == pe )
 		goto _test_eof389;
 case 389:
-#line 8598 "inc/vcf/validator_detail_v43.hpp"
+#line 8671 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 109 )
 		goto tr546;
 	goto tr517;
@@ -8608,7 +8681,7 @@ st390:
 	if ( ++p == pe )
 		goto _test_eof390;
 case 390:
-#line 8612 "inc/vcf/validator_detail_v43.hpp"
+#line 8685 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 101 )
 		goto tr547;
 	goto tr517;
@@ -8622,7 +8695,7 @@ st391:
 	if ( ++p == pe )
 		goto _test_eof391;
 case 391:
-#line 8626 "inc/vcf/validator_detail_v43.hpp"
+#line 8699 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto tr548;
 	goto tr517;
@@ -8636,7 +8709,7 @@ st392:
 	if ( ++p == pe )
 		goto _test_eof392;
 case 392:
-#line 8640 "inc/vcf/validator_detail_v43.hpp"
+#line 8713 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr549;
 	goto tr517;
@@ -8650,7 +8723,7 @@ st393:
 	if ( ++p == pe )
 		goto _test_eof393;
 case 393:
-#line 8654 "inc/vcf/validator_detail_v43.hpp"
+#line 8727 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 61 )
 		goto tr550;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -8666,9 +8739,11 @@ st394:
 	if ( ++p == pe )
 		goto _test_eof394;
 case 394:
-#line 8670 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto tr551;
+#line 8743 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto tr551;
+		case 95: goto tr551;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr551;
@@ -8691,9 +8766,11 @@ st395:
 	if ( ++p == pe )
 		goto _test_eof395;
 case 395:
-#line 8695 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st395;
+#line 8770 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st395;
+		case 95: goto st395;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st395;
@@ -8726,14 +8803,14 @@ st396:
 	if ( ++p == pe )
 		goto _test_eof396;
 case 396:
-#line 8730 "inc/vcf/validator_detail_v43.hpp"
+#line 8807 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr555;
 		case 62: goto tr544;
 		case 95: goto tr554;
 	}
 	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
+		if ( 43 <= (*p) && (*p) <= 46 )
 			goto tr554;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
@@ -8754,7 +8831,7 @@ st397:
 	if ( ++p == pe )
 		goto _test_eof397;
 case 397:
-#line 8758 "inc/vcf/validator_detail_v43.hpp"
+#line 8835 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto tr519;
 	goto tr517;
@@ -8818,8 +8895,10 @@ st406:
 	if ( ++p == pe )
 		goto _test_eof406;
 case 406:
-	if ( (*p) == 95 )
-		goto tr565;
+	switch( (*p) ) {
+		case 43: goto tr565;
+		case 95: goto tr565;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr565;
@@ -8846,9 +8925,11 @@ st407:
 	if ( ++p == pe )
 		goto _test_eof407;
 case 407:
-#line 8850 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st407;
+#line 8929 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st407;
+		case 95: goto st407;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st407;
@@ -8885,8 +8966,9 @@ st408:
 	if ( ++p == pe )
 		goto _test_eof408;
 case 408:
-#line 8889 "inc/vcf/validator_detail_v43.hpp"
+#line 8970 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
+		case 43: goto tr568;
 		case 62: goto tr544;
 		case 95: goto tr568;
 	}
@@ -8916,7 +8998,7 @@ st409:
 	if ( ++p == pe )
 		goto _test_eof409;
 case 409:
-#line 8920 "inc/vcf/validator_detail_v43.hpp"
+#line 9002 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 65: goto tr570;
@@ -8934,7 +9016,7 @@ st410:
 	if ( ++p == pe )
 		goto _test_eof410;
 case 410:
-#line 8938 "inc/vcf/validator_detail_v43.hpp"
+#line 9020 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 77: goto tr571;
@@ -8952,7 +9034,7 @@ st411:
 	if ( ++p == pe )
 		goto _test_eof411;
 case 411:
-#line 8956 "inc/vcf/validator_detail_v43.hpp"
+#line 9038 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 80: goto tr572;
@@ -8970,7 +9052,7 @@ st412:
 	if ( ++p == pe )
 		goto _test_eof412;
 case 412:
-#line 8974 "inc/vcf/validator_detail_v43.hpp"
+#line 9056 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 76: goto tr573;
@@ -8988,7 +9070,7 @@ st413:
 	if ( ++p == pe )
 		goto _test_eof413;
 case 413:
-#line 8992 "inc/vcf/validator_detail_v43.hpp"
+#line 9074 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 69: goto st414;
@@ -9015,7 +9097,7 @@ st415:
 	if ( ++p == pe )
 		goto _test_eof415;
 case 415:
-#line 9019 "inc/vcf/validator_detail_v43.hpp"
+#line 9101 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st416;
 	goto tr569;
@@ -9044,8 +9126,10 @@ st419:
 	if ( ++p == pe )
 		goto _test_eof419;
 case 419:
-	if ( (*p) == 95 )
-		goto tr581;
+	switch( (*p) ) {
+		case 43: goto tr581;
+		case 95: goto tr581;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr581;
@@ -9072,9 +9156,11 @@ st420:
 	if ( ++p == pe )
 		goto _test_eof420;
 case 420:
-#line 9076 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st420;
+#line 9160 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st420;
+		case 95: goto st420;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st420;
@@ -9111,14 +9197,14 @@ st421:
 	if ( ++p == pe )
 		goto _test_eof421;
 case 421:
-#line 9115 "inc/vcf/validator_detail_v43.hpp"
+#line 9201 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr585;
 		case 62: goto tr586;
 		case 95: goto tr584;
 	}
 	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
+		if ( 43 <= (*p) && (*p) <= 46 )
 			goto tr584;
 	} else if ( (*p) > 57 ) {
 		if ( (*p) > 90 ) {
@@ -9139,9 +9225,11 @@ st422:
 	if ( ++p == pe )
 		goto _test_eof422;
 case 422:
-#line 9143 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto tr587;
+#line 9229 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto tr587;
+		case 95: goto tr587;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr587;
@@ -9164,9 +9252,11 @@ st423:
 	if ( ++p == pe )
 		goto _test_eof423;
 case 423:
-#line 9168 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st423;
+#line 9256 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st423;
+		case 95: goto st423;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st423;
@@ -9199,8 +9289,9 @@ st424:
 	if ( ++p == pe )
 		goto _test_eof424;
 case 424:
-#line 9203 "inc/vcf/validator_detail_v43.hpp"
+#line 9293 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
+		case 43: goto tr590;
 		case 61: goto tr591;
 		case 95: goto tr590;
 	}
@@ -9226,7 +9317,7 @@ st425:
 	if ( ++p == pe )
 		goto _test_eof425;
 case 425:
-#line 9230 "inc/vcf/validator_detail_v43.hpp"
+#line 9321 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st428;
 	if ( (*p) < 45 ) {
@@ -9258,7 +9349,7 @@ st426:
 	if ( ++p == pe )
 		goto _test_eof426;
 case 426:
-#line 9262 "inc/vcf/validator_detail_v43.hpp"
+#line 9353 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr585;
 		case 62: goto tr586;
@@ -9279,7 +9370,7 @@ st427:
 	if ( ++p == pe )
 		goto _test_eof427;
 case 427:
-#line 9283 "inc/vcf/validator_detail_v43.hpp"
+#line 9374 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -9316,7 +9407,7 @@ st429:
 	if ( ++p == pe )
 		goto _test_eof429;
 case 429:
-#line 9320 "inc/vcf/validator_detail_v43.hpp"
+#line 9411 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr599;
 		case 92: goto tr600;
@@ -9344,7 +9435,7 @@ st430:
 	if ( ++p == pe )
 		goto _test_eof430;
 case 430:
-#line 9348 "inc/vcf/validator_detail_v43.hpp"
+#line 9439 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto st422;
 		case 62: goto st427;
@@ -9370,7 +9461,7 @@ st431:
 	if ( ++p == pe )
 		goto _test_eof431;
 case 431:
-#line 9374 "inc/vcf/validator_detail_v43.hpp"
+#line 9465 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr603;
 		case 92: goto tr600;
@@ -9392,7 +9483,7 @@ st432:
 	if ( ++p == pe )
 		goto _test_eof432;
 case 432:
-#line 9396 "inc/vcf/validator_detail_v43.hpp"
+#line 9487 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr599;
 		case 44: goto tr604;
@@ -9432,9 +9523,10 @@ st433:
 	if ( ++p == pe )
 		goto _test_eof433;
 case 433:
-#line 9436 "inc/vcf/validator_detail_v43.hpp"
+#line 9527 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr599;
+		case 43: goto tr606;
 		case 47: goto tr598;
 		case 92: goto tr600;
 		case 95: goto tr606;
@@ -9483,9 +9575,10 @@ st434:
 	if ( ++p == pe )
 		goto _test_eof434;
 case 434:
-#line 9487 "inc/vcf/validator_detail_v43.hpp"
+#line 9579 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr599;
+		case 43: goto tr608;
 		case 47: goto tr598;
 		case 92: goto tr600;
 		case 95: goto tr608;
@@ -9534,9 +9627,10 @@ st435:
 	if ( ++p == pe )
 		goto _test_eof435;
 case 435:
-#line 9538 "inc/vcf/validator_detail_v43.hpp"
+#line 9631 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr599;
+		case 43: goto tr609;
 		case 47: goto tr598;
 		case 61: goto tr610;
 		case 92: goto tr600;
@@ -9577,7 +9671,7 @@ st436:
 	if ( ++p == pe )
 		goto _test_eof436;
 case 436:
-#line 9581 "inc/vcf/validator_detail_v43.hpp"
+#line 9675 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr612;
 		case 44: goto tr598;
@@ -9607,7 +9701,7 @@ st437:
 	if ( ++p == pe )
 		goto _test_eof437;
 case 437:
-#line 9611 "inc/vcf/validator_detail_v43.hpp"
+#line 9705 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr599;
 		case 44: goto tr615;
@@ -9647,7 +9741,7 @@ st438:
 	if ( ++p == pe )
 		goto _test_eof438;
 case 438:
-#line 9651 "inc/vcf/validator_detail_v43.hpp"
+#line 9745 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -9677,7 +9771,7 @@ st439:
 	if ( ++p == pe )
 		goto _test_eof439;
 case 439:
-#line 9681 "inc/vcf/validator_detail_v43.hpp"
+#line 9775 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr603;
 		case 44: goto tr615;
@@ -9697,7 +9791,7 @@ st440:
 	if ( ++p == pe )
 		goto _test_eof440;
 case 440:
-#line 9701 "inc/vcf/validator_detail_v43.hpp"
+#line 9795 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr596;
 		case 44: goto tr618;
@@ -9721,7 +9815,7 @@ st441:
 	if ( ++p == pe )
 		goto _test_eof441;
 case 441:
-#line 9725 "inc/vcf/validator_detail_v43.hpp"
+#line 9819 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 115: goto tr621;
@@ -9739,7 +9833,7 @@ st442:
 	if ( ++p == pe )
 		goto _test_eof442;
 case 442:
-#line 9743 "inc/vcf/validator_detail_v43.hpp"
+#line 9837 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 115: goto tr622;
@@ -9757,7 +9851,7 @@ st443:
 	if ( ++p == pe )
 		goto _test_eof443;
 case 443:
-#line 9761 "inc/vcf/validator_detail_v43.hpp"
+#line 9855 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 101: goto tr623;
@@ -9775,7 +9869,7 @@ st444:
 	if ( ++p == pe )
 		goto _test_eof444;
 case 444:
-#line 9779 "inc/vcf/validator_detail_v43.hpp"
+#line 9873 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 109: goto tr624;
@@ -9793,7 +9887,7 @@ st445:
 	if ( ++p == pe )
 		goto _test_eof445;
 case 445:
-#line 9797 "inc/vcf/validator_detail_v43.hpp"
+#line 9891 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 98: goto tr625;
@@ -9811,7 +9905,7 @@ st446:
 	if ( ++p == pe )
 		goto _test_eof446;
 case 446:
-#line 9815 "inc/vcf/validator_detail_v43.hpp"
+#line 9909 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 108: goto tr626;
@@ -9829,7 +9923,7 @@ st447:
 	if ( ++p == pe )
 		goto _test_eof447;
 case 447:
-#line 9833 "inc/vcf/validator_detail_v43.hpp"
+#line 9927 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 121: goto st448;
@@ -9856,7 +9950,7 @@ st449:
 	if ( ++p == pe )
 		goto _test_eof449;
 case 449:
-#line 9860 "inc/vcf/validator_detail_v43.hpp"
+#line 9954 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
 			goto tr630;
@@ -9873,7 +9967,7 @@ st450:
 	if ( ++p == pe )
 		goto _test_eof450;
 case 450:
-#line 9877 "inc/vcf/validator_detail_v43.hpp"
+#line 9971 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr629;
 		case 13: goto tr632;
@@ -9899,7 +9993,7 @@ st451:
 	if ( ++p == pe )
 		goto _test_eof451;
 case 451:
-#line 9903 "inc/vcf/validator_detail_v43.hpp"
+#line 9997 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr629;
 		case 13: goto tr632;
@@ -10022,7 +10116,7 @@ st461:
 	if ( ++p == pe )
 		goto _test_eof461;
 case 461:
-#line 10026 "inc/vcf/validator_detail_v43.hpp"
+#line 10120 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr46;
 		case 13: goto tr646;
@@ -10090,7 +10184,7 @@ st468:
 	if ( ++p == pe )
 		goto _test_eof468;
 case 468:
-#line 10094 "inc/vcf/validator_detail_v43.hpp"
+#line 10188 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 111: goto tr651;
@@ -10108,7 +10202,7 @@ st469:
 	if ( ++p == pe )
 		goto _test_eof469;
 case 469:
-#line 10112 "inc/vcf/validator_detail_v43.hpp"
+#line 10206 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 110: goto tr652;
@@ -10126,7 +10220,7 @@ st470:
 	if ( ++p == pe )
 		goto _test_eof470;
 case 470:
-#line 10130 "inc/vcf/validator_detail_v43.hpp"
+#line 10224 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 116: goto tr653;
@@ -10144,7 +10238,7 @@ st471:
 	if ( ++p == pe )
 		goto _test_eof471;
 case 471:
-#line 10148 "inc/vcf/validator_detail_v43.hpp"
+#line 10242 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 105: goto tr654;
@@ -10162,7 +10256,7 @@ st472:
 	if ( ++p == pe )
 		goto _test_eof472;
 case 472:
-#line 10166 "inc/vcf/validator_detail_v43.hpp"
+#line 10260 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 103: goto st473;
@@ -10189,7 +10283,7 @@ st474:
 	if ( ++p == pe )
 		goto _test_eof474;
 case 474:
-#line 10193 "inc/vcf/validator_detail_v43.hpp"
+#line 10287 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st475;
 	goto tr650;
@@ -10261,7 +10355,7 @@ st479:
 	if ( ++p == pe )
 		goto _test_eof479;
 case 479:
-#line 10265 "inc/vcf/validator_detail_v43.hpp"
+#line 10359 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr664;
 		case 62: goto tr665;
@@ -10289,9 +10383,11 @@ st480:
 	if ( ++p == pe )
 		goto _test_eof480;
 case 480:
-#line 10293 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto tr666;
+#line 10387 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto tr666;
+		case 95: goto tr666;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto tr666;
@@ -10314,9 +10410,11 @@ st481:
 	if ( ++p == pe )
 		goto _test_eof481;
 case 481:
-#line 10318 "inc/vcf/validator_detail_v43.hpp"
-	if ( (*p) == 95 )
-		goto st481;
+#line 10414 "inc/vcf/validator_detail_v43.hpp"
+	switch( (*p) ) {
+		case 43: goto st481;
+		case 95: goto st481;
+	}
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st481;
@@ -10349,8 +10447,9 @@ st482:
 	if ( ++p == pe )
 		goto _test_eof482;
 case 482:
-#line 10353 "inc/vcf/validator_detail_v43.hpp"
+#line 10451 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
+		case 43: goto tr669;
 		case 61: goto tr670;
 		case 95: goto tr669;
 	}
@@ -10376,7 +10475,7 @@ st483:
 	if ( ++p == pe )
 		goto _test_eof483;
 case 483:
-#line 10380 "inc/vcf/validator_detail_v43.hpp"
+#line 10479 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 34 )
 		goto st486;
 	if ( (*p) < 45 ) {
@@ -10408,7 +10507,7 @@ st484:
 	if ( ++p == pe )
 		goto _test_eof484;
 case 484:
-#line 10412 "inc/vcf/validator_detail_v43.hpp"
+#line 10511 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto tr664;
 		case 62: goto tr665;
@@ -10429,7 +10528,7 @@ st485:
 	if ( ++p == pe )
 		goto _test_eof485;
 case 485:
-#line 10433 "inc/vcf/validator_detail_v43.hpp"
+#line 10532 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -10466,7 +10565,7 @@ st487:
 	if ( ++p == pe )
 		goto _test_eof487;
 case 487:
-#line 10470 "inc/vcf/validator_detail_v43.hpp"
+#line 10569 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr678;
 		case 92: goto tr679;
@@ -10494,7 +10593,7 @@ st488:
 	if ( ++p == pe )
 		goto _test_eof488;
 case 488:
-#line 10498 "inc/vcf/validator_detail_v43.hpp"
+#line 10597 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 44: goto st480;
 		case 62: goto st485;
@@ -10520,7 +10619,7 @@ st489:
 	if ( ++p == pe )
 		goto _test_eof489;
 case 489:
-#line 10524 "inc/vcf/validator_detail_v43.hpp"
+#line 10623 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr682;
 		case 92: goto tr679;
@@ -10542,7 +10641,7 @@ st490:
 	if ( ++p == pe )
 		goto _test_eof490;
 case 490:
-#line 10546 "inc/vcf/validator_detail_v43.hpp"
+#line 10645 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr678;
 		case 44: goto tr683;
@@ -10582,9 +10681,10 @@ st491:
 	if ( ++p == pe )
 		goto _test_eof491;
 case 491:
-#line 10586 "inc/vcf/validator_detail_v43.hpp"
+#line 10685 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr678;
+		case 43: goto tr685;
 		case 47: goto tr677;
 		case 92: goto tr679;
 		case 95: goto tr685;
@@ -10633,9 +10733,10 @@ st492:
 	if ( ++p == pe )
 		goto _test_eof492;
 case 492:
-#line 10637 "inc/vcf/validator_detail_v43.hpp"
+#line 10737 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr678;
+		case 43: goto tr687;
 		case 47: goto tr677;
 		case 92: goto tr679;
 		case 95: goto tr687;
@@ -10684,9 +10785,10 @@ st493:
 	if ( ++p == pe )
 		goto _test_eof493;
 case 493:
-#line 10688 "inc/vcf/validator_detail_v43.hpp"
+#line 10789 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr678;
+		case 43: goto tr688;
 		case 47: goto tr677;
 		case 61: goto tr689;
 		case 92: goto tr679;
@@ -10727,7 +10829,7 @@ st494:
 	if ( ++p == pe )
 		goto _test_eof494;
 case 494:
-#line 10731 "inc/vcf/validator_detail_v43.hpp"
+#line 10833 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr691;
 		case 44: goto tr677;
@@ -10757,7 +10859,7 @@ st495:
 	if ( ++p == pe )
 		goto _test_eof495;
 case 495:
-#line 10761 "inc/vcf/validator_detail_v43.hpp"
+#line 10863 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr678;
 		case 44: goto tr694;
@@ -10797,7 +10899,7 @@ st496:
 	if ( ++p == pe )
 		goto _test_eof496;
 case 496:
-#line 10801 "inc/vcf/validator_detail_v43.hpp"
+#line 10903 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr57;
@@ -10827,7 +10929,7 @@ st497:
 	if ( ++p == pe )
 		goto _test_eof497;
 case 497:
-#line 10831 "inc/vcf/validator_detail_v43.hpp"
+#line 10933 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr682;
 		case 44: goto tr694;
@@ -10847,7 +10949,7 @@ st498:
 	if ( ++p == pe )
 		goto _test_eof498;
 case 498:
-#line 10851 "inc/vcf/validator_detail_v43.hpp"
+#line 10953 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 34: goto tr675;
 		case 44: goto tr697;
@@ -10871,7 +10973,7 @@ st499:
 	if ( ++p == pe )
 		goto _test_eof499;
 case 499:
-#line 10875 "inc/vcf/validator_detail_v43.hpp"
+#line 10977 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 101: goto tr700;
@@ -10889,7 +10991,7 @@ st500:
 	if ( ++p == pe )
 		goto _test_eof500;
 case 500:
-#line 10893 "inc/vcf/validator_detail_v43.hpp"
+#line 10995 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 100: goto tr701;
@@ -10907,7 +11009,7 @@ st501:
 	if ( ++p == pe )
 		goto _test_eof501;
 case 501:
-#line 10911 "inc/vcf/validator_detail_v43.hpp"
+#line 11013 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 105: goto tr702;
@@ -10925,7 +11027,7 @@ st502:
 	if ( ++p == pe )
 		goto _test_eof502;
 case 502:
-#line 10929 "inc/vcf/validator_detail_v43.hpp"
+#line 11031 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 103: goto tr703;
@@ -10943,7 +11045,7 @@ st503:
 	if ( ++p == pe )
 		goto _test_eof503;
 case 503:
-#line 10947 "inc/vcf/validator_detail_v43.hpp"
+#line 11049 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 114: goto tr704;
@@ -10961,7 +11063,7 @@ st504:
 	if ( ++p == pe )
 		goto _test_eof504;
 case 504:
-#line 10965 "inc/vcf/validator_detail_v43.hpp"
+#line 11067 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 101: goto tr705;
@@ -10979,7 +11081,7 @@ st505:
 	if ( ++p == pe )
 		goto _test_eof505;
 case 505:
-#line 10983 "inc/vcf/validator_detail_v43.hpp"
+#line 11085 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 101: goto tr706;
@@ -10997,7 +11099,7 @@ st506:
 	if ( ++p == pe )
 		goto _test_eof506;
 case 506:
-#line 11001 "inc/vcf/validator_detail_v43.hpp"
+#line 11103 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 68: goto tr707;
@@ -11015,7 +11117,7 @@ st507:
 	if ( ++p == pe )
 		goto _test_eof507;
 case 507:
-#line 11019 "inc/vcf/validator_detail_v43.hpp"
+#line 11121 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 61: goto tr42;
 		case 66: goto st508;
@@ -11042,7 +11144,7 @@ st509:
 	if ( ++p == pe )
 		goto _test_eof509;
 case 509:
-#line 11046 "inc/vcf/validator_detail_v43.hpp"
+#line 11148 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 60 )
 		goto st510;
 	goto tr699;
@@ -11066,7 +11168,7 @@ st511:
 	if ( ++p == pe )
 		goto _test_eof511;
 case 511:
-#line 11070 "inc/vcf/validator_detail_v43.hpp"
+#line 11172 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr711;
 		case 13: goto tr714;
@@ -11092,7 +11194,7 @@ st512:
 	if ( ++p == pe )
 		goto _test_eof512;
 case 512:
-#line 11096 "inc/vcf/validator_detail_v43.hpp"
+#line 11198 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr711;
 		case 13: goto tr714;
@@ -11203,7 +11305,7 @@ st522:
 	if ( ++p == pe )
 		goto _test_eof522;
 case 522:
-#line 11207 "inc/vcf/validator_detail_v43.hpp"
+#line 11309 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr711;
 		case 13: goto tr728;
@@ -11224,7 +11326,7 @@ st523:
 	if ( ++p == pe )
 		goto _test_eof523;
 case 523:
-#line 11228 "inc/vcf/validator_detail_v43.hpp"
+#line 11330 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr56;
 		case 13: goto tr730;
@@ -11259,7 +11361,7 @@ st524:
 	if ( ++p == pe )
 		goto _test_eof524;
 case 524:
-#line 11263 "inc/vcf/validator_detail_v43.hpp"
+#line 11365 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto st28;
 		case 13: goto tr728;
@@ -11359,7 +11461,7 @@ st536:
 	if ( ++p == pe )
 		goto _test_eof536;
 case 536:
-#line 11363 "inc/vcf/validator_detail_v43.hpp"
+#line 11465 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 80 )
 		goto st537;
 	goto tr734;
@@ -11394,7 +11496,7 @@ st540:
 	if ( ++p == pe )
 		goto _test_eof540;
 case 540:
-#line 11398 "inc/vcf/validator_detail_v43.hpp"
+#line 11500 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 73 )
 		goto st541;
 	goto tr734;
@@ -11422,7 +11524,7 @@ st543:
 	if ( ++p == pe )
 		goto _test_eof543;
 case 543:
-#line 11426 "inc/vcf/validator_detail_v43.hpp"
+#line 11528 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 82 )
 		goto st544;
 	goto tr734;
@@ -11457,7 +11559,7 @@ st547:
 	if ( ++p == pe )
 		goto _test_eof547;
 case 547:
-#line 11461 "inc/vcf/validator_detail_v43.hpp"
+#line 11563 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 65 )
 		goto st548;
 	goto tr734;
@@ -11492,7 +11594,7 @@ st551:
 	if ( ++p == pe )
 		goto _test_eof551;
 case 551:
-#line 11496 "inc/vcf/validator_detail_v43.hpp"
+#line 11598 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 81 )
 		goto st552;
 	goto tr734;
@@ -11534,7 +11636,7 @@ st556:
 	if ( ++p == pe )
 		goto _test_eof556;
 case 556:
-#line 11538 "inc/vcf/validator_detail_v43.hpp"
+#line 11640 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 70 )
 		goto st557;
 	goto tr734;
@@ -11590,7 +11692,7 @@ st563:
 	if ( ++p == pe )
 		goto _test_eof563;
 case 563:
-#line 11594 "inc/vcf/validator_detail_v43.hpp"
+#line 11696 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 73 )
 		goto st564;
 	goto tr734;
@@ -11635,7 +11737,7 @@ st568:
 	if ( ++p == pe )
 		goto _test_eof568;
 case 568:
-#line 11639 "inc/vcf/validator_detail_v43.hpp"
+#line 11741 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 70 )
 		goto st569;
 	goto tr774;
@@ -11701,7 +11803,7 @@ st575:
 	if ( ++p == pe )
 		goto _test_eof575;
 case 575:
-#line 11705 "inc/vcf/validator_detail_v43.hpp"
+#line 11807 "inc/vcf/validator_detail_v43.hpp"
 	if ( 32 <= (*p) && (*p) <= 126 )
 		goto tr782;
 	goto tr774;
@@ -11725,7 +11827,7 @@ st576:
 	if ( ++p == pe )
 		goto _test_eof576;
 case 576:
-#line 11729 "inc/vcf/validator_detail_v43.hpp"
+#line 11831 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr783;
 		case 10: goto tr784;
@@ -11782,7 +11884,7 @@ st669:
 	if ( ++p == pe )
 		goto _test_eof669;
 case 669:
-#line 11786 "inc/vcf/validator_detail_v43.hpp"
+#line 11888 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr917;
 		case 13: goto tr918;
@@ -11841,7 +11943,7 @@ st670:
 	if ( ++p == pe )
 		goto _test_eof670;
 case 670:
-#line 11845 "inc/vcf/validator_detail_v43.hpp"
+#line 11947 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr921;
 		case 13: goto tr922;
@@ -11883,7 +11985,7 @@ st577:
 	if ( ++p == pe )
 		goto _test_eof577;
 case 577:
-#line 11887 "inc/vcf/validator_detail_v43.hpp"
+#line 11989 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 10 )
 		goto st670;
 	goto st0;
@@ -11925,7 +12027,7 @@ st578:
 	if ( ++p == pe )
 		goto _test_eof578;
 case 578:
-#line 11929 "inc/vcf/validator_detail_v43.hpp"
+#line 12031 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr790;
 		case 43: goto tr791;
@@ -11971,7 +12073,7 @@ st579:
 	if ( ++p == pe )
 		goto _test_eof579;
 case 579:
-#line 11975 "inc/vcf/validator_detail_v43.hpp"
+#line 12077 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr793;
 	goto tr792;
@@ -11995,7 +12097,7 @@ st580:
 	if ( ++p == pe )
 		goto _test_eof580;
 case 580:
-#line 11999 "inc/vcf/validator_detail_v43.hpp"
+#line 12101 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 9 )
 		goto tr794;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -12025,7 +12127,7 @@ st581:
 	if ( ++p == pe )
 		goto _test_eof581;
 case 581:
-#line 12029 "inc/vcf/validator_detail_v43.hpp"
+#line 12131 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) > 58 ) {
 		if ( 60 <= (*p) && (*p) <= 126 )
 			goto tr797;
@@ -12052,7 +12154,7 @@ st582:
 	if ( ++p == pe )
 		goto _test_eof582;
 case 582:
-#line 12056 "inc/vcf/validator_detail_v43.hpp"
+#line 12158 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr798;
 		case 59: goto tr800;
@@ -12078,7 +12180,7 @@ st583:
 	if ( ++p == pe )
 		goto _test_eof583;
 case 583:
-#line 12082 "inc/vcf/validator_detail_v43.hpp"
+#line 12184 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 65: goto tr802;
 		case 67: goto tr802;
@@ -12112,7 +12214,7 @@ st584:
 	if ( ++p == pe )
 		goto _test_eof584;
 case 584:
-#line 12116 "inc/vcf/validator_detail_v43.hpp"
+#line 12218 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr803;
 		case 65: goto tr804;
@@ -12145,7 +12247,7 @@ st585:
 	if ( ++p == pe )
 		goto _test_eof585;
 case 585:
-#line 12149 "inc/vcf/validator_detail_v43.hpp"
+#line 12251 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 42: goto tr806;
 		case 46: goto tr807;
@@ -12184,7 +12286,7 @@ st586:
 	if ( ++p == pe )
 		goto _test_eof586;
 case 586:
-#line 12188 "inc/vcf/validator_detail_v43.hpp"
+#line 12290 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr812;
 		case 44: goto tr813;
@@ -12208,7 +12310,7 @@ st587:
 	if ( ++p == pe )
 		goto _test_eof587;
 case 587:
-#line 12212 "inc/vcf/validator_detail_v43.hpp"
+#line 12314 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr815;
 		case 45: goto tr815;
@@ -12233,7 +12335,7 @@ st588:
 	if ( ++p == pe )
 		goto _test_eof588;
 case 588:
-#line 12237 "inc/vcf/validator_detail_v43.hpp"
+#line 12339 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 73 )
 		goto tr821;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -12259,7 +12361,7 @@ st589:
 	if ( ++p == pe )
 		goto _test_eof589;
 case 589:
-#line 12263 "inc/vcf/validator_detail_v43.hpp"
+#line 12365 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr822;
 		case 46: goto tr823;
@@ -12287,7 +12389,7 @@ st590:
 	if ( ++p == pe )
 		goto _test_eof590;
 case 590:
-#line 12291 "inc/vcf/validator_detail_v43.hpp"
+#line 12393 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr827;
 		case 58: goto tr826;
@@ -12323,7 +12425,7 @@ st591:
 	if ( ++p == pe )
 		goto _test_eof591;
 case 591:
-#line 12327 "inc/vcf/validator_detail_v43.hpp"
+#line 12429 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 58 )
 		goto st591;
 	if ( (*p) < 65 ) {
@@ -12367,7 +12469,7 @@ st592:
 	if ( ++p == pe )
 		goto _test_eof592;
 case 592:
-#line 12371 "inc/vcf/validator_detail_v43.hpp"
+#line 12473 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr831;
 		case 59: goto tr832;
@@ -12393,7 +12495,7 @@ st593:
 	if ( ++p == pe )
 		goto _test_eof593;
 case 593:
-#line 12397 "inc/vcf/validator_detail_v43.hpp"
+#line 12499 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 46: goto tr834;
 		case 49: goto tr835;
@@ -12419,7 +12521,7 @@ st671:
 	if ( ++p == pe )
 		goto _test_eof671;
 case 671:
-#line 12423 "inc/vcf/validator_detail_v43.hpp"
+#line 12525 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr924;
 		case 10: goto tr925;
@@ -12450,7 +12552,7 @@ st594:
 	if ( ++p == pe )
 		goto _test_eof594;
 case 594:
-#line 12454 "inc/vcf/validator_detail_v43.hpp"
+#line 12556 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 95 )
 		goto tr838;
 	if ( (*p) > 90 ) {
@@ -12479,7 +12581,7 @@ st595:
 	if ( ++p == pe )
 		goto _test_eof595;
 case 595:
-#line 12483 "inc/vcf/validator_detail_v43.hpp"
+#line 12585 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr839;
 		case 37: goto tr840;
@@ -12514,7 +12616,7 @@ st596:
 	if ( ++p == pe )
 		goto _test_eof596;
 case 596:
-#line 12518 "inc/vcf/validator_detail_v43.hpp"
+#line 12620 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 46 )
 		goto tr844;
 	if ( (*p) < 48 ) {
@@ -12546,7 +12648,7 @@ st672:
 	if ( ++p == pe )
 		goto _test_eof672;
 case 672:
-#line 12550 "inc/vcf/validator_detail_v43.hpp"
+#line 12652 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr839;
 		case 10: goto tr925;
@@ -12613,7 +12715,7 @@ st673:
 	if ( ++p == pe )
 		goto _test_eof673;
 case 673:
-#line 12617 "inc/vcf/validator_detail_v43.hpp"
+#line 12719 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr921;
 		case 13: goto tr922;
@@ -12650,7 +12752,7 @@ st597:
 	if ( ++p == pe )
 		goto _test_eof597;
 case 597:
-#line 12654 "inc/vcf/validator_detail_v43.hpp"
+#line 12756 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr846;
 		case 92: goto tr846;
@@ -12690,7 +12792,7 @@ st598:
 	if ( ++p == pe )
 		goto _test_eof598;
 case 598:
-#line 12694 "inc/vcf/validator_detail_v43.hpp"
+#line 12796 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr847;
 		case 62: goto tr848;
@@ -12718,7 +12820,7 @@ st599:
 	if ( ++p == pe )
 		goto _test_eof599;
 case 599:
-#line 12722 "inc/vcf/validator_detail_v43.hpp"
+#line 12824 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 9 )
 		goto tr849;
 	goto tr789;
@@ -12779,7 +12881,7 @@ st600:
 	if ( ++p == pe )
 		goto _test_eof600;
 case 600:
-#line 12783 "inc/vcf/validator_detail_v43.hpp"
+#line 12885 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 10 )
 		goto st673;
 	goto tr850;
@@ -12793,7 +12895,7 @@ st601:
 	if ( ++p == pe )
 		goto _test_eof601;
 case 601:
-#line 12797 "inc/vcf/validator_detail_v43.hpp"
+#line 12899 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) > 57 ) {
 		if ( 59 <= (*p) && (*p) <= 126 )
 			goto tr853;
@@ -12820,7 +12922,7 @@ st674:
 	if ( ++p == pe )
 		goto _test_eof674;
 case 674:
-#line 12824 "inc/vcf/validator_detail_v43.hpp"
+#line 12926 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr839;
 		case 10: goto tr925;
@@ -12842,7 +12944,7 @@ st675:
 	if ( ++p == pe )
 		goto _test_eof675;
 case 675:
-#line 12846 "inc/vcf/validator_detail_v43.hpp"
+#line 12948 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr839;
 		case 10: goto tr925;
@@ -12879,7 +12981,7 @@ st676:
 	if ( ++p == pe )
 		goto _test_eof676;
 case 676:
-#line 12883 "inc/vcf/validator_detail_v43.hpp"
+#line 12985 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr839;
 		case 10: goto tr925;
@@ -12911,7 +13013,7 @@ st602:
 	if ( ++p == pe )
 		goto _test_eof602;
 case 602:
-#line 12915 "inc/vcf/validator_detail_v43.hpp"
+#line 13017 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 48 )
 		goto tr854;
 	goto tr833;
@@ -12925,7 +13027,7 @@ st603:
 	if ( ++p == pe )
 		goto _test_eof603;
 case 603:
-#line 12929 "inc/vcf/validator_detail_v43.hpp"
+#line 13031 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 48 )
 		goto tr855;
 	goto tr833;
@@ -12939,7 +13041,7 @@ st604:
 	if ( ++p == pe )
 		goto _test_eof604;
 case 604:
-#line 12943 "inc/vcf/validator_detail_v43.hpp"
+#line 13045 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 48 )
 		goto tr856;
 	goto tr833;
@@ -12953,7 +13055,7 @@ st605:
 	if ( ++p == pe )
 		goto _test_eof605;
 case 605:
-#line 12957 "inc/vcf/validator_detail_v43.hpp"
+#line 13059 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 71 )
 		goto tr857;
 	goto tr833;
@@ -12967,7 +13069,7 @@ st677:
 	if ( ++p == pe )
 		goto _test_eof677;
 case 677:
-#line 12971 "inc/vcf/validator_detail_v43.hpp"
+#line 13073 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr924;
 		case 10: goto tr925;
@@ -12986,7 +13088,7 @@ st606:
 	if ( ++p == pe )
 		goto _test_eof606;
 case 606:
-#line 12990 "inc/vcf/validator_detail_v43.hpp"
+#line 13092 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 49: goto tr835;
 		case 95: goto tr836;
@@ -13017,7 +13119,7 @@ st678:
 	if ( ++p == pe )
 		goto _test_eof678;
 case 678:
-#line 13021 "inc/vcf/validator_detail_v43.hpp"
+#line 13123 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr924;
 		case 10: goto tr925;
@@ -13046,7 +13148,7 @@ st607:
 	if ( ++p == pe )
 		goto _test_eof607;
 case 607:
-#line 13050 "inc/vcf/validator_detail_v43.hpp"
+#line 13152 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) > 58 ) {
 		if ( 60 <= (*p) && (*p) <= 126 )
 			goto tr859;
@@ -13063,7 +13165,7 @@ st679:
 	if ( ++p == pe )
 		goto _test_eof679;
 case 679:
-#line 13067 "inc/vcf/validator_detail_v43.hpp"
+#line 13169 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr924;
 		case 10: goto tr925;
@@ -13083,7 +13185,7 @@ st608:
 	if ( ++p == pe )
 		goto _test_eof608;
 case 608:
-#line 13087 "inc/vcf/validator_detail_v43.hpp"
+#line 13189 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 58 )
 		goto tr826;
 	if ( (*p) < 65 ) {
@@ -13121,7 +13223,7 @@ st609:
 	if ( ++p == pe )
 		goto _test_eof609;
 case 609:
-#line 13125 "inc/vcf/validator_detail_v43.hpp"
+#line 13227 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr831;
 		case 58: goto st591;
@@ -13157,7 +13259,7 @@ st610:
 	if ( ++p == pe )
 		goto _test_eof610;
 case 610:
-#line 13161 "inc/vcf/validator_detail_v43.hpp"
+#line 13263 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr860;
 	goto tr814;
@@ -13171,7 +13273,7 @@ st611:
 	if ( ++p == pe )
 		goto _test_eof611;
 case 611:
-#line 13175 "inc/vcf/validator_detail_v43.hpp"
+#line 13277 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr822;
 		case 69: goto tr824;
@@ -13190,7 +13292,7 @@ st612:
 	if ( ++p == pe )
 		goto _test_eof612;
 case 612:
-#line 13194 "inc/vcf/validator_detail_v43.hpp"
+#line 13296 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr861;
 		case 45: goto tr861;
@@ -13208,7 +13310,7 @@ st613:
 	if ( ++p == pe )
 		goto _test_eof613;
 case 613:
-#line 13212 "inc/vcf/validator_detail_v43.hpp"
+#line 13314 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr862;
 	goto tr814;
@@ -13222,7 +13324,7 @@ st614:
 	if ( ++p == pe )
 		goto _test_eof614;
 case 614:
-#line 13226 "inc/vcf/validator_detail_v43.hpp"
+#line 13328 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 9 )
 		goto tr822;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -13248,7 +13350,7 @@ st615:
 	if ( ++p == pe )
 		goto _test_eof615;
 case 615:
-#line 13252 "inc/vcf/validator_detail_v43.hpp"
+#line 13354 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 110 )
 		goto tr863;
 	goto tr814;
@@ -13262,7 +13364,7 @@ st616:
 	if ( ++p == pe )
 		goto _test_eof616;
 case 616:
-#line 13266 "inc/vcf/validator_detail_v43.hpp"
+#line 13368 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 102 )
 		goto tr864;
 	goto tr814;
@@ -13286,7 +13388,7 @@ st617:
 	if ( ++p == pe )
 		goto _test_eof617;
 case 617:
-#line 13290 "inc/vcf/validator_detail_v43.hpp"
+#line 13392 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 9 )
 		goto tr822;
 	goto tr814;
@@ -13304,7 +13406,7 @@ st618:
 	if ( ++p == pe )
 		goto _test_eof618;
 case 618:
-#line 13308 "inc/vcf/validator_detail_v43.hpp"
+#line 13410 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 97 )
 		goto tr865;
 	goto tr814;
@@ -13318,7 +13420,7 @@ st619:
 	if ( ++p == pe )
 		goto _test_eof619;
 case 619:
-#line 13322 "inc/vcf/validator_detail_v43.hpp"
+#line 13424 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 78 )
 		goto tr864;
 	goto tr814;
@@ -13332,7 +13434,7 @@ st620:
 	if ( ++p == pe )
 		goto _test_eof620;
 case 620:
-#line 13336 "inc/vcf/validator_detail_v43.hpp"
+#line 13438 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 42: goto tr806;
 		case 46: goto tr866;
@@ -13371,7 +13473,7 @@ st621:
 	if ( ++p == pe )
 		goto _test_eof621;
 case 621:
-#line 13375 "inc/vcf/validator_detail_v43.hpp"
+#line 13477 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 65: goto tr867;
 		case 67: goto tr867;
@@ -13395,7 +13497,7 @@ st622:
 	if ( ++p == pe )
 		goto _test_eof622;
 case 622:
-#line 13399 "inc/vcf/validator_detail_v43.hpp"
+#line 13501 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr812;
 		case 44: goto tr813;
@@ -13425,7 +13527,7 @@ st623:
 	if ( ++p == pe )
 		goto _test_eof623;
 case 623:
-#line 13429 "inc/vcf/validator_detail_v43.hpp"
+#line 13531 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 42: goto tr869;
 		case 61: goto tr868;
@@ -13467,7 +13569,7 @@ st624:
 	if ( ++p == pe )
 		goto _test_eof624;
 case 624:
-#line 13471 "inc/vcf/validator_detail_v43.hpp"
+#line 13573 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 61 )
 		goto tr868;
 	if ( (*p) < 63 ) {
@@ -13507,7 +13609,7 @@ st625:
 	if ( ++p == pe )
 		goto _test_eof625;
 case 625:
-#line 13511 "inc/vcf/validator_detail_v43.hpp"
+#line 13613 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 62 )
 		goto tr871;
 	if ( (*p) < 45 ) {
@@ -13529,7 +13631,7 @@ st626:
 	if ( ++p == pe )
 		goto _test_eof626;
 case 626:
-#line 13533 "inc/vcf/validator_detail_v43.hpp"
+#line 13635 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 62 )
 		goto tr871;
 	if ( (*p) < 61 ) {
@@ -13579,7 +13681,7 @@ st627:
 	if ( ++p == pe )
 		goto _test_eof627;
 case 627:
-#line 13583 "inc/vcf/validator_detail_v43.hpp"
+#line 13685 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr812;
 		case 44: goto tr813;
@@ -13608,7 +13710,7 @@ st628:
 	if ( ++p == pe )
 		goto _test_eof628;
 case 628:
-#line 13612 "inc/vcf/validator_detail_v43.hpp"
+#line 13714 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr875;
 		case 60: goto tr876;
@@ -13639,7 +13741,7 @@ st629:
 	if ( ++p == pe )
 		goto _test_eof629;
 case 629:
-#line 13643 "inc/vcf/validator_detail_v43.hpp"
+#line 13745 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr875;
 		case 58: goto tr877;
@@ -13667,7 +13769,7 @@ st630:
 	if ( ++p == pe )
 		goto _test_eof630;
 case 630:
-#line 13671 "inc/vcf/validator_detail_v43.hpp"
+#line 13773 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr875;
 		case 58: goto tr877;
@@ -13699,7 +13801,7 @@ st631:
 	if ( ++p == pe )
 		goto _test_eof631;
 case 631:
-#line 13703 "inc/vcf/validator_detail_v43.hpp"
+#line 13805 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr875;
 		case 58: goto tr877;
@@ -13731,7 +13833,7 @@ st632:
 	if ( ++p == pe )
 		goto _test_eof632;
 case 632:
-#line 13735 "inc/vcf/validator_detail_v43.hpp"
+#line 13837 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr879;
 		case 92: goto tr879;
@@ -13761,7 +13863,7 @@ st633:
 	if ( ++p == pe )
 		goto _test_eof633;
 case 633:
-#line 13765 "inc/vcf/validator_detail_v43.hpp"
+#line 13867 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr879;
 		case 62: goto tr880;
@@ -13789,7 +13891,7 @@ st634:
 	if ( ++p == pe )
 		goto _test_eof634;
 case 634:
-#line 13793 "inc/vcf/validator_detail_v43.hpp"
+#line 13895 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 58 )
 		goto tr881;
 	goto tr805;
@@ -13803,7 +13905,7 @@ st635:
 	if ( ++p == pe )
 		goto _test_eof635;
 case 635:
-#line 13807 "inc/vcf/validator_detail_v43.hpp"
+#line 13909 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr882;
 	goto tr805;
@@ -13817,7 +13919,7 @@ st636:
 	if ( ++p == pe )
 		goto _test_eof636;
 case 636:
-#line 13821 "inc/vcf/validator_detail_v43.hpp"
+#line 13923 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 91 )
 		goto tr871;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -13833,7 +13935,7 @@ st637:
 	if ( ++p == pe )
 		goto _test_eof637;
 case 637:
-#line 13837 "inc/vcf/validator_detail_v43.hpp"
+#line 13939 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr883;
 		case 60: goto tr884;
@@ -13864,7 +13966,7 @@ st638:
 	if ( ++p == pe )
 		goto _test_eof638;
 case 638:
-#line 13868 "inc/vcf/validator_detail_v43.hpp"
+#line 13970 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr883;
 		case 58: goto tr885;
@@ -13892,7 +13994,7 @@ st639:
 	if ( ++p == pe )
 		goto _test_eof639;
 case 639:
-#line 13896 "inc/vcf/validator_detail_v43.hpp"
+#line 13998 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr883;
 		case 58: goto tr885;
@@ -13924,7 +14026,7 @@ st640:
 	if ( ++p == pe )
 		goto _test_eof640;
 case 640:
-#line 13928 "inc/vcf/validator_detail_v43.hpp"
+#line 14030 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr883;
 		case 58: goto tr885;
@@ -13956,7 +14058,7 @@ st641:
 	if ( ++p == pe )
 		goto _test_eof641;
 case 641:
-#line 13960 "inc/vcf/validator_detail_v43.hpp"
+#line 14062 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr887;
 		case 92: goto tr887;
@@ -13986,7 +14088,7 @@ st642:
 	if ( ++p == pe )
 		goto _test_eof642;
 case 642:
-#line 13990 "inc/vcf/validator_detail_v43.hpp"
+#line 14092 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr887;
 		case 62: goto tr888;
@@ -14014,7 +14116,7 @@ st643:
 	if ( ++p == pe )
 		goto _test_eof643;
 case 643:
-#line 14018 "inc/vcf/validator_detail_v43.hpp"
+#line 14120 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 58 )
 		goto tr889;
 	goto tr805;
@@ -14028,7 +14130,7 @@ st644:
 	if ( ++p == pe )
 		goto _test_eof644;
 case 644:
-#line 14032 "inc/vcf/validator_detail_v43.hpp"
+#line 14134 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr890;
 	goto tr805;
@@ -14042,7 +14144,7 @@ st645:
 	if ( ++p == pe )
 		goto _test_eof645;
 case 645:
-#line 14046 "inc/vcf/validator_detail_v43.hpp"
+#line 14148 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 93 )
 		goto tr871;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -14062,7 +14164,7 @@ st646:
 	if ( ++p == pe )
 		goto _test_eof646;
 case 646:
-#line 14066 "inc/vcf/validator_detail_v43.hpp"
+#line 14168 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr891;
 		case 60: goto tr892;
@@ -14093,7 +14195,7 @@ st647:
 	if ( ++p == pe )
 		goto _test_eof647;
 case 647:
-#line 14097 "inc/vcf/validator_detail_v43.hpp"
+#line 14199 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr891;
 		case 58: goto tr893;
@@ -14121,7 +14223,7 @@ st648:
 	if ( ++p == pe )
 		goto _test_eof648;
 case 648:
-#line 14125 "inc/vcf/validator_detail_v43.hpp"
+#line 14227 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr891;
 		case 58: goto tr893;
@@ -14153,7 +14255,7 @@ st649:
 	if ( ++p == pe )
 		goto _test_eof649;
 case 649:
-#line 14157 "inc/vcf/validator_detail_v43.hpp"
+#line 14259 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr891;
 		case 58: goto tr893;
@@ -14185,7 +14287,7 @@ st650:
 	if ( ++p == pe )
 		goto _test_eof650;
 case 650:
-#line 14189 "inc/vcf/validator_detail_v43.hpp"
+#line 14291 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr896;
 		case 92: goto tr896;
@@ -14215,7 +14317,7 @@ st651:
 	if ( ++p == pe )
 		goto _test_eof651;
 case 651:
-#line 14219 "inc/vcf/validator_detail_v43.hpp"
+#line 14321 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr896;
 		case 62: goto tr897;
@@ -14243,7 +14345,7 @@ st652:
 	if ( ++p == pe )
 		goto _test_eof652;
 case 652:
-#line 14247 "inc/vcf/validator_detail_v43.hpp"
+#line 14349 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 58 )
 		goto tr898;
 	goto tr805;
@@ -14257,7 +14359,7 @@ st653:
 	if ( ++p == pe )
 		goto _test_eof653;
 case 653:
-#line 14261 "inc/vcf/validator_detail_v43.hpp"
+#line 14363 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr899;
 	goto tr805;
@@ -14271,7 +14373,7 @@ st654:
 	if ( ++p == pe )
 		goto _test_eof654;
 case 654:
-#line 14275 "inc/vcf/validator_detail_v43.hpp"
+#line 14377 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 91 )
 		goto tr895;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -14291,7 +14393,7 @@ st655:
 	if ( ++p == pe )
 		goto _test_eof655;
 case 655:
-#line 14295 "inc/vcf/validator_detail_v43.hpp"
+#line 14397 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr900;
 		case 60: goto tr901;
@@ -14322,7 +14424,7 @@ st656:
 	if ( ++p == pe )
 		goto _test_eof656;
 case 656:
-#line 14326 "inc/vcf/validator_detail_v43.hpp"
+#line 14428 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr900;
 		case 58: goto tr902;
@@ -14350,7 +14452,7 @@ st657:
 	if ( ++p == pe )
 		goto _test_eof657;
 case 657:
-#line 14354 "inc/vcf/validator_detail_v43.hpp"
+#line 14456 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr900;
 		case 58: goto tr902;
@@ -14382,7 +14484,7 @@ st658:
 	if ( ++p == pe )
 		goto _test_eof658;
 case 658:
-#line 14386 "inc/vcf/validator_detail_v43.hpp"
+#line 14488 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr900;
 		case 58: goto tr902;
@@ -14414,7 +14516,7 @@ st659:
 	if ( ++p == pe )
 		goto _test_eof659;
 case 659:
-#line 14418 "inc/vcf/validator_detail_v43.hpp"
+#line 14520 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr904;
 		case 92: goto tr904;
@@ -14444,7 +14546,7 @@ st660:
 	if ( ++p == pe )
 		goto _test_eof660;
 case 660:
-#line 14448 "inc/vcf/validator_detail_v43.hpp"
+#line 14550 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 43: goto tr904;
 		case 62: goto tr905;
@@ -14472,7 +14574,7 @@ st661:
 	if ( ++p == pe )
 		goto _test_eof661;
 case 661:
-#line 14476 "inc/vcf/validator_detail_v43.hpp"
+#line 14578 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 58 )
 		goto tr906;
 	goto tr805;
@@ -14486,7 +14588,7 @@ st662:
 	if ( ++p == pe )
 		goto _test_eof662;
 case 662:
-#line 14490 "inc/vcf/validator_detail_v43.hpp"
+#line 14592 "inc/vcf/validator_detail_v43.hpp"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr907;
 	goto tr805;
@@ -14500,7 +14602,7 @@ st663:
 	if ( ++p == pe )
 		goto _test_eof663;
 case 663:
-#line 14504 "inc/vcf/validator_detail_v43.hpp"
+#line 14606 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 93 )
 		goto tr895;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -14520,7 +14622,7 @@ st664:
 	if ( ++p == pe )
 		goto _test_eof664;
 case 664:
-#line 14524 "inc/vcf/validator_detail_v43.hpp"
+#line 14626 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 9: goto tr812;
 		case 65: goto tr867;
@@ -14583,7 +14685,7 @@ st665:
 	if ( ++p == pe )
 		goto _test_eof665;
 case 665:
-#line 14587 "inc/vcf/validator_detail_v43.hpp"
+#line 14689 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 10 )
 		goto st669;
 	goto tr774;
@@ -14612,7 +14714,7 @@ st666:
 	if ( ++p == pe )
 		goto _test_eof666;
 case 666:
-#line 14616 "inc/vcf/validator_detail_v43.hpp"
+#line 14718 "inc/vcf/validator_detail_v43.hpp"
 	if ( (*p) == 10 )
 		goto st22;
 	goto tr0;
@@ -14632,7 +14734,7 @@ st667:
 	if ( ++p == pe )
 		goto _test_eof667;
 case 667:
-#line 14636 "inc/vcf/validator_detail_v43.hpp"
+#line 14738 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr911;
 		case 13: goto tr912;
@@ -14656,7 +14758,7 @@ st680:
 	if ( ++p == pe )
 		goto _test_eof680;
 case 680:
-#line 14660 "inc/vcf/validator_detail_v43.hpp"
+#line 14762 "inc/vcf/validator_detail_v43.hpp"
 	goto st0;
 tr915:
 #line 43 "src/vcf/vcf.ragel"
@@ -14674,7 +14776,7 @@ st668:
 	if ( ++p == pe )
 		goto _test_eof668;
 case 668:
-#line 14678 "inc/vcf/validator_detail_v43.hpp"
+#line 14780 "inc/vcf/validator_detail_v43.hpp"
 	switch( (*p) ) {
 		case 10: goto tr914;
 		case 13: goto tr915;
@@ -14698,7 +14800,7 @@ st681:
 	if ( ++p == pe )
 		goto _test_eof681;
 case 681:
-#line 14702 "inc/vcf/validator_detail_v43.hpp"
+#line 14804 "inc/vcf/validator_detail_v43.hpp"
 	goto st0;
 	}
 	_test_eof2: cs = 2; goto _test_eof; 
@@ -16428,7 +16530,7 @@ goto st667;}
 	case 102: 
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -16452,7 +16554,7 @@ goto st667;}
 	case 479: 
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -16480,7 +16582,7 @@ goto st667;}
 	case 153: 
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -16508,7 +16610,7 @@ goto st667;}
 	case 219: 
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -16536,7 +16638,7 @@ goto st667;}
 	case 285: 
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -16561,7 +16663,7 @@ goto st667;}
 	case 366: 
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -16586,7 +16688,7 @@ goto st667;}
 	case 316: 
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -16611,7 +16713,7 @@ goto st667;}
 	case 421: 
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -17117,7 +17219,7 @@ goto st668;}
 	case 110: 
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -17149,7 +17251,7 @@ goto st667;}
 	case 161: 
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -17181,7 +17283,7 @@ goto st667;}
 	case 227: 
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -17213,7 +17315,7 @@ goto st667;}
 	case 293: 
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -17252,7 +17354,7 @@ goto st667;}
     }
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -17284,7 +17386,7 @@ goto st667;}
     }
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -17316,7 +17418,7 @@ goto st667;}
     }
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -17348,7 +17450,7 @@ goto st667;}
     }
 #line 375 "src/vcf/vcf.ragel"
 	{
-        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore and dash"});
+        ErrorPolicy::handle_error(*this, new MetaSectionError{n_lines, "Metadata ID contains a character different from alphanumeric, dot, underscore, dash and plus"});
         p--; {       if ( p == pe )
                goto _test_eof667;
 goto st667;}
@@ -17652,7 +17754,7 @@ goto st667;}
 goto st667;}
     }
 	break;
-#line 17656 "inc/vcf/validator_detail_v43.hpp"
+#line 17758 "inc/vcf/validator_detail_v43.hpp"
 	}
 	}
 
