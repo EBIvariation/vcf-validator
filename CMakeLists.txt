@@ -5,6 +5,9 @@ set (vcf-validator_VERSION_MAJOR 0)
 set (vcf-validator_VERSION_MINOR 10)
 set (vcf-validator_VERSION_PATCH 0)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 configure_file (
         "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp.in"
         "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp"
