@@ -25,11 +25,10 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install cmake wget build-essential
-        ./install_dependencies.sh
+        sudo apt-get install cmake wget build-essential libboost-all-dev libcurl4-openssl-dev libssl-dev zlib1g-dev libbz2-dev
     - name: Compile and test
       run: |
-        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DSTATIC_BUILD=1 ..
+        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} ..
         make -j2
         cd .. && ./build/bin/test_validation_suite
     - name: Rename release files
