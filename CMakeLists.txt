@@ -21,6 +21,15 @@ add_compile_options(-Wall -Wno-unknown-pragmas)
 # Don't force static builds when building via conda
 # Let conda environment provide dependencies
 
+# For windows libcurl is not found automatically
+if (WIN32)
+  set(CURL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/dependencies/curl/include")
+  set(CURL_LIBRARY "${PROJECT_SOURCE_DIR}/dependencies/curl/lib/libcurl.lib")
+  set(CURL_LIBRARIES ${CURL_LIBRARY})
+  set(CURL_FOUND TRUE)
+  add_definitions(-DCURL_STATICLIB)
+endif()
+
 # Use CMake environment to find dependencies in conda environment
 find_package(Boost REQUIRED COMPONENTS filesystem iostreams program_options regex log thread system)
 find_package(CURL REQUIRED)
