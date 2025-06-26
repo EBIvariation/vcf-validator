@@ -17,7 +17,7 @@ it installs the given dependencies:
   - curl library                            curl-7.62.0
   - openssl library                         openssl-1.1.1w
   - c-ares library                          c-ares-1.15.0
-  - boost library                           boost-1.72.0
+  - boost library                           boost-1.78.0.0
 "
 
 if [ "$#" -ne 0 ]
@@ -108,21 +108,22 @@ make && make install
 cd ..
 
 echo "installing  boost"
-wget https://sourceforge.net/projects/boost/files/boost/1.72.0/boost_1_72_0.tar.gz/download -O ./boost.tar.gz
+wget https://sourceforge.net/projects/boost/files/boost/1.78.0/boost_1_78_0.tar.gz/download -O ./boost.tar.gz
 tar zxf ./boost.tar.gz
-mv boost_1_72_0 boost && cd boost
+mv boost_1_78_0 boost && cd boost
 
 # If there's some error like "undefined reference to bzip2_base", then boost didn't compile everything for iostreams.
 # The boost iostreams compilation was ok if this command finds some lines "nm libboost_iostreams.a | grep bzip2_base".
 # The next user-config.jam should fix that.
-# Documentation on building iostreams: https://www.boost.org/doc/libs/1_72_0/libs/iostreams/doc/index.html
+# Documentation on building iostreams: https://www.boost.org/doc/libs/1_78_0/libs/iostreams/doc/index.html
 # Documentation on specifying zlib and bzip2: https://boostorg.github.io/build/manual/master/index.html#bbv2.reference.tools.libraries.zlib
 echo "
 using zlib : 1.2.11 : <source>${dependencies_dir_abs_path}/zlib-1.2.11 ;
 using bzip2 : 1.0.6 : <source>${dependencies_dir_abs_path}/bzip2-1.0.6 ;
 " > tools/build/src/user-config.jam
 
-./bootstrap.sh --prefix=${build_dir_abs_path}  --with-libraries=filesystem,iostreams,log,program_options,regex,system && ./b2 link=static --prefix=${build_dir_abs_path} install
+./bootstrap.sh --prefix=${build_dir_abs_path}  --with-libraries=filesystem,iostreams,log,program_options,regex,system,thread && ./b2 link=static --prefix=${build_dir_abs_path} install cxxflags="-std=c++14 -fPIC" link=static threading=multi runtime-link=static
+
 cd ..
 
 cd ..
