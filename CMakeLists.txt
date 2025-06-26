@@ -38,6 +38,7 @@ if(WIN32)
   set(CURL_LIBRARIES ${CURL_LIBRARY})
   set(CURL_FOUND TRUE)
   add_definitions(-DCURL_STATICLIB)
+  add_definitions(-DNOMINMAX)
   set(Boost_USE_STATIC_LIBS ON)
 endif()
 
