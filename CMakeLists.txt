@@ -31,13 +31,14 @@ endif()
 
 # ========== Dependencies ==========
 
-# Manually locate CURL on Windows
+# Manually locate CURL on Windows and set specific definitions
 if(WIN32)
   set(CURL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/dependencies/curl/include")
   set(CURL_LIBRARY "${PROJECT_SOURCE_DIR}/dependencies/curl/lib/libcurl.lib")
   set(CURL_LIBRARIES ${CURL_LIBRARY})
   set(CURL_FOUND TRUE)
   add_definitions(-DCURL_STATICLIB)
+  # std::max Conflicts with Macro max so disable the macros
   add_definitions(-DNOMINMAX)
   set(Boost_USE_STATIC_LIBS ON)
 endif()
