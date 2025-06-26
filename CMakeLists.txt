@@ -1,28 +1,38 @@
 cmake_minimum_required(VERSION 3.10)
-project (vcf-validator CXX C)
+project(vcf-validator CXX C)
 
-set (vcf-validator_VERSION_MAJOR 0)
-set (vcf-validator_VERSION_MINOR 10)
-set (vcf-validator_VERSION_PATCH 0)
+# Version info
+set(vcf-validator_VERSION_MAJOR 0)
+set(vcf-validator_VERSION_MINOR 10)
+set(vcf-validator_VERSION_PATCH 0)
 
+# Build settings
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-configure_file (
+# Configure header with version macros
+configure_file(
         "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp.in"
         "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp"
 )
+# Output binaries to bin/ directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_compile_options(-Wall -Wno-unknown-pragmas)
 
-# Don't force static builds when building via conda
-# Let conda environment provide dependencies
+# Compiler options (avoid GCC flags on MSVC)
+if(MSVC)
+  add_compile_options(/W3)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+else()
+  add_compile_options(-Wall -Wno-unknown-pragmas)
+endif()
 
-# For windows libcurl is not found automatically
-if (WIN32)
+# ========== Dependencies ==========
+
+# Manually locate CURL on Windows
+if(WIN32)
   set(CURL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/dependencies/curl/include")
   set(CURL_LIBRARY "${PROJECT_SOURCE_DIR}/dependencies/curl/lib/libcurl.lib")
   set(CURL_LIBRARIES ${CURL_LIBRARY})
@@ -30,13 +40,13 @@ if (WIN32)
   add_definitions(-DCURL_STATICLIB)
 endif()
 
-# Use CMake environment to find dependencies in conda environment
+# Use CMake to find dependencies in conda or system environments
 find_package(Boost REQUIRED COMPONENTS filesystem iostreams program_options regex log thread system)
 find_package(CURL REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Threads REQUIRED)
 
-# Include paths from found packages
+# Include paths
 include_directories(
         ${Boost_INCLUDE_DIRS}
         ${CURL_INCLUDE_DIRS}
@@ -45,7 +55,8 @@ include_directories(
         ${PROJECT_SOURCE_DIR}/lib
 )
 
-# Library sources
+# ========== Library ==========
+
 file(GLOB_RECURSE MOD_VCF_SOURCES
         inc/**/*.hpp
         src/**/*.cpp
@@ -60,14 +71,16 @@ target_link_libraries(mod_vcf
         bz2 z dl
 )
 
-# === Production Binaries ===
+# ========== Executables ==========
+
 add_executable(vcf_validator src/validator_main.cpp)
 target_link_libraries(vcf_validator mod_vcf)
 
 add_executable(vcf_assembly_checker src/assembly_checker_main.cpp)
 target_link_libraries(vcf_assembly_checker mod_vcf)
 
-# === Tests ===
+# ========== Tests ==========
+
 enable_testing()
 
 file(GLOB_RECURSE VCF_TEST_SOURCES
