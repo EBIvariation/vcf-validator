@@ -6,7 +6,7 @@ This suite includes all the checks from the vcftools suite as well as additional
 * Errors: Violations of the VCF specification
 * Warnings: A recommendation is not followed or potentially wrong information appears in the file
 
-These tools have been implemented using C++11.
+These tools have been implemented using C++14.
 
 
 ## Installation
@@ -122,20 +122,19 @@ The build has been tested on the following compilers:
 
 Some dependencies have to be installed manually and others can be installed automatically. We recommend using the automatic install when possible.
 
-Dependency | Version | Instalation method
-:--------: | :-----: | :----:
-Cmake | \>=2.8 | manual
-bzip2 | 1.0.6 | manual or automatic
-zlib | 1.2.11 | manual or automatic
-Boost* | \>=1.65 | manual or automatic
+Dependency | Version  | Instalation method
+:--------: |:--------:| :----:
+Cmake | \>=3.10  | manual
+bzip2 |  1.0.6   | manual or automatic
+zlib |  1.2.11  | manual or automatic
+Boost* | \>=1.78 | manual or automatic
 
 *: See below the exact subset of Boost packages required.
 
-If you are using Ubuntu 16, you can prepare all dependencies and compile the Validation Suite with these commands:
+If you are using Ubuntu 24.04, you can prepare all dependencies and compile the Validation Suite with these commands:
 ```
-sudo apt-get install cmake wget build-essential
-./install_dependencies.sh
-mkdir build && cd build && cmake -G "Unix Makefiles" -DSTATIC_BUILD=1 ..
+sudo apt-get install cmake build-essential libboost-all-dev libcurl4-openssl-dev libssl-dev zlib1g-dev libbz2-dev
+mkdir build && cd build && cmake -G "Unix Makefiles" ..
 make
 ```
 
@@ -169,15 +168,15 @@ On macOS the binaries obtained will only have system libraries dynamically linke
 Some dependencies have to be installed manually and others can be installed automatically. We recommend using the automatic install when possible.
 
 Dependency | Version | Instalation method
-:--------: | :-----: | :----:
-Cmake | \>=2.8 | manual
-bzip2 | 1.0.6 | manual or automatic
-zlib | 1.2.11 | manual or automatic
-Boost | \>=1.65 | manual
+:--------: |:-------:| :----:
+Cmake | \>=3.10 | manual
+bzip2 |  1.0.6  | manual or automatic
+zlib | 1.2.11  | manual or automatic
+Boost | \>=1.78 | manual
 
 You can prepare all dependencies and compile the Validation Suite with these commands:
 ```
-brew install cmake boost
+brew install cmake boost automake libtool
 mkdir build && cd build && cmake -G "Unix Makefiles" ..
 make
 ```
@@ -194,38 +193,6 @@ In order to create the build scripts, please run `cmake` with your preferred gen
 
 The VCF Validation Suite binaries will be created in the `bin` subfolder.
 
-#### Dependencies
-
-##### Compression libraries
-
-You will need to download the bzip2 and zlib source code, from [here](http://www.bzip.org/downloads.html) and [here](https://zlib.net/zlib1211.zip) respectively.
-
-##### Boost
-
-The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. You will need to compile them with zlib and bzip2 support and statically linking the runtime libraries.
-
-* Download Boost from [here](https://www.boost.org/users/download/) and uncompress it
-* From the directory where Boost was uncompressed, run these commands:
-
-```
-bootstrap
-.\b2 --with-atomic --with-chrono --with-date_time --with-filesystem --with-log --with-program_options --with-regex --with-system --with-thread --with-iostreams -sBZIP2_SOURCE=path\to\bzip2-1.x.x -sZLIB_SOURCE=path\to\zlib-1.x.x runtime-link=static --build-type=complete
-```
-
-* Add boost_1_xx_x/stage/lib folder to the environment variable `LIB`
-* Add boost_1_xx_x folder to the environment variable `INCLUDE`
-
-#### Compile
-
-In order to create the build scripts and compile vcf-validator, please run the following commands from the project root folder:
-
-```
-cmake -DCMAKE_BUILD_TYPE=Release -DSTATIC_BUILD=1 -G "NMake Makefiles" /path/to/CMakeLists.txt
-nmake
-```
-
-Binaries will be created in the `bin` subfolder.
-
 ## Deliverables
 
 The following binaries are be created after successful build:
@@ -233,7 +200,6 @@ The following binaries are be created after successful build:
 * `vcf_validator`: VCF validation tool
 * `vcf_assembly_checker`: variant checking tool against FASTA sequence
 * `test_validation_suite` and derivatives: testing correct behaviour of the tools listed above
-
 
 ## Tests
 

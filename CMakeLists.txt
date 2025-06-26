@@ -68,8 +68,14 @@ target_link_libraries(mod_vcf
         ${CURL_LIBRARIES}
         ${OPENSSL_LIBRARIES}
         Threads::Threads
-        bz2 z dl
 )
+
+# Library that only exist in unix platform
+if(WINDOWS)
+  target_link_libraries(mod_vcf ws2_32 crypt32 Wldap32 Normaliz)
+else ()
+  target_link_libraries(mod_vcf bz2 z dl)
+endif()
 
 # ========== Executables ==========
 
