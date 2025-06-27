@@ -43,11 +43,27 @@ if(WIN32)
   set(Boost_USE_STATIC_LIBS ON)
 endif()
 
+list(APPEND CMAKE_PREFIX_PATH "${PROJECT_SOURCE_DIR}/dependencies/build")
+link_directories("${PROJECT_SOURCE_DIR}/dependencies/build/lib")
+
+# Specific to statically linked dependencies
+set(BUILD_SHARED_LIBS OFF)
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_STATIC_RUNTIME ON)
+set(CURL_STATICLIB ON)
+set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+set(ENV{PKG_CONFIG_STATIC} "1")
+set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:${PROJECT_SOURCE_DIR}/dependencies/build/lib/pkgconfig")
+
+
 # Use CMake to find dependencies in conda or system environments
 find_package(Boost REQUIRED COMPONENTS filesystem iostreams program_options regex log thread system)
-find_package(CURL REQUIRED)
+#find_package(CURL REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Threads REQUIRED)
+find_package(ZLIB REQUIRED)
+find_package(BZip2 REQUIRED)
+find_package(PkgConfig REQUIRED)
 
 # Include paths
 include_directories(
@@ -65,19 +81,47 @@ file(GLOB_RECURSE MOD_VCF_SOURCES
         src/**/*.cpp
 )
 
+
 add_library(mod_vcf STATIC ${MOD_VCF_SOURCES})
-target_link_libraries(mod_vcf
-        ${Boost_LIBRARIES}
-        ${CURL_LIBRARIES}
-        ${OPENSSL_LIBRARIES}
+target_link_libraries(mod_vcf PRIVATE
+        Boost::filesystem
+        Boost::iostreams
+        Boost::program_options
+        Boost::regex
+        Boost::log
+        Boost::thread
+        Boost::system
+#        CURL::libcurl
+        OpenSSL::Crypto
+        OpenSSL::SSL
         Threads::Threads
 )
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(LIBCURL REQUIRED IMPORTED_TARGET libcurl)
+pkg_check_modules(LIBCURL REQUIRED libcurl)
+
+target_link_libraries(mod_vcf PRIVATE PkgConfig::LIBCURL)
+# Add the include paths
+target_include_directories(mod_vcf PRIVATE ${LIBCURL_INCLUDE_DIRS})
+# Add *all* linker flags (includes private deps)
+target_link_libraries(mod_vcf PRIVATE ${LIBCURL_STATIC_LIBRARIES})
+message(STATUS "libcurl libraries: ${LIBCURL_LIBRARIES}")
+message(STATUS "libcurl link flags: ${LIBCURL_LDFLAGS}")
+
+
+#target_link_libraries(mod_vcf PRIVATE
+#        ${Boost_LIBRARIES}
+#        ${CURL_LIBRARIES}
+#        ${OPENSSL_LIBRARIES}
+#        Threads::Threads
+#)
+
 # Library that only exist in unix platform
 if(WIN32)
-  target_link_libraries(mod_vcf ws2_32 crypt32 Wldap32 Normaliz)
+  target_link_libraries(mod_vcf PRIVATE ws2_32 crypt32 Wldap32 Normaliz)
 else ()
-  target_link_libraries(mod_vcf bz2 z dl)
+  target_link_libraries(mod_vcf PRIVATE ZLIB::ZLIB BZip2::BZip2 dl)
 endif()
 
 # ========== Executables ==========
