@@ -109,17 +109,18 @@ target_link_libraries(mod_vcf PRIVATE
         Threads::Threads
 )
 
-if(STATIC_BUILD)
-  # Use pkg-config to find libcurl dependencies
-  pkg_check_modules(LIBCURL REQUIRED IMPORTED_TARGET libcurl)
-  target_link_libraries(mod_vcf PRIVATE ${LIBCURL_STATIC_LIBRARIES})
-else()
-  target_link_libraries(mod_vcf PRIVATE ${LIBCURL_LIBRARIES})
-endif()
+
 
 if(MSVC)
   target_link_libraries(mod_vcf PRIVATE ws2_32 crypt32 Wldap32 Normaliz)
 else()
+  if(STATIC_BUILD)
+    # Use pkg-config to find libcurl dependencies
+    pkg_check_modules(LIBCURL REQUIRED IMPORTED_TARGET libcurl)
+    target_link_libraries(mod_vcf PRIVATE ${LIBCURL_STATIC_LIBRARIES})
+  else()
+    target_link_libraries(mod_vcf PRIVATE ${LIBCURL_LIBRARIES})
+  endif()
   target_link_libraries(mod_vcf PRIVATE ZLIB::ZLIB BZip2::BZip2 dl)
 endif()
 
