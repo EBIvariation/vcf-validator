@@ -6,12 +6,12 @@ set(vcf-validator_VERSION_MAJOR 0)
 set(vcf-validator_VERSION_MINOR 10)
 set(vcf-validator_VERSION_PATCH 0)
 
-# Build settings
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Configure header with version macros
+option(STATIC_BUILD "Build with static linkage" ON)
+
 configure_file(
         "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp.in"
         "${PROJECT_SOURCE_DIR}/inc/cmake_config.hpp"
@@ -19,9 +19,7 @@ configure_file(
 # Output binaries to bin/ directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-
-
-# Compiler options (avoid GCC flags on MSVC)
+# Compiler options (avoid GCC flags on WINDOWS)
 if(MSVC)
   add_compile_options(/W3)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
@@ -29,10 +27,32 @@ else()
   add_compile_options(-Wall -Wno-unknown-pragmas)
 endif()
 
+# ========== Static/Dynamic Build Settings ==========
+
+if(STATIC_BUILD)
+  message(STATUS "Configuring for static build")
+  set(BUILD_SHARED_LIBS OFF)
+  set(Boost_USE_STATIC_LIBS ON)
+  set(Boost_USE_STATIC_RUNTIME ON)
+  set(CURL_STATICLIB ON)
+  set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+  set(ENV{PKG_CONFIG_STATIC} "1")
+  # This settings assume that the dependencies have been installed from the project base directory using install_dependencies.sh
+  list(APPEND CMAKE_PREFIX_PATH "${PROJECT_SOURCE_DIR}/dependencies/build")
+  link_directories("${PROJECT_SOURCE_DIR}/dependencies/build/lib")
+  set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:${PROJECT_SOURCE_DIR}/dependencies/build/lib/pkgconfig")
+else()
+  message(STATUS "Configuring for dynamic build")
+  set(BUILD_SHARED_LIBS ON)
+  set(Boost_USE_STATIC_LIBS OFF)
+  set(Boost_USE_STATIC_RUNTIME OFF)
+  set(CURL_STATICLIB OFF)
+endif()
+
 # ========== Dependencies ==========
 
-# Manually locate CURL on Windows and set specific definitions
 if(WIN32)
+  # This settings assume that the dependencies have been installed from the project base directory using install_dependencies.bat
   set(CURL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/dependencies/curl/include")
   set(CURL_LIBRARY "${PROJECT_SOURCE_DIR}/dependencies/curl/lib/libcurl.lib")
   set(CURL_LIBRARIES ${CURL_LIBRARY})
@@ -43,29 +63,17 @@ if(WIN32)
   set(Boost_USE_STATIC_LIBS ON)
 endif()
 
-list(APPEND CMAKE_PREFIX_PATH "${PROJECT_SOURCE_DIR}/dependencies/build")
-link_directories("${PROJECT_SOURCE_DIR}/dependencies/build/lib")
 
-# Specific to statically linked dependencies
-set(BUILD_SHARED_LIBS OFF)
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_STATIC_RUNTIME ON)
-set(CURL_STATICLIB ON)
-set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-set(ENV{PKG_CONFIG_STATIC} "1")
-set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:${PROJECT_SOURCE_DIR}/dependencies/build/lib/pkgconfig")
-
-
-# Use CMake to find dependencies in conda or system environments
 find_package(Boost REQUIRED COMPONENTS filesystem iostreams program_options regex log thread system)
-#find_package(CURL REQUIRED)
+find_package(CURL REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Threads REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(BZip2 REQUIRED)
 find_package(PkgConfig REQUIRED)
 
-# Include paths
+# ========== Include Paths ==========
+
 include_directories(
         ${Boost_INCLUDE_DIRS}
         ${CURL_INCLUDE_DIRS}
@@ -74,15 +82,18 @@ include_directories(
         ${PROJECT_SOURCE_DIR}/lib
 )
 
-# ========== Library ==========
+# ========== Sources & Library ==========
 
 file(GLOB_RECURSE MOD_VCF_SOURCES
         inc/**/*.hpp
         src/**/*.cpp
 )
 
-
 add_library(mod_vcf STATIC ${MOD_VCF_SOURCES})
+
+# Use pkg-config to find libcurl dependencies
+pkg_check_modules(LIBCURL REQUIRED IMPORTED_TARGET libcurl)
+
 target_link_libraries(mod_vcf PRIVATE
         Boost::filesystem
         Boost::iostreams
@@ -91,36 +102,18 @@ target_link_libraries(mod_vcf PRIVATE
         Boost::log
         Boost::thread
         Boost::system
-#        CURL::libcurl
+        CURL::libcurl
         OpenSSL::Crypto
         OpenSSL::SSL
         Threads::Threads
 )
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(LIBCURL REQUIRED IMPORTED_TARGET libcurl)
-pkg_check_modules(LIBCURL REQUIRED libcurl)
-
-target_link_libraries(mod_vcf PRIVATE PkgConfig::LIBCURL)
-# Add the include paths
 target_include_directories(mod_vcf PRIVATE ${LIBCURL_INCLUDE_DIRS})
-# Add *all* linker flags (includes private deps)
 target_link_libraries(mod_vcf PRIVATE ${LIBCURL_STATIC_LIBRARIES})
-message(STATUS "libcurl libraries: ${LIBCURL_LIBRARIES}")
-message(STATUS "libcurl link flags: ${LIBCURL_LDFLAGS}")
 
-
-#target_link_libraries(mod_vcf PRIVATE
-#        ${Boost_LIBRARIES}
-#        ${CURL_LIBRARIES}
-#        ${OPENSSL_LIBRARIES}
-#        Threads::Threads
-#)
-
-# Library that only exist in unix platform
 if(WIN32)
   target_link_libraries(mod_vcf PRIVATE ws2_32 crypt32 Wldap32 Normaliz)
-else ()
+else()
   target_link_libraries(mod_vcf PRIVATE ZLIB::ZLIB BZip2::BZip2 dl)
 endif()
 

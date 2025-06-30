@@ -26,10 +26,11 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install cmake  build-essential libboost-all-dev libcurl4-openssl-dev libssl-dev zlib1g-dev libbz2-dev
+        sudo apt-get install cmake  build-essential build-essential cmake wget pkg-config
+        ./install_dependencies.sh
     - name: Compile and test
       run: |
-        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} ..
+        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DSTATIC_BUILD=ON ..
         make -j2
         cd .. && ./build/bin/test_validation_suite
     - name: Rename release files
@@ -67,8 +68,7 @@ jobs:
         HOMEBREW_NO_AUTO_UPDATE=1 brew install boost automake
     - name: Compile and test
       run: |
-        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} ..
-        export LIBRARY_PATH=${LIBRARY_PATH}:/usr/local/opt/icu4c/lib:/usr/local/lib
+        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DSTATIC_BUILD=OFF ..
         make -j2
         cd .. && ./build/bin/test_validation_suite
     - name: Rename release files
@@ -106,7 +106,7 @@ jobs:
         HOMEBREW_NO_AUTO_UPDATE=1 brew install boost automake libtool
     - name: Compile and test
       run: |
-        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} ..
+        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DSTATIC_BUILD=OFF ..
         make -j2
         cd .. && ./build/bin/test_validation_suite
     - name: Rename release files
