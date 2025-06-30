@@ -68,11 +68,13 @@ find_package(Boost REQUIRED COMPONENTS filesystem iostreams log log_setup progra
 find_package(CURL REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Threads REQUIRED)
-find_package(ZLIB REQUIRED)
-find_package(BZip2 REQUIRED)
-# Only need PkgConfig when building statically
-if(STATIC_BUILD)
-  find_package(PkgConfig REQUIRED)
+if( NOT MSVC)
+  find_package(ZLIB REQUIRED)
+  find_package(BZip2 REQUIRED)
+  # Only need PkgConfig when building statically
+  if(STATIC_BUILD)
+    find_package(PkgConfig REQUIRED)
+  endif()
 endif()
 
   # ========== Include Paths ==========
