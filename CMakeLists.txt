@@ -103,7 +103,6 @@ target_link_libraries(mod_vcf PRIVATE
         Boost::system
         Boost::thread
         CURL::libcurl
-        OpenSSL::Crypto
         OpenSSL::SSL
         Threads::Threads
 )
