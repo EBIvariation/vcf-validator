@@ -91,6 +91,7 @@ file(GLOB_RECURSE MOD_VCF_SOURCES
 
 add_library(mod_vcf STATIC ${MOD_VCF_SOURCES})
 
+
 # Use pkg-config to find libcurl dependencies
 pkg_check_modules(LIBCURL REQUIRED IMPORTED_TARGET libcurl)
 
@@ -108,8 +109,11 @@ target_link_libraries(mod_vcf PRIVATE
         Threads::Threads
 )
 
-target_include_directories(mod_vcf PRIVATE ${LIBCURL_INCLUDE_DIRS})
-target_link_libraries(mod_vcf PRIVATE ${LIBCURL_STATIC_LIBRARIES})
+if(STATIC_BUILD)
+  target_link_libraries(mod_vcf PRIVATE ${LIBCURL_STATIC_LIBRARIES})
+else()
+  target_link_libraries(mod_vcf PRIVATE ${LIBCURL_LIBRARIES})
+endif()
 
 if(WIN32)
   target_link_libraries(mod_vcf PRIVATE ws2_32 crypt32 Wldap32 Normaliz)
