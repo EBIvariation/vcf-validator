@@ -5,7 +5,7 @@ init:
   - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
   - cmd: set INCLUDE=C:\Libraries\boost_1_67_0;%INCLUDE%
   - cmd: set LIB=C:\Libraries\boost_1_67_0\lib32-msvc-14.1;%LIB%
-  - cmd: set OPENSSL_ROOT_DIR=C:\OpenSSL-v111-Win64\bin
+  - cmd: set OPENSSL_ROOT_DIR=C:\OpenSSL-v111-Win32
 # https://www.appveyor.com/docs/windows-images-software
 
 install:
