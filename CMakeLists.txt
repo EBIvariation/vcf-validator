@@ -47,6 +47,7 @@ else()
   set(Boost_USE_STATIC_LIBS OFF)
   set(Boost_USE_STATIC_RUNTIME OFF)
   set(CURL_STATICLIB OFF)
+  add_definitions(-DBOOST_ALL_DYN_LINK)
 endif()
 
 # ========== Dependencies ==========
@@ -63,16 +64,18 @@ if(WIN32)
   set(Boost_USE_STATIC_LIBS ON)
 endif()
 
-
-find_package(Boost REQUIRED COMPONENTS filesystem iostreams program_options regex log thread system)
+find_package(Boost REQUIRED COMPONENTS filesystem iostreams log log_setup program_options regex system thread)
 find_package(CURL REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Threads REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(BZip2 REQUIRED)
-find_package(PkgConfig REQUIRED)
+# Only need PkgConfig when building statically
+if(STATIC_BUILD)
+  find_package(PkgConfig REQUIRED)
+endif()
 
-# ========== Include Paths ==========
+  # ========== Include Paths ==========
 
 include_directories(
         ${Boost_INCLUDE_DIRS}
@@ -90,19 +93,15 @@ file(GLOB_RECURSE MOD_VCF_SOURCES
 )
 
 add_library(mod_vcf STATIC ${MOD_VCF_SOURCES})
-
-
-# Use pkg-config to find libcurl dependencies
-pkg_check_modules(LIBCURL REQUIRED IMPORTED_TARGET libcurl)
-
 target_link_libraries(mod_vcf PRIVATE
         Boost::filesystem
         Boost::iostreams
+        Boost::log
+        Boost::log_setup
         Boost::program_options
         Boost::regex
-        Boost::log
-        Boost::thread
         Boost::system
+        Boost::thread
         CURL::libcurl
         OpenSSL::Crypto
         OpenSSL::SSL
@@ -110,6 +109,8 @@ target_link_libraries(mod_vcf PRIVATE
 )
 
 if(STATIC_BUILD)
+  # Use pkg-config to find libcurl dependencies
+  pkg_check_modules(LIBCURL REQUIRED IMPORTED_TARGET libcurl)
   target_link_libraries(mod_vcf PRIVATE ${LIBCURL_STATIC_LIBRARIES})
 else()
   target_link_libraries(mod_vcf PRIVATE ${LIBCURL_LIBRARIES})

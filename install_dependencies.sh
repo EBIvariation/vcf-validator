@@ -19,7 +19,7 @@ CURL_VERSION="7.62.0"
 BOOST_VERSION="1.81.0"
 
 ########################################
-# 🧾 Help / Usage
+#   Help / Usage
 ########################################
 help_install_dependencies="Usage:
 ./install_dependencies.sh                   installs dependencies for Linux OS
@@ -34,7 +34,7 @@ it installs the given dependencies:
 "
 
 ########################################
-# 🛡️ OS Check
+#   OS Check
 ########################################
 if [ "$#" -ne 0 ]; then
   echo "$help_install_dependencies"
@@ -67,7 +67,7 @@ include_dir_abs_path="${build_dir_abs_path}/include"
 PKG_CONFIG_PATH="${lib_dir_abs_path}/pkgconfig"
 
 ########################################
-# 📦 Install Dependencies
+#   Install Dependencies
 ########################################
 
 # libbz2
