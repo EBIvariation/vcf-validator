@@ -115,19 +115,20 @@ If you plan to make changes, make sure to check the [docs/developer-guide.md](do
 ### Linux
 
 The build has been tested on the following compilers:
-* Clang 10
-* GCC 9
+* Clang 
+* GCC
 
 #### Dependencies
 
 Some dependencies have to be installed manually and others can be installed automatically. We recommend using the automatic install when possible.
 
-Dependency | Version  | Instalation method
-:--------: |:--------:| :----:
-Cmake | \>=3.10  | manual
-bzip2 |  1.0.6   | manual or automatic
-zlib |  1.2.11  | manual or automatic
-Boost* | \>=1.78 | manual or automatic
+| Dependency | Version | Installation method |
+|:----------:|:-------:|:-------------------:|
+|   Cmake    | \>=3.10 |       manual        |
+|   bzip2    |  1.0.6  | manual or automatic |
+|    zlib    |  1.3.1  | manual or automatic |
+|    curl    | 7.62.0  | manual or automatic |
+|   Boost*   | \>=1.78 | manual or automatic |
 
 *: See below the exact subset of Boost packages required.
 
@@ -167,12 +168,12 @@ On macOS the binaries obtained will only have system libraries dynamically linke
 
 Some dependencies have to be installed manually and others can be installed automatically. We recommend using the automatic install when possible.
 
-Dependency | Version | Instalation method
-:--------: |:-------:| :----:
-Cmake | \>=3.10 | manual
-bzip2 |  1.0.6  | manual or automatic
-zlib | 1.2.11  | manual or automatic
-Boost | \>=1.78 | manual
+| Dependency | Version | Installation method |
+|:----------:|:-------:|:-------------------:|
+|   Cmake    | \>=3.10 |       manual        |
+|   bzip2    |  1.0.6  | manual or automatic |
+|    zlib    |  1.3.1  | manual or automatic |
+|   Boost    | \>=1.78 |       manual        |
 
 You can prepare all dependencies and compile the Validation Suite with these commands:
 ```
@@ -185,7 +186,7 @@ The VCF Validation Suite binaries will be created in the `build/bin` subfolder. 
 
 ##### CMake and automatic installation
 
-The automatic install requires CMake and wget to be installed before running the script (as zlib require them to be installed). In order to set up the environment to compile the dependencies, first you need to run `brew install cmake boost`.
+The automatic install requires CMake and wget to be installed before running the script. In order to set up the environment to compile the dependencies, first you need to run `brew install cmake boost`.
 
 #### Compile
 
@@ -217,5 +218,3 @@ ragel -G2 src/vcf/vcf_v42.ragel -o inc/vcf/validator_detail_v42.hpp
 ragel -G2 src/vcf/vcf_v43.ragel -o inc/vcf/validator_detail_v43.hpp
 ragel -G2 src/vcf/vcf_v44.ragel -o inc/vcf/validator_detail_v44.hpp
 ```
-
-## Miscellaneous
