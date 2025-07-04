@@ -1,3 +1,4 @@
+# These docker image are used to config that the dynamic build works locally on linux
 # Use a slim base image
 FROM debian:bullseye-slim
 
