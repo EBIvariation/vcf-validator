@@ -19,18 +19,18 @@ jobs:
       matrix:
         config:
           - {cc: "gcc", cxx: "g++"}
-          - {cc: "clang-10", cxx: "clang++-10"}
+          - {cc: "clang", cxx: "clang++"}
 
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install cmake wget build-essential
+        sudo apt-get install cmake build-essential wget pkg-config
         ./install_dependencies.sh
     - name: Compile and test
       run: |
-        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DSTATIC_BUILD=1 ..
+        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DSTATIC_BUILD=ON ..
         make -j2
         cd .. && ./build/bin/test_validation_suite
     - name: Rename release files
@@ -54,13 +54,12 @@ jobs:
 
   ### Mac OS build intel
   macos_build_intel:
-    runs-on: macos-12
+    runs-on: macos-13
     strategy:
       matrix:
         config:
           - {cc: "gcc", cxx: "g++"}
           - {cc: "clang", cxx: "clang++"}
-
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
@@ -69,8 +68,7 @@ jobs:
         HOMEBREW_NO_AUTO_UPDATE=1 brew install boost automake
     - name: Compile and test
       run: |
-        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} ..
-        export LIBRARY_PATH=${LIBRARY_PATH}:/usr/local/opt/icu4c/lib:/usr/local/lib
+        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DSTATIC_BUILD=OFF ..
         make -j2
         cd .. && ./build/bin/test_validation_suite
     - name: Rename release files
@@ -108,7 +106,7 @@ jobs:
         HOMEBREW_NO_AUTO_UPDATE=1 brew install boost automake libtool
     - name: Compile and test
       run: |
-        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} ..
+        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DSTATIC_BUILD=OFF ..
         make -j2
         cd .. && ./build/bin/test_validation_suite
     - name: Rename release files

@@ -1,0 +1,28 @@
+# These docker image are used to config that the dynamic build works locally on linux
+# Use a slim base image
+FROM debian:bullseye-slim
+
+# Install build dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        cmake \
+        wget \
+        pkg-config \
+        libboost-all-dev \
+        libcurl4-openssl-dev \
+        libssl-dev \
+        zlib1g-dev \
+        libbz2-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set work directory
+WORKDIR /app
+
+# Copy the whole project
+COPY . .
+
+## Create build directory and compile
+RUN rm -rf build && mkdir build && cd build && \
+    cmake -DSTATIC_BUILD=OFF .. && \
+    make -j$(nproc)

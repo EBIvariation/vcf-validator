@@ -6,7 +6,7 @@ This suite includes all the checks from the vcftools suite as well as additional
 * Errors: Violations of the VCF specification
 * Warnings: A recommendation is not followed or potentially wrong information appears in the file
 
-These tools have been implemented using C++11.
+These tools have been implemented using C++14.
 
 
 ## Installation
@@ -115,34 +115,45 @@ If you plan to make changes, make sure to check the [docs/developer-guide.md](do
 ### Linux
 
 The build has been tested on the following compilers:
-* Clang 10
-* GCC 9
+* Clang 
+* GCC
 
 #### Dependencies
 
 Some dependencies have to be installed manually and others can be installed automatically. We recommend using the automatic install when possible.
 
-Dependency | Version | Instalation method
-:--------: | :-----: | :----:
-Cmake | \>=2.8 | manual
-bzip2 | 1.0.6 | manual or automatic
-zlib | 1.2.11 | manual or automatic
-Boost* | \>=1.65 | manual or automatic
+| Dependency | Version | Installation method |
+|:----------:|:-------:|:-------------------:|
+|   Cmake    | \>=3.10 |       manual        |
+|   bzip2    |  1.0.6  | manual or automatic |
+|    zlib    |  1.3.1  | manual or automatic |
+|    curl    | 7.62.0  | manual or automatic |
+|   Boost*   | \>=1.78 | manual or automatic |
 
 *: See below the exact subset of Boost packages required.
 
-If you are using Ubuntu 16, you can prepare all dependencies and compile the Validation Suite with these commands:
+#### Dynamically linked libraries
+
+If you are using Ubuntu 24.04, you can collect all dependencies using the package manager and compile the Validation Suite with these commands:
 ```
-sudo apt-get install cmake wget build-essential
-./install_dependencies.sh
-mkdir build && cd build && cmake -G "Unix Makefiles" -DSTATIC_BUILD=1 ..
+sudo apt-get install cmake build-essential libboost-all-dev libcurl4-openssl-dev libssl-dev zlib1g-dev libbz2-dev
+mkdir build && cd build && cmake DSTATIC_BUILD=OFF -G "Unix Makefiles" ..
+make
+```
+
+#### Statically linked libraries
+
+Assuming you are using Ubuntu 24.04, you'll need to install basic compilation tooling using the package manager and the other dependencies using install_dependencies.sh
+```
+sudo apt-get install cmake  build-essential wget pkg-config
+mkdir build && cd build && cmake DSTATIC_BUILD=ON -G "Unix Makefiles" ..
 make
 ```
 
 The VCF Validation Suite binaries will be created in the `build/bin` subfolder. Optionally, read below for the explanation of the previous commands.
 
 ##### CMake and automatic installation
-The automatic install **requires** CMake and wget to be installed before running the script (as zlib require them to be installed). Also, the script will compile some dependencies so a compilation environment is needed. If you are using Ubuntu, you can install all that with the command `sudo apt-get install cmake wget build-essential`. After installing that, use the command `./install_dependencies.sh`.
+The install **requires** CMake and wget to be installed before running the script (as zlib require them to be installed). Also, the script will compile some dependencies so a compilation environment is needed. If you are using Ubuntu, you can install all that with the command `sudo apt-get install cmake wget build-essential`. After installing that, use the command `./install_dependencies.sh`.
 
 A subfolder named `dependencies` will be created, with all the required libraries copied into it. 
 
@@ -155,7 +166,7 @@ If you are using Ubuntu, you can install them with the command `sudo apt-get ins
 
 #### Compile
 
-In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `mkdir build && cd build && cmake -G "Unix Makefiles" ..` will create Makefiles, and to build the binaries, you will need to run `make`.
+In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `mkdir build && cd build && cmake -G DSTATIC_BUILD=OFF "Unix Makefiles" ..` will create Makefiles, and to build the binaries, you will need to run `make`.
 
 The VCF Validation Suite binaries will be created in the `build/bin` subfolder.
 
@@ -168,17 +179,17 @@ On macOS the binaries obtained will only have system libraries dynamically linke
 
 Some dependencies have to be installed manually and others can be installed automatically. We recommend using the automatic install when possible.
 
-Dependency | Version | Instalation method
-:--------: | :-----: | :----:
-Cmake | \>=2.8 | manual
-bzip2 | 1.0.6 | manual or automatic
-zlib | 1.2.11 | manual or automatic
-Boost | \>=1.65 | manual
+| Dependency | Version | Installation method |
+|:----------:|:-------:|:-------------------:|
+|   Cmake    | \>=3.10 |       manual        |
+|   bzip2    |  1.0.6  | manual or automatic |
+|    zlib    |  1.3.1  | manual or automatic |
+|   Boost    | \>=1.78 |       manual        |
 
 You can prepare all dependencies and compile the Validation Suite with these commands:
 ```
-brew install cmake boost
-mkdir build && cd build && cmake -G "Unix Makefiles" ..
+brew install cmake boost automake libtool
+mkdir build && cd build && cmake DSTATIC_BUILD=OFF -G "Unix Makefiles" ..
 make
 ```
 
@@ -186,45 +197,13 @@ The VCF Validation Suite binaries will be created in the `build/bin` subfolder. 
 
 ##### CMake and automatic installation
 
-The automatic install requires CMake and wget to be installed before running the script (as zlib require them to be installed). In order to set up the environment to compile the dependencies, first you need to run `brew install cmake boost`.
+The automatic install requires CMake and wget to be installed before running the script. In order to set up the environment to compile the dependencies, first you need to run `brew install cmake boost`.
 
 #### Compile
 
 In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `mkdir build && cd build && cmake -G "Unix Makefiles" ..` will create Makefiles, and to build the binaries, you will need to run `make`.
 
 The VCF Validation Suite binaries will be created in the `bin` subfolder.
-
-#### Dependencies
-
-##### Compression libraries
-
-You will need to download the bzip2 and zlib source code, from [here](http://www.bzip.org/downloads.html) and [here](https://zlib.net/zlib1211.zip) respectively.
-
-##### Boost
-
-The dependencies are the Boost library core, and its submodules: Boost.filesystem, Boost.iostreams, Boost.program_options, Boost.regex, Boost.log and Boost.system. You will need to compile them with zlib and bzip2 support and statically linking the runtime libraries.
-
-* Download Boost from [here](https://www.boost.org/users/download/) and uncompress it
-* From the directory where Boost was uncompressed, run these commands:
-
-```
-bootstrap
-.\b2 --with-atomic --with-chrono --with-date_time --with-filesystem --with-log --with-program_options --with-regex --with-system --with-thread --with-iostreams -sBZIP2_SOURCE=path\to\bzip2-1.x.x -sZLIB_SOURCE=path\to\zlib-1.x.x runtime-link=static --build-type=complete
-```
-
-* Add boost_1_xx_x/stage/lib folder to the environment variable `LIB`
-* Add boost_1_xx_x folder to the environment variable `INCLUDE`
-
-#### Compile
-
-In order to create the build scripts and compile vcf-validator, please run the following commands from the project root folder:
-
-```
-cmake -DCMAKE_BUILD_TYPE=Release -DSTATIC_BUILD=1 -G "NMake Makefiles" /path/to/CMakeLists.txt
-nmake
-```
-
-Binaries will be created in the `bin` subfolder.
 
 ## Deliverables
 
@@ -233,7 +212,6 @@ The following binaries are be created after successful build:
 * `vcf_validator`: VCF validation tool
 * `vcf_assembly_checker`: variant checking tool against FASTA sequence
 * `test_validation_suite` and derivatives: testing correct behaviour of the tools listed above
-
 
 ## Tests
 
@@ -251,5 +229,3 @@ ragel -G2 src/vcf/vcf_v42.ragel -o inc/vcf/validator_detail_v42.hpp
 ragel -G2 src/vcf/vcf_v43.ragel -o inc/vcf/validator_detail_v43.hpp
 ragel -G2 src/vcf/vcf_v44.ragel -o inc/vcf/validator_detail_v44.hpp
 ```
-
-## Miscellaneous

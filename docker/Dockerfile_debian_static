@@ -1,0 +1,25 @@
+# These docker image are used to config that the static build works locally on linux
+# Use a slim base image
+FROM debian:bullseye-slim
+
+# Install build dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        cmake \
+        wget \
+        pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set work directory
+WORKDIR /app
+
+# Copy the whole project
+COPY . .
+
+RUN ./install_dependencies.sh
+
+# Create build directory and compile
+RUN rm -rf build && mkdir build && cd build && \
+    cmake -DSTATIC_BUILD=ON .. && \
+    make -j$(nproc)
