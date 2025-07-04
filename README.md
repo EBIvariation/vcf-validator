@@ -132,17 +132,28 @@ Some dependencies have to be installed manually and others can be installed auto
 
 *: See below the exact subset of Boost packages required.
 
-If you are using Ubuntu 24.04, you can prepare all dependencies and compile the Validation Suite with these commands:
+#### Dynamically linked libraries
+
+If you are using Ubuntu 24.04, you can collect all dependencies using the package manager and compile the Validation Suite with these commands:
 ```
 sudo apt-get install cmake build-essential libboost-all-dev libcurl4-openssl-dev libssl-dev zlib1g-dev libbz2-dev
-mkdir build && cd build && cmake -G "Unix Makefiles" ..
+mkdir build && cd build && cmake DSTATIC_BUILD=OFF -G "Unix Makefiles" ..
+make
+```
+
+#### Statically linked libraries
+
+Assuming you are using Ubuntu 24.04, you'll need to install basic compilation tooling using the package manager and the other dependencies using install_dependencies.sh
+```
+sudo apt-get install cmake  build-essential wget pkg-config
+mkdir build && cd build && cmake DSTATIC_BUILD=ON -G "Unix Makefiles" ..
 make
 ```
 
 The VCF Validation Suite binaries will be created in the `build/bin` subfolder. Optionally, read below for the explanation of the previous commands.
 
 ##### CMake and automatic installation
-The automatic install **requires** CMake and wget to be installed before running the script (as zlib require them to be installed). Also, the script will compile some dependencies so a compilation environment is needed. If you are using Ubuntu, you can install all that with the command `sudo apt-get install cmake wget build-essential`. After installing that, use the command `./install_dependencies.sh`.
+The install **requires** CMake and wget to be installed before running the script (as zlib require them to be installed). Also, the script will compile some dependencies so a compilation environment is needed. If you are using Ubuntu, you can install all that with the command `sudo apt-get install cmake wget build-essential`. After installing that, use the command `./install_dependencies.sh`.
 
 A subfolder named `dependencies` will be created, with all the required libraries copied into it. 
 
@@ -155,7 +166,7 @@ If you are using Ubuntu, you can install them with the command `sudo apt-get ins
 
 #### Compile
 
-In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `mkdir build && cd build && cmake -G "Unix Makefiles" ..` will create Makefiles, and to build the binaries, you will need to run `make`.
+In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `mkdir build && cd build && cmake -G DSTATIC_BUILD=OFF "Unix Makefiles" ..` will create Makefiles, and to build the binaries, you will need to run `make`.
 
 The VCF Validation Suite binaries will be created in the `build/bin` subfolder.
 
@@ -178,7 +189,7 @@ Some dependencies have to be installed manually and others can be installed auto
 You can prepare all dependencies and compile the Validation Suite with these commands:
 ```
 brew install cmake boost automake libtool
-mkdir build && cd build && cmake -G "Unix Makefiles" ..
+mkdir build && cd build && cmake DSTATIC_BUILD=OFF -G "Unix Makefiles" ..
 make
 ```
 
