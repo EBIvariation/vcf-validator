@@ -15,11 +15,9 @@ RUN apt-get update && \
 WORKDIR /app
 
 # Copy the whole project
-COPY . .
+#COPY . .
 
-RUN ./install_dependencies.sh
+#RUN ./install_dependencies.sh
 
 # Create build directory and compile
-RUN rm -rf build && mkdir build && cd build && \
-    cmake -DSTATIC_BUILD=ON .. && \
-    make -j$(nproc)
+#ENTRYPOINT ["docker/build_static.sh"]
