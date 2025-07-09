@@ -14,7 +14,7 @@ jobs:
 
   ### Linux build
   linux_build:
-    runs-on: debian:bullseye-slim
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         config:
