@@ -14,7 +14,7 @@ jobs:
 
   ### Linux build
   linux_build:
-    runs-on: ubuntu-24.04
+    runs-on: debian:bullseye-slim
     strategy:
       matrix:
         config:
@@ -26,7 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install cmake build-essential wget pkg-config
+        sudo apt-get install -y --no-install-recommends build-essential cmake wget pkg-config
         ./install_dependencies.sh
     - name: Compile and test
       run: |
