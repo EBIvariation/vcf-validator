@@ -13,11 +13,3 @@ RUN apt-get update && \
 
 # Set work directory
 WORKDIR /app
-
-# Copy the whole project
-#COPY . .
-
-#RUN ./install_dependencies.sh
-
-# Create build directory and compile
-#ENTRYPOINT ["docker/build_static.sh"]

@@ -18,9 +18,3 @@ RUN apt-get update && \
 
 # Set work directory
 WORKDIR /app
-
-# Copy the whole project
-#COPY . .
-
-## Create build directory and compile
-#ENTRYPOINT ["docker/build_dynamic.sh"]

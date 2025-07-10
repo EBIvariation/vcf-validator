@@ -12,4 +12,8 @@ cd build
 cmake -DSTATIC_BUILD=ON ..
 make -j$(nproc)
 
+cd ..
+
+build/bin/test_validation_suite
+
 rm -rf dependencies
