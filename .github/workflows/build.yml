@@ -20,7 +20,7 @@ jobs:
     - name: build static
       run: |
         docker build -t debian_static -f docker/Dockerfile_debian_static .
-        docker run  --rm -v $(pwd):/app --user $UID --user 502:20 -v $(pwd):/app debian_static docker/build_static.sh
+        docker run  --rm -v $(pwd):/app --user $UID -v $(pwd):/app debian_static docker/build_static.sh
     - name: test
       run: |
         ./build/bin/test_validation_suite
