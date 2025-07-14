@@ -109,7 +109,7 @@ cd "curl-${CURL_VERSION}"
 LDFLAGS="-L${lib_dir_abs_path}" CPPFLAGS="-I$include_dir_abs_path" \
 ./configure --disable-shared --enable-static --without-librtmp \
   --without-ca-bundle --disable-ldap --without-zlib --without-libidn2 \
-  --without-nss --enable-ares=$build_dir_abs_path --with-openssl \
+  --without-nss --enable-ares=$build_dir_abs_path --with-ssl=$build_dir_abs_path  \
   --prefix=$build_dir_abs_path
 make && make install
 cd ..

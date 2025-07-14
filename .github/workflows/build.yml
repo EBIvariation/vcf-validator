@@ -14,39 +14,27 @@ jobs:
 
   ### Linux build
   linux_build:
-    runs-on: ubuntu-24.04
-    strategy:
-      matrix:
-        config:
-          - {cc: "gcc", cxx: "g++"}
-          - {cc: "clang", cxx: "clang++"}
-
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install dependencies
+    - name: build static
       run: |
-        sudo apt-get update
-        sudo apt-get install cmake build-essential wget pkg-config
-        ./install_dependencies.sh
-    - name: Compile and test
+        docker build -t debian_static -f docker/Dockerfile_debian_static .
+        docker run  --rm -v $(pwd):/app --user $UID -v $(pwd):/app debian_static docker/build_static.sh
+    - name: test
       run: |
-        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DSTATIC_BUILD=ON ..
-        make -j2
-        cd .. && ./build/bin/test_validation_suite
+        ./build/bin/test_validation_suite
     - name: Rename release files
-      if: ${{ matrix.config.cc == 'gcc' }}
       run: |
         mv build/bin/vcf_validator vcf_validator_linux
         mv build/bin/vcf_assembly_checker vcf_assembly_checker_linux
     - name: Upload vcf-validator
       uses: actions/upload-artifact@v4
-      if: ${{ matrix.config.cc == 'gcc' }}
       with:
         name: vcf_validator_linux
         path: vcf_validator_linux
     - name: Upload vcf-assembly-checker
       uses: actions/upload-artifact@v4
-      if: ${{ matrix.config.cc == 'gcc' }}
       with:
         name: vcf_assembly_checker_linux
         path: vcf_assembly_checker_linux

@@ -18,11 +18,3 @@ RUN apt-get update && \
 
 # Set work directory
 WORKDIR /app
-
-# Copy the whole project
-COPY . .
-
-## Create build directory and compile
-RUN rm -rf build && mkdir build && cd build && \
-    cmake -DSTATIC_BUILD=OFF .. && \
-    make -j$(nproc)
