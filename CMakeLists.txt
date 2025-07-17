@@ -4,7 +4,7 @@ project(vcf-validator CXX C)
 # Version info
 set(vcf-validator_VERSION_MAJOR 0)
 set(vcf-validator_VERSION_MINOR 10)
-set(vcf-validator_VERSION_PATCH 1)
+set(vcf-validator_VERSION_PATCH 2)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
