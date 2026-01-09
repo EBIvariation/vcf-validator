@@ -212,7 +212,7 @@ namespace ebi
         try {
             // Transform the position token into a size_t
             position = static_cast<size_t>(std::stoi(m_line_tokens[POS][0]));
-        } catch (std::invalid_argument ex) {
+        } catch (const std::invalid_argument&) {
             throw new PositionBodyError{state.n_lines};
         }
 
@@ -221,7 +221,7 @@ namespace ebi
         if (m_line_tokens[QUAL][0] != MISSING_VALUE) {
             try {
                 quality = std::stof(m_line_tokens[QUAL][0]);
-            } catch (std::invalid_argument ex) {
+            } catch (const std::invalid_argument&) {
                 throw new QualityBodyError{state.n_lines};
             }
         }
@@ -271,7 +271,7 @@ namespace ebi
     {
         try {
             return m_line_tokens.at(column);
-        } catch (std::out_of_range) {
+        } catch (const std::out_of_range&) {
             return {};
         }
     }

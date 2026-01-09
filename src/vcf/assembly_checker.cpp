@@ -139,7 +139,7 @@ namespace ebi
                   try {
                       fasta->sequence(contig, 0, 1);
                   }
-                  catch(ebi::util::curl::URLRetrievalException ex) {
+                  catch(const ebi::util::curl::URLRetrievalException& ex) {
                       std::string warningMessage = "Could not download sequence for contig/chromosome "
                                                    + contig + " because: " + ex.what();
                       write_warning_output(outputs, warningMessage);
@@ -250,7 +250,7 @@ namespace ebi
                   try {
                       fasta->sequence(contig_name, 0, 1); // trigger download
                   }
-                  catch(ebi::util::curl::URLRetrievalException ex) {
+                  catch(const ebi::util::curl::URLRetrievalException& ex) {
                       report_missing_chromosome_in_ENA(line_num, ex.what(), record_core, outputs);
                       is_valid = false;
                       continue;
