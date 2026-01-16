@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
+# Use legacy FindBoost module until Boost CMake configs are more reliable across platforms
+if(POLICY CMP0167)
+  cmake_policy(SET CMP0167 OLD)
+endif()
 project(vcf-validator CXX C)
 
 # Version info
