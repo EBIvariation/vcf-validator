@@ -28,8 +28,8 @@ else()
 endif()
 
 # ========== Static/Dynamic Build Settings ==========
-if( NOT MSVC)
-  if(STATIC_BUILD AND NOT MSVC)
+if(NOT MSVC)
+  if(STATIC_BUILD)
     message(STATUS "Configuring for static build")
     set(BUILD_SHARED_LIBS OFF)
     set(Boost_USE_STATIC_LIBS ON)
@@ -68,7 +68,7 @@ find_package(Boost REQUIRED COMPONENTS filesystem iostreams log log_setup progra
 find_package(CURL REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Threads REQUIRED)
-if( NOT MSVC)
+if(NOT MSVC)
   find_package(ZLIB REQUIRED)
   find_package(BZip2 REQUIRED)
   # Only need PkgConfig when building statically
@@ -77,7 +77,7 @@ if( NOT MSVC)
   endif()
 endif()
 
-  # ========== Include Paths ==========
+# ========== Include Paths ==========
 
 include_directories(
         ${Boost_INCLUDE_DIRS}
@@ -119,7 +119,7 @@ else()
     pkg_check_modules(LIBCURL REQUIRED IMPORTED_TARGET libcurl)
     target_link_libraries(mod_vcf PRIVATE ${LIBCURL_STATIC_LIBRARIES})
   else()
-    target_link_libraries(mod_vcf PRIVATE ${LIBCURL_LIBRARIES})
+    target_link_libraries(mod_vcf PRIVATE ${CURL_LIBRARIES})
   endif()
   target_link_libraries(mod_vcf PRIVATE ZLIB::ZLIB BZip2::BZip2 dl)
 endif()

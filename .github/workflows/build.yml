@@ -42,11 +42,10 @@ jobs:
 
   ### Mac OS build intel
   macos_build_intel:
-    runs-on: macos-13
+    runs-on: macos-15
     strategy:
       matrix:
         config:
-          - {cc: "gcc", cxx: "g++"}
           - {cc: "clang", cxx: "clang++"}
     steps:
     - uses: actions/checkout@v2
