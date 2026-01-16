@@ -68,7 +68,7 @@ if(MSVC)
   set(Boost_USE_STATIC_LIBS ON)
 endif()
 
-find_package(Boost REQUIRED COMPONENTS filesystem iostreams log log_setup program_options regex system thread)
+find_package(Boost REQUIRED COMPONENTS filesystem iostreams log log_setup program_options regex thread)
 find_package(CURL REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Threads REQUIRED)
@@ -106,7 +106,6 @@ target_link_libraries(mod_vcf PRIVATE
         Boost::log_setup
         Boost::program_options
         Boost::regex
-        Boost::system
         Boost::thread
         CURL::libcurl
         OpenSSL::SSL
