@@ -42,11 +42,10 @@ jobs:
 
   ### Mac OS build intel
   macos_build_intel:
-    runs-on: macos-13
+    runs-on: macos-15
     strategy:
       matrix:
         config:
-          - {cc: "gcc", cxx: "g++"}
           - {cc: "clang", cxx: "clang++"}
     steps:
     - uses: actions/checkout@v2
@@ -56,7 +55,7 @@ jobs:
         HOMEBREW_NO_AUTO_UPDATE=1 brew install boost automake
     - name: Compile and test
       run: |
-        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DSTATIC_BUILD=OFF ..
+        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_PREFIX_PATH=$(brew --prefix) -DBoost_NO_BOOST_CMAKE=ON -DSTATIC_BUILD=OFF ..
         make -j2
         cd .. && ./build/bin/test_validation_suite
     - name: Rename release files
@@ -83,7 +82,6 @@ jobs:
     strategy:
       matrix:
         config:
-          - {cc: "gcc", cxx: "g++"}
           - {cc: "clang", cxx: "clang++"}
 
     steps:
@@ -94,7 +92,7 @@ jobs:
         HOMEBREW_NO_AUTO_UPDATE=1 brew install boost automake libtool
     - name: Compile and test
       run: |
-        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DSTATIC_BUILD=OFF ..
+        mkdir build && cd build && cmake -G "Unix Makefiles" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_PREFIX_PATH=$(brew --prefix) -DBoost_NO_BOOST_CMAKE=ON -DSTATIC_BUILD=OFF ..
         make -j2
         cd .. && ./build/bin/test_validation_suite
     - name: Rename release files

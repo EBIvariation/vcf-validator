@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
+# Use legacy FindBoost module until Boost CMake configs are more reliable across platforms
+if(POLICY CMP0167)
+  cmake_policy(SET CMP0167 OLD)
+endif()
 project(vcf-validator CXX C)
 
 # Version info
@@ -28,8 +32,8 @@ else()
 endif()
 
 # ========== Static/Dynamic Build Settings ==========
-if( NOT MSVC)
-  if(STATIC_BUILD AND NOT MSVC)
+if(NOT MSVC)
+  if(STATIC_BUILD)
     message(STATUS "Configuring for static build")
     set(BUILD_SHARED_LIBS OFF)
     set(Boost_USE_STATIC_LIBS ON)
@@ -64,11 +68,11 @@ if(MSVC)
   set(Boost_USE_STATIC_LIBS ON)
 endif()
 
-find_package(Boost REQUIRED COMPONENTS filesystem iostreams log log_setup program_options regex system thread)
+find_package(Boost REQUIRED COMPONENTS filesystem iostreams log log_setup program_options regex thread)
 find_package(CURL REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Threads REQUIRED)
-if( NOT MSVC)
+if(NOT MSVC)
   find_package(ZLIB REQUIRED)
   find_package(BZip2 REQUIRED)
   # Only need PkgConfig when building statically
@@ -77,7 +81,7 @@ if( NOT MSVC)
   endif()
 endif()
 
-  # ========== Include Paths ==========
+# ========== Include Paths ==========
 
 include_directories(
         ${Boost_INCLUDE_DIRS}
@@ -102,7 +106,6 @@ target_link_libraries(mod_vcf PRIVATE
         Boost::log_setup
         Boost::program_options
         Boost::regex
-        Boost::system
         Boost::thread
         CURL::libcurl
         OpenSSL::SSL
@@ -119,7 +122,7 @@ else()
     pkg_check_modules(LIBCURL REQUIRED IMPORTED_TARGET libcurl)
     target_link_libraries(mod_vcf PRIVATE ${LIBCURL_STATIC_LIBRARIES})
   else()
-    target_link_libraries(mod_vcf PRIVATE ${LIBCURL_LIBRARIES})
+    target_link_libraries(mod_vcf PRIVATE ${CURL_LIBRARIES})
   endif()
   target_link_libraries(mod_vcf PRIVATE ZLIB::ZLIB BZip2::BZip2 dl)
 endif()
