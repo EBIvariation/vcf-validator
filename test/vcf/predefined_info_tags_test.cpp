@@ -2566,4 +2566,211 @@ namespace ebi
         }
     }
 
+    TEST_CASE("Record INFO END checks v4.5", "[record][keyvalue]")
+    {
+        std::shared_ptr<vcf::Source> source{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v45,
+                {},
+                { "Sample1", "Sample2" }}};
+        std::shared_ptr<vcf::Source> source_v44{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v44,
+                {},
+                { "Sample1", "Sample2" }}};
+
+        SECTION("END is computed from REF, SVLEN and LEN")
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "CA",
+                            { "C" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123457" } },
+                            { vcf::GT },
+                            { "0/1", "0/0" },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "<DEL>" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123476" }, { vcf::SVLEN, "20" }, { vcf::SVCLAIM, "D" } },
+                            { vcf::GT },
+                            { "0/1", "0/0" },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "<DEL>" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123476" }, { vcf::SVLEN, "-20" }, { vcf::SVCLAIM, "D" } },
+                            { vcf::GT },
+                            { "0/1", "0/0" },
+                            source}) );   //absolute SVLEN
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "<INS>" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123456" }, { vcf::SVLEN, "20" } },
+                            { vcf::GT },
+                            { "0/1", "0/0" },
+                            source}) );   //INS ends at REF
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123475" } },
+                            { vcf::GT, vcf::LEN },
+                            { "0/0:10", "0/0:20" },
+                            source}) );   //longest reference block
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "<NON_REF>" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123475" } },
+                            { vcf::GT, vcf::LEN },
+                            { "0/0:10", "0/0:20" },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123475" } },
+                            { vcf::GT, vcf::LEN },
+                            { "0/0:10", "0/0" },
+                            source}) );   //LEN inferred from END
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "<DEL>" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123476" }, { vcf::SVLEN, "." }, { vcf::SVCLAIM, "D" } },
+                            { vcf::GT },
+                            { "0/1", "0/0" },
+                            source}) );   //SVLEN inferred from END
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "CA",
+                            { "C" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "0" } },
+                            { vcf::GT },
+                            { "0/1", "0/0" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "<DEL>" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123486" }, { vcf::SVLEN, "20" }, { vcf::SVCLAIM, "D" } },
+                            { vcf::GT },
+                            { "0/1", "0/0" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123470" } },
+                            { vcf::GT, vcf::LEN },
+                            { "0/0:10", "0/0:20" },
+                            source}),
+                        vcf::InfoBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123460" } },
+                            { vcf::GT, vcf::LEN },
+                            { "0/0:10", "0/0" },
+                            source}),
+                        vcf::InfoBodyError*);   //shorter than a known block
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "CA",
+                            { "C" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "0" } },
+                            { vcf::GT },
+                            { "0/1", "0/0" },
+                            source_v44}) );   //not computed in v4.4
+        }
+    }
+
 }

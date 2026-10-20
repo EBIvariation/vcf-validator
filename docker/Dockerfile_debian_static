@@ -1,6 +1,6 @@
 # These docker image are used to config that the static build works locally on linux
 # Use a slim base image
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 # Install build dependencies
 RUN apt-get update && \

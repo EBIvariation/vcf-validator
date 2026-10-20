@@ -1,0 +1,7 @@
+##fileformat=VCFv4.5
+##contig=<ID=1,length=100000000>
+##INFO=<ID=END,Number=1,Type=Integer,Description="Deprecated. Present for backwards compatibility with earlier versions of VCF.">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=LEN,Number=1,Type=Integer,Description="Length of <*> reference block">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	SAMPLE1
+1	100	.	G	<*>	.	.	END=105	GT:LEN	0/0:10

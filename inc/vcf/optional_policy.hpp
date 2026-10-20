@@ -55,6 +55,8 @@ namespace ebi
         void check_body_entry_alt_gvcf_gt_value(ParsingState & state, Record const & record) const;
         bool sample_has_reference_in_all_alleles(std::string const & sample) const;
         void check_body_entry_info_gvcf_end(ParsingState & state, Record const & record) const;
+        void check_body_entry_format_len(ParsingState & state, Record const & record) const;
+        bool has_reference_block_allele(Record const & record) const;
         void check_body_entry_info_imprecise(ParsingState & state, Record const & record) const;
         void check_body_entry_info_other_tag(ParsingState & state, std::multimap<std::string, std::string> const & info,
                                              std::string const & tag) const;

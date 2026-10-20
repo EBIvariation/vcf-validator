@@ -63,6 +63,8 @@ namespace ebi
             fileformat_version = Version::v43;
         } else if (m_current_token == VCF_V44) {
             fileformat_version = Version::v44;
+        } else if (m_current_token == VCF_V45) {
+            fileformat_version = Version::v45;
         } else {
             throw new FileformatError{state.n_lines, "Not allowed VCF fileformat version"};
         }

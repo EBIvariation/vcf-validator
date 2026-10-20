@@ -28,6 +28,7 @@ namespace ebi
     const std::string VCF_V42 = "VCFv4.2";
     const std::string VCF_V43 = "VCFv4.3";
     const std::string VCF_V44 = "VCFv4.4";
+    const std::string VCF_V45 = "VCFv4.5";
 
     // validator, debugulator and assembly_checker command line arguments
     const char STDIN[] = "stdin";
@@ -104,6 +105,10 @@ namespace ebi
     const std::string R = "R";
     const std::string UNKNOWN_CARDINALITY = ".";
     const std::string P = "P";
+    const std::string LA = "LA";
+    const std::string LR = "LR";
+    const std::string LG = "LG";
+    const std::string M = "M";
 
     // Pass value for Filter
     const std::string PASS = "PASS";
@@ -118,6 +123,7 @@ namespace ebi
 
     // ALT for gVCF
     const std::string GVCF_NON_VARIANT_ALLELE = "<*>";
+    const std::string GVCF_NON_REF_ALLELE = "<NON_REF>";
 
     // INFO predefined tags
     const std::string AA = "AA";
@@ -191,11 +197,22 @@ namespace ebi
     const std::string HQ = "HQ";
     const std::string NQ = "NQ";
     const std::string PL = "PL";
+    const std::string PP = "PP";
     const std::string PQ = "PQ";
     const std::string PS = "PS";
     const std::string PSL = "PSL";
     const std::string PSO = "PSO";
     const std::string PSQ = "PSQ";
+    const std::string LAA = "LAA";
+    const std::string LAD = "LAD";
+    const std::string LADF = "LADF";
+    const std::string LADR = "LADR";
+    const std::string LEC = "LEC";
+    const std::string LEN = "LEN";
+    const std::string LGL = "LGL";
+    const std::string LGP = "LGP";
+    const std::string LPL = "LPL";
+    const std::string LPP = "LPP";
 
     // File extensions
     const std::string VCF_EXT = ".vcf";
