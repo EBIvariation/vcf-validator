@@ -1196,4 +1196,163 @@ namespace ebi
         }
    }
 
+    TEST_CASE("Reference block warnings v4.5", "[body alt warnings]")
+    {
+        std::shared_ptr<vcf::Source> source{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v45,
+                {},
+                { "Sample1" }}};
+        std::shared_ptr<vcf::Source> source_v44{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v44,
+                {},
+                { "Sample1" }}};
+
+        for (auto & src : { source, source_v44 }) {
+            src->meta_entries.emplace(vcf::REFERENCE, vcf::MetaEntry{ 1, vcf::REFERENCE, "file", src });
+            src->meta_entries.emplace(vcf::CONTIG, vcf::MetaEntry{ 1, vcf::CONTIG, { { vcf::ID, "chr1" } }, src });
+            src->meta_entries.emplace(vcf::INFO, vcf::MetaEntry{ 1, vcf::INFO,
+                    { { vcf::ID, vcf::END }, { vcf::NUMBER, "1" }, { vcf::TYPE, vcf::INTEGER }, { vcf::DESCRIPTION, "End position" } },
+                    src });
+            src->meta_entries.emplace(vcf::FORMAT, vcf::MetaEntry{ 1, vcf::FORMAT,
+                    { { vcf::ID, vcf::GT }, { vcf::NUMBER, "1" }, { vcf::TYPE, vcf::STRING }, { vcf::DESCRIPTION, "Genotype" } },
+                    src });
+            src->meta_entries.emplace(vcf::FORMAT, vcf::MetaEntry{ 1, vcf::FORMAT,
+                    { { vcf::ID, vcf::LEN }, { vcf::NUMBER, "1" }, { vcf::TYPE, vcf::INTEGER }, { vcf::DESCRIPTION, "Reference block length" } },
+                    src });
+            src->meta_entries.emplace(vcf::ALT, vcf::MetaEntry{ 1, vcf::ALT,
+                    { { vcf::ID, "NON_REF" }, { vcf::DESCRIPTION, "Reference block" } },
+                    src });
+        }
+
+        vcf::ParsingState parsing_state{source, vcf::AdditionalChecks()};
+        vcf::ParsingState parsing_state_v44{source_v44, vcf::AdditionalChecks()};
+        vcf::ValidateOptionalPolicy optional_policy;
+
+        SECTION("FORMAT LEN and INFO END")
+        {
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LEN },
+                            { "0/0:10" },
+                            source})) );   //END deprecated in favour of LEN
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123465" } },
+                            { vcf::GT },
+                            { "0/0" },
+                            source})) );
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<NON_REF>" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LEN },
+                            { "0/0:10" },
+                            source})) );   //<NON_REF> is an alias of <*>
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT },
+                            { "0/0" },
+                            source})),
+                        vcf::FormatBodyError*);
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<NON_REF>" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT },
+                            { "0/0" },
+                            source})),
+                        vcf::FormatBodyError*);
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<NON_REF>" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LEN },
+                            { "0/1:10" },
+                            source})),
+                        vcf::AlternateAllelesBodyError*);
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state, vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "T" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LEN },
+                            { "0/1:10" },
+                            source})),
+                        vcf::FormatBodyError*);   //LEN only for reference blocks
+
+            CHECK_THROWS_AS( (optional_policy.optional_check_body_entry(parsing_state_v44, vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LEN },
+                            { "0/0:10" },
+                            source_v44})),
+                        vcf::InfoBodyError*);   //END required in v4.4
+        }
+    }
+
 }

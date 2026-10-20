@@ -3449,4 +3449,179 @@ namespace ebi
                             vcf::MetaSectionError* );
         }
     }
+
+    TEST_CASE("FORMAT MetaEntry checks v4.5", "[checks][keyvalue]")
+    {
+        std::shared_ptr<vcf::Source> source{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v45,
+                {},
+                { "Sample1" }}};
+        std::shared_ptr<vcf::Source> source_v44{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v44,
+                {},
+                { "Sample1" }}};
+
+        SECTION("Number field values")
+        {
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "test"}, {vcf::NUMBER, vcf::LA}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }) );   //LA, LR, LG and M valid for v45 onwards
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "test"}, {vcf::NUMBER, vcf::LR}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "test"}, {vcf::NUMBER, vcf::LG}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "testC"}, {vcf::NUMBER, vcf::M}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "test"}, {vcf::NUMBER, vcf::P}, {vcf::TYPE, vcf::STRING}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "test"}, {vcf::NUMBER, vcf::LA}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "test"} },
+                                source_v44
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "testC"}, {vcf::NUMBER, vcf::M}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "test"} },
+                                source_v44
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, "test"}, {vcf::NUMBER, vcf::LA}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );   //not valid for INFO
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                vcf::INFO,
+                                { {vcf::ID, "testC"}, {vcf::NUMBER, vcf::M}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "test"}, {vcf::NUMBER, vcf::M}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );   //base modification ID must end with the base
+        }
+
+        SECTION("Predefined tags")
+        {
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::LAD}, {vcf::NUMBER, vcf::LR}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::LPL}, {vcf::NUMBER, vcf::LG}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::LEN}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "M5mC"}, {vcf::NUMBER, vcf::M}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }) );
+
+            CHECK_NOTHROW( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "DPM27551C"}, {vcf::NUMBER, vcf::M}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }) );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::LAD}, {vcf::NUMBER, vcf::R}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, vcf::LPL}, {vcf::NUMBER, vcf::LG}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "M5mC"}, {vcf::NUMBER, "1"}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "M27551C"}, {vcf::NUMBER, vcf::M}, {vcf::TYPE, vcf::INTEGER}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+
+            CHECK_THROWS_AS( (vcf::MetaEntry {
+                                1,
+                                vcf::FORMAT,
+                                { {vcf::ID, "ADM5hmC"}, {vcf::NUMBER, vcf::M}, {vcf::TYPE, vcf::FLOAT}, {vcf::DESCRIPTION, "test"} },
+                                source
+                            }),
+                            vcf::MetaSectionError* );
+        }
+    }
+
 }

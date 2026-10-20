@@ -1,0 +1,9 @@
+##fileformat=VCFv4.5
+##contig=<ID=1,length=100000000>
+##INFO=<ID=END,Number=1,Type=Integer,Description="Deprecated. Present for backwards compatibility with earlier versions of VCF.">
+##INFO=<ID=SVLEN,Number=A,Type=Integer,Description="Length of structural variant">
+##INFO=<ID=SVCLAIM,Number=A,Type=String,Description="Claim made by the structural variant call. Valid values are D, J, DJ for abundance, adjacency and both respectively">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	SAMPLE1
+1	100	.	G	<DEL>	.	.	END=110;SVLEN=.;SVCLAIM=D	GT	0/1
+1	200	.	G	<DUP>	.	.	END=150;SVLEN=.;SVCLAIM=D	GT	0/1

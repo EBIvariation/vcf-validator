@@ -1761,4 +1761,480 @@ namespace ebi
         }
     }
 
+    TEST_CASE("Record predefined FORMAT tags checks v4.5", "[record][keyvalue]")
+    {
+        std::shared_ptr<vcf::Source> source{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v45,
+                {},
+                { "Sample1" }}};
+        std::shared_ptr<vcf::Source> source_v44{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v44,
+                {},
+                { "Sample1" }}};
+
+        SECTION("Local alleles")
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A", "C", "T", "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LAA, vcf::AD, vcf::LAD, vcf::PL, vcf::LPL },
+                            { "2/4:2,4:20,.,30,.,10:20,30,10:90,.,.,80,.,0,.,.,.,.,100,.,110,.,120:90,80,0,100,110,120" },
+                            source}) );   //example from the specification
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "G", "T", "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LAA, vcf::LAD, vcf::LPL },
+                            { "0/0:3:30,1:0,30,80" },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A", "T", "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LAA, vcf::LAD, vcf::LPL },
+                            { "0/0:.:30:0" },
+                            source}) );   //missing LAA is a REF-only site
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A", "T" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::LAA, vcf::LAD },
+                            { "2:5,15" },
+                            source}) );   //LAA first without GT
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A", "T" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LAA, vcf::LAD, vcf::LPL },
+                            { "1:1,2:5,10,15:20,0,30" },
+                            source}) );   //haploid
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A", "C", "T" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LAA, vcf::LPL },
+                            { "0/2:2,3:0,10,20,30,40" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);   //LG, 6 values expected
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A", "C", "T" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LAA, vcf::LAD },
+                            { "0/2:2,3:0,10" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);   //LR, 3 values expected
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A", "C", "T" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LAD },
+                            { "0/1:10,5" },
+                            source}),
+                        vcf::FormatBodyError*);   //LAA missing
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A", "C", "T" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::DP, vcf::LAA, vcf::LAD },
+                            { "0/1:15:1:10,5" },
+                            source}),
+                        vcf::FormatBodyError*);   //LAA after other fields
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A", "C", "T" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LAA, vcf::LAD },
+                            { "0/1:4:10,5" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);   //LAA out of range
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A", "C", "T" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LAA, vcf::LAD },
+                            { "0/1:0:10,5" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);   //LAA is 1-based
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A", "C", "T" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LAA, vcf::LAD },
+                            { "0/1:1,1:10,5,5" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);   //LAA duplicated
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A", "C", "T" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LAA, vcf::AD, vcf::LAD },
+                            { "0/2:2:10,.,5,.:10,6" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);   //LAD not matching AD
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A", "C", "T" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LAD },
+                            { "0/1:10,5" },
+                            source_v44}) );   //local alleles not defined in v4.4
+        }
+
+        SECTION("Base modifications")
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "A" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, "M5mC" },
+                            { "0/1:0.95" },
+                            source}) );   //examples from the specification
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "CTAG" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, "M5mC" },
+                            { "0/1:0,0.5,0.7" },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "." },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, "M5mC", "M5hmC" },
+                            { "0|0:0.9,0:0,0.1" },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "A", "T", "G", "ACG" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, "M5mC" },
+                            { "/3|1/0|4|0/0/3/1:0.25,0.1,0.5,0.6,." },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "A" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::PS, "M5mC", "DPM5mC", "ADM5mC" },
+                            { "0|1:20:0.33:3:1" },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "CG",
+                            { "." },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, "M27551C" },
+                            { "0/0:0.5,0.2" },
+                            source}) );   //reserved ChEBI key
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "AG",
+                            { "." },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, "M18107N" },
+                            { "0|0:0.1,.,.,.,0.2,.,.,." },
+                            source}) );   //N, values for both strands
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "A" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, "M5mC" },
+                            { "0/1:." },
+                            source}) );   //missing
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "A" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, "M5mC" },
+                            { "0/1:0.5,0.2" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);   //A can not be 5mC methylated
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "CG",
+                            { "." },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, "M27551C" },
+                            { "0/0:0.5" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "G" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, "M5mC" },
+                            { "0|1:0.5,1.5" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);   //fraction out of [0,1]
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "G" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, "DPM5mC" },
+                            { "0|1:5,-1" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);   //negative depth
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "A" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { "M5mC" },
+                            { "0.5" },
+                            source}),
+                        vcf::FormatBodyError*);   //GT must be present
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "C",
+                            { "A" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { "M5mC" },
+                            { "0.5" },
+                            source_v44}) );   //base modifications not defined in v4.4
+        }
+
+        SECTION("Reference block length")
+        {
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LEN },
+                            { "0/0:10" },
+                            source}) );
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LEN },
+                            { "0/0:0" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
+            CHECK_THROWS_AS( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "G",
+                            { "<*>" },
+                            1.0,
+                            { vcf::PASS },
+                            {},
+                            { vcf::GT, vcf::LEN },
+                            { "0/0:1,2" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+        }
+    }
+
 }

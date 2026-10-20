@@ -188,23 +188,47 @@ namespace ebi
         } else if (entry.source->version == Version::v43 ) {
             check_predefined_tag(FORMAT, NUMBER, value, format_v43);
             check_predefined_tag(FORMAT, TYPE, value, format_v43);
-        } else {
+        } else if (entry.source->version == Version::v44) {
             check_predefined_tag(FORMAT, NUMBER, value, format_v44);
             check_predefined_tag(FORMAT, TYPE, value, format_v44);
+        } else {
+            check_predefined_tag(FORMAT, NUMBER, value, format_v45);
+            check_predefined_tag(FORMAT, TYPE, value, format_v45);
+            std::pair<std::string, std::string> base_modification;
+            if (get_base_modification_tag(value[ID], base_modification)) {
+                //reserved base modification keys can not be listed, as they contain any ChEBI ID
+                std::map<std::string, std::pair<std::string, std::string>> base_modification_tags = {
+                        { value[ID], base_modification } };
+                check_predefined_tag(FORMAT, NUMBER, value, base_modification_tags);
+                check_predefined_tag(FORMAT, TYPE, value, base_modification_tags);
+            }
+            check_format_base_modification_id(value[ID], value[NUMBER]);
+        }
+    }
+
+    void MetaEntryVisitor::check_format_base_modification_id(std::string const & id_field,
+                                                             std::string const & number_field) const
+    {
+        static const std::string modified_bases = "ACGTUN";
+        if (number_field == M && (id_field.empty() || modified_bases.find(id_field.back()) == std::string::npos)) {
+            throw new MetaSectionError{entry.line, "FORMAT metadata ID of a base modification field (Number=M) must "
+                    "end with the modified base: A, C, G, T, U or N", "Found ID was '" + id_field + "'"};
         }
     }
 
     void MetaEntryVisitor::check_format_or_info_number(std::string const & number_field, std::string const & field, bool isinfo) const
     {
         bool checkP = entry.source->version >= Version::v44;
+        bool checkLocal = !isinfo && entry.source->version >= Version::v45;   //LA, LR, LG and M for format v45 onwards
         if (util::contains_if(number_field, [](char c) { return !isdigit(c); }) &&
             number_field != A &&
             number_field != R &&
             number_field != G &&
             number_field != UNKNOWN_CARDINALITY &&
-            (isinfo || !checkP || (number_field != P && !isinfo && checkP))) {
+            (isinfo || !checkP || (number_field != P && !isinfo && checkP)) &&
+            (!checkLocal || (number_field != LA && number_field != LR && number_field != LG && number_field != M))) {
             throw new MetaSectionError{entry.line, field + " metadata Number is not a number, A, R, G" +
-                ((!isinfo && checkP) ? ", P" : "") + " or dot"};
+                ((!isinfo && checkP) ? ", P" : "") + (checkLocal ? ", LA, LR, LG, M" : "") + " or dot"};
         }
     }
 

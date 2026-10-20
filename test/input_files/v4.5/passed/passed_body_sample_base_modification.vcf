@@ -1,0 +1,20 @@
+##fileformat=VCFv4.5
+##contig=<ID=1,length=100000000>
+##contig=<ID=2,length=100000000>
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=PS,Number=1,Type=Integer,Description="Phase set">
+##FORMAT=<ID=M5mC,Number=M,Type=Float,Description="Fraction of bases modified with 5-Methylcytosine">
+##FORMAT=<ID=M5hmC,Number=M,Type=Float,Description="Fraction of bases modified with 5-Hydroxymethylcytosine">
+##FORMAT=<ID=DPM5mC,Number=M,Type=Integer,Description="Total read depth for reads able to detect 5mC">
+##FORMAT=<ID=ADM5mC,Number=M,Type=Integer,Description="Read depth for reads with 5mC">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	SAMPLE1
+1	10	.	C	A	.	.	.	GT:M5mC	0/1:0.95
+1	20	.	C	CTAG	.	.	.	GT:M5mC	0/1:0,0.5,0.7
+1	30	.	C	.	.	.	.	GT:M5mC:M5hmC	0|0:0.9,0:0,0.1
+1	40	.	C	A,T,G,ACG	.	.	.	GT:M5mC	/3|1/0|4|0/0/3/1:0.25,0.1,0.5,0.6,.
+2	10	.	C	.	.	.	.	GT:M5mC:DPM5mC:ADM5mC	0/0:0.5:2:1
+2	11	.	G	.	.	.	.	GT:M5mC:DPM5mC:ADM5mC	0/0:.:.:.
+2	20	.	C	.	.	.	.	GT:PS:M5mC:DPM5mC:ADM5mC	0|0:20:0.75,.:4,.:3,.
+2	21	.	G	A	.	.	.	GT:PS:M5mC:DPM5mC:ADM5mC	0|1:20:0.33:3:1
+2	30	.	CG	.	.	.	.	GT:M27551C:DPM27551C	0/0:0.5,0.2:10,10
+2	40	.	AG	.	.	.	.	GT:M18107N	0|0:0.1,.,.,.,0.2,.,.,.

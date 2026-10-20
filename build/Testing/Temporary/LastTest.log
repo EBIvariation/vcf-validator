@@ -1,0 +1,1190 @@
+Start testing: Oct 19 17:31 BST
+----------------------------------------------------------
+1/6 Testing: ValidatorTests_v41
+1/6 Test: ValidatorTests_v41
+Command: "/Users/tcezard/CLionProjects/vcf-validator/build/bin/test_validator_v41"
+Directory: /Users/tcezard/CLionProjects/vcf-validator/build
+"ValidatorTests_v41" start time: Oct 19 17:31 BST
+Output:
+----------------------------------------------------------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_validator_v41 is a Catch v2.13.10 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Files that fail the validation under specification v4.1
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v41_test.cpp:22
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v41_test.cpp:22: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.1/failed"
+
+-------------------------------------------------------------------------------
+Files that pass the validation under specification v4.1
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v41_test.cpp:37
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v41_test.cpp:37: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.1/passed"
+
+===============================================================================
+test cases: 2 | 2 failed
+assertions: 2 | 2 failed
+
+<end of output>
+Test time =   0.31 sec
+----------------------------------------------------------
+Test Failed.
+"ValidatorTests_v41" end time: Oct 19 17:31 BST
+"ValidatorTests_v41" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/6 Testing: ValidatorTests_v42
+2/6 Test: ValidatorTests_v42
+Command: "/Users/tcezard/CLionProjects/vcf-validator/build/bin/test_validator_v42"
+Directory: /Users/tcezard/CLionProjects/vcf-validator/build
+"ValidatorTests_v42" start time: Oct 19 17:31 BST
+Output:
+----------------------------------------------------------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_validator_v42 is a Catch v2.13.10 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Files that fail the validation under specification v4.2
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v42_test.cpp:22
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v42_test.cpp:22: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.2/failed"
+
+-------------------------------------------------------------------------------
+Files that pass the validation under specification v4.2
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v42_test.cpp:37
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v42_test.cpp:37: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.2/passed"
+
+===============================================================================
+test cases: 2 | 2 failed
+assertions: 2 | 2 failed
+
+<end of output>
+Test time =   0.25 sec
+----------------------------------------------------------
+Test Failed.
+"ValidatorTests_v42" end time: Oct 19 17:31 BST
+"ValidatorTests_v42" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/6 Testing: ValidatorTests_v43
+3/6 Test: ValidatorTests_v43
+Command: "/Users/tcezard/CLionProjects/vcf-validator/build/bin/test_validator_v43"
+Directory: /Users/tcezard/CLionProjects/vcf-validator/build
+"ValidatorTests_v43" start time: Oct 19 17:31 BST
+Output:
+----------------------------------------------------------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_validator_v43 is a Catch v2.13.10 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Files that fail the validation under specification v4.3
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:22
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:22: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/failed"
+
+-------------------------------------------------------------------------------
+Files that pass the validation under specification v4.3
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:37
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:37: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/passed"
+
+-------------------------------------------------------------------------------
+Compressed files that throw std::invalid_argument
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:52
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:52: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/compressed_files/non_readable"
+
+-------------------------------------------------------------------------------
+Compressed files that do not throw std::invalid_argument
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:67
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:67: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/compressed_files/readable/passed"
+
+-------------------------------------------------------------------------------
+Files to validate evidence flag under specification v4.3
+  Without genotypes or frequencies
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:86
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:86: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/evidence/failed"
+
+-------------------------------------------------------------------------------
+Files to validate evidence flag under specification v4.3
+  With genotypes or frequencies
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:106
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:106: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/evidence/passed"
+
+===============================================================================
+test cases: 5 | 5 failed
+assertions: 6 | 6 failed
+
+<end of output>
+Test time =   0.24 sec
+----------------------------------------------------------
+Test Failed.
+"ValidatorTests_v43" end time: Oct 19 17:31 BST
+"ValidatorTests_v43" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/6 Testing: ValidatorTests_v44
+4/6 Test: ValidatorTests_v44
+Command: "/Users/tcezard/CLionProjects/vcf-validator/build/bin/test_validator_v44"
+Directory: /Users/tcezard/CLionProjects/vcf-validator/build
+"ValidatorTests_v44" start time: Oct 19 17:31 BST
+Output:
+----------------------------------------------------------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_validator_v44 is a Catch v2.13.10 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Files that fail the validation under specification v4.4
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:22
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:22: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/failed"
+
+-------------------------------------------------------------------------------
+Files that pass the validation under specification v4.4
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:37
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:37: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/passed"
+
+-------------------------------------------------------------------------------
+Compressed files that throw std::invalid_argument v4.4
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:52
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:52: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/compressed_files/non_readable"
+
+-------------------------------------------------------------------------------
+Compressed files that do not throw std::invalid_argument v4.4
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:67
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:67: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/compressed_files/readable/passed"
+
+-------------------------------------------------------------------------------
+Files to validate evidence flag under specification v4.4
+  Without genotypes or frequencies
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:86
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:86: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/evidence/failed"
+
+-------------------------------------------------------------------------------
+Files to validate evidence flag under specification v4.4
+  With genotypes or frequencies
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:106
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:106: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/evidence/passed"
+
+===============================================================================
+test cases: 5 | 5 failed
+assertions: 6 | 6 failed
+
+<end of output>
+Test time =   0.25 sec
+----------------------------------------------------------
+Test Failed.
+"ValidatorTests_v44" end time: Oct 19 17:31 BST
+"ValidatorTests_v44" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/6 Testing: ValidatorTests_v45
+5/6 Test: ValidatorTests_v45
+Command: "/Users/tcezard/CLionProjects/vcf-validator/build/bin/test_validator_v45"
+Directory: /Users/tcezard/CLionProjects/vcf-validator/build
+"ValidatorTests_v45" start time: Oct 19 17:31 BST
+Output:
+----------------------------------------------------------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_validator_v45 is a Catch v2.13.10 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Files that fail the validation under specification v4.5
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:22
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:22: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.5/failed"
+
+-------------------------------------------------------------------------------
+Files that pass the validation under specification v4.5
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:37
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:37: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.5/passed"
+
+-------------------------------------------------------------------------------
+Compressed files that throw std::invalid_argument v4.5
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:52
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:52: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.5/compressed_files/non_readable"
+
+-------------------------------------------------------------------------------
+Compressed files that do not throw std::invalid_argument v4.5
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:67
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:67: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.5/compressed_files/readable/passed"
+
+-------------------------------------------------------------------------------
+Files to validate evidence flag under specification v4.5
+  Without genotypes or frequencies
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:86
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:86: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.5/evidence/failed"
+
+-------------------------------------------------------------------------------
+Files to validate evidence flag under specification v4.5
+  With genotypes or frequencies
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:106
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:106: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.5/evidence/passed"
+
+===============================================================================
+test cases: 5 | 5 failed
+assertions: 6 | 6 failed
+
+<end of output>
+Test time =   0.25 sec
+----------------------------------------------------------
+Test Failed.
+"ValidatorTests_v45" end time: Oct 19 17:31 BST
+"ValidatorTests_v45" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/6 Testing: ValidatorTests
+6/6 Test: ValidatorTests
+Command: "/Users/tcezard/CLionProjects/vcf-validator/build/bin/test_validation_suite"
+Directory: /Users/tcezard/CLionProjects/vcf-validator/build
+"ValidatorTests" start time: Oct 19 17:31 BST
+Output:
+----------------------------------------------------------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_validation_suite is a Catch v2.13.10 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Tests for parsing assembly report
+  Failing to parse assembly report due to incorrect column size
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/assembly_report/assembly_report_test.cpp:53
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/assembly_report/assembly_report_test.cpp:58: FAILED:
+  CHECK_THROWS_AS( synonyms_map.parse_assembly_report(input), std::runtime_error )
+because no exception was thrown where one was expected:
+
+-------------------------------------------------------------------------------
+Tests for parsing assembly report
+  Failing to parse assembly report due to duplicate synonyms
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/assembly_report/assembly_report_test.cpp:61
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/assembly_report/assembly_report_test.cpp:66: FAILED:
+  CHECK_THROWS_AS( synonyms_map.parse_assembly_report(input), std::runtime_error )
+because no exception was thrown where one was expected:
+
+-------------------------------------------------------------------------------
+Tests for fetching synonyms list
+  Check availability of contig
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/assembly_report/assembly_report_test.cpp:99
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/assembly_report/assembly_report_test.cpp:101: FAILED:
+  CHECK( synonyms_map.is_contig_available("chr1") )
+with expansion:
+  false
+
+-------------------------------------------------------------------------------
+Tests for fetching synonyms list
+  Get Contig Synonyms
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/assembly_report/assembly_report_test.cpp:105
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/assembly_report/assembly_report_test.cpp:105: FAILED:
+  {Unknown expression after the reported line}
+due to unexpected exception with message:
+  Contig 'chr1' not found in synonyms map
+
+[2026-10-19 17:31:06.150003] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Tests for using file based fasta
+  Create file based fasta objects
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:33
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:36: FAILED:
+  CHECK_NOTHROW( std::unique_ptr<ebi::vcf::fasta::IFasta>( new ebi::vcf::fasta::FileBasedFasta(WHOLE_GENOME_FASTA, WHOLE_GENOME_FASTA_INDEX)) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/fasta/whole_genome.fa
+
+[2026-10-19 17:31:06.150458] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:38: FAILED:
+  CHECK_NOTHROW( std::unique_ptr<ebi::vcf::fasta::IFasta>( new ebi::vcf::fasta::FileBasedFasta(SINGLE_CHROMOSOME_FASTA, SINGLE_CHROMOSOME_FASTA_INDEX)) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/fasta/single_chromosome.fa
+
+[2026-10-19 17:31:06.150502] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Tests for using file based fasta
+  Check if contigs exist, whole genome
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:41
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:41: FAILED:
+due to unexpected exception with message:
+  Couldn't open file test/input_files/fasta/whole_genome.fa
+
+[2026-10-19 17:31:06.150600] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Tests for using file based fasta
+  Check if contigs exist, single chromosome
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:52
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:52: FAILED:
+due to unexpected exception with message:
+  Couldn't open file test/input_files/fasta/single_chromosome.fa
+
+[2026-10-19 17:31:06.150663] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Tests for using file based fasta
+  Check the contigs' length, whole genome
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:61
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:61: FAILED:
+due to unexpected exception with message:
+  Couldn't open file test/input_files/fasta/whole_genome.fa
+
+[2026-10-19 17:31:06.150777] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Tests for using file based fasta
+  Check the contigs' length, single chromosome
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:72
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:72: FAILED:
+due to unexpected exception with message:
+  Couldn't open file test/input_files/fasta/single_chromosome.fa
+
+[2026-10-19 17:31:06.150876] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Tests for using file based fasta
+  Check the contigs' sequence, whole genome
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:81
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:81: FAILED:
+due to unexpected exception with message:
+  Couldn't open file test/input_files/fasta/whole_genome.fa
+
+[2026-10-19 17:31:06.151058] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Tests for using file based fasta
+  Check the contigs' sequence, single chromosome
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:93
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/fasta/fasta_test.cpp:93: FAILED:
+due to unexpected exception with message:
+  Couldn't open file test/input_files/fasta/single_chromosome.fa
+
+ebi::util::curl::Easy::request failed: https://www.ebi.ac.uk/ena/browser/api/fasta/Non-existing
+Failure when receiving data from the peer
+[2026-10-19 17:31:06.517148] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Matching FASTA and VCF combination
+  Empty VCF File
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:36
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:43: FAILED:
+  CHECK( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/passed/
+  passed_empty_vcf/passed_empty_vcf.fa
+
+[2026-10-19 17:31:06.517541] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.517581] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.517691] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Matching FASTA and VCF combination
+  Single entry
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:46
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:53: FAILED:
+  CHECK( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/passed/
+  passed_single_variant/passed_single_variant.fa
+
+[2026-10-19 17:31:06.517932] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.517948] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.518049] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Matching FASTA and VCF combination
+  Full sample VCF, all match
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:56
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:63: FAILED:
+  CHECK( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/passed/
+  passed_fullsample/passed_fullsample.fa
+
+[2026-10-19 17:31:06.518170] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.518179] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.518229] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Matching FASTA and VCF combination
+  Mapping contigs , all match
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:66
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:74: FAILED:
+  CHECK( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report_path, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/passed/
+  passed_with_mapping/passed_with_mapping.fa
+
+[2026-10-19 17:31:06.518389] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.518398] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.518457] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Matching FASTA and VCF combination
+  Mapping contigs but contig has same synonym on the same line, all match
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:77
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:85: FAILED:
+  CHECK( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report_path, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/passed/
+  passed_with_mapping_multi_synonyms/passed_with_mapping_multi_synonyms.fa
+
+[2026-10-19 17:31:06.518574] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.518581] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.518611] [0x00000001f10c61c0] [debug]   Detected .gz compression
+[2026-10-19 17:31:06.519346] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Matching FASTA and VCF combination
+  compressed VCF, gz compression
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:88
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:95: FAILED:
+  CHECK( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/compressed/
+  passed_compressed_gz/passed_compressed_gz.fa
+
+[2026-10-19 17:31:06.519472] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.519479] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.519511] [0x00000001f10c61c0] [debug]   Detected .gz compression
+[2026-10-19 17:31:06.519980] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.519990] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.520027] [0x00000001f10c61c0] [debug]   Detected .gz compression
+[2026-10-19 17:31:06.520047] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Matching FASTA and VCF combination
+  no fasta index provided, creating index from fasta file on-the-fly
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:107
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:114: FAILED:
+  CHECK( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/passed/
+  passed_missing_index/passed_missing_index.fa
+
+[2026-10-19 17:31:06.520157] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.520162] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.520222] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Not fully matching VCF and Fasta combination
+  Single entry, single mismatch
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:124
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:131: FAILED:
+  CHECK_FALSE( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/failed/
+  failed_singlemismatch_singleentry/failed_singlemismatch_singleentry.fa
+
+[2026-10-19 17:31:06.520334] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.520340] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.520376] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Not fully matching VCF and Fasta combination
+  Multiple entry, multiple mismatch
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:134
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:141: FAILED:
+  CHECK_FALSE( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/failed/
+  failed_multiplemismatch_multipleentry/failed_multiplemismatch_multipleentry.
+  fa
+
+[2026-10-19 17:31:06.520463] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.520468] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.520501] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Not fully matching VCF and Fasta combination
+  Empty FASTA file, single entry
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:144
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:151: FAILED:
+  CHECK_FALSE( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/failed/
+  failed_empty_fasta/failed_empty_fasta.fa
+
+[2026-10-19 17:31:06.520581] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.520585] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.520630] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Not fully matching VCF and Fasta combination
+  Multiple entry, all mismatch
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:154
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:161: FAILED:
+  CHECK_FALSE( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/failed/
+  failed_allmismatch_multipleentry/failed_allmismatch_multipleentry.fa
+
+[2026-10-19 17:31:06.520711] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.520716] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.520752] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Not fully matching VCF and Fasta combination
+  Not mapping contigs , fail
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:164
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:171: FAILED:
+  CHECK_FALSE( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/passed/
+  passed_with_mapping/passed_with_mapping.fa
+
+[2026-10-19 17:31:06.520829] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.520834] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+-------------------------------------------------------------------------------
+Not fully matching VCF and Fasta combination
+  No fasta provided, using ENA API to retrieve fasta for contigs, but got no
+  sequence, fail
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:174
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:180: FAILED:
+  CHECK_FALSE( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, "", assembly_report, outputs) )
+with expansion:
+  !true
+
+[2026-10-19 17:31:06.520913] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.520918] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+-------------------------------------------------------------------------------
+Not fully matching VCF and Fasta combination
+  With a valid assembly report, but a synonym could not be found for
+  chromosome, can't use ENA API to download fasta, fail
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:183
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:190: FAILED:
+  CHECK_FALSE( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, "", assembly_report_path, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/failed/
+  failed_ena_api_with_mapping/assembly_report.txt
+
+[2026-10-19 17:31:06.521033] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.521037] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.521076] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+[2026-10-19 17:31:06.521116] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.521121] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+test/input_files/v4.3/assembly_checker/failed/failed_no_genbank_contigs/failed_no_genbank_contigs.fatest/input_files/v4.3/assembly_checker/failed/failed_no_genbank_contigs/failed_no_genbank_contigs.vcf[2026-10-19 17:31:06.521159] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+[2026-10-19 17:31:06.521197] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.521202] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+[2026-10-19 17:31:06.521237] [0x00000001f10c61c0] [debug]   Detected .bz2 compression
+[2026-10-19 17:31:06.521314] [0x00000001f10c61c0] [info]    Reading from input FASTA file...
+-------------------------------------------------------------------------------
+Not fully matching VCF and Fasta combination
+  compressed vcf, bz2 compression
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:221
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/assembly_checker_integration_test.cpp:228: FAILED:
+  CHECK_FALSE( ebi::vcf::assembly_checker::check_vcf_ref(vcf_input, vcf_path, fasta_path, assembly_report, outputs) )
+due to unexpected exception with message:
+  Couldn't open file test/input_files/v4.3/assembly_checker/compressed/
+  failed_compressed_bz2/failed_compressed_bz2.fa
+
+[2026-10-19 17:31:06.521398] [0x00000001f10c61c0] [info]    Number of matches: 0/0
+[2026-10-19 17:31:06.521401] [0x00000001f10c61c0] [info]    Percentage of matches: nan%
+-------------------------------------------------------------------------------
+Tests for compressed files
+  File with extensions of compressed files
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:29
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:29: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/compressed_files/non_readable"
+
+-------------------------------------------------------------------------------
+Tests for compressed files
+  Compressed file streams
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:49
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:49: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/compressed_files/non_readable"
+
+-------------------------------------------------------------------------------
+Tests for compressed files
+  Passed compressed files
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:73
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:73: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/compressed_files/readable/passed"
+
+-------------------------------------------------------------------------------
+Tests for compressed files
+  Failed compressed files
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:89
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:89: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/compressed_files/readable/failed"
+
+-------------------------------------------------------------------------------
+Tests for non-compressed files
+  File without extensions of compressed files
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:107
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:107: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/passed"
+
+-------------------------------------------------------------------------------
+Tests for non-compressed files
+  Non-Compressed file streams
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:124
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:124: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/passed"
+
+-------------------------------------------------------------------------------
+Tests for compressed files v4.4
+  File with extensions of compressed files
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:146
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:146: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/compressed_files/non_readable"
+
+-------------------------------------------------------------------------------
+Tests for compressed files v4.4
+  Compressed file streams
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:166
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:166: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/compressed_files/non_readable"
+
+-------------------------------------------------------------------------------
+Tests for compressed files v4.4
+  Passed compressed files
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:190
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:190: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/compressed_files/readable/passed"
+
+-------------------------------------------------------------------------------
+Tests for compressed files v4.4
+  Failed compressed files
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:206
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:206: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/compressed_files/readable/failed"
+
+-------------------------------------------------------------------------------
+Tests for non-compressed files v4.4
+  File without extensions of compressed files
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:224
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:224: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/passed"
+
+-------------------------------------------------------------------------------
+Tests for non-compressed files v4.4
+  Non-Compressed file streams
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:241
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/compressed_file_test.cpp:241: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/passed"
+
+-------------------------------------------------------------------------------
+Files that fail the validation under specification v4.1
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v41_test.cpp:22
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v41_test.cpp:22: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.1/failed"
+
+-------------------------------------------------------------------------------
+Files that pass the validation under specification v4.1
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v41_test.cpp:37
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v41_test.cpp:37: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.1/passed"
+
+-------------------------------------------------------------------------------
+Files that fail the validation under specification v4.2
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v42_test.cpp:22
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v42_test.cpp:22: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.2/failed"
+
+-------------------------------------------------------------------------------
+Files that pass the validation under specification v4.2
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v42_test.cpp:37
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v42_test.cpp:37: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.2/passed"
+
+-------------------------------------------------------------------------------
+Files that fail the validation under specification v4.3
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:22
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:22: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/failed"
+
+-------------------------------------------------------------------------------
+Files that pass the validation under specification v4.3
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:37
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:37: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/passed"
+
+-------------------------------------------------------------------------------
+Compressed files that throw std::invalid_argument
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:52
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:52: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/compressed_files/non_readable"
+
+-------------------------------------------------------------------------------
+Compressed files that do not throw std::invalid_argument
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:67
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:67: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/compressed_files/readable/passed"
+
+-------------------------------------------------------------------------------
+Files to validate evidence flag under specification v4.3
+  Without genotypes or frequencies
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:86
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:86: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/evidence/failed"
+
+-------------------------------------------------------------------------------
+Files to validate evidence flag under specification v4.3
+  With genotypes or frequencies
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:106
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v43_test.cpp:106: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.3/evidence/passed"
+
+-------------------------------------------------------------------------------
+Files that fail the validation under specification v4.4
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:22
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:22: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/failed"
+
+-------------------------------------------------------------------------------
+Files that pass the validation under specification v4.4
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:37
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:37: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/passed"
+
+-------------------------------------------------------------------------------
+Compressed files that throw std::invalid_argument v4.4
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:52
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:52: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/compressed_files/non_readable"
+
+-------------------------------------------------------------------------------
+Compressed files that do not throw std::invalid_argument v4.4
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:67
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:67: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/compressed_files/readable/passed"
+
+-------------------------------------------------------------------------------
+Files to validate evidence flag under specification v4.4
+  Without genotypes or frequencies
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:86
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:86: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/evidence/failed"
+
+-------------------------------------------------------------------------------
+Files to validate evidence flag under specification v4.4
+  With genotypes or frequencies
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:106
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v44_test.cpp:106: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.4/evidence/passed"
+
+-------------------------------------------------------------------------------
+Files that fail the validation under specification v4.5
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:22
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:22: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.5/failed"
+
+-------------------------------------------------------------------------------
+Files that pass the validation under specification v4.5
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:37
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:37: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.5/passed"
+
+-------------------------------------------------------------------------------
+Compressed files that throw std::invalid_argument v4.5
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:52
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:52: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.5/compressed_files/non_readable"
+
+-------------------------------------------------------------------------------
+Compressed files that do not throw std::invalid_argument v4.5
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:67
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:67: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.5/compressed_files/readable/passed"
+
+-------------------------------------------------------------------------------
+Files to validate evidence flag under specification v4.5
+  Without genotypes or frequencies
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:86
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:86: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.5/evidence/failed"
+
+-------------------------------------------------------------------------------
+Files to validate evidence flag under specification v4.5
+  With genotypes or frequencies
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:106
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/parser_v45_test.cpp:106: FAILED:
+due to unexpected exception with message:
+  boost::filesystem::directory_iterator::construct: No such file or directory
+  [system:2]: "test/input_files/v4.5/evidence/passed"
+
+-------------------------------------------------------------------------------
+Integration test: summary report
+  test/input_files/v4.3/passed/passed_body_format.vcf summary error count
+-------------------------------------------------------------------------------
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/report_writer_test.cpp:70
+...............................................................................
+
+/Users/tcezard/CLionProjects/vcf-validator/test/vcf/report_writer_test.cpp:70: FAILED:
+due to unexpected exception with message:
+  Unable to write output file test/input_files/v4.3/passed/passed_body_format.
+  vcf.errors_summary.txt
+
+===============================================================================
+test cases:   72 |   43 passed | 29 failed
+assertions: 1113 | 1051 passed | 62 failed
+
+<end of output>
+Test time =   0.72 sec
+----------------------------------------------------------
+Test Failed.
+"ValidatorTests" end time: Oct 19 17:31 BST
+"ValidatorTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 19 17:31 BST

@@ -1,0 +1,15 @@
+##fileformat=VCFv4.5
+##contig=<ID=1,length=100000000>
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=LAA,Number=.,Type=Integer,Description="1-based indices into ALT, indicating which alleles are relevant (local) for the current sample">
+##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Read depth for each allele">
+##FORMAT=<ID=LAD,Number=LR,Type=Integer,Description="Local-allele representation of AD">
+##FORMAT=<ID=PL,Number=G,Type=Integer,Description="Phred-scaled genotype likelihoods">
+##FORMAT=<ID=LPL,Number=LG,Type=Integer,Description="Local-allele representation of PL">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	SAMPLE1
+1	1	.	G	A,C,T,<*>	.	.	.	GT:LAA:AD:LAD:PL:LPL	2/4:2,4:20,.,30,.,10:20,30,10:90,.,.,80,.,0,.,.,.,.,100,.,110,.,120:90,80,0,100,110,120
+1	2	.	A	C,G,T,<*>	.	.	.	GT:LAA:AD:LAD:PL:LPL	0/3:3:15,.,.,25,.:15,25:40,.,.,.,.,.,0,.,.,80,.,.,.,.,.:40,0,80
+1	3	.	C	G,T,<*>	.	.	.	GT:LAA:AD:LAD:PL:LPL	0/0:3:30,.,.,1:30,1:0,.,.,.,.,.,30,.,.,80:0,30,80
+1	4	.	G	A,T,<*>	.	.	.	GT:LAA:LAD:LPL	0/0:.:30:0
+1	5	.	G	A,T	.	.	.	GT:LAA:LAD:LPL	1:1,2:5,10,15:20,0,30
+1	6	.	G	A,T	.	.	.	LAA:LAD	2:5,15

@@ -1,0 +1,1 @@
+According to the VCF specification, the input file is valid
