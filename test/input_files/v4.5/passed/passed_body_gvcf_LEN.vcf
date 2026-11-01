@@ -1,0 +1,20 @@
+##fileformat=VCFv4.5
+##contig=<ID=1,length=100000000>
+##INFO=<ID=END,Number=1,Type=Integer,Description="Deprecated. Present for backwards compatibility with earlier versions of VCF.">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Read depth">
+##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Conditional genotype quality">
+##FORMAT=<ID=MIN_DP,Number=1,Type=Integer,Description="Minimum DP observed within the reference block">
+##FORMAT=<ID=PL,Number=G,Type=Integer,Description="Phred-scaled genotype likelihoods">
+##FORMAT=<ID=LEN,Number=1,Type=Integer,Description="Length of <*> reference block">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	SAMPLE1
+1	4370	.	G	<*>	.	.	END=4383	GT:DP:GQ:MIN_DP:PL:LEN	0/0:25:60:23:0,60,900:14
+1	4384	.	C	<*>	.	.	END=4388	GT:DP:GQ:MIN_DP:PL:LEN	0/0:25:45:25:0,42,630:5
+1	4389	.	T	TC,<*>	213.73	.	.	GT:DP:GQ:PL	0/1:23:99:51,0,36,93,92,86
+1	4390	.	C	<*>	.	.	END=4390	GT:DP:GQ:MIN_DP:PL:LEN	0/0:26:0:26:0,0,315:1
+1	4391	.	C	<*>	.	.	END=4395	GT:DP:GQ:MIN_DP:PL:LEN	0/0:27:63:27:0,63,945:5
+1	4396	.	G	C,<*>	0	.	.	GT:DP:GQ:PL	0/0:24:52:0,52,95,66,95,97
+1	4397	.	T	<*>	.	.	END=4416	GT:DP:GQ:MIN_DP:PL:LEN	0/0:22:14:22:0,15,593:20
+1	4417	.	A	<*>	.	.	.	GT:DP:LEN	0/0:20:10
+1	4427	.	A	<NON_REF>	.	.	.	GT:DP:LEN	0/0:20:10
+1	4437	.	A	<NON_REF>	.	.	END=4446	GT:DP:LEN	0/0:20:10

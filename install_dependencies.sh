@@ -79,7 +79,7 @@ cd ..
 
 # zlib
 echo "Installing zlib"
-wget --no-check-certificate https://zlib.net/zlib-${ZLIB_VERSION}.tar.gz -O ./libz.tar.gz
+wget --no-check-certificate https://github.com/madler/zlib/releases/download/v${ZLIB_VERSION}/zlib-${ZLIB_VERSION}.tar.gz -O ./libz.tar.gz
 tar xzf ./libz.tar.gz
 # sharedlibdir is set elsewhere so that the .so file is not being used when linking
 cd zlib-${ZLIB_VERSION} && ./configure --prefix=$build_dir_abs_path --sharedlibdir=$dependencies_dir_abs_path && make install

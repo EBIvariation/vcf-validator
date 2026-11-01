@@ -88,7 +88,8 @@ namespace ebi
     void Record::set_types()
     {
         for (auto & alternate : alternate_alleles) {
-            if (alternate == MISSING_VALUE || alternate == GVCF_NON_VARIANT_ALLELE) {
+            if (alternate == MISSING_VALUE || alternate == GVCF_NON_VARIANT_ALLELE ||
+                (alternate == GVCF_NON_REF_ALLELE && source->version >= Version::v45)) {     //alias of <*> since v45
                 types.push_back(RecordType::NO_VARIATION);
             } else if (alternate[0] == '<') {
                 types.push_back(RecordType::STRUCTURAL);
@@ -136,7 +137,7 @@ namespace ebi
 
     void Record::check_ids_no_duplicates() const
     {
-        if (source->version == Version::v43 || source->version == Version::v44) {
+        if (source->version >= Version::v43) {
             try {
                 check_no_duplicates(ids);
             } catch (const std::invalid_argument &ex) {
@@ -220,7 +221,7 @@ namespace ebi
 
     void Record::check_filter_no_duplicates() const
     {
-        if (source->version == Version::v43 || source->version == Version::v44) {
+        if (source->version >= Version::v43) {
             try {
                 check_no_duplicates(filters);
             } catch (const std::invalid_argument &ex) {
@@ -291,7 +292,7 @@ namespace ebi
 
     void Record::check_info_no_duplicates() const
     {
-        if ((source->version == Version::v43 || source->version == Version::v44) && info.size() > 1) {
+        if ((source->version >= Version::v43) && info.size() > 1) {
             for (auto & in : info) {
                 if (info.count(in.first) > 1) {
                     throw new InfoBodyError{line, "INFO must not have duplicate keys", "", ErrorFix::DUPLICATE_VALUES};
@@ -354,6 +355,8 @@ namespace ebi
         check_format_no_duplicates();
         check_format_allele_SVLEN();
         check_format_CICN();    //TODO check and confirm from spec issue.
+        check_format_local_alleles();
+        check_format_base_modification();
     }
 
     void Record::check_format_GT() const
@@ -365,7 +368,7 @@ namespace ebi
 
     void Record::check_format_no_duplicates() const
     {
-        if (source->version == Version::v43 || source->version == Version::v44) {
+        if (source->version >= Version::v43) {
             try {
                 check_no_duplicates(format);
             } catch (const std::invalid_argument &ex) {
@@ -394,13 +397,25 @@ namespace ebi
 
     void Record::check_predefined_tag_format(std::string const &field_key, std::vector<std::string> const &values,
                                              std::map<std::string, std::pair<std::string, std::string>> const &tags,
-                                             size_t ploidy) const
+                                             size_t ploidy, size_t sample_index, long local_alleles) const
     {
-        auto iterator = tags.find(field_key);
-        if (iterator != tags.end()) {
+        auto predefined_tags = &tags;
+        std::map<std::string, std::pair<std::string, std::string>> base_modification_tags;
+        std::pair<std::string, std::string> base_modification;
+        if (tags.find(field_key) == tags.end() && source->version >= Version::v45
+                && get_base_modification_tag(field_key, base_modification)) {
+            //reserved base modification keys can not be listed, as they contain any ChEBI ID
+            base_modification_tags[field_key] = base_modification;
+            predefined_tags = &base_modification_tags;
+        }
+        auto iterator = predefined_tags->find(field_key);
+        if (iterator != predefined_tags->end()) {
             try {
                 long cardinality;
-                check_sample_field_cardinality(values, get_predefined_number(iterator), ploidy, cardinality);
+                long base_modifications = get_predefined_number(iterator) == M ?
+                        get_base_modification_cardinality(sample_index, field_key) : -1;
+                check_sample_field_cardinality(values, get_predefined_number(iterator), ploidy, cardinality, false,
+                                               local_alleles, base_modifications);
                 check_field_type(values, get_predefined_type(iterator));
             } catch (std::shared_ptr<Error> ex) {
                 raise(std::make_shared<Error>(line, field_key + " does not match the" + ex->message,
@@ -438,6 +453,10 @@ namespace ebi
                 }
             }
         } else if (field_key == END) {
+            if (source->version >= Version::v45) {
+                check_info_end_computed(field_value);   //END is a computed field since v45
+                return;
+            }
             auto it = info.find(IMPRECISE);
             if (it != info.end() && it->second == "0") {
                 auto expected = std::to_string(position + reference_allele.length() - 1);
@@ -825,6 +844,7 @@ namespace ebi
         if (format[0] == GT) {
             ploidy = get_ploidy_from_GT(samples[i]);
         }
+        long local_alleles = source->version >= Version::v45 ? get_local_allele_count(i) : 0;
 
         for (size_t j = 0; j < subfields.size(); ++j) {
             MetaEntry meta = format_meta[j];
@@ -836,7 +856,10 @@ namespace ebi
                 long expected_cardinality;
 
                 try {
-                    check_sample_field_cardinality(values, meta_entry_properties[NUMBER], ploidy, expected_cardinality);
+                    long base_modifications = (meta_entry_properties[NUMBER] == M) ?
+                            get_base_modification_cardinality(i, meta_entry_properties[ID]) : -1;
+                    check_sample_field_cardinality(values, meta_entry_properties[NUMBER], ploidy, expected_cardinality,
+                                                   false, local_alleles, base_modifications);
                     check_field_type(values, meta_entry_properties[TYPE]);
                 } catch (std::shared_ptr<Error> ex) {
                     std::string message = "Sample #" + std::to_string(i + 1) + ", field " + meta_entry_properties[ID]
@@ -851,8 +874,10 @@ namespace ebi
                         check_predefined_tag_format(format[j], values, format_v41_v42, ploidy);
                     } else if (source->version == Version::v43) {
                         check_predefined_tag_format(format[j], values, format_v43, ploidy);
-                    } else {
+                    } else if (source->version == Version::v44) {
                         check_predefined_tag_format(format[j], values, format_v44, ploidy);
+                    } else {
+                        check_predefined_tag_format(format[j], values, format_v45, ploidy, i, local_alleles);
                     }
                 } catch (std::shared_ptr<Error> ex) {
                     throw new SamplesFieldBodyError{line, "Sample #" + std::to_string(i + 1) + ", " + ex->message,
@@ -868,7 +893,7 @@ namespace ebi
                                                           std::vector<std::string> const & values) const
     {
         std::string message = "Sample #" + std::to_string(i + 1) + ", " + field_key + "=" + field_value + " value";
-        if (field_key == GP || (field_key == CNP && (source->version == Version::v43 || source->version == Version::v44))) {
+        if (field_key == GP || (field_key == CNP && (source->version >= Version::v43))) {
             for (auto & value : values) {
                 if (std::stold(value) < 0 || std::stold(value) > 1) {
                     throw new SamplesFieldBodyError{line, message + " does not lie in the interval [0,1]", "", field_key};
@@ -877,6 +902,9 @@ namespace ebi
         }
         if (source->version < Version::v44) {   //not valid for < v44
             return;
+        }
+        if (source->version >= Version::v45) {
+            strict_validation_format_predefined_tags_v45(i, field_key, values, message);
         }
         if (field_key == PSL) {
             if (format[0] == GT) {
@@ -967,8 +995,10 @@ namespace ebi
     }
 
     bool Record::is_valid_cardinality(std::string const &number, size_t alternate_allele_number, size_t ploidy,
-                                      long &expected_cardinality, bool isinfo) const
+                                      long &expected_cardinality, bool isinfo, long local_alleles,
+                                      long base_modifications) const
     {
+        bool local_numbers = !isinfo && source->version >= Version::v45;  //LA, LR, LG and M valid for format v45 onwards
         bool valid = true;
 
         if (number == A) {
@@ -986,6 +1016,18 @@ namespace ebi
             expected_cardinality = -1;
         } else if (number == P && !isinfo) {    //invalid for info data
             expected_cardinality = ploidy;
+        } else if (number == LA && local_numbers) {
+            // ...the number of local alternate alleles listed in LAA
+            expected_cardinality = local_alleles;
+        } else if (number == LR && local_numbers) {
+            // ...the number of local alternate alleles + reference
+            expected_cardinality = local_alleles + 1;
+        } else if (number == LG && local_numbers) {
+            // ...the number of possible genotypes with the local alleles
+            expected_cardinality = boost::math::binomial_coefficient<float>(local_alleles + ploidy, ploidy);
+        } else if (number == M && local_numbers) {
+            // ...the number of possible base modifications, unknown (-1) if it can't be computed
+            expected_cardinality = base_modifications;
         } else {
             // ...specified as a number in range [0, +MAX_LONG)
             try {
@@ -1016,12 +1058,16 @@ namespace ebi
     }
 
     void Record::check_sample_field_cardinality(std::vector<std::string> const &values, std::string const &number,
-                                                size_t ploidy, long &expected_cardinality, bool isinfo) const
+                                                size_t ploidy, long &expected_cardinality, bool isinfo,
+                                                long local_alleles, long base_modifications) const
     {
-        if (!is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected_cardinality, isinfo)) {
-            //P is valid for format data and not for info
+        if (!is_valid_cardinality(number, alternate_alleles.size(), ploidy, expected_cardinality, isinfo,
+                                  local_alleles, base_modifications)) {
+            //P is valid for format data and not for info, same for LA, LR, LG and M since v45
             raise(std::make_shared<Error>(line, " meta specification Number=" + number
-                    + " is not one of [A, R, G, " + (isinfo ? "" : "P, ") + "., <non-negative number>]"));
+                    + " is not one of [A, R, G, " + (isinfo ? "" : "P, ")
+                    + (!isinfo && source->version >= Version::v45 ? "LA, LR, LG, M, " : "")
+                    + "., <non-negative number>]"));
         }
         if(!values.empty()) {
             if (values.front() == MISSING_VALUE && values.size() == 1) { return; } // No need to check missing data
@@ -1047,6 +1093,16 @@ namespace ebi
                         "assume diploidy. Contains " + std::to_string(values.size()) + " value(s), expected "
                         + std::to_string(expected_cardinality) + " (derived from ploidy " + std::to_string(ploidy)
                         + ")";
+            } else if (number == LA || number == LR || number == LG) {
+                detailed_message = ". It must derive its number of values from the local alleles in LAA"
+                        + std::string(number == LG ? " and the ploidy of GT (if present), or assume diploidy" : "")
+                        + ". Contains " + std::to_string(values.size()) + " value(s), expected "
+                        + std::to_string(expected_cardinality) + " (derived from " + std::to_string(local_alleles)
+                        + " local allele(s)" + (number == LG ? " and ploidy " + std::to_string(ploidy) : "") + ")";
+            } else if (number == M) {
+                detailed_message = ". It must derive its number of values from the bases of the alleles in GT that "
+                        "could contain the base modification. Contains " + std::to_string(values.size())
+                        + " value(s), expected " + std::to_string(expected_cardinality);
             }
             raise(std::make_shared<Error>(line, message, detailed_message));
         }
@@ -1204,17 +1260,281 @@ namespace ebi
         }
     }
 
+    void Record::check_format_local_alleles() const
+    {
+        if (source->version < Version::v45) {   //v45 onwards
+            return;
+        }
+        std::vector<MetaEntry> format_meta = get_meta_entry_objects();
+        for (size_t j = 0; j < format.size(); ++j) {
+            std::string number = get_format_field_number(format[j], format_meta[j]);
+            if (number != LA && number != LR && number != LG) {
+                continue;
+            }
+            auto laa = std::find(format.begin(), format.end(), LAA);
+            if (laa == format.end()) {
+                throw new FormatBodyError{line, "FORMAT " + LAA + " must be present when local-allele fields "
+                        "(Number=LA, LR or LG) are present, found " + format[j]};
+            }
+            size_t expected_position = (format[0] == GT) ? 1 : 0;
+            if (static_cast<size_t>(laa - format.begin()) != expected_position) {
+                throw new FormatBodyError{line, "FORMAT " + LAA + " must precede all fields other than GT when "
+                        "local-allele fields (Number=LA, LR or LG) are present"};
+            }
+            return;
+        }
+    }
+
+    void Record::check_format_base_modification() const
+    {
+        if (source->version < Version::v45 || util::contains(format, GT)) {   //v45 onwards
+            return;
+        }
+        std::vector<MetaEntry> format_meta = get_meta_entry_objects();
+        for (size_t j = 0; j < format.size(); ++j) {
+            if (get_format_field_number(format[j], format_meta[j]) == M) {
+                throw new FormatBodyError{line, "FORMAT " + GT + " must be present when base modification fields "
+                        "(Number=M) are present, found " + format[j]};
+            }
+        }
+    }
+
+    std::string Record::get_format_field_number(std::string const & field_key, MetaEntry const & meta) const
+    {
+        if (meta.is_defined_in_header()) {
+            auto & key_values = boost::get<std::map<std::string, std::string>>(meta.value);
+            auto number = key_values.find(NUMBER);
+            return number != key_values.end() ? number->second : "";
+        }
+        auto predefined = format_v45.find(field_key);
+        if (predefined != format_v45.end()) {
+            return get_predefined_number(predefined);
+        }
+        std::pair<std::string, std::string> base_modification;
+        if (get_base_modification_tag(field_key, base_modification)) {
+            return base_modification.second;
+        }
+        return "";
+    }
+
+    void Record::strict_validation_format_predefined_tags_v45(size_t i, std::string const & field_key,
+                                                              std::vector<std::string> const & values,
+                                                              std::string const & message) const
+    {
+        try {
+            std::pair<std::string, std::string> base_modification;
+            if (field_key == LAA) {
+                std::set<std::string> listed;
+                for (auto & value : values) {
+                    if (value == MISSING_VALUE) { continue; }
+                    long index = std::stol(value);
+                    if (index < 1 || index > static_cast<long>(alternate_alleles.size())) {
+                        throw new SamplesFieldBodyError{line, message + " must be a 1-based index into ALT",
+                                "Index=" + value + ", maximum allowed=" + std::to_string(alternate_alleles.size()), field_key};
+                    }
+                    if (!listed.insert(value).second) {
+                        throw new SamplesFieldBodyError{line, message + " must not contain duplicate indexes", "", field_key};
+                    }
+                }
+            } else if (field_key == LEN) {
+                for (auto & value : values) {
+                    if (value != MISSING_VALUE && std::stol(value) < 1) {
+                        throw new SamplesFieldBodyError{line, message + " must be a positive integer", "", field_key};
+                    }
+                }
+            } else if (LOCAL_ALLELE_FIELDS_v45.count(field_key)) {
+                //local-allele field and its global equivalent must encode the same information, if both are present
+                std::vector<std::string> global_values, local_alleles;
+                std::string const & global_key = LOCAL_ALLELE_FIELDS_v45.at(field_key);
+                get_sample_field_values(i, global_key, global_values);
+                get_sample_field_values(i, LAA, local_alleles);
+                if (global_values.size() <= 1) {
+                    return;     //global field omitted or missing
+                }
+                bool is_r = get_predefined_number(format_v45.find(global_key)) == R;
+                for (size_t k = 0; k < values.size(); ++k) {
+                    size_t global_index;
+                    if (is_r && k == 0) {
+                        global_index = 0;   //reference
+                    } else {
+                        size_t local_index = is_r ? k - 1 : k;
+                        if (local_index >= local_alleles.size() || local_alleles[local_index] == MISSING_VALUE) {
+                            break;      //cardinality already checked
+                        }
+                        global_index = std::stoul(local_alleles[local_index]) - (is_r ? 0 : 1);
+                    }
+                    if (global_index < global_values.size() && values[k] != MISSING_VALUE
+                            && global_values[global_index] != MISSING_VALUE && values[k] != global_values[global_index]) {
+                        throw new SamplesFieldBodyError{line, message + " does not match " + global_key + " for the local "
+                                "alleles in " + LAA, field_key + " value at " + std::to_string(k + 1) + " is " + values[k]
+                                + ", " + global_key + " value at " + std::to_string(global_index + 1) + " is "
+                                + global_values[global_index], field_key};
+                    }
+                }
+            } else if (get_base_modification_tag(field_key, base_modification)) {
+                bool is_fraction = base_modification.first == FLOAT;   //M fields, DPM and ADM are read depths
+                for (auto & value : values) {
+                    if (value == MISSING_VALUE) { continue; }
+                    if (is_fraction && (std::stold(value) < 0 || std::stold(value) > 1)) {
+                        throw new SamplesFieldBodyError{line, message + " does not lie in the interval [0,1]", "", field_key};
+                    }
+                    if (!is_fraction && std::stol(value) < 0) {
+                        throw new SamplesFieldBodyError{line, message + " must be a non-negative integer number", "", field_key};
+                    }
+                }
+            }
+        } catch (const std::logic_error &) {
+            //non numeric values are reported by the type checks
+        }
+    }
+
+    void Record::check_info_end_computed(std::string const & field_value) const
+    {
+        static boost::regex sv_end_regex("<(DEL|DUP|INV|CNV)(:[^>]+)*>");
+        long end = static_cast<long>(position + reference_allele.size()) - 1;
+        bool complete = true;      //whether all the values needed to compute the end are known
+        std::vector<std::string> svlen_values;
+        auto svlen = info.find(SVLEN);
+        if (svlen != info.end()) {
+            util::string_split(svlen->second, ",", svlen_values);
+        }
+
+        long found;
+        try {
+            found = std::stol(field_value);
+            bool reference_block = false;
+            for (size_t i = 0; i < alternate_alleles.size(); ++i) {
+                if (alternate_alleles[i] == GVCF_NON_VARIANT_ALLELE || alternate_alleles[i] == GVCF_NON_REF_ALLELE) {
+                    reference_block = true;
+                } else if (types[i] == RecordType::STRUCTURAL && boost::regex_match(alternate_alleles[i], sv_end_regex)) {
+                    if (svlen_values.size() != alternate_alleles.size() || svlen_values[i] == MISSING_VALUE) {
+                        complete = false;   //SVLEN may be inferred from END
+                    } else {
+                        end = std::max(end, static_cast<long>(position) + std::abs(std::stol(svlen_values[i])));
+                    }
+                }
+            }
+            if (reference_block) {
+                complete = complete && !samples.empty();  //without samples, END is the only reference block length
+                std::vector<std::string> len_values;
+                for (size_t i = 0; i < samples.size(); ++i) {
+                    get_sample_field_values(i, LEN, len_values);
+                    if (len_values.size() != 1 || len_values[0] == MISSING_VALUE) {
+                        complete = false;   //LEN may be inferred from END
+                    } else {
+                        end = std::max(end, static_cast<long>(position) + std::stol(len_values[0]) - 1);
+                    }
+                }
+            }
+        } catch (const std::exception &) {
+            return;     //non numeric values are reported by the type checks
+        }
+
+        if (found < end || (complete && found != end)) {
+            std::string expected = std::to_string(end);
+            throw new InfoBodyError{line, "INFO END must be the maximum end position of the REF allele, the "
+                    "symbolic structural variant alleles (POS + SVLEN) and the <*> reference blocks (POS + FORMAT LEN - 1)",
+                    "END=" + field_value + (complete ? ", expected value=" : ", expected at least ") + expected,
+                    complete ? ErrorFix::RECOVERABLE_VALUE : ErrorFix::IRRECOVERABLE_VALUE, END,
+                    complete ? expected : ""};
+        }
+    }
+
+    long Record::get_local_allele_count(size_t i) const
+    {
+        std::vector<std::string> values;
+        get_sample_field_values(i, LAA, values);
+        if (values.size() == 1 && values[0] == MISSING_VALUE) {
+            return 0;   //missing LAA is an empty list, i.e. a REF-only site
+        }
+        return values.size();
+    }
+
+    long Record::get_base_modification_cardinality(size_t i, std::string const & field_key) const
+    {
+        if (format.empty() || format[0] != GT || field_key.empty()) {
+            return -1;
+        }
+        auto complement = [](char base) {
+            switch (base) {
+                case 'A': return 'T';
+                case 'C': return 'G';
+                case 'G': return 'C';
+                case 'T': return 'A';
+                default: return base;
+            }
+        };
+        auto normalize = [](char base) {
+            base = std::toupper(base);
+            return base == 'U' ? 'T' : base;
+        };
+        char base = normalize(field_key.back());
+
+        std::string GT_subfield = samples[i].substr(0, samples[i].find(':'));
+        std::vector<std::string> alleles;
+        get_phased_alleles(GT_subfield, alleles);   //each allele has its phasing as prefix
+
+        long cardinality = 0;
+        std::set<std::string> unphased_alleles;
+        for (auto & allele : alleles) {
+            std::string index = allele.substr(1);
+            if (allele[0] == '/' && !unphased_alleles.insert(index).second) {
+                continue;   //unphased allele values are encoded at the first occurrence only
+            }
+            if (index == MISSING_VALUE || util::contains_if_not(index, isdigit)) {
+                continue;
+            }
+            size_t allele_index = std::stoul(index);
+            if (allele_index > alternate_alleles.size()) {
+                continue;   //reported by the GT checks
+            }
+            if (allele_index > 0 && types[allele_index - 1] != RecordType::SNV
+                    && types[allele_index - 1] != RecordType::MNV && types[allele_index - 1] != RecordType::INDEL) {
+                continue;   //symbolic alleles contain no relevant bases
+            }
+            std::string const & sequence = allele_index == 0 ? reference_allele : alternate_alleles[allele_index - 1];
+            for (char sequence_base : sequence) {
+                sequence_base = normalize(sequence_base);
+                if (base == 'N') {
+                    cardinality += 2;   //values for both the positive and negative strands
+                } else if (sequence_base == base || sequence_base == complement(base)) {
+                    ++cardinality;
+                }
+            }
+        }
+        return cardinality;
+    }
+
+    bool get_base_modification_tag(std::string const & key, std::pair<std::string, std::string> & type_number)
+    {
+        static boost::regex base_modification_regex(
+                "(M|DPM|ADM)([0-9]+[ACGTUN]|5mC|5hmC|5fC|5caC|5hmU|5fU|5caU|6mA|8oxoG|XaoN|xaoN)");
+        boost::smatch pieces_match;
+        if (!boost::regex_match(key, pieces_match, base_modification_regex)) {
+            return false;
+        }
+        type_number = { pieces_match[1] == M ? FLOAT : INTEGER, M };
+        return true;
+    }
+
     void Record::get_PSL_values(size_t i, std::vector<std::string>& pslvalues) const
     {
-        std::vector<std::string> samplevals;
-        const auto &psl = std::find(format.begin(), format.end(), PSL);
-        if (psl == format.end()) {
-            return;         //PSL not found
+        get_sample_field_values(i, PSL, pslvalues);
+    }
+
+    void Record::get_sample_field_values(size_t i, std::string const & field_key, std::vector<std::string>& values) const
+    {
+        values.clear();
+        const auto &field = std::find(format.begin(), format.end(), field_key);
+        if (field == format.end()) {
+            return;         //field not found
         }
-        size_t offset = psl - format.begin();   //position of PSL
-        //already field count checked data
+        size_t offset = field - format.begin();   //position of the field
+        std::vector<std::string> samplevals;
         util::string_split(samples[i], ":", samplevals);
-        util::string_split(samplevals[offset], ",", pslvalues);
+        if (offset < samplevals.size()) {
+            util::string_split(samplevals[offset], ",", values);
+        }
     }
     void Record::get_phased_alleles(std::string GT, std::vector<std::string>& alleles) const
     {

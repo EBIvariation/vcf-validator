@@ -1,0 +1,12 @@
+##fileformat=VCFv4.5
+##contig=<ID=1,length=100000000>
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=LAA,Number=.,Type=Integer,Description="Local alleles">
+##FORMAT=<ID=XLA,Number=LA,Type=Integer,Description="One value per local alternate allele">
+##FORMAT=<ID=XLR,Number=LR,Type=Integer,Description="One value per local allele, including REF">
+##FORMAT=<ID=XLG,Number=LG,Type=Float,Description="One value per local genotype">
+##FORMAT=<ID=XMODC,Number=M,Type=Float,Description="Custom C base modification">
+##FORMAT=<ID=XMODN,Number=M,Type=Float,Description="Custom base modification on any base">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	SAMPLE1
+1	100	.	C	A,G	.	.	.	GT:LAA:XLA:XLR:XLG:XMODC	0/2:2:5:1,5:1,2,3:0.5,0.4
+1	200	.	CA	C	.	.	.	GT:LAA:XLA:XLR:XLG:XMODN	0|1:1:5:1,5:1,2,3:0.1,0.2,0.3,0.4,0.5,0.6

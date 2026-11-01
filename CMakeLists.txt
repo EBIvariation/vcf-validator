@@ -147,7 +147,7 @@ file(GLOB_RECURSE VCF_TEST_SOURCES
         test/vcf/test_utils.hpp
 )
 
-set(TEST_VERSIONS 41 42 43 44)
+set(TEST_VERSIONS 41 42 43 44 45)
 
 foreach(ver IN LISTS TEST_VERSIONS)
   add_executable(test_validator_v${ver}

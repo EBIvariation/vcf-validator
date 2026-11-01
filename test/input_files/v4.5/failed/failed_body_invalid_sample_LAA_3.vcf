@@ -1,0 +1,7 @@
+##fileformat=VCFv4.5
+##contig=<ID=1,length=100000000>
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=LAA,Number=.,Type=Integer,Description="1-based indices into ALT, indicating which alleles are relevant (local) for the current sample">
+##FORMAT=<ID=LAD,Number=LR,Type=Integer,Description="Local-allele representation of AD">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	SAMPLE1
+1	100	.	G	A,C,T	.	.	.	GT:LAA:LAD	0/1:0:10,5

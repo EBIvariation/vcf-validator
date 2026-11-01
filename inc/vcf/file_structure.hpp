@@ -56,7 +56,8 @@ namespace ebi
         v41,
         v42,
         v43,
-        v44
+        v44,
+        v45
     };
 
     enum class RecordType
@@ -289,6 +290,62 @@ namespace ebi
             { PSO, { INTEGER, P } },
             { PSQ, { INTEGER, P } },
     };
+
+    const std::map<std::string, std::pair<std::string, std::string>> format_v45 = {
+            { AD, { INTEGER, R } },
+            { ADF, { INTEGER, R } },
+            { ADR, { INTEGER, R } },
+            { AHAP, { INTEGER, "1" } },
+            { CICN, { FLOAT, "2" } },
+            { CN, { FLOAT, "1" } },
+            { CNL, { FLOAT, G } },
+            { CNP, { FLOAT, G } },
+            { CNQ, { FLOAT, "1" } },
+            { DP, { INTEGER, "1" } },
+            { EC, { INTEGER, A } },
+            { FT, { STRING, "1" } },
+            { GL, { FLOAT, G } },
+            { GP, { FLOAT, G } },
+            { GQ, { INTEGER, "1" } },
+            { GT, { STRING, "1" } },
+            { HAP, { INTEGER, "1" } },
+            { HQ, { INTEGER, "2" } },
+            { LA, { INTEGER, UNKNOWN_CARDINALITY } },
+            { LAA, { INTEGER, UNKNOWN_CARDINALITY } },
+            { LAD, { INTEGER, LR } },
+            { LADF, { INTEGER, LR } },
+            { LADR, { INTEGER, LR } },
+            { LEC, { INTEGER, LA } },
+            { LEN, { INTEGER, "1" } },
+            { LGL, { FLOAT, LG } },
+            { LGP, { FLOAT, LG } },
+            { LPL, { INTEGER, LG } },
+            { LPP, { INTEGER, LG } },
+            { MQ, { INTEGER, "1" } },
+            { NQ, { INTEGER, "1" } },
+            { PL, { INTEGER, G } },
+            { PP, { INTEGER, G } },
+            { PQ, { INTEGER, "1" } },
+            { PS, { INTEGER, "1" } },
+            { PSL, { STRING, P } },
+            { PSO, { INTEGER, P } },
+            { PSQ, { INTEGER, P } },
+    };
+
+    // local-allele FORMAT fields with Number=LR or LA and their global equivalent, as per v45
+    const std::map<std::string, std::string> LOCAL_ALLELE_FIELDS_v45{
+            { LAD, AD },
+            { LADF, ADF },
+            { LADR, ADR },
+            { LEC, EC },
+    };
+
+    /**
+     * Gets the predefined Type and Number of a reserved base modification FORMAT key (v4.5 onwards): M, DPM or ADM,
+     * followed by a ChEBI ID or one of its aliases (e.g. 5mC), and ending with the base the modification occurs on
+     * @return false if the key is not a base modification key
+     */
+    bool get_base_modification_tag(std::string const & key, std::pair<std::string, std::string> & type_number);
 
     const std::set<std::string> PREDEFINED_INFO_SVTYPES{
             DEL,
@@ -555,6 +612,27 @@ namespace ebi
         void check_format_no_duplicates() const;
 
         /**
+         * Checks that LAA is present and precedes all fields other than GT when local-allele fields
+         * (Number=LA, LR or LG) are present, as per v45
+         *
+         * @throw FormatBodyError
+         */
+        void check_format_local_alleles() const;
+
+        /**
+         * Checks that GT is present when base modification fields (Number=M) are present, as per v45
+         *
+         * @throw FormatBodyError
+         */
+        void check_format_base_modification() const;
+
+        /**
+         * Returns the Number of a FORMAT field, from its meta entry or, if not defined in the header, from the
+         * predefined tags. An empty string is returned when the field is not known
+         */
+        std::string get_format_field_number(std::string const & field_key, MetaEntry const & meta) const;
+
+        /**
          * Checks that INFO predefined tags are consistent with the specification
          */
         void check_predefined_tag_info(std::string const &field_key, std::vector<std::string> const &values,
@@ -565,7 +643,7 @@ namespace ebi
          */
         void check_predefined_tag_format(std::string const &field_key, std::vector<std::string> const &values,
                                          std::map<std::string, std::pair<std::string, std::string>> const &tags,
-                                         size_t ploidy) const;
+                                         size_t ploidy, size_t sample_index = 0, long local_alleles = 0) const;
         /**
          * Strict validation of predefined INFO tags
          *
@@ -637,6 +715,36 @@ namespace ebi
                                                       std::vector<std::string> const & values) const;
 
         /**
+         * Strict validation of predefined FORMAT tags introduced in v45 (local alleles, base modifications and LEN)
+         *
+         * @throw SamplesFieldBodyError
+         */
+        void strict_validation_format_predefined_tags_v45(size_t i, std::string const & field_key,
+                                                          std::vector<std::string> const & values,
+                                                          std::string const & message) const;
+
+        /**
+         * Checks that INFO END matches the end position computed from REF, the SVLEN of symbolic structural variant
+         * alleles and the FORMAT LEN of <*> reference blocks, as per v45
+         *
+         * @throw InfoBodyError
+         */
+        void check_info_end_computed(std::string const & field_value) const;
+
+        /**
+         * Returns the number of local alleles listed in the LAA field of a sample (a missing LAA is an empty list)
+         */
+        long get_local_allele_count(size_t i) const;
+
+        /**
+         * Returns the number of values expected in a base modification field (Number=M) of a sample: the number of
+         * bases, on either strand, of the alleles in GT order that could contain the modification of the given base.
+         * Unphased alleles are counted only at their first occurrence, missing and symbolic alleles have no bases.
+         * Returns -1 if GT is not available
+         */
+        long get_base_modification_cardinality(size_t i, std::string const & field_key) const;
+
+        /**
          * Check that the allele indexes in a sample are not greater than the total number of alleles
          *
          * @throw SamplesFieldBodyError
@@ -674,6 +782,8 @@ namespace ebi
          *  - "." means unknown number of elements
          *  - number is a positive number [0, +inf)
          *  - "P" is the number of alleles in the corresponding GT
+         *  - "LA", "LR" and "LG" are like "A", "R" and "G" but only with the `local_alleles` listed in LAA (v45)
+         *  - "M" is the number of possible base modifications, given as `base_modifications` (v45)
          * @param alternate_allele_number the number of alternate alleles
          * @param ploidy is the number of copies of a chromosome in a sample, so a given genotype in said chromosome needs `ploidy` alleles to be completely specified
          * @param expected_cardinality return by reference [0, +inf) for valid numbers. -1 if unknown number.
@@ -683,7 +793,8 @@ namespace ebi
          * @return bool: whether the number was valid or not
          */
         bool is_valid_cardinality(std::string const &number, size_t alternate_allele_number, size_t ploidy,
-                                  long &expected_cardinality, bool isinfo) const;
+                                  long &expected_cardinality, bool isinfo, long local_alleles = 0,
+                                  long base_modifications = -1) const;
 
         /**
          * Checks that the values match either their type specified in the meta or the VCF specification for predefined tags not in meta
@@ -705,7 +816,8 @@ namespace ebi
          * @throw std::invalid_argument
          */
         void check_sample_field_cardinality(std::vector<std::string> const &values, std::string const &number,
-                                            size_t ploidy, long &expected_cardinality, bool isinfo = false) const;
+                                            size_t ploidy, long &expected_cardinality, bool isinfo = false,
+                                            long local_alleles = 0, long base_modifications = -1) const;
 
         /**
          * Checks that every field in a column matches the Type specification in the meta
@@ -760,6 +872,11 @@ namespace ebi
          * Gets PSL values from samples
          */
         void get_PSL_values(size_t i, std::vector<std::string>& pslvalues) const;
+
+        /**
+         * Gets the values of a FORMAT field from a sample, leaving `values` empty if the field is not present
+         */
+        void get_sample_field_values(size_t i, std::string const & field_key, std::vector<std::string>& values) const;
     };
 
     std::ostream &operator<<(std::ostream &os, const Record &record);
