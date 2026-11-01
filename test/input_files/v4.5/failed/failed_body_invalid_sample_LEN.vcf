@@ -1,0 +1,6 @@
+##fileformat=VCFv4.5
+##contig=<ID=1,length=100000000>
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=LEN,Number=1,Type=Integer,Description="Length of <*> reference block">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	SAMPLE1
+1	100	.	G	<*>	.	.	.	GT:LEN	0/0:0

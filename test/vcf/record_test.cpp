@@ -1225,4 +1225,55 @@ namespace ebi
         }
     }
 
+    TEST_CASE("Record constructor v45", "[constructor]")
+    {
+        std::shared_ptr<vcf::Source> source{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v45,
+                {},
+                { "Sample1" }}};
+        std::shared_ptr<vcf::Source> source_v44{
+            new vcf::Source{
+                "Example VCF source",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v44,
+                {},
+                { "Sample1" }}};
+
+        SECTION("<NON_REF> is an alias of <*>")
+        {
+            vcf::Record record_v45 = vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<NON_REF>" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123460" } },
+                            { vcf::GT },
+                            { "0/0" },
+                            source};
+            CHECK(record_v45.types == std::vector<vcf::RecordType>{vcf::RecordType::NO_VARIATION});
+
+            vcf::Record record_v44 = vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "<NON_REF>" },
+                            1.0,
+                            { vcf::PASS },
+                            { { vcf::END, "123460" }, { vcf::SVLEN, "." } },
+                            { vcf::GT },
+                            { "0/0" },
+                            source_v44};
+            CHECK(record_v44.types == std::vector<vcf::RecordType>{vcf::RecordType::STRUCTURAL});
+        }
+    }
+
 }

@@ -100,8 +100,9 @@ The common and basic definitions are in
 between versions are defined in
 [src/vcf/vcf_v41.ragel](../src/vcf/vcf_v41.ragel),
 [src/vcf/vcf_v42.ragel](../src/vcf/vcf_v42.ragel),
-[src/vcf/vcf_v43.ragel](../src/vcf/vcf_v43.ragel) and
-[src/vcf/vcf_v44.ragel](../src/vcf/vcf_v44.ragel).
+[src/vcf/vcf_v43.ragel](../src/vcf/vcf_v43.ragel),
+[src/vcf/vcf_v44.ragel](../src/vcf/vcf_v44.ragel) and
+[src/vcf/vcf_v45.ragel](../src/vcf/vcf_v45.ragel).
 
 Those files not only describe the regex that define the syntax, they also define
 the points of the grammar where the semantic checks are injected.
@@ -112,6 +113,7 @@ ragel -G2 src/vcf/vcf_v41.ragel -o inc/vcf/validator_detail_v41.hpp
 ragel -G2 src/vcf/vcf_v42.ragel -o inc/vcf/validator_detail_v42.hpp
 ragel -G2 src/vcf/vcf_v43.ragel -o inc/vcf/validator_detail_v43.hpp
 ragel -G2 src/vcf/vcf_v44.ragel -o inc/vcf/validator_detail_v44.hpp
+ragel -G2 src/vcf/vcf_v45.ragel -o inc/vcf/validator_detail_v45.hpp
 ```
 
 #### VCF parsing, policies and file structure

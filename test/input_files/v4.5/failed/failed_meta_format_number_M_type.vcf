@@ -1,0 +1,5 @@
+##fileformat=VCFv4.5
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=M5mC,Number=1,Type=Float,Description="Reserved base modification key with a wrong Number">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	SAMPLE1
+1	100	.	C	A	.	.	.	GT	0/1

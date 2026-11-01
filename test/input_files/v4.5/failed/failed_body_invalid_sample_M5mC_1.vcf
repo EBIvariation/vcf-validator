@@ -1,0 +1,6 @@
+##fileformat=VCFv4.5
+##contig=<ID=1,length=100000000>
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=M5mC,Number=M,Type=Float,Description="Fraction of bases modified with 5-Methylcytosine">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	SAMPLE1
+1	100	.	G	A,C,T	.	.	.	GT:M5mC	0/1:0.5,0.2

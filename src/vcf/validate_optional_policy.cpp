@@ -46,6 +46,9 @@ namespace ebi
         // gVCF fields should provide END, as <*> is supposed to represent a region
         check_body_entry_info_gvcf_end(state, record);
 
+        // FORMAT LEN is the length of a <*> reference block, so it should only be used with <*>
+        check_body_entry_format_len(state, record);
+
         // If a variant is flagged as precise, then it should not contain imprecise variant fields like CIPOS or CIEND
         check_body_entry_info_imprecise(state, record);
 
@@ -123,7 +126,7 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_alt_gvcf_gt_value(ParsingState & state, Record const & record) const
     {
-        if (util::contains(record.alternate_alleles, GVCF_NON_VARIANT_ALLELE) && record.format[0] == vcf::GT) {
+        if (has_reference_block_allele(record) && record.format[0] == vcf::GT) {
             //with v44, there can be optional leading phasing info, remove it and use
             bool checkprefix = state.source->version < Version::v44? false : true;
             for (auto sample : record.samples) {
@@ -157,12 +160,38 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_info_gvcf_end(ParsingState & state, Record const & record) const
     {
-        if (util::contains(record.alternate_alleles, GVCF_NON_VARIANT_ALLELE)
-            && record.info.find(END) == record.info.end()) {
+        if (!has_reference_block_allele(record) || record.info.find(END) != record.info.end()) {
+            return;
+        }
+        if (record.source->version < Version::v45) {
             throw new InfoBodyError{state.n_lines,
                     "INFO END should be provided when ALT is " + GVCF_NON_VARIANT_ALLELE
                     + " as it is supposed to be a region"};
         }
+        //END is deprecated since v45, the length of the region is given per sample by FORMAT LEN
+        if (!util::contains(record.format, LEN)) {
+            throw new FormatBodyError{state.n_lines,
+                    "FORMAT LEN (or INFO END, for backwards compatibility) should be provided when ALT is "
+                    + GVCF_NON_VARIANT_ALLELE + " as it is supposed to be a region"};
+        }
+    }
+
+    void ValidateOptionalPolicy::check_body_entry_format_len(ParsingState & state, Record const & record) const
+    {
+        if (record.source->version >= Version::v45 && util::contains(record.format, LEN)
+            && !has_reference_block_allele(record)) {
+            throw new FormatBodyError{state.n_lines,
+                    "FORMAT LEN is the length of a reference block and should only be used when ALT contains "
+                    + GVCF_NON_VARIANT_ALLELE};
+        }
+    }
+
+    bool ValidateOptionalPolicy::has_reference_block_allele(Record const & record) const
+    {
+        //<NON_REF> is an alias of <*> since v45
+        return util::contains(record.alternate_alleles, GVCF_NON_VARIANT_ALLELE)
+               || (record.source->version >= Version::v45
+                   && util::contains(record.alternate_alleles, GVCF_NON_REF_ALLELE));
     }
 
     void ValidateOptionalPolicy::check_body_entry_info_imprecise(ParsingState & state, Record const & record) const
@@ -256,7 +285,8 @@ namespace ebi
             {Version::v41, info_v41_v42},
             {Version::v42, info_v41_v42},
             {Version::v43, info_v43},
-            {Version::v44, info_v44}, }; //TODO: see whether to make this available for all or not.
+            {Version::v44, info_v44},
+            {Version::v45, info_v44}, }; //TODO: see whether to make this available for all or not.
 
         for (auto & confidence_interval_tag : confidence_interval_tags) {
             auto it = record.info.find(confidence_interval_tag);
@@ -475,7 +505,8 @@ namespace ebi
             {Version::v41, format_v41_v42},
             {Version::v42, format_v41_v42},
             {Version::v43, format_v43},
-            {Version::v44, format_v44}, }; //TODO: see whether to make this available for all or not.
+            {Version::v44, format_v44},
+            {Version::v45, format_v45}, }; //TODO: see whether to make this available for all or not.
 
         for (auto & confidence_interval_tag : confidence_interval_tags) {
             auto it = std::find(record.format.begin(), record.format.end(), confidence_interval_tag);
