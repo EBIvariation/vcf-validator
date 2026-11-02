@@ -1,0 +1,4 @@
+##fileformat=VCFv4.5
+##INFO=<ID=DP2,Number=1,Type=Integer,Description="Ends with a lone backslash\">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+1	100	.	A	T	.	PASS	.
