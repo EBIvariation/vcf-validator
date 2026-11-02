@@ -80,7 +80,7 @@
     ## A value can be expressed in multiple ways:
     ## - The line is a single key-value pair (meta_value): the value cannot start with an angle bracket, quote or linebreak, but it is free text thereafter
     ## - One of multiple key-value pairs, non-quoted (meta_field_value): the value cannot contain a comma -end of field-, or a closing angle bracket -end of entry-, or quote
-    ## - One of multiple key-value pairs, quoted (meta_field_desc): the value can contain any character except for non-escaped quotes
+    ## - One of multiple key-value pairs, quoted (meta_field_desc): a backslash always starts an escape, so quotes and backslashes must be written \" and \\ (a lone trailing backslash is rejected)
     meta_value      = ((print - ('<' | '"' | NL)) (print)*)	>token_begin $token_middle %token_end ;
     meta_field_value= (print - (',' | '>' | '"'))+		>token_begin $token_middle %token_end ;
     meta_field_desc = (('\\' print) | (print - '"' - '\\'))*		>token_begin $token_middle %token_end ;

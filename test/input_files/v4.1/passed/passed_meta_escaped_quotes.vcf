@@ -1,0 +1,6 @@
+##fileformat=VCFv4.1
+##INFO=<ID=AF,Number=A,Type=Float,Description="Allele \"frequency\", with one more \" to make the count of escaped quotes odd">
+##FILTER=<ID=q10,Description="Quality below 10, ending with an escaped backslash \\">
+##contig=<ID=1,note="a\"b",length=1000>
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+1	100	.	A	T	.	PASS	AF=0.5
