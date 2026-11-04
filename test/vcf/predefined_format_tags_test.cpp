@@ -1758,6 +1758,63 @@ namespace ebi
                             source}),
                         vcf::SamplesFieldBodyError*);
 
+            CHECK_NOTHROW( (vcf::Record{    //missing PSO, with several PSL values
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL, vcf::PSO },
+                            { "0|1:.,.:." },
+                            source}));
+
+            CHECK_NOTHROW( (vcf::Record{    //missing PSQ, with several PSL values
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL, vcf::PSQ },
+                            { "0|1:.,.:." },
+                            source}));
+
+            CHECK_NOTHROW( (vcf::Record{    //missing PSO and PSQ before PSL
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSO, vcf::PSQ, vcf::PSL },
+                            { "0|1:.:.:.,." },
+                            source}));
+
+            CHECK_THROWS_AS( (vcf::Record{  //invalid pso, value where PSL is missing
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GT, vcf::PSL, vcf::PSO },
+                            { "0|1:chr1*123456*1,.:1,2" },
+                            source}),
+                        vcf::SamplesFieldBodyError*);
+
         }
     }
 

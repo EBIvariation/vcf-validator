@@ -915,7 +915,8 @@ namespace ebi
                     GT_subfield = samples[i].substr(0, pos);
                 }
                 get_phased_alleles(GT_subfield, alleles);   //allele or unknown(.)
-                for (size_t i = 0; i < values.size(); ++i) {
+                //a cardinality mismatch with GT is reported by the cardinality checks
+                for (size_t i = 0; i < std::min(values.size(), alleles.size()); ++i) {
                     if (alleles[i].at(0) == '/' && values[i] != MISSING_VALUE) {
                         //un-phased allele must have '.' in PSL
                         throw new SamplesFieldBodyError{line, message + " at " +
@@ -927,7 +928,11 @@ namespace ebi
             //needs caching of records for detailed validation, which is not efficient - skipped
             std::vector<std::string> pslvals;
             get_PSL_values(i, pslvals);
-            for (size_t i = 0; i < pslvals.size(); ++i) {
+            if (values.size() == 1 && values[0] == MISSING_VALUE) {
+                return;     //the whole field is missing
+            }
+            //a cardinality mismatch with PSL is reported by the cardinality checks
+            for (size_t i = 0; i < std::min(pslvals.size(), values.size()); ++i) {
                 if (pslvals[i] == MISSING_VALUE && values[i] != MISSING_VALUE) {
                     //when psl is missing val, pso has to be missing as well
                     throw new SamplesFieldBodyError{line, message + " at " + std::to_string(i+1) +
@@ -937,7 +942,11 @@ namespace ebi
         } else if (field_key == PSQ) {
             std::vector<std::string> pslvals;
             get_PSL_values(i, pslvals);
-            for (size_t i = 0; i < pslvals.size(); ++i) {
+            if (values.size() == 1 && values[0] == MISSING_VALUE) {
+                return;     //the whole field is missing
+            }
+            //a cardinality mismatch with PSL is reported by the cardinality checks
+            for (size_t i = 0; i < std::min(pslvals.size(), values.size()); ++i) {
                 if (pslvals[i] == MISSING_VALUE && values[i] != MISSING_VALUE) {
                     //when psl is missing val, psq has to be missing as well
                     throw new SamplesFieldBodyError{line, message + " at " + std::to_string(i+1) +
