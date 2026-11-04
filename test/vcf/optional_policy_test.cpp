@@ -784,6 +784,61 @@ namespace ebi
                                 sources[1]})),
                             vcf::AlternateAllelesBodyError*);
         }
+
+        SECTION("gVCF fields without FORMAT and samples")
+        {
+            std::shared_ptr<vcf::Source> no_samples_source{new vcf::Source{
+                "Example VCF source without samples",
+                vcf::InputFormat::VCF_FILE_VCF | vcf::InputFormat::VCF_FILE_BGZIP,
+                vcf::Version::v44,
+                {},
+                {}}};
+            no_samples_source->meta_entries.emplace(vcf::REFERENCE,
+                vcf::MetaEntry{ 1, vcf::REFERENCE, "file", no_samples_source });
+            no_samples_source->meta_entries.emplace(vcf::CONTIG,
+                vcf::MetaEntry{ 1, vcf::CONTIG, { { vcf::ID, "chr1" } }, no_samples_source });
+            no_samples_source->meta_entries.emplace(vcf::INFO,
+                vcf::MetaEntry{
+                    1,
+                    vcf::INFO,
+                    {
+                        { vcf::ID, vcf::END },
+                        { vcf::NUMBER, "1" },
+                        { vcf::TYPE, vcf::INTEGER },
+                        { vcf::DESCRIPTION, "End position" }
+                    },
+                    no_samples_source
+            });
+            vcf::ParsingState no_samples_state{no_samples_source, vcf::AdditionalChecks()};
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(no_samples_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { vcf::GVCF_NON_VARIANT_ALLELE },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::END, "123460" } },
+                                {},
+                                {},
+                                no_samples_source})) );
+
+            CHECK_NOTHROW( (optional_policy.optional_check_body_entry(no_samples_state, vcf::Record{
+                                1,
+                                "chr1",
+                                123456,
+                                { "id123" },
+                                "A",
+                                { "AC", vcf::GVCF_NON_VARIANT_ALLELE },
+                                1.0,
+                                { vcf::PASS },
+                                { { vcf::END, "123460" } },
+                                {},
+                                {},
+                                no_samples_source})) );
+        }
     }
 
     TEST_CASE("Alternate allele warnings v4.4", "[body alt warnings]")
