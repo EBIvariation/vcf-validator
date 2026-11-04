@@ -2,7 +2,8 @@ os:
   - Visual Studio 2017
 
 init:
-  - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
+  # 64-bit hosted compiler producing 32-bit binaries
+  - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsamd64_x86.bat"
   - cmd: set INCLUDE=C:\Libraries\boost_1_67_0;%INCLUDE%
   - cmd: set LIB=C:\Libraries\boost_1_67_0\lib32-msvc-14.1;%LIB%
   - cmd: set OPENSSL_ROOT_DIR=C:\OpenSSL-v111-Win32
