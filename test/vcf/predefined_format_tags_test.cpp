@@ -319,6 +319,34 @@ namespace ebi
                             source}),
                         vcf::SamplesFieldBodyError*);
 
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GP },
+                            { "." },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GP },
+                            { "0.5,.,0.5" },
+                            source}) );
+
            CHECK_THROWS_AS( (vcf::Record{
                             1,
                             "chr1",
@@ -691,6 +719,34 @@ namespace ebi
                             { "1.34" },
                             source}),
                         vcf::SamplesFieldBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CNP },
+                            { "." },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CNP },
+                            { "0.5,.,0.5" },
+                            source}) );
 
             CHECK_THROWS_AS( (vcf::Record{
                             1,
@@ -1093,6 +1149,34 @@ namespace ebi
                             source}),
                         vcf::SamplesFieldBodyError*);
 
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GP },
+                            { "." },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::GP },
+                            { "0.5,.,0.5" },
+                            source}) );
+
            CHECK_THROWS_AS( (vcf::Record{
                             1,
                             "chr1",
@@ -1479,6 +1563,34 @@ namespace ebi
                             { "1.34" },
                             source}),
                         vcf::SamplesFieldBodyError*);
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CNP },
+                            { "." },
+                            source}) );
+
+            CHECK_NOTHROW( (vcf::Record{
+                            1,
+                            "chr1",
+                            123456,
+                            { "id123" },
+                            "A",
+                            { "AT" },
+                            1.0,
+                            { vcf::PASS },
+                            { {vcf::AA, "243"} },
+                            { vcf::CNP },
+                            { "0.5,.,0.5" },
+                            source}) );
 
             CHECK_THROWS_AS( (vcf::Record{
                             1,
