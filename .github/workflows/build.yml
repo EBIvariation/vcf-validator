@@ -122,7 +122,11 @@ jobs:
       MACHINE: x64
       VCPKG_TRIPLET: x64-windows-static
       VCPKG_BINARY_SOURCES: clear;files,${{ github.workspace }}\vcpkg_cache,readwrite
-      VCPKG_PACKAGES: boost-filesystem boost-iostreams boost-log boost-program-options boost-regex boost-thread openssl
+      # Compiled Boost libraries linked by CMake, plus the header-only ones included directly by the code
+      VCPKG_PACKAGES: >-
+        boost-filesystem boost-iostreams boost-log boost-program-options boost-regex boost-thread
+        boost-algorithm boost-math boost-variant
+        openssl
     steps:
     - uses: actions/checkout@v4
     - name: Restore vcpkg binary cache
