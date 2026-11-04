@@ -1,0 +1,86 @@
+# TEMPORARY: find MSVC flags that compile src/vcf/validator.cpp in reasonable time (/O2 takes over 2h).
+# Each variant reports the validator.cpp compile time and the time to validate a generated 300k-record VCF.
+# Remove this file (and msvc_experiment_make_vcf.py) once the flags are chosen.
+name: MSVC flags experiment
+
+on:
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  msvc_flags:
+    runs-on: windows-2022
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        variant:
+          - {name: "O1", flags: "/O1 /DNDEBUG"}
+          - {name: "O2-noSSA", flags: "/O2 /Ob2 /d2SSAOptimizer- /DNDEBUG"}
+          - {name: "O2-Ob1", flags: "/O2 /Ob1 /DNDEBUG"}
+          - {name: "Od", flags: "/Od /DNDEBUG"}
+    name: msvc_flags (${{ matrix.variant.name }})
+    env:
+      MACHINE: x64
+      VCPKG_TRIPLET: x64-windows-static
+      VCPKG_BINARY_SOURCES: clear;files,${{ github.workspace }}\vcpkg_cache,readwrite
+      VCPKG_PACKAGES: >-
+        boost-filesystem boost-iostreams boost-log boost-program-options boost-regex boost-thread
+        boost-algorithm boost-math boost-variant
+        openssl
+    steps:
+    - uses: actions/checkout@v4
+    - name: Restore vcpkg binary cache
+      uses: actions/cache/restore@v4
+      with:
+        path: vcpkg_cache
+        key: vcpkg-${{ env.VCPKG_TRIPLET }}-experiment
+        restore-keys: vcpkg-${{ env.VCPKG_TRIPLET }}-
+    - name: Set up MSVC environment
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x64
+    - name: Install dependencies
+      shell: cmd
+      run: |
+        if not exist vcpkg_cache mkdir vcpkg_cache
+        "%VCPKG_INSTALLATION_ROOT%\vcpkg" install --triplet %VCPKG_TRIPLET% %VCPKG_PACKAGES% || exit /b 1
+        call install_dependencies.bat
+        if not exist dependencies\curl\lib\libcurl.lib exit /b 1
+    - name: Configure
+      shell: cmd
+      run: |
+        cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release ^
+          -DCMAKE_CXX_FLAGS_RELEASE="${{ matrix.variant.flags }}" ^
+          -DCMAKE_TOOLCHAIN_FILE="%VCPKG_INSTALLATION_ROOT%\scripts\buildsystems\vcpkg.cmake" ^
+          -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% ^
+          -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
+          -DBoost_USE_STATIC_RUNTIME=ON || exit /b 1
+    - name: Compile validator.cpp alone
+      timeout-minutes: 90
+      shell: pwsh
+      run: |
+        "| Variant | Flags | Step | Time |" >> $env:GITHUB_STEP_SUMMARY
+        "|---|---|---|---|" >> $env:GITHUB_STEP_SUMMARY
+        $t = Measure-Command { cmake --build build --target "CMakeFiles/mod_vcf.dir/src/vcf/validator.cpp.obj" | Out-Host }
+        if ($LASTEXITCODE -ne 0) { exit 1 }
+        "| ${{ matrix.variant.name }} | ``${{ matrix.variant.flags }}`` | compile validator.cpp | {0:N1} min |" -f $t.TotalMinutes >> $env:GITHUB_STEP_SUMMARY
+    - name: Compile everything else
+      shell: pwsh
+      run: |
+        $t = Measure-Command { cmake --build build --parallel --target vcf_validator test_validation_suite | Out-Host }
+        if ($LASTEXITCODE -ne 0) { exit 1 }
+        "| ${{ matrix.variant.name }} | | compile the rest | {0:N1} min |" -f $t.TotalMinutes >> $env:GITHUB_STEP_SUMMARY
+    - name: Test
+      shell: cmd
+      run: build\bin\test_validation_suite.exe
+    - name: Time validation of a 300k-record VCF
+      shell: pwsh
+      run: |
+        python .github/workflows/msvc_experiment_make_vcf.py big.vcf 300000
+        New-Item -ItemType Directory -Force -Path vout | Out-Null
+        $t = Measure-Command { build\bin\vcf_validator.exe -i big.vcf -l warning -o vout | Out-Null }
+        if ($LASTEXITCODE -ne 0) { exit 1 }
+        "| ${{ matrix.variant.name }} | | validate 300k records | {0:N1} s |" -f $t.TotalSeconds >> $env:GITHUB_STEP_SUMMARY
