@@ -114,10 +114,75 @@ jobs:
         path: vcf_assembly_checker_macos_arm64
 
 
+  ### Windows build (64-bit, fully static including the MSVC runtime)
+  windows_build:
+    runs-on: windows-2022
+    timeout-minutes: 180
+    env:
+      MACHINE: x64
+      VCPKG_TRIPLET: x64-windows-static
+      VCPKG_BINARY_SOURCES: clear;files,${{ github.workspace }}\vcpkg_cache,readwrite
+      VCPKG_PACKAGES: boost-filesystem boost-iostreams boost-log boost-program-options boost-regex boost-thread openssl
+    steps:
+    - uses: actions/checkout@v4
+    - name: Restore vcpkg binary cache
+      id: vcpkg_cache
+      uses: actions/cache/restore@v4
+      with:
+        path: vcpkg_cache
+        key: vcpkg-${{ env.VCPKG_TRIPLET }}-${{ hashFiles('.github/workflows/build.yml') }}
+        restore-keys: vcpkg-${{ env.VCPKG_TRIPLET }}-
+    - name: Set up MSVC environment
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x64
+    - name: Install dependencies
+      shell: cmd
+      run: |
+        if not exist vcpkg_cache mkdir vcpkg_cache
+        "%VCPKG_INSTALLATION_ROOT%\vcpkg" install --triplet %VCPKG_TRIPLET% %VCPKG_PACKAGES% || exit /b 1
+        call install_dependencies.bat
+        if not exist dependencies\curl\lib\libcurl.lib exit /b 1
+    - name: Save vcpkg binary cache
+      if: always() && steps.vcpkg_cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: vcpkg_cache
+        key: vcpkg-${{ env.VCPKG_TRIPLET }}-${{ hashFiles('.github/workflows/build.yml') }}
+    - name: Compile
+      shell: cmd
+      run: |
+        cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release ^
+          -DCMAKE_TOOLCHAIN_FILE="%VCPKG_INSTALLATION_ROOT%\scripts\buildsystems\vcpkg.cmake" ^
+          -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% ^
+          -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
+          -DBoost_USE_STATIC_RUNTIME=ON || exit /b 1
+        cmake --build build --parallel || exit /b 1
+    - name: Test
+      shell: cmd
+      run: |
+        build\bin\test_validator_v41.exe || exit /b 1
+        build\bin\test_validator_v42.exe || exit /b 1
+        build\bin\test_validator_v43.exe || exit /b 1
+        build\bin\test_validator_v44.exe || exit /b 1
+        build\bin\test_validator_v45.exe || exit /b 1
+        build\bin\test_validation_suite.exe || exit /b 1
+    - name: Upload vcf-validator
+      uses: actions/upload-artifact@v4
+      with:
+        name: vcf_validator_windows
+        path: build/bin/vcf_validator.exe
+    - name: Upload vcf-assembly-checker
+      uses: actions/upload-artifact@v4
+      with:
+        name: vcf_assembly_checker_windows
+        path: build/bin/vcf_assembly_checker.exe
+
+
   ### Release job (tags only)
   create_release:
     if: startsWith(github.ref, 'refs/tags/')
-    needs: [ linux_build, macos_build_intel, macos_build_arm ]
+    needs: [ linux_build, macos_build_intel, macos_build_arm, windows_build ]
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
