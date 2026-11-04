@@ -126,7 +126,7 @@ namespace ebi
 
     void ValidateOptionalPolicy::check_body_entry_alt_gvcf_gt_value(ParsingState & state, Record const & record) const
     {
-        if (has_reference_block_allele(record) && record.format[0] == vcf::GT) {
+        if (has_reference_block_allele(record) && !record.format.empty() && record.format[0] == vcf::GT) {
             //with v44, there can be optional leading phasing info, remove it and use
             bool checkprefix = state.source->version < Version::v44? false : true;
             for (auto sample : record.samples) {
