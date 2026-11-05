@@ -1,0 +1,3 @@
+# Test inputs must be checked out byte-for-byte: Windows checkouts would otherwise convert them to CRLF,
+# which changes FASTA line lengths and index offsets.
+test/input_files/** -text

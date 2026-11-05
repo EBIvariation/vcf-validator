@@ -1,6 +1,6 @@
-# TEMPORARY: find MSVC flags that compile src/vcf/validator.cpp in reasonable time (/O2 takes over 2h).
+# TEMPORARY: choose how to build validator.cpp on Windows (MSVC /O2, /O1 and /O2 variants take over 90 min).
 # Each variant reports the validator.cpp compile time and the time to validate a generated 300k-record VCF.
-# Remove this file (and msvc_experiment_make_vcf.py) once the flags are chosen.
+# Remove this file (and msvc_experiment_make_vcf.py) once the Windows build is settled.
 name: MSVC flags experiment
 
 on:
@@ -17,10 +17,10 @@ jobs:
       fail-fast: false
       matrix:
         variant:
-          - {name: "O1", flags: "/O1 /DNDEBUG"}
-          - {name: "O2-noSSA", flags: "/O2 /Ob2 /d2SSAOptimizer- /DNDEBUG"}
-          - {name: "O2-Ob1", flags: "/O2 /Ob1 /DNDEBUG"}
-          - {name: "Od", flags: "/Od /DNDEBUG"}
+          # MSVC everywhere at /O2, except validator.cpp at /Od (set in CMakeLists.txt)
+          - {name: "msvc-Od-validator", compiler: "cl"}
+          # clang-cl everywhere at /O2
+          - {name: "clang-cl-O2", compiler: "clang-cl"}
     name: msvc_flags (${{ matrix.variant.name }})
     env:
       MACHINE: x64
@@ -53,7 +53,7 @@ jobs:
       shell: cmd
       run: |
         cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release ^
-          -DCMAKE_CXX_FLAGS_RELEASE="${{ matrix.variant.flags }}" ^
+          -DCMAKE_C_COMPILER=${{ matrix.variant.compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.variant.compiler }} ^
           -DCMAKE_TOOLCHAIN_FILE="%VCPKG_INSTALLATION_ROOT%\scripts\buildsystems\vcpkg.cmake" ^
           -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% ^
           -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
@@ -62,25 +62,37 @@ jobs:
       timeout-minutes: 90
       shell: pwsh
       run: |
-        "| Variant | Flags | Step | Time |" >> $env:GITHUB_STEP_SUMMARY
-        "|---|---|---|---|" >> $env:GITHUB_STEP_SUMMARY
+        "| Variant | Step | Time |" >> $env:GITHUB_STEP_SUMMARY
+        "|---|---|---|" >> $env:GITHUB_STEP_SUMMARY
         $t = Measure-Command { cmake --build build --target "CMakeFiles/mod_vcf.dir/src/vcf/validator.cpp.obj" | Out-Host }
         if ($LASTEXITCODE -ne 0) { exit 1 }
-        "| ${{ matrix.variant.name }} | ``${{ matrix.variant.flags }}`` | compile validator.cpp | {0:N1} min |" -f $t.TotalMinutes >> $env:GITHUB_STEP_SUMMARY
+        "| ${{ matrix.variant.name }} | compile validator.cpp | {0:N1} min |" -f $t.TotalMinutes >> $env:GITHUB_STEP_SUMMARY
     - name: Compile everything else
+      id: build
       shell: pwsh
       run: |
-        $t = Measure-Command { cmake --build build --parallel --target vcf_validator test_validation_suite | Out-Host }
+        $t = Measure-Command { cmake --build build --parallel | Out-Host }
         if ($LASTEXITCODE -ne 0) { exit 1 }
-        "| ${{ matrix.variant.name }} | | compile the rest | {0:N1} min |" -f $t.TotalMinutes >> $env:GITHUB_STEP_SUMMARY
+        "| ${{ matrix.variant.name }} | compile the rest | {0:N1} min |" -f $t.TotalMinutes >> $env:GITHUB_STEP_SUMMARY
     - name: Test
       shell: cmd
-      run: build\bin\test_validation_suite.exe
+      run: |
+        build\bin\test_validator_v41.exe || exit /b 1
+        build\bin\test_validator_v42.exe || exit /b 1
+        build\bin\test_validator_v43.exe || exit /b 1
+        build\bin\test_validator_v44.exe || exit /b 1
+        build\bin\test_validator_v45.exe || exit /b 1
+        build\bin\test_validation_suite.exe || exit /b 1
     - name: Time validation of a 300k-record VCF
+      if: always() && steps.build.outcome == 'success'
       shell: pwsh
       run: |
         python .github/workflows/msvc_experiment_make_vcf.py big.vcf 300000
         New-Item -ItemType Directory -Force -Path vout | Out-Null
-        $t = Measure-Command { build\bin\vcf_validator.exe -i big.vcf -l warning -o vout | Out-Null }
-        if ($LASTEXITCODE -ne 0) { exit 1 }
-        "| ${{ matrix.variant.name }} | | validate 300k records | {0:N1} s |" -f $t.TotalSeconds >> $env:GITHUB_STEP_SUMMARY
+        $runs = 1..3 | ForEach-Object {
+          $t = Measure-Command { build\bin\vcf_validator.exe -i big.vcf -l warning -o vout | Out-Null }
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          $t.TotalSeconds
+        }
+        $best = ($runs | Measure-Object -Minimum).Minimum
+        "| ${{ matrix.variant.name }} | validate 300k records (best of 3) | {0:N1} s |" -f $best >> $env:GITHUB_STEP_SUMMARY

@@ -99,6 +99,12 @@ file(GLOB_RECURSE MOD_VCF_SOURCES
 )
 
 add_library(mod_vcf STATIC ${MOD_VCF_SOURCES})
+
+# The MSVC optimiser takes hours on the large ragel-generated parsers instantiated in validator.cpp,
+# so that file is compiled without optimisation. clang-cl is not affected.
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  set_source_files_properties(src/vcf/validator.cpp PROPERTIES COMPILE_FLAGS "/Od /Ob0")
+endif()
 target_link_libraries(mod_vcf PRIVATE
         Boost::filesystem
         Boost::iostreams
