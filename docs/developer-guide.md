@@ -18,20 +18,24 @@ scripts to help installing the dependencies
 ([install_dependencies.sh](../install_dependencies.sh)) for Linux and
 [install_dependencies.bat](../install_dependencies.bat) for Windows).
 
-We also use TravisCI ([.travis.yml](../.travis.yml)) and AppVeyor
-([appveyor.yml](../appveyor.yml)) to do builds and run tests on Pull Requests
-and to generate the binaries from tags in master that we upload to the releases
-page (https://github.com/EBIvariation/vcf-validator/releases).
+We use GitHub Actions ([.github/workflows/build.yml](../.github/workflows/build.yml))
+to build and run the tests on Linux, macOS (Intel and ARM) and Windows for every
+Pull Request and every push to master, and to generate the binaries from tags
+that we upload to the releases page
+(https://github.com/EBIvariation/vcf-validator/releases).
+
+The Windows binaries are compiled with clang-cl rather than the MSVC compiler:
+the MSVC optimiser takes hours on the large Ragel-generated parsers instantiated
+in [src/vcf/validator.cpp](../src/vcf/validator.cpp). When building with MSVC
+anyway, CMakeLists.txt compiles that one file without optimisation.
 
 ### Deploying
 
-Once we tag a commit in master and push the tag, travis will generate binaries
-for Linux and macOs, and AppVeyor will generate the Windows ones.
-
-The process is semi-automatic at the moment of writing. Travis will prepare a
-new Releases page with no description but will upload the binaries. The manual
-step is to download the Windows binaries from AppVeyor and upload to that page,
-and also fill the release notes.
+Once we tag a commit in master and push the tag, GitHub Actions builds the
+binaries for all platforms and creates a draft release with all of them
+attached (`vcf_validator_linux`, `vcf_validator_macos_x64`,
+`vcf_validator_macos_arm64`, `vcf_validator.exe`, and the same for
+`vcf_assembly_checker`).
 
 
 ## Compilation architecture
