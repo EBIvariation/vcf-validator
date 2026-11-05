@@ -1,7 +1,7 @@
 @echo off
 
 :: Target architecture of libcurl (x86 or x64), must match the compiler environment
-if "%MACHINE%"=="" set MACHINE=x86
+if "%MACHINE%"=="" set MACHINE=x64
 
 if not exist dependencies mkdir dependencies
 cd dependencies

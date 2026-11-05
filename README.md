@@ -1,4 +1,4 @@
-# vcf-validator | [![Build Status](https://github.com/EBIvariation/vcf-validator/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/EBIvariation/vcf-validator/actions/workflows/build.yml/badge.svg?branch=master) [![Build status](https://ci.appveyor.com/api/projects/status/vt4ldlwhm91e3n49/branch/master?svg=true)](https://ci.appveyor.com/project/ebivariation-bot/vcf-validator/branch/master)
+# vcf-validator | [![Build Status](https://github.com/EBIvariation/vcf-validator/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/EBIvariation/vcf-validator/actions/workflows/build.yml)
 Validation suite for Variant Call Format (VCF) files. Please find below instructions on how to download and run, or read the wiki for more details about checks already implemented.
 
 This suite includes all the checks from the vcftools suite as well as additional lexical, syntactic and semantic analysis of the VCF input. If any inconsistencies are found, they are classified in one of the following categories:
@@ -204,6 +204,47 @@ The automatic install requires CMake and wget to be installed before running the
 In order to create the build scripts, please run `cmake` with your preferred generator. For instance, `mkdir build && cd build && cmake -G "Unix Makefiles" ..` will create Makefiles, and to build the binaries, you will need to run `make`.
 
 The VCF Validation Suite binaries will be created in the `bin` subfolder.
+
+### Windows
+
+On Windows the binaries are 64-bit and fully statically linked, including the C++ runtime, so they run without installing any dependency. This is how the release binaries are built in [.github/workflows/build.yml](.github/workflows/build.yml).
+
+#### Dependencies
+
+| Dependency | Version | Installation method |
+|:----------:|:-------:|:-------------------:|
+| Visual Studio 2022 with the "Desktop development with C++" and "C++ Clang tools for Windows" components | 2022 | manual |
+|   Cmake    | \>=3.15 | manual (included in Visual Studio) |
+|   vcpkg    | latest  | manual |
+| Boost* and OpenSSL | \>=1.78 | automatic (vcpkg) |
+|    curl    | 7.62.0  | automatic (`install_dependencies.bat`) |
+
+*: Boost.filesystem, Boost.iostreams, Boost.log, Boost.program_options, Boost.regex, Boost.thread, and the header-only Boost.algorithm, Boost.math and Boost.variant.
+
+Use a standalone clone of vcpkg: the copy bundled with Visual Studio only supports manifest mode. For instance, in `C:\vcpkg`:
+```
+git clone https://github.com/microsoft/vcpkg C:\vcpkg
+C:\vcpkg\bootstrap-vcpkg.bat
+```
+
+#### Compile
+
+From the project root, in an "x64 Native Tools Command Prompt for VS 2022":
+```
+C:\vcpkg\vcpkg install --triplet x64-windows-static boost-filesystem boost-iostreams boost-log boost-program-options boost-regex boost-thread boost-algorithm boost-math boost-variant openssl
+install_dependencies.bat
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release ^
+  -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl ^
+  -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static ^
+  -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded -DBoost_USE_STATIC_RUNTIME=ON
+cmake --build build --parallel
+```
+
+`install_dependencies.bat` builds a static libcurl into the `dependencies` subfolder.
+
+We recommend clang-cl because the MSVC compiler takes hours to optimise the large generated parsers in `src/vcf/validator.cpp`. If you build with MSVC (`cl`) anyway, that file is compiled without optimisation, which makes the validation slower.
+
+The VCF Validation Suite binaries will be created in the `build\bin` subfolder.
 
 ## Deliverables
 

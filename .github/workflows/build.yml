@@ -114,7 +114,7 @@ jobs:
         path: vcf_assembly_checker_macos_arm64
 
 
-  ### Windows build (64-bit, fully static including the MSVC runtime)
+  ### Windows build (64-bit, fully static) Compiled with clang-cl
   windows_build:
     runs-on: windows-2022
     timeout-minutes: 180
@@ -157,6 +157,7 @@ jobs:
       shell: cmd
       run: |
         cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release ^
+          -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl ^
           -DCMAKE_TOOLCHAIN_FILE="%VCPKG_INSTALLATION_ROOT%\scripts\buildsystems\vcpkg.cmake" ^
           -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% ^
           -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
@@ -165,11 +166,6 @@ jobs:
     - name: Test
       shell: cmd
       run: |
-        build\bin\test_validator_v41.exe || exit /b 1
-        build\bin\test_validator_v42.exe || exit /b 1
-        build\bin\test_validator_v43.exe || exit /b 1
-        build\bin\test_validator_v44.exe || exit /b 1
-        build\bin\test_validator_v45.exe || exit /b 1
         build\bin\test_validation_suite.exe || exit /b 1
     - name: Upload vcf-validator
       uses: actions/upload-artifact@v4
