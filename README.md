@@ -112,6 +112,43 @@ If you would like to use an unreleased version of vcf-validator, you can clone t
 
 If you plan to make changes, make sure to check the [docs/developer-guide.md](docs/developer-guide.md).
 
+### Nix
+
+[Nix](https://nixos.org/) is a package manager that provides reproducible environments across Linux, macOS, and Windows (via WSL2).
+
+#### Running without installation
+
+You can run vcf-validator directly from GitHub without cloning or installing dependencies:
+
+```bash
+# Run the validator
+nix run github:EBIvariation/vcf-validator -- --help
+
+# Run the assembly checker  
+nix run github:EBIvariation/vcf-validator#vcf_assembly_checker -- --help
+```
+
+#### Development
+
+For local development with all dependencies pre-installed:
+
+```bash
+# Clone and enter development shell
+git clone https://github.com/EBIvariation/vcf-validator.git
+cd vcf-validator
+nix develop
+
+# Build locally
+mkdir build && cd build
+cmake -DSTATIC_BUILD=OFF ..
+make
+
+# Or build with Nix
+nix build
+```
+
+The development shell includes CMake, Boost, and C++ linters (clang-tidy, cppcheck) ready to use.
+
 ### Linux
 
 The build has been tested on the following compilers:

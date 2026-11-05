@@ -262,7 +262,7 @@ namespace ebi
                     try {
                         check_info_field_cardinality(values, key_values[NUMBER]);
                         check_field_type(values, key_values[TYPE]);
-                    } catch (std::shared_ptr<Error> ex) {
+                    } catch (const std::shared_ptr<Error>& ex) {
                         std::string message = "INFO " + key_values[ID] + " does not match the meta" + ex->message;
                         throw new InfoBodyError{line, message, key_values[ID] + "=" + field.second,
                                 ErrorFix::IRRECOVERABLE_VALUE, key_values[ID]};
@@ -281,7 +281,7 @@ namespace ebi
                     } else {
                         check_predefined_tag_info(field.first, values, info_v44);
                     }
-                } catch (std::shared_ptr<Error> ex) {
+                } catch (const std::shared_ptr<Error>& ex) {
                     throw new InfoBodyError{line, "INFO " + ex->message, field.first + "=" + field.second, ErrorFix::IRRECOVERABLE_VALUE, field.first};
                 }
             }
@@ -386,7 +386,7 @@ namespace ebi
             try {
                 check_info_field_cardinality(values, get_predefined_number(iterator));
                 check_field_type(values, get_predefined_type(iterator));
-            } catch (std::shared_ptr<Error> ex) {
+            } catch (const std::shared_ptr<Error>& ex) {
                 raise(std::make_shared<Error>(line, field_key + " does not match the" + ex->message));
             }
             if (get_predefined_type(iterator) == INTEGER) {
@@ -417,7 +417,7 @@ namespace ebi
                 check_sample_field_cardinality(values, get_predefined_number(iterator), ploidy, cardinality, false,
                                                local_alleles, base_modifications);
                 check_field_type(values, get_predefined_type(iterator));
-            } catch (std::shared_ptr<Error> ex) {
+            } catch (const std::shared_ptr<Error>& ex) {
                 raise(std::make_shared<Error>(line, field_key + " does not match the" + ex->message,
                                               ex->detailed_message));
             }
@@ -861,7 +861,7 @@ namespace ebi
                     check_sample_field_cardinality(values, meta_entry_properties[NUMBER], ploidy, expected_cardinality,
                                                    false, local_alleles, base_modifications);
                     check_field_type(values, meta_entry_properties[TYPE]);
-                } catch (std::shared_ptr<Error> ex) {
+                } catch (const std::shared_ptr<Error>& ex) {
                     std::string message = "Sample #" + std::to_string(i + 1) + ", field " + meta_entry_properties[ID]
                                           + " does not match the meta" + ex->message;
                     std::string detailed_message = meta_entry_properties[ID] + "=" + subfield + ex->detailed_message;
@@ -879,7 +879,7 @@ namespace ebi
                     } else {
                         check_predefined_tag_format(format[j], values, format_v45, ploidy, i, local_alleles);
                     }
-                } catch (std::shared_ptr<Error> ex) {
+                } catch (const std::shared_ptr<Error>& ex) {
                     throw new SamplesFieldBodyError{line, "Sample #" + std::to_string(i + 1) + ", " + ex->message,
                                                     format[j] + "=" + subfield, format[j]};
                 }
@@ -1136,7 +1136,7 @@ namespace ebi
             // ...try to cast to float
             try {
                 std::stof(value);
-            } catch (std::out_of_range) {
+            } catch (const std::out_of_range&) {
                 // It maybe a subnormal number
                 std::stold(value);
             }
