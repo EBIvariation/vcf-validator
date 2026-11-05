@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <cstdint>
 #include <fstream>
 #include <memory>
 #include <string>
